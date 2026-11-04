@@ -1,0 +1,297 @@
+{
+  "schema": "r1134-c223-terminal-report-v1",
+  "result": "PASS FOR THIS FINITE FROZEN COHORT",
+  "terminal_receipt": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6621208055",
+  "c_acceptance": "https://github.com/wakairo/NewLang_Compiler/pull/1140#issuecomment-6621260371",
+  "qualification": "pre-execution frozen independent cohort / scope-calibrated V2 / incidental old-P formatter exposure after freeze",
+  "final_full": "5 jobs, each 670/670 PASS",
+  "final_partial": "1 job, 669/669 PASS",
+  "totals": {
+    "native": 336,
+    "unmodified": 168,
+    "passive": 168,
+    "guest_sanitizer": 48,
+    "HEADER": 392,
+    "CONTINUE": 224,
+    "BREAK": 168,
+    "HELPER": 336,
+    "LOCAL": 2184,
+    "INIT": 168,
+    "FINAL": 168
+  },
+  "cases": [
+    {
+      "id": "p01-rise-three",
+      "trace": [
+        2,
+        5,
+        8,
+        11
+      ],
+      "continue_count": 3,
+      "break_count": 1,
+      "expected_locals": {
+        "old_copy": 43,
+        "sibling_copy": 167,
+        "loop_old": 43,
+        "break_current": 96,
+        "break_sibling": 167,
+        "break_remote_first": 81,
+        "break_remote_second": 214,
+        "caller_old": 96,
+        "caller_current": 201,
+        "caller_sibling": 167,
+        "caller_remote_first": 81,
+        "caller_remote_second": 214,
+        "preserved_old": 43
+      },
+      "passive_observations": 28,
+      "unmodified_runs": 28,
+      "all_frozen_trace_and_locals_match": true
+    },
+    {
+      "id": "p02-rise-zero",
+      "trace": [
+        12
+      ],
+      "continue_count": 0,
+      "break_count": 1,
+      "expected_locals": {
+        "old_copy": 52,
+        "sibling_copy": 173,
+        "loop_old": 52,
+        "break_current": 107,
+        "break_sibling": 173,
+        "break_remote_first": 88,
+        "break_remote_second": 222,
+        "caller_old": 107,
+        "caller_current": 209,
+        "caller_sibling": 173,
+        "caller_remote_first": 88,
+        "caller_remote_second": 222,
+        "preserved_old": 52
+      },
+      "passive_observations": 28,
+      "unmodified_runs": 28,
+      "all_frozen_trace_and_locals_match": true
+    },
+    {
+      "id": "p03-rise-one",
+      "trace": [
+        7,
+        10
+      ],
+      "continue_count": 1,
+      "break_count": 1,
+      "expected_locals": {
+        "old_copy": 61,
+        "sibling_copy": 181,
+        "loop_old": 61,
+        "break_current": 118,
+        "break_sibling": 181,
+        "break_remote_first": 93,
+        "break_remote_second": 231,
+        "caller_old": 118,
+        "caller_current": 217,
+        "caller_sibling": 181,
+        "caller_remote_first": 93,
+        "caller_remote_second": 231,
+        "preserved_old": 61
+      },
+      "passive_observations": 28,
+      "unmodified_runs": 28,
+      "all_frozen_trace_and_locals_match": true
+    },
+    {
+      "id": "p04-fall-three",
+      "trace": [
+        14,
+        10,
+        6,
+        2
+      ],
+      "continue_count": 3,
+      "break_count": 1,
+      "expected_locals": {
+        "old_copy": 139,
+        "sibling_copy": 73,
+        "loop_old": 139,
+        "break_current": 87,
+        "break_sibling": 73,
+        "break_remote_first": 159,
+        "break_remote_second": 226,
+        "caller_old": 87,
+        "caller_current": 193,
+        "caller_sibling": 73,
+        "caller_remote_first": 159,
+        "caller_remote_second": 226,
+        "preserved_old": 139
+      },
+      "passive_observations": 28,
+      "unmodified_runs": 28,
+      "all_frozen_trace_and_locals_match": true
+    },
+    {
+      "id": "p05-fall-zero",
+      "trace": [
+        3
+      ],
+      "continue_count": 0,
+      "break_count": 1,
+      "expected_locals": {
+        "old_copy": 148,
+        "sibling_copy": 79,
+        "loop_old": 148,
+        "break_current": 99,
+        "break_sibling": 79,
+        "break_remote_first": 166,
+        "break_remote_second": 233,
+        "caller_old": 99,
+        "caller_current": 202,
+        "caller_sibling": 79,
+        "caller_remote_first": 166,
+        "caller_remote_second": 233,
+        "preserved_old": 148
+      },
+      "passive_observations": 28,
+      "unmodified_runs": 28,
+      "all_frozen_trace_and_locals_match": true
+    },
+    {
+      "id": "p06-fall-one",
+      "trace": [
+        6,
+        2
+      ],
+      "continue_count": 1,
+      "break_count": 1,
+      "expected_locals": {
+        "old_copy": 156,
+        "sibling_copy": 84,
+        "loop_old": 156,
+        "break_current": 111,
+        "break_sibling": 84,
+        "break_remote_first": 172,
+        "break_remote_second": 241,
+        "caller_old": 111,
+        "caller_current": 211,
+        "caller_sibling": 84,
+        "caller_remote_first": 172,
+        "caller_remote_second": 241,
+        "preserved_old": 156
+      },
+      "passive_observations": 28,
+      "unmodified_runs": 28,
+      "all_frozen_trace_and_locals_match": true
+    }
+  ],
+  "negative_observations": [
+    {
+      "case": "n07-late-underflow",
+      "diagnostic_code": "USIZE-SUBTRACTION-PRECISION",
+      "diagnostic_message": "subtraction needs known dependency-free quantity operands in this profile",
+      "native": "NOT_RUN_BY_FROZEN_CONTRACT",
+      "rejection_layer": "precision",
+      "returncode": 3,
+      "stage": "NEGATIVE_CHECK",
+      "verdict": "REJECT"
+    },
+    {
+      "case": "n08-inverted-overflow",
+      "diagnostic_code": "USIZE-ADDITION-PRECISION",
+      "diagnostic_message": "addition needs known dependency-free quantity operands in this profile",
+      "native": "NOT_RUN_BY_FROZEN_CONTRACT",
+      "rejection_layer": "precision",
+      "returncode": 3,
+      "stage": "NEGATIVE_CHECK",
+      "verdict": "REJECT"
+    },
+    {
+      "case": "n09-wrong-arm-underflow",
+      "diagnostic_code": "USIZE-SUBTRACTION-PRECISION",
+      "diagnostic_message": "subtraction needs known dependency-free quantity operands in this profile",
+      "native": "NOT_RUN_BY_FROZEN_CONTRACT",
+      "rejection_layer": "precision",
+      "returncode": 3,
+      "stage": "NEGATIVE_CHECK",
+      "verdict": "REJECT"
+    },
+    {
+      "case": "n10-operand-type",
+      "diagnostic_code": "USIZE-ADDITION-TYPE",
+      "diagnostic_message": "+ requires two exact core usize operands",
+      "native": "NOT_RUN_BY_FROZEN_CONTRACT",
+      "rejection_layer": "semantic",
+      "returncode": 3,
+      "stage": "NEGATIVE_CHECK",
+      "verdict": "REJECT"
+    },
+    {
+      "case": "n11-carry-type",
+      "diagnostic_code": "P14-CONTINUE-TYPE",
+      "diagnostic_message": "continue value must have the exact parameter static type",
+      "native": "NOT_RUN_BY_FROZEN_CONTRACT",
+      "rejection_layer": "semantic",
+      "returncode": 3,
+      "stage": "NEGATIVE_CHECK",
+      "verdict": "REJECT"
+    },
+    {
+      "case": "n12-nearest-arity",
+      "diagnostic_code": "P14-CONTINUE-ARITY",
+      "diagnostic_message": "continue arguments must match the loop parameter count",
+      "native": "NOT_RUN_BY_FROZEN_CONTRACT",
+      "rejection_layer": "semantic",
+      "returncode": 3,
+      "stage": "NEGATIVE_CHECK",
+      "verdict": "REJECT"
+    },
+    {
+      "case": "n13-ending-loan",
+      "diagnostic_code": "USIZE-SUBTRACTION-PRECISION",
+      "diagnostic_message": "subtraction needs known dependency-free quantity operands in this profile",
+      "native": "NOT_RUN_BY_FROZEN_CONTRACT",
+      "rejection_layer": "precision",
+      "returncode": 3,
+      "stage": "NEGATIVE_CHECK",
+      "verdict": "REJECT"
+    },
+    {
+      "case": "c14-commuted-precision",
+      "diagnostic_code": "USIZE-ADDITION-PRECISION",
+      "diagnostic_message": "addition needs known dependency-free quantity operands in this profile",
+      "native": "NOT_RUN_BY_FROZEN_CONTRACT",
+      "rejection_layer": "precision",
+      "returncode": 3,
+      "stage": "NEGATIVE_CHECK",
+      "verdict": "CONSERVATIVE_REJECT"
+    }
+  ],
+  "negative_native_count": 0,
+  "first_pair": {
+    "jobs": 6,
+    "result": "failure retained",
+    "reason": "E1/E2 runner classification omitted error(precision); actual n07 returned rc3 with empty stdout and precision refusal",
+    "later_positive_and_native": "NOT_RUN"
+  },
+  "passive_transform": {
+    "pairs": 36,
+    "recorded_insertions_per_pair": 19,
+    "stdio_include": true,
+    "original_emitted_c_preserved": true,
+    "loop_old": "actual separate declaration and actual normal-B assignment; observed after normal loop exit",
+    "sub_guard_not_count": 1,
+    "synthetic_initialization": false
+  },
+  "limits": [
+    "V1 remains frozen and unexecuted.",
+    "V2 was scope-calibrated before execution; it is not fresh PRE-REF BLIND.",
+    "Incidental old-P formatter suggestion exposure occurred after V1/V2/E1 freeze; no foreign patch applied. No unrestricted whole-period implementation-blind claim.",
+    "n13-ending-loan was rejected by quantity precision. An independent loan-escape rejection and internal checking order were not demonstrated.",
+    "Ordered HEADER and ordered HELPER subsequences, counts and values were checked; no total cross-tag chronology assertion.",
+    "Outgoing Continue argument was not directly printed. Pointer identities are interpreted only within each passive invocation.",
+    "Finite fixtures do not establish general soundness, general loop progress, private implementation behavior, or audit-locality proof.",
+    "GO624 remains PAUSED and H1 HOLD; R issues no Product GO, READY, merge or closure.",
+    "Original formatter artifact ZIP binary is absent from this Git archive; its GitHub-reported digest was not independently verified from ZIP bytes. Full decoded first job log and the original log-contained patch are preserved."
+  ]
+}

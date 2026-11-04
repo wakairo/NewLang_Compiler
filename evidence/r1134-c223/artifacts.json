@@ -1,0 +1,102 @@
+{
+  "schema": "r1134-c223-actions-artifacts-v1",
+  "runs": [
+    {
+      "run": 41758217232,
+      "total_count": 1,
+      "pagination": {
+        "per_page": 100,
+        "page": 1,
+        "complete": true
+      },
+      "artifacts": [
+        {
+          "id": 13289016887,
+          "name": "r-fast-format-suggestions-48c74e5535691cf3e07da94d7e409b98cc57c3f3-attempt1",
+          "size_in_bytes": 1851,
+          "digest_reported_by_github": "sha256:8f4a1d364bf9f818f8ef1b5759bc96d3381acc17b29a61d32926df7630d1ff21",
+          "expired": false,
+          "created_at": "2026-11-04T02:03:56Z",
+          "updated_at": "2026-11-04T02:03:56Z",
+          "expires_at": "2026-11-11T02:03:56Z",
+          "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41758217232/artifacts/13289016887"
+        }
+      ]
+    },
+    {
+      "run": 41759204982,
+      "total_count": 0,
+      "pagination": {
+        "per_page": 100,
+        "page": 1,
+        "complete": true
+      },
+      "artifacts": []
+    },
+    {
+      "run": 41761241162,
+      "total_count": 0,
+      "pagination": {
+        "per_page": 100,
+        "page": 1,
+        "complete": true
+      },
+      "artifacts": []
+    },
+    {
+      "run": 41759409083,
+      "total_count": 0,
+      "pagination": {
+        "per_page": 100,
+        "page": 1,
+        "complete": true
+      },
+      "artifacts": []
+    },
+    {
+      "run": 41759409242,
+      "total_count": 0,
+      "pagination": {
+        "per_page": 100,
+        "page": 1,
+        "complete": true
+      },
+      "artifacts": []
+    },
+    {
+      "run": 41761249943,
+      "total_count": 0,
+      "pagination": {
+        "per_page": 100,
+        "page": 1,
+        "complete": true
+      },
+      "artifacts": []
+    },
+    {
+      "run": 41761249810,
+      "total_count": 0,
+      "pagination": {
+        "per_page": 100,
+        "page": 1,
+        "complete": true
+      },
+      "artifacts": []
+    }
+  ],
+  "first_formatter_zip": {
+    "id": 13289016887,
+    "connector_download_file_ref": "file_0000000025bc81fa98cd3fa258e433ca",
+    "download_file_name": "r1134-first-format-suggestions.zip",
+    "binary_in_git_archive": false,
+    "zip_bytes_independently_hashed": false,
+    "reported_size": 1851,
+    "reported_sha256": "8f4a1d364bf9f818f8ef1b5759bc96d3381acc17b29a61d32926df7630d1ff21",
+    "limitation": "Connector download yielded a file reference, not accessible ZIP bytes in the authorized pure API workflow. The reported digest is metadata only. No signed download URL retained.",
+    "replacement_claim": false,
+    "other_preserved_evidence": [
+      "complete decoded first job log",
+      "exact timestamp-stripped log-contained suggestion block"
+    ]
+  }
+}

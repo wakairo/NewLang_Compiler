@@ -1,0 +1,242 @@
+{
+  "schema": "r1134-c223-lineage-v1",
+  "fixed_main": "28726f933ff4885c000e0247cf4fd9ac1859c5b1",
+  "fixed_p": "0caf94894560d2f9a0b1f9404ca87055b0a21ee7",
+  "canonical": "Draft17.34",
+  "qualification": "pre-execution frozen independent cohort / scope-calibrated V2 / incidental old-P formatter exposure after freeze",
+  "execution_branch": "r-fast/r1134-guarded-loop-native",
+  "execution_pr": {
+    "number": 1140,
+    "disposition": "Draft / NEVER MERGE; left open"
+  },
+  "commits": [
+    {
+      "stage": "E1",
+      "commit": "48c74e5535691cf3e07da94d7e409b98cc57c3f3",
+      "tree": "eb303e179f4e7d0615ff1e6b5f079e211a7ab759",
+      "parent": "0caf94894560d2f9a0b1f9404ca87055b0a21ee7"
+    },
+    {
+      "stage": "E2",
+      "commit": "4699e098bcb18840a222b85ff2ae4fbfe429d4bf",
+      "tree": "d61902b6c9eccdc449eca981b0cd64d9c8231dc6",
+      "parent": "48c74e5535691cf3e07da94d7e409b98cc57c3f3"
+    },
+    {
+      "stage": "E3",
+      "commit": "ef6647cf361310ed84b92a009a79eaa1f5385493",
+      "tree": "0ef7168e56b9b17e73458c81494ad2b8030cb7f5",
+      "parent": "4699e098bcb18840a222b85ff2ae4fbfe429d4bf"
+    }
+  ],
+  "unexecuted_review_draft": "df705ea2ebc422127034923711bc05a5f6ae5899",
+  "actual_merge_checkouts": {
+    "first": "b7be79e9f33cdeab1de3162da54c1a13fb213df4",
+    "final": "3794d4bbf1f81a78a57230f457d53adf1fb8e20c"
+  },
+  "equipment": {
+    "equipment.json": {
+      "git_blob": "0d424d34d66ca09531637f17032dc0403f7908c4",
+      "bytes": 3451,
+      "sha256": "22741ab112b8f0b3bc187a6958155c763831c2a19b2bc02310faa840556cd7eb",
+      "original": {
+        "schema": "newlang.r1134.c223.equipment.freeze.v1",
+        "fixed_main": "28726f933ff4885c000e0247cf4fd9ac1859c5b1",
+        "fixed_p_head": "0caf94894560d2f9a0b1f9404ca87055b0a21ee7",
+        "v1_manifest_sha256": "3f047b8690c99331a8787762a3d44c5a7c54b4658be3fefcce70d30305659843",
+        "v2_manifest_sha256": "c1a536546e8143cbd675b88adddba16c72012aa2ae405777e56b1abc50bab862",
+        "entries": [
+          {
+            "path": "CTestConfig.cmake",
+            "bytes": 2512,
+            "sha256": "06ad86415fb7d06618ddbdb7ddf739ddfe4ff551b4be983397611c8227b021e0"
+          },
+          {
+            "path": "tests/r1134/CTestCustom.cmake.in",
+            "bytes": 208,
+            "sha256": "ff6437ea6ab625412228c96b01833bdaa768285eca492f71bdc5f4a83de04340"
+          },
+          {
+            "path": "tests/r1134/report.py",
+            "bytes": 1718,
+            "sha256": "48184605570136d0ddb0860107b40f98c1c8c31535739de04cc1649ad2a368f9"
+          },
+          {
+            "path": "tests/r1134/runner.py",
+            "bytes": 22460,
+            "sha256": "1b2fca8362309662abd6ecd93248c4f1f2a479952fc647f1c4aae5735eeedea6"
+          },
+          {
+            "path": "tests/r1134/public_probe.c",
+            "bytes": 5233,
+            "sha256": "32c464d22401761e00c986b98012174b836537a949bd4acfd9287b393abd4da7"
+          }
+        ],
+        "actions_only": true,
+        "local_shell_compiler_native_lean_execution": 0,
+        "registration": {
+          "test": "r1134_guarded_loop_native.integration",
+          "file": "CTestConfig.cmake",
+          "mechanism": "CTest deferred addition; build target runs ctest -N -R for exactly one observed registration; zero test execution in RFAST"
+        },
+        "positive_modes": "Each positive: public CLI CHECK, public owned source probe, exact original C17 and passive observation copy; both GCC/Clang O0/O2; applicable address/undefined guest modes in corresponding host jobs",
+        "negative_modes": "Seven frozen invalid cases CHECK only; c14 precision CHECK only; exact rejection layer/code/message retained; no negative or precision native execution",
+        "observer": "Only actual guest locals/lvalues and real ref arguments are read. No replacement of original C; no synthetic carry/state or authority; expected scalars remain frozen oracle only.",
+        "timeouts": {
+          "command_seconds": 30,
+          "guest_seconds": 10,
+          "ctest_seconds": 300
+        },
+        "raw": "Each command argv/rc/timeout/stdout/stderr; exact original/passive C and all mapping edits; all actual observation JSON; executable byte sizes/SHA256. raw.json post-test base64 transport into job log even on success. First failure retained and later affected stages NOT_RUN.",
+        "tooling_references_after_v2_freeze": [
+          "fixed-main public CLI options in src/main.c",
+          "fixed-main include/newlang/{checked,semantic,parser,source}.h",
+          "fixed-main CMakeLists.txt and immutable workflows",
+          "fixed-main tests/support/node_checked.h",
+          "fixed-main tests/r675/{blind_test.py,public_probe.c} equipment only",
+          "old R1129 bc3386f1b710f262e51ebea9a3d05db6064f398b CTestConfig.cmake and evidence/r1129/harness/{CTestCustom.cmake.in,report.py}"
+        ],
+        "prohibited_sources_read": 0,
+        "note": "P CMake blob was fetched as opaque base64 solely while considering preservation by append; contents not inspected and no append used. New CTestConfig.cmake leaves all preexisting files unchanged.",
+        "stop": "First trustworthy all green; scope/unsafe/authority/semantic anomaly STOP affected; equipment-only mechanical fixes preserve all earlier diagnostics and frozen inputs. FAST<=6, normal<=2 pairs/12jobs, manual0. No READY/merge/ProductGO."
+      }
+    },
+    "equipment-e2.json": {
+      "git_blob": "dcef011bb7d47b437f6f393ccc5cc9b175c5066b",
+      "bytes": 1564,
+      "sha256": "18c7e96600a0ad5ad26310e6e05897ada09c3c75d4620544978dbc5d49bbbad3",
+      "original": {
+        "schema": "newlang.r1134.c223.equipment.forward.v2",
+        "authority": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620652006",
+        "prior_head": "48c74e5535691cf3e07da94d7e409b98cc57c3f3",
+        "change": "R-only formatter whitespace; identical non-whitespace character stream",
+        "path": "tests/r1134/public_probe.c",
+        "bytes": 5270,
+        "sha256": "71b30f615e2037b91334b6828c65c8aa95d67505cf1672de11dc7d1512eac1b5",
+        "v1_v2_and_e1": "UNCHANGED",
+        "independence": "pre-execution frozen independent cohort / scope-calibrated V2 / incidental old-P formatter exposure after freeze",
+        "first_red": {
+          "run": 41758217232,
+          "job": 126339286595,
+          "attempt": 1,
+          "event": "push",
+          "head": "48c74e5535691cf3e07da94d7e409b98cc57c3f3",
+          "stage": "pinned format",
+          "host_build": "NOT_RUN",
+          "semantic_native": "NOT_RUN",
+          "raw_utf8_bytes": 37866,
+          "raw_sha256": "476e07eb4d3963ad9e9d79ec1e6f400b2b0e889271e76581180340f211fbb0a8",
+          "formatter_artifact": 13289016887,
+          "artifact_zip_sha256": "8f4a1d364bf9f818f8ef1b5759bc96d3381acc17b29a61d32926df7630d1ff21"
+        },
+        "foreign_hunk": "NOT_APPLIED; no guest source/oracle/expectation or observation-purpose changes",
+        "forward_prevention": "Filter suggestions/diagnostics to R paths before display; preserve full raw opaquely",
+        "budgets_before_ref": {
+          "rfast": 1,
+          "normal_jobs": 0,
+          "normal_pairs": 0,
+          "manual": 0
+        },
+        "scope_limits": "No new blind cohort claim. Private inference/general soundness/audit locality unmeasured; GO624 PAUSED/H1 HOLD."
+      }
+    },
+    "equipment-e3.json": {
+      "git_blob": "55d6f3b958dc6ee6d615b2e4680b0afee00aa9c8",
+      "bytes": 3560,
+      "sha256": "447d278a62489cd3cc25910ea9376fbfc4e43692eb6f8e8226e1e6c0d02b0127",
+      "original": {
+        "schema": "newlang.r1134.c223.equipment.forward.v3",
+        "prior_head": "4699e098bcb18840a222b85ff2ae4fbfe429d4bf",
+        "authority": [
+          "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620268814",
+          "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620652006"
+        ],
+        "first_normal_pair": {
+          "full": 41759409083,
+          "partial": 41759409242,
+          "checkout": "b7be79e9f33cdeab1de3162da54c1a13fb213df4",
+          "head": "4699e098bcb18840a222b85ff2ae4fbfe429d4bf",
+          "known_first_R_failure": "n07 CHECK returned rc3 error(precision)[USIZE-SUBTRACTION-PRECISION]; E1 regex omitted legitimate precision category; first outputs preserved, no unsafe acceptance"
+        },
+        "changes": [
+          "Include precision among actual CHECK rejection categories; preserve actual layer/code/message and rc3/no-stdout requirement. No expected outcome changed.",
+          "Compile/run exact unmodified generated C for all genuine CHECK-positive cases before passive mapping; passive failure cannot erase separable actual unmodified-native evidence.",
+          "Use Clang JSON syntax AST of each own emitted C to verify actual lexical declarations, scalar guard operand, braced edge context and real helper definitions. No producer files/fixtures or expected-value inference.",
+          "Normalize and record at most one actual logical-not wrapper around the same actual less-than guard, following bounded initializer aliases; read its actual unsigned carry without assuming emitted branch polarity.",
+          "For separately declared loop_old, require one actual B assignment, unconditional dominance of the real Break, and observe the actual scalar only after normal loop exit; never synthesize an initializer.",
+          "Preserve exact Clang syntax-map stdout in raw command receipt, plus its byte/SHA identity and all passive insertion offsets/text.",
+          "Atomically checkpoint command receipts before/after launch, including launch error and outer-interruption state; reporter distinguishes RAW_UNAVAILABLE/incomplete from no execution."
+        ],
+        "entries": [
+          {
+            "path": "tests/r1134/runner.py",
+            "bytes": 18749,
+            "sha256": "f8f7961a70b2311c81197b90952d0ca5a98f6d296c7820fdb8ff39985dc7506e"
+          },
+          {
+            "path": "tests/r1134/report.py",
+            "bytes": 1937,
+            "sha256": "9ddcd19cf8a8347f601e53d18b9a604ceac2924ae55de52d0b5be37008c9e240"
+          },
+          {
+            "path": "tests/r1134/observer.py",
+            "bytes": 14797,
+            "sha256": "61998138950994c486adb9da2fc0ac848603c1c9893e903fdca9e75470864350"
+          }
+        ],
+        "unchanged": [
+          "all V1 bytes and oracle; V1 remains unexecuted",
+          "all V2 source/oracle/README/manifest bytes and assertions",
+          "E1/E2 records and first RFAST RED/exposure",
+          "public_probe.c formatted E2",
+          "existing producer files, CMake, workflows, toolchains",
+          "GCC/Clang O0/O2 strict flags; applicable guest ASan/UBSan; command and CTest timeouts"
+        ],
+        "additional_tooling_reference": {
+          "path": "evidence/r1129/harness/instrument.py",
+          "ref": "bc3386f1b710f262e51ebea9a3d05db6064f398b",
+          "purpose": "permitted prior-R syntax-map/passive-observation equipment only; no old expected values reused"
+        },
+        "budgets_before_second_pair": {
+          "rfast": 2,
+          "normal_pairs": 1,
+          "actual_normal_jobs": 6,
+          "manual": 0
+        },
+        "independence": "pre-execution frozen independent cohort / scope-calibrated V2 / incidental old-P formatter exposure after freeze",
+        "limit": "Finite measured evidence only; no private inference/general soundness/audit-locality proof. GO624 PAUSED/H1 HOLD."
+      }
+    }
+  },
+  "workflow_blobs": {
+    ".github/workflows/compiler-ci.yml": "23655288e60f0d3d08a12c9a542346bf31829a08",
+    ".github/workflows/compiler-frontend-ci.yml": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5",
+    ".github/workflows/r-preflight.yml": "9fea1afeeef948127c73e9ca86c476091036116e"
+  },
+  "authorities": {
+    "release": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620268814",
+    "entry_correction": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620316795",
+    "v2_freeze": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620335894",
+    "v2_c_identity": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620386472",
+    "exposure_stop": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620561796",
+    "exposure_addendum": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620569491",
+    "adjudicated_resume": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620652006",
+    "archive": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620832073",
+    "archive_resume": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6621485288"
+  },
+  "exposure": {
+    "when": "after V1/V2/E1 freeze",
+    "what": "formatter combined suggestions included preexisting tests/p1117/lineage.c deletion hunk",
+    "foreign_hunk_applied": false,
+    "adjudicated": true
+  },
+  "budget": {
+    "fast_used": 3,
+    "fast_max": 6,
+    "normal_pairs_used": 2,
+    "normal_pairs_max": 2,
+    "normal_jobs": 12,
+    "manual_dispatch_or_rerun": 0,
+    "archive_semantic_execution": 0
+  }
+}

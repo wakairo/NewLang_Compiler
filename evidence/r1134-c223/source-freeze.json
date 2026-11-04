@@ -1,0 +1,473 @@
+{
+  "schema": "r1134-c223-source-freeze-v1",
+  "storage": "All original source/oracle/manifest files remain at inherited parent paths, unchanged. No archive copy substitutes for the frozen source.",
+  "parent": "ef6647cf361310ed84b92a009a79eaa1f5385493",
+  "bundles": [
+    {
+      "bundle": "c222-r-v1",
+      "total_files": 15,
+      "total_bytes": 51021,
+      "manifest_path": "tests/r1134/c222-r-v1/manifest.json",
+      "manifest_sha256": "3f047b8690c99331a8787762a3d44c5a7c54b4658be3fefcce70d30305659843",
+      "original_manifest": {
+        "schema": "newlang.c222.r.freeze.manifest.v1",
+        "bundle_id": "c222-r-v1",
+        "phase": "PRE-REF_BLIND_SOURCE-FREEZE_ONLY",
+        "compiler_main": "28726f933ff4885c000e0247cf4fd9ac1859c5b1",
+        "p_candidate_head": null,
+        "canonical": "Draft17.34",
+        "issue": "https://github.com/wakairo/NewLang_Compiler/issues/1134",
+        "start_comment": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6618851744",
+        "byte_contract": {
+          "encoding": "UTF-8",
+          "ascii_subset": true,
+          "bom": false,
+          "newline": "LF",
+          "exactly_one_final_lf": true,
+          "fenced_payload_only": true,
+          "markdown_fence_bytes_excluded": true
+        },
+        "hash_algorithm": "SHA-256",
+        "hash_method": "Pure JavaScript UTF-8 bytes and SHA-256; standard empty/abc/56-byte multi-block known-answer checks; exact fence extraction rehash before publication.",
+        "entries": [
+          {
+            "path": "c222-r-v1/sources/p01-rise-three.nl",
+            "role": "source",
+            "bytes": 1591,
+            "sha256": "28640d32a05c648a152cd4bbb06388e7c0d11370eeaee342ac341d1e6066f1f1"
+          },
+          {
+            "path": "c222-r-v1/sources/p02-rise-zero.nl",
+            "role": "source",
+            "bytes": 1592,
+            "sha256": "2fb4bb9e03119f0577b8d2e6fe3cf0ffe7367f18991d4d8c2f88fe274904e8a4"
+          },
+          {
+            "path": "c222-r-v1/sources/p03-rise-one.nl",
+            "role": "source",
+            "bytes": 1592,
+            "sha256": "5ff8776553df4814e1b265c6865d56af6d88ae927ea45c5255c11fd130eef56b"
+          },
+          {
+            "path": "c222-r-v1/sources/p04-fall-three.nl",
+            "role": "source",
+            "bytes": 1591,
+            "sha256": "3d61d272276753caf09054518c13f04d014c90b0d95ee774ad38d8c15ae362ef"
+          },
+          {
+            "path": "c222-r-v1/sources/p05-helper-precision.nl",
+            "role": "source",
+            "bytes": 377,
+            "sha256": "196d46d078afb2cf314371be3b46ecc898ee1d0e62430adeaeecdf33f8491be2"
+          },
+          {
+            "path": "c222-r-v1/sources/c06-divergent-identity.nl",
+            "role": "source",
+            "bytes": 143,
+            "sha256": "fce7d99527f521f08d6d3163bf1a7ff811918f804cf3d8ac704ead5ecb7efd94"
+          },
+          {
+            "path": "c222-r-v1/sources/n07-late-underflow.nl",
+            "role": "source",
+            "bytes": 242,
+            "sha256": "5f24044e7d4b8eded031b770dc5562cb6c99f3d00111a98bd9ece8d7f96db972"
+          },
+          {
+            "path": "c222-r-v1/sources/n08-inverted-overflow-guard.nl",
+            "role": "source",
+            "bytes": 259,
+            "sha256": "b06d28eeb97e9d2fbc389902242d12e59f4787cc4bc4bd56239f11c2da86dc81"
+          },
+          {
+            "path": "c222-r-v1/sources/n09-carry-type.nl",
+            "role": "source",
+            "bytes": 87,
+            "sha256": "1f681763ad4c63a8bbd7eee5f3ef0513f92a12a8d937c15cc774b59a431faa4e"
+          },
+          {
+            "path": "c222-r-v1/sources/n10-nearest-target-arity.nl",
+            "role": "source",
+            "bytes": 171,
+            "sha256": "e8237e1fe9bf14b18058bde30e85a62c382735fc22a7bf91d93bfdc90b30954b"
+          },
+          {
+            "path": "c222-r-v1/sources/n11-loan-control-boundary.nl",
+            "role": "source",
+            "bytes": 181,
+            "sha256": "99e74b046d9fed2932b9e359fbbef7a2ae28d7322998d2314b547457edb88969"
+          },
+          {
+            "path": "c222-r-v1/sources/n12-ending-loan-result.nl",
+            "role": "source",
+            "bytes": 352,
+            "sha256": "b3e8fe58999ee4cbbc480212f3e7af038f21c053fe6679d8bb3bf1670037fe95"
+          },
+          {
+            "path": "c222-r-v1/oracle.json",
+            "role": "oracle",
+            "bytes": 29928,
+            "sha256": "9d7382f0c9227bf472426dffe4ada90422bcc26cb9c155de9d4592cb2a0b264f"
+          },
+          {
+            "path": "c222-r-v1/README.txt",
+            "role": "rationale",
+            "bytes": 7781,
+            "sha256": "da2208c78dc82e45dcb0b8c702c9ecbafe26b29f27b471b099f69e733b316655"
+          }
+        ],
+        "total_entry_bytes": 45887,
+        "self_reference": "manifest.json does not include itself. Its exact bytes and SHA-256 are recorded in the containing Issue comment.",
+        "authorities": [
+          {
+            "path": "docs/reference/CURRENT_SPEC.md",
+            "git_blob_sha1": "18b2d6b089c1507743f14325c7a2723b1c341db6",
+            "used": "pointer only"
+          },
+          {
+            "path": "docs/NewLang_Project_Compass.md",
+            "git_blob_sha1": "0f9b170ce26504a16acec8e4b84beab11f9fbd4e",
+            "used": "related goal/non-goal/authority navigation"
+          },
+          {
+            "path": "docs/NewLang_Product_Value_Strategy.md",
+            "git_blob_sha1": "c75f1601f13070bc5a588bd78957b54662bdfd23",
+            "used": "section 1.1"
+          },
+          {
+            "path": "docs/NewLang_Project_Development_Process.md",
+            "git_blob_sha1": "c777512dba935410cb1060569e0f4aeeaff427d5",
+            "used": "sections 7/8"
+          },
+          {
+            "path": "docs/reference/NewLang_v0_spec_Draft17_34.md",
+            "git_blob_sha1": "84236f4bc29ae35f01f8eca4238d56c2f62d34a0",
+            "used": "canonical quantity/T/Change/Copy/dependency/function/scope/control-flow rules"
+          }
+        ],
+        "blind_boundary": {
+          "p1133_body_comments_read": false,
+          "p_implementation_fixtures_oracle_reports_read": false,
+          "m_f_b_examples_rationale_read": false,
+          "former_r_artifacts_read": false,
+          "canonical_embedded_historical_references": "visible in authorized canonical/pointer; linked reports were not followed or reused"
+        },
+        "execution_authorization": "NONE",
+        "terminal_state": "FROZEN_RETURN_TO_C_STOP"
+      },
+      "files": [
+        {
+          "path": "tests/r1134/c222-r-v1/sources/p01-rise-three.nl",
+          "role": "source",
+          "bytes": 1591,
+          "sha256": "28640d32a05c648a152cd4bbb06388e7c0d11370eeaee342ac341d1e6066f1f1",
+          "git_blob": "aa6174c3318ad300c6eac6949fcb6129575eded2"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/sources/p02-rise-zero.nl",
+          "role": "source",
+          "bytes": 1592,
+          "sha256": "2fb4bb9e03119f0577b8d2e6fe3cf0ffe7367f18991d4d8c2f88fe274904e8a4",
+          "git_blob": "d49313b6219f128f1e662ab3f4e77a31978b4665"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/sources/p03-rise-one.nl",
+          "role": "source",
+          "bytes": 1592,
+          "sha256": "5ff8776553df4814e1b265c6865d56af6d88ae927ea45c5255c11fd130eef56b",
+          "git_blob": "0ab775bf37f0043641e6450c11ba0ebaccdbd485"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/sources/p04-fall-three.nl",
+          "role": "source",
+          "bytes": 1591,
+          "sha256": "3d61d272276753caf09054518c13f04d014c90b0d95ee774ad38d8c15ae362ef",
+          "git_blob": "d877516fdf9dfdd8d5a669184bf9359625eebe17"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/sources/p05-helper-precision.nl",
+          "role": "source",
+          "bytes": 377,
+          "sha256": "196d46d078afb2cf314371be3b46ecc898ee1d0e62430adeaeecdf33f8491be2",
+          "git_blob": "ead8010cf31a7c65fc24e481a53fbd5eea9c0399"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/sources/c06-divergent-identity.nl",
+          "role": "source",
+          "bytes": 143,
+          "sha256": "fce7d99527f521f08d6d3163bf1a7ff811918f804cf3d8ac704ead5ecb7efd94",
+          "git_blob": "4215e5fa1e3a7fe1de5e81a316938de244a7c8be"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/sources/n07-late-underflow.nl",
+          "role": "source",
+          "bytes": 242,
+          "sha256": "5f24044e7d4b8eded031b770dc5562cb6c99f3d00111a98bd9ece8d7f96db972",
+          "git_blob": "a712107e45e5b1f12556ed79bec8d321e2a5e741"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/sources/n08-inverted-overflow-guard.nl",
+          "role": "source",
+          "bytes": 259,
+          "sha256": "b06d28eeb97e9d2fbc389902242d12e59f4787cc4bc4bd56239f11c2da86dc81",
+          "git_blob": "5a91a5ddad4913b65f3dc6f65b9538f26df291a7"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/sources/n09-carry-type.nl",
+          "role": "source",
+          "bytes": 87,
+          "sha256": "1f681763ad4c63a8bbd7eee5f3ef0513f92a12a8d937c15cc774b59a431faa4e",
+          "git_blob": "121c96e357d18187a8506be3330589380bd80049"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/sources/n10-nearest-target-arity.nl",
+          "role": "source",
+          "bytes": 171,
+          "sha256": "e8237e1fe9bf14b18058bde30e85a62c382735fc22a7bf91d93bfdc90b30954b",
+          "git_blob": "cbf19c139ffbecb86679c0207d548afcc5169ad0"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/sources/n11-loan-control-boundary.nl",
+          "role": "source",
+          "bytes": 181,
+          "sha256": "99e74b046d9fed2932b9e359fbbef7a2ae28d7322998d2314b547457edb88969",
+          "git_blob": "0faaa3b22fe2c3fbbfee2809e566c3f9dff3f63c"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/sources/n12-ending-loan-result.nl",
+          "role": "source",
+          "bytes": 352,
+          "sha256": "b3e8fe58999ee4cbbc480212f3e7af038f21c053fe6679d8bb3bf1670037fe95",
+          "git_blob": "0b158814e75253f1831c80470f7953173b966c63"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/oracle.json",
+          "role": "oracle",
+          "bytes": 29928,
+          "sha256": "9d7382f0c9227bf472426dffe4ada90422bcc26cb9c155de9d4592cb2a0b264f",
+          "git_blob": "b5c2a355bf5fd061256b4d7ad55289945a7c256b"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/README.txt",
+          "role": "rationale",
+          "bytes": 7781,
+          "sha256": "da2208c78dc82e45dcb0b8c702c9ecbafe26b29f27b471b099f69e733b316655",
+          "git_blob": "ebe40c63cc4eb89641f9b1d2a8ff71199b24aba7"
+        },
+        {
+          "path": "tests/r1134/c222-r-v1/manifest.json",
+          "bytes": 5134,
+          "sha256": "3f047b8690c99331a8787762a3d44c5a7c54b4658be3fefcce70d30305659843",
+          "git_blob": "b30a64301dd5b2fcc7361e7df8351fbee77ee5c4"
+        }
+      ]
+    },
+    {
+      "bundle": "c223-r-v2",
+      "total_files": 17,
+      "total_bytes": 30264,
+      "manifest_path": "tests/r1134/c223-r-v2/manifest.json",
+      "manifest_sha256": "c1a536546e8143cbd675b88adddba16c72012aa2ae405777e56b1abc50bab862",
+      "original_manifest": {
+        "schema": "newlang.r1134.c223.freeze.manifest.v2",
+        "encoding": "UTF-8 ASCII subset",
+        "bom": false,
+        "newline": "LF",
+        "exactly_one_final_lf": true,
+        "fenced_payload_only": true,
+        "fixed_main": "28726f933ff4885c000e0247cf4fd9ac1859c5b1",
+        "fixed_p_head": "0caf94894560d2f9a0b1f9404ca87055b0a21ee7",
+        "canonical": "Draft17.34",
+        "independence": "SCOPE-CALIBRATED / implementation-fixture-blind; not fresh PRE-REF BLIND",
+        "v1_manifest_sha256": "3f047b8690c99331a8787762a3d44c5a7c54b4658be3fefcce70d30305659843",
+        "entries": [
+          {
+            "path": "c223-r-v2/sources/p01-rise-three.nl",
+            "bytes": 1089,
+            "sha256": "e937ef758072c41d811089cb0be90c9aeb0631a91c198798841c6ed2c932e9f2"
+          },
+          {
+            "path": "c223-r-v2/sources/p02-rise-zero.nl",
+            "bytes": 1091,
+            "sha256": "d9d83924d42b7be37d89e5f09540ea4c42c276e286b760166e0cf015b23c2d9b"
+          },
+          {
+            "path": "c223-r-v2/sources/p03-rise-one.nl",
+            "bytes": 1090,
+            "sha256": "603a3aa9cd825f219e46490cb39990939430b479892a29651c0ce2fe91a8df1e"
+          },
+          {
+            "path": "c223-r-v2/sources/p04-fall-three.nl",
+            "bytes": 1112,
+            "sha256": "448edef669b1af3d41c19051e793aaff7ff2300a27cc7abae4595a45effe8927"
+          },
+          {
+            "path": "c223-r-v2/sources/p05-fall-zero.nl",
+            "bytes": 1111,
+            "sha256": "6ee435288123c566087e0961a43e4658ed471f0982c84677f32b99ad14157857"
+          },
+          {
+            "path": "c223-r-v2/sources/p06-fall-one.nl",
+            "bytes": 1112,
+            "sha256": "aebb64dabdcc8a1e95ca357ee476e9cef0df5e4a55e3ebc279b17c9345138e79"
+          },
+          {
+            "path": "c223-r-v2/sources/n07-late-underflow.nl",
+            "bytes": 181,
+            "sha256": "0542437e06daaaefec549a2407f67f3d45b6235f9599e0be10cd9af1917ec001"
+          },
+          {
+            "path": "c223-r-v2/sources/n08-inverted-overflow.nl",
+            "bytes": 181,
+            "sha256": "0ca8fee9c34443e4161d0bd7b15bc3708eb80d46f2c9652de25588e5fbdb73dc"
+          },
+          {
+            "path": "c223-r-v2/sources/n09-wrong-arm-underflow.nl",
+            "bytes": 181,
+            "sha256": "22ab15710a10a462ca3340c44c0706e6cc9f7d9c51ad94bf2131c933aea25f60"
+          },
+          {
+            "path": "c223-r-v2/sources/n10-operand-type.nl",
+            "bytes": 178,
+            "sha256": "4b52bfda8fb8dafd8037357599059d2d6f72817506e604800fcf8b4d8b77c417"
+          },
+          {
+            "path": "c223-r-v2/sources/n11-carry-type.nl",
+            "bytes": 170,
+            "sha256": "deb3534fa269be290486ea088d2eb2e5b50a472baf159279e8440405ef93c04e"
+          },
+          {
+            "path": "c223-r-v2/sources/n12-nearest-arity.nl",
+            "bytes": 177,
+            "sha256": "fdd6c37b642b3451d576de0912d2b7b99a7138165cdf0f58344c247e2a0c8909"
+          },
+          {
+            "path": "c223-r-v2/sources/n13-ending-loan.nl",
+            "bytes": 292,
+            "sha256": "dfb01eef3bcb76aab5d6e157d94e79392db96345e7edf6a5227d64f1b162590b"
+          },
+          {
+            "path": "c223-r-v2/sources/c14-commuted-precision.nl",
+            "bytes": 181,
+            "sha256": "87809534f52d3b2a3175fd9c04a14cec59810f44cf621e4aa578517dd545d2ce"
+          },
+          {
+            "path": "c223-r-v2/oracle.json",
+            "bytes": 14824,
+            "sha256": "04f5bb29bd672c72ae14ecab618797e83360a4a7eb79eb0cb7b2d1be6144a2be"
+          },
+          {
+            "path": "c223-r-v2/README.txt",
+            "bytes": 3894,
+            "sha256": "594df1a866316bf0470b4996b8616361434415b1bf6c7c1711d504c0edfd8f93"
+          }
+        ],
+        "total_entry_bytes": 26864,
+        "self_reference": "This manifest excludes itself; its identity is recorded in the containing Issue comment."
+      },
+      "files": [
+        {
+          "path": "tests/r1134/c223-r-v2/sources/p01-rise-three.nl",
+          "bytes": 1089,
+          "sha256": "e937ef758072c41d811089cb0be90c9aeb0631a91c198798841c6ed2c932e9f2",
+          "git_blob": "3f2c89331d6325030a73c2bd4367d1f3a7451260"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/p02-rise-zero.nl",
+          "bytes": 1091,
+          "sha256": "d9d83924d42b7be37d89e5f09540ea4c42c276e286b760166e0cf015b23c2d9b",
+          "git_blob": "56e34430396cd760f313f76f04214d0678bac7ac"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/p03-rise-one.nl",
+          "bytes": 1090,
+          "sha256": "603a3aa9cd825f219e46490cb39990939430b479892a29651c0ce2fe91a8df1e",
+          "git_blob": "da6737c66d9388aa22f6e6c0408610072cc7023a"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/p04-fall-three.nl",
+          "bytes": 1112,
+          "sha256": "448edef669b1af3d41c19051e793aaff7ff2300a27cc7abae4595a45effe8927",
+          "git_blob": "0d91a7b652069f3049c3f5d16c69db95a1b9fdb7"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/p05-fall-zero.nl",
+          "bytes": 1111,
+          "sha256": "6ee435288123c566087e0961a43e4658ed471f0982c84677f32b99ad14157857",
+          "git_blob": "84980a974771d1233ac899d4466b039b13e377d3"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/p06-fall-one.nl",
+          "bytes": 1112,
+          "sha256": "aebb64dabdcc8a1e95ca357ee476e9cef0df5e4a55e3ebc279b17c9345138e79",
+          "git_blob": "903a1659c322eaf3fa93c53525a3ad219a54cb24"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/n07-late-underflow.nl",
+          "bytes": 181,
+          "sha256": "0542437e06daaaefec549a2407f67f3d45b6235f9599e0be10cd9af1917ec001",
+          "git_blob": "f4dd4c046400a4ff6fa0f0265e2d1cdeb9dbf986"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/n08-inverted-overflow.nl",
+          "bytes": 181,
+          "sha256": "0ca8fee9c34443e4161d0bd7b15bc3708eb80d46f2c9652de25588e5fbdb73dc",
+          "git_blob": "dd93482d5854960df4dc88c7e1c1e01d79358a88"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/n09-wrong-arm-underflow.nl",
+          "bytes": 181,
+          "sha256": "22ab15710a10a462ca3340c44c0706e6cc9f7d9c51ad94bf2131c933aea25f60",
+          "git_blob": "df8caceb64a8dffe14e7c3819630a8c3fae85a1c"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/n10-operand-type.nl",
+          "bytes": 178,
+          "sha256": "4b52bfda8fb8dafd8037357599059d2d6f72817506e604800fcf8b4d8b77c417",
+          "git_blob": "09fec929cbe5df3465a6b6192558289653fdc0f7"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/n11-carry-type.nl",
+          "bytes": 170,
+          "sha256": "deb3534fa269be290486ea088d2eb2e5b50a472baf159279e8440405ef93c04e",
+          "git_blob": "0dcf73313008784ae8d667c9f7d4d64db02fb8f5"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/n12-nearest-arity.nl",
+          "bytes": 177,
+          "sha256": "fdd6c37b642b3451d576de0912d2b7b99a7138165cdf0f58344c247e2a0c8909",
+          "git_blob": "64e537db747e15da92d9210fccf1865ddacafcd9"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/n13-ending-loan.nl",
+          "bytes": 292,
+          "sha256": "dfb01eef3bcb76aab5d6e157d94e79392db96345e7edf6a5227d64f1b162590b",
+          "git_blob": "7470ad573d430f084196cbb0ea33fb75cb97e968"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/sources/c14-commuted-precision.nl",
+          "bytes": 181,
+          "sha256": "87809534f52d3b2a3175fd9c04a14cec59810f44cf621e4aa578517dd545d2ce",
+          "git_blob": "34631c95c34e85ac8b6e0966aebf134b9def0f8b"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/oracle.json",
+          "bytes": 14824,
+          "sha256": "04f5bb29bd672c72ae14ecab618797e83360a4a7eb79eb0cb7b2d1be6144a2be",
+          "git_blob": "7d0c71618a00fb198438e12a98b385c58bf8b1fc"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/README.txt",
+          "bytes": 3894,
+          "sha256": "594df1a866316bf0470b4996b8616361434415b1bf6c7c1711d504c0edfd8f93",
+          "git_blob": "2d9f6b7d2903cdbd44177dd0d8374af4c313994a"
+        },
+        {
+          "path": "tests/r1134/c223-r-v2/manifest.json",
+          "bytes": 3400,
+          "sha256": "c1a536546e8143cbd675b88adddba16c72012aa2ae405777e56b1abc50bab862",
+          "git_blob": "60dc9479081dfc4ff01bf4b223769bf52b4f7acf"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schema": "r1134-c223-custody-recovery-v1",
+  "interruption": {
+    "occurred_before_tree_commit_ref": true,
+    "transient_payload_cache_lost": true,
+    "first_large_create_succeeded": true,
+    "original_local_exception": "large blob readback failed",
+    "original_blob_sha_not_cached": true
+  },
+  "recovery": {
+    "scope": "pure GitHub data retrieval and pure JavaScript hashing; no shell/compiler/native/Lean/new Actions execution",
+    "all_logs_recovered_from_immutable_job_ids": 15,
+    "normal_raw_payloads_recovered_losslessly_from_transport": 12,
+    "raw_git_blob_sha1_crosschecked_against_independent_c_table": true,
+    "idempotent_recreate_log_blob": "6aa57a8058787e67c976f3366c3769e1ecd79795",
+    "generic_fetch_reproduction": {
+      "keys": [
+        "content",
+        "isError"
+      ],
+      "isError": true,
+      "structuredKeys": null,
+      "content": [
+        {
+          "type": "text",
+          "text_length": 96,
+          "text_if_error": "tool call error: tool call failed for `codex_apps/github.fetch`\n\nCaused by:\n    Transport closed"
+        }
+      ]
+    },
+    "precise_cause": "The observed generic wrapper failure is Transport closed; no stronger root-cause assertion is made.",
+    "remedy": "Dedicated github_fetch_blob returned full decoded content. All 12 large payloads were independently read back and SHA-256/byte-count verified before the archive tree was built. All remaining payloads will be verified before publishing the new ref.",
+    "chunking_used": false
+  },
+  "qualification": "pre-execution frozen independent cohort / scope-calibrated V2 / incidental old-P formatter exposure after freeze",
+  "missing_zip_binary": true,
+  "manifest_contract": "Manifest lists every new payload except itself. The immutable manifest is independently hashed in the final Issue receipt; each payload is read back by Git blob SHA and SHA-256 checked before ref creation."
+}

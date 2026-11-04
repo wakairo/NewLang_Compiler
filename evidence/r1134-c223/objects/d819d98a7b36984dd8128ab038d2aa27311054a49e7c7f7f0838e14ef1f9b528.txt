@@ -1,0 +1,6 @@
+{
+  "bytes": 475564,
+  "raw_location": "C17_SYNTAX_MAP_AST command stdout_base64",
+  "sha256": "919c6811324ec658de69516f8f131883e6b4cccb6eb4a34cfe2cc7cdb0e8a2da",
+  "source": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build/r1134-raw/p02-rise-zero/generated.c"
+}

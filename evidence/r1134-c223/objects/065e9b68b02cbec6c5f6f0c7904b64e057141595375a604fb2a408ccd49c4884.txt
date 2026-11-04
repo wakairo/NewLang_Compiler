@@ -1,0 +1,48 @@
+{
+  "break_count": 1,
+  "carry_trace": [
+    14,
+    10,
+    6,
+    2
+  ],
+  "continue_count": 3,
+  "helpers": [
+    [
+      "0x7ffc5dd2aa45",
+      "139",
+      "87"
+    ],
+    [
+      "0x7ffc5dd2aa45",
+      "87",
+      "193"
+    ]
+  ],
+  "identity_within_run": [
+    140721882573380,
+    140721882573380,
+    140721882573381,
+    2,
+    140721882573382,
+    140721882573382,
+    140721882573383,
+    2
+  ],
+  "locals": {
+    "break_current": 87,
+    "break_remote_first": 159,
+    "break_remote_second": 226,
+    "break_sibling": 73,
+    "caller_current": 193,
+    "caller_old": 87,
+    "caller_remote_first": 159,
+    "caller_remote_second": 226,
+    "caller_sibling": 73,
+    "loop_old": 139,
+    "old_copy": 139,
+    "preserved_old": 139,
+    "sibling_copy": 73
+  },
+  "original_disjoint_from_remote": true
+}

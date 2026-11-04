@@ -1,0 +1,1731 @@
+{
+  "schema": "r1134-c223-evidence-manifest-v1",
+  "repository": "wakairo/NewLang_Compiler",
+  "branch": "r-archive/r1134-c223-evidence",
+  "parent": "ef6647cf361310ed84b92a009a79eaa1f5385493",
+  "parent_tree": "0ef7168e56b9b17e73458c81494ad2b8030cb7f5",
+  "retained_parent_blob_leaves": 5902,
+  "only_added_prefix": "evidence/r1134-c223/",
+  "all_payloads_utf8": true,
+  "hash": "SHA-256 exact UTF-8 bytes; no normalization",
+  "self_reference": "This manifest excludes itself; its SHA-256 is in the final Issue receipt.",
+  "payload_count": 275,
+  "payload_bytes": 63257420,
+  "jobs": 15,
+  "runs": 7,
+  "normal_raw_json": 12,
+  "logical_runtime_artifacts": 438,
+  "unique_runtime_objects": 238,
+  "qualification": "pre-execution frozen independent cohort / scope-calibrated V2 / incidental old-P formatter exposure after freeze",
+  "original_zip_binary_in_git": false,
+  "workflow_blobs": {
+    ".github/workflows/compiler-ci.yml": "23655288e60f0d3d08a12c9a542346bf31829a08",
+    ".github/workflows/compiler-frontend-ci.yml": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5",
+    ".github/workflows/r-preflight.yml": "9fea1afeeef948127c73e9ca86c476091036116e"
+  },
+  "budget": {
+    "fast": 3,
+    "normal_jobs": 12,
+    "manual": 0,
+    "archive_semantic_execution": 0
+  },
+  "authority": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620832073",
+  "resume": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6621485288",
+  "entries": [
+    {
+      "path": "evidence/r1134-c223/artifact-bindings.json",
+      "bytes": 140608,
+      "sha256": "13306bf048e682d678db2d0ce0367cf463a16d0042477e3e7af8e957a3ccd22d",
+      "role": "all 438 exact logical runtime file bindings to 238 content objects"
+    },
+    {
+      "path": "evidence/r1134-c223/artifacts.json",
+      "bytes": 2717,
+      "sha256": "af7c84ab57761f2b494985918eff007b27ea88fcf8b8557f845e9cfb975aaf6b",
+      "role": "artifact metadata and explicit missing original ZIP binary limitation"
+    },
+    {
+      "path": "evidence/r1134-c223/custody-recovery.json",
+      "bytes": 1925,
+      "sha256": "968c3600b829dc9f8b3a985fd0e2d3d4766130e855a4a694ec79e81a7ea8e1a9",
+      "role": "interruption, exact observed failure shape and data-only recovery"
+    },
+    {
+      "path": "evidence/r1134-c223/FIRST/formatter-suggestions-from-log.opaque.txt",
+      "bytes": 5762,
+      "sha256": "28a407a16b20104a3f21acaad891635480a0794e74da9795bea191de0f105451",
+      "role": "original log-contained formatter suggestions; timestamp prefix removed only; opaque; foreign hunk NOT_APPLIED"
+    },
+    {
+      "path": "evidence/r1134-c223/jobs.json",
+      "bytes": 19729,
+      "sha256": "26b46153967c02f42f99590cf4e371c5417dde5a74a549fd91f05f612ab9361c",
+      "role": "job/run/check-out identity and raw/log bindings"
+    },
+    {
+      "path": "evidence/r1134-c223/lineage.json",
+      "bytes": 13196,
+      "sha256": "99bc835df11bfef724bc31209756174546bb256c7fb1246d3dddefc9780fbece",
+      "role": "frozen lineage, equipment identities, exposure and authorization"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/024fea3c6cf95b392335072b05bd1c08dcb717f07d7fe8851e72dcf901fbad17.txt",
+      "bytes": 273,
+      "sha256": "024fea3c6cf95b392335072b05bd1c08dcb717f07d7fe8851e72dcf901fbad17",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/04cdd5dd7db468464aa490db4a32351be85682b241dc56dafc4571a1d6df3208.txt",
+      "bytes": 815,
+      "sha256": "04cdd5dd7db468464aa490db4a32351be85682b241dc56dafc4571a1d6df3208",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/0542437e06daaaefec549a2407f67f3d45b6235f9599e0be10cd9af1917ec001.txt",
+      "bytes": 181,
+      "sha256": "0542437e06daaaefec549a2407f67f3d45b6235f9599e0be10cd9af1917ec001",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/05427c77600891b823e737a9025d0fa29729ba3c4ca2d261275111522a3195f4.txt",
+      "bytes": 803,
+      "sha256": "05427c77600891b823e737a9025d0fa29729ba3c4ca2d261275111522a3195f4",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/05ea53f661cb98bdc43ffffe902f220cf87c50c9e1fcd4b500cd3d0153034891.txt",
+      "bytes": 282,
+      "sha256": "05ea53f661cb98bdc43ffffe902f220cf87c50c9e1fcd4b500cd3d0153034891",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/065e9b68b02cbec6c5f6f0c7904b64e057141595375a604fb2a408ccd49c4884.txt",
+      "bytes": 815,
+      "sha256": "065e9b68b02cbec6c5f6f0c7904b64e057141595375a604fb2a408ccd49c4884",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/069c6e48bdd49334178c6fc252a84f95ef719321f34036f1abf7fb6994710d0c.txt",
+      "bytes": 794,
+      "sha256": "069c6e48bdd49334178c6fc252a84f95ef719321f34036f1abf7fb6994710d0c",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/0b6eb5fb633aef0f6e83db755e5dfb1ce3760369c3ec0481b337c98d497ed395.txt",
+      "bytes": 801,
+      "sha256": "0b6eb5fb633aef0f6e83db755e5dfb1ce3760369c3ec0481b337c98d497ed395",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/0ca8fee9c34443e4161d0bd7b15bc3708eb80d46f2c9652de25588e5fbdb73dc.txt",
+      "bytes": 181,
+      "sha256": "0ca8fee9c34443e4161d0bd7b15bc3708eb80d46f2c9652de25588e5fbdb73dc",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/0e2faf17bdcd9aa1f24bacb0e385653cbd31547edd139f1d57540bf4fd2906e1.txt",
+      "bytes": 794,
+      "sha256": "0e2faf17bdcd9aa1f24bacb0e385653cbd31547edd139f1d57540bf4fd2906e1",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/0e37a52fd1f774aa00a4bedfad5d6169d33582841dae1c3b434b91051fb17c65.txt",
+      "bytes": 803,
+      "sha256": "0e37a52fd1f774aa00a4bedfad5d6169d33582841dae1c3b434b91051fb17c65",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/0f6cb9d1bc3ad3999e5f6120a7a80808eb8405f18ba6599b945dc9ca518d7581.txt",
+      "bytes": 803,
+      "sha256": "0f6cb9d1bc3ad3999e5f6120a7a80808eb8405f18ba6599b945dc9ca518d7581",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/0f9f8bb2845931a8e0f9ebf76d4cdb85e2ce9277cafb221256d1037e8c51b8b3.txt",
+      "bytes": 801,
+      "sha256": "0f9f8bb2845931a8e0f9ebf76d4cdb85e2ce9277cafb221256d1037e8c51b8b3",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/13cfb322ef0d0d1d97dd2e7a7b03681be723737da004408bbf3a90e685142e16.txt",
+      "bytes": 815,
+      "sha256": "13cfb322ef0d0d1d97dd2e7a7b03681be723737da004408bbf3a90e685142e16",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/154460df6da72c856e0dfa30ad9143832398294da12d691c0e6895a10843c899.txt",
+      "bytes": 801,
+      "sha256": "154460df6da72c856e0dfa30ad9143832398294da12d691c0e6895a10843c899",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/158d9a1bb8d1d239974c790287225d4e18f0d7f2381c39b937a2cbb3e98ca8da.txt",
+      "bytes": 792,
+      "sha256": "158d9a1bb8d1d239974c790287225d4e18f0d7f2381c39b937a2cbb3e98ca8da",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/161ddb9d4801ab5b2c7f65a4a6469de8ebf4f33c54fc926709d7d65082aef6d5.txt",
+      "bytes": 274,
+      "sha256": "161ddb9d4801ab5b2c7f65a4a6469de8ebf4f33c54fc926709d7d65082aef6d5",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/165e6a7e1e634a0bfbf5bd3c1e93903b659506891895c171d369a952f25a2e80.txt",
+      "bytes": 5027,
+      "sha256": "165e6a7e1e634a0bfbf5bd3c1e93903b659506891895c171d369a952f25a2e80",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/16aa1bb5543f6dccd181989ff0e2e2af11db501c925c988852cbb2af3cd0ad24.txt",
+      "bytes": 815,
+      "sha256": "16aa1bb5543f6dccd181989ff0e2e2af11db501c925c988852cbb2af3cd0ad24",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/17a3a744eeb4fc312826dedfdbc6788bff4f743c9265fa2a257c851fef3179a7.txt",
+      "bytes": 815,
+      "sha256": "17a3a744eeb4fc312826dedfdbc6788bff4f743c9265fa2a257c851fef3179a7",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/17e2f8443ad7cb00f18aee38a285a0e23949d4c8f57f464d036a26f416690428.txt",
+      "bytes": 811,
+      "sha256": "17e2f8443ad7cb00f18aee38a285a0e23949d4c8f57f464d036a26f416690428",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/18ac8d08cf0c3d5772750798b77755dcbf00c3829470d15864b8c8e577444d89.txt",
+      "bytes": 792,
+      "sha256": "18ac8d08cf0c3d5772750798b77755dcbf00c3829470d15864b8c8e577444d89",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/1924c2bbddb63c495a865cf185c94ee54c205c33f128e4befa9076c84b1c0339.txt",
+      "bytes": 803,
+      "sha256": "1924c2bbddb63c495a865cf185c94ee54c205c33f128e4befa9076c84b1c0339",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/195fae2e4c1bd587971d7d3667de49aa0ed841109e5dec709af43cb398ea0260.txt",
+      "bytes": 803,
+      "sha256": "195fae2e4c1bd587971d7d3667de49aa0ed841109e5dec709af43cb398ea0260",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/1b2a5d20900991bb3051bbe697b40cda21ed453790789d6c54120fc225a2219d.txt",
+      "bytes": 792,
+      "sha256": "1b2a5d20900991bb3051bbe697b40cda21ed453790789d6c54120fc225a2219d",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/1e8cdf894ee32598367e0dd81710a4760dd11cffdb6aa025e78cea0ee6d42e94.txt",
+      "bytes": 272,
+      "sha256": "1e8cdf894ee32598367e0dd81710a4760dd11cffdb6aa025e78cea0ee6d42e94",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/1f7806c1dc28e284f999ed974fb498879f839703284d5a3d426a148aa30046c7.txt",
+      "bytes": 3888,
+      "sha256": "1f7806c1dc28e284f999ed974fb498879f839703284d5a3d426a148aa30046c7",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/21428fe7a50797ed0f61d5a9c14b50e88adf5ac66cfcabb46fc1636326dc2718.txt",
+      "bytes": 803,
+      "sha256": "21428fe7a50797ed0f61d5a9c14b50e88adf5ac66cfcabb46fc1636326dc2718",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/221ad9e7891c930c55385ec40a25b814fe21d63d03d75cf588339348f3c2406d.txt",
+      "bytes": 272,
+      "sha256": "221ad9e7891c930c55385ec40a25b814fe21d63d03d75cf588339348f3c2406d",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/22ab15710a10a462ca3340c44c0706e6cc9f7d9c51ad94bf2131c933aea25f60.txt",
+      "bytes": 181,
+      "sha256": "22ab15710a10a462ca3340c44c0706e6cc9f7d9c51ad94bf2131c933aea25f60",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/23da46cc2be208e6444c207bb4d71b8e6439f5d80432ada7af5baa380b3cc47e.txt",
+      "bytes": 792,
+      "sha256": "23da46cc2be208e6444c207bb4d71b8e6439f5d80432ada7af5baa380b3cc47e",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/280c672b05bc0933b91b7ab6fb1f9914549d7a25cad0f732677cdca2d1b71eb3.txt",
+      "bytes": 801,
+      "sha256": "280c672b05bc0933b91b7ab6fb1f9914549d7a25cad0f732677cdca2d1b71eb3",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/286f28d45eef95f9a3d00c1ae03fc1a36d209129692b57d77f5cb60d8faec593.txt",
+      "bytes": 811,
+      "sha256": "286f28d45eef95f9a3d00c1ae03fc1a36d209129692b57d77f5cb60d8faec593",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/293830f23cf7082a0814e2867a29fbf015bbb88ffccb1f9441f98bc3ea73c6bd.txt",
+      "bytes": 803,
+      "sha256": "293830f23cf7082a0814e2867a29fbf015bbb88ffccb1f9441f98bc3ea73c6bd",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/2a1503bd8911b9259b7bf2ed7de11a1e2b7d1cd8f7b703ce8a454f61e27be204.txt",
+      "bytes": 815,
+      "sha256": "2a1503bd8911b9259b7bf2ed7de11a1e2b7d1cd8f7b703ce8a454f61e27be204",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/2a67a9bea3ca001e95f67af2aa49f2dae351e5bfb63949ade7641f353c5572cd.txt",
+      "bytes": 815,
+      "sha256": "2a67a9bea3ca001e95f67af2aa49f2dae351e5bfb63949ade7641f353c5572cd",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/2b131be5e26a5af9f78e8f518a30ea02a0d8d7f4b0f1a5240b93dac76a9ee9a6.txt",
+      "bytes": 815,
+      "sha256": "2b131be5e26a5af9f78e8f518a30ea02a0d8d7f4b0f1a5240b93dac76a9ee9a6",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/2b1cfc1464ed2e1d5c1edad20270758f0ec4e0be01930f080d6c0cec56125a78.txt",
+      "bytes": 801,
+      "sha256": "2b1cfc1464ed2e1d5c1edad20270758f0ec4e0be01930f080d6c0cec56125a78",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/2c10c77b328352a53e14d4920d6b9754e1baa35ec252e3a0e17a226eaa29f429.txt",
+      "bytes": 815,
+      "sha256": "2c10c77b328352a53e14d4920d6b9754e1baa35ec252e3a0e17a226eaa29f429",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/2d2213148e333371cb7f943952f8a66dbbf72eabdb186dd644d1a87e29c30c4a.txt",
+      "bytes": 792,
+      "sha256": "2d2213148e333371cb7f943952f8a66dbbf72eabdb186dd644d1a87e29c30c4a",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/2fa2babed0cfcd17bd7b29273586b3465cf13ae426999493619555cd4106b5cb.txt",
+      "bytes": 273,
+      "sha256": "2fa2babed0cfcd17bd7b29273586b3465cf13ae426999493619555cd4106b5cb",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/300adcb4c6473b35d2e497e2e20f73ccf4ecb550e9186ce4761a18dbb043908c.txt",
+      "bytes": 803,
+      "sha256": "300adcb4c6473b35d2e497e2e20f73ccf4ecb550e9186ce4761a18dbb043908c",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/30d10e8dc3315cfee6f747c59eb338c951102c8ac4fde1bb27f01085cbc7b9bc.txt",
+      "bytes": 792,
+      "sha256": "30d10e8dc3315cfee6f747c59eb338c951102c8ac4fde1bb27f01085cbc7b9bc",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/31033741fd65f1cc95c1cf0297743f86c7a4c75fc0ec003d3553708eb746ae76.txt",
+      "bytes": 811,
+      "sha256": "31033741fd65f1cc95c1cf0297743f86c7a4c75fc0ec003d3553708eb746ae76",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/31f4c970536ac5e162830c158f897a87698847cf96ddc1eba0dff433f172b568.txt",
+      "bytes": 281,
+      "sha256": "31f4c970536ac5e162830c158f897a87698847cf96ddc1eba0dff433f172b568",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/326a5e07fe59da6727a1475e27c3bbf195e22e5fef96ff742fdebb608d80a1e9.txt",
+      "bytes": 811,
+      "sha256": "326a5e07fe59da6727a1475e27c3bbf195e22e5fef96ff742fdebb608d80a1e9",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/330633cbf28647423f485d7fcda5acff288cf67d78a4ae2be4a172defcbb2506.txt",
+      "bytes": 5027,
+      "sha256": "330633cbf28647423f485d7fcda5acff288cf67d78a4ae2be4a172defcbb2506",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/335273a22c7f4fe97024a5b5ef2e895fb113bcccd3ed926e363175c49a46955d.txt",
+      "bytes": 811,
+      "sha256": "335273a22c7f4fe97024a5b5ef2e895fb113bcccd3ed926e363175c49a46955d",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/33f03248e46d4846d3ba439b6cbb692f13ea9beb8f3dd1a9571062eb09607ef9.txt",
+      "bytes": 811,
+      "sha256": "33f03248e46d4846d3ba439b6cbb692f13ea9beb8f3dd1a9571062eb09607ef9",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/344ccdce68acf36c04008013ddd239806ae379a1f5419c20906ddfad59f4b8f4.txt",
+      "bytes": 803,
+      "sha256": "344ccdce68acf36c04008013ddd239806ae379a1f5419c20906ddfad59f4b8f4",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/358d8b8fb5666c4baf5398702d08b77615ec6ca491e8de28a90ebf164b200863.txt",
+      "bytes": 811,
+      "sha256": "358d8b8fb5666c4baf5398702d08b77615ec6ca491e8de28a90ebf164b200863",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/3613c0c40d8bed9abc1cdaeb76cb8e7cd3ea603729ce231dbf2aacc83e515cf9.txt",
+      "bytes": 792,
+      "sha256": "3613c0c40d8bed9abc1cdaeb76cb8e7cd3ea603729ce231dbf2aacc83e515cf9",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/3647afc4dfef44b2b8f8174f0411fa9d3364d8ce473d60a86b518899f64d9d8a.txt",
+      "bytes": 274,
+      "sha256": "3647afc4dfef44b2b8f8174f0411fa9d3364d8ce473d60a86b518899f64d9d8a",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/37938c8106299ae3daa25d9d9cada7e1189886d41ccea0e6539e5eefbe8317ef.txt",
+      "bytes": 794,
+      "sha256": "37938c8106299ae3daa25d9d9cada7e1189886d41ccea0e6539e5eefbe8317ef",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/37ac7a1e2ae4538e3c9e54e4f1313246c001c4eff9cab13dff52d26dbf2948be.txt",
+      "bytes": 272,
+      "sha256": "37ac7a1e2ae4538e3c9e54e4f1313246c001c4eff9cab13dff52d26dbf2948be",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/37df012e766d71fc2ea38822e311b536aea8a468bb159bb2db13d17b111afc04.txt",
+      "bytes": 815,
+      "sha256": "37df012e766d71fc2ea38822e311b536aea8a468bb159bb2db13d17b111afc04",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/3ab8bd8e7db95a39ba3caf9d25b440fcdfea67a0d93fa39f3cfd8eb31377f873.txt",
+      "bytes": 792,
+      "sha256": "3ab8bd8e7db95a39ba3caf9d25b440fcdfea67a0d93fa39f3cfd8eb31377f873",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/3b0177e44d8c122694cb86a1ea50385e0b97b1c6c0fc4d2636582118f7a1eae4.txt",
+      "bytes": 803,
+      "sha256": "3b0177e44d8c122694cb86a1ea50385e0b97b1c6c0fc4d2636582118f7a1eae4",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/3c005e86e74c6e4b75753964d55daf5eb3e5610a8100d135b704ada229cccb84.txt",
+      "bytes": 811,
+      "sha256": "3c005e86e74c6e4b75753964d55daf5eb3e5610a8100d135b704ada229cccb84",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/3d73273e1a00ebe7ff275ecda5bd850fd03cff8c72d050c0bc87a04f96d23466.txt",
+      "bytes": 792,
+      "sha256": "3d73273e1a00ebe7ff275ecda5bd850fd03cff8c72d050c0bc87a04f96d23466",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/3eb8ba67d866891f85618ba0aef91d52cc4f60c091aad3dd3feec77723cdcfc8.txt",
+      "bytes": 274,
+      "sha256": "3eb8ba67d866891f85618ba0aef91d52cc4f60c091aad3dd3feec77723cdcfc8",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/3eda25d1afc40bc4a06da98e4fbea1782267b00cd9a6482424de9b33b2bb0f9b.txt",
+      "bytes": 815,
+      "sha256": "3eda25d1afc40bc4a06da98e4fbea1782267b00cd9a6482424de9b33b2bb0f9b",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/3fd33d312835dc3ad123756f44865466ccd774003d831bd34c16355e945c150a.txt",
+      "bytes": 792,
+      "sha256": "3fd33d312835dc3ad123756f44865466ccd774003d831bd34c16355e945c150a",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/40d346f6c37a849021075d37d58dcb92a15440a791fde5034d008559f33627c9.txt",
+      "bytes": 3883,
+      "sha256": "40d346f6c37a849021075d37d58dcb92a15440a791fde5034d008559f33627c9",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/415907d55e10793dcf01bc002954676466a96067939a0609313e4271e7cea84c.txt",
+      "bytes": 815,
+      "sha256": "415907d55e10793dcf01bc002954676466a96067939a0609313e4271e7cea84c",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/42a19faa226723b7d2eac7d19cb30c0a2bc549ff9f41abfbc1bbca5710f136c9.txt",
+      "bytes": 792,
+      "sha256": "42a19faa226723b7d2eac7d19cb30c0a2bc549ff9f41abfbc1bbca5710f136c9",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/44639bf1522b5005bcdb6c43e9b11e5f41bb54dc7126c9107fdc146d5f3056e9.txt",
+      "bytes": 811,
+      "sha256": "44639bf1522b5005bcdb6c43e9b11e5f41bb54dc7126c9107fdc146d5f3056e9",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/4489bb0fef15b807ad0154cc59050a873a660c7801ca28e082d48fe6503c8365.txt",
+      "bytes": 815,
+      "sha256": "4489bb0fef15b807ad0154cc59050a873a660c7801ca28e082d48fe6503c8365",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/448edef669b1af3d41c19051e793aaff7ff2300a27cc7abae4595a45effe8927.txt",
+      "bytes": 1112,
+      "sha256": "448edef669b1af3d41c19051e793aaff7ff2300a27cc7abae4595a45effe8927",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/45b0210549b7c95d06184ea3fb239d1d4ccc5ee9f0ee35045d05389ee6cf9e65.txt",
+      "bytes": 811,
+      "sha256": "45b0210549b7c95d06184ea3fb239d1d4ccc5ee9f0ee35045d05389ee6cf9e65",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/47cf03cf64606fd46dde14662fadda67e7c7374d08702bef42d8dfd8d42b8991.txt",
+      "bytes": 792,
+      "sha256": "47cf03cf64606fd46dde14662fadda67e7c7374d08702bef42d8dfd8d42b8991",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/488e98dba72022f72fce7a994ae248c4c26e5d1e0cc3a65724b85ec5ab085a91.txt",
+      "bytes": 803,
+      "sha256": "488e98dba72022f72fce7a994ae248c4c26e5d1e0cc3a65724b85ec5ab085a91",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/4a207497eedf8383b4f311e0762a972cfb1a3ac9f0ff4122446245203231846c.txt",
+      "bytes": 811,
+      "sha256": "4a207497eedf8383b4f311e0762a972cfb1a3ac9f0ff4122446245203231846c",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/4a212f9cd2380dbbceb03c5e54d330bc1d36c7952df38eb31c549562d9380e14.txt",
+      "bytes": 794,
+      "sha256": "4a212f9cd2380dbbceb03c5e54d330bc1d36c7952df38eb31c549562d9380e14",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/4ac9de422b701234bc1479b8bc2f91f8e865a23986c0b6de2f4c8b0640433906.txt",
+      "bytes": 794,
+      "sha256": "4ac9de422b701234bc1479b8bc2f91f8e865a23986c0b6de2f4c8b0640433906",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/4b52bfda8fb8dafd8037357599059d2d6f72817506e604800fcf8b4d8b77c417.txt",
+      "bytes": 178,
+      "sha256": "4b52bfda8fb8dafd8037357599059d2d6f72817506e604800fcf8b4d8b77c417",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/4b744fdc1c9a0ca9d6bc7a292b8860e855be2529868cb9c00f7ff28f629713ae.txt",
+      "bytes": 792,
+      "sha256": "4b744fdc1c9a0ca9d6bc7a292b8860e855be2529868cb9c00f7ff28f629713ae",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/4c9a666bb91b96531df39e7dd054b1f83c93c63b36566d7fe11fad7940581c73.txt",
+      "bytes": 801,
+      "sha256": "4c9a666bb91b96531df39e7dd054b1f83c93c63b36566d7fe11fad7940581c73",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/4d156b21a0ee9119aabc6a280e1d3f16cf603351bb49b96104fbfedb73e4369a.txt",
+      "bytes": 273,
+      "sha256": "4d156b21a0ee9119aabc6a280e1d3f16cf603351bb49b96104fbfedb73e4369a",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/4dfe40f0a8cf2d3274bbcfeee28e242f6bee65593fd47e677365c9968daf9f4a.txt",
+      "bytes": 801,
+      "sha256": "4dfe40f0a8cf2d3274bbcfeee28e242f6bee65593fd47e677365c9968daf9f4a",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/4f2f3f7076d7f3083a38c149cad9e5f6943d2f30abc7ef93ce24e841b2e5b475.txt",
+      "bytes": 792,
+      "sha256": "4f2f3f7076d7f3083a38c149cad9e5f6943d2f30abc7ef93ce24e841b2e5b475",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/50714a88f4dbd4cae713514cd6e35f2e53ce2bac72dedeb20e18e5ffce6a26e8.txt",
+      "bytes": 792,
+      "sha256": "50714a88f4dbd4cae713514cd6e35f2e53ce2bac72dedeb20e18e5ffce6a26e8",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/519c199f2e8d9c9169f0109c0e8135777e4a07ccbfe76f9c0b9f394d15c16748.txt",
+      "bytes": 811,
+      "sha256": "519c199f2e8d9c9169f0109c0e8135777e4a07ccbfe76f9c0b9f394d15c16748",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/51efb723c72b717ac46b99d3a1554b3b477af5f4427cc0368f6c29dc37f77b1f.txt",
+      "bytes": 273,
+      "sha256": "51efb723c72b717ac46b99d3a1554b3b477af5f4427cc0368f6c29dc37f77b1f",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/54cdf4721f5a6f641809ee62cf864fe26c72ab314ed69d9a3f3cae8cf7768aee.txt",
+      "bytes": 6618,
+      "sha256": "54cdf4721f5a6f641809ee62cf864fe26c72ab314ed69d9a3f3cae8cf7768aee",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/550942a1d30e719775ce3d61303f0b42881e789e4a34332169e540c509b5255a.txt",
+      "bytes": 5027,
+      "sha256": "550942a1d30e719775ce3d61303f0b42881e789e4a34332169e540c509b5255a",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/552b5d778e14460a88582bc433f7343cfc4930bec266071b1922cdd425f47452.txt",
+      "bytes": 811,
+      "sha256": "552b5d778e14460a88582bc433f7343cfc4930bec266071b1922cdd425f47452",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/55467ed436cf467fbcd6f542b2ad50e38f97a770fd97137f3fbe6807c721f700.txt",
+      "bytes": 811,
+      "sha256": "55467ed436cf467fbcd6f542b2ad50e38f97a770fd97137f3fbe6807c721f700",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/55d42cc16666bfb34ff3871935705b44ef275b52046641163025859d392c5ed9.txt",
+      "bytes": 801,
+      "sha256": "55d42cc16666bfb34ff3871935705b44ef275b52046641163025859d392c5ed9",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/55fc8187c24bed97fa78ee9a402686ddb972c4d8d0018509ff4217562f9daeeb.txt",
+      "bytes": 792,
+      "sha256": "55fc8187c24bed97fa78ee9a402686ddb972c4d8d0018509ff4217562f9daeeb",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/56aee18b00effbdd463d88181574b97a0d692c1dc7535ad1a15ff816ed60244a.txt",
+      "bytes": 811,
+      "sha256": "56aee18b00effbdd463d88181574b97a0d692c1dc7535ad1a15ff816ed60244a",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/576c6a299eb60e6458555be52763eaee00f6c51507ad023a2c7fab57853d05d1.txt",
+      "bytes": 811,
+      "sha256": "576c6a299eb60e6458555be52763eaee00f6c51507ad023a2c7fab57853d05d1",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/59818c93474410174ff726f0409c218acfe9191150b7dac807c3d1f475a4d89e.txt",
+      "bytes": 811,
+      "sha256": "59818c93474410174ff726f0409c218acfe9191150b7dac807c3d1f475a4d89e",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/59dd251fa03a105ee48a98484e4c815b5dae383d513ea3aa59e2545d92a56503.txt",
+      "bytes": 794,
+      "sha256": "59dd251fa03a105ee48a98484e4c815b5dae383d513ea3aa59e2545d92a56503",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/5a3dad3758aeb88f38eb8aeb506fce436655aa8f6f59a4daa67f20194e8741cd.txt",
+      "bytes": 815,
+      "sha256": "5a3dad3758aeb88f38eb8aeb506fce436655aa8f6f59a4daa67f20194e8741cd",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/5d9006d15faae89b151b15d429de45622861d8d550fa68a9edb190bee3cf838e.txt",
+      "bytes": 811,
+      "sha256": "5d9006d15faae89b151b15d429de45622861d8d550fa68a9edb190bee3cf838e",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/5e7c33a81c1a63f88956a95eae2132aa1d395759d3ddd5e64cf433940561882a.txt",
+      "bytes": 801,
+      "sha256": "5e7c33a81c1a63f88956a95eae2132aa1d395759d3ddd5e64cf433940561882a",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/603a3aa9cd825f219e46490cb39990939430b479892a29651c0ce2fe91a8df1e.txt",
+      "bytes": 1090,
+      "sha256": "603a3aa9cd825f219e46490cb39990939430b479892a29651c0ce2fe91a8df1e",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/611b3ef1098092fdb0775a28ad264045cb7e955206cdcf1663076e7b5d1da4a6.txt",
+      "bytes": 801,
+      "sha256": "611b3ef1098092fdb0775a28ad264045cb7e955206cdcf1663076e7b5d1da4a6",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/621d91dee1f388eb3303df329dbc1a596b1a409795b77cfb28e7afec9700e93e.txt",
+      "bytes": 794,
+      "sha256": "621d91dee1f388eb3303df329dbc1a596b1a409795b77cfb28e7afec9700e93e",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/622e195b33fbc2b9ef72558a0809bae0ef78963245c48f9acd01f71fb0d35035.txt",
+      "bytes": 801,
+      "sha256": "622e195b33fbc2b9ef72558a0809bae0ef78963245c48f9acd01f71fb0d35035",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/6233e08f2bd1fbf37a232dd331a063f934d2de614c85afb16a32693aa5a67a6c.txt",
+      "bytes": 803,
+      "sha256": "6233e08f2bd1fbf37a232dd331a063f934d2de614c85afb16a32693aa5a67a6c",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/62e26835fa3faa4e9f50bc3eda2fc24f0c7702950220086bdf0cc9d4e2176209.txt",
+      "bytes": 801,
+      "sha256": "62e26835fa3faa4e9f50bc3eda2fc24f0c7702950220086bdf0cc9d4e2176209",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/6768d29c58dc56433ad6b39912bfa280818e3af4423da0e450dda69dd51327d4.txt",
+      "bytes": 3888,
+      "sha256": "6768d29c58dc56433ad6b39912bfa280818e3af4423da0e450dda69dd51327d4",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/69e74f0d64b291b5bb3757350d45c8e76d219011f7a2b1a1ddf0857066e7ceee.txt",
+      "bytes": 794,
+      "sha256": "69e74f0d64b291b5bb3757350d45c8e76d219011f7a2b1a1ddf0857066e7ceee",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/6d448ae03b8bd16c4da2de96ea7dd7d76584842eb14b336d7a57343fd25570d3.txt",
+      "bytes": 5027,
+      "sha256": "6d448ae03b8bd16c4da2de96ea7dd7d76584842eb14b336d7a57343fd25570d3",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/6ee435288123c566087e0961a43e4658ed471f0982c84677f32b99ad14157857.txt",
+      "bytes": 1111,
+      "sha256": "6ee435288123c566087e0961a43e4658ed471f0982c84677f32b99ad14157857",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/700c2438dd8b581fab6cb5ec8c1d42fe61707df8200445e996189f3cf5102096.txt",
+      "bytes": 794,
+      "sha256": "700c2438dd8b581fab6cb5ec8c1d42fe61707df8200445e996189f3cf5102096",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/709490c3a2447a4cd54401301aa691b846e6f5e6c8bc16500ed7062e612deed8.txt",
+      "bytes": 815,
+      "sha256": "709490c3a2447a4cd54401301aa691b846e6f5e6c8bc16500ed7062e612deed8",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/7156671c86c776a81ac19ea37a1ace826cbde6dfe38a6fa2ac6b8d935999d1ab.txt",
+      "bytes": 803,
+      "sha256": "7156671c86c776a81ac19ea37a1ace826cbde6dfe38a6fa2ac6b8d935999d1ab",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/738eafed75e56770a8b266aeaf09f82c92639d72f59f04f48f4ef8022da30a10.txt",
+      "bytes": 801,
+      "sha256": "738eafed75e56770a8b266aeaf09f82c92639d72f59f04f48f4ef8022da30a10",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/743b9254734c901bbb5a78a8614549adfeed5a696de77a160b016bb375876f0a.txt",
+      "bytes": 811,
+      "sha256": "743b9254734c901bbb5a78a8614549adfeed5a696de77a160b016bb375876f0a",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/7648620e45190dce57b02ac27d69b3045d22e2c43a4198b77aa0b968b4f98942.txt",
+      "bytes": 3885,
+      "sha256": "7648620e45190dce57b02ac27d69b3045d22e2c43a4198b77aa0b968b4f98942",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/769b12506d7cd5f0d56bbc461dd269f9beee65ca0d5ea8684d36103b17a48004.txt",
+      "bytes": 801,
+      "sha256": "769b12506d7cd5f0d56bbc461dd269f9beee65ca0d5ea8684d36103b17a48004",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/7a0131788b47af1a6494ef461507cb1303aa1882e2ba51732cc1d4cba0449587.txt",
+      "bytes": 6615,
+      "sha256": "7a0131788b47af1a6494ef461507cb1303aa1882e2ba51732cc1d4cba0449587",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/7a2a8bd59db74489f06318970f19193b7eee4483635d57b0baff315eff3dc142.txt",
+      "bytes": 283,
+      "sha256": "7a2a8bd59db74489f06318970f19193b7eee4483635d57b0baff315eff3dc142",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/7a87b8d108d2fc75f8fd17947de7b48a46b3331e40f7ec4fd2bc16191d154c85.txt",
+      "bytes": 794,
+      "sha256": "7a87b8d108d2fc75f8fd17947de7b48a46b3331e40f7ec4fd2bc16191d154c85",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/7b73ca492a21cca67ba0da2763b61e0a1b7f0859d2710fd661e59c0eabdf8af4.txt",
+      "bytes": 272,
+      "sha256": "7b73ca492a21cca67ba0da2763b61e0a1b7f0859d2710fd661e59c0eabdf8af4",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/7b8c431197f8cccc1a5fa7cfc25d788b24b91543c183ec1fdd2ba21894345327.txt",
+      "bytes": 803,
+      "sha256": "7b8c431197f8cccc1a5fa7cfc25d788b24b91543c183ec1fdd2ba21894345327",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/7ec67e1410b50810f79965170b1e6e05842cde5ff555ca6361f5a838c9369ebf.txt",
+      "bytes": 794,
+      "sha256": "7ec67e1410b50810f79965170b1e6e05842cde5ff555ca6361f5a838c9369ebf",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/7eca4a0cf02cacd9f4e728ff94ae27827973f7f3f56cae25de54cca6bb4007f9.txt",
+      "bytes": 801,
+      "sha256": "7eca4a0cf02cacd9f4e728ff94ae27827973f7f3f56cae25de54cca6bb4007f9",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/7f0f7605491bfb9982c2ad8611228e71ee17a52a3a3aefe89df2ebce089dce16.txt",
+      "bytes": 274,
+      "sha256": "7f0f7605491bfb9982c2ad8611228e71ee17a52a3a3aefe89df2ebce089dce16",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/7f9e87880345f9a5d8ec5f1dc9fad241a8414788361e8b12e99032b9ab9173b9.txt",
+      "bytes": 815,
+      "sha256": "7f9e87880345f9a5d8ec5f1dc9fad241a8414788361e8b12e99032b9ab9173b9",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/80f4491e99087aee9021ad911a8346d5f117c50ed4736f3bc3a90a36c72311c1.txt",
+      "bytes": 794,
+      "sha256": "80f4491e99087aee9021ad911a8346d5f117c50ed4736f3bc3a90a36c72311c1",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/82617b7f8038c344895702b1a7992890360e604cac542a216495b0171c1a60b8.txt",
+      "bytes": 274,
+      "sha256": "82617b7f8038c344895702b1a7992890360e604cac542a216495b0171c1a60b8",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/836b95dff6187b49aaf4ee6a1a89666d147baeccbd633c41ee1074001b099143.txt",
+      "bytes": 803,
+      "sha256": "836b95dff6187b49aaf4ee6a1a89666d147baeccbd633c41ee1074001b099143",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/8595ca41a18755b0ae7ab11805177204597ba6bc46279ba914c2ed559082244c.txt",
+      "bytes": 801,
+      "sha256": "8595ca41a18755b0ae7ab11805177204597ba6bc46279ba914c2ed559082244c",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/8598428b85f607d84ba2f686143924dc10e9118a2a3b1a38b54888194ddf6d2c.txt",
+      "bytes": 801,
+      "sha256": "8598428b85f607d84ba2f686143924dc10e9118a2a3b1a38b54888194ddf6d2c",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/86ca2c338e9fc59549fba570a2526cab406778d804b4af13ace25e5748b735f8.txt",
+      "bytes": 803,
+      "sha256": "86ca2c338e9fc59549fba570a2526cab406778d804b4af13ace25e5748b735f8",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/874c29ba9682d4f81eeea5ea6e5dcca5e2b0b5cd7aa5168c33bf463cfaf4b118.txt",
+      "bytes": 803,
+      "sha256": "874c29ba9682d4f81eeea5ea6e5dcca5e2b0b5cd7aa5168c33bf463cfaf4b118",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/87809534f52d3b2a3175fd9c04a14cec59810f44cf621e4aa578517dd545d2ce.txt",
+      "bytes": 181,
+      "sha256": "87809534f52d3b2a3175fd9c04a14cec59810f44cf621e4aa578517dd545d2ce",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/88b4cf127779f511dfe0ccc45531698b1a46a0d57d5a5416b2314fa8ff811973.txt",
+      "bytes": 803,
+      "sha256": "88b4cf127779f511dfe0ccc45531698b1a46a0d57d5a5416b2314fa8ff811973",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/89d5dd07f3c4cbaf383bccfc7b23c36120272d9a008d250cfdc11cc701531efe.txt",
+      "bytes": 792,
+      "sha256": "89d5dd07f3c4cbaf383bccfc7b23c36120272d9a008d250cfdc11cc701531efe",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/8a675a8049eb4bb3fad065f10fbd6eb1231a0e114c51b6b3b0029ace27119f1e.txt",
+      "bytes": 794,
+      "sha256": "8a675a8049eb4bb3fad065f10fbd6eb1231a0e114c51b6b3b0029ace27119f1e",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/8a929e6f47faf8dc208ad7ce94c0f9cf08d6bec194bb27a70c8cf1d37f2cc22d.txt",
+      "bytes": 801,
+      "sha256": "8a929e6f47faf8dc208ad7ce94c0f9cf08d6bec194bb27a70c8cf1d37f2cc22d",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/8c07efe746aba742b2d435e1c30a5ea9a5f9a37bbf5ed5a199a750147bc3fc05.txt",
+      "bytes": 801,
+      "sha256": "8c07efe746aba742b2d435e1c30a5ea9a5f9a37bbf5ed5a199a750147bc3fc05",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/8d595e2aded0c3c617f64f388967da11d9e440cd11834d76d57d38cc935ae23f.txt",
+      "bytes": 801,
+      "sha256": "8d595e2aded0c3c617f64f388967da11d9e440cd11834d76d57d38cc935ae23f",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/8ee45b6526578db7ca4972a1a8ef3336c9d8cc0d54974224ed4e388d960e33ff.txt",
+      "bytes": 6618,
+      "sha256": "8ee45b6526578db7ca4972a1a8ef3336c9d8cc0d54974224ed4e388d960e33ff",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/908357d5a9fdcb900c458a282b13f0c09d871fc3da77465f2c0bc7b3cb39e061.txt",
+      "bytes": 801,
+      "sha256": "908357d5a9fdcb900c458a282b13f0c09d871fc3da77465f2c0bc7b3cb39e061",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/9134709afe319fd60a90d68cbcfd2848cbc06645b058b733da95b1ece2f8e45b.txt",
+      "bytes": 811,
+      "sha256": "9134709afe319fd60a90d68cbcfd2848cbc06645b058b733da95b1ece2f8e45b",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/917882071228de650965dab6c10d7be4e3ebc86adf639334f0f55e687ec8aa23.txt",
+      "bytes": 803,
+      "sha256": "917882071228de650965dab6c10d7be4e3ebc86adf639334f0f55e687ec8aa23",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/93267eb27a6c885e2e0a98057f1b27332f7a2fed048d71541781224c9f25d764.txt",
+      "bytes": 815,
+      "sha256": "93267eb27a6c885e2e0a98057f1b27332f7a2fed048d71541781224c9f25d764",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/95844a66cd4126696dfa0092ef1b4c3a5ad2306b0dad4427b84055b0d034acd2.txt",
+      "bytes": 272,
+      "sha256": "95844a66cd4126696dfa0092ef1b4c3a5ad2306b0dad4427b84055b0d034acd2",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/960609284c3f289e8452f29bfe548f04bb545e331b50a82fc3b18ba5fb823685.txt",
+      "bytes": 811,
+      "sha256": "960609284c3f289e8452f29bfe548f04bb545e331b50a82fc3b18ba5fb823685",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/963fa9c4e10a298c302c95095241fe9fbaa3b5e04846f0bb0286c270df04b01f.txt",
+      "bytes": 794,
+      "sha256": "963fa9c4e10a298c302c95095241fe9fbaa3b5e04846f0bb0286c270df04b01f",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/98637617390a4a6dcc0b13397cc7a28c80485a0a26833078298223981f0f67c6.txt",
+      "bytes": 273,
+      "sha256": "98637617390a4a6dcc0b13397cc7a28c80485a0a26833078298223981f0f67c6",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/99e9aa2c068e23d642f48211f20d617369426f814757abbda86b1e1133d455c1.txt",
+      "bytes": 794,
+      "sha256": "99e9aa2c068e23d642f48211f20d617369426f814757abbda86b1e1133d455c1",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/9a0dc29aabcf80bec7cdff01fc399fdb8c209a1d0ee8cce6d651b8b9de50834b.txt",
+      "bytes": 794,
+      "sha256": "9a0dc29aabcf80bec7cdff01fc399fdb8c209a1d0ee8cce6d651b8b9de50834b",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/9a539e9621821b1f05775b9179e2a4d65c0170b944de0a961c791555584008b8.txt",
+      "bytes": 803,
+      "sha256": "9a539e9621821b1f05775b9179e2a4d65c0170b944de0a961c791555584008b8",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/9ae36a8c73b5d4980b92b654cd36b0ec459eb4aa4a3d12e88b0085ebd4a95bee.txt",
+      "bytes": 5027,
+      "sha256": "9ae36a8c73b5d4980b92b654cd36b0ec459eb4aa4a3d12e88b0085ebd4a95bee",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/9afcf707a2be3ae8a1aabac792f384e88ed06c997da96e93aea912386a43431b.txt",
+      "bytes": 792,
+      "sha256": "9afcf707a2be3ae8a1aabac792f384e88ed06c997da96e93aea912386a43431b",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/9b0a89c43b71323eb12a1ca2646ac94862e0f46d6680448caecc245055c71478.txt",
+      "bytes": 815,
+      "sha256": "9b0a89c43b71323eb12a1ca2646ac94862e0f46d6680448caecc245055c71478",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/9bd951e347b1950faa5bf77f283ff274c02aac625869d4614a833c55fdc3cb47.txt",
+      "bytes": 5027,
+      "sha256": "9bd951e347b1950faa5bf77f283ff274c02aac625869d4614a833c55fdc3cb47",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/9be706f4f6c7f5f4120cd8b73d42e220c9e56311d7b414183e4c6f376de3672b.txt",
+      "bytes": 6613,
+      "sha256": "9be706f4f6c7f5f4120cd8b73d42e220c9e56311d7b414183e4c6f376de3672b",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/9be828ea25b8f75ee1a51b58f3dc2585e2f7e3e159e464c50fae2f44503560de.txt",
+      "bytes": 803,
+      "sha256": "9be828ea25b8f75ee1a51b58f3dc2585e2f7e3e159e464c50fae2f44503560de",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/9e6b567f9671cdca6e20a527188a852869c62e9bde388bcf884f5abcfe779acb.txt",
+      "bytes": 811,
+      "sha256": "9e6b567f9671cdca6e20a527188a852869c62e9bde388bcf884f5abcfe779acb",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/9e8ac0bd16ee08f4986a19f93115c1900fecb1a5ba64f373e1e54c76c8990d3d.txt",
+      "bytes": 801,
+      "sha256": "9e8ac0bd16ee08f4986a19f93115c1900fecb1a5ba64f373e1e54c76c8990d3d",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/a39b36fc72a086d22254c3209c33559dbcc3213001e41b5d3b23d9bee72720ce.txt",
+      "bytes": 792,
+      "sha256": "a39b36fc72a086d22254c3209c33559dbcc3213001e41b5d3b23d9bee72720ce",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/a73d420d7e3be98102fa97313603e72684ded6766855271851c0bbb7bb006139.txt",
+      "bytes": 272,
+      "sha256": "a73d420d7e3be98102fa97313603e72684ded6766855271851c0bbb7bb006139",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/a839a4d542a299404b20a74fe964f4dd7fb5f6b20e620d60b09ff1a1a8f9637b.txt",
+      "bytes": 273,
+      "sha256": "a839a4d542a299404b20a74fe964f4dd7fb5f6b20e620d60b09ff1a1a8f9637b",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/aa2217691d2708a3ac1596fea39f22bdfc8749c6552c632fe8bcc4fd1cdc312d.txt",
+      "bytes": 815,
+      "sha256": "aa2217691d2708a3ac1596fea39f22bdfc8749c6552c632fe8bcc4fd1cdc312d",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/aabff03ad40b7e3c2e433d2714fb56da4bd7d46ee5b64ff3856d67f7d2cb4a90.txt",
+      "bytes": 792,
+      "sha256": "aabff03ad40b7e3c2e433d2714fb56da4bd7d46ee5b64ff3856d67f7d2cb4a90",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/ab31cc18d24a2a079493de32d0e45f614495289673559dd5a0028aa4b2cb259b.txt",
+      "bytes": 801,
+      "sha256": "ab31cc18d24a2a079493de32d0e45f614495289673559dd5a0028aa4b2cb259b",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/ab8e8ec9c0cec4fc839cce7d2751e530ddaa81cd81b6171d040a8087840313bb.txt",
+      "bytes": 6617,
+      "sha256": "ab8e8ec9c0cec4fc839cce7d2751e530ddaa81cd81b6171d040a8087840313bb",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/acd617a2b32b70f75dee86a57a3312c57b78badcf822d7ac1c0490b7ba309431.txt",
+      "bytes": 2253,
+      "sha256": "acd617a2b32b70f75dee86a57a3312c57b78badcf822d7ac1c0490b7ba309431",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/aebb64dabdcc8a1e95ca357ee476e9cef0df5e4a55e3ebc279b17c9345138e79.txt",
+      "bytes": 1112,
+      "sha256": "aebb64dabdcc8a1e95ca357ee476e9cef0df5e4a55e3ebc279b17c9345138e79",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/b1bc9b0d42e82d521e65d7c32e5b4f708d6a04b7cf89452f39774600f549da5d.txt",
+      "bytes": 272,
+      "sha256": "b1bc9b0d42e82d521e65d7c32e5b4f708d6a04b7cf89452f39774600f549da5d",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/b1cc8919b24bc45bcf9828bffd16077c7e93ce9868e03ca18b5d6d5f8723c124.txt",
+      "bytes": 794,
+      "sha256": "b1cc8919b24bc45bcf9828bffd16077c7e93ce9868e03ca18b5d6d5f8723c124",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/b1cd0af24a0afcc30c67d2ad6e6ce0d3175f37502bbdd88555aafb487b6fbabc.txt",
+      "bytes": 792,
+      "sha256": "b1cd0af24a0afcc30c67d2ad6e6ce0d3175f37502bbdd88555aafb487b6fbabc",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/b2ca16bdee4f0c2a203269398a5588746e336bb4108c417518a7c0b8e24193b2.txt",
+      "bytes": 794,
+      "sha256": "b2ca16bdee4f0c2a203269398a5588746e336bb4108c417518a7c0b8e24193b2",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/b31a16422ac89575afd712a359dc6b55e93ce4c248bb92fe0aa85b5490f4952d.txt",
+      "bytes": 6614,
+      "sha256": "b31a16422ac89575afd712a359dc6b55e93ce4c248bb92fe0aa85b5490f4952d",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/b614961cc2340a82baaff15376d41fe0644255c99f618e9c0b96a2523caa8240.txt",
+      "bytes": 274,
+      "sha256": "b614961cc2340a82baaff15376d41fe0644255c99f618e9c0b96a2523caa8240",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/b69e783b293499c471f73ec4f4a44ea376b1c3ff73c4ba4eae62be1b19dff57b.txt",
+      "bytes": 273,
+      "sha256": "b69e783b293499c471f73ec4f4a44ea376b1c3ff73c4ba4eae62be1b19dff57b",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/b7729f2c4e16c27d433c14742c158669111079143c87caf05ebae4add14fd893.txt",
+      "bytes": 811,
+      "sha256": "b7729f2c4e16c27d433c14742c158669111079143c87caf05ebae4add14fd893",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/bee7e133d6d07ff7bb2967c9a596df4c241ed9a97f06f808265bda3232da79c5.txt",
+      "bytes": 803,
+      "sha256": "bee7e133d6d07ff7bb2967c9a596df4c241ed9a97f06f808265bda3232da79c5",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c01d6133fc6c7c63b88e2ac24f76f373c0d0f8a9b73de30ad7b3cd7113c59626.txt",
+      "bytes": 281,
+      "sha256": "c01d6133fc6c7c63b88e2ac24f76f373c0d0f8a9b73de30ad7b3cd7113c59626",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c02320008c96431c17327ea76cb984194542d9e8b1ed79d887c5143fb57d593a.txt",
+      "bytes": 274,
+      "sha256": "c02320008c96431c17327ea76cb984194542d9e8b1ed79d887c5143fb57d593a",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c225f207bd1823f1b04519a3ed2d499cc6b792910292413d95824acf9c780861.txt",
+      "bytes": 2253,
+      "sha256": "c225f207bd1823f1b04519a3ed2d499cc6b792910292413d95824acf9c780861",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c238159f07f8a6c35c8c54471e93c155bcd9e6ef0e1f6b8dc47d5bf005088e65.txt",
+      "bytes": 815,
+      "sha256": "c238159f07f8a6c35c8c54471e93c155bcd9e6ef0e1f6b8dc47d5bf005088e65",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c2673ef598b800e4ace69361a9f1a8a5704f2660dde1efe67914c3a1f29114ca.txt",
+      "bytes": 794,
+      "sha256": "c2673ef598b800e4ace69361a9f1a8a5704f2660dde1efe67914c3a1f29114ca",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c3e8bbb871467783e6f4ecf00c6c7334d6a73063311caa3d119cc7f183b06a42.txt",
+      "bytes": 811,
+      "sha256": "c3e8bbb871467783e6f4ecf00c6c7334d6a73063311caa3d119cc7f183b06a42",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c4578e8d3fc1edf9e0070115a6b953b1901212892f6356519a3329188c6169ef.txt",
+      "bytes": 803,
+      "sha256": "c4578e8d3fc1edf9e0070115a6b953b1901212892f6356519a3329188c6169ef",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c6ad4b6e5d5022a774d204eb56b3c80e4f17bbaabb510b270bdf55feef2899ee.txt",
+      "bytes": 272,
+      "sha256": "c6ad4b6e5d5022a774d204eb56b3c80e4f17bbaabb510b270bdf55feef2899ee",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c72592bcb95c37aa9cd4c09937bdc456f4a5084b4d36250b0482f400a5a0bb30.txt",
+      "bytes": 282,
+      "sha256": "c72592bcb95c37aa9cd4c09937bdc456f4a5084b4d36250b0482f400a5a0bb30",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c7998e958c252c63804c65c8e88df5b8a7691fd791f57cd0cf759067cf1a4ebb.txt",
+      "bytes": 272,
+      "sha256": "c7998e958c252c63804c65c8e88df5b8a7691fd791f57cd0cf759067cf1a4ebb",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c94d688f1eca2ac89102459add49e44e36529afcc2f78fb80a5bac5d893319f9.txt",
+      "bytes": 815,
+      "sha256": "c94d688f1eca2ac89102459add49e44e36529afcc2f78fb80a5bac5d893319f9",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c94de59ce7b596a0a4335cf9b90ed844fbb6e3c219b0b7a783d3b4c7263d5158.txt",
+      "bytes": 283,
+      "sha256": "c94de59ce7b596a0a4335cf9b90ed844fbb6e3c219b0b7a783d3b4c7263d5158",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/c967d53706cb525412e8fb5e057af118e7d3915955140303a628f4a7d6aad35e.txt",
+      "bytes": 3884,
+      "sha256": "c967d53706cb525412e8fb5e057af118e7d3915955140303a628f4a7d6aad35e",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/cb8ce929199f866b2e908dde85c91b7e029e6438159d6ab12eacb674059d3676.txt",
+      "bytes": 794,
+      "sha256": "cb8ce929199f866b2e908dde85c91b7e029e6438159d6ab12eacb674059d3676",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/cea48a9c2719d4b3f65a7f22a68105bea22846962bc90a3b02dbb5acbb7fe35d.txt",
+      "bytes": 273,
+      "sha256": "cea48a9c2719d4b3f65a7f22a68105bea22846962bc90a3b02dbb5acbb7fe35d",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/cfb1a8a35f944652bf5a7d97a299802ee376ca50465901ae1828e08f7b94716c.txt",
+      "bytes": 274,
+      "sha256": "cfb1a8a35f944652bf5a7d97a299802ee376ca50465901ae1828e08f7b94716c",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/cfcf4e2819129a62134a95d87b5b8631fdabd4271f9433de0e97f8704746bb01.txt",
+      "bytes": 792,
+      "sha256": "cfcf4e2819129a62134a95d87b5b8631fdabd4271f9433de0e97f8704746bb01",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d09ad7471ac2905a2becb2264d0cdb5dcaabdd6413ff4fc8dbafebc34b9d264c.txt",
+      "bytes": 272,
+      "sha256": "d09ad7471ac2905a2becb2264d0cdb5dcaabdd6413ff4fc8dbafebc34b9d264c",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d120892b3903dd42b20739dd035f34ca72c9abe411037472d7aa1b49b143ddc4.txt",
+      "bytes": 794,
+      "sha256": "d120892b3903dd42b20739dd035f34ca72c9abe411037472d7aa1b49b143ddc4",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d2b9fb14d03ab1ceba8952177b814f73255a98d6fb10e22b17225f6ae056b2d4.txt",
+      "bytes": 3887,
+      "sha256": "d2b9fb14d03ab1ceba8952177b814f73255a98d6fb10e22b17225f6ae056b2d4",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d2e58e8776d5ac565dc173859ca3460fb23cd51202b85ac10b97e463ffb2bb07.txt",
+      "bytes": 811,
+      "sha256": "d2e58e8776d5ac565dc173859ca3460fb23cd51202b85ac10b97e463ffb2bb07",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d4041c2ee2876306a48594bb40822c55558ffdd723b27d1469a663af0048258f.txt",
+      "bytes": 815,
+      "sha256": "d4041c2ee2876306a48594bb40822c55558ffdd723b27d1469a663af0048258f",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d46871e47498a5b3a7f26f331f1c821dc33bdde401eb930f50e160e118abde06.txt",
+      "bytes": 273,
+      "sha256": "d46871e47498a5b3a7f26f331f1c821dc33bdde401eb930f50e160e118abde06",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d496d35b479a33342e2dfca2be41cd5bb44f8ea7061a0a2d3a379f6432305aa9.txt",
+      "bytes": 803,
+      "sha256": "d496d35b479a33342e2dfca2be41cd5bb44f8ea7061a0a2d3a379f6432305aa9",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d575c16c141751cb27d03f21d8267ad8a0922745ab155e79b29fd8af5d531e9c.txt",
+      "bytes": 815,
+      "sha256": "d575c16c141751cb27d03f21d8267ad8a0922745ab155e79b29fd8af5d531e9c",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d6f42b12f7901c4f074c401c8f4d3ac830f88866340bc93b4592905055a42a38.txt",
+      "bytes": 815,
+      "sha256": "d6f42b12f7901c4f074c401c8f4d3ac830f88866340bc93b4592905055a42a38",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d819d98a7b36984dd8128ab038d2aa27311054a49e7c7f7f0838e14ef1f9b528.txt",
+      "bytes": 273,
+      "sha256": "d819d98a7b36984dd8128ab038d2aa27311054a49e7c7f7f0838e14ef1f9b528",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d8c9e99dd561b635a36718eade2013f3e2ad11a82fe581b10476dc57d992153d.txt",
+      "bytes": 794,
+      "sha256": "d8c9e99dd561b635a36718eade2013f3e2ad11a82fe581b10476dc57d992153d",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d8d1cc3a5c8a5b650bf9b041a5d1ea4e04d48db2dfe6a1ff1e8df84e21b98dd1.txt",
+      "bytes": 811,
+      "sha256": "d8d1cc3a5c8a5b650bf9b041a5d1ea4e04d48db2dfe6a1ff1e8df84e21b98dd1",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d9b2c731b8a027b7538a0a70051c0c7e3375195e2aa3660106d4c53cd9a01234.txt",
+      "bytes": 794,
+      "sha256": "d9b2c731b8a027b7538a0a70051c0c7e3375195e2aa3660106d4c53cd9a01234",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/d9d83924d42b7be37d89e5f09540ea4c42c276e286b760166e0cf015b23c2d9b.txt",
+      "bytes": 1091,
+      "sha256": "d9d83924d42b7be37d89e5f09540ea4c42c276e286b760166e0cf015b23c2d9b",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/dab86bca38310655019ff147f329d76606cbeac5a66b557a1b130f0bb051c3c4.txt",
+      "bytes": 803,
+      "sha256": "dab86bca38310655019ff147f329d76606cbeac5a66b557a1b130f0bb051c3c4",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/dc3261417c97ae117e7b0f8240e60c7d8c15e18d3f701657d1bf991e0bdd06b8.txt",
+      "bytes": 801,
+      "sha256": "dc3261417c97ae117e7b0f8240e60c7d8c15e18d3f701657d1bf991e0bdd06b8",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/de285193de396f76c5f022ceec51c69ba189d27c8fe1764f0f48d4358cc7cf05.txt",
+      "bytes": 815,
+      "sha256": "de285193de396f76c5f022ceec51c69ba189d27c8fe1764f0f48d4358cc7cf05",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/de8c656151fca1e0eb332573b39a0c9c1f9131a860a7158004a753431b46856a.txt",
+      "bytes": 792,
+      "sha256": "de8c656151fca1e0eb332573b39a0c9c1f9131a860a7158004a753431b46856a",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/deb3534fa269be290486ea088d2eb2e5b50a472baf159279e8440405ef93c04e.txt",
+      "bytes": 170,
+      "sha256": "deb3534fa269be290486ea088d2eb2e5b50a472baf159279e8440405ef93c04e",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/df7db056098ca493e599a590a515a653a2415bdf4a722599e5e9b7c21953f1d5.txt",
+      "bytes": 801,
+      "sha256": "df7db056098ca493e599a590a515a653a2415bdf4a722599e5e9b7c21953f1d5",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/dfa48031c0ea8f4bf2886225c7ac17cbb6709383acb5103c576d15fbf12d6582.txt",
+      "bytes": 792,
+      "sha256": "dfa48031c0ea8f4bf2886225c7ac17cbb6709383acb5103c576d15fbf12d6582",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/dfb01eef3bcb76aab5d6e157d94e79392db96345e7edf6a5227d64f1b162590b.txt",
+      "bytes": 292,
+      "sha256": "dfb01eef3bcb76aab5d6e157d94e79392db96345e7edf6a5227d64f1b162590b",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/dfb985641f859b11cac6f19c992a7f98fffcfd866b3e6d35f411fad50d4396ac.txt",
+      "bytes": 274,
+      "sha256": "dfb985641f859b11cac6f19c992a7f98fffcfd866b3e6d35f411fad50d4396ac",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/e0f7162d57de08a4cde2cf332afd54b0952da20c07d5d724cfc4e7d6cab41bcb.txt",
+      "bytes": 794,
+      "sha256": "e0f7162d57de08a4cde2cf332afd54b0952da20c07d5d724cfc4e7d6cab41bcb",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/e389e6b58a499af402a04b33a9b6dfc26fbb74ddec8356122a69ac86272edf1e.txt",
+      "bytes": 803,
+      "sha256": "e389e6b58a499af402a04b33a9b6dfc26fbb74ddec8356122a69ac86272edf1e",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/e3cad4cea75693d3c1ba9dcbea1625b261bbbb774918b1a45708758930191b1d.txt",
+      "bytes": 794,
+      "sha256": "e3cad4cea75693d3c1ba9dcbea1625b261bbbb774918b1a45708758930191b1d",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/e41c65df88c06cb92939a4a6fc224dd3e1f17b15d69dd4026dff7ee3e12fff24.txt",
+      "bytes": 815,
+      "sha256": "e41c65df88c06cb92939a4a6fc224dd3e1f17b15d69dd4026dff7ee3e12fff24",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/e422cca27046fb8c604b2e97b632643a9a98b92777e888e23556381904990dd1.txt",
+      "bytes": 803,
+      "sha256": "e422cca27046fb8c604b2e97b632643a9a98b92777e888e23556381904990dd1",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/e8d1bb2c059484103ba0b58151987765b2c37dc63a4eed14a87797e694cbcf21.txt",
+      "bytes": 794,
+      "sha256": "e8d1bb2c059484103ba0b58151987765b2c37dc63a4eed14a87797e694cbcf21",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/e937ef758072c41d811089cb0be90c9aeb0631a91c198798841c6ed2c932e9f2.txt",
+      "bytes": 1089,
+      "sha256": "e937ef758072c41d811089cb0be90c9aeb0631a91c198798841c6ed2c932e9f2",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/ea42d69e8da893f39030a436bfded6c91c2a8acb131e1e56a9ed26e47766941f.txt",
+      "bytes": 792,
+      "sha256": "ea42d69e8da893f39030a436bfded6c91c2a8acb131e1e56a9ed26e47766941f",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/ed55dcf8bf2174c64bd3775d693541009659be4fff159a9c4757db0b2d5715b2.txt",
+      "bytes": 811,
+      "sha256": "ed55dcf8bf2174c64bd3775d693541009659be4fff159a9c4757db0b2d5715b2",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/ef16bb8785c060d446b61bd8f9cf86870365142bec781ca041504d6f98cb1b29.txt",
+      "bytes": 792,
+      "sha256": "ef16bb8785c060d446b61bd8f9cf86870365142bec781ca041504d6f98cb1b29",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/ef4dd8706f36e1a187d3ac75e528163c0027d068d68a84cee9d510538ab1dcdb.txt",
+      "bytes": 792,
+      "sha256": "ef4dd8706f36e1a187d3ac75e528163c0027d068d68a84cee9d510538ab1dcdb",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/f1e9dbf3ec5899fdbc9b40ebbd090f0cfeb580cd0c07428f008a391d5ce427ff.txt",
+      "bytes": 274,
+      "sha256": "f1e9dbf3ec5899fdbc9b40ebbd090f0cfeb580cd0c07428f008a391d5ce427ff",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/f2ab40157798db867c97d759b3e65bd99f1c2c2751471d79ee5149df60e174e5.txt",
+      "bytes": 794,
+      "sha256": "f2ab40157798db867c97d759b3e65bd99f1c2c2751471d79ee5149df60e174e5",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/f3731778db350bba2acdfe24d3a0056da23652b509579b4e491297a3378b6d70.txt",
+      "bytes": 801,
+      "sha256": "f3731778db350bba2acdfe24d3a0056da23652b509579b4e491297a3378b6d70",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/f68156b621b5942cb3e30c6d8c4459b3ccb415848b41ad485a5a21dd74e260f6.txt",
+      "bytes": 803,
+      "sha256": "f68156b621b5942cb3e30c6d8c4459b3ccb415848b41ad485a5a21dd74e260f6",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/f9b4eed7b3f52449dabd54654b12572fea9b114dfff63229f726a6ba4195f6a0.txt",
+      "bytes": 811,
+      "sha256": "f9b4eed7b3f52449dabd54654b12572fea9b114dfff63229f726a6ba4195f6a0",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/fa812e2c49617f5d64cac59f039ab21131854fa24c8c251cfeaa3754fab46a0e.txt",
+      "bytes": 815,
+      "sha256": "fa812e2c49617f5d64cac59f039ab21131854fa24c8c251cfeaa3754fab46a0e",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/faab9382636718c7d8e72a0a6e4f1559aa9571b4669ee2965e4226976df152ae.txt",
+      "bytes": 801,
+      "sha256": "faab9382636718c7d8e72a0a6e4f1559aa9571b4669ee2965e4226976df152ae",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/fac54b5fe505e372a4d7047b37c1ca4a9dda5cc06572f51b1035fd17cb03b97f.txt",
+      "bytes": 801,
+      "sha256": "fac54b5fe505e372a4d7047b37c1ca4a9dda5cc06572f51b1035fd17cb03b97f",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/fb41603bbc005b3eb8b53cf3d9d5ff239aeba0fc415e49d305a56a72b5b90bd8.txt",
+      "bytes": 815,
+      "sha256": "fb41603bbc005b3eb8b53cf3d9d5ff239aeba0fc415e49d305a56a72b5b90bd8",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/fdd6c37b642b3451d576de0912d2b7b99a7138165cdf0f58344c247e2a0c8909.txt",
+      "bytes": 177,
+      "sha256": "fdd6c37b642b3451d576de0912d2b7b99a7138165cdf0f58344c247e2a0c8909",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/fe6685cea779399fa9ece7316ee669a66519195cae67ce382a2bb38bb4949667.txt",
+      "bytes": 792,
+      "sha256": "fe6685cea779399fa9ece7316ee669a66519195cae67ce382a2bb38bb4949667",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/objects/fee4a0956e6d93d1c88235f55de467829926d5f2970c793902698d580f5ad1ca.txt",
+      "bytes": 794,
+      "sha256": "fee4a0956e6d93d1c88235f55de467829926d5f2970c793902698d580f5ad1ca",
+      "role": "exact decoded runtime artifact, logical bindings in artifact-bindings.json"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41758217232-attempt1-126339286595.log",
+      "bytes": 37866,
+      "sha256": "476e07eb4d3963ad9e9d79ec1e6f400b2b0e889271e76581180340f211fbb0a8",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41758217232/job/126339286595"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41759204982-attempt1-126342574359.log",
+      "bytes": 84138,
+      "sha256": "d5b5da3dfac16e7a0cca684111c1dcd9958e14c7278bf952c719d48969f36460",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41759204982/job/126342574359"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41759409083-attempt1-126343247643.log",
+      "bytes": 234817,
+      "sha256": "81a26234e290de54d087748af46bb8fdd7cd979ddec519846d92d76e77594080",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41759409083/job/126343247643"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41759409083-attempt1-126343247813.log",
+      "bytes": 232219,
+      "sha256": "4697240d971ce32727deaf8f8e826b3dd66d20346fd8ea591679f623caeaf0e5",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41759409083/job/126343247813"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41759409083-attempt1-126343248055.log",
+      "bytes": 231582,
+      "sha256": "e868969d300a58d44ca1b793801223524d3c24def77101fa9e99987802405108",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41759409083/job/126343248055"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41759409083-attempt1-126343248077.log",
+      "bytes": 232834,
+      "sha256": "9a5db7301e49d7cf60eccb3193bb736e5e4893cd9286cfaace49bf7a07c1a410",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41759409083/job/126343248077"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41759409083-attempt1-126343248113.log",
+      "bytes": 232919,
+      "sha256": "15fdcbf43c4c73aee72d46574b0391f04355610c3fc2baf1178d964b165e8207",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41759409083/job/126343248113"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41759409242-attempt1-126343248008.log",
+      "bytes": 271005,
+      "sha256": "fea9784dd955300ec1655a762d1fe688f8aa1b8132507872ab1aab3f6e52a6d8",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41759409242/job/126343248008"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41761241162-attempt1-126349187582.log",
+      "bytes": 88641,
+      "sha256": "08ca32f2a4a9706ba4bd992708912bcd116221d5abacf14e6093b82ea6f54e17",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41761241162/job/126349187582"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41761249810-attempt1-126349213865.log",
+      "bytes": 5954845,
+      "sha256": "c8691a2749d9d06aa806fe2d1965ac40b09e6ba82ce77ddc5e75b7a96d5eddef",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41761249810/job/126349213865",
+      "git_blob": "c7f250731d5f88a7e720bba147475d4c53c5c2b1"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41761249943-attempt1-126349214426.log",
+      "bytes": 5928892,
+      "sha256": "cbffdb9d9aed86bf919e4ab0fc069151dbe7b29205f2672ec29ce5e6ff62975f",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41761249943/job/126349214426",
+      "git_blob": "6aa57a8058787e67c976f3366c3769e1ecd79795"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41761249943-attempt1-126349214671.log",
+      "bytes": 5930469,
+      "sha256": "4a6c11023e1c9c3eb8724d3cead7cb284d380dab568c0718b2d86393c7b47459",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41761249943/job/126349214671",
+      "git_blob": "66468607fbbe0fd3e4729e7c3c2e7858c5abef15"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41761249943-attempt1-126349214763.log",
+      "bytes": 6043642,
+      "sha256": "6a91990ae515499191d7ed6de904da5c515453d4ec33687853c31df128c9de62",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41761249943/job/126349214763",
+      "git_blob": "4f58c8cd6ec23ef1a907c9e30d6c677ab2b16d50"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41761249943-attempt1-126349214790.log",
+      "bytes": 6043041,
+      "sha256": "95cf940ef278a7ac5c1d21891096d48bcb1baccb4fd46c05664078adae7fa4d8",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41761249943/job/126349214790",
+      "git_blob": "98e7599cfe2cde5221ab3d38dfd237f3f3ac76c3"
+    },
+    {
+      "path": "evidence/r1134-c223/opaque-job-logs/41761249943-attempt1-126349214830.log",
+      "bytes": 5928185,
+      "sha256": "1826f45f0ff0834e53766843dcf297831a9c58c923c241726cb7d88002add952",
+      "role": "complete decoded Actions job log; opaque mixed producer content",
+      "source": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41761249943/job/126349214830",
+      "git_blob": "6157ef41ea1d3af8d5f208ad349abcc211fedbdd"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41759409083-attempt1-126343247643.json",
+      "bytes": 5349,
+      "sha256": "d253d5ca9fdf2304873616d1efa1b72532a07ee97798a1613415153cf797e678",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126343247643,
+      "git_blob": "af17afa8cb382c983bc80ac9eca5bf0af39611b1"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41759409083-attempt1-126343247813.json",
+      "bytes": 5136,
+      "sha256": "924b1608530de126dea941d5abe6f4462f9bd13ae828966d88a627abec29bd37",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126343247813,
+      "git_blob": "4e7bed90bc9c41119725273660d3b39640651002"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41759409083-attempt1-126343248055.json",
+      "bytes": 5136,
+      "sha256": "924b1608530de126dea941d5abe6f4462f9bd13ae828966d88a627abec29bd37",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126343248055,
+      "git_blob": "4e7bed90bc9c41119725273660d3b39640651002"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41759409083-attempt1-126343248077.json",
+      "bytes": 5352,
+      "sha256": "fbf98e00c34fa723108cbc47778462d7e79450b48576e82bed4ba81086f1a138",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126343248077,
+      "git_blob": "882c97aee948e1a084d94b6ff39b6c6191459d47"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41759409083-attempt1-126343248113.json",
+      "bytes": 5354,
+      "sha256": "c6c5cdd69daf1fb02ef859375f5858f8b33e7a95c169b67d2bb49b0707bc215b",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126343248113,
+      "git_blob": "678874c46411e43ae457bf1feb699997197e502a"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41759409242-attempt1-126343248008.json",
+      "bytes": 4761,
+      "sha256": "384eaeb77a7b0c29501439949af8f84f29b6de6c55b7afa4d61d19708b60f3a3",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126343248008,
+      "git_blob": "6c49434faea7b90da50d52e21f619e8e31aa4d5d"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41761249810-attempt1-126349213865.json",
+      "bytes": 4178801,
+      "sha256": "02150940809a0845eab25d4a69a1ecae42e0ad41468c7a2c456685de96e666ff",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126349213865,
+      "git_blob": "c66608a83ad4293f2ae55ba07db45260644fde9a"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41761249943-attempt1-126349214426.json",
+      "bytes": 4189505,
+      "sha256": "0f8a7dee4c26a375eb6be60cb9277081e3b6469e9c1d7b9da038c48141ce4b48",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126349214426,
+      "git_blob": "cfd144660c14161d55ee949c6faef3aa8dbf6afd"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41761249943-attempt1-126349214671.json",
+      "bytes": 4189718,
+      "sha256": "e5c2a1cee6965343d4c40f4b079e6c2b4141d2115c584e1bfb3050644f0098e2",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126349214671,
+      "git_blob": "130544845228c5b40efe2f383168aef8116cf3e3"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41761249943-attempt1-126349214763.json",
+      "bytes": 4264159,
+      "sha256": "252ea6e5551729ad086d280df62e62c564f1170919fea07e2563a3b5055968ba",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126349214763,
+      "git_blob": "49993c54ed166d9752a44093a1d6cf465bfdf3ab"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41761249943-attempt1-126349214790.json",
+      "bytes": 4263821,
+      "sha256": "36b6f6c067d00635213d43413f52dd346e53ff9c81ee230a6d3b745fac1a7875",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126349214790,
+      "git_blob": "fdd185e5386a9ce286a171d08f8e8f02382c0613"
+    },
+    {
+      "path": "evidence/r1134-c223/r-raw/41761249943-attempt1-126349214830.json",
+      "bytes": 4189505,
+      "sha256": "7aeff222698327da3fdea21ce4bc0fc33dc9ea8a7a9eec520cafb48b95eb97fe",
+      "role": "exact R raw.json reconstructed from original post-test transport",
+      "source_job": 126349214830,
+      "git_blob": "07d40dd6601c559ce6d8c58dea5dd1906713cef3"
+    },
+    {
+      "path": "evidence/r1134-c223/README.md",
+      "bytes": 7092,
+      "sha256": "67254414e393827debf226657e8e063faf23a0003873a17414046b155db1e83c",
+      "role": "self-contained terminal result and custody guide"
+    },
+    {
+      "path": "evidence/r1134-c223/report.json",
+      "bytes": 9641,
+      "sha256": "990f6c49fc5d6988e53af805606d500deabe3eafae26a4d2a8f563040e28e3a5",
+      "role": "finite result, actual diagnostics, scope and measurement limits"
+    },
+    {
+      "path": "evidence/r1134-c223/runs.json",
+      "bytes": 4692,
+      "sha256": "cb82663b0c2663cebbc4cbe888e3efa5ca8ebe9a42912b2fcf39f58576e7838b",
+      "role": "complete execution branch run metadata"
+    },
+    {
+      "path": "evidence/r1134-c223/source-freeze.json",
+      "bytes": 19812,
+      "sha256": "5f279a150a0b9f6d1a4409cb4a7a3c7e5b801f3e7b1bfdf381b11853cb0e57b1",
+      "role": "V1/V2 original manifests and exact inherited file identities"
+    }
+  ]
+}

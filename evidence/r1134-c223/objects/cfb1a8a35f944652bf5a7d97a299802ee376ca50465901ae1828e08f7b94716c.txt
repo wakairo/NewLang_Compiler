@@ -1,0 +1,6 @@
+{
+  "bytes": 475599,
+  "raw_location": "C17_SYNTAX_MAP_AST command stdout_base64",
+  "sha256": "e2d0b86f639753e23888cf22bb1c95bdb0696ffb3777aa13a5d2936c48516e5c",
+  "source": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build/r1134-raw/p01-rise-three/generated.c"
+}

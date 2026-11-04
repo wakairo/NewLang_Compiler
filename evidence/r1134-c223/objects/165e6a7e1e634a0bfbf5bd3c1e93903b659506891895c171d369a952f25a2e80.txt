@@ -1,0 +1,122 @@
+{
+  "actual_carry": "nl_loop_phase_23",
+  "actual_guard_logical_not_count": 0,
+  "actual_helper_functions": [
+    "nl_fn_11"
+  ],
+  "caller_function": "nl_fn_10",
+  "edge_bracing": "AST_VERIFIED",
+  "insertions": [
+    {
+      "offset": 1238,
+      "text": "\nprintf(\"R1134 INIT %p %p %p %zu %p %p %p %zu %u %u %u %u\\n\", (void *)&nl_local_1, (void *)&nl_local_1.f0, (void *)&nl_local_1.f1, sizeof(nl_local_1), (void *)&nl_local_2, (void *)&nl_local_2.f0, (void *)&nl_local_2.f1, sizeof(nl_local_2), (unsigned)nl_local_1.f0, (unsigned)nl_local_1.f1, (unsigned)nl_local_2.f0, (unsigned)nl_local_2.f1);\n"
+    },
+    {
+      "offset": 1769,
+      "text": "\nprintf(\"R1134 HEADER %zu %p %p %p %zu %p %p %p %zu %u %u %u %u\\n\", (size_t)nl_loop_phase_23, (void *)&nl_local_1, (void *)&nl_local_1.f0, (void *)&nl_local_1.f1, sizeof(nl_local_1), (void *)&nl_local_2, (void *)&nl_local_2.f0, (void *)&nl_local_2.f1, sizeof(nl_local_2), (unsigned)nl_local_1.f0, (unsigned)nl_local_1.f1, (unsigned)nl_local_2.f0, (unsigned)nl_local_2.f1);\n"
+    },
+    {
+      "offset": 1998,
+      "text": "\nprintf(\"R1134 CONTINUE %p %p %p %zu %p %p %p %zu %u %u %u %u\\n\", (void *)&nl_local_1, (void *)&nl_local_1.f0, (void *)&nl_local_1.f1, sizeof(nl_local_1), (void *)&nl_local_2, (void *)&nl_local_2.f0, (void *)&nl_local_2.f1, sizeof(nl_local_2), (unsigned)nl_local_1.f0, (unsigned)nl_local_1.f1, (unsigned)nl_local_2.f0, (unsigned)nl_local_2.f1);\n"
+    },
+    {
+      "offset": 2206,
+      "text": "\nprintf(\"R1134 BREAK %p %p %p %zu %p %p %p %zu %u %u %u %u\\n\", (void *)&nl_local_1, (void *)&nl_local_1.f0, (void *)&nl_local_1.f1, sizeof(nl_local_1), (void *)&nl_local_2, (void *)&nl_local_2.f0, (void *)&nl_local_2.f1, sizeof(nl_local_2), (unsigned)nl_local_1.f0, (unsigned)nl_local_1.f1, (unsigned)nl_local_2.f0, (unsigned)nl_local_2.f1);\n"
+    },
+    {
+      "offset": 1356,
+      "text": "\nprintf(\"R1134 LOCAL old_copy %u\\n\", (unsigned)nl_local_3);\n"
+    },
+    {
+      "offset": 1470,
+      "text": "\nprintf(\"R1134 LOCAL sibling_copy %u\\n\", (unsigned)nl_local_4);\n"
+    },
+    {
+      "offset": 2218,
+      "text": "\nprintf(\"R1134 LOCAL loop_old %u\\n\", (unsigned)nl_local_9);\n"
+    },
+    {
+      "offset": 2287,
+      "text": "\nprintf(\"R1134 LOCAL break_current %u\\n\", (unsigned)nl_local_10);\n"
+    },
+    {
+      "offset": 2404,
+      "text": "\nprintf(\"R1134 LOCAL break_sibling %u\\n\", (unsigned)nl_local_11);\n"
+    },
+    {
+      "offset": 2521,
+      "text": "\nprintf(\"R1134 LOCAL break_remote_first %u\\n\", (unsigned)nl_local_12);\n"
+    },
+    {
+      "offset": 2638,
+      "text": "\nprintf(\"R1134 LOCAL break_remote_second %u\\n\", (unsigned)nl_local_13);\n"
+    },
+    {
+      "offset": 3036,
+      "text": "\nprintf(\"R1134 LOCAL caller_old %u\\n\", (unsigned)nl_local_17);\n"
+    },
+    {
+      "offset": 3106,
+      "text": "\nprintf(\"R1134 LOCAL caller_current %u\\n\", (unsigned)nl_local_18);\n"
+    },
+    {
+      "offset": 3223,
+      "text": "\nprintf(\"R1134 LOCAL caller_sibling %u\\n\", (unsigned)nl_local_19);\n"
+    },
+    {
+      "offset": 3340,
+      "text": "\nprintf(\"R1134 LOCAL caller_remote_first %u\\n\", (unsigned)nl_local_20);\n"
+    },
+    {
+      "offset": 3457,
+      "text": "\nprintf(\"R1134 LOCAL caller_remote_second %u\\n\", (unsigned)nl_local_21);\n"
+    },
+    {
+      "offset": 3571,
+      "text": "\nprintf(\"R1134 LOCAL preserved_old %u\\n\", (unsigned)nl_local_22);\n"
+    },
+    {
+      "offset": 3571,
+      "text": "\nprintf(\"R1134 FINAL %p %p %p %zu %p %p %p %zu %u %u %u %u\\n\", (void *)&nl_local_1, (void *)&nl_local_1.f0, (void *)&nl_local_1.f1, sizeof(nl_local_1), (void *)&nl_local_2, (void *)&nl_local_2.f0, (void *)&nl_local_2.f1, sizeof(nl_local_2), (unsigned)nl_local_1.f0, (unsigned)nl_local_1.f1, (unsigned)nl_local_2.f0, (unsigned)nl_local_2.f1);\n"
+    },
+    {
+      "offset": 3677,
+      "text": "\nprintf(\"R1134 HELPER %p %u %u\\n\", (void *)nl_local_6, (unsigned)*nl_local_6, (unsigned)nl_local_7);\n"
+    }
+  ],
+  "mapping_scope": "Public source names plus actual emitted-C lexical declarations; no private issuer proof or cross-world authority comparison.",
+  "passive_only": true,
+  "public_symbols": {
+    "break_current": "nl_local_10",
+    "break_remote_first": "nl_local_12",
+    "break_remote_second": "nl_local_13",
+    "break_sibling": "nl_local_11",
+    "caller_current": "nl_local_18",
+    "caller_old": "nl_local_17",
+    "caller_remote_first": "nl_local_20",
+    "caller_remote_second": "nl_local_21",
+    "caller_sibling": "nl_local_19",
+    "loop_old": "nl_local_9",
+    "old_copy": "nl_local_3",
+    "original": "nl_local_1",
+    "preserved_old": "nl_local_22",
+    "remote": "nl_local_2",
+    "sibling_copy": "nl_local_4"
+  },
+  "separate_loop_result_assignment": {
+    "actual_assignment": [
+      2085,
+      2126
+    ],
+    "actual_break": [
+      2206,
+      2211
+    ],
+    "declaration": [
+      1543,
+      1562
+    ],
+    "observation_after_normal_loop_exit": 2218,
+    "variable": "nl_local_9"
+  }
+}

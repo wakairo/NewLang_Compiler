@@ -1,0 +1,6 @@
+{
+  "bytes": 478794,
+  "raw_location": "C17_SYNTAX_MAP_AST command stdout_base64",
+  "sha256": "6403579a2458c77679f8f45388c93e9dd8418357bf5b714157e8981d2b365048",
+  "source": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build/r1134-raw/p06-fall-one/generated.c"
+}

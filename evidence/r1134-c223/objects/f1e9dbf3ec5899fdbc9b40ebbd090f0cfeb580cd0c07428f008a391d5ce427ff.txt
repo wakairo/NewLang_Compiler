@@ -1,0 +1,6 @@
+{
+  "bytes": 478868,
+  "raw_location": "C17_SYNTAX_MAP_AST command stdout_base64",
+  "sha256": "f0e95892e54db9d57b86f99569528959a8c37b5974d2a45f0740493664d10d29",
+  "source": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build/r1134-raw/p04-fall-three/generated.c"
+}
