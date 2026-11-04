@@ -1,0 +1,172 @@
+[
+  {
+    "path": "tests/r1151/p01_add_zero_first.nl",
+    "bytes": 599,
+    "sha256": "78436756cf1b080396347682bea391d5a199fb5c8f58bcc95bef0eab88a8716f",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/p02_add_one_second.nl",
+    "bytes": 603,
+    "sha256": "0392c301804ef11d0c0230043bd67b332b5457514665cc290415218a15109b9d",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/p03_add_many_first.nl",
+    "bytes": 603,
+    "sha256": "9486940c52971fe34802d3242b93d641c7405d55383c2176c8d6d3566cab62c8",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/p04_sub_zero_second.nl",
+    "bytes": 603,
+    "sha256": "68f122f7fb1e82921ffdf5cc201387e93d38f07a619690c1436e158083c49a4b",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/p05_sub_one_first.nl",
+    "bytes": 604,
+    "sha256": "cfec1a35f25e104aa3cd486cbd08974ed2b39f9f2bf0c99487eb4e8b0979ed26",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/p06_sub_many_second.nl",
+    "bytes": 600,
+    "sha256": "9147685e07e3d911fa2a3d9a56f49f838cd30b510cc81f982a06ff42b312f37a",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/n01_nonbool_guard.nl",
+    "bytes": 505,
+    "sha256": "269465ded0553ef40ae6407e4b6585344205989d0b26a5be38556888c90ced43",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/n02_wrong_continue_type.nl",
+    "bytes": 502,
+    "sha256": "19c7b7779c2ffd02e21e1a2def854f23b29796985ec09edf5c82fa7dc052ed52",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/n03_foreign_field.nl",
+    "bytes": 510,
+    "sha256": "348dbfca3cab013a6e68e469f9522bfca3f35a52de934fbc46e8c91f064b7301",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/n04_read_to_write.nl",
+    "bytes": 503,
+    "sha256": "80a1b8ab78d1c381fe42bf6ca797c61d88658a1a5e9ed934c7e7b95be6dc7571",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/n05_ref_escape.nl",
+    "bytes": 506,
+    "sha256": "d9e1717a24809e81868c43b45c2f9b21f12d7e5f99b8eed17bad6faef05c0e97",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/n06_ended_root.nl",
+    "bytes": 589,
+    "sha256": "1e0e9c39b8504d9ca18e49f2ed9af108575517d16c01ccb45537d9192acefe01",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/oracle-v1.json",
+    "bytes": 7165,
+    "sha256": "c80e40960242c9d4beb4738701564c4c353ff7add90f9130ce41d2231384611a",
+    "encoding": "UTF-8 ASCII",
+    "newlines": "LF; final LF present"
+  },
+  {
+    "path": "tests/r1151/v2/p01_add_zero_first.nl",
+    "bytes": 677,
+    "sha256": "0a2974c749a33e933554c27457359d5008b6b45c7e0c68a2c1210a8d37da0500"
+  },
+  {
+    "path": "tests/r1151/v2/p02_add_one_second.nl",
+    "bytes": 681,
+    "sha256": "ade38b51c5e262509a76cec9282d11e1b617584b269f6d461e38cde98e6a3c91"
+  },
+  {
+    "path": "tests/r1151/v2/p03_add_many_first.nl",
+    "bytes": 681,
+    "sha256": "683ca6e46bfb35506cf2cdccb7c45b1d115dc5bc76a779d481b2676e03c683c6"
+  },
+  {
+    "path": "tests/r1151/v2/p04_sub_zero_second.nl",
+    "bytes": 681,
+    "sha256": "16b48405657d80942b6dc02d66bceb82ff95f205e46868cc9c14dd94ce5b09d0"
+  },
+  {
+    "path": "tests/r1151/v2/p05_sub_one_first.nl",
+    "bytes": 682,
+    "sha256": "0c4bf699bd85a4df96921da2f834a6ceae3c972e771a5692439f3dd0e3582624"
+  },
+  {
+    "path": "tests/r1151/v2/p06_sub_many_second.nl",
+    "bytes": 678,
+    "sha256": "4d4dd9ddc4cfcd3182a74df64505909564bb4c8cee20a87e0670f0695add559c"
+  },
+  {
+    "path": "tests/r1151/v3/p01_add_zero_first.nl",
+    "bytes": 631,
+    "sha256": "42f8808552e8f62ef01eecf437a122bcff3f7f7aa82ebcf3cdcebddbda415eb3",
+    "encoding": "ASCII",
+    "newlines": "LF, final LF"
+  },
+  {
+    "path": "tests/r1151/v3/p02_add_one_second.nl",
+    "bytes": 635,
+    "sha256": "23035ee5d35849bf628639637db4823cea69c6291f57611432df1e11e2fdfe8a",
+    "encoding": "ASCII",
+    "newlines": "LF, final LF"
+  },
+  {
+    "path": "tests/r1151/v3/p03_add_many_first.nl",
+    "bytes": 635,
+    "sha256": "141fa15d5afeb7df039a6d2a43c4af56138e6f95684c4e2061eaf273d6bccf77",
+    "encoding": "ASCII",
+    "newlines": "LF, final LF"
+  },
+  {
+    "path": "tests/r1151/v3/p04_sub_zero_second.nl",
+    "bytes": 636,
+    "sha256": "efed70d9414d1b37de5d79b13f0b03bb0a1ea8ecdec65d1a33170e1328f55c57",
+    "encoding": "ASCII",
+    "newlines": "LF, final LF"
+  },
+  {
+    "path": "tests/r1151/v3/p05_sub_one_first.nl",
+    "bytes": 636,
+    "sha256": "35441ff7203a589428f847cbb47d793ce72d7d4844f0a2bb331ed16c44641349",
+    "encoding": "ASCII",
+    "newlines": "LF, final LF"
+  },
+  {
+    "path": "tests/r1151/v3/p06_sub_many_second.nl",
+    "bytes": 632,
+    "sha256": "1d643a9d6dd0b880983818f5be720d90d389215f050f64cd254c76c62be14d2b",
+    "encoding": "ASCII",
+    "newlines": "LF, final LF"
+  },
+  {
+    "path": "tests/r1151/v3/oracle-v3.json",
+    "bytes": 8521,
+    "sha256": "461d148d13a0c3b0a04dd8665bf801f685a43c34418de4e0163b9ac564cfe5b2",
+    "encoding": "ASCII",
+    "newlines": "LF, final LF"
+  }
+]
