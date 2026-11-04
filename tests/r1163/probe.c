@@ -16,7 +16,7 @@ static size_t loops, returns, fields, arithmetic;
 #define REQUIRE(x)                                                             \
     do {                                                                       \
         if (!(x)) {                                                            \
-            fprintf(stderr, "R1163 PUBLIC STOP line=%d %s\n", __LINE__, #x);    \
+            fprintf(stderr, "R1163 PUBLIC STOP line=%d %s\n", __LINE__, #x);   \
             exit(2);                                                           \
         }                                                                      \
     } while (0)
@@ -90,9 +90,10 @@ static void original(const NLCheckedFragment *f, NLCheckedNodeId id,
     NLSemanticPlaceView sibling_before, sibling_after;
     REQUIRE(nl_semantic_place_view(r->field.entry, r->field.root, &before));
     REQUIRE(nl_semantic_place_view(r->field.post, r->field.root, &after));
-    REQUIRE(nl_semantic_place_view(r->field.entry, r->field.child,
-                                   &child_before));
-    REQUIRE(nl_semantic_place_view(r->field.post, r->field.child, &child_after));
+    REQUIRE(
+        nl_semantic_place_view(r->field.entry, r->field.child, &child_before));
+    REQUIRE(
+        nl_semantic_place_view(r->field.post, r->field.child, &child_after));
     REQUIRE(nl_semantic_place_view(r->field.entry, r->field.sibling,
                                    &sibling_before));
     REQUIRE(nl_semantic_place_view(r->field.post, r->field.sibling,
@@ -110,8 +111,8 @@ static void original(const NLCheckedFragment *f, NLCheckedNodeId id,
     NLSemanticValueView old, now, sibling;
     REQUIRE(nl_semantic_value_view(r->field.entry, child_before.current_value,
                                    &old));
-    REQUIRE(nl_semantic_value_view(r->field.post, child_after.current_value,
-                                   &now));
+    REQUIRE(
+        nl_semantic_value_view(r->field.post, child_after.current_value, &now));
     REQUIRE(nl_semantic_value_view(r->field.post, sibling_after.current_value,
                                    &sibling));
     REQUIRE(old.scalar_known && now.scalar_known && sibling.scalar_known);
@@ -122,13 +123,13 @@ static void original(const NLCheckedFragment *f, NLCheckedNodeId id,
            r->field.sibling, old.scalar_value, now.scalar_value,
            sibling.scalar_value, r->replay_changes);
     for (size_t stream = 0; stream != 3; ++stream) {
-        size_t count = stream == 2 ? r->replay_events
-                                  : r->field.arms[stream].event_count;
+        size_t count =
+            stream == 2 ? r->replay_events : r->field.arms[stream].event_count;
         for (size_t i = 0; i < count; ++i) {
             NLIfFieldEvent e;
             REQUIRE(nl_checked_if_return_event(f, id, stream, i, &e));
-            REQUIRE(nl_checked_if_return_event_validate(f, id, stream, i,
-                                                         &e) == NL_CHECK_OK);
+            REQUIRE(nl_checked_if_return_event_validate(f, id, stream, i, &e) ==
+                    NL_CHECK_OK);
             REQUIRE(e.field.parent == r->field.root);
             if (e.change)
                 REQUIRE(e.field.index == r->field.index);
@@ -217,7 +218,8 @@ int main(int argc, char **argv)
     const NLSyntaxTree *inputs[] = {unit};
     REQUIRE(nl_semantic_register_function_unit(context, inputs, 1, &ud) ==
             NL_CHECK_OK);
-    REQUIRE(nl_source_create("main()", 6, "r1163-entry", &entry) == NL_SOURCE_OK);
+    REQUIRE(nl_source_create("main()", 6, "r1163-entry", &entry) ==
+            NL_SOURCE_OK);
     REQUIRE(nl_parser_create(entry, &entry_parser) == NL_PARSE_OK);
     REQUIRE(nl_parser_parse_source_fragment(entry_parser, &call, &pd) ==
             NL_PARSE_OK);
