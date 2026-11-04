@@ -86,6 +86,24 @@ static const NLCheckedNodeView *binding(const NLCheckedFragment *fragment,
     return NULL;
 }
 
+static bool typed_binding(const NLCheckedFragment *body,
+                          const NLCheckedNodeView *bind, NLTypeId expected)
+{
+    if (bind == NULL || bind->kind != NL_CHECKED_BINDING ||
+        bind->type != nl_semantic_unit_type(nl_checked_context(body)) ||
+        bind->argument_count != 1 || bind->symbol == 0)
+        return false;
+    const NLCheckedNodeView *receiver =
+        nl_checked_node_view(body, bind->first_argument);
+    const NLCheckedNodeView *initializer =
+        nl_checked_node_view(body, bind->initializer);
+    return receiver != NULL && receiver->kind == NL_CHECKED_RECEIVER &&
+           receiver->symbol == bind->symbol && receiver->type == expected &&
+           initializer != NULL && initializer->type == expected &&
+           initializer->result_count == 1 &&
+           initializer->results[0].type == expected && !initializer->terminates;
+}
+
 static bool inspect(const NLCheckedFragment *entry)
 {
     const NLCheckedFragment *body =
@@ -112,13 +130,14 @@ static bool inspect(const NLCheckedFragment *entry)
         loop->results[0].type != quantity || loop->continue_edges != 1 ||
         loop->break_edges != 1 || loop->return_edges != 0 ||
         nl_checked_loop_body(body, after->initializer) == NULL ||
-        after->type != quantity || copy->type != quantity ||
+        !typed_binding(body, after, quantity) ||
+        !typed_binding(body, copy, quantity) ||
         copy_value == NULL || copy_value->kind != NL_CHECKED_IDENTIFIER ||
         copy_value->symbol != after->symbol ||
         copy_value->value_use != NL_VALUE_COPIED || call == NULL ||
         call->kind != NL_CHECKED_REGISTERED_CALL || call->argument_count != 1 ||
         call->result_count != 1 || call->results[0].type != octet ||
-        selected->type != octet)
+        !typed_binding(body, selected, octet))
         return false;
     const NLCheckedNodeView *actual =
         nl_checked_node_view(body, call->first_argument);
@@ -149,6 +168,7 @@ static bool inspect(const NLCheckedFragment *entry)
            "\"header_inductive\":true,\"continue_edges\":%zu,"
            "\"break_edges\":%zu,\"return_edges\":%zu,"
            "\"ordinary_copy\":true,\"actual_copy\":true,"
+           "\"binding_unit_and_typed_receivers\":true,"
            "\"private_relation_valid\":true,"
            "\"direct_break_provenance\":%s,"
            "\"entry\":%zu,\"loop\":%zu,\"after\":%zu,\"mirrored\":%zu,"
