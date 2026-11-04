@@ -1,0 +1,218 @@
+{
+  "authority": "C228 / local fixed PR1149 d66fdf7; normative mainc120dd1 / Draft17.34",
+  "positive": {
+    "01-add-less-true": {
+      "name": "01-add-less-true",
+      "nominal": "CompassCell",
+      "fields": [
+        "mark",
+        "twin"
+      ],
+      "values": [
+        66,
+        192
+      ],
+      "index": 0,
+      "start": 2,
+      "limit": 12,
+      "step": 4,
+      "direction": "add",
+      "trace": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "result": 14,
+      "operator": "<",
+      "compare": 15,
+      "truth": true,
+      "incoming": [
+        137,
+        23
+      ],
+      "old": 66,
+      "updated": 137,
+      "sibling": 192,
+      "check": 0,
+      "emit": 0,
+      "condition_evaluations": 1,
+      "selected_arm": 0,
+      "store_count": 1,
+      "identity": "same pre-loop original root/child/incarnation and C field address",
+      "static_condition": "dependency-free Unknown Bool from Unknown loop-result Copy"
+    },
+    "02-zero-less-false": {
+      "name": "02-zero-less-false",
+      "nominal": "FlagCell",
+      "fields": [
+        "steady",
+        "choice"
+      ],
+      "values": [
+        41,
+        91
+      ],
+      "index": 1,
+      "start": 12,
+      "limit": 12,
+      "step": 4,
+      "direction": "add",
+      "trace": [
+        12
+      ],
+      "result": 12,
+      "operator": "<",
+      "compare": 12,
+      "truth": false,
+      "incoming": [
+        58,
+        209
+      ],
+      "old": 91,
+      "updated": 209,
+      "sibling": 41,
+      "check": 0,
+      "emit": 0,
+      "condition_evaluations": 1,
+      "selected_arm": 1,
+      "store_count": 1,
+      "identity": "same pre-loop original root/child/incarnation and C field address",
+      "static_condition": "dependency-free Unknown Bool from Unknown loop-result Copy"
+    },
+    "03-sub-equal-true": {
+      "name": "03-sub-equal-true",
+      "nominal": "ValueCell",
+      "fields": [
+        "neighbor",
+        "target"
+      ],
+      "values": [
+        148,
+        76
+      ],
+      "index": 1,
+      "start": 23,
+      "limit": 8,
+      "step": 6,
+      "direction": "sub",
+      "trace": [
+        23,
+        17,
+        11,
+        5
+      ],
+      "result": 5,
+      "operator": "==",
+      "compare": 5,
+      "truth": true,
+      "incoming": [
+        184,
+        39
+      ],
+      "old": 76,
+      "updated": 184,
+      "sibling": 148,
+      "check": 0,
+      "emit": 0,
+      "condition_evaluations": 1,
+      "selected_arm": 0,
+      "store_count": 1,
+      "identity": "same pre-loop original root/child/incarnation and C field address",
+      "static_condition": "dependency-free Unknown Bool from Unknown loop-result Copy"
+    },
+    "04-one-equal-false": {
+      "name": "04-one-equal-false",
+      "nominal": "ToneCell",
+      "fields": [
+        "tone",
+        "trace"
+      ],
+      "values": [
+        52,
+        164
+      ],
+      "index": 0,
+      "start": 7,
+      "limit": 10,
+      "step": 4,
+      "direction": "add",
+      "trace": [
+        7,
+        11
+      ],
+      "result": 11,
+      "operator": "==",
+      "compare": 10,
+      "truth": false,
+      "incoming": [
+        97,
+        218
+      ],
+      "old": 52,
+      "updated": 218,
+      "sibling": 164,
+      "check": 0,
+      "emit": 0,
+      "condition_evaluations": 1,
+      "selected_arm": 1,
+      "store_count": 1,
+      "identity": "same pre-loop original root/child/incarnation and C field address",
+      "static_condition": "dependency-free Unknown Bool from Unknown loop-result Copy"
+    }
+  },
+  "controls": {
+    "80-known-condition": {
+      "check": 0,
+      "emit": 0
+    },
+    "81-existing-loop-consumer": {
+      "check": 0,
+      "emit": 0
+    },
+    "82-different-child-control": {
+      "check": 0,
+      "emit": 4,
+      "classification": "legal different-child join, outside the same-child IF backend family"
+    }
+  },
+  "negative": {
+    "90-overflow": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    },
+    "91-read-mode": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    },
+    "92-ending-reference": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    },
+    "93-incoming-type": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    }
+  },
+  "prediction": "Composite CHECK and existing owned loop/IF may pass; fixed backend known-Bool consumer rejects before emission. Preserve an earlier actual refusal or unexpected acceptance as FIRST.",
+  "native": {
+    "compilers": [
+      "GCC13",
+      "Clang23"
+    ],
+    "opts": [
+      "O0",
+      "O2"
+    ],
+    "versions": [
+      "raw unchanged C",
+      "read-only passive observations"
+    ],
+    "exit": 0
+  },
+  "scope": "One pre-existing two-u8 original, one guarded usize slot, one C/B, root literal comparison and one same-child two-normal IF; no wrapper/new issuer/bridge/source law."
+}

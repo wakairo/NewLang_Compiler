@@ -1,0 +1,9 @@
+actual main owner validate=0
+loop=10 status=0 scalar=1 result=7/5
+actual driver root validate=0
+source-ordered item=7 kind=2 initializer=2 valid=1 aggregate=10 scalar_loop=0
+source-ordered item=11 kind=2 initializer=10 valid=1 aggregate=10 scalar_loop=1
+source-ordered item=14 kind=2 initializer=13 valid=1 aggregate=10 scalar_loop=1
+source-ordered item=19 kind=2 initializer=18 valid=0 aggregate=10 scalar_loop=1
+root comparison=18 kind=55 scalar_known=0 type=9 dependency=0 count=0
+IF=22 GET=1 VALIDATE=0 condition=21 root=1 child=2 index=0
