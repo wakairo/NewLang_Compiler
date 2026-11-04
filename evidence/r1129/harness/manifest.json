@@ -1,0 +1,276 @@
+{
+  "schema": "r1129-c221c-harness-freeze-v1",
+  "authority_comment": 6614995406,
+  "provenance": "PROFILE-CALIBRATED / NON-BLIND to declared structural scope; implementation and fixtures unseen",
+  "canonical_main": "73ef10a97f2fab7b70d094b2114359e961acefb5",
+  "draft": "Draft17.34",
+  "target_p_head": "dc21cf33105a7dba832e197f24e153ad87862a0f",
+  "target_p_tree": "34c85ebdebb0fe601d20856ad3f5f3a5446362e0",
+  "initial_r_branch": "r-fast/r1129-c221-stutter",
+  "files": [
+    {
+      "path": "CTestConfig.cmake",
+      "bytes": 2591,
+      "sha256": "ca3dc1b16290714d6a19f120d38c28258a1bff99a330ff61630d00805cdeb0a0",
+      "git_blob_sha": "4ccacf3e4a2b0921bd36d27ba52cdd47f6f6fb5a"
+    },
+    {
+      "path": "evidence/r1129/harness/assess.py",
+      "bytes": 11663,
+      "sha256": "e67d4188d0839c1cd07046e657837ef074bd5ae90d0057e73045d8312a8fc597",
+      "git_blob_sha": "ce1617d0a897537b285abb135e23fc22ed3da33b"
+    },
+    {
+      "path": "evidence/r1129/harness/CTestCustom.cmake.in",
+      "bytes": 207,
+      "sha256": "abb9561f94707fa9f4e33b40a2a42abdedf4d1bf2860de134b3a5bf8f743341c",
+      "git_blob_sha": "7d2ee058a7fc056a17c9d7588892cc5681cf9db3"
+    },
+    {
+      "path": "evidence/r1129/harness/instrument.py",
+      "bytes": 26167,
+      "sha256": "f6f8d46b3a0d08d51161d638941851ff911ddd0737cf28504e6b07c7c154c809",
+      "git_blob_sha": "206c98e0522b7a16f1442def913a8c62817b5c33"
+    },
+    {
+      "path": "evidence/r1129/harness/owned.c",
+      "bytes": 15793,
+      "sha256": "e11c9ae4c10e4151d8565300c3b91e3f7833ae34a7e461f2512bd5e436935147",
+      "git_blob_sha": "61cab24e51014c2e7847aae900273809d9b9d33a"
+    },
+    {
+      "path": "evidence/r1129/harness/plan.md",
+      "bytes": 8450,
+      "sha256": "68bf12d5d192ca1d2ff236eb27e3514399b50bb0c4da46b669072c5a8881e992",
+      "git_blob_sha": "64f0576368d56c48246f81462a8ba6a7c9a0e3c6"
+    },
+    {
+      "path": "evidence/r1129/harness/report.py",
+      "bytes": 2481,
+      "sha256": "db2d1515a0cb1129586e471de3bcad333bfa42145d5890300cb6ab7e89c4457c",
+      "git_blob_sha": "757ab06d0e2bedefad133be752926d9b49fbdd48"
+    },
+    {
+      "path": "evidence/r1129/harness/run.py",
+      "bytes": 20675,
+      "sha256": "58ee525fe4468b7262acf53d01dd242941c7b17e0f6e569fffd9d79867b5d1e9",
+      "git_blob_sha": "164cc0417f6522da1c479f39c3452cd1a90abec1"
+    },
+    {
+      "path": "evidence/r1129/v1/continue_arity.nl",
+      "logical_path": "r1129/v1/continue_arity.nl",
+      "bytes": 1591,
+      "sha256": "264e86ce2119b05fb2713b1d73cc0e8f98b0849043bb93c22d1cbf532dd4431a",
+      "git_blob_sha": "6eaa03e1b20d70794a20646a472b5fcc12b108dd"
+    },
+    {
+      "path": "evidence/r1129/v1/continue_target.nl",
+      "logical_path": "r1129/v1/continue_target.nl",
+      "bytes": 1682,
+      "sha256": "27bea4070f60e3e4b66d487ccb11784b1ceea2582fc49896598bd64b8e081ffd",
+      "git_blob_sha": "abbe8296ff27ef9da5f085d1005582af9fc53c72"
+    },
+    {
+      "path": "evidence/r1129/v1/continue_type.nl",
+      "logical_path": "r1129/v1/continue_type.nl",
+      "bytes": 1577,
+      "sha256": "42980821e93679787ef910bfca5b24dce4d56a8ce47c19b61de9f8857ef0cfd1",
+      "git_blob_sha": "b4e7ecc7a64df748174d7fd285c5af65cd6533a1"
+    },
+    {
+      "path": "evidence/r1129/v1/equal_bits.nl",
+      "logical_path": "r1129/v1/equal_bits.nl",
+      "bytes": 1697,
+      "sha256": "0e95d9ce0e648234f8aac43ead80b145979d85f6f8d9d7c034780827a4a4d781",
+      "git_blob_sha": "0f92cee90a5ba05608b20b1a8a5e2248df27f4bd"
+    },
+    {
+      "path": "evidence/r1129/v1/loan_escape.nl",
+      "logical_path": "r1129/v1/loan_escape.nl",
+      "bytes": 1677,
+      "sha256": "248ee8862a04c59fabf620ee7afef0a9013ac2a89478a735cffee611da439aff",
+      "git_blob_sha": "ab3cbfc52688263199ad024c05c79dc4d326c2e0"
+    },
+    {
+      "path": "evidence/r1129/v1/manifest.json",
+      "logical_path": "r1129/v1/manifest.json",
+      "bytes": 2524,
+      "sha256": "70134add33049ac8f3f09e442b55a89d3aecadc46f79a8ac7ce9f0c60299fe31",
+      "git_blob_sha": "c66aa5d893c47d054b66fb975b4e20052ba8ce7a"
+    },
+    {
+      "path": "evidence/r1129/v1/oracle.json",
+      "logical_path": "r1129/v1/oracle.json",
+      "bytes": 11111,
+      "sha256": "1c1af4237566d5ad6bdb3659c64559a541e9de9fccbbc492bf43f2887a9ff794",
+      "git_blob_sha": "038a3fa303dc2eb58eb2aa2b4b6f4f37c2783ee2"
+    },
+    {
+      "path": "evidence/r1129/v1/plan.md",
+      "logical_path": "r1129/v1/plan.md",
+      "bytes": 10816,
+      "sha256": "474a2f6518dd3bb0af79d94623de9a5557fc3b1007d42a033e98d480b033c172",
+      "git_blob_sha": "d73f4952f56fc88d9710f91419863f65c6e962b3"
+    },
+    {
+      "path": "evidence/r1129/v1/stutter.nl",
+      "logical_path": "r1129/v1/stutter.nl",
+      "bytes": 1580,
+      "sha256": "0683b6993d0ed08022b9507f7738d7ec8447cc987eb2268889dd770b6a4e0244",
+      "git_blob_sha": "478ebac0a0693f0a2b4d08f5438e493643ae2931"
+    },
+    {
+      "path": "evidence/r1129/v2/continue_arity.nl",
+      "logical_path": "r1129/v2/continue_arity.nl",
+      "bytes": 1149,
+      "sha256": "c480aac1bc61259546d4f14fd0f10191b3be21909f9eef25a314f4f07a4af292",
+      "git_blob_sha": "0d9c9ad99b3721b962a441709a616d0652fb180f"
+    },
+    {
+      "path": "evidence/r1129/v2/continue_target.nl",
+      "logical_path": "r1129/v2/continue_target.nl",
+      "bytes": 1233,
+      "sha256": "77e0534c799a5355e75a07ea98e43d9dffffd1416e0a32ba1aaad9f0d98466a4",
+      "git_blob_sha": "8a49dfce5a1ef96e82817b6e9247bb7c910b5472"
+    },
+    {
+      "path": "evidence/r1129/v2/continue_type.nl",
+      "logical_path": "r1129/v2/continue_type.nl",
+      "bytes": 1136,
+      "sha256": "ffbd6aaa0e8f2d84af09fc128696c9157fd4285f3ba34febe5258c9f48c979d4",
+      "git_blob_sha": "0d2bc70bf8b44bc5e8baede990c389a4761ac9ad"
+    },
+    {
+      "path": "evidence/r1129/v2/equal_bits.nl",
+      "logical_path": "r1129/v2/equal_bits.nl",
+      "bytes": 1256,
+      "sha256": "9c797703d8a6fdfc4485075b5f6029670cfafc0a7f465fe18ba9a35c17f605ef",
+      "git_blob_sha": "5e7c64c1442ffeebbcee25082a02f091292f7388"
+    },
+    {
+      "path": "evidence/r1129/v2/immediate_break.nl",
+      "logical_path": "r1129/v2/immediate_break.nl",
+      "bytes": 1140,
+      "sha256": "76d9f8f1133daea7a37d9a47566e06159b211feb68ebadabdd152631e0f51224",
+      "git_blob_sha": "6a2fb84733283c611a650b5843a248ddf09c0e6c"
+    },
+    {
+      "path": "evidence/r1129/v2/loan_escape.nl",
+      "logical_path": "r1129/v2/loan_escape.nl",
+      "bytes": 1236,
+      "sha256": "779e30f6b628cdc2b5c434f15fed919b5479f93f874c67d16be75a620dea70f0",
+      "git_blob_sha": "cff238e5d60e13a3e49ee44627b4eb4741b65fbf"
+    },
+    {
+      "path": "evidence/r1129/v2/manifest.json",
+      "logical_path": "r1129/v2/manifest.json",
+      "bytes": 2288,
+      "sha256": "3555c90c0fac9604ffe70a05450b23204e021222317292015fb9a0b6f6491a95",
+      "git_blob_sha": "b460f67e2e84777566f1f604d7557369ba0b63d2"
+    },
+    {
+      "path": "evidence/r1129/v2/normal.nl",
+      "logical_path": "r1129/v2/normal.nl",
+      "bytes": 1139,
+      "sha256": "29c996ac079a77d1f659e012463ce1c91ca9ab9d581940010ffbf26f849dc801",
+      "git_blob_sha": "8a2ff1aa43077068f0353b15da7c2a7e0338c9d7"
+    },
+    {
+      "path": "evidence/r1129/v2/oracle.json",
+      "logical_path": "r1129/v2/oracle.json",
+      "bytes": 9025,
+      "sha256": "4679977c9b0afc941d58f1e54a03bec4b8e996d1050ccdc1268c1ded17863644",
+      "git_blob_sha": "08ab4b5a01a98d45e64c91cb54fd100b4ac6dd63"
+    },
+    {
+      "path": "evidence/r1129/v2/plan.md",
+      "logical_path": "r1129/v2/plan.md",
+      "bytes": 4951,
+      "sha256": "a4ef132be851aa3b1749898a422ba965c786a9b1aec3f3936e863a94dc69f47f",
+      "git_blob_sha": "46d30c02fb5141e569fcaa7b365ac4cb3be63ee6"
+    }
+  ],
+  "manifest_self_policy": "Excluded from files; own bytes/SHA in Issue freeze and runtime receipt.",
+  "payload_file_count": 27,
+  "payload_total_bytes": 146835,
+  "execution_at_freeze": {
+    "newlang": 18,
+    "native": 12,
+    "actions": 4,
+    "r_refs": 1,
+    "manual": 0,
+    "definition": "newlang counts 6 CLI CHECK + 6 public owned + 6 CLI C17 source processes; native counts 12 unmodified O0/O2 launches; actions counts 2 FAST + 2 natural PR workflow runs",
+    "fast_push_runs": 2,
+    "natural_pr_jobs": 6,
+    "passive_native_processes": 0,
+    "later_cases": "NOT_RUN"
+  },
+  "full_sources_comments": [
+    6614215197,
+    6614900934,
+    6615754255,
+    6615765509,
+    6615870272
+  ],
+  "value": "UNMEASURED / GO624 PAUSED / H1 HOLD",
+  "revision": 3,
+  "previous_manifest_sha256": "a4be9faa7aeef19ccedeb9d48aca6b85b5e500ae8b38c586a61944a906e33d1c",
+  "original_complete_freeze_comment": 6615911791,
+  "forward_mechanical_revision": {
+    "kind": "bounded passive C phase-location adapter correction",
+    "source_oracle_predictions_unchanged": true,
+    "original_r_head": "3908666af7cf58041732294827c60b538090b272",
+    "initial_natural_runs": [
+      41724783042,
+      41724783037
+    ],
+    "initial_natural_jobs": 6,
+    "first_stage": "normal CHECK/public owned/C17/unmodified O0/O2 succeeded; passive mapping ObservationLimit before compilation",
+    "first_stop": "no unique phase-comparison IF",
+    "causal_receipt_comment": 6616416103,
+    "complete_initial_raw_comment": 6616490851,
+    "original_instrument_sha256": "8d54ef792467f669994080e2653dc11c3c5bff05cec850ae03d7081e2d8fdade",
+    "own_c_sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+    "own_c_git_blob": "275588bec80e9563e7edc80e31312423babc66ad",
+    "own_ast_git_blob": "e67e2754e6db76c7dca3a0e6eaeea1782cedbd2d",
+    "change": "Two ordering-only full-range requests become strict direct-begin requests; non-phase operand must be pure IntegerLiteral through only NoOp/IntegralCast wrappers.",
+    "guards_unchanged": "All insertion/text-slice direct offsets, lexical live roots, no shadowing, alias immutability/nonescape, stable helper destination and no expected-value injection.",
+    "full_latest_instrument_source": "enclosing Issue repair freeze",
+    "native_prediction": "Unchanged V2 phases/old/current/storage/caller oracle; still no passive outcome observed.",
+    "remaining_natural_pr_sets_before_push": 1,
+    "manual_rerun_dispatch": 0
+  },
+  "prior_mechanical_revisions": [
+    {
+      "kind": "exact pinned Clang23.1.3 formatting only",
+      "source_oracle_predictions_unchanged": true,
+      "original_r_head": "6c4e5a57c37aeec8bd3c5f04014a7b7699190671",
+      "first_fast_run": 41722844617,
+      "attempt": 1,
+      "job": 126219835445,
+      "original_owned_sha256": "79b8dde734046e8698e53b75721188f9085bb8e39636c25010c112cb16c192e4",
+      "full_latest_owned_source": "enclosing Issue forward repair freeze",
+      "raw": [
+        {
+          "path": "evidence/r1129/raw/fast-41722844617-attempt1/job-126219835445-received-utf8.log",
+          "bytes": 32769,
+          "sha256": "bb3e4fa9757a6708bb8973357643ad593420beb3668b793236b5b8135c40c10c",
+          "git_blob_sha": "83ddf7a2d50b5b40fb1c71d7e05877492a26bcf3"
+        },
+        {
+          "path": "evidence/r1129/raw/fast-41722844617-attempt1/formatter-complete-received.patch",
+          "bytes": 3801,
+          "sha256": "ccecdb14707d8d9629357a95ad056e81b7dfa241b23d482e5ed1712b170c8530",
+          "git_blob_sha": "6bff2c0f2d3698ea8fdb209a0a7ad548f08f66d4"
+        },
+        {
+          "path": "evidence/r1129/raw/fast-41722844617-attempt1/formatter-r-owned-only.patch",
+          "bytes": 575,
+          "sha256": "6caf695542da2c345f904833eaaa6aaf6fcc5bd21298fbb106015a5b9abc7abf",
+          "git_blob_sha": "3bca1160e3bdd4fbd5e5c999112c2099a33d5142"
+        }
+      ],
+      "ignored_foreign_suggestion_path": "tests/p1117/lineage.c; no body used; existing bytes untouched"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "schema": "r1129-c221a-source-freeze-v2",
+  "provenance": "PROFILE-CALIBRATED / NON-BLIND to declared structural scope; implementation and fixtures unseen",
+  "release_comment": 6614284539,
+  "canonical_main": "73ef10a97f2fab7b70d094b2114359e961acefb5",
+  "draft": "Draft17.34",
+  "execution_candidate_head": null,
+  "v1_manifest_sha256": "70134add33049ac8f3f09e442b55a89d3aecadc46f79a8ac7ce9f0c60299fe31",
+  "v1_status": "All nine durable V1 files verified unchanged; NOT RUN",
+  "encoding": "ASCII (UTF-8 subset), no BOM, LF, exactly one final LF; fenced content only",
+  "payload_file_count": 9,
+  "payload_total_bytes": 22265,
+  "files": [
+    {
+      "path": "r1129/v2/normal.nl",
+      "bytes": 1139,
+      "sha256": "29c996ac079a77d1f659e012463ce1c91ca9ab9d581940010ffbf26f849dc801"
+    },
+    {
+      "path": "r1129/v2/immediate_break.nl",
+      "bytes": 1140,
+      "sha256": "76d9f8f1133daea7a37d9a47566e06159b211feb68ebadabdd152631e0f51224"
+    },
+    {
+      "path": "r1129/v2/equal_bits.nl",
+      "bytes": 1256,
+      "sha256": "9c797703d8a6fdfc4485075b5f6029670cfafc0a7f465fe18ba9a35c17f605ef"
+    },
+    {
+      "path": "r1129/v2/loan_escape.nl",
+      "bytes": 1236,
+      "sha256": "779e30f6b628cdc2b5c434f15fed919b5479f93f874c67d16be75a620dea70f0"
+    },
+    {
+      "path": "r1129/v2/continue_type.nl",
+      "bytes": 1136,
+      "sha256": "ffbd6aaa0e8f2d84af09fc128696c9157fd4285f3ba34febe5258c9f48c979d4"
+    },
+    {
+      "path": "r1129/v2/continue_arity.nl",
+      "bytes": 1149,
+      "sha256": "c480aac1bc61259546d4f14fd0f10191b3be21909f9eef25a314f4f07a4af292"
+    },
+    {
+      "path": "r1129/v2/continue_target.nl",
+      "bytes": 1233,
+      "sha256": "77e0534c799a5355e75a07ea98e43d9dffffd1416e0a32ba1aaad9f0d98466a4"
+    },
+    {
+      "path": "r1129/v2/oracle.json",
+      "bytes": 9025,
+      "sha256": "4679977c9b0afc941d58f1e54a03bec4b8e996d1050ccdc1268c1ded17863644"
+    },
+    {
+      "path": "r1129/v2/plan.md",
+      "bytes": 4951,
+      "sha256": "a4ef132be851aa3b1749898a422ba965c786a9b1aec3f3936e863a94dc69f47f"
+    }
+  ],
+  "manifest_self_policy": "Manifest excluded from payload files/total; own size and SHA-256 appear in the enclosing Issue freeze.",
+  "execution_status": "SOURCE-FREEZE ONLY; ALL SEMANTIC AND NATIVE LAYERS NOT RUN"
+}

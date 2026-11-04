@@ -1,0 +1,75 @@
+{
+  "schema": "r1129-c221-source-freeze-v1",
+  "canonical_main": "73ef10a97f2fab7b70d094b2114359e961acefb5",
+  "final_main_verification": "73ef10a97f2fab7b70d094b2114359e961acefb5",
+  "candidate_execution_head": null,
+  "encoding": "UTF-8 ASCII subset, no BOM, LF, one final LF; bytes inside file fences only",
+  "payload_file_count": 8,
+  "payload_total_bytes": 31731,
+  "files": [
+    {
+      "path": "r1129/v1/stutter.nl",
+      "bytes": 1580,
+      "sha256": "0683b6993d0ed08022b9507f7738d7ec8447cc987eb2268889dd770b6a4e0244"
+    },
+    {
+      "path": "r1129/v1/equal_bits.nl",
+      "bytes": 1697,
+      "sha256": "0e95d9ce0e648234f8aac43ead80b145979d85f6f8d9d7c034780827a4a4d781"
+    },
+    {
+      "path": "r1129/v1/loan_escape.nl",
+      "bytes": 1677,
+      "sha256": "248ee8862a04c59fabf620ee7afef0a9013ac2a89478a735cffee611da439aff"
+    },
+    {
+      "path": "r1129/v1/continue_type.nl",
+      "bytes": 1577,
+      "sha256": "42980821e93679787ef910bfca5b24dce4d56a8ce47c19b61de9f8857ef0cfd1"
+    },
+    {
+      "path": "r1129/v1/continue_arity.nl",
+      "bytes": 1591,
+      "sha256": "264e86ce2119b05fb2713b1d73cc0e8f98b0849043bb93c22d1cbf532dd4431a"
+    },
+    {
+      "path": "r1129/v1/continue_target.nl",
+      "bytes": 1682,
+      "sha256": "27bea4070f60e3e4b66d487ccb11784b1ceea2582fc49896598bd64b8e081ffd"
+    },
+    {
+      "path": "r1129/v1/oracle.json",
+      "bytes": 11111,
+      "sha256": "1c1af4237566d5ad6bdb3659c64559a541e9de9fccbbc492bf43f2887a9ff794"
+    },
+    {
+      "path": "r1129/v1/plan.md",
+      "bytes": 10816,
+      "sha256": "474a2f6518dd3bb0af79d94623de9a5557fc3b1007d42a033e98d480b033c172"
+    }
+  ],
+  "canonical_git_blobs": [
+    {
+      "path": "docs/NewLang_Project_Compass.md",
+      "git_blob_sha": "0f9b170ce26504a16acec8e4b84beab11f9fbd4e"
+    },
+    {
+      "path": "docs/NewLang_Product_Value_Strategy.md",
+      "git_blob_sha": "c75f1601f13070bc5a588bd78957b54662bdfd23"
+    },
+    {
+      "path": "docs/NewLang_Project_Development_Process.md",
+      "git_blob_sha": "c777512dba935410cb1060569e0f4aeeaff427d5"
+    },
+    {
+      "path": "docs/reference/CURRENT_SPEC.md",
+      "git_blob_sha": "18b2d6b089c1507743f14325c7a2723b1c341db6"
+    },
+    {
+      "path": "docs/reference/NewLang_v0_spec_Draft17_34.md",
+      "git_blob_sha": "84236f4bc29ae35f01f8eca4238d56c2f62d34a0"
+    }
+  ],
+  "manifest_self_policy": "This manifest excludes itself from files/total; its own size and SHA-256 are recorded by the enclosing Issue freeze.",
+  "execution_status": "NOT RUN"
+}
