@@ -156,8 +156,8 @@ static bool v1_scalar(const NLCheckedFragment *fragment, NLCheckedNodeId id,
 
 /* Native target §6 quantity staging only. A source-connected Copy binding is
  * required; no usize call ABI, ref, arithmetic or inferred owner authority. */
-static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
-                            V0Program *p)
+static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                 V0Program *p, bool allow_loop)
 {
     const NLTypeId type =
         nl_semantic_core_type(nl_checked_context(f), NL_TYPE_USIZE);
@@ -173,7 +173,8 @@ static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
             v->result_count != 1 || v->results[0].type != type ||
             !nl_semantic_value_view(nl_checked_context(f), v->results[0].value,
                                     &value) ||
-            value.type != type || value.dependencies != NL_DEPENDENCY_FREE ||
+            value.type != type || (!allow_loop && !value.scalar_known) ||
+            value.dependencies != NL_DEPENDENCY_FREE ||
             value.value_dependency_count != 0 ||
             (!first &&
              (value.scalar_known != known || value.scalar_value != expected)))
@@ -221,6 +222,20 @@ static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
         id = origin;
     }
     return false;
+}
+
+/* Existing size/offset consumers keep their known-number contract. The
+ * unknown route is explicit and used only by ordinary Copy bindings and
+ * the existing pure numeric predicate actual. */
+static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
+                            V0Program *p)
+{
+    return quantity_scalar_impl(f, id, p, false);
+}
+static bool loop_quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                 V0Program *p)
+{
+    return quantity_scalar_impl(f, id, p, true);
 }
 
 /* New bool lowering is restricted to the function's straight-line root block.
@@ -2044,7 +2059,7 @@ static bool v1_call_parameter_kind(const NLCheckedFragment *f,
         return false;
     if (quantity) {
         V0Program operands = *p;
-        if (!quantity_scalar(f, call->first_argument, &operands))
+        if (!loop_quantity_scalar(f, call->first_argument, &operands))
             return false;
     } else if (!v1_scalar(f, call->first_argument, p))
         return false;
@@ -2398,7 +2413,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
     case NL_CHECKED_USIZE_LESS_THAN:
     case NL_CHECKED_IDENTIFIER:
         return v1_scalar(fragment, id, program) ||
-               quantity_scalar(fragment, id, program) ||
+               loop_quantity_scalar(fragment, id, program) ||
                boolean_scalar(fragment, id, program) ||
                gate_ptr(fragment, id, program);
     case NL_CHECKED_IF: {
@@ -2427,7 +2442,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                receiver->type == initializer->type &&
                ((v0_unit_loan_binding(fragment, view) &&
                  v0_validate_node(fragment, view->initializer, program)) ||
-                quantity_scalar(fragment, view->initializer, program) ||
+                loop_quantity_scalar(fragment, view->initializer, program) ||
                 boolean_scalar(fragment, view->initializer, program) ||
                 (receiver->type == program->u8 &&
                  ((initializer->kind == NL_CHECKED_IF &&
