@@ -605,8 +605,11 @@ static NLCheckStatus validate_stutter_cycle(const NLLinearBreakProof *p,
         loop->return_edges || !loop->header_inductive ||
         loop->first_argument != s->initial_node || p->target != s->target ||
         nl_checked_loop_body(p->owner, p->loop) != s->graph ||
-        nl_checked_match_arm(p->owner, p->loop, 1) != p->body ||
-        nl_checked_match_arm(p->owner, p->loop, 2) ||
+        (s->scalar ? (p->body != nl_checked_if_arm(s->graph, s->conditional,
+                                                   1 - s->continue_arm) ||
+                      nl_checked_match_arm(p->owner, p->loop, 1))
+                   : (nl_checked_match_arm(p->owner, p->loop, 1) != p->body ||
+                      nl_checked_match_arm(p->owner, p->loop, 2))) ||
         !stutter_literal(initial,
                          nl_semantic_core_type(p->world, NL_TYPE_USIZE),
                          s->initial) ||
