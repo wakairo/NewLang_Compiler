@@ -1075,7 +1075,7 @@ if(BUILD_TESTING)
         set_tests_properties(p1117_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE)
     endforeach()
     add_test(NAME p1117_native.integration COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/run_v2.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1123/legacy_integration.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1117_probe>"
         "${CMAKE_CURRENT_BINARY_DIR}/p1117-native" candidate
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
@@ -1106,6 +1106,38 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/c217"
         "${CMAKE_CURRENT_BINARY_DIR}/p1117-c217-native"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}")
+    add_executable(p1123_safety tests/p1123/safety.c)
+    add_executable(p1123_oom tests/p1123/safety.c)
+    foreach(target p1123_safety p1123_oom)
+        target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+        target_link_libraries(${target} PRIVATE newlang_checked_c_node newlang_semantic)
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+    endforeach()
+    target_compile_definitions(p1123_oom PRIVATE P1123_OOM)
+    target_compile_options(p1123_oom PRIVATE -fno-pie)
+    target_link_options(p1123_oom PRIVATE -no-pie -Wl,--wrap=malloc
+        -Wl,--wrap=calloc -Wl,--wrap=realloc
+        -Wl,--wrap=nl_parser_parse_function_unit
+        -Wl,--wrap=nl_parser_parse_expression_fragment
+        -Wl,--wrap=nl_semantic_register_function_unit
+        -Wl,--wrap=nl_semantic_check_expression)
+    foreach(profile 01-stutter-less 02-stutter-equality 11-prefix-current
+                    13-reversed-arms 14-first-break)
+        add_test(NAME p1123_${profile}_current.unit COMMAND p1123_safety
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1123/sources/${profile}.nl")
+    endforeach()
+    foreach(profile 01-stutter-less 02-stutter-equality 11-prefix-current)
+        add_test(NAME p1123_${profile}_oom.unit COMMAND p1123_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1123/sources/${profile}.nl")
+        set_tests_properties(p1123_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE)
+    endforeach()
+    add_test(NAME p1123_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1123/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1123_safety>"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1123-native"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+    add_test(NAME p1123_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1123/evidence_test.py")
     add_executable(p1098_probe tests/p1098/probe.c)
     add_executable(p1098_oom tests/p1098/probe.c)
     target_compile_definitions(p1098_oom PRIVATE P1098_OOM)
@@ -1840,4 +1872,10 @@ if(BUILD_TESTING)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    # Full registration/invocation/named-output fault enumeration with host
+    # ASan checks thousands of independent retries. Keep every location and
+    # assertion; give only this finite cohort its measured sanitizer budget.
+    foreach(profile 01-stutter-less 02-stutter-equality 11-prefix-current)
+        set_tests_properties(p1123_${profile}_oom.unit PROPERTIES TIMEOUT 300)
+    endforeach()
 endif()

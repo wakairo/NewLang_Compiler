@@ -70,8 +70,9 @@ typedef struct {
     size_t entry_function;
     NLTypeId unit, u8, aggregate;
     bool uses_usize;
-    bool u8_export;       /* opt-in target wrapper, never source authority */
-    bool linear_break;    /* independently validated private CHECK consumer */
+    bool u8_export;    /* opt-in target wrapper, never source authority */
+    bool linear_break; /* independently validated private CHECK consumer */
+    bool stuttering_loop;
     bool two_normal_unit; /* validated new profile; passive C hooks only */
     const NLCopyBodyParameters *unit_parameters;
     const NLCheckedFragment *formal_body; /* current validation only */
@@ -2360,6 +2361,10 @@ static bool linear_break_selection(const NLCheckedFragment *f,
     if (v.call && !v0_validate_call(v.caller, v.call, p))
         return false;
     p->linear_break = true;
+    if (v.stuttering) {
+        p->stuttering_loop = true;
+        p->uses_usize = true;
+    }
     return true;
 }
 
@@ -2835,6 +2840,74 @@ static bool emit_if_field(FILE *stream, const NLCheckedFragment *f,
             fprintf(stream, "(void)nl_if_result_%zu;\n", id) >= 0);
 }
 
+static bool emit_stuttering_loop(FILE *stream, const NLLinearBreakView *p,
+                                 NLCheckedNodeId id, NLSymbolId result,
+                                 size_t depth)
+{
+    if (!v0_indent(stream, depth) ||
+        fprintf(stream, "uint8_t nl_local_%zu;\n", result) < 0 ||
+        !v0_indent(stream, depth) ||
+        fprintf(stream, "size_t nl_loop_carry_%zu = (size_t)UINTMAX_C(%zu);\n",
+                id, p->initial_phase) < 0 ||
+        !v0_indent(stream, depth) || fputs("for (;;) {\n", stream) < 0 ||
+        !v0_indent(stream, depth + 1) ||
+        fprintf(stream, "const size_t nl_loop_phase_%zu = nl_loop_carry_%zu;\n",
+                id, id) < 0 ||
+        !v0_indent(stream, depth + 1) ||
+        fprintf(stream,
+                "NL_LOOP_PHASE(nl_loop_phase_%zu, &nl_local_%zu.f0, "
+                "&nl_local_%zu.f1);\n",
+                id, p->base, p->base) < 0 ||
+        !v0_indent(stream, depth + 1) ||
+        fprintf(
+            stream, "if (%snl_loop_phase_%zu %s (size_t)UINTMAX_C(%zu)%s) {\n",
+            p->continue_on_true ? "" : "!(", id, p->less ? "<" : "==", p->limit,
+            p->continue_on_true ? "" : ")") < 0 ||
+        !v0_indent(stream, depth + 2) ||
+        fprintf(stream, "nl_loop_carry_%zu = (size_t)UINTMAX_C(%zu);\n", id,
+                p->next_phase) < 0 ||
+        !v0_indent(stream, depth + 2) ||
+        fprintf(stream,
+                "NL_LOOP_CONTINUE(nl_loop_phase_%zu, nl_loop_carry_%zu, "
+                "&nl_local_%zu.f0, &nl_local_%zu.f1);\n",
+                id, id, p->base, p->base) < 0 ||
+        !v0_indent(stream, depth + 2) || fputs("continue;\n", stream) < 0 ||
+        !v0_indent(stream, depth + 1) || fputs("}\n", stream) < 0 ||
+        !v0_indent(stream, depth + 1) ||
+        fprintf(stream,
+                "NL_LOOP_BEFORE(&nl_local_%zu.f0, &nl_local_%zu.f1, %zu);\n",
+                p->base, p->base, p->index) < 0 ||
+        !v0_indent(stream, depth + 1) ||
+        fprintf(stream, "nl_local_%zu = ", result) < 0)
+        return false;
+    if (p->call) {
+        const NLCheckedNodeView *call =
+            nl_checked_node_view(p->caller, p->call);
+        const NLCheckedNodeView *ref =
+            nl_checked_node_view(p->caller, call->first_argument);
+        const NLCheckedNodeView *incoming =
+            nl_checked_node_view(p->caller, ref->next_argument);
+        if (fprintf(stream, "nl_fn_%zu(&nl_local_%zu.f%zu, ", call->function,
+                    p->base, p->index) < 0 ||
+            !v1_emit_scalar(stream, incoming) || fputs(");\n", stream) < 0)
+            return false;
+    } else if (fprintf(stream, "nl_local_%zu.f%zu;\n", p->base, p->index) < 0 ||
+               !v0_indent(stream, depth + 1) ||
+               fprintf(stream, "nl_local_%zu.f%zu = %zu;\n", p->base, p->index,
+                       p->incoming) < 0) {
+        return false;
+    }
+    return v0_indent(stream, depth + 1) &&
+           fprintf(stream,
+                   "NL_LOOP_AFTER(&nl_local_%zu.f0, &nl_local_%zu.f1, "
+                   "%zu, nl_local_%zu);\n",
+                   p->base, p->base, p->index, result) >= 0 &&
+           v0_indent(stream, depth + 1) && fputs("break;\n", stream) >= 0 &&
+           v0_indent(stream, depth) && fputs("}\n", stream) >= 0 &&
+           v0_indent(stream, depth) &&
+           fprintf(stream, "(void)nl_local_%zu;\n", result) >= 0;
+}
+
 static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                          NLCheckedNodeId id, size_t depth)
 {
@@ -2902,6 +2975,9 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
             if (nl_linear_break_validate(fragment, view->initializer, &proof) !=
                 NL_CHECK_OK)
                 return false;
+            if (proof.stuttering)
+                return emit_stuttering_loop(stream, &proof, view->initializer,
+                                            view->symbol, depth);
             /* The old load and sole store use the SAME already declared
              * parent original. No body-world ID names a C storage object. */
             if (proof.call) {
@@ -3279,6 +3355,14 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
               "#ifndef NL_LOOP_BEFORE\n#define NL_LOOP_BEFORE(...) "
               "((void)0)\n#endif\n"
               "#ifndef NL_LOOP_AFTER\n#define NL_LOOP_AFTER(...) "
+              "((void)0)\n#endif\n\n",
+              stream) < 0)
+        return false;
+
+    if (program->stuttering_loop &&
+        fputs("#ifndef NL_LOOP_PHASE\n#define NL_LOOP_PHASE(...) "
+              "((void)0)\n#endif\n"
+              "#ifndef NL_LOOP_CONTINUE\n#define NL_LOOP_CONTINUE(...) "
               "((void)0)\n#endif\n\n",
               stream) < 0)
         return false;

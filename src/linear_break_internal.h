@@ -14,6 +14,9 @@ typedef struct {
     NLCheckedResult result;
     const NLCheckedFragment *caller; /* actual owned helper caller, or NULL */
     NLCheckedNodeId call;
+    /* Populated only by the independently checked private cyclic relation. */
+    bool stuttering, less, continue_on_true;
+    size_t initial_phase, next_phase, limit;
 } NLLinearBreakView;
 NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *,
                                        NLCheckedNodeId, NLLinearBreakView *);

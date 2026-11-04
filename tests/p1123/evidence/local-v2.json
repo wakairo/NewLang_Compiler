@@ -1,0 +1,55 @@
+{
+  "candidate_head": "31c571bdc6cc637181a8927a40dfc03ac3c1ce12",
+  "candidate_tree": "32b258b43930c3ba2a76102eb518e1af6235f837",
+  "fixed_parent": "a1091b2672b0a4b1d37e2571ef97bf100882b60b",
+  "merged_main": "73ef10a97f2fab7b70d094b2114359e961acefb5",
+  "native": {
+    "cases": 5,
+    "original_and_observed": true,
+    "compilers": [
+      "GCC13",
+      "Clang23"
+    ],
+    "optimization": [
+      "O0",
+      "O2"
+    ],
+    "runs": 40,
+    "result": "PASS"
+  },
+  "oom": {
+    "01-stutter-less": {
+      "registration": 907,
+      "invocation": 1352,
+      "named_cli": 3112
+    },
+    "02-stutter-equality": {
+      "registration": 1057,
+      "invocation": 1450,
+      "named_cli": 3358
+    },
+    "11-prefix-current": {
+      "registration": 984,
+      "invocation": 1473,
+      "named_cli": 3367
+    }
+  },
+  "total_reached_oom": 17060,
+  "production_repairs": [
+    "v1 fresh binding counter equality precision RED -> exact +1 C / +0 E-normal relation"
+  ],
+  "harness_reds_preserved": [
+    "body_count0 no-op negative",
+    "23-byte sentinel compared with22",
+    "CLI1 assumed for parse OOM (existing CLI3); replace with phase+API OOM observation"
+  ],
+  "not_yet_tested": [
+    "full frontend",
+    "ASan/LSan",
+    "UBSan",
+    "clean checkout"
+  ],
+  "push": 0,
+  "PR": 0,
+  "CI": 0
+}
