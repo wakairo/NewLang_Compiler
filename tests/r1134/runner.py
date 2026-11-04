@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 import traceback
+from observer import observe_c
 
 ROOT = Path(__file__).resolve().parent
 COMPILER, PROBE, HOST_CC, SANITIZER, RAW_ARG = sys.argv[1:]
@@ -39,10 +40,17 @@ def keep(name, data):
                    "base64": base64.b64encode(data).decode("ascii")}
     return path
 
-def command(case, stage, args, timeout=30):
+def command(case, stage, args, timeout=30, echo=True):
     CURRENT.update(case=case, stage=stage)
     args = [str(arg) for arg in args]
+    receipt = {"case": case, "stage": stage, "argv": args,
+               "timeout_seconds": timeout, "timed_out": False,
+               "returncode": None, "status": "RUNNING",
+               "stdout_base64": "", "stderr_base64": ""}
+    RECORDS.append(receipt)
+    write_raw(raw_payload(False, "INCOMPLETE_AT_CHECKPOINT", False))
     timed_out = False
+    launch_error = None
     try:
         result = subprocess.run(args, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE, timeout=timeout,
@@ -51,18 +59,22 @@ def command(case, stage, args, timeout=30):
     except subprocess.TimeoutExpired as error:
         timed_out = True
         code, stdout, stderr = None, error.stdout or b"", error.stderr or b""
-    receipt = {"case": case, "stage": stage, "argv": args,
-               "timeout_seconds": timeout, "timed_out": timed_out,
-               "returncode": code,
-               "stdout_base64": base64.b64encode(stdout).decode("ascii"),
-               "stderr_base64": base64.b64encode(stderr).decode("ascii")}
-    RECORDS.append(receipt)
+    except OSError as error:
+        launch_error = str(error)
+        code, stdout, stderr = None, b"", str(error).encode("utf-8")
+    receipt.update({"timed_out": timed_out, "returncode": code,
+                    "status": "COMPLETE" if launch_error is None else "LAUNCH_ERROR",
+                    "launch_error": launch_error,
+                    "stdout_base64": base64.b64encode(stdout).decode("ascii"),
+                    "stderr_base64": base64.b64encode(stderr).decode("ascii")})
+    write_raw(raw_payload(False, "INCOMPLETE_AT_CHECKPOINT", False))
     emit("COMMAND", {key: value for key, value in receipt.items()
                      if key not in ("stdout_base64", "stderr_base64")})
-    if stdout:
+    if echo and stdout:
         print(stdout.decode("utf-8", errors="replace"), end="", flush=True)
     if stderr:
         print(stderr.decode("utf-8", errors="replace"), end="", flush=True)
+    require(launch_error is None, case + ": command launch failure; later stages NOT_RUN")
     require(not timed_out, case + ": timeout; later stages NOT_RUN")
     return code, stdout, stderr
 
@@ -85,135 +97,10 @@ def verified_bundle(prefix, expected_manifest):
                     "manifest_sha256": digest(data),
                     "entries_verified": len(manifest["entries"])})
 
-def mask_c(text):
-    pattern = re.compile(r'/\*[\s\S]*?\*/|//[^\n]*|"(?:\\.|[^"\\])*"|'
-                         r"'(?:\\.|[^'\\])*'")
-    return pattern.sub(lambda match: "".join(
-        "\n" if char == "\n" else " " for char in match.group()), text)
-
-def paired(mask, left, right):
-    stack = []
-    result = {}
-    for index, char in enumerate(mask):
-        if char == left:
-            stack.append(index)
-        elif char == right:
-            require(bool(stack), "equipment: unmatched C delimiter")
-            result[stack.pop()] = index
-    require(not stack, "equipment: unmatched C delimiter")
-    return result
-
 def unique(matches, description):
     require(len(matches) == 1, "equipment: expected one " + description +
             ", observed " + str(len(matches)))
     return matches[0]
-
-def observe_c(text, owned, case):
-    mask = mask_c(text)
-    braces = paired(mask, "{", "}")
-    parens = paired(mask, "(", ")")
-    names = {}
-    for match in re.finditer(
-            r"(?m)^R1134 NAME main \d+ (\d+) \d+ ([A-Za-z_]\w*)$", owned):
-        names.setdefault(match[2], set()).add(match[1])
-    needed = ["original", "remote"] + list(case["expected_locals"])
-    c_names = {}
-    for name in needed:
-        symbol = unique(list(names.get(name, set())), "public symbol for " + name)
-        c_names[name] = "nl_local_" + symbol
-
-    declarations = {}
-    for name in ("original", "remote"):
-        pattern = re.compile(r"\b(?:const\s+)?nl_type_\d+\s+" +
-                             re.escape(c_names[name]) + r"\s*=\s*\{")
-        start = unique(list(pattern.finditer(mask)), "actual " + name + " object")
-        opening = mask.index("{", start.start())
-        closing = braces[opening]
-        end = re.match(r"\s*;", mask[closing + 1:])
-        require(end is not None, "equipment: object declaration has no semicolon")
-        declarations[name] = (start.start(), closing + 1 + end.end())
-    require(declarations["original"][0] < declarations["remote"][0],
-            "equipment: unexpected source declaration order")
-    containers = [(a, b) for a, b in braces.items()
-                  if a < declarations["original"][0] and
-                  b > declarations["remote"][1]]
-    require(bool(containers), "equipment: no enclosing main body")
-    main_start, main_end = min(containers, key=lambda item: item[1] - item[0])
-    loop_pattern = re.compile(r"\b(?:for\s*\(\s*;\s*;\s*\)|"
-                              r"while\s*\(\s*(?:1|true)\s*\))\s*\{")
-    loop = unique([match for match in loop_pattern.finditer(mask)
-                   if main_start < match.start() < main_end], "generated loop")
-    loop_open = mask.index("{", loop.start())
-    loop_close = braces[loop_open]
-    condition_match = unique(list(re.finditer(
-        r"\bif\s*\(", mask[loop_open + 1:loop_close])), "guarded loop if")
-    if_start = loop_open + 1 + condition_match.start()
-    if_paren = mask.index("(", if_start)
-    condition_end = parens[if_paren]
-    condition = mask[if_paren + 1:condition_end]
-    candidates = set(re.findall(r"\b(nl_[A-Za-z0-9_]+)\s*\)*\s*<", condition))
-    if not candidates:
-        candidates = set(re.findall(
-            r"\b(nl_[A-Za-z0-9_]+)\s*\)*\s*<",
-            mask[loop_open + 1:if_start]))
-    carry = unique(list(candidates), "actual carry operand in emitted guard")
-    edits = []
-
-    def frame(tag, carry_name=None):
-        original, remote = c_names["original"], c_names["remote"]
-        fmt = "R1134 " + tag
-        arguments = []
-        if carry_name is not None:
-            fmt += " %zu"
-            arguments.append("(size_t)" + carry_name)
-        fmt += " %p %p %p %zu %p %p %p %zu %u %u %u %u\\n"
-        arguments.extend([
-            "(void *)&" + original, "(void *)&" + original + ".f0",
-            "(void *)&" + original + ".f1", "sizeof(" + original + ")",
-            "(void *)&" + remote, "(void *)&" + remote + ".f0",
-            "(void *)&" + remote + ".f1", "sizeof(" + remote + ")",
-            "(unsigned)" + original + ".f0", "(unsigned)" + original + ".f1",
-            "(unsigned)" + remote + ".f0", "(unsigned)" + remote + ".f1"])
-        return '\nprintf("' + fmt + '", ' + ", ".join(arguments) + ");\n"
-
-    edits.append((declarations["remote"][1], frame("INIT")))
-    edits.append((if_start, frame("HEADER", carry)))
-    for keyword, tag in (("continue", "CONTINUE"), ("break", "BREAK")):
-        found = unique(list(re.finditer(r"\b" + keyword + r"\s*;",
-                                       mask[loop_open + 1:loop_close])),
-                       "actual " + keyword + " edge")
-        edits.append((loop_open + 1 + found.start(), frame(tag)))
-    local_locations = {}
-    for name in case["expected_locals"]:
-        pattern = re.compile(r"\b(?:const\s+)?uint8_t\s+" +
-                             re.escape(c_names[name]) + r"\s*=[^;]*;")
-        decl = unique([match for match in pattern.finditer(mask)
-                       if main_start < match.start() < main_end],
-                      "actual scalar binding " + name)
-        local_locations[name] = decl.end()
-        edits.append((decl.end(), '\nprintf("R1134 LOCAL ' + name +
-                      ' %u\\n", (unsigned)' + c_names[name] + ");\n"))
-    edits.append((local_locations["preserved_old"], frame("FINAL")))
-    helper_pattern = re.compile(
-        r"\b(?:static\s+)?uint8_t\s+(nl_[A-Za-z0-9_]+)\s*\(\s*"
-        r"uint8_t\s*\*\s*(?:const\s+)?([A-Za-z_]\w*)\s*,\s*"
-        r"(?:const\s+)?uint8_t\s+(?:const\s+)?([A-Za-z_]\w*)\s*\)\s*\{")
-    helper = unique(list(helper_pattern.finditer(mask)), "Copy-returning helper")
-    pointer, incoming = helper[2], helper[3]
-    edits.append((helper.end(),
-                  '\nprintf("R1134 HELPER %p %u %u\\n", (void *)' +
-                  pointer + ", (unsigned)*" + pointer + ", (unsigned)" +
-                  incoming + ");\n"))
-    observed = text
-    for position, insertion in sorted(edits, key=lambda item: item[0], reverse=True):
-        observed = observed[:position] + insertion + observed[position:]
-    metadata = {"public_symbols": c_names, "actual_carry": carry,
-                "actual_helper": helper[1], "helper_pointer": pointer,
-                "helper_incoming": incoming,
-                "insertions": [{"offset": pos, "text": insertion}
-                               for pos, insertion in edits],
-                "passive_only": True}
-    return "#include <stdio.h>\n" + observed, metadata
 
 def validate_trace(output, case):
     rows = {}
@@ -298,6 +185,11 @@ def validate_trace(output, case):
 def run():
     require(os.environ.get("GITHUB_ACTIONS") == "true", "Actions-only equipment")
     RAW.mkdir(parents=True, exist_ok=True)
+    (RAW / "started.json").write_text(
+        json.dumps({"event": "R1134_RUNNER_STARTED",
+                    "github_sha": os.environ.get("GITHUB_SHA")}) + "\n",
+        encoding="utf-8")
+    write_raw(raw_payload(False, "INCOMPLETE_AT_CHECKPOINT", False))
     verified_bundle("c222-r-v1",
                     "3f047b8690c99331a8787762a3d44c5a7c54b4658be3fefcce70d30305659843")
     verified_bundle("c223-r-v2",
@@ -322,7 +214,7 @@ def run():
         code, stdout, stderr = command(case["id"], "NEGATIVE_CHECK",
                                        [COMPILER, "--check", source])
         diagnostic = re.search(
-            r"error\((semantic|unsupported)\)\[([A-Z][A-Z0-9-]+)\]:\s*([^\r\n]+)",
+            r"error\((semantic|unsupported|precision)\)\[([A-Z][A-Z0-9-]+)\]:\s*([^\r\n]+)",
             stderr.decode("utf-8", errors="replace"))
         if case["profile_prediction"] == "CONSERVATIVE_REJECTION_ALLOWED":
             require((code == 0 and not stdout and not stderr) or
@@ -345,6 +237,38 @@ def run():
              for opt in ("O0", "O2")]
     if SANITIZER in ("address", "undefined"):
         modes.extend(("clang", clang, opt, SANITIZER) for opt in ("O0", "O2"))
+
+    def compile_native(case, cc_name, cc, optimization, sanitizer, kind, c_source):
+        case_id = case["id"]
+        mode = cc_name + "-" + optimization + "-" + sanitizer
+        exe = RAW / case_id / (mode + "-" + kind + ".exe")
+        args = [cc, "-std=c17", "-pedantic-errors", "-Wall", "-Wextra",
+                "-Wpedantic", "-Werror", "-" + optimization]
+        if sanitizer != "none":
+            args += ["-fsanitize=" + sanitizer, "-fno-omit-frame-pointer",
+                     "-fno-sanitize-recover=all"]
+        args += [c_source, "-o", exe]
+        built = command(case_id, "STRICT_C17_COMPILE:" + mode + ":" + kind,
+                        args, timeout=30)
+        checked_ok(built, case_id + " strict C17 " + mode + ":" + kind)
+        executable = exe.read_bytes()
+        SUMMARY.append({"case": case_id, "mode": mode, "kind": kind,
+                        "exe_bytes": len(executable),
+                        "exe_sha256": digest(executable)})
+        native = command(case_id, "NATIVE:" + mode + ":" + kind, [exe], timeout=10)
+        checked_ok(native, case_id + " native " + mode + ":" + kind,
+                   empty_stdout=kind == "unmodified")
+        observation = None
+        if kind == "passive":
+            CURRENT.update(case=case_id, stage="PASSIVE_TRACE_ASSERT:" + mode)
+            observation = validate_trace(native[1], case)
+            keep(case_id + "/" + mode + "-observation.json",
+                 json.dumps(observation, sort_keys=True, indent=2) + "\n")
+        SUMMARY.append({"case": case_id, "mode": mode, "kind": kind,
+                        "verdict": "PASS", "observation": observation})
+        write_raw(raw_payload(False, "INCOMPLETE_AT_CHECKPOINT", False))
+
+    prepared = []
     for case in oracle["cases"]:
         if not case["native_allowed"]:
             continue
@@ -362,63 +286,64 @@ def run():
         checked_ok(emission, case_id + " emission")
         require(bool(emission[1]), "empty generated translation unit")
         original_c = keep(case_id + "/generated.c", emission[1])
+        for cc_name, cc, optimization, sanitizer in modes:
+            compile_native(case, cc_name, cc, optimization, sanitizer,
+                           "unmodified", original_c)
+        prepared.append((case, original_c, emission[1], public[1]))
+        emit("CASE", {"case": case_id, "verdict": "UNMODIFIED_NATIVE_PASS",
+                      "modes": len(modes), "passive": "NOT_RUN_YET"})
+    for case, original_c, emitted, public in prepared:
+        case_id = case["id"]
+        syntax = command(case_id, "C17_SYNTAX_MAP_AST",
+                         [clang, "-std=c17", "-pedantic-errors", "-Wall",
+                          "-Wextra", "-Wpedantic", "-Werror",
+                          "-Xclang", "-ast-dump=json", "-fsyntax-only", original_c],
+                         timeout=30, echo=False)
+        checked_ok(syntax, case_id + " actual C syntax map")
+        ast = json.loads(syntax[1])
+        keep(case_id + "/syntax-map-identity.json",
+             json.dumps({"bytes": len(syntax[1]), "sha256": digest(syntax[1]),
+                         "raw_location": "C17_SYNTAX_MAP_AST command stdout_base64",
+                         "source": str(original_c)}, sort_keys=True, indent=2) + "\n")
         CURRENT.update(case=case_id, stage="PASSIVE_EQUIPMENT_MAPPING")
-        observed, mapping = observe_c(emission[1].decode("utf-8"),
-                                     public[1].decode("utf-8"), case)
+        observed, mapping = observe_c(emitted.decode("utf-8"), ast,
+                                     public.decode("utf-8"), case, str(original_c))
         passive_c = keep(case_id + "/passive.c", observed)
         keep(case_id + "/passive-map.json",
              json.dumps(mapping, sort_keys=True, indent=2) + "\n")
         for cc_name, cc, optimization, sanitizer in modes:
-            mode = cc_name + "-" + optimization + "-" + sanitizer
-            for kind, c_source in (("unmodified", original_c), ("passive", passive_c)):
-                exe = RAW / case_id / (mode + "-" + kind + ".exe")
-                args = [cc, "-std=c17", "-pedantic-errors", "-Wall", "-Wextra",
-                        "-Wpedantic", "-Werror", "-" + optimization]
-                if sanitizer != "none":
-                    args += ["-fsanitize=" + sanitizer, "-fno-omit-frame-pointer",
-                             "-fno-sanitize-recover=all"]
-                args += [c_source, "-o", exe]
-                built = command(case_id, "STRICT_C17_COMPILE:" + mode + ":" + kind,
-                                args, timeout=30)
-                checked_ok(built, case_id + " strict C17 " + mode + ":" + kind)
-                executable = exe.read_bytes()
-                SUMMARY.append({"case": case_id, "mode": mode, "kind": kind,
-                                "exe_bytes": len(executable),
-                                "exe_sha256": digest(executable)})
-                native = command(case_id, "NATIVE:" + mode + ":" + kind,
-                                 [exe], timeout=10)
-                checked_ok(native, case_id + " native " + mode + ":" + kind,
-                           empty_stdout=kind == "unmodified")
-                observation = None
-                if kind == "passive":
-                    CURRENT.update(case=case_id, stage="PASSIVE_TRACE_ASSERT:" + mode)
-                    observation = validate_trace(native[1], case)
-                    keep(case_id + "/" + mode + "-observation.json",
-                         json.dumps(observation, sort_keys=True, indent=2) + "\n")
-                SUMMARY.append({"case": case_id, "mode": mode, "kind": kind,
-                                "verdict": "PASS", "observation": observation})
+            compile_native(case, cc_name, cc, optimization, sanitizer,
+                           "passive", passive_c)
         emit("CASE", {"case": case_id, "verdict": "PASS", "modes": len(modes),
                       "unmodified_and_passive": True})
     SUMMARY.append({"stage": "COMPLETE", "verdict": "ALL_FINITE_CHECKS_PASS"})
     emit("COMPLETE", SUMMARY[-1])
 
-def finish(success, error):
+def raw_payload(success, error, complete):
+    return {"schema": "newlang.r1134.c223.raw.v2", "success": success,
+            "complete": complete, "first_failure": None if success else dict(CURRENT),
+            "error": error,
+            "github": {key: os.environ.get(key) for key in (
+                "GITHUB_SHA", "GITHUB_REF", "GITHUB_EVENT_NAME", "GITHUB_RUN_ID",
+                "GITHUB_RUN_ATTEMPT", "GITHUB_JOB", "GITHUB_HEAD_REF", "GITHUB_BASE_REF")},
+            "host_sanitizer": SANITIZER, "commands": RECORDS,
+            "files": FILES, "summary": SUMMARY,
+            "later_unrecorded_stages": "NOT_RUN",
+            "v1": "BYTE_PRESERVED_NOT_EXECUTED",
+            "scope": "pre-execution frozen independent cohort / scope-calibrated V2 / incidental old-P formatter exposure after freeze",
+            "limits": "Finite source/public-owned/native evidence only; private inference, general soundness and audit-locality burden unmeasured; GO624 PAUSED; H1 HOLD."}
+
+def write_raw(payload):
     RAW.mkdir(parents=True, exist_ok=True)
-    payload = {"schema": "newlang.r1134.c223.raw.v1", "success": success,
-               "first_failure": None if success else dict(CURRENT),
-               "error": error,
-               "github": {key: os.environ.get(key) for key in (
-                   "GITHUB_SHA", "GITHUB_REF", "GITHUB_EVENT_NAME", "GITHUB_RUN_ID",
-                   "GITHUB_RUN_ATTEMPT", "GITHUB_JOB", "GITHUB_HEAD_REF",
-                   "GITHUB_BASE_REF")},
-               "host_sanitizer": SANITIZER, "commands": RECORDS,
-               "files": FILES, "summary": SUMMARY,
-               "later_unrecorded_stages": "NOT_RUN",
-               "v1": "BYTE_PRESERVED_NOT_EXECUTED",
-               "scope": "SCOPE-CALIBRATED / implementation-fixture-blind",
-               "limits": "Finite source/public-owned/native evidence only; private inference, general soundness and audit-locality burden unmeasured; GO624 PAUSED; H1 HOLD."}
     data = (json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n").encode()
-    (RAW / "raw.json").write_bytes(data)
+    temporary = RAW / "raw.json.tmp"
+    temporary.write_bytes(data)
+    temporary.replace(RAW / "raw.json")
+    return data
+
+def finish(success, error):
+    payload = raw_payload(success, error, True)
+    data = write_raw(payload)
     emit("RAW_READY", {"bytes": len(data), "sha256": digest(data),
                        "path": str(RAW / "raw.json"), "success": success})
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
@@ -427,7 +352,7 @@ def finish(success, error):
             stream.write("\n## R1134 C223 independent finite execution\n\n")
             stream.write(("PASS" if success else "FIRST RED") + " - raw SHA256 " +
                          digest(data) + "\n\n")
-            stream.write("CTest post-test transport preserves exact raw JSON in this job log. V1 unchanged and unexecuted; V2 scope-calibrated. General soundness and audit-locality burden remain unmeasured.\n")
+            stream.write("CTest post-test transport preserves exact raw JSON in this job log. V1 unchanged and unexecuted; V2 scope-calibrated, with the recorded incidental old-P exposure after freeze. General soundness and audit-locality burden remain unmeasured.\n")
     emit("FINAL", {"success": success, "first_failure": payload["first_failure"],
                    "raw_sha256": digest(data)})
 

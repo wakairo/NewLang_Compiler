@@ -1,0 +1,62 @@
+{
+  "schema": "newlang.r1134.c223.equipment.forward.v3",
+  "prior_head": "4699e098bcb18840a222b85ff2ae4fbfe429d4bf",
+  "authority": [
+    "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620268814",
+    "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620652006"
+  ],
+  "first_normal_pair": {
+    "full": 41759409083,
+    "partial": 41759409242,
+    "checkout": "b7be79e9f33cdeab1de3162da54c1a13fb213df4",
+    "head": "4699e098bcb18840a222b85ff2ae4fbfe429d4bf",
+    "known_first_R_failure": "n07 CHECK returned rc3 error(precision)[USIZE-SUBTRACTION-PRECISION]; E1 regex omitted legitimate precision category; first outputs preserved, no unsafe acceptance"
+  },
+  "changes": [
+    "Include precision among actual CHECK rejection categories; preserve actual layer/code/message and rc3/no-stdout requirement. No expected outcome changed.",
+    "Compile/run exact unmodified generated C for all genuine CHECK-positive cases before passive mapping; passive failure cannot erase separable actual unmodified-native evidence.",
+    "Use Clang JSON syntax AST of each own emitted C to verify actual lexical declarations, scalar guard operand, braced edge context and real helper definitions. No producer files/fixtures or expected-value inference.",
+    "Normalize and record at most one actual logical-not wrapper around the same actual less-than guard, following bounded initializer aliases; read its actual unsigned carry without assuming emitted branch polarity.",
+    "For separately declared loop_old, require one actual B assignment, unconditional dominance of the real Break, and observe the actual scalar only after normal loop exit; never synthesize an initializer.",
+    "Preserve exact Clang syntax-map stdout in raw command receipt, plus its byte/SHA identity and all passive insertion offsets/text.",
+    "Atomically checkpoint command receipts before/after launch, including launch error and outer-interruption state; reporter distinguishes RAW_UNAVAILABLE/incomplete from no execution."
+  ],
+  "entries": [
+    {
+      "path": "tests/r1134/runner.py",
+      "bytes": 18749,
+      "sha256": "f8f7961a70b2311c81197b90952d0ca5a98f6d296c7820fdb8ff39985dc7506e"
+    },
+    {
+      "path": "tests/r1134/report.py",
+      "bytes": 1937,
+      "sha256": "9ddcd19cf8a8347f601e53d18b9a604ceac2924ae55de52d0b5be37008c9e240"
+    },
+    {
+      "path": "tests/r1134/observer.py",
+      "bytes": 14797,
+      "sha256": "61998138950994c486adb9da2fc0ac848603c1c9893e903fdca9e75470864350"
+    }
+  ],
+  "unchanged": [
+    "all V1 bytes and oracle; V1 remains unexecuted",
+    "all V2 source/oracle/README/manifest bytes and assertions",
+    "E1/E2 records and first RFAST RED/exposure",
+    "public_probe.c formatted E2",
+    "existing producer files, CMake, workflows, toolchains",
+    "GCC/Clang O0/O2 strict flags; applicable guest ASan/UBSan; command and CTest timeouts"
+  ],
+  "additional_tooling_reference": {
+    "path": "evidence/r1129/harness/instrument.py",
+    "ref": "bc3386f1b710f262e51ebea9a3d05db6064f398b",
+    "purpose": "permitted prior-R syntax-map/passive-observation equipment only; no old expected values reused"
+  },
+  "budgets_before_second_pair": {
+    "rfast": 2,
+    "normal_pairs": 1,
+    "actual_normal_jobs": 6,
+    "manual": 0
+  },
+  "independence": "pre-execution frozen independent cohort / scope-calibrated V2 / incidental old-P formatter exposure after freeze",
+  "limit": "Finite measured evidence only; no private inference/general soundness/audit-locality proof. GO624 PAUSED/H1 HOLD."
+}

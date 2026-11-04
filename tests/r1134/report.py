@@ -14,7 +14,8 @@ def main():
     root = Path(sys.argv[1]).resolve()
     path = root / "raw.json"
     if not path.is_file():
-        emit("TRANSPORT_STATUS", {"status": "NOT_EXECUTED", "root": str(root)})
+        emit("TRANSPORT_STATUS", {"status": "RAW_UNAVAILABLE", "root": str(root),
+                                  "runner_started": (root / "started.json").is_file()})
         return 0
     if path.is_symlink() or path.resolve().parent != root:
         raise RuntimeError("R1134 refuses foreign/symlink raw")
@@ -26,11 +27,13 @@ def main():
               for index in range(0, len(encoded), 4096)]
     emit("RAW_BEGIN", {"codec": "base64", "bytes": len(data), "sha256": sha,
                        "chunks": len(chunks), "success": payload["success"],
+                       "complete": payload.get("complete", True),
                        "first_failure": payload["first_failure"]})
     for index, chunk in enumerate(chunks):
         emit("RAW_CHUNK", {"index": index, "data": chunk})
     emit("RAW_END", {"sha256": sha, "chunks": len(chunks), "status": "COMPLETE"})
     emit("RESULT", {"success": payload["success"],
+                    "complete": payload.get("complete", True),
                     "first_failure": payload["first_failure"],
                     "error": payload["error"], "summary": payload["summary"],
                     "host_sanitizer": payload["host_sanitizer"],
