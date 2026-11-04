@@ -108,6 +108,9 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    set(_r1157_fixed_prefix "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1157/fixed_transport.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}")
     # P930 diagnostic-only wrappers: production libraries/CLI remain unchanged.
     add_executable(p930_observe tests/p930/observe.c)
     add_executable(p930_oom tests/p930/observe.c)
@@ -690,7 +693,7 @@ if(BUILD_TESTING)
         target_link_options(p1088_${probe} PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
         add_test(NAME p1088_${probe}.unit COMMAND p1088_${probe})
     endforeach()
-    add_test(NAME p1088_evidence.unit COMMAND "${Python3_EXECUTABLE}"
+    add_test(NAME p1088_evidence.unit COMMAND ${_r1157_fixed_prefix} "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1088/evidence_test.py")
 
     add_executable(if_test tests/unit/if_test.c)
@@ -938,7 +941,7 @@ if(BUILD_TESTING)
     add_test(NAME p982_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982")
-    add_test(NAME p982_freeze.unit COMMAND "${Python3_EXECUTABLE}"
+    add_test(NAME p982_freeze.unit COMMAND ${_r1157_fixed_prefix} "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/freeze_test.py")
     add_executable(p990_probe tests/p990/probe.c)
     target_include_directories(p990_probe PRIVATE tests/support)
@@ -999,7 +1002,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/calibration_unreachable_bound_v2.nl" "0" "1" "121")
     add_test(NAME p990_unreachable_bound_oom.unit COMMAND p990_oom
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/calibration_unreachable_bound_v2.nl")
-    add_test(NAME p990_new_native.integration COMMAND "${Python3_EXECUTABLE}"
+    add_test(NAME p990_new_native.integration COMMAND ${_r1157_fixed_prefix} "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "new")
     add_test(NAME p990_p986_native.integration COMMAND "${Python3_EXECUTABLE}"
@@ -1043,7 +1046,7 @@ if(BUILD_TESTING)
     add_test(NAME p1107_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" candidate)
-    add_test(NAME p1107_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+    add_test(NAME p1107_evidence_history.unit COMMAND ${_r1157_fixed_prefix} "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1107)
     add_executable(p1117_probe tests/p1117/probe.c)
     add_executable(p1117_lineage tests/p1117/lineage_v2.c)
@@ -1079,7 +1082,7 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1117_probe>"
         "${CMAKE_CURRENT_BINARY_DIR}/p1117-native" candidate
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
-    add_test(NAME p1117_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+    add_test(NAME p1117_evidence_history.unit COMMAND ${_r1157_fixed_prefix} "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1117)
     add_executable(p1117_c217_lineage tests/p1117/c217/probe.c)
     target_include_directories(p1117_c217_lineage PRIVATE
@@ -1297,7 +1300,7 @@ if(BUILD_TESTING)
     add_test(NAME p1098_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/run-v2.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098")
-    add_test(NAME p1098_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+    add_test(NAME p1098_evidence_history.unit COMMAND ${_r1157_fixed_prefix} "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1098)
     add_executable(p1092_observe tests/p1092/observe.c)
     add_executable(p1092_oom tests/p1092/observe.c)
@@ -1335,24 +1338,36 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}")
     add_test(NAME p1092_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/evidence_test.py")
-    add_test(NAME p990_freeze_protocol.unit COMMAND "${Python3_EXECUTABLE}"
+    add_test(NAME p990_freeze_protocol.unit COMMAND ${_r1157_fixed_prefix} "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/freeze_selftest.py")
     set_tests_properties(p990_freeze_protocol.unit PROPERTIES RUN_SERIAL TRUE)
-    add_test(NAME p1045_two_original_native.integration COMMAND "${Python3_EXECUTABLE}"
+    add_test(NAME p1045_two_original_native.integration COMMAND ${_r1157_fixed_prefix} "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/p1045_forward.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     foreach(p1055_profile IN ITEMS 0 1 2 3 4)
-        add_test(NAME p1055_old_origin_${p1055_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+        set(_r1157_profile_prefix)
+        if(p1055_profile EQUAL 0)
+            set(_r1157_profile_prefix ${_r1157_fixed_prefix})
+        endif()
+        add_test(NAME p1055_old_origin_${p1055_profile}.integration COMMAND ${_r1157_profile_prefix} "${Python3_EXECUTABLE}"
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/run.py" "$<TARGET_FILE:newlangc>"
             "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1055_profile}")
     endforeach()
     foreach(p1058_profile IN ITEMS 0 1)
-        add_test(NAME p1058_closed_h_${p1058_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+        set(_r1157_profile_prefix)
+        if(p1058_profile EQUAL 0)
+            set(_r1157_profile_prefix ${_r1157_fixed_prefix})
+        endif()
+        add_test(NAME p1058_closed_h_${p1058_profile}.integration COMMAND ${_r1157_profile_prefix} "${Python3_EXECUTABLE}"
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1058/run.py" "$<TARGET_FILE:newlangc>"
             "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1058_profile}")
     endforeach()
     foreach(p1062_profile IN ITEMS 0 1 2 3 4 5)
-        add_test(NAME p1062_h_body_${p1062_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+        set(_r1157_profile_prefix)
+        if(p1062_profile EQUAL 0)
+            set(_r1157_profile_prefix ${_r1157_fixed_prefix})
+        endif()
+        add_test(NAME p1062_h_body_${p1062_profile}.integration COMMAND ${_r1157_profile_prefix} "${Python3_EXECUTABLE}"
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1062/run.py" "$<TARGET_FILE:newlangc>"
             "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1062_profile}")
     endforeach()
@@ -2006,4 +2021,26 @@ if(BUILD_TESTING)
     foreach(profile 01-add-many 05-sub-many)
         set_tests_properties(p1139_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
+endif()
+
+# R1157 scoped independent runtime observation; never execute at configure/build.
+if(BUILD_TESTING)
+    add_test(NAME r1157_runtime_if.independent
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1157/runner.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}"
+        "${CMAKE_CURRENT_BINARY_DIR}" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}")
+    set_tests_properties(r1157_runtime_if.independent PROPERTIES TIMEOUT 240)
+    get_property(r1157_names DIRECTORY PROPERTY TESTS)
+    set(r1157_count 0)
+    foreach(r1157_name IN LISTS r1157_names)
+        if(r1157_name STREQUAL "r1157_runtime_if.independent")
+            math(EXPR r1157_count "${r1157_count} + 1")
+        endif()
+    endforeach()
+    if(NOT r1157_count EQUAL 1)
+        message(FATAL_ERROR "R1157 registration is not unique")
+    endif()
+    message(STATUS "R1157 unique CTest registered: r1157_runtime_if.independent (not executed at configure/build)")
 endif()

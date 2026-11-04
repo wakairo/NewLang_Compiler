@@ -1,0 +1,133 @@
+#include <stddef.h>
+
+#include <stdio.h>
+static size_t r1157_operand(unsigned c, unsigned side, size_t v)
+{ fprintf(stderr, "R1157 OP %u %u %zu\n", c, side, v); return v; }
+static _Bool r1157_branch(unsigned c, _Bool v)
+{ fprintf(stderr, "R1157 BRANCH %u %u\n", c, (unsigned)v); return v; }
+static _Bool r1157_condition(unsigned c, _Bool v, const void *root,
+                             const void *f0, const void *f1,
+                             unsigned v0, unsigned v1)
+{ fprintf(stderr, "R1157 COND %u %u %p %p %p %u %u\n", c, (unsigned)v,
+          root, f0, f1, v0, v1); return v; }
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+#include <limits.h>
+_Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+#include <stddef.h>
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+
+#ifdef NEWLANG_LOOP_OBSERVER
+#include NEWLANG_LOOP_OBSERVER
+#endif
+#ifndef NL_LOOP_BIND
+#define NL_LOOP_BIND(...) ((void)0)
+#endif
+#ifndef NL_LOOP_READ
+#define NL_LOOP_READ(...) ((void)0)
+#endif
+#ifndef NL_LOOP_BEFORE
+#define NL_LOOP_BEFORE(...) ((void)0)
+#endif
+#ifndef NL_LOOP_AFTER
+#define NL_LOOP_AFTER(...) ((void)0)
+#endif
+
+#ifdef NEWLANG_SCALAR_LOOP_OBSERVER
+#include NEWLANG_SCALAR_LOOP_OBSERVER
+#endif
+#ifndef NL_SCALAR_PHASE
+#define NL_SCALAR_PHASE(...) ((void)0)
+#endif
+#ifndef NL_SCALAR_RESULT
+#define NL_SCALAR_RESULT(...) ((void)0)
+#endif
+
+static void nl_fn_10(void);
+
+static void nl_fn_10(void)
+{
+    nl_type_10 nl_local_1 = { .f1 = 61, .f0 = 17, };
+    (void)nl_local_1;
+    NL_LOOP_BIND(&nl_local_1.f0, &nl_local_1.f1);
+    const uint8_t nl_local_2 = nl_local_1.f0;
+    (void)nl_local_2;
+    NL_LOOP_READ(&nl_local_1.f0, nl_local_2);
+    size_t nl_local_3;
+    size_t nl_loop_carry_13 = (size_t)UINTMAX_C(9);
+    for (;;) {
+        const size_t nl_loop_phase_13 = nl_loop_carry_13;
+        NL_SCALAR_PHASE(nl_loop_phase_13);
+        if (r1157_branch(0, (r1157_condition(0, (r1157_operand(0, 0, (nl_loop_phase_13)) < r1157_operand(0, 1, ((size_t)UINTMAX_C(9)))), &nl_local_1, &nl_local_1.f0, &nl_local_1.f1, nl_local_1.f0, nl_local_1.f1)))) {
+fprintf(stderr, "R1157 ARM 0 then\n");
+            nl_loop_carry_13 = nl_loop_phase_13 + (size_t)UINTMAX_C(1);
+            continue;
+        }
+fprintf(stderr, "R1157 ARM 0 else\n");
+        nl_local_3 = nl_loop_phase_13;
+        NL_SCALAR_RESULT(nl_local_3);
+        break;
+    }
+    (void)nl_local_3;
+    const size_t nl_local_4 = nl_local_3;
+    (void)nl_local_4;
+    const size_t nl_less_left_19 = nl_local_4;
+    const size_t nl_less_right_19 = ((size_t)UINTMAX_C(10));
+    uint8_t nl_if_result_22;
+    if ((r1157_condition(1, (r1157_operand(1, 0, (nl_less_left_19)) < r1157_operand(1, 1, (nl_less_right_19))), &nl_local_1, &nl_local_1.f0, &nl_local_1.f1, nl_local_1.f0, nl_local_1.f1))) {
+fprintf(stderr, "R1157 ARM 1 then\n");
+        uint8_t nl_loan_result_1;
+        {
+            uint8_t *const nl_local_5 = &nl_local_1.f0;
+            (void)nl_local_5;
+            const uint8_t nl_replace_old_4 = *nl_local_5;
+fprintf(stderr, "R1157 STORE before %p %u\n", (void *)(nl_local_5), (unsigned)(*nl_local_5));
+            *nl_local_5 = 43;
+fprintf(stderr, "R1157 STORE after %p %u\n", (void *)(nl_local_5), (unsigned)(*nl_local_5));
+            nl_loan_result_1 = nl_replace_old_4;
+        }
+        (void)nl_loan_result_1;
+        nl_if_result_22 = nl_loan_result_1;
+    } else {
+fprintf(stderr, "R1157 ARM 1 else\n");
+        uint8_t nl_loan_result_1;
+        {
+            uint8_t *const nl_local_5 = &nl_local_1.f0;
+            (void)nl_local_5;
+            const uint8_t nl_replace_old_4 = *nl_local_5;
+fprintf(stderr, "R1157 STORE before %p %u\n", (void *)(nl_local_5), (unsigned)(*nl_local_5));
+            *nl_local_5 = 83;
+fprintf(stderr, "R1157 STORE after %p %u\n", (void *)(nl_local_5), (unsigned)(*nl_local_5));
+            nl_loan_result_1 = nl_replace_old_4;
+        }
+        (void)nl_loan_result_1;
+        nl_if_result_22 = nl_loan_result_1;
+    }
+    const uint8_t nl_local_5 = nl_if_result_22;
+    (void)nl_local_5;
+    const uint8_t nl_local_6 = nl_local_1.f0;
+    (void)nl_local_6;
+    NL_LOOP_READ(&nl_local_1.f0, nl_local_6);
+    const uint8_t nl_local_7 = nl_local_1.f1;
+fprintf(stderr, "R1157 VAL before %zu\n", (size_t)nl_local_2);
+fprintf(stderr, "R1157 VAL settled %zu\n", (size_t)nl_local_3);
+fprintf(stderr, "R1157 VAL echoed %zu\n", (size_t)nl_local_4);
+fprintf(stderr, "R1157 VAL displaced %zu\n", (size_t)nl_local_5);
+fprintf(stderr, "R1157 VAL after %zu\n", (size_t)nl_local_6);
+fprintf(stderr, "R1157 VAL still %zu\n", (size_t)nl_local_7);
+fprintf(stderr, "R1157 FINAL %p %p %p %u %u\n", (void *)&nl_local_1, (void *)&nl_local_1.f0, (void *)&nl_local_1.f1, (unsigned)nl_local_1.f0, (unsigned)nl_local_1.f1);
+    (void)nl_local_7;
+    NL_LOOP_READ(&nl_local_1.f1, nl_local_7);
+    (void)nl_local_5;
+    (void)0;
+}
+
+int main(void)
+{
+    nl_fn_10();
+    return 0;
+}
