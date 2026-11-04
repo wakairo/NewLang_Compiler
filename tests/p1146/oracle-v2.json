@@ -1,0 +1,190 @@
+{
+  "authority": "C226 / fixed main7e492ec / canonical Draft17.34",
+  "positive_cases": {
+    "01-add-many-first": {
+      "name": "01-add-many-first",
+      "nominal": "MarkPair",
+      "fields": [
+        "heat",
+        "spare"
+      ],
+      "values": [
+        72,
+        203
+      ],
+      "write_index": 0,
+      "start": 1,
+      "limit": 10,
+      "step": 4,
+      "direction": "add",
+      "threshold": 14,
+      "tags": [
+        119,
+        47
+      ],
+      "trace": [
+        1,
+        5,
+        9,
+        13
+      ],
+      "result": 13,
+      "tag": 119,
+      "old": 72,
+      "updated": 119,
+      "sibling": 203,
+      "identity": "same original root and field address before loop, at store and after read; sibling distinct and unchanged",
+      "result_dependency": "free Unknown usize, ordinary Copy; predicate current real actual/formal/result; scoped old u8 Copy free"
+    },
+    "02-add-zero-second": {
+      "name": "02-add-zero-second",
+      "nominal": "FlagPair",
+      "fields": [
+        "keep",
+        "flag"
+      ],
+      "values": [
+        57,
+        83
+      ],
+      "write_index": 1,
+      "start": 10,
+      "limit": 10,
+      "step": 4,
+      "direction": "add",
+      "threshold": 10,
+      "tags": [
+        29,
+        231
+      ],
+      "trace": [
+        10
+      ],
+      "result": 10,
+      "tag": 231,
+      "old": 83,
+      "updated": 231,
+      "sibling": 57,
+      "identity": "same original root and field address before loop, at store and after read; sibling distinct and unchanged",
+      "result_dependency": "free Unknown usize, ordinary Copy; predicate current real actual/formal/result; scoped old u8 Copy free"
+    },
+    "03-sub-many-second": {
+      "name": "03-sub-many-second",
+      "nominal": "SignalPair",
+      "fields": [
+        "steady",
+        "signal"
+      ],
+      "values": [
+        91,
+        156
+      ],
+      "write_index": 1,
+      "start": 22,
+      "limit": 7,
+      "step": 6,
+      "direction": "sub",
+      "threshold": 5,
+      "tags": [
+        41,
+        218
+      ],
+      "trace": [
+        22,
+        16,
+        10,
+        4
+      ],
+      "result": 4,
+      "tag": 41,
+      "old": 156,
+      "updated": 41,
+      "sibling": 91,
+      "identity": "same original root and field address before loop, at store and after read; sibling distinct and unchanged",
+      "result_dependency": "free Unknown usize, ordinary Copy; predicate current real actual/formal/result; scoped old u8 Copy free"
+    },
+    "04-add-one-first": {
+      "name": "04-add-one-first",
+      "nominal": "TonePair",
+      "fields": [
+        "tone",
+        "stable"
+      ],
+      "values": [
+        17,
+        65
+      ],
+      "write_index": 0,
+      "start": 8,
+      "limit": 10,
+      "step": 4,
+      "direction": "add",
+      "threshold": 12,
+      "tags": [
+        36,
+        214
+      ],
+      "trace": [
+        8,
+        12
+      ],
+      "result": 12,
+      "tag": 214,
+      "old": 17,
+      "updated": 214,
+      "sibling": 65,
+      "identity": "same original root and field address before loop, at store and after read; sibling distinct and unchanged",
+      "result_dependency": "free Unknown usize, ordinary Copy; predicate current real actual/formal/result; scoped old u8 Copy free"
+    }
+  },
+  "controls": {
+    "80-scalar-control": {
+      "check": 0,
+      "emit": 0
+    },
+    "81-literal-write-control": {
+      "check": 0,
+      "emit": 0
+    },
+    "82-late-original-control": {
+      "check": 0,
+      "emit": 4,
+      "named": 4,
+      "classification": "legal source outside this pre-loop-original composition profile; not an unsafe-source negative"
+    }
+  },
+  "negative_cases": {
+    "90-overflow": {
+      "acceptance": "reject CHECK or backend before publication; preserve named output; classify actual first layer, do not overclaim later layer"
+    },
+    "91-read-mode": {
+      "acceptance": "reject CHECK or backend before publication; preserve named output; classify actual first layer, do not overclaim later layer"
+    },
+    "92-ending-reference": {
+      "acceptance": "reject CHECK or backend before publication; preserve named output; classify actual first layer, do not overclaim later layer"
+    },
+    "93-incoming-type": {
+      "acceptance": "reject CHECK or backend before publication; preserve named output; classify actual first layer, do not overclaim later layer"
+    }
+  },
+  "gate0_prediction": {
+    "composite": "CHECK/source-issued may pass, first backend failure predicted at predicate_call aggregate exclusion; earlier actual failure is FIRST",
+    "main_unchanged": true
+  },
+  "native": {
+    "compilers": [
+      "GCC13",
+      "Clang23"
+    ],
+    "opts": [
+      "O0",
+      "O2"
+    ],
+    "versions": [
+      "raw unchanged C",
+      "read-only passive observation"
+    ],
+    "expected_exit": 0
+  },
+  "scope": "one original two-u8 T alive from before one guarded scalar loop; actual loop result Copy/pure predicate then original scoped replace/read; no T-changing C, new issuer, bridge or semantic contract"
+}

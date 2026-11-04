@@ -1,0 +1,20 @@
+{
+  "main": "7e492ec7aca7bff101ab19a0b6006feff0741c1f",
+  "tree": "3d230802ca275bd963101c9b575f1567927f5c7a",
+  "compiler_sha256": "451abbf33c64b41fdf3e524e9616f50988111e9de8dae65c460f7d01229f1e55",
+  "files": {
+    "gate0.py": "c39a43e03a037f180e859a38bf78d0274090018807b56785f8e44b13581c019a",
+    "oracle.json": "3a73619141c1dca721264dd14143d68915d806bc0a3a1d3ec049b35538743343",
+    "source-generator.py": "c98236a3ea1eb9360eca9cebbaf42e006675c273862ed8d7f38bad21c165b6f9",
+    "sources/01-add-many-first.nl": "03b0c7e585ba0fd3abe5a38dc86badf070436ad646c828616090d9eec6283c89",
+    "sources/02-add-zero-second.nl": "245dfa70bc0a8e97febc3777f5300cbaf837e797b7f3bb482dc995a3a13c2b71",
+    "sources/03-sub-many-second.nl": "28476229004f1fda72c44ce28be463e0b43622368059ee2632fd1f7dfa7c542c",
+    "sources/04-add-one-first.nl": "164be291113a3e9ae7b81ddd44516d1240db25d6153e17ffbd7575618d69aa31",
+    "sources/80-scalar-control.nl": "3da3a8d4b56ae32b71f37b44584491d69adeecb9c79cc44623798f5b4a017b8e",
+    "sources/81-literal-write-control.nl": "27893f0ff69af30f5a7ae3690613d644f2481f083060cafedc786a312814c7a6",
+    "sources/90-overflow.nl": "7b91ca98a12777007c48ce44b0b8dcac7cf725a1047afbcaefc984f6b8918774",
+    "sources/91-read-mode.nl": "75e5c61c39ea3e3c94a751d21ed15db781309a007186505c89a81da30cf5a4cd",
+    "sources/92-ending-reference.nl": "e89b7c5d45638cdacd8eca2c6ae52043f1d8c3595449dbca0b2f59b3305b070f",
+    "sources/93-incoming-type.nl": "c265e9a36cfbd11cf2a050e801f495d4abeecaad2a6ec48d528dc5eb141fbd74"
+  }
+}

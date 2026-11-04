@@ -157,7 +157,8 @@ static bool v1_scalar(const NLCheckedFragment *fragment, NLCheckedNodeId id,
 /* Native target §6 quantity staging only. A source-connected Copy binding is
  * required; no usize call ABI, ref, arithmetic or inferred owner authority. */
 static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
-                                 V0Program *p, bool allow_loop)
+                                 V0Program *p, bool allow_loop,
+                                 NLCheckedNodeId *loop_origin)
 {
     const NLTypeId type =
         nl_semantic_core_type(nl_checked_context(f), NL_TYPE_USIZE);
@@ -187,6 +188,8 @@ static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
             if (nl_linear_break_validate(f, id, &loop) != NL_CHECK_OK ||
                 !loop.scalar_loop || loop.result.value != v->results[0].value)
                 return false;
+            if (loop_origin)
+                *loop_origin = id;
             p->uses_usize = p->scalar_loop = true;
             return true;
         }
@@ -230,12 +233,12 @@ static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
 static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
                             V0Program *p)
 {
-    return quantity_scalar_impl(f, id, p, false);
+    return quantity_scalar_impl(f, id, p, false, NULL);
 }
 static bool loop_quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
                                  V0Program *p)
 {
-    return quantity_scalar_impl(f, id, p, true);
+    return quantity_scalar_impl(f, id, p, true, NULL);
 }
 
 /* New bool lowering is restricted to the function's straight-line root block.
@@ -3426,7 +3429,8 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
                 program->aggregate) < 0)
         return false;
 
-    if (program->linear_break &&
+    if ((program->linear_break ||
+         (program->scalar_loop && program->aggregate)) &&
         fputs("#ifdef NEWLANG_LOOP_OBSERVER\n"
               "#include NEWLANG_LOOP_OBSERVER\n#endif\n"
               "#ifndef NL_LOOP_BIND\n#define NL_LOOP_BIND(...) "
