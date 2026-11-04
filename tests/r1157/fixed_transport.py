@@ -42,13 +42,13 @@ def prepare(repo, build):
     tracked = set(invoke(['git', '-C', repo, 'ls-files', '-z']).decode().rstrip('\0').split('\0'))
     assert set(base) <= tracked
     assert all(x.startswith('tests/r1157/') for x in tracked - set(base))
-    prospective = json.loads((OWN / 'v3/manifest.json').read_text())
+    prospective = json.loads((OWN / 'v4/manifest.json').read_text())
     for name, expected in prospective['files'].items():
         p = repo / name
         assert p.is_file() and not p.is_symlink()
         assert hashlib.sha256(p.read_bytes()).hexdigest() == expected, 'R prospective digest: ' + name
     assert 'CMakeLists.txt' in prospective['files']
-    assert tracked - set(base) <= set(prospective['files']) | {'tests/r1157/v3/manifest.json'}
+    assert tracked - set(base) <= set(prospective['files']) | {'tests/r1157/v4/manifest.json'}
     root = build / 'r1157-fixed-authority'
     lock = build / 'r1157-fixed-authority.lock'
     with lock.open('a') as held:

@@ -18,11 +18,13 @@ REPO, BUILD = Path(REPO), Path(BUILD)
 R1157_DIR = Path(__file__).resolve().parent
 OUT = BUILD / 'r1157-raw'
 OUT.mkdir(exist_ok=True)
-ORACLE = json.loads((R1157_DIR / 'v1/oracle.json').read_text())
-RESULT = {'version': 'R1157-machine-V3', 'cases': {}, 'negatives': {}, 'commands': [],
+ORACLE = json.loads((R1157_DIR / 'v4/oracle.json').read_text())
+RESULT = {'version': 'R1157-machine-V4-C234', 'cases': {}, 'negatives': {}, 'commands': [],
           'checkout': os.environ.get('GITHUB_SHA'), 'run': os.environ.get('GITHUB_RUN_ID'),
           'attempt': os.environ.get('GITHUB_RUN_ATTEMPT'), 'sanitizer': SAN,
-          'first': False, 'original_first': 'first/receipt.json', 'independence': 'V1 oracle frozen before interface connection'}
+          'first': False, 'scope_first': True, 'original_first': 'first/receipt.json',
+          'previous_red': 'v3_results/receipt.json',
+          'independence': 'V1 frozen independent; V4 scope-calibrated after C234 public profile disclosure'}
 
 
 def run(tag, command, allowed=(0,), timeout=45):
@@ -285,6 +287,7 @@ def assess(text, case):
     assert all([int(x[7]), int(x[8])] == [case['ember'], case['reserve']] for x in conditions)
     ops = [x.split() for x in lines if x.startswith('R1157 OP ')]
     assert [int(x[4]) for x in ops if x[2:4] == ['0', '0']] == case['values'], ops
+    assert [int(x[4]) for x in ops if x[2:4] == ['0', '1']] == [case['runtime_guard_right']] * len(case['guard']), ops
     assert [int(x[4]) for x in ops if x[2:4] == ['1', '0']] == [case['left']], ops
     assert [int(x[4]) for x in ops if x[2:4] == ['1', '1']] == [case['right']], ops
     arms = [x.split()[3] for x in lines if x.startswith('R1157 ARM 1 ')]
@@ -330,6 +333,8 @@ def main():
     shutil.copytree(R1157_DIR / 'v1', OUT / 'frozen-v1', dirs_exist_ok=True)
     shutil.copytree(R1157_DIR / 'v2', OUT / 'frozen-v2', dirs_exist_ok=True)
     shutil.copytree(R1157_DIR / 'v3', OUT / 'frozen-v3', dirs_exist_ok=True)
+    shutil.copytree(R1157_DIR / 'v4', OUT / 'frozen-v4', dirs_exist_ok=True)
+    shutil.copytree(R1157_DIR / 'v3_results', OUT / 'original-v3-red', dirs_exist_ok=True)
     shutil.copytree(R1157_DIR / 'first', OUT / 'original-first', dirs_exist_ok=True)
     shutil.copyfile(__file__, OUT / 'executed-runner.py')
     run('fixed-authority-transport', [sys.executable, R1157_DIR / 'fixed_transport.py', REPO, BUILD])
@@ -342,7 +347,7 @@ def main():
     # Negatives never receive a fabricated later-layer success.
     for negative in ORACLE['negatives']:
         name = negative['id']
-        p = run(f'negative/{name}', [CLI, '--check', R1157_DIR / 'v3/negative' / f'{name}.nl'], allowed=None)
+        p = run(f'negative/{name}', [CLI, '--check', R1157_DIR / 'v4/negative' / f'{name}.nl'], allowed=None)
         diagnostic = p.stderr.decode(errors='replace')
         hit = re.search(r'error\((parser|semantic|cli|unsupported|precision)\)\[([^]]+)\]', diagnostic)
         RESULT['negatives'][name] = {'status': p.returncode, 'actual_layer': hit.group(1) if hit else 'unclassified',
@@ -352,7 +357,7 @@ def main():
     checks = []
     for case in ORACLE['positives']:
         name = case['id']
-        p = run(f'{name}/check', [CLI, '--check', R1157_DIR / 'v3/sources' / f'{name}.nl'], allowed=None)
+        p = run(f'{name}/check', [CLI, '--check', R1157_DIR / 'v4/sources' / f'{name}.nl'], allowed=None)
         RESULT['cases'][name] = {'check_status': p.returncode, 'owned': 'NOT_REACHED', 'C17': 'NOT_REACHED', 'native': 'NOT_REACHED'}
         checks.append((name, p.returncode, p.stderr.decode(errors='replace')))
     if any(rc or err for _, rc, err in checks):
@@ -375,17 +380,14 @@ def main():
                ('guestUBSan',clang,['-O1','-fsanitize=undefined','-fno-sanitize-recover=all'])]
     for case in ORACLE['positives']:
         name = case['id']; directory = OUT / name; directory.mkdir(exist_ok=True)
-        original = R1157_DIR / 'v1/sources' / f'{name}.nl'
-        adapted = R1157_DIR / 'v3/sources' / f'{name}.nl'
-        original_probe = run(f'{name}/public-v1-specimen', [probe, original, 'specimen()'])
-        original_nodes = [json.loads(x) for x in original_probe.stdout.decode().splitlines()]
-        RESULT['cases'][name]['owned_v1'] = public_assess(original_nodes, case)
-        p = run(f'{name}/public-v3-main', [probe, adapted, 'main()'])
+        adapted = R1157_DIR / 'v4/sources' / f'{name}.nl'
+        RESULT['cases'][name]['owned_v1'] = 'NOT_RUN: preserved original scope; V4 uses its own actual source'
+        p = run(f'{name}/public-v4-main', [probe, adapted, 'main()'])
         nodes = [json.loads(x) for x in p.stdout.decode().splitlines()]
         RESULT['cases'][name]['owned'] = public_assess(nodes, case)
         RESULT['cases'][name]['mapping_provenance'] = {
             'source_sha256': hashlib.sha256(adapted.read_bytes()).hexdigest(),
-            'actual_call': 'main()', 'probe': f'{name}/public-v3-main',
+            'actual_call': 'main()', 'probe': f'{name}/public-v4-main',
             'same_source_used_for': ['CHECK', 'owned', 'stdout-C17', 'named-C17', 'observer-binding-map']}
         raw = run(f'{name}/emit', [CLI, adapted]).stdout
         rawpath = directory / 'original.c'; rawpath.write_bytes(raw)

@@ -1,0 +1,998 @@
+{
+  "version": "R1157-V3-actual-completed-six",
+  "source_acceptance_disposition": "all ADD3 accepted; all original equality SUB3 precision rejected; positive prediction mismatch retained",
+  "C234_scope_adjudication": "existing explicit profile boundary; not demonstrated compiler defect; V4 may calibrate scope separately",
+  "owned_C17_native": "NOT_REACHED for every case in every V3 job",
+  "compiler": "af16bbaebcaada68ff45afdf236d1debfc90b565",
+  "compiler_tree": "74a1bdc728398eb85bb690a9eaff34194f316b50",
+  "merge_parents": [
+    "af16bbaebcaada68ff45afdf236d1debfc90b565",
+    "8bd8823600d81b4f823faa7668781f52aec368f9"
+  ],
+  "jobs": [
+    {
+      "label": "GCC",
+      "job": 126565003647,
+      "run": 41827242681,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "head": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "checkout": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "passed_tests": 689,
+      "total_tests": 690,
+      "failed_tests": [
+        "r1157_runtime_if.independent"
+      ],
+      "prior_history_tests_passed": [
+        "p1088_evidence.unit",
+        "p982_freeze.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p990_freeze_protocol.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "capsule_sha256": "68d43d86bd387e74fdceac1cafabefbd39030b2a58887e5d84756a6c44bcdd0a",
+      "capsule_bytes": 90213,
+      "job_log_sha256": "4564035a037d5cb13beddf18347c25a21ce1b09090b11138921af36cccea26f1",
+      "first_failure": {
+        "layer": "source_CHECK",
+        "checks": [
+          [
+            "add_zero",
+            0,
+            ""
+          ],
+          [
+            "add_one",
+            0,
+            ""
+          ],
+          [
+            "add_four",
+            0,
+            ""
+          ],
+          [
+            "sub_zero",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_zero.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_one",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_one.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_four",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_four.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ]
+        ]
+      },
+      "negatives": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unsupported",
+          "diagnostic": "LOCAL-LOAN-PROFILE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "scoped_ref_escape": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P8-EXIT-DEPENDENCY",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "normal_join_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-RESULT",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "unknown_child": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "FIELD-UNKNOWN-FIELD",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "cases": {
+        "add_zero": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_one": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_four": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_zero": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_one": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_four": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "native_runs": 0
+    },
+    {
+      "label": "Clang",
+      "job": 126565003539,
+      "run": 41827242681,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "head": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "checkout": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "passed_tests": 689,
+      "total_tests": 690,
+      "failed_tests": [
+        "r1157_runtime_if.independent"
+      ],
+      "prior_history_tests_passed": [
+        "p1088_evidence.unit",
+        "p982_freeze.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p990_freeze_protocol.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "capsule_sha256": "c7a75b233f789fa799aec42a97350a99e150ebfe6538a3cf583815db901baacc",
+      "capsule_bytes": 90209,
+      "job_log_sha256": "ceb5f3274051f7534dec411b39f95f6e0a060784f1a3cd4688db02dab319f93a",
+      "first_failure": {
+        "layer": "source_CHECK",
+        "checks": [
+          [
+            "add_zero",
+            0,
+            ""
+          ],
+          [
+            "add_one",
+            0,
+            ""
+          ],
+          [
+            "add_four",
+            0,
+            ""
+          ],
+          [
+            "sub_zero",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_zero.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_one",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_one.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_four",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_four.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ]
+        ]
+      },
+      "negatives": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unsupported",
+          "diagnostic": "LOCAL-LOAN-PROFILE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "scoped_ref_escape": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P8-EXIT-DEPENDENCY",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "normal_join_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-RESULT",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "unknown_child": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "FIELD-UNKNOWN-FIELD",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "cases": {
+        "add_zero": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_one": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_four": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_zero": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_one": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_four": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "native_runs": 0
+    },
+    {
+      "label": "GCC-Release",
+      "job": 126565003270,
+      "run": 41827242681,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "head": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "checkout": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "passed_tests": 689,
+      "total_tests": 690,
+      "failed_tests": [
+        "r1157_runtime_if.independent"
+      ],
+      "prior_history_tests_passed": [
+        "p1088_evidence.unit",
+        "p982_freeze.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p990_freeze_protocol.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "capsule_sha256": "3dd6c53aaecf38babe24493cb100808a15b0dc08ccfeae4d29ede5ae6e90d0cb",
+      "capsule_bytes": 90183,
+      "job_log_sha256": "da98f3cf7fe7517f507d880ff3bd0a339a655157cfdf40d0ca760cdef5a2f2e3",
+      "first_failure": {
+        "layer": "source_CHECK",
+        "checks": [
+          [
+            "add_zero",
+            0,
+            ""
+          ],
+          [
+            "add_one",
+            0,
+            ""
+          ],
+          [
+            "add_four",
+            0,
+            ""
+          ],
+          [
+            "sub_zero",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_zero.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_one",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_one.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_four",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_four.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ]
+        ]
+      },
+      "negatives": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unsupported",
+          "diagnostic": "LOCAL-LOAN-PROFILE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "scoped_ref_escape": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P8-EXIT-DEPENDENCY",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "normal_join_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-RESULT",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "unknown_child": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "FIELD-UNKNOWN-FIELD",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "cases": {
+        "add_zero": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_one": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_four": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_zero": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_one": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_four": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "native_runs": 0
+    },
+    {
+      "label": "UBSan",
+      "job": 126565003747,
+      "run": 41827242681,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "head": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "checkout": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "passed_tests": 689,
+      "total_tests": 690,
+      "failed_tests": [
+        "r1157_runtime_if.independent"
+      ],
+      "prior_history_tests_passed": [
+        "p1088_evidence.unit",
+        "p982_freeze.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p990_freeze_protocol.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "capsule_sha256": "8541183d8fda6bf2ced1d6f54c8a789e32f5d9eb4728eaf6f57d8009bf29fba9",
+      "capsule_bytes": 90243,
+      "job_log_sha256": "e648509151425fd27a0aad53af5ecafcc5575b7cadc5afb94dafe28238d07754",
+      "first_failure": {
+        "layer": "source_CHECK",
+        "checks": [
+          [
+            "add_zero",
+            0,
+            ""
+          ],
+          [
+            "add_one",
+            0,
+            ""
+          ],
+          [
+            "add_four",
+            0,
+            ""
+          ],
+          [
+            "sub_zero",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_zero.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_one",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_one.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_four",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_four.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ]
+        ]
+      },
+      "negatives": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unsupported",
+          "diagnostic": "LOCAL-LOAN-PROFILE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "scoped_ref_escape": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P8-EXIT-DEPENDENCY",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "normal_join_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-RESULT",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "unknown_child": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "FIELD-UNKNOWN-FIELD",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "cases": {
+        "add_zero": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_one": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_four": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_zero": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_one": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_four": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "native_runs": 0
+    },
+    {
+      "label": "ASan",
+      "job": 126565003779,
+      "run": 41827242681,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "head": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "checkout": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "passed_tests": 689,
+      "total_tests": 690,
+      "failed_tests": [
+        "r1157_runtime_if.independent"
+      ],
+      "prior_history_tests_passed": [
+        "p1088_evidence.unit",
+        "p982_freeze.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p990_freeze_protocol.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "capsule_sha256": "9289c420762e24fbcdecef0e8163319bb403fcb47a5f4ffaad7dc480f590c2a7",
+      "capsule_bytes": 90242,
+      "job_log_sha256": "236dfb59b2e32194cc326fb00a95a33d2ecbea409bddaaef8d8a473703283a5a",
+      "first_failure": {
+        "layer": "source_CHECK",
+        "checks": [
+          [
+            "add_zero",
+            0,
+            ""
+          ],
+          [
+            "add_one",
+            0,
+            ""
+          ],
+          [
+            "add_four",
+            0,
+            ""
+          ],
+          [
+            "sub_zero",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_zero.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_one",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_one.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_four",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_four.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ]
+        ]
+      },
+      "negatives": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unsupported",
+          "diagnostic": "LOCAL-LOAN-PROFILE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "scoped_ref_escape": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P8-EXIT-DEPENDENCY",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "normal_join_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-RESULT",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "unknown_child": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "FIELD-UNKNOWN-FIELD",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "cases": {
+        "add_zero": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_one": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_four": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_zero": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_one": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_four": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "native_runs": 0
+    },
+    {
+      "label": "PARTIAL",
+      "job": 126565003279,
+      "run": 41827242676,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "head": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "checkout": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "passed_tests": 688,
+      "total_tests": 689,
+      "failed_tests": [
+        "r1157_runtime_if.independent"
+      ],
+      "prior_history_tests_passed": [
+        "p1088_evidence.unit",
+        "p982_freeze.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p990_freeze_protocol.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "capsule_sha256": "34a354eee7c5bb633853647fe471d73f65261377f89d63bebbe92f329f39c12f",
+      "capsule_bytes": 90238,
+      "job_log_sha256": "3177b27fea2bb1a802a4e4f5b83a9cd02ea4e7f4eec428b879156758dc269b5f",
+      "first_failure": {
+        "layer": "source_CHECK",
+        "checks": [
+          [
+            "add_zero",
+            0,
+            ""
+          ],
+          [
+            "add_one",
+            0,
+            ""
+          ],
+          [
+            "add_four",
+            0,
+            ""
+          ],
+          [
+            "sub_zero",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_zero.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_one",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_one.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ],
+          [
+            "sub_four",
+            3,
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1157/v3/sources/sub_four.nl:9:28-9:29: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n"
+          ]
+        ]
+      },
+      "negatives": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unsupported",
+          "diagnostic": "LOCAL-LOAN-PROFILE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "scoped_ref_escape": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P8-EXIT-DEPENDENCY",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "normal_join_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-RESULT",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "unknown_child": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "FIELD-UNKNOWN-FIELD",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "cases": {
+        "add_zero": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_one": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "add_four": {
+          "check_status": 0,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_zero": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_one": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "sub_four": {
+          "check_status": 3,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "native_runs": 0
+    }
+  ]
+}
