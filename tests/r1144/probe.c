@@ -63,8 +63,8 @@ static bool named(const NLCheckedFragment *fragment,
            memcmp(bytes.bytes, name, bytes.length) == 0;
 }
 
-static const NLCheckedNodeView *
-binding(const NLCheckedFragment *fragment, const char *name)
+static const NLCheckedNodeView *binding(const NLCheckedFragment *fragment,
+                                        const char *name)
 {
     NLSymbolId symbol = 0;
     for (size_t id = 1; id <= nl_checked_node_count(fragment); ++id) {
@@ -116,9 +116,9 @@ static bool inspect(const NLCheckedFragment *entry)
         copy_value == NULL || copy_value->kind != NL_CHECKED_IDENTIFIER ||
         copy_value->symbol != after->symbol ||
         copy_value->value_use != NL_VALUE_COPIED || call == NULL ||
-        call->kind != NL_CHECKED_REGISTERED_CALL ||
-        call->argument_count != 1 || call->result_count != 1 ||
-        call->results[0].type != octet || selected->type != octet)
+        call->kind != NL_CHECKED_REGISTERED_CALL || call->argument_count != 1 ||
+        call->result_count != 1 || call->results[0].type != octet ||
+        selected->type != octet)
         return false;
     const NLCheckedNodeView *actual =
         nl_checked_node_view(body, call->first_argument);
@@ -138,8 +138,7 @@ static bool inspect(const NLCheckedFragment *entry)
             parameter = view->symbol;
     }
     NLLinearBreakView proof;
-    if (parameter == 0 ||
-        nl_linear_break_owner_validate(body) != NL_CHECK_OK ||
+    if (parameter == 0 || nl_linear_break_owner_validate(body) != NL_CHECK_OK ||
         nl_linear_break_validate(body, after->initializer, &proof) !=
             NL_CHECK_OK ||
         !proof.scalar_loop || !proof.computed_carry ||
@@ -242,8 +241,8 @@ int main(int argc, char **argv)
 done:
     nl_checked_destroy(entry);
     nl_semantic_destroy(context);
-    nl_syntax_destroy(entry_tree);
-    nl_syntax_destroy(unit);
+    nl_syntax_tree_destroy(entry_tree);
+    nl_syntax_tree_destroy(unit);
     nl_parser_destroy(entry_parser);
     nl_parser_destroy(parser);
     nl_source_destroy(entry_source);
