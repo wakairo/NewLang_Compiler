@@ -39,7 +39,9 @@ for file in "${files[@]}"; do
     exit 1
   fi
   canonical="$scratch/canonical"
-  if ! "$formatter" -- "$file" > "$canonical"; then
+  # With stdin, the pinned formatter returns ignored input unchanged.
+  # Keep the filename for ignore, style, and language lookup.
+  if ! "$formatter" --assume-filename="$file" < "$file" > "$canonical"; then
     echo "Formatter could not produce canonical bytes for $file" >&2
     exit 1
   fi
