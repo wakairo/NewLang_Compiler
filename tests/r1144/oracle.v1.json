@@ -1,0 +1,248 @@
+{
+  "schema": "r1144-v1",
+  "authority": {
+    "main": "acdbf91944a3bac99671d71c6ae23134b56d6c32",
+    "spec": "Draft17.34",
+    "p_head": "773643d2709a5e5db24650069d67c0d9032fefb0"
+  },
+  "independence": "Initial source and predictions derived solely from Issue1144 and canonical before producer inspection.",
+  "references": [
+    "4.2",
+    "5.2",
+    "6",
+    "11.1",
+    "18.2",
+    "18.5",
+    "19.1",
+    "27.1",
+    "27.4",
+    "27.5",
+    "27.6",
+    "27.7",
+    "27.8"
+  ],
+  "byte_encoding": "UTF-8; LF; final LF; no BOM",
+  "positive": [
+    {
+      "id": "A0",
+      "path": "tests/r1144/sources/add_zero.nl",
+      "sha256": "2f99b12fea9bf70d82c27bafe2153ea43af17813e5e1f16e7c5acb0ce877a87e",
+      "expected_check": "accept",
+      "expected_header_values": [
+        31
+      ],
+      "expected_continue_count": 0,
+      "expected_break": 31,
+      "expected_outer_binding": 31,
+      "expected_copy": 31,
+      "expected_actual": 31,
+      "expected_predicate_branch": "false",
+      "expected_source_result": 29,
+      "proof": "One usize carry, one Continue and one normal Break; finite literal-guard arithmetic preserves representability. Copy and call actual retain the executed Break value."
+    },
+    {
+      "id": "A1",
+      "path": "tests/r1144/sources/add_one.nl",
+      "sha256": "d7967b1c934d38594d7c7075b5042518b226e6a2463b1af5f35df931c68cceac",
+      "expected_check": "accept",
+      "expected_header_values": [
+        13,
+        17
+      ],
+      "expected_continue_count": 1,
+      "expected_break": 17,
+      "expected_outer_binding": 17,
+      "expected_copy": 17,
+      "expected_actual": 17,
+      "expected_predicate_branch": "true",
+      "expected_source_result": 83,
+      "proof": "One usize carry, one Continue and one normal Break; finite literal-guard arithmetic preserves representability. Copy and call actual retain the executed Break value."
+    },
+    {
+      "id": "A3",
+      "path": "tests/r1144/sources/add_three.nl",
+      "sha256": "71d1681752e3f363a30ede801f6a5463c0192b741f32508f05c2f269e4daf110",
+      "expected_check": "accept",
+      "expected_header_values": [
+        5,
+        9,
+        13,
+        17
+      ],
+      "expected_continue_count": 3,
+      "expected_break": 17,
+      "expected_outer_binding": 17,
+      "expected_copy": 17,
+      "expected_actual": 17,
+      "expected_predicate_branch": "true",
+      "expected_source_result": 83,
+      "proof": "One usize carry, one Continue and one normal Break; finite literal-guard arithmetic preserves representability. Copy and call actual retain the executed Break value."
+    },
+    {
+      "id": "S0",
+      "path": "tests/r1144/sources/sub_zero.nl",
+      "sha256": "c941016972d316d096187cf6dfe56e099c6d4c2ca91d026fc0f8d053b5677483",
+      "expected_check": "accept",
+      "expected_header_values": [
+        11
+      ],
+      "expected_continue_count": 0,
+      "expected_break": 11,
+      "expected_outer_binding": 11,
+      "expected_copy": 11,
+      "expected_actual": 11,
+      "expected_predicate_branch": "false",
+      "expected_source_result": 29,
+      "proof": "One usize carry, one Continue and one normal Break; finite literal-guard arithmetic preserves representability. Copy and call actual retain the executed Break value."
+    },
+    {
+      "id": "S1",
+      "path": "tests/r1144/sources/sub_one.nl",
+      "sha256": "936e5fe76a882374dc6e2744840086a1eda9151f642c44a4e3f1684bdb133532",
+      "expected_check": "accept",
+      "expected_header_values": [
+        20,
+        17
+      ],
+      "expected_continue_count": 1,
+      "expected_break": 17,
+      "expected_outer_binding": 17,
+      "expected_copy": 17,
+      "expected_actual": 17,
+      "expected_predicate_branch": "true",
+      "expected_source_result": 83,
+      "proof": "One usize carry, one Continue and one normal Break; finite literal-guard arithmetic preserves representability. Copy and call actual retain the executed Break value."
+    },
+    {
+      "id": "S3",
+      "path": "tests/r1144/sources/sub_three.nl",
+      "sha256": "f5aa6f52ac1b93731acdb8ed4882e96daa9550ad78161e4ff0b75885f7dbb21f",
+      "expected_check": "accept",
+      "expected_header_values": [
+        29,
+        25,
+        21,
+        17
+      ],
+      "expected_continue_count": 3,
+      "expected_break": 17,
+      "expected_outer_binding": 17,
+      "expected_copy": 17,
+      "expected_actual": 17,
+      "expected_predicate_branch": "true",
+      "expected_source_result": 83,
+      "proof": "One usize carry, one Continue and one normal Break; finite literal-guard arithmetic preserves representability. Copy and call actual retain the executed Break value."
+    }
+  ],
+  "negative": [
+    {
+      "id": "N1",
+      "path": "tests/r1144/negative/underflow_guard.nl",
+      "sha256": "70e7be8790dc5fa411989d17e6c86b9d8629603daa7f0502de4cf886f64cbb62",
+      "classification": "canonical-invalid",
+      "expected_check": "reject",
+      "predicted_first_rejection_layer": "quantity precondition / CHECK",
+      "reason": "At current=1 the true guard cursor>0 permits 1-2. usize cannot represent -1.",
+      "native_allowed": false,
+      "unsafe_if_executed": true
+    },
+    {
+      "id": "N2",
+      "path": "tests/r1144/negative/carry_type.nl",
+      "sha256": "7463dfb0f13968f9cf8f859887781d2c0f2a7d6d44d8c1cdcb1a09900a0d3ec9",
+      "classification": "canonical-invalid",
+      "expected_check": "reject",
+      "predicted_first_rejection_layer": "static carry type / frontend or CHECK",
+      "reason": "Continue passes u8 into a usize parameter.",
+      "native_allowed": false,
+      "unsafe_if_executed": false
+    },
+    {
+      "id": "N3",
+      "path": "tests/r1144/negative/carry_arity.nl",
+      "sha256": "82cc85ac62e715c485725b0e168fab78a43ee43e8e9fed3b1486e6b4235305d2",
+      "classification": "canonical-invalid",
+      "expected_check": "reject",
+      "predicted_first_rejection_layer": "static carry arity / frontend or CHECK",
+      "reason": "Two Continue arguments target one parameter.",
+      "native_allowed": false,
+      "unsafe_if_executed": false
+    },
+    {
+      "id": "N4",
+      "path": "tests/r1144/negative/result_actual_type.nl",
+      "sha256": "7c8fab78db90e6e9b4e728e3b32c0e06ed5d823c6d2a34f59628e75153b85a91",
+      "classification": "canonical-invalid",
+      "expected_check": "reject",
+      "predicted_first_rejection_layer": "ordinary call actual type / frontend or CHECK",
+      "reason": "The loop result and its Copy are u8; r1144_pick requires usize. Break result need not equal carry type, so the actual mismatch is the intended invalidity.",
+      "native_allowed": false,
+      "unsafe_if_executed": false
+    },
+    {
+      "id": "N5",
+      "path": "tests/r1144/negative/scope_escape_name.nl",
+      "sha256": "25160bf8624b77263c51572e83297c3279a16b1b0be6c8a27ca44802cacbc722",
+      "classification": "canonical-invalid",
+      "expected_check": "reject",
+      "predicted_first_rejection_layer": "lexical name resolution / frontend or CHECK",
+      "reason": "cursor is scoped to the loop body and cannot be named by the outer Copy binding.",
+      "native_allowed": false,
+      "unsafe_if_executed": false
+    },
+    {
+      "id": "N6",
+      "path": "tests/r1144/negative/even_sub_precision.nl",
+      "sha256": "0d892f7154ca367a8ee0747aac1e655ec0b6558ae56b7286f45e56a97b7d2b7e",
+      "classification": "canonical-legal-precision-rejection-permitted",
+      "expected_check": "accept-or-analysis-precision-reject",
+      "predicted_first_rejection_layer": "cyclic invariant/quantity precondition / CHECK",
+      "reason": "Concrete states [2,0] are safe. A nonrelational guard-only lower bound of 1 does not prove subtraction by 2; conservative analysis may reject. This is not a language-invalid witness.",
+      "native_allowed": false,
+      "unsafe_if_executed": false,
+      "concrete_header_values": [
+        2,
+        0
+      ],
+      "concrete_continue_count": 1,
+      "concrete_break": 0,
+      "concrete_source_result": 29
+    }
+  ],
+  "observation": {
+    "unmodified_guest": "Compile emitted C unchanged and record execution and output. Exit zero alone does not establish value observations.",
+    "passive_observer": "A separate copy may add read-only output of existing guest values/control points. It must not compute or assign guest values, supply branch/loop outcomes, fabricate issuers, or substitute entry/constant for actual values.",
+    "required_observed": [
+      "header_values",
+      "continue_count",
+      "break_result",
+      "outer_binding",
+      "ordinary_copy",
+      "callee_actual",
+      "source_selected_result"
+    ],
+    "required_stages": [
+      "source/parser",
+      "CHECK",
+      "authentic-owned-if-applicable",
+      "C17",
+      "GCC-native",
+      "Clang-native",
+      "ASan",
+      "UBSan"
+    ],
+    "unobserved_limits": [
+      "Finite traces are not all-state proofs.",
+      "No general range or termination proof assumed.",
+      "Earlier rejection gives no evidence for later loan/barrier stages.",
+      "Audit locality is UNMEASURED; GO624 PAUSED; H1 HOLD; P1036-PR1050 STOP."
+    ]
+  },
+  "budget": {
+    "positive_max": 6,
+    "negative_max": 6,
+    "fast_max_actual_runs": 6,
+    "normal_max_actual_jobs": 12,
+    "manual_rerun_or_dispatch": 0
+  }
+}
