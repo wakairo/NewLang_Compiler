@@ -5650,6 +5650,10 @@ static bool save_stutter_graph(Check *, NLCheckedNodeId,
 static NLCheckStatus seal_stutter_cycle(NLLinearBreakProof *);
 static NLCheckStatus validate_stutter_cycle(const NLLinearBreakProof *,
                                             NLLinearBreakView *);
+static bool stutter_scalar(const NLLinearBreakProof *);
+static NLCheckStatus validate_scalar_cycle(const NLLinearBreakProof *,
+                                           const NLCheckedFragment *,
+                                           NLLinearBreakView *);
 
 static void destroy_linear_breaks(NLCheckedFragment *f)
 {
@@ -5912,6 +5916,8 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
     const NLLinearBreakProof *p = f->linear_breaks;
     while (p && p->loop != id)
         p = p->next;
+    if (p && stutter_scalar(p))
+        return validate_scalar_cycle(p, f, out);
     if (!p || p->owner != f || !p->sealed || f->context != p->world ||
         f->source != p->source || f->body_owner != p->plan ||
         !nl_h_custody_validate(p->root) ||

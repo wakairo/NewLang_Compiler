@@ -29,11 +29,16 @@ typedef struct NLStutterProof {
     NLSymbolId parameter;
     NLCheckedNodeId conditional, initial_node;
     size_t initial, next, limit, continue_arm;
-    bool less, computed, subtract, graph_owned, sealed, definition;
+    bool less, computed, subtract, scalar, graph_owned, sealed, definition;
     StutterGraph graphs[3];
     StutterWorld exits[4]; /* both leaf and both union-owned snapshots */
     NLControlExitView exit_views[4];
 } NLStutterProof;
+
+static bool stutter_scalar(const NLLinearBreakProof *p)
+{
+    return p && p->cycle && p->cycle->scalar;
+}
 
 static const NLCheckedFragment *stutter_graph(const NLLinearBreakProof *p)
 {
@@ -89,6 +94,23 @@ static const NLSyntaxNode *stutter_continue(const NLSyntaxNode *node)
                ? c->data.call.arguments
                : NULL;
 }
+static bool stutter_scalar_source(Check *c, const NLSyntaxNode *node,
+                                  NLSourceSpan parameter)
+{
+    const NLSyntaxView *b = nl_syntax_node_view(node);
+    const NLSyntaxView *n = b && b->kind == NL_SYNTAX_BLOCK
+                                ? nl_syntax_node_view(b->data.block.items)
+                                : NULL;
+    const NLSyntaxView *v =
+        n && n->kind == NL_SYNTAX_BREAK
+            ? nl_syntax_node_view(n->data.statement.expression)
+            : NULL;
+    return b && n && v && !b->data.block.tail &&
+           b->data.block.item_count == 1 &&
+           !nl_syntax_next_argument(b->data.block.items) &&
+           v->kind == NL_SYNTAX_EXPR_NAME &&
+           stutter_name(c, v->data.name, parameter);
+}
 static bool stutter_source_shape(Check *c, const NLSyntaxView *s)
 {
     if (s->data.loop.count != 1 || c->loop || c->in_source_loan ||
@@ -138,6 +160,9 @@ static bool stutter_source_shape(Check *c, const NLSyntaxView *s)
     NLSyntaxView normal = *s;
     normal.data.loop.count = 0;
     normal.data.loop.body = arms[first ? 1 : 0];
+    if (stutter_scalar_source(c, normal.data.loop.body,
+                              param->data.binding.name))
+        return true;
     if (!linear_break_source(c, &normal))
         return false;
     /* No phase capture or incoming-name shadow ambiguity in the normal arm.
@@ -471,6 +496,48 @@ static NLCheckStatus stutter_relation(const NLStutterProof *s,
             if (nc != 1 || nl != 1 || nb != 1 || na != 1 ||
                 ni != (size_t)s->computed || nq != (size_t)s->computed)
                 return bad;
+        } else if (s->scalar) {
+            const NLCheckedNodeView *n =
+                nl_checked_node_view(a, x->source_node);
+            const NLCheckedNodeView *v =
+                n ? nl_checked_node_view(a, n->initializer) : NULL;
+            if (!n || n->kind != NL_CHECKED_BREAK || !v ||
+                v->kind != NL_CHECKED_IDENTIFIER || v->symbol != s->parameter ||
+                v->value_use != NL_VALUE_COPIED || v->type != usize ||
+                v->result_count != 1 || v->results[0].type != usize ||
+                x->values[0].type != usize ||
+                v->results[0].value != x->values[0].value ||
+                !stutter_free_quantity(a->context, v->results[0].value,
+                                       usize) ||
+                !stutter_free_quantity(
+                    nl_control_state_context((NLControlState *)x->state),
+                    x->values[0].value, usize) ||
+                !stutter_frame(
+                    e, nl_control_state_context((NLControlState *)x->state),
+                    1) ||
+                !stutter_frame(
+                    e, nl_control_state_context((NLControlState *)u->state), 1))
+                return bad;
+            size_t nb = 0, na = 0, ni = 0, nx = 0;
+            for (size_t j = 1; j <= a->count; ++j)
+                switch (nl_checked_node_view(a, j)->kind) {
+                case NL_CHECKED_BLOCK:
+                    ++nb;
+                    break;
+                case NL_CHECKED_IF_ARM:
+                    ++na;
+                    break;
+                case NL_CHECKED_IDENTIFIER:
+                    ++ni;
+                    break;
+                case NL_CHECKED_BREAK:
+                    ++nx;
+                    break;
+                default:
+                    return bad;
+                }
+            if (nb != 1 || na != 1 || ni != 1 || nx != 1)
+                return bad;
         } else {
             NLCheckStatus r = linear_break_relation(
                 a, a->context, s->entry, s->target, x->values[0], s->definition,
@@ -574,12 +641,13 @@ static NLCheckStatus validate_stutter_cycle(const NLLinearBreakProof *p,
     if (r != NL_CHECK_OK)
         return r;
     const NLCheckedField *f = &effect.field;
-    if (f->parent != out->root || f->child != out->child ||
-        f->nominal != out->nominal || f->index != out->index ||
-        f->parent_incarnation != out->incarnation ||
-        f->child_incarnation != out->child_incarnation || !effect.incoming ||
-        effect.incoming->kind != NL_CHECKED_U8_LITERAL ||
-        effect.incoming->scalar_result.value != out->incoming)
+    if (!s->scalar &&
+        (f->parent != out->root || f->child != out->child ||
+         f->nominal != out->nominal || f->index != out->index ||
+         f->parent_incarnation != out->incarnation ||
+         f->child_incarnation != out->child_incarnation || !effect.incoming ||
+         effect.incoming->kind != NL_CHECKED_U8_LITERAL ||
+         effect.incoming->scalar_result.value != out->incoming))
         return bad;
     out->stuttering = true;
     out->less = s->less;
@@ -590,6 +658,42 @@ static NLCheckStatus validate_stutter_cycle(const NLLinearBreakProof *p,
     out->next_phase = s->next;
     out->limit = s->limit;
     return NL_CHECK_OK;
+}
+
+/* A new free Copy package represents the actual unknown normal result.
+ * No arm-world value ID or memory authority is copied into the caller. */
+static NLCheckStatus validate_scalar_cycle(const NLLinearBreakProof *p,
+                                           const NLCheckedFragment *f,
+                                           NLLinearBreakView *out)
+{
+    const NLCheckStatus bad = NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    if (!p->sealed || p->owner != f || f->context != p->world ||
+        f->source != p->source || f->body_owner != p->plan ||
+        !nl_h_custody_validate(p->root) ||
+        !linear_graph_matches(p->root, p->root_origin, p->root_nodes,
+                              p->root_count, p->root_root) ||
+        !linear_graph_matches(f, p->parent_origin, p->parent_nodes,
+                              p->parent_count, p->parent_root) ||
+        !linear_graph_matches(p->body, p->body_origin, p->body_nodes,
+                              p->body_count, p->body_root) ||
+        !linear_world_matches(f->context, &p->final_storage, p->final,
+                              &p->final_anchor) ||
+        !linear_callable(p, f->context) || !linear_callable(p, p->post) ||
+        nl_checked_loop_body(f, p->loop) != p->cycle->graph)
+        return bad;
+    const NLCheckedNodeView *n = nl_checked_node_view(f, p->loop);
+    const NLTypeId type = nl_semantic_core_type(p->world, NL_TYPE_USIZE);
+    const NLSemanticContext *entry = nl_control_state_context(p->entry);
+    if (!n || n->type != type || n->result_count != 1 ||
+        n->results[0].type != type || n->results[0].value != p->result.value ||
+        p->result.type != type || p->result.value != entry->value_count + 1 ||
+        p->post->value_count != entry->value_count + 1 ||
+        !stutter_frame(entry, p->post, 0) ||
+        !stutter_free_quantity(p->post, p->result.value, type) ||
+        !stutter_free_quantity(f->context, p->result.value, type))
+        return bad;
+    *out = (NLLinearBreakView){.scalar_loop = true, .result = p->result};
+    return validate_stutter_cycle(p, out);
 }
 
 static NLCheckedNodeId source_stutter_loop(Check *check,
@@ -613,6 +717,8 @@ static NLCheckedNodeId source_stutter_loop(Check *check,
                                    conditional->data.conditional.else_block};
     s->continue_arm = stutter_continue(arms[0]) ? 0 : 1;
     s->break_source = arms[1 - s->continue_arm];
+    s->scalar =
+        stutter_scalar_source(check, s->break_source, param->data.binding.name);
     s->guard_source = conditional->data.conditional.condition;
     s->carry_source = stutter_continue(arms[s->continue_arm]);
     const NLSyntaxView *carry = nl_syntax_node_view(s->carry_source);
@@ -705,10 +811,40 @@ static NLCheckedNodeId source_stutter_loop(Check *check,
      * reaching B therefore executes this SAME transfer on exact E. This
      * operation establishes real caller IDs; abstract arm IDs are not copied.
      * Runtime lowering emits the transfer only at the actual loop exit. */
-    NLSyntaxView normal = *syntax;
-    normal.data.loop.count = 0;
-    normal.data.loop.body = s->break_source;
-    id = source_linear_break(check, &normal, s, target);
+    if (s->scalar) {
+        LoopControl normal = {.source_parent = check->artifact,
+                              .target = target};
+        if (!host(check, nl_control_state_create(check->context, &normal.entry),
+                  syntax->span))
+            goto cleanup;
+        const NLTypeId type =
+            nl_semantic_core_type(check->context, NL_TYPE_USIZE);
+        const NLValueId result =
+            new_value(check, (NLSemanticValueView){.type = type}, syntax->span);
+        if (result) {
+            normal.normal_result = (NLCheckedResult){type, result};
+            id = add(check, (NLCheckedNodeView){.kind = NL_CHECKED_LOOP,
+                                                .span = syntax->span,
+                                                .type = type,
+                                                .result_count = 1,
+                                                .results = {{type, result}},
+                                                .header_inductive = true,
+                                                .break_edges = 1});
+        }
+        const NLCheckedFragment *breaking =
+            nl_checked_if_arm(s->graph, s->conditional, 1 - s->continue_arm);
+        if (id &&
+            (!save_stutter_graph(check, id, s, syntax->span) ||
+             !host(check, retain_linear_break(check, &normal, id, breaking, s),
+                   syntax->span)))
+            id = 0;
+        nl_control_state_destroy(normal.entry);
+    } else {
+        NLSyntaxView normal = *syntax;
+        normal.data.loop.count = 0;
+        normal.data.loop.body = s->break_source;
+        id = source_linear_break(check, &normal, s, target);
+    }
     if (id) {
         view(check, id)->argument_count = 1;
         view(check, id)->first_argument = s->initial_node;
