@@ -1171,6 +1171,33 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1133/bounds/run.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_BINARY_DIR}/p1133-bounds")
+    add_executable(p1139_safety tests/p1139/safety.c)
+    add_executable(p1139_oom tests/p1139/safety.c)
+    foreach(target p1139_safety p1139_oom)
+        target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+        target_link_libraries(${target} PRIVATE newlang_checked_c_node newlang_semantic)
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+    endforeach()
+    target_compile_definitions(p1139_oom PRIVATE P1139_OOM)
+    target_compile_options(p1139_oom PRIVATE -fno-pie)
+    target_link_options(p1139_oom PRIVATE -no-pie -Wl,--wrap=malloc
+        -Wl,--wrap=calloc -Wl,--wrap=realloc
+        -Wl,--wrap=nl_parser_parse_function_unit
+        -Wl,--wrap=nl_parser_parse_expression_fragment
+        -Wl,--wrap=nl_semantic_register_function_unit
+        -Wl,--wrap=nl_semantic_check_expression)
+    foreach(profile 01-add-many 05-sub-many)
+        add_test(NAME p1139_${profile}_current.unit COMMAND p1139_safety
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1139/sources/${profile}.nl")
+        add_test(NAME p1139_${profile}_oom.unit COMMAND p1139_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1139/sources/${profile}.nl")
+        set_tests_properties(p1139_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE)
+    endforeach()
+    add_test(NAME p1139_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1139/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1139_safety>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1139-native")
     add_executable(p1098_probe tests/p1098/probe.c)
     add_executable(p1098_oom tests/p1098/probe.c)
     target_compile_definitions(p1098_oom PRIVATE P1098_OOM)
@@ -1915,5 +1942,8 @@ if(BUILD_TESTING)
         # Same exhaustive retry/no-clobber protocol as the measured P1123
         # cohort above; only these new guarded-carry cohorts get this budget.
         set_tests_properties(p1133_${profile}_oom.unit PROPERTIES TIMEOUT 300)
+    endforeach()
+    foreach(profile 01-add-many 05-sub-many)
+        set_tests_properties(p1139_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
 endif()
