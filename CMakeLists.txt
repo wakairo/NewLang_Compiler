@@ -691,7 +691,7 @@ if(BUILD_TESTING)
         add_test(NAME p1088_${probe}.unit COMMAND p1088_${probe})
     endforeach()
     add_test(NAME p1088_evidence.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1088/evidence_test.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/freeze_bridge.py" p1088_evidence.unit)
 
     add_executable(if_test tests/unit/if_test.c)
     target_link_libraries(if_test PRIVATE newlang_semantic newlang_parser)
@@ -939,7 +939,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982")
     add_test(NAME p982_freeze.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/freeze_test.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/freeze_bridge.py" baseline)
     add_executable(p990_probe tests/p990/probe.c)
     target_include_directories(p990_probe PRIVATE tests/support)
     target_link_libraries(p990_probe PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
@@ -1000,7 +1000,7 @@ if(BUILD_TESTING)
     add_test(NAME p990_unreachable_bound_oom.unit COMMAND p990_oom
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/calibration_unreachable_bound_v2.nl")
     add_test(NAME p990_new_native.integration COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/freeze_bridge.py" p990_new_native.integration "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "new")
     add_test(NAME p990_p986_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
@@ -1044,7 +1044,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" candidate)
     add_test(NAME p1107_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1107)
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/freeze_bridge.py" p1107_evidence_history.unit p1107)
     add_executable(p1117_probe tests/p1117/probe.c)
     add_executable(p1117_lineage tests/p1117/lineage_v2.c)
     add_executable(p1117_safety tests/p1117/safety_v3.c)
@@ -1080,7 +1080,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_BINARY_DIR}/p1117-native" candidate
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     add_test(NAME p1117_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1117)
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/freeze_bridge.py" p1117_evidence_history.unit p1117)
     add_executable(p1117_c217_lineage tests/p1117/c217/probe.c)
     target_include_directories(p1117_c217_lineage PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/src")
@@ -1238,7 +1238,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/run-v2.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098")
     add_test(NAME p1098_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1098)
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/freeze_bridge.py" p1098_evidence_history.unit p1098)
     add_executable(p1092_observe tests/p1092/observe.c)
     add_executable(p1092_oom tests/p1092/observe.c)
     target_compile_definitions(p1092_oom PRIVATE P1092_OOM)
@@ -1276,25 +1276,43 @@ if(BUILD_TESTING)
     add_test(NAME p1092_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/evidence_test.py")
     add_test(NAME p990_freeze_protocol.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/freeze_selftest.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/freeze_bridge.py" protocol)
     set_tests_properties(p990_freeze_protocol.unit PROPERTIES RUN_SERIAL TRUE)
     add_test(NAME p1045_two_original_native.integration COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/p1045_forward.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/freeze_bridge.py" p1045_two_original_native.integration "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     foreach(p1055_profile IN ITEMS 0 1 2 3 4)
-        add_test(NAME p1055_old_origin_${p1055_profile}.integration COMMAND "${Python3_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/run.py" "$<TARGET_FILE:newlangc>"
-            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1055_profile}")
+        if("${p1055_profile}" STREQUAL "0")
+            add_test(NAME p1055_old_origin_${p1055_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/freeze_bridge.py" p1055_old_origin_0.integration "$<TARGET_FILE:newlangc>"
+                "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1055_profile}")
+        else()
+            add_test(NAME p1055_old_origin_${p1055_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/run.py" "$<TARGET_FILE:newlangc>"
+                "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1055_profile}")
+        endif()
     endforeach()
     foreach(p1058_profile IN ITEMS 0 1)
-        add_test(NAME p1058_closed_h_${p1058_profile}.integration COMMAND "${Python3_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1058/run.py" "$<TARGET_FILE:newlangc>"
-            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1058_profile}")
+        if("${p1058_profile}" STREQUAL "0")
+            add_test(NAME p1058_closed_h_${p1058_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/freeze_bridge.py" p1058_closed_h_0.integration "$<TARGET_FILE:newlangc>"
+                "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1058_profile}")
+        else()
+            add_test(NAME p1058_closed_h_${p1058_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1058/run.py" "$<TARGET_FILE:newlangc>"
+                "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1058_profile}")
+        endif()
     endforeach()
     foreach(p1062_profile IN ITEMS 0 1 2 3 4 5)
-        add_test(NAME p1062_h_body_${p1062_profile}.integration COMMAND "${Python3_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1062/run.py" "$<TARGET_FILE:newlangc>"
-            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1062_profile}")
+        if("${p1062_profile}" STREQUAL "0")
+            add_test(NAME p1062_h_body_${p1062_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/freeze_bridge.py" p1062_h_body_0.integration "$<TARGET_FILE:newlangc>"
+                "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1062_profile}")
+        else()
+            add_test(NAME p1062_h_body_${p1062_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1062/run.py" "$<TARGET_FILE:newlangc>"
+                "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1062_profile}")
+        endif()
     endforeach()
     foreach(p1079_profile IN ITEMS 0 1 2)
         add_test(NAME p1079_field_if_${p1079_profile}.integration COMMAND "${Python3_EXECUTABLE}"
@@ -1946,4 +1964,27 @@ if(BUILD_TESTING)
     foreach(profile 01-add-many 05-sub-many)
         set_tests_properties(p1139_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
+endif()
+
+# R1144 C225: independent, pre-frozen scalar cohort. No Production change.
+if(BUILD_TESTING)
+    add_executable(r1144_owned_probe tests/r1144/probe.c)
+    target_include_directories(r1144_owned_probe PRIVATE src)
+    target_link_libraries(r1144_owned_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME r1144_loop_result_consumer.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/observe.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r1144_owned_probe>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER_ID}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/r1144-evidence"
+        "${CMAKE_BUILD_TYPE}" "${NEWLANG_FRONTEND_ONLY}")
+    set_tests_properties(r1144_loop_result_consumer.integration PROPERTIES
+        TIMEOUT 180 RUN_SERIAL TRUE
+        ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    add_custom_target(r1144_registration_inventory ALL
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1144/inventory.py"
+        "${CMAKE_CTEST_COMMAND}" "${CMAKE_CURRENT_BINARY_DIR}"
+        DEPENDS newlangc r1144_owned_probe
+        VERBATIM)
 endif()
