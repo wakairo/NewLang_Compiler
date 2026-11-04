@@ -1,0 +1,145 @@
+{
+  "schema": "newlang.c222.r.freeze.manifest.v1",
+  "bundle_id": "c222-r-v1",
+  "phase": "PRE-REF_BLIND_SOURCE-FREEZE_ONLY",
+  "compiler_main": "28726f933ff4885c000e0247cf4fd9ac1859c5b1",
+  "p_candidate_head": null,
+  "canonical": "Draft17.34",
+  "issue": "https://github.com/wakairo/NewLang_Compiler/issues/1134",
+  "start_comment": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6618851744",
+  "byte_contract": {
+    "encoding": "UTF-8",
+    "ascii_subset": true,
+    "bom": false,
+    "newline": "LF",
+    "exactly_one_final_lf": true,
+    "fenced_payload_only": true,
+    "markdown_fence_bytes_excluded": true
+  },
+  "hash_algorithm": "SHA-256",
+  "hash_method": "Pure JavaScript UTF-8 bytes and SHA-256; standard empty/abc/56-byte multi-block known-answer checks; exact fence extraction rehash before publication.",
+  "entries": [
+    {
+      "path": "c222-r-v1/sources/p01-rise-three.nl",
+      "role": "source",
+      "bytes": 1591,
+      "sha256": "28640d32a05c648a152cd4bbb06388e7c0d11370eeaee342ac341d1e6066f1f1"
+    },
+    {
+      "path": "c222-r-v1/sources/p02-rise-zero.nl",
+      "role": "source",
+      "bytes": 1592,
+      "sha256": "2fb4bb9e03119f0577b8d2e6fe3cf0ffe7367f18991d4d8c2f88fe274904e8a4"
+    },
+    {
+      "path": "c222-r-v1/sources/p03-rise-one.nl",
+      "role": "source",
+      "bytes": 1592,
+      "sha256": "5ff8776553df4814e1b265c6865d56af6d88ae927ea45c5255c11fd130eef56b"
+    },
+    {
+      "path": "c222-r-v1/sources/p04-fall-three.nl",
+      "role": "source",
+      "bytes": 1591,
+      "sha256": "3d61d272276753caf09054518c13f04d014c90b0d95ee774ad38d8c15ae362ef"
+    },
+    {
+      "path": "c222-r-v1/sources/p05-helper-precision.nl",
+      "role": "source",
+      "bytes": 377,
+      "sha256": "196d46d078afb2cf314371be3b46ecc898ee1d0e62430adeaeecdf33f8491be2"
+    },
+    {
+      "path": "c222-r-v1/sources/c06-divergent-identity.nl",
+      "role": "source",
+      "bytes": 143,
+      "sha256": "fce7d99527f521f08d6d3163bf1a7ff811918f804cf3d8ac704ead5ecb7efd94"
+    },
+    {
+      "path": "c222-r-v1/sources/n07-late-underflow.nl",
+      "role": "source",
+      "bytes": 242,
+      "sha256": "5f24044e7d4b8eded031b770dc5562cb6c99f3d00111a98bd9ece8d7f96db972"
+    },
+    {
+      "path": "c222-r-v1/sources/n08-inverted-overflow-guard.nl",
+      "role": "source",
+      "bytes": 259,
+      "sha256": "b06d28eeb97e9d2fbc389902242d12e59f4787cc4bc4bd56239f11c2da86dc81"
+    },
+    {
+      "path": "c222-r-v1/sources/n09-carry-type.nl",
+      "role": "source",
+      "bytes": 87,
+      "sha256": "1f681763ad4c63a8bbd7eee5f3ef0513f92a12a8d937c15cc774b59a431faa4e"
+    },
+    {
+      "path": "c222-r-v1/sources/n10-nearest-target-arity.nl",
+      "role": "source",
+      "bytes": 171,
+      "sha256": "e8237e1fe9bf14b18058bde30e85a62c382735fc22a7bf91d93bfdc90b30954b"
+    },
+    {
+      "path": "c222-r-v1/sources/n11-loan-control-boundary.nl",
+      "role": "source",
+      "bytes": 181,
+      "sha256": "99e74b046d9fed2932b9e359fbbef7a2ae28d7322998d2314b547457edb88969"
+    },
+    {
+      "path": "c222-r-v1/sources/n12-ending-loan-result.nl",
+      "role": "source",
+      "bytes": 352,
+      "sha256": "b3e8fe58999ee4cbbc480212f3e7af038f21c053fe6679d8bb3bf1670037fe95"
+    },
+    {
+      "path": "c222-r-v1/oracle.json",
+      "role": "oracle",
+      "bytes": 29928,
+      "sha256": "9d7382f0c9227bf472426dffe4ada90422bcc26cb9c155de9d4592cb2a0b264f"
+    },
+    {
+      "path": "c222-r-v1/README.txt",
+      "role": "rationale",
+      "bytes": 7781,
+      "sha256": "da2208c78dc82e45dcb0b8c702c9ecbafe26b29f27b471b099f69e733b316655"
+    }
+  ],
+  "total_entry_bytes": 45887,
+  "self_reference": "manifest.json does not include itself. Its exact bytes and SHA-256 are recorded in the containing Issue comment.",
+  "authorities": [
+    {
+      "path": "docs/reference/CURRENT_SPEC.md",
+      "git_blob_sha1": "18b2d6b089c1507743f14325c7a2723b1c341db6",
+      "used": "pointer only"
+    },
+    {
+      "path": "docs/NewLang_Project_Compass.md",
+      "git_blob_sha1": "0f9b170ce26504a16acec8e4b84beab11f9fbd4e",
+      "used": "related goal/non-goal/authority navigation"
+    },
+    {
+      "path": "docs/NewLang_Product_Value_Strategy.md",
+      "git_blob_sha1": "c75f1601f13070bc5a588bd78957b54662bdfd23",
+      "used": "section 1.1"
+    },
+    {
+      "path": "docs/NewLang_Project_Development_Process.md",
+      "git_blob_sha1": "c777512dba935410cb1060569e0f4aeeaff427d5",
+      "used": "sections 7/8"
+    },
+    {
+      "path": "docs/reference/NewLang_v0_spec_Draft17_34.md",
+      "git_blob_sha1": "84236f4bc29ae35f01f8eca4238d56c2f62d34a0",
+      "used": "canonical quantity/T/Change/Copy/dependency/function/scope/control-flow rules"
+    }
+  ],
+  "blind_boundary": {
+    "p1133_body_comments_read": false,
+    "p_implementation_fixtures_oracle_reports_read": false,
+    "m_f_b_examples_rationale_read": false,
+    "former_r_artifacts_read": false,
+    "canonical_embedded_historical_references": "visible in authorized canonical/pointer; linked reports were not followed or reused"
+  },
+  "execution_authorization": "NONE",
+  "terminal_state": "FROZEN_RETURN_TO_C_STOP"
+}

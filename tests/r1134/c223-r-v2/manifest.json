@@ -1,0 +1,97 @@
+{
+  "schema": "newlang.r1134.c223.freeze.manifest.v2",
+  "encoding": "UTF-8 ASCII subset",
+  "bom": false,
+  "newline": "LF",
+  "exactly_one_final_lf": true,
+  "fenced_payload_only": true,
+  "fixed_main": "28726f933ff4885c000e0247cf4fd9ac1859c5b1",
+  "fixed_p_head": "0caf94894560d2f9a0b1f9404ca87055b0a21ee7",
+  "canonical": "Draft17.34",
+  "independence": "SCOPE-CALIBRATED / implementation-fixture-blind; not fresh PRE-REF BLIND",
+  "v1_manifest_sha256": "3f047b8690c99331a8787762a3d44c5a7c54b4658be3fefcce70d30305659843",
+  "entries": [
+    {
+      "path": "c223-r-v2/sources/p01-rise-three.nl",
+      "bytes": 1089,
+      "sha256": "e937ef758072c41d811089cb0be90c9aeb0631a91c198798841c6ed2c932e9f2"
+    },
+    {
+      "path": "c223-r-v2/sources/p02-rise-zero.nl",
+      "bytes": 1091,
+      "sha256": "d9d83924d42b7be37d89e5f09540ea4c42c276e286b760166e0cf015b23c2d9b"
+    },
+    {
+      "path": "c223-r-v2/sources/p03-rise-one.nl",
+      "bytes": 1090,
+      "sha256": "603a3aa9cd825f219e46490cb39990939430b479892a29651c0ce2fe91a8df1e"
+    },
+    {
+      "path": "c223-r-v2/sources/p04-fall-three.nl",
+      "bytes": 1112,
+      "sha256": "448edef669b1af3d41c19051e793aaff7ff2300a27cc7abae4595a45effe8927"
+    },
+    {
+      "path": "c223-r-v2/sources/p05-fall-zero.nl",
+      "bytes": 1111,
+      "sha256": "6ee435288123c566087e0961a43e4658ed471f0982c84677f32b99ad14157857"
+    },
+    {
+      "path": "c223-r-v2/sources/p06-fall-one.nl",
+      "bytes": 1112,
+      "sha256": "aebb64dabdcc8a1e95ca357ee476e9cef0df5e4a55e3ebc279b17c9345138e79"
+    },
+    {
+      "path": "c223-r-v2/sources/n07-late-underflow.nl",
+      "bytes": 181,
+      "sha256": "0542437e06daaaefec549a2407f67f3d45b6235f9599e0be10cd9af1917ec001"
+    },
+    {
+      "path": "c223-r-v2/sources/n08-inverted-overflow.nl",
+      "bytes": 181,
+      "sha256": "0ca8fee9c34443e4161d0bd7b15bc3708eb80d46f2c9652de25588e5fbdb73dc"
+    },
+    {
+      "path": "c223-r-v2/sources/n09-wrong-arm-underflow.nl",
+      "bytes": 181,
+      "sha256": "22ab15710a10a462ca3340c44c0706e6cc9f7d9c51ad94bf2131c933aea25f60"
+    },
+    {
+      "path": "c223-r-v2/sources/n10-operand-type.nl",
+      "bytes": 178,
+      "sha256": "4b52bfda8fb8dafd8037357599059d2d6f72817506e604800fcf8b4d8b77c417"
+    },
+    {
+      "path": "c223-r-v2/sources/n11-carry-type.nl",
+      "bytes": 170,
+      "sha256": "deb3534fa269be290486ea088d2eb2e5b50a472baf159279e8440405ef93c04e"
+    },
+    {
+      "path": "c223-r-v2/sources/n12-nearest-arity.nl",
+      "bytes": 177,
+      "sha256": "fdd6c37b642b3451d576de0912d2b7b99a7138165cdf0f58344c247e2a0c8909"
+    },
+    {
+      "path": "c223-r-v2/sources/n13-ending-loan.nl",
+      "bytes": 292,
+      "sha256": "dfb01eef3bcb76aab5d6e157d94e79392db96345e7edf6a5227d64f1b162590b"
+    },
+    {
+      "path": "c223-r-v2/sources/c14-commuted-precision.nl",
+      "bytes": 181,
+      "sha256": "87809534f52d3b2a3175fd9c04a14cec59810f44cf621e4aa578517dd545d2ce"
+    },
+    {
+      "path": "c223-r-v2/oracle.json",
+      "bytes": 14824,
+      "sha256": "04f5bb29bd672c72ae14ecab618797e83360a4a7eb79eb0cb7b2d1be6144a2be"
+    },
+    {
+      "path": "c223-r-v2/README.txt",
+      "bytes": 3894,
+      "sha256": "594df1a866316bf0470b4996b8616361434415b1bf6c7c1711d504c0edfd8f93"
+    }
+  ],
+  "total_entry_bytes": 26864,
+  "self_reference": "This manifest excludes itself; its identity is recorded in the containing Issue comment."
+}

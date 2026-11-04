@@ -1,0 +1,61 @@
+{
+  "schema": "newlang.r1134.c223.equipment.freeze.v1",
+  "fixed_main": "28726f933ff4885c000e0247cf4fd9ac1859c5b1",
+  "fixed_p_head": "0caf94894560d2f9a0b1f9404ca87055b0a21ee7",
+  "v1_manifest_sha256": "3f047b8690c99331a8787762a3d44c5a7c54b4658be3fefcce70d30305659843",
+  "v2_manifest_sha256": "c1a536546e8143cbd675b88adddba16c72012aa2ae405777e56b1abc50bab862",
+  "entries": [
+    {
+      "path": "CTestConfig.cmake",
+      "bytes": 2512,
+      "sha256": "06ad86415fb7d06618ddbdb7ddf739ddfe4ff551b4be983397611c8227b021e0"
+    },
+    {
+      "path": "tests/r1134/CTestCustom.cmake.in",
+      "bytes": 208,
+      "sha256": "ff6437ea6ab625412228c96b01833bdaa768285eca492f71bdc5f4a83de04340"
+    },
+    {
+      "path": "tests/r1134/report.py",
+      "bytes": 1718,
+      "sha256": "48184605570136d0ddb0860107b40f98c1c8c31535739de04cc1649ad2a368f9"
+    },
+    {
+      "path": "tests/r1134/runner.py",
+      "bytes": 22460,
+      "sha256": "1b2fca8362309662abd6ecd93248c4f1f2a479952fc647f1c4aae5735eeedea6"
+    },
+    {
+      "path": "tests/r1134/public_probe.c",
+      "bytes": 5233,
+      "sha256": "32c464d22401761e00c986b98012174b836537a949bd4acfd9287b393abd4da7"
+    }
+  ],
+  "actions_only": true,
+  "local_shell_compiler_native_lean_execution": 0,
+  "registration": {
+    "test": "r1134_guarded_loop_native.integration",
+    "file": "CTestConfig.cmake",
+    "mechanism": "CTest deferred addition; build target runs ctest -N -R for exactly one observed registration; zero test execution in RFAST"
+  },
+  "positive_modes": "Each positive: public CLI CHECK, public owned source probe, exact original C17 and passive observation copy; both GCC/Clang O0/O2; applicable address/undefined guest modes in corresponding host jobs",
+  "negative_modes": "Seven frozen invalid cases CHECK only; c14 precision CHECK only; exact rejection layer/code/message retained; no negative or precision native execution",
+  "observer": "Only actual guest locals/lvalues and real ref arguments are read. No replacement of original C; no synthetic carry/state or authority; expected scalars remain frozen oracle only.",
+  "timeouts": {
+    "command_seconds": 30,
+    "guest_seconds": 10,
+    "ctest_seconds": 300
+  },
+  "raw": "Each command argv/rc/timeout/stdout/stderr; exact original/passive C and all mapping edits; all actual observation JSON; executable byte sizes/SHA256. raw.json post-test base64 transport into job log even on success. First failure retained and later affected stages NOT_RUN.",
+  "tooling_references_after_v2_freeze": [
+    "fixed-main public CLI options in src/main.c",
+    "fixed-main include/newlang/{checked,semantic,parser,source}.h",
+    "fixed-main CMakeLists.txt and immutable workflows",
+    "fixed-main tests/support/node_checked.h",
+    "fixed-main tests/r675/{blind_test.py,public_probe.c} equipment only",
+    "old R1129 bc3386f1b710f262e51ebea9a3d05db6064f398b CTestConfig.cmake and evidence/r1129/harness/{CTestCustom.cmake.in,report.py}"
+  ],
+  "prohibited_sources_read": 0,
+  "note": "P CMake blob was fetched as opaque base64 solely while considering preservation by append; contents not inspected and no append used. New CTestConfig.cmake leaves all preexisting files unchanged.",
+  "stop": "First trustworthy all green; scope/unsafe/authority/semantic anomaly STOP affected; equipment-only mechanical fixes preserve all earlier diagnostics and frozen inputs. FAST<=6, normal<=2 pairs/12jobs, manual0. No READY/merge/ProductGO."
+}
