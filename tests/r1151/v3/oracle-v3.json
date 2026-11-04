@@ -1,0 +1,226 @@
+{
+  "version": "R1151-V3-CLI-DIRECT",
+  "authority_main": "c120dd1accfefd3e8d3d7ae7a2f7f17b54e3f89a",
+  "canonical": "Draft17.34",
+  "fixed_p": "d66fdf751aa5823b5775cbaf346a6c02aba38182",
+  "positive": [
+    {
+      "id": "p01_add_zero_first",
+      "initial": 6,
+      "bound": 6,
+      "step": 2,
+      "op": "+",
+      "guard": "<",
+      "path": [
+        6
+      ],
+      "field": "upper",
+      "upper": 29,
+      "lower": 197,
+      "ret": "old",
+      "expected_return": 29,
+      "expected_result": 6,
+      "expected_selected": 83,
+      "expected_old": 29,
+      "expected_sibling": 197,
+      "expected_backedges": 0,
+      "expected_guard_evaluations": 1,
+      "target_index": 0
+    },
+    {
+      "id": "p02_add_one_second",
+      "initial": 4,
+      "bound": 7,
+      "step": 3,
+      "op": "+",
+      "guard": "<",
+      "path": [
+        4,
+        7
+      ],
+      "field": "lower",
+      "upper": 37,
+      "lower": 193,
+      "ret": "updated",
+      "expected_return": 142,
+      "expected_result": 7,
+      "expected_selected": 142,
+      "expected_old": 193,
+      "expected_sibling": 37,
+      "expected_backedges": 1,
+      "expected_guard_evaluations": 2,
+      "target_index": 1
+    },
+    {
+      "id": "p03_add_many_first",
+      "initial": 1,
+      "bound": 8,
+      "step": 3,
+      "op": "+",
+      "guard": "<",
+      "path": [
+        1,
+        4,
+        7,
+        10
+      ],
+      "field": "upper",
+      "upper": 53,
+      "lower": 181,
+      "ret": "updated",
+      "expected_return": 142,
+      "expected_result": 10,
+      "expected_selected": 142,
+      "expected_old": 53,
+      "expected_sibling": 181,
+      "expected_backedges": 3,
+      "expected_guard_evaluations": 4,
+      "target_index": 0
+    },
+    {
+      "id": "p04_sub_zero_second",
+      "initial": 9,
+      "bound": 9,
+      "step": 2,
+      "op": "-",
+      "guard": ">",
+      "path": [
+        9
+      ],
+      "field": "lower",
+      "upper": 61,
+      "lower": 211,
+      "ret": "sibling",
+      "expected_return": 61,
+      "expected_result": 9,
+      "expected_selected": 142,
+      "expected_old": 211,
+      "expected_sibling": 61,
+      "expected_backedges": 0,
+      "expected_guard_evaluations": 1,
+      "target_index": 1
+    },
+    {
+      "id": "p05_sub_one_first",
+      "initial": 8,
+      "bound": 6,
+      "step": 2,
+      "op": "-",
+      "guard": ">",
+      "path": [
+        8,
+        6
+      ],
+      "field": "upper",
+      "upper": 109,
+      "lower": 227,
+      "ret": "updated",
+      "expected_return": 83,
+      "expected_result": 6,
+      "expected_selected": 83,
+      "expected_old": 109,
+      "expected_sibling": 227,
+      "expected_backedges": 1,
+      "expected_guard_evaluations": 2,
+      "target_index": 0
+    },
+    {
+      "id": "p06_sub_many_second",
+      "initial": 17,
+      "bound": 5,
+      "step": 4,
+      "op": "-",
+      "guard": ">",
+      "path": [
+        17,
+        13,
+        9,
+        5
+      ],
+      "field": "lower",
+      "upper": 43,
+      "lower": 151,
+      "ret": "old",
+      "expected_return": 151,
+      "expected_result": 5,
+      "expected_selected": 142,
+      "expected_old": 151,
+      "expected_sibling": 43,
+      "expected_backedges": 3,
+      "expected_guard_evaluations": 4,
+      "target_index": 1
+    }
+  ],
+  "negative": [
+    {
+      "id": "n01_nonbool_guard",
+      "class": "canonical-invalid",
+      "rule": "27.4 condition static type bool",
+      "expected": "reject no later than semantic CHECK; no C/native"
+    },
+    {
+      "id": "n02_wrong_continue_type",
+      "class": "canonical-invalid",
+      "rule": "27.6 exact carry type",
+      "expected": "reject no later than semantic CHECK; no C/native"
+    },
+    {
+      "id": "n03_foreign_field",
+      "class": "canonical-invalid",
+      "rule": "17.1 exact own declared field identity",
+      "expected": "reject no later than semantic CHECK; no C/native"
+    },
+    {
+      "id": "n04_read_to_write",
+      "class": "canonical-invalid",
+      "rule": "11 ref mode and 17.4 replace(write)",
+      "expected": "reject no later than semantic CHECK; no C/native"
+    },
+    {
+      "id": "n05_ref_escape",
+      "class": "canonical-invalid",
+      "rule": "13.8 ending loan scope compatibility",
+      "expected": "reject no later than semantic CHECK; no C/native"
+    },
+    {
+      "id": "n06_ended_root",
+      "class": "canonical-invalid",
+      "rule": "10.1 current liveness and 13.8 ptr reacquisition",
+      "expected": "reject no later than semantic CHECK; no C/native; early refusal is not proof of reaching liveness validator"
+    }
+  ],
+  "invariants": [
+    "Exactly one original Prism live root is created before loop; its field declaration order is upper(index0),lower(index1), while construction text is lower then upper.",
+    "Original's address and both fields remain unchanged across every concrete loop header, guard and backedge; root and field incarnations remain live.",
+    "Loop has one static Continue and one static normal Break; break actual equals last header, result binding and ordinary Copy.",
+    "choose actual equals copied actual; choose evaluates n==6 and returns actual 83 or 142; no observer creates result, control, guest store or identity.",
+    "The scoped write target is the same original target-field address; real replace returns old field Copy, actual store equals choose return.",
+    "before and old equal original target initial value; updated equals actual selected value; sibling equals original other field initial value.",
+    "All address/value observation happens during the original object's lifetime. A recorded numeric identity may be retained but no ended pointer or field is evaluated."
+  ],
+  "predicted_layers": {
+    "positives": "Canonical-legal in the stated finite profile. Predict CHECK acceptance, authentic owned issuance/validation, strict C17 and native observable equivalence if implementation covers it; conservative precision/profile refusal is coverage debt and must be reported distinctly from canonical invalidity.",
+    "negatives": "Reject; do not emit or native-run rejected source. Preserve earliest actual layer/diagnostic. An earlier rejection is not evidence for downstream validator coverage.",
+    "guest": "Run unmodified generated C with GCC/Clang O0 and O2, plus applicable guest ASan/UBSan; preserve raw and commands.",
+    "observer": "Separate read-only instrumented C to observe live original address, fields, concrete loop header/guard/break, result/Copy, callee actual/return and store/old/update/sibling. Record exactly which points exist. Compare independent frozen semantic oracle; never patch guest behavior.",
+    "owned": "Use real compiler public owned evidence when available. Do not synthesize private proof, issuer, root or value facts."
+  },
+  "limitations": [
+    "No general range/termination proof",
+    "No changing T within loop, nested/multiple loops, general H/heap, production repair",
+    "Finite observations do not prove general soundness, all optimization, representation privacy, library audit locality or Product GO",
+    "audit locality UNMEASURED; GO624 PAUSED; H1 HOLD; P1036-PR1050 STOP"
+  ],
+  "predecessors": {
+    "v1": "https://github.com/wakairo/NewLang_Compiler/issues/1151#issuecomment-6626465949",
+    "v2": "https://github.com/wakairo/NewLang_Compiler/issues/1151#issuecomment-6626554487",
+    "status": "NOT_RUN: no compiler, owned, emit, native or sanitizer execution"
+  },
+  "interface_calibration": {
+    "entry": "main -> unit, all original T/loop/predicate/write/read operations remain in this direct body; no new helper/return boundary",
+    "terminal": "V1 expected_return is preserved numerically as terminal_copy of the same old/updated/sibling binding; V3 main returns unit and the CLI host returns zero",
+    "sub": "For unsigned values, n > B is equivalent to !(n < B+1), with B+1 = 10, 7, 6 in these finite sources. Break is true arm and Continue false arm. Initial/carry arithmetic/path/result/field/predicate numerical oracle is unchanged.",
+    "independence": "V1 source/oracle independently frozen before implementation access. V2/V3 are post-freeze interface-calibrated, not fresh blind inputs.",
+    "prediction": "All six V3 sources canonical-legal; predicted direct ordinary CLI support for authenticated scalar-loop result -> Copy -> pure predicate -> original field write/read within the fixed finite consumer. Actual refusal remains evidence; no source/oracle relaxation after observed semantics."
+  }
+}

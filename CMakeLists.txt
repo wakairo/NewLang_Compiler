@@ -691,7 +691,8 @@ if(BUILD_TESTING)
         add_test(NAME p1088_${probe}.unit COMMAND p1088_${probe})
     endforeach()
     add_test(NAME p1088_evidence.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1088/evidence_test.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/freeze_bridge.py"
+        "tests/p1088/evidence_test.py")
 
     add_executable(if_test tests/unit/if_test.c)
     target_link_libraries(if_test PRIVATE newlang_semantic newlang_parser)
@@ -939,7 +940,8 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982")
     add_test(NAME p982_freeze.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/freeze_test.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/freeze_bridge.py"
+        "tests/p982/freeze_test.py")
     add_executable(p990_probe tests/p990/probe.c)
     target_include_directories(p990_probe PRIVATE tests/support)
     target_link_libraries(p990_probe PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
@@ -1000,7 +1002,8 @@ if(BUILD_TESTING)
     add_test(NAME p990_unreachable_bound_oom.unit COMMAND p990_oom
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/calibration_unreachable_bound_v2.nl")
     add_test(NAME p990_new_native.integration COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/freeze_bridge.py"
+        "tests/p990/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "new")
     add_test(NAME p990_p986_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
@@ -1044,7 +1047,8 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" candidate)
     add_test(NAME p1107_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1107)
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/freeze_bridge.py"
+        "tests/p1117/history_latest.py" p1107)
     add_executable(p1117_probe tests/p1117/probe.c)
     add_executable(p1117_lineage tests/p1117/lineage_v2.c)
     add_executable(p1117_safety tests/p1117/safety_v3.c)
@@ -1080,7 +1084,8 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_BINARY_DIR}/p1117-native" candidate
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     add_test(NAME p1117_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1117)
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/freeze_bridge.py"
+        "tests/p1117/history_latest.py" p1117)
     add_executable(p1117_c217_lineage tests/p1117/c217/probe.c)
     target_include_directories(p1117_c217_lineage PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/src")
@@ -1267,7 +1272,8 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/run-v2.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098")
     add_test(NAME p1098_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1098)
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/freeze_bridge.py"
+        "tests/p1117/history_latest.py" p1098)
     add_executable(p1092_observe tests/p1092/observe.c)
     add_executable(p1092_oom tests/p1092/observe.c)
     target_compile_definitions(p1092_oom PRIVATE P1092_OOM)
@@ -1305,24 +1311,41 @@ if(BUILD_TESTING)
     add_test(NAME p1092_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/evidence_test.py")
     add_test(NAME p990_freeze_protocol.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/freeze_selftest.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/freeze_bridge.py"
+        "tests/p990/freeze_selftest.py")
     set_tests_properties(p990_freeze_protocol.unit PROPERTIES RUN_SERIAL TRUE)
     add_test(NAME p1045_two_original_native.integration COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/p1045_forward.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/freeze_bridge.py"
+        "tests/p1055/p1045_forward.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     foreach(p1055_profile IN ITEMS 0 1 2 3 4)
+        set(r1151_p1055_runner "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/run.py")
+        if(p1055_profile EQUAL 0)
+            set(r1151_p1055_runner "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/freeze_bridge.py"
+                "tests/p1055/run.py")
+        endif()
         add_test(NAME p1055_old_origin_${p1055_profile}.integration COMMAND "${Python3_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/run.py" "$<TARGET_FILE:newlangc>"
+            ${r1151_p1055_runner} "$<TARGET_FILE:newlangc>"
             "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1055_profile}")
     endforeach()
     foreach(p1058_profile IN ITEMS 0 1)
+        set(r1151_p1058_runner "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1058/run.py")
+        if(p1058_profile EQUAL 0)
+            set(r1151_p1058_runner "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/freeze_bridge.py"
+                "tests/p1058/run.py")
+        endif()
         add_test(NAME p1058_closed_h_${p1058_profile}.integration COMMAND "${Python3_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1058/run.py" "$<TARGET_FILE:newlangc>"
+            ${r1151_p1058_runner} "$<TARGET_FILE:newlangc>"
             "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1058_profile}")
     endforeach()
     foreach(p1062_profile IN ITEMS 0 1 2 3 4 5)
+        set(r1151_p1062_runner "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1062/run.py")
+        if(p1062_profile EQUAL 0)
+            set(r1151_p1062_runner "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/freeze_bridge.py"
+                "tests/p1062/run.py")
+        endif()
         add_test(NAME p1062_h_body_${p1062_profile}.integration COMMAND "${Python3_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1062/run.py" "$<TARGET_FILE:newlangc>"
+            ${r1151_p1062_runner} "$<TARGET_FILE:newlangc>"
             "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1062_profile}")
     endforeach()
     foreach(p1079_profile IN ITEMS 0 1 2)
@@ -1958,6 +1981,22 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # R1151 independent finite cohort; measured production is the fixed P.
+    add_executable(r1151_public_probe tests/r1151/probe.c)
+    target_link_libraries(r1151_public_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME r1151_original_t_write.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1151/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r1151_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_BINARY_DIR}/r1151-evidence")
+    get_property(r1151_registered DIRECTORY PROPERTY TESTS)
+    list(FILTER r1151_registered INCLUDE REGEX "^r1151_original_t_write\\.integration$")
+    list(LENGTH r1151_registered r1151_registered_count)
+    if(NOT r1151_registered_count EQUAL 1)
+        message(FATAL_ERROR "R1151 unique registration missing")
+    endif()
+    message(STATUS "R1151 unique registration: r1151_original_t_write.integration")
+
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
