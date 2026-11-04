@@ -36,7 +36,8 @@ static void dump(const NLCheckedFragment *fragment, const char *label,
                "\"copy\":%s,\"binding\":%s,\"call\":%s,\"loop\":%s,"
                "\"name\":\"",
                label, i, (int)v->kind, v->symbol, v->function, v->type,
-               v->initializer, v->value_use == NL_VALUE_COPIED ? "true" : "false",
+               v->initializer,
+               v->value_use == NL_VALUE_COPIED ? "true" : "false",
                v->kind == NL_CHECKED_BINDING ? "true" : "false",
                v->kind == NL_CHECKED_REGISTERED_CALL ? "true" : "false",
                v->kind == NL_CHECKED_LOOP ? "true" : "false");
@@ -54,8 +55,8 @@ static void dump(const NLCheckedFragment *fragment, const char *label,
                v->field.index, v->field.base, v->field.parent, v->field.child,
                v->field.parent_incarnation, v->field.child_incarnation,
                v->field.parent_fact, v->field.parent_post_fact,
-               v->field.child_fact, v->field.child_post_fact, v->field.old_value,
-               v->field.new_value);
+               v->field.child_fact, v->field.child_post_fact,
+               v->field.old_value, v->field.new_value);
         if (v->kind == NL_CHECKED_REGISTERED_CALL) {
             const NLCheckedFragment *body = nl_checked_call_body(fragment, i);
             if (body)
@@ -98,8 +99,8 @@ int main(int argc, char **argv)
     if (nl_source_create("main()", strlen("main()"), "<r1151-entry>",
                          &entry_source) != NL_SOURCE_OK ||
         nl_parser_create(entry_source, &entry_parser) != NL_PARSE_OK ||
-        nl_parser_parse_expression_fragment(entry_parser, &entry_tree, &parse) !=
-            NL_PARSE_OK ||
+        nl_parser_parse_expression_fragment(entry_parser, &entry_tree,
+                                            &parse) != NL_PARSE_OK ||
         nl_semantic_check_expression(context, entry_tree, &entry, &check) !=
             NL_CHECK_OK)
         goto done;
