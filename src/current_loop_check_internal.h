@@ -39,8 +39,8 @@ static bool current_copy_value(const NLSemanticContext *c,
 
 static const NLCheckedNodeView *
 current_copy_binding(const NLCheckedFragment *f, const NLSemanticContext *c,
-                     NLCheckedNodeId use,
-                     NLSymbolId symbol, const NLCheckedNodeView **initializer)
+                     NLCheckedNodeId use, NLSymbolId symbol,
+                     const NLCheckedNodeView **initializer)
 {
     const NLCheckedNodeView *found = NULL;
     if (!f || !c || !symbol || symbol > c->binding_count ||
@@ -54,15 +54,13 @@ current_copy_binding(const NLCheckedFragment *f, const NLSemanticContext *c,
             return NULL;
         const NLCheckedNodeView *receiver =
             nl_checked_node_view(f, b->first_argument);
-        const NLCheckedNodeView *init =
-            nl_checked_node_view(f, b->initializer);
+        const NLCheckedNodeView *init = nl_checked_node_view(f, b->initializer);
         const NLCheckedNodeView *use_node = nl_checked_node_view(f, use);
         if (!receiver || !init || !use_node ||
             b->type != nl_semantic_unit_type(c) || b->result_count ||
             b->argument_count != 1 || b->initializer >= id ||
             b->first_argument <= id || b->first_argument >= use ||
-            receiver->next_argument ||
-            receiver->kind != NL_CHECKED_RECEIVER ||
+            receiver->next_argument || receiver->kind != NL_CHECKED_RECEIVER ||
             receiver->value_use != NL_VALUE_RECEIVED ||
             receiver->symbol != symbol || receiver->type != init->type ||
             !current_copy_name(f, b->name, c->bindings[symbol - 1].name) ||
@@ -79,10 +77,9 @@ current_copy_binding(const NLCheckedFragment *f, const NLSemanticContext *c,
 }
 
 static bool current_copy_origin(const NLCheckedFragment *f,
-                                const NLSemanticContext *c,
-                                NLCheckedNodeId id, NLSymbolId root_symbol,
-                                bool literal_root, size_t max_copies,
-                                size_t *literal)
+                                const NLSemanticContext *c, NLCheckedNodeId id,
+                                NLSymbolId root_symbol, bool literal_root,
+                                size_t max_copies, size_t *literal)
 {
     const NLTypeId type = c ? nl_semantic_core_type(c, NL_TYPE_USIZE) : 0;
     NLSemanticValueView expected = {0};
@@ -92,9 +89,8 @@ static bool current_copy_origin(const NLCheckedFragment *f,
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
         NLSemanticValueView value;
         if (!current_copy_value(c, n, type, &value) ||
-            (!first &&
-             (value.scalar_known != expected.scalar_known ||
-              value.scalar_value != expected.scalar_value)))
+            (!first && (value.scalar_known != expected.scalar_known ||
+                        value.scalar_value != expected.scalar_value)))
             return false;
         if (first) {
             expected = value;
@@ -116,8 +112,7 @@ static bool current_copy_origin(const NLCheckedFragment *f,
             n->value_use != NL_VALUE_COPIED ||
             n->span.start_byte != n->name.start_byte ||
             n->span.end_byte != n->name.end_byte ||
-            !current_copy_name(f, n->name,
-                               c->bindings[n->symbol - 1].name))
+            !current_copy_name(f, n->name, c->bindings[n->symbol - 1].name))
             return false;
         if (root_symbol && n->symbol == root_symbol) {
             NLSemanticValueView root;
@@ -265,9 +260,8 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
     if (!p || !init ||
         (init->kind != NL_SYNTAX_USIZE_LITERAL &&
          init->kind != NL_SYNTAX_EXPR_NAME) ||
-        !b ||
-        b->kind != NL_SYNTAX_BLOCK || b->data.block.items || !v || !guard ||
-        guard->kind != NL_SYNTAX_USIZE_LESS_THAN || !lhs || !rhs ||
+        !b || b->kind != NL_SYNTAX_BLOCK || b->data.block.items || !v ||
+        !guard || guard->kind != NL_SYNTAX_USIZE_LESS_THAN || !lhs || !rhs ||
         lhs->kind != NL_SYNTAX_EXPR_NAME ||
         !stutter_name(c, lhs->data.name, p->data.binding.name) ||
         rhs->kind != NL_SYNTAX_USIZE_LITERAL ||
@@ -727,8 +721,7 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
     if (!arg || !actual || !stutter_span(arg->span, actual->span) ||
         arg->next_argument ||
         !current_copy_origin(r->arm, r->arm->context, v->first_argument,
-                             s->phase, false, 2,
-                             NULL) ||
+                             s->phase, false, 2, NULL) ||
         !stutter_free_quantity(r->arm->context, arg->results[0].value,
                                quantity) ||
         !root || root->terminates || pure.body->body_count ||
@@ -736,8 +729,8 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
         (test->kind != NL_CHECKED_USIZE_LESS_THAN &&
          test->kind != NL_CHECKED_USIZE_EQUALITY) ||
         !current_copy_origin(pure.body, pure.body->context,
-                             test->first_argument, pure.formal,
-                             false, 2, NULL) ||
+                             test->first_argument, pure.formal, false, 2,
+                             NULL) ||
         !stutter_literal(right, quantity, right->scalar_result.value) ||
         right->next_argument)
         return false;
@@ -766,12 +759,10 @@ static const NLCheckedNodeView *current_take(CurrentWalk *r, NLCheckedNodeId id)
 }
 static bool current_scalar(CurrentWalk *r, const NLCheckedNodeView *v)
 {
-    if (v && v->type ==
-                 nl_semantic_core_type(r->arm->context, NL_TYPE_USIZE)) {
-        const NLCheckedNodeId id =
-            (NLCheckedNodeId)(v - r->arm->nodes) + 1;
-        return current_copy_origin(r->arm, r->arm->context, id,
-                                   r->proof->phase, false, 2, NULL);
+    if (v && v->type == nl_semantic_core_type(r->arm->context, NL_TYPE_USIZE)) {
+        const NLCheckedNodeId id = (NLCheckedNodeId)(v - r->arm->nodes) + 1;
+        return current_copy_origin(r->arm, r->arm->context, id, r->proof->phase,
+                                   false, 2, NULL);
     }
     if (!v || v->result_count != 1 ||
         v->type != nl_semantic_core_type(r->arm->context, NL_TYPE_U8) ||
@@ -1254,8 +1245,7 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         nl_checked_call_body(p->root, p->call) != f ||
         !current_copy_origin(f, f->context, s->initial_node, 0, true, 2,
                              &initial) ||
-        initial != s->initial ||
-        !current_projection(s, e, p->post) ||
+        initial != s->initial || !current_projection(s, e, p->post) ||
         !stutter_free_quantity(p->post, p->result.value, p->result.type) ||
         p->result.value != p->post->value_count ||
         !stutter_frame(e, nl_control_state_context(p->entry), 0) ||

@@ -1305,6 +1305,44 @@ if(BUILD_TESTING)
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
         "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1184-native")
 
+    # C247 reuses the unchanged P-owned destruction/OOM/census machinery.
+    execute_process(COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/equipment.py"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1188_predecessor_safety.h"
+        COMMAND_ERROR_IS_FATAL ANY)
+    add_executable(p1188_safety tests/p1188/safety-v2.c)
+    add_executable(p1188_oom tests/p1184/safety.c)
+    add_executable(p1188_census tests/p1184/census.c)
+    foreach(target p1188_safety p1188_oom p1188_census)
+        target_include_directories(${target} PRIVATE src "${CMAKE_CURRENT_BINARY_DIR}")
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    endforeach()
+    target_compile_definitions(p1188_oom PRIVATE P1184_OOM)
+    target_compile_options(p1188_oom PRIVATE -fno-pie)
+    target_link_options(p1188_oom PRIVATE -no-pie -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    target_link_options(p1188_census PRIVATE -Wl,--wrap=nl_sem_clone
+        -Wl,--wrap=nl_semantic_create -Wl,--wrap=nl_semantic_destroy
+        -Wl,--wrap=nl_sem_commit)
+    add_test(NAME p1188_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/evidence_test.py")
+    foreach(profile 01-init-one 02-actual-one 03-formal-one 04-all-one 05-all-two 06-eq-two)
+        add_test(NAME p1188_${profile}_current.unit COMMAND p1188_safety
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/sources/${profile}.nl")
+    endforeach()
+    foreach(profile 04-all-one 05-all-two)
+        add_test(NAME p1188_${profile}_oom.unit COMMAND p1188_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/sources/${profile}.nl")
+        set_tests_properties(p1188_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 300)
+    endforeach()
+    add_test(NAME p1188_all_two_census.unit COMMAND p1188_census
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/sources/05-all-two.nl")
+    add_test(NAME p1188_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/native-v3.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1188_safety>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1188-native")
+
     add_test(NAME p1169_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1169/evidence_test.py")
     add_executable(p1169_safety tests/p1169/safety.c)

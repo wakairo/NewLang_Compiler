@@ -2990,11 +2990,10 @@ static bool emit_current_helper(FILE *stream, const NLLinearBreakView *p,
     const NLCheckedNodeView *actual =
         call ? nl_checked_node_view(p->iteration, call->first_argument) : NULL;
     return call && actual && v0_indent(stream, depth) &&
-           fprintf(stream, "const uint8_t nl_local_%zu = nl_fn_%zu(",
-                   binding, call->function) >= 0 &&
+           fprintf(stream, "const uint8_t nl_local_%zu = nl_fn_%zu(", binding,
+                   call->function) >= 0 &&
            emit_current_quantity(stream, p, loop, actual) &&
-           fputs(");\n", stream) >= 0 &&
-           v0_indent(stream, depth) &&
+           fputs(");\n", stream) >= 0 && v0_indent(stream, depth) &&
            fprintf(stream, "(void)nl_local_%zu;\n", binding) >= 0;
 }
 
@@ -3018,9 +3017,8 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
               ? fprintf(stream, "(size_t)UINTMAX_C(%zu)",
                         initial->scalar_result.value) >= 0
               : v1_emit_scalar(stream, initial)) ||
-        fputs(";\n", stream) < 0 ||
-        !v0_indent(stream, depth) || fputs("for (;;) {\n", stream) < 0 ||
-        !v0_indent(stream, depth + 1) ||
+        fputs(";\n", stream) < 0 || !v0_indent(stream, depth) ||
+        fputs("for (;;) {\n", stream) < 0 || !v0_indent(stream, depth + 1) ||
         fprintf(stream, "const size_t nl_loop_phase_%zu = nl_loop_carry_%zu;\n",
                 id, id) < 0 ||
         !v0_indent(stream, depth + 1) ||
@@ -3041,8 +3039,7 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
                 : NULL;
         if (!n ||
             !(receiver && receiver->type ==
-                              nl_semantic_core_type(arm->context,
-                                                    NL_TYPE_USIZE)
+                              nl_semantic_core_type(arm->context, NL_TYPE_USIZE)
                   ? emit_current_copy(stream, p, id, n, depth + 2)
               : p->incoming_if && n->kind == NL_CHECKED_BINDING &&
                       n->initializer == p->incoming_if

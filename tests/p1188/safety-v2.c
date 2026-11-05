@@ -34,19 +34,18 @@ int main(int argc, char **argv)
                 continue;
             ++declarations;
             NLCheckedNodeView saved = *node, saved_init = *init;
-            NLBindingEntry *binding =
-                &((NLSemanticContext *)fragment->context)
-                     ->bindings[node->symbol - 1];
+            NLBindingEntry *binding = &((NLSemanticContext *)fragment->context)
+                                           ->bindings[node->symbol - 1];
             NLBindingEntry saved_binding = *binding;
 #define COPY_BAD(mutation, restoration)                                        \
     do {                                                                       \
         mutation;                                                              \
-        NLLinearBreakView untouched, before;                                    \
-        memset(&untouched, 0xA7, sizeof untouched);                             \
-        memcpy(&before, &untouched, sizeof before);                             \
-        assert(nl_linear_break_validate(caller, loop_id(&a), &untouched) !=     \
+        NLLinearBreakView untouched, before;                                   \
+        memset(&untouched, 0xA7, sizeof untouched);                            \
+        memcpy(&before, &untouched, sizeof before);                            \
+        assert(nl_linear_break_validate(caller, loop_id(&a), &untouched) !=    \
                NL_CHECK_OK);                                                   \
-        assert(!memcmp(&before, &untouched, sizeof before));                    \
+        assert(!memcmp(&before, &untouched, sizeof before));                   \
         restoration;                                                           \
         assert(valid(&a, &proof));                                             \
         ++trials;                                                              \
@@ -62,8 +61,7 @@ int main(int argc, char **argv)
                 COPY_BAD(init->value_use = NL_VALUE_CONSUMED,
                          *init = saved_init);
             }
-            NLSemanticContext *world =
-                (NLSemanticContext *)fragment->context;
+            NLSemanticContext *world = (NLSemanticContext *)fragment->context;
             NLSemanticValueView *value =
                 &world->values[init->results[0].value - 1];
             NLSemanticValueView saved_value = *value;
@@ -73,8 +71,9 @@ int main(int argc, char **argv)
                      *value = saved_value);
         }
     }
-    printf("C247 Copy-declarations=%zu restored-tamper=%zu view-no-clobber=PASS\n",
-           declarations, trials);
+    printf(
+        "C247 Copy-declarations=%zu restored-tamper=%zu view-no-clobber=PASS\n",
+        declarations, trials);
     dispose(&a);
     return p1188_previous_safety_main(argc, argv);
 }
