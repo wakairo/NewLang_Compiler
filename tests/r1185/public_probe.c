@@ -148,20 +148,20 @@ static bool walk_node(const NLCheckedFragment *fragment, size_t artifact,
                "\"parent_post_fact\":%zu,\"child_post_fact\":%zu,"
                "\"old_value\":%zu,\"new_value\":%zu,"
                "\"dependency_compatible\":%d}\n",
-               artifact, world, id, field->base, field->nominal,
-               field->index, field->parent, field->child,
-               field->parent_incarnation, field->child_incarnation,
-               field->parent_fact, field->child_fact, field->parent_post_fact,
-               field->child_post_fact, field->old_value, field->new_value,
+               artifact, world, id, field->base, field->nominal, field->index,
+               field->parent, field->child, field->parent_incarnation,
+               field->child_incarnation, field->parent_fact, field->child_fact,
+               field->parent_post_fact, field->child_post_fact,
+               field->old_value, field->new_value,
                field->dependency_compatible);
     }
     for (size_t i = 0; i < node->result_count && i < 2; ++i) {
         NLSemanticValueView value = {0};
-        bool valid = nl_semantic_value_view(context, node->results[i].value,
-                                            &value);
+        bool valid =
+            nl_semantic_value_view(context, node->results[i].value, &value);
         NLSemanticTypeView type = {0};
-        bool type_valid = nl_semantic_type_view(context, node->results[i].type,
-                                                &type);
+        bool type_valid =
+            nl_semantic_type_view(context, node->results[i].type, &type);
         printf("{\"record\":\"result\",\"artifact\":%zu,\"world\":%zu,"
                "\"node\":%zu,\"index\":%zu,\"type\":%zu,"
                "\"value\":%zu,\"view_valid\":%d,\"scalar_known\":%d,"
@@ -177,9 +177,9 @@ static bool walk_node(const NLCheckedFragment *fragment, size_t artifact,
                value.domain, value.allocation_region, value.aggregate_owner,
                value.reference_count, type_valid, (int)type.kind, type.is_copy);
     }
-    NLCheckedNodeId links[] = {
-        node->initializer, node->first_argument, node->next_argument,
-        node->first_item, node->next_item, node->tail};
+    NLCheckedNodeId links[] = {node->initializer,   node->first_argument,
+                               node->next_argument, node->first_item,
+                               node->next_item,     node->tail};
     for (size_t i = 0; i < sizeof(links) / sizeof(links[0]); ++i) {
         if (!walk_node(fragment, artifact, world, links[i], depth + 1)) {
             return false;
@@ -237,9 +237,8 @@ static bool walk_fragment(const NLCheckedFragment *fragment, size_t parent,
            "\"parent\":%zu,\"from_node\":%zu,\"edge\":",
            artifact, world, parent, from);
     json_string(edge);
-    printf(",\"arm\":%zu,\"root\":%zu,\"nodes\":%zu,\"fresh\":%d}\n",
-           arm, nl_checked_root(fragment), nl_checked_node_count(fragment),
-           fresh);
+    printf(",\"arm\":%zu,\"root\":%zu,\"nodes\":%zu,\"fresh\":%d}\n", arm,
+           nl_checked_root(fragment), nl_checked_node_count(fragment), fresh);
     return !fresh || walk_node(fragment, artifact, world,
                                nl_checked_root(fragment), depth + 1);
 }
@@ -285,8 +284,8 @@ int main(int argc, char **argv)
         goto cleanup;
     }
     const NLSyntaxTree *inputs[] = {unit};
-    check_status = nl_semantic_register_function_unit(context, inputs, 1,
-                                                      &unit_diag);
+    check_status =
+        nl_semantic_register_function_unit(context, inputs, 1, &unit_diag);
     stage("register_unit", (int)check_status,
           unit_diag.diagnostic.diagnostic.code);
     if (check_status != NL_CHECK_OK) {
@@ -307,15 +306,15 @@ int main(int argc, char **argv)
         goto cleanup;
     }
     memset(&parse_diag, 0, sizeof(parse_diag));
-    parse_status = nl_parser_parse_source_fragment(entry_parser, &entry,
-                                                   &parse_diag);
+    parse_status =
+        nl_parser_parse_source_fragment(entry_parser, &entry, &parse_diag);
     stage("parse_main_call", (int)parse_status, parse_diag.diagnostic.code);
     if (parse_status != NL_PARSE_OK) {
         nl_parse_diagnostic_render(stderr, entry_source, &parse_diag);
         goto cleanup;
     }
-    check_status = nl_semantic_check_source_fragment(context, entry, &owned,
-                                                      &check_diag);
+    check_status =
+        nl_semantic_check_source_fragment(context, entry, &owned, &check_diag);
     stage("check_main_call", (int)check_status, check_diag.diagnostic.code);
     if (check_status != NL_CHECK_OK) {
         nl_check_diagnostic_render(stderr, entry_source, &check_diag);
