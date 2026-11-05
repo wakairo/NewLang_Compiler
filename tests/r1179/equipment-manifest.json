@@ -1,5 +1,5 @@
 {
-  "schema": "R1179_EQUIPMENT_PREFLIGHT_V1",
+  "schema": "R1179_EQUIPMENT_PREFLIGHT_V2",
   "fixed_compiler": "bb8b33cefc030ed99941c9c93fef9c7ef89b0ac0",
   "fixed_tree": "d8fd0b0a95184d3449d7e1525ba56574429dbf8f",
   "bundle_sha256": "2dff96cd7271a2b5637c46e7a45ab798fbbf84249b447fdf82657b484a69d680",
@@ -178,8 +178,8 @@
     {
       "path": "tests/r1179/probe.c",
       "bytes": 12116,
-      "sha256": "e162c78fad817bdf3c1555540c3f7c2fb0ac9c1c53d31eb526ac5f77fc130b18",
-      "git_blob": "7433adffe5424a1a4940bfc55eac75b71686dbb2"
+      "sha256": "805fb0f93ea2c533ede8c5a8e7d5f76173d32e76e51e5db1587fbf3580aacf37",
+      "git_blob": "be6042b9293597841f1746409629152ea920eb6e"
     },
     {
       "path": "tests/r1179/register.cmake",
@@ -199,5 +199,19 @@
       "sha256": "f6aecef6180ed4d96b7c889e056c8fa34c8eff597528259a7cf0ba1f1b4be9f1",
       "git_blob": "b5aeae644f24eaaeae29c114444cc610342e0004"
     }
-  ]
+  ],
+  "previous_r_head": "333ace592984e4de55f30b4e80a7101b0b7e7d72",
+  "mechanical_repair": {
+    "log_bytes": 36457,
+    "log_sha256": "7a1dff36e7e8b798024e872377324d62896427991d4c3e84f7f7ed3e1917b4d8",
+    "zip_bytes": 1784,
+    "zip_sha256": "ec1d8dbcfe028639d03b22af6075ebc4b712737bce928275d022a950f54d0fac",
+    "patch_sha256": "2ccd8092e4dbc6a2c3d5c2c6be4381f6a315e2c1e49eaac40ccd024884f94032",
+    "patch_section_count": 2,
+    "applied_path": "tests/r1179/probe.c",
+    "applied_hunks": 3,
+    "old_probe_sha256": "e162c78fad817bdf3c1555540c3f7c2fb0ac9c1c53d31eb526ac5f77fc130b18",
+    "new_probe_sha256": "805fb0f93ea2c533ede8c5a8e7d5f76173d32e76e51e5db1587fbf3580aacf37",
+    "source_oracle_changes": 0
+  }
 }

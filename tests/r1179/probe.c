@@ -131,8 +131,8 @@ static void place(const NLSemanticContext *world, NLPlaceId id)
     printf("]}");
 }
 
-static int observe(const NLCheckedFragment *fragment, size_t parent,
-                   size_t via, const char *edge, size_t arm, size_t depth)
+static int observe(const NLCheckedFragment *fragment, size_t parent, size_t via,
+                   const char *edge, size_t arm, size_t depth)
 {
     if (fragment == NULL) {
         return 1;
@@ -187,8 +187,8 @@ static int observe(const NLCheckedFragment *fragment, size_t parent,
                node->next_item, node->tail, node->argument_count,
                node->result_count, (int)node->value_use,
                node->terminates ? "true" : "false", node->normal_arms,
-               node->header_inductive ? "true" : "false",
-               node->continue_edges, node->break_edges, node->return_edges,
+               node->header_inductive ? "true" : "false", node->continue_edges,
+               node->break_edges, node->return_edges,
                node->has_scalar_result ? "true" : "false",
                node->scalar_result.known ? "true" : "false",
                node->scalar_result.value);
@@ -221,13 +221,13 @@ static int observe(const NLCheckedFragment *fragment, size_t parent,
         printf("},\"loan\":{\"scope\":%zu,\"dependency_scope\":%zu,"
                "\"place\":%zu,\"incarnation\":%zu,\"body_nonescape\":%s,"
                "\"normal_result_forwarded\":%s}}\n",
-               node->loan.scope, node->loan.dependency_scope,
-               node->loan.place, node->loan.incarnation,
+               node->loan.scope, node->loan.dependency_scope, node->loan.place,
+               node->loan.incarnation,
                node->loan.body_nonescape_proved ? "true" : "false",
                node->loan.normal_result_forwarded ? "true" : "false");
         if (node->kind == NL_CHECKED_REGISTERED_CALL &&
-            !observe(nl_checked_call_body(fragment, id), fid, id,
-                     "call_body", 0, depth + 1)) {
+            !observe(nl_checked_call_body(fragment, id), fid, id, "call_body",
+                     0, depth + 1)) {
             return 0;
         }
         if (node->kind == NL_CHECKED_LOOP &&
