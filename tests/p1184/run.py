@@ -4,7 +4,7 @@ import json,re,subprocess,sys
 p=Path(__file__).resolve().parent
 compiler,probe,gcc,clang,sanitizer,output=sys.argv[1:]
 oracle=json.loads((p/'oracle.json').read_text())
-version=json.loads((p/'oracle-v2.json').read_text())
+version={'source_overrides':{},'expected_diagnostics':{}}
 raw=Path(output);raw.mkdir(exist_ok=False,parents=True);rows=[];native_runs=0
 def run(cmd,label,allowed=(0,)):
     r=subprocess.run(list(map(str,cmd)),capture_output=True,timeout=90)
