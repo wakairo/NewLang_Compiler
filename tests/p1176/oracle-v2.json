@@ -1,0 +1,15 @@
+{
+  "previous_oracle": "oracle.json",
+  "previous_sha256": "0df0009d82427765341c0279032477c5bce7af20760a120a3826b30cd655e184",
+  "source_overrides": {
+    "96-escaping-arm": "source-v2/96-escaping-arm.nl"
+  },
+  "expected_diagnostics": {
+    "96-escaping-arm": "P8-EXIT-DEPENDENCY"
+  },
+  "reason": "Original new negative used an unsupported loan_read field form and reached LOCAL-LOAN-PROFILE. Use the existing bounded loan_write spelling with an escaping reference to reach the intended ending-scope dependency check; original source/oracle/raw remains unchanged.",
+  "sources": {
+    "source-v2/96-escaping-arm.nl": "edd9fc6634c93bf36ed116ba49e740e54b46c7e7272111dabdadc074beac1be9"
+  },
+  "candidate_executions": 0
+}

@@ -2976,6 +2976,46 @@ static bool emit_scalar_loop(FILE *stream, const NLLinearBreakView *p,
 /* The distinct current consumer already checked the complete ordered body.
  * Use the same loan/scalar emitter for its source items, in the actual native
  * iteration scope. No abstract header/phi operation is emitted. */
+static bool emit_current_selection(FILE *stream, const NLLinearBreakView *p,
+                                   NLCheckedNodeId loop, NLSymbolId binding,
+                                   size_t depth)
+{
+    const NLCheckedFragment *f = p->iteration;
+    const NLCheckedNodeView *choice = nl_checked_node_view(f, p->incoming_if);
+    const NLCheckedNodeView *test =
+        choice ? nl_checked_node_view(f, choice->initializer) : NULL;
+    const NLCheckedNodeView *left =
+        test ? nl_checked_node_view(f, test->first_argument) : NULL;
+    const NLCheckedNodeView *right =
+        left ? nl_checked_node_view(f, left->next_argument) : NULL;
+    if (!choice || !test || !left || !right ||
+        left->symbol != p->phase_symbol ||
+        (test->kind != NL_CHECKED_USIZE_LESS_THAN &&
+         test->kind != NL_CHECKED_USIZE_EQUALITY) ||
+        !v0_indent(stream, depth) ||
+        fprintf(stream,
+                "const uint8_t nl_local_%zu = (nl_loop_phase_%zu %s "
+                "(size_t)UINTMAX_C(%zu) ? ",
+                binding, loop,
+                test->kind == NL_CHECKED_USIZE_LESS_THAN ? "<" : "==",
+                right->scalar_result.value) < 0)
+        return false;
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedFragment *arm = nl_checked_if_arm(f, p->incoming_if, a);
+        const NLCheckedNodeView *root =
+            arm ? nl_checked_node_view(arm, nl_checked_root(arm)) : NULL;
+        const NLCheckedNodeView *block =
+            root ? nl_checked_node_view(arm, root->initializer) : NULL;
+        const NLCheckedNodeView *tail =
+            block ? nl_checked_node_view(arm, block->tail) : NULL;
+        if (!tail || !v1_emit_scalar(stream, tail) ||
+            (a == 0 && fputs(" : ", stream) < 0))
+            return false;
+    }
+    return fputs(");\n", stream) >= 0 && v0_indent(stream, depth) &&
+           fprintf(stream, "(void)nl_local_%zu;\n", binding) >= 0;
+}
+
 static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
                               NLCheckedNodeId id, NLSymbolId result,
                               size_t depth)
@@ -3006,7 +3046,11 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
     NLCheckedNodeId item = block->first_item;
     while (item && item != p->continue_node) {
         const NLCheckedNodeView *n = nl_checked_node_view(arm, item);
-        if (!n || !v0_emit_node(stream, arm, item, depth + 2))
+        if (!n ||
+            !(p->incoming_if && n->kind == NL_CHECKED_BINDING &&
+                      n->initializer == p->incoming_if
+                  ? emit_current_selection(stream, p, id, n->symbol, depth + 2)
+                  : v0_emit_node(stream, arm, item, depth + 2)))
             return false;
         if (n->kind == NL_CHECKED_BINDING &&
             (!v0_indent(stream, depth + 2) ||

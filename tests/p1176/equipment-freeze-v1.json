@@ -1,0 +1,12 @@
+{
+  "created_utc": "2026-11-05T05:40:01.291654+00:00",
+  "files": {
+    "check.py": "8d6802aa8d13b471e8fb160fdd41730f281d3949d835704dcf27c8c0caf99566",
+    "safety.c": "c73ca5d3794ef5e2377cdb376b9a2e1441bfdf8c0457eefca55cb81a975c7320",
+    "run.py": "81ae1f54ea835f45d0be89d00642619e20dcf78f1965dddb267b1499988f7f4a",
+    "census.c": "54243060ca4bbe2c866ae368394ff8c6c119999cbd2c8b6fd0e3b75ce5e2df76"
+  },
+  "oracle": "oracle.json",
+  "oracle_sha256": "0df0009d82427765341c0279032477c5bce7af20760a120a3826b30cd655e184",
+  "expectations": "Genuine owned/current/runtime IF; full nested source/phase/arm/world/result/foreign/count rejection; original ownership; frozen native arrays; census before exhaustive OOM"
+}

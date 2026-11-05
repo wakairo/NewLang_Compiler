@@ -1227,6 +1227,41 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1146_safety>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_BINARY_DIR}/p1146-native")
+    add_test(NAME p1176_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1176/evidence_test.py")
+    add_executable(p1176_safety tests/p1176/safety.c)
+    add_executable(p1176_oom tests/p1176/safety.c)
+    add_executable(p1176_census tests/p1176/census.c)
+    foreach(target p1176_safety p1176_oom p1176_census)
+        target_include_directories(${target} PRIVATE src)
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    endforeach()
+    target_compile_definitions(p1176_oom PRIVATE P1176_OOM)
+    target_compile_options(p1176_oom PRIVATE -fno-pie)
+    target_link_options(p1176_oom PRIVATE -no-pie -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    target_link_options(p1176_census PRIVATE -Wl,--wrap=nl_sem_clone
+        -Wl,--wrap=nl_semantic_create -Wl,--wrap=nl_semantic_destroy
+        -Wl,--wrap=nl_sem_commit)
+    foreach(profile 01-phase-left 02-phase-right 03-one-edge 04-zero-edge 05-phase-equality 06-incoming-alias)
+        add_test(NAME p1176_${profile}_current.unit COMMAND p1176_safety
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1176/sources/${profile}.nl")
+    endforeach()
+    foreach(profile 01-phase-left 06-incoming-alias)
+        add_test(NAME p1176_${profile}_oom.unit COMMAND p1176_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1176/sources/${profile}.nl")
+        set_tests_properties(p1176_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 300)
+    endforeach()
+    foreach(profile 01-phase-left 80-literal-control)
+        add_test(NAME p1176_${profile}_census.unit COMMAND p1176_census
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1176/sources/${profile}.nl")
+    endforeach()
+    add_test(NAME p1176_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1176/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1176_safety>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1176-native")
+
     add_test(NAME p1169_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1169/evidence_test.py")
     add_executable(p1169_safety tests/p1169/safety.c)

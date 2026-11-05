@@ -1,0 +1,14 @@
+{
+  "created_utc": "2026-11-05T05:53:51.635012+00:00",
+  "files": {
+    "check.py": "31f444737c439c5692f4788643ededfe668c1d679d3b25dc60fa5fdca8744997",
+    "run.py": "51d34b3182945e2731fd28f3609834d80b3529fe8edae9d945906c8c53ed52af",
+    "safety.c": "c73ca5d3794ef5e2377cdb376b9a2e1441bfdf8c0457eefca55cb81a975c7320",
+    "census.c": "d51ac4a9037d24d04c57a656a9f507eb60af105a7b14383e2f22b457898b2273",
+    "oracle-v2.json": "bcd8f96a15d0fe8e137152c6472722a8f0042b210f018fc4f21a58b7518bbb27",
+    "source-v2/96-escaping-arm.nl": "edd9fc6634c93bf36ed116ba49e740e54b46c7e7272111dabdadc074beac1be9"
+  },
+  "source_oracle_v1_unchanged": true,
+  "reason": "Original new negative used an unsupported loan_read field form and reached LOCAL-LOAN-PROFILE. Use the existing bounded loan_write spelling with an escaping reference to reach the intended ending-scope dependency check; original source/oracle/raw remains unchanged.",
+  "expectation": "Same six positive native arrays and twelve logical negative profiles; corrected96 must specifically reject ending-loan scope dependency."
+}
