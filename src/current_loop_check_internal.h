@@ -26,7 +26,9 @@ typedef struct NLCurrentLoopProof {
     const NLSource *helper_source;
     const char *helper_parameter_name;
     NLSourceSpan helper_name;
-    NLTypeId *helper_parameters[8]; /* six graphs, actual caller, post */
+    NLTypeId *helper_parameters[12]; /* six graphs, caller/post, four exits */
+    const NLFunctionEntry *helper_post_functions;
+    size_t helper_post_function_count;
     StutterWorld exits[4];
     NLControlExitView exit_views[4];
     bool graph_owned, sealed;
@@ -915,6 +917,23 @@ current_helper_function(const NLCurrentLoopProof *s, const NLSemanticContext *c)
                : NULL;
 }
 
+/* No signature contents are read here. First authenticate the enclosing table
+ * allocation/count, then the helper's retained signature allocation. This must
+ * precede world comparison, which compares signature contents as well. */
+static bool current_helper_signature_origin(const NLCurrentLoopProof *s,
+                                            const NLSemanticContext *c,
+                                            const NLFunctionEntry *functions,
+                                            size_t count, size_t slot)
+{
+    if (!c || c->functions != functions || c->function_count != count ||
+        !functions || !s->helper_function || s->helper_function > count ||
+        slot >= sizeof(s->helper_parameters) / sizeof(*s->helper_parameters))
+        return false;
+    const NLFunctionEntry *fn = &functions[s->helper_function - 1];
+    return fn->count == 1 && fn->parameters &&
+           fn->parameters == s->helper_parameters[slot];
+}
+
 /* Current helper admission authenticates the actual retained plan and
  * each world's original signature allocation before indexing it. Plan owner
  * counts may change; syntax/source/parameter identity may not. */
@@ -961,6 +980,8 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         s->helper_parameters[6] = actual->parameters;
         s->helper_parameters[7] = post->parameters;
+        s->helper_post_functions = p->post->functions;
+        s->helper_post_function_count = p->post->function_count;
     }
     for (size_t i = 0; i < (s->helper ? 6u : s->scalar ? 5u : 3u); ++i) {
         StutterGraph *a = &s->graphs[i];
@@ -995,6 +1016,13 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
             &s->exits[i], nl_control_state_context((NLControlState *)x->state));
         if (status != NL_CHECK_OK)
             return status;
+        if (s->helper) {
+            const NLFunctionEntry *fn =
+                current_helper_function(s, s->exits[i].world);
+            if (!fn || !fn->parameters)
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+            s->helper_parameters[8 + i] = fn->parameters;
+        }
     }
     s->sealed = true;
     return NL_CHECK_OK;
@@ -1013,6 +1041,12 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                               p->root_count, p->root_root) ||
         !linear_graph_matches(f, p->parent_origin, p->parent_nodes,
                               p->parent_count, p->parent_root) ||
+        (s->helper && (!current_helper_signature_origin(
+                           s, f->context, p->final_storage.functions,
+                           p->final_storage.function_count, 6) ||
+                       !current_helper_signature_origin(
+                           s, p->post, s->helper_post_functions,
+                           s->helper_post_function_count, 7))) ||
         !linear_world_matches(f->context, &p->final_storage, p->final,
                               &p->final_anchor) ||
         !linear_callable(p, f->context) || !linear_callable(p, p->post) ||
@@ -1026,6 +1060,9 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                                   a->root) ||
             a->fragment->source != a->source ||
             a->fragment->context != a->world.world ||
+            (s->helper && !current_helper_signature_origin(
+                              s, a->world.world, a->world.storage.functions,
+                              a->world.storage.function_count, i)) ||
             !linear_world_matches(a->world.world, &a->world.storage,
                                   a->world.copy, &a->world.anchor) ||
             (s->helper && !current_helper_entry(s, a->world.world, i)))
@@ -1041,6 +1078,10 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         if (!x || memcmp(x, &s->exit_views[i], sizeof(*x)) ||
             nl_control_state_context((NLControlState *)x->state) !=
                 s->exits[i].world ||
+            (s->helper &&
+             !current_helper_signature_origin(
+                 s, s->exits[i].world, s->exits[i].storage.functions,
+                 s->exits[i].storage.function_count, 8 + i)) ||
             !linear_world_matches(s->exits[i].world, &s->exits[i].storage,
                                   s->exits[i].copy, &s->exits[i].anchor))
             return bad;
