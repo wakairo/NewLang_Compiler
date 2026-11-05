@@ -4,6 +4,23 @@ if(BUILD_TESTING)
     function(add_test)
         set(r1185_relocated)
         foreach(r1185_arg IN LISTS ARGV)
+            # Runtime tools and build products exist in the actual checkout,
+            # not in the genuine tracked-source/Git snapshot. Preserve their
+            # original argv even when the SDK is beneath CMAKE_SOURCE_DIR.
+            set(r1185_runtime_path FALSE)
+            foreach(r1185_runtime_root IN ITEMS
+                    "${CMAKE_BINARY_DIR}" "${CMAKE_SOURCE_DIR}/.deps")
+                string(FIND "${r1185_arg}" "${r1185_runtime_root}/"
+                    r1185_runtime_prefix)
+                if(r1185_arg STREQUAL r1185_runtime_root
+                        OR NOT r1185_runtime_prefix EQUAL -1)
+                    set(r1185_runtime_path TRUE)
+                endif()
+            endforeach()
+            if(r1185_runtime_path)
+                list(APPEND r1185_relocated "${r1185_arg}")
+                continue()
+            endif()
             string(FIND "${r1185_arg}" "${CMAKE_SOURCE_DIR}/"
                 r1185_source_path)
             if(r1185_arg STREQUAL "${CMAKE_SOURCE_DIR}")

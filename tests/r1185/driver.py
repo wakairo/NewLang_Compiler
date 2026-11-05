@@ -184,14 +184,21 @@ def main():
         save_json(out / "actual-checkout.json", metadata)
         help_result = commands.run("compiler-help", [compiler, "--help"], source_root)
         help_text = (help_result["stdout"] + help_result["stderr"]).decode("utf-8", errors="replace")
-        emit_option = None
-        for candidate in ("--emit-c17", "--emit-c"):
-            if re.search(re.escape(candidate) + r"(?=\s|[=,\]\)]|$)", help_text):
-                emit_option = candidate
-                break
-        if emit_option is None:
-            raise EquipmentError("ordinary CLI C17 option not discoverable from actual --help")
-        summary["ordinary_c17_option"] = emit_option
+        reject_abnormal_host(help_result, "compiler --help")
+        if help_result["rc"] != 0:
+            raise EquipmentError("ordinary CLI --help did not complete normally")
+        emit_arguments = None
+        if re.search(r"(?m)^\s*SOURCE\s+Emit supported checked-profile C17 to stdout\.$", help_text):
+            emit_arguments = []
+        else:
+            for candidate in ("--emit-c17", "--emit-c"):
+                if re.search(re.escape(candidate) + r"(?=\s|[=,\]\)]|$)", help_text):
+                    emit_arguments = [candidate]
+                    break
+        if emit_arguments is None:
+            raise EquipmentError("ordinary CLI C17 argv not discoverable from actual --help")
+        summary["ordinary_c17_argv_prefix"] = emit_arguments
+        summary["ordinary_c17_contract"] = "actual --help; positional SOURCE emits stdout when prefix is empty"
         cases = oracle["cases"]
         invalid = {c["id"] for c in cases if c["canonical_legality"] == "INVALID"}
         positives = [c for c in cases if c["kind"] in ("positive", "ordinary_control")]
@@ -252,7 +259,7 @@ def main():
                 if ident in invalid or state["check"]["rc"] != 0 or state["public_owned"]["rc"] != 0:
                     continue
                 source = own / "cohort" / case["source"]
-                emitted = commands.run(ident + "-emit", [compiler, emit_option, source], source_root)
+                emitted = commands.run(ident + "-emit", [compiler, *emit_arguments, source], source_root)
                 state["C17"] = emitted["record"]
                 if case not in positives:
                     state["coverage_probe"] = "legal accepted/refused at actual layer; not invalid-source safety result"
