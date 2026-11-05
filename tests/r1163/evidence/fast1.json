@@ -1,0 +1,13 @@
+{
+  "run_id": 41937122452,
+  "job_id": 126948281687,
+  "attempt": 1,
+  "head": "735677fbc462c70fbe1af844a4542720b2263361",
+  "conclusion": "failure",
+  "layer": "FORMAT_ONLY",
+  "compiler": "23.1.3",
+  "build": "NOT_RUN",
+  "semantic": "NOT_RUN",
+  "repair": "Exact formatter patch restricted to tests/r1163/probe.c; old P1117 empty-output deletion suggestion not applied.",
+  "new_probe_sha256": "9b8ee5a05a531f669b124d4396b158f46eb92feae45207bd284a834b81169db4"
+}

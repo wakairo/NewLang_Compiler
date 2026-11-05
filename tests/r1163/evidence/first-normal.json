@@ -1,0 +1,378 @@
+{
+  "first_head": "52b5b577e33b7be45419a797f6994565f2923b28",
+  "first_merge_checkout": "75ee7c3bea0e83b1b6207021cc4071dc39a9f906",
+  "first_results_immutable": true,
+  "jobs": [
+    {
+      "job_id": 126949834380,
+      "name": "PARTIAL",
+      "run_id": 41937577335,
+      "attempt": 1,
+      "conclusion": "failure",
+      "head": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "raw_bytes": 1791134,
+      "raw_sha256": "058fe00200c0a1b6bf66239b666489dddbc57b1236739229fdb23c4099c8ebd3",
+      "capsules": [
+        {
+          "header": {
+            "bytes": 43736,
+            "chunks": 24,
+            "encoding": "base64-zip",
+            "id": "frontend-c17-partial-41937577335-97d06c39d99b",
+            "sha256": "97d06c39d99becd8e8dbab7041e39e18d4a1f5450b462a5eb185769264ac4de1"
+          },
+          "status": "STOP",
+          "layer": "MACHINERY_AST",
+          "error": "a_add_zero_left_early: comparison does not produce a named actual bool",
+          "native_runs": 0,
+          "native_builds": 0,
+          "command_groups": {
+            "-check": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-public": {
+              "count": 1,
+              "exit_counts": {
+                "0": 1
+              }
+            },
+            "-emit": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-named": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-ast": {
+              "count": 1,
+              "exit_counts": {
+                "0": 1
+              }
+            },
+            "-build": {
+              "count": 0,
+              "exit_counts": {}
+            },
+            "-run": {
+              "count": 0,
+              "exit_counts": {}
+            }
+          },
+          "all_frozen_match": true
+        }
+      ]
+    },
+    {
+      "job_id": 126949834394,
+      "name": "GCC",
+      "run_id": 41937577311,
+      "attempt": 1,
+      "conclusion": "failure",
+      "head": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "raw_bytes": 1749799,
+      "raw_sha256": "088f0156c2f74d1267b27ffaed340424ca7a626af3decd6d15fb58eef4937d2d",
+      "capsules": [
+        {
+          "header": {
+            "bytes": 43735,
+            "chunks": 24,
+            "encoding": "base64-zip",
+            "id": "validate-41937577311-fc7e024e42b4",
+            "sha256": "fc7e024e42b4040e48cdd583fe7abf2f23d9dd4957c4ced4df401c6588aa2930"
+          },
+          "status": "STOP",
+          "layer": "MACHINERY_AST",
+          "error": "a_add_zero_left_early: comparison does not produce a named actual bool",
+          "native_runs": 0,
+          "native_builds": 0,
+          "command_groups": {
+            "-check": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-public": {
+              "count": 1,
+              "exit_counts": {
+                "0": 1
+              }
+            },
+            "-emit": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-named": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-ast": {
+              "count": 1,
+              "exit_counts": {
+                "0": 1
+              }
+            },
+            "-build": {
+              "count": 0,
+              "exit_counts": {}
+            },
+            "-run": {
+              "count": 0,
+              "exit_counts": {}
+            }
+          },
+          "all_frozen_match": true
+        }
+      ]
+    },
+    {
+      "job_id": 126949834650,
+      "name": "GCC Release",
+      "run_id": 41937577311,
+      "attempt": 1,
+      "conclusion": "failure",
+      "head": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "raw_bytes": 1749456,
+      "raw_sha256": "a1263029ff78833baf3f528725ef23a8fdf03c72abba92c266d5fd5d5e0391dd",
+      "capsules": [
+        {
+          "header": {
+            "bytes": 43725,
+            "chunks": 24,
+            "encoding": "base64-zip",
+            "id": "validate-41937577311-fa4ee4e5326e",
+            "sha256": "fa4ee4e5326e20167c951a040ff0efdaf4d874a1dc0fc4ec8e190dc4d4d55127"
+          },
+          "status": "STOP",
+          "layer": "MACHINERY_AST",
+          "error": "a_add_zero_left_early: comparison does not produce a named actual bool",
+          "native_runs": 0,
+          "native_builds": 0,
+          "command_groups": {
+            "-check": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-public": {
+              "count": 1,
+              "exit_counts": {
+                "0": 1
+              }
+            },
+            "-emit": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-named": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-ast": {
+              "count": 1,
+              "exit_counts": {
+                "0": 1
+              }
+            },
+            "-build": {
+              "count": 0,
+              "exit_counts": {}
+            },
+            "-run": {
+              "count": 0,
+              "exit_counts": {}
+            }
+          },
+          "all_frozen_match": true
+        }
+      ]
+    },
+    {
+      "job_id": 126949834610,
+      "name": "Clang",
+      "run_id": 41937577311,
+      "attempt": 1,
+      "conclusion": "failure",
+      "head": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "raw_bytes": 1771338,
+      "raw_sha256": "43f8e4b0a85569e04bcab1a7ceab4366bc92a6d5f14c236ecc92a3b2ac587cf2",
+      "capsules": [
+        {
+          "header": {
+            "bytes": 43763,
+            "chunks": 24,
+            "encoding": "base64-zip",
+            "id": "validate-41937577311-5ed9a8124465",
+            "sha256": "5ed9a8124465460ff9a3a7411abce94f1f8e46f6485b021e4a7cd3a6291ef33e"
+          },
+          "status": "STOP",
+          "layer": "MACHINERY_AST",
+          "error": "a_add_zero_left_early: comparison does not produce a named actual bool",
+          "native_runs": 0,
+          "native_builds": 0,
+          "command_groups": {
+            "-check": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-public": {
+              "count": 1,
+              "exit_counts": {
+                "0": 1
+              }
+            },
+            "-emit": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-named": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-ast": {
+              "count": 1,
+              "exit_counts": {
+                "0": 1
+              }
+            },
+            "-build": {
+              "count": 0,
+              "exit_counts": {}
+            },
+            "-run": {
+              "count": 0,
+              "exit_counts": {}
+            }
+          },
+          "all_frozen_match": true
+        }
+      ]
+    },
+    {
+      "job_id": 126949834527,
+      "name": "ASan",
+      "run_id": 41937577311,
+      "attempt": 1,
+      "conclusion": "failure",
+      "head": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "raw_capture": "PENDING_C_HELPER_CAPTURE; actual terminal failure recorded by Actions API; no result overwritten"
+    },
+    {
+      "job_id": 126949834503,
+      "name": "UBSan",
+      "run_id": 41937577311,
+      "attempt": 1,
+      "conclusion": "failure",
+      "head": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "raw_bytes": 1769943,
+      "raw_sha256": "1584e0d48b8c3dc771e626b90171a62a277051804ca8b026c000c435fe27f2a2",
+      "capsules": [
+        {
+          "header": {
+            "bytes": 43759,
+            "chunks": 24,
+            "encoding": "base64-zip",
+            "id": "validate-41937577311-fac44b3b8a24",
+            "sha256": "fac44b3b8a24fe5df29aa6598380271c0884bf9c5522a929328a33c2aeaf90b2"
+          },
+          "status": "STOP",
+          "layer": "MACHINERY_AST",
+          "error": "a_add_zero_left_early: comparison does not produce a named actual bool",
+          "native_runs": 0,
+          "native_builds": 0,
+          "command_groups": {
+            "-check": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-public": {
+              "count": 1,
+              "exit_counts": {
+                "0": 1
+              }
+            },
+            "-emit": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-named": {
+              "count": 8,
+              "exit_counts": {
+                "0": 1,
+                "3": 7
+              }
+            },
+            "-ast": {
+              "count": 1,
+              "exit_counts": {
+                "0": 1
+              }
+            },
+            "-build": {
+              "count": 0,
+              "exit_counts": {}
+            },
+            "-run": {
+              "count": 0,
+              "exit_counts": {}
+            }
+          },
+          "all_frozen_match": true
+        }
+      ]
+    }
+  ],
+  "budget_before_m2": {
+    "FAST_actual_jobs": 2,
+    "normal_actual_jobs": 6,
+    "manual": 0
+  },
+  "planned_natural_m2": {
+    "FAST_jobs": 1,
+    "normal_jobs": 6
+  },
+  "scope_disposition_comment": 6645682942,
+  "ordering_clarification_comment": 6645869762,
+  "note": "M2 repairs only R machinery. First PARTIAL original capsule is included verbatim; full decoded logs/capsules are retained by C and are to be archived separately after measurement terminates."
+}

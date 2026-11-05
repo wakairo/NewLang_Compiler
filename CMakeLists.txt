@@ -106,6 +106,7 @@ add_executable(newlangc src/main.c)
 target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic newlang_diagnostic)
 
 include(CTest)
+include("${CMAKE_CURRENT_SOURCE_DIR}/tests/r1163/register.cmake")
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
     # P930 diagnostic-only wrappers: production libraries/CLI remain unchanged.
