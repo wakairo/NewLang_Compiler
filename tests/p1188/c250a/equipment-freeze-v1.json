@@ -1,0 +1,10 @@
+{
+  "authority": "C250a mapping equipment frozen before first new compiler execution; baseline emits only",
+  "files": {
+    "tests/p1188/c250a/probe.c": "4ec47c3246e9d7a38e4b9b68da3175d31cd0bc2a82102dada476f0a1439d2782",
+    "tests/p1188/c250a/mapping.py": "1e361a4ed3b1a6e421f4bdbf3662878e391c03bfe10335209c7e1dd7320b73f0",
+    "tests/p1188/c250a/baseline.py": "f2f57a1e4143e4485a4f565809a33d67f43a85333d8b8cbd1b963b0c519a22e1",
+    "tests/p1188/c250a/source-freeze-v1.json": "0307be2349d9ce583b2948fed39fdfc76114a9f33ccc4d465f66b7b18d964902",
+    "tests/p1188/c250a/oracle-v1.json": "4882bce90d65c3e02ec2e3bc7f239f18ed848deb9669aa4f371fe43585aa3689"
+  }
+}
