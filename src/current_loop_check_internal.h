@@ -405,7 +405,7 @@ static bool current_arm(const NLCurrentLoopProof *s,
                 if (!receiver || receiver->kind != NL_CHECKED_RECEIVER || !v->symbol ||
                     v->symbol > NL_SEMANTIC_MAX_ENTRIES || r.bound[v->symbol - 1] ||
                     v->symbol == s->phase || receiver->symbol != v->symbol ||
-                    v->type != nl_semantic_core_type(arm->context, NL_TYPE_U8) ||
+                    receiver->type != nl_semantic_core_type(arm->context, NL_TYPE_U8) ||
                     !(x->kind == NL_CHECKED_LOAN_HEADER ? current_loan(&r, x) : current_scalar(&r, x)))
                     return false;
                 r.bound[v->symbol - 1] = x->results[0].value;
