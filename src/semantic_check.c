@@ -2539,7 +2539,7 @@ static bool stutter_quantity(Check *, const NLSyntaxNode *, NLCheckedNodeId,
                              NLCheckedNodeId);
 static void stutter_quantity_record(Check *, NLCheckedNodeId);
 static bool current_quantity(Check *, const NLSyntaxNode *, NLCheckedNodeId,
-                              NLCheckedNodeId);
+                             NLCheckedNodeId);
 static void current_quantity_record(Check *, NLCheckedNodeId);
 static bool finite_add_bound(size_t limit, size_t step)
 {
@@ -6164,8 +6164,12 @@ cleanup:
     return check->status == NL_CHECK_OK ? id : 0;
 }
 
+/* These implementation includes intentionally share preceding snapshot and
+ * syntax helpers. The changing-current relation never widens stutter's E. */
+// clang-format off
 #include "stutter_loop_check_internal.h"
 #include "current_loop_check_internal.h"
+// clang-format on
 
 static NLCheckedNodeId source_loop(Check *check, const NLSyntaxView *syntax)
 {
