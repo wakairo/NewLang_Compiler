@@ -1,0 +1,22 @@
+{
+  "created_utc": "2026-11-05T09:26:19Z",
+  "created_jst": "2026-11-05T18:26:19+09:00",
+  "resume": "https://github.com/wakairo/NewLang_Compiler/issues/1185#issuecomment-6654370983",
+  "c_release": "https://github.com/wakairo/NewLang_Compiler/issues/1185#issuecomment-6654354882",
+  "v1_freeze": "https://github.com/wakairo/NewLang_Compiler/issues/1185#issuecomment-6654206989",
+  "v1_bundle_sha256": "e7319131a257cadac4fecd587a65656f821f72e1802c66c88a69454c7e37e509",
+  "independence": "pre-execution frozen independent V1 / scope-calibrated V2; C-supplied finite-profile boundaries. All values and semantic traces are preserved from V1; only declared alias profile scaffolding is removed before any execution.",
+  "restricted_inputs_read": [],
+  "candidate_public_headers_or_CI_read_before_V2_freeze": false,
+  "execution_counts_at_freeze": {
+    "compiler": 0,
+    "build": 0,
+    "guest_native": 0,
+    "AST_generation": 0,
+    "ref_mutation": 0,
+    "push": 0,
+    "PR": 0,
+    "Actions": 0
+  },
+  "all_layers": "NOT_RUN"
+}

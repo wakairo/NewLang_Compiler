@@ -1,0 +1,16 @@
+{
+  "execution_released": true,
+  "compiler_sha": "faad092b5b0deb608a048ff60bee0056082f9a59",
+  "tree_sha": "01388ae82b1749453546933cb4ca6b311a25df77",
+  "direct_parent_sha": "6be8c524b7a745d0d67a082e4cc2f794f90a3cd7",
+  "state": "C247_RELEASED_NEW_TARGET_ONLY",
+  "release": "https://github.com/wakairo/NewLang_Compiler/issues/1185#issuecomment-6656900527",
+  "old_target_history": "d7436585b74d0d6564df7cdf77da280903fb5234 remains STOP / NOT_RUN; E0/E1/E2 preserved",
+  "source_oracle": "V2 unchanged; no new values selected; V1 remains NOT_RUN",
+  "environment": "Dedicated GitHub branch plus Actions only; no equivalent local compiler/native/AST generation",
+  "r_branch": "r-fast/r1185-helper-result-current",
+  "pr_base": "p-c245-helper-current",
+  "pr_state": "DRAFT/NEVERMERGE",
+  "budgets": {"fast_actual_jobs": 6, "normal_actual_jobs": 12, "manual": 0},
+  "authority_main": "63658cd546be8b99599baf19476486a475adb320"
+}

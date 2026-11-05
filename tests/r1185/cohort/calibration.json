@@ -1,0 +1,213 @@
+{
+  "edition": "V2",
+  "created_utc": "2026-11-05T09:26:19Z",
+  "created_jst": "2026-11-05T18:26:19+09:00",
+  "release": "https://github.com/wakairo/NewLang_Compiler/issues/1185#issuecomment-6654354882",
+  "independence": "pre-execution frozen independent V1 / scope-calibrated V2; C-supplied finite-profile boundaries. All values and semantic traces are preserved from V1; only declared alias profile scaffolding is removed before any execution.",
+  "v1": "Untouched and NOT_RUN. Full original bytes remain in V1 Issue freeze and archive.",
+  "authority": "Draft17.34 at adopted main; C supplied only finite-profile boundaries for this calibration. No P/F/old R implementation, test source, fixture, oracle, report, driver or observer read.",
+  "preserved": [
+    "original nominal types and declared field identities/indices",
+    "all independent scalar values, predicates, branches, phase headers, Continue actuals, actual Break values",
+    "helper result -> caller u8 Copy -> one selected scoped replace",
+    "old/current/sibling traces, zero/one/multiple backedges, same-bits replacement",
+    "R/L/S original storage and run-local identity questions",
+    "N04 loan/alias escape, N05 ref/dependency escape, N06 nested IF, N08 two calls including shifted actual",
+    "six invalid negatives versus two legal coverage probes; early rejection is not deeper target reach"
+  ],
+  "not_claimed": [
+    "outer-to-loop initializer Copy behavior",
+    "caller true-arm usize argument alias composition",
+    "callee formal-to-condition usize alias composition",
+    "unlimited fresh-BLIND independence after C finite-profile disclosure",
+    "whole-loop public validator applicability",
+    "machine CALL existence inferred from semantic helper flow"
+  ],
+  "C01": "Removed ordinary actual alias and formal-condition alias before execution; actual/formal=5 and result=162 unchanged. Control is still helper-only, no loop/store evidence.",
+  "P06": "Outer phase=2 remains; loop now initializes from literal usize(2). Distinct outer/iteration/formal identities remain, but outer initializer Copy provenance is not tested.",
+  "N08": "Shifted actual and second call deliberately remain as the coverage attack; they are not cleaned away.",
+  "value_alignment_risk": "Legal initializer/phase-actual/formal Copy composition remains finite coverage debt in unexecuted V1. V2 pass must not be promoted to full reuse or audit-locality completion.",
+  "changes": [
+    {
+      "case": "C01",
+      "v1_sha256": "df9b7325ed0ffb2b7c7c99ce8d5ccae59d3443707db2401ec0e6f2dab0d4d2e7",
+      "v2_sha256": "116ab8a57841c3efb2562f59514e4df89036d5fc6ca01b0b9e9a302f6fe12672",
+      "v1_bytes": 327,
+      "v2_bytes": 273,
+      "removed_claims": [
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03",
+        "callee usize formal alias in LT/EQ condition; condition now reads fresh formal directly"
+      ],
+      "diff": "--- V1/source/C01.nl\n+++ V2/source/C01.nl\n@@ -1,6 +1,5 @@\n fn ordinary_pick(tick: usize) -> u8 {\n-    let examined = tick;\n-    if (examined < usize(4)) {\n+    if (tick < usize(4)) {\n         u8(29)\n     } else {\n         u8(162)\n@@ -9,8 +8,7 @@\n \n fn main() -> unit {\n     let phase = usize(5);\n-    let actual = phase;\n-    let normal = ordinary_pick(actual);\n+    let normal = ordinary_pick(phase);\n     let normal_copy = normal;\n     let phase_after = phase;\n     unit\n"
+    },
+    {
+      "case": "N01",
+      "v1_sha256": "bcfad1dbaaa08c36e59da13de763200d54c7596417e9628c29c0bf2462b9ffb0",
+      "v2_sha256": "0600221d6af1bf2b3a535307b0d270cdabd7e17d4de9fafdfbd4e7ad4f6b2fa7",
+      "v1_bytes": 1050,
+      "v2_bytes": 968,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "diff": "--- V1/source/N01.nl\n+++ V2/source/N01.nl\n@@ -13,11 +13,9 @@\n     let entry_selected = root@hot;\n     let entry_sibling = root@cold;\n     let starting_phase = usize(0);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(0)) {\n         if (phase < usize(2)) {\n-            let actual = phase;\n-            let actual_copy = actual;\n-            let returned = sample(actual_copy);\n+            let returned = sample(phase);\n             let incoming = returned;\n             let old = loan_write(root@hot) { |destination|\n                 replace(destination, incoming)\n"
+    },
+    {
+      "case": "N02",
+      "v1_sha256": "74ff7e39207c3f5e5a423c6073f328885d30feb982e56a6a1d7a4a11ad1503a8",
+      "v2_sha256": "acc60c6276ac667568239ce7127500e0b51c3334d3682853bfcca8e2f14caa2a",
+      "v1_bytes": 1064,
+      "v2_bytes": 982,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "diff": "--- V1/source/N02.nl\n+++ V2/source/N02.nl\n@@ -13,11 +13,9 @@\n     let entry_selected = root@hot;\n     let entry_sibling = root@cold;\n     let starting_phase = usize(0);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(0)) {\n         if (phase < usize(2)) {\n-            let actual = phase;\n-            let actual_copy = actual;\n-            let returned = sample(actual_copy);\n+            let returned = sample(phase);\n             let incoming = returned;\n             let old = loan_write(root@hot) { |destination|\n                 replace(destination, incoming)\n"
+    },
+    {
+      "case": "N03",
+      "v1_sha256": "4ba25697f9b31c03d0ac6fdcb7946fc669398cf6a9965fa94aae50d8e345d881",
+      "v2_sha256": "8970394ba7554851623aa3596b158fd29a1c21160a6b18dec6b639e628a8d72d",
+      "v1_bytes": 1055,
+      "v2_bytes": 979,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "diff": "--- V1/source/N03.nl\n+++ V2/source/N03.nl\n@@ -13,10 +13,8 @@\n     let entry_selected = root@hot;\n     let entry_sibling = root@cold;\n     let starting_phase = usize(0);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(0)) {\n         if (phase < usize(2)) {\n-            let actual = phase;\n-            let actual_copy = actual;\n             let returned = sample(u8(0));\n             let incoming = returned;\n             let old = loan_write(root@hot) { |destination|\n"
+    },
+    {
+      "case": "N04",
+      "v1_sha256": "c49bd1d246d0b7f1d4b2a228846bc98a899bba5c226454ff3c6e3181b8d427ed",
+      "v2_sha256": "a44000849d6b3d8b6a453a424be74dd9550e9015af8040a501252f0f60d28237",
+      "v1_bytes": 1056,
+      "v2_bytes": 1017,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "diff": "--- V1/source/N04.nl\n+++ V2/source/N04.nl\n@@ -13,10 +13,9 @@\n     let entry_selected = root@hot;\n     let entry_sibling = root@cold;\n     let starting_phase = usize(0);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(0)) {\n         if (phase < usize(2)) {\n-            let actual = phase;\n-            let returned = sample(actual);\n+            let returned = sample(phase);\n             let incoming = returned;\n             let escaped = loan_write(root@hot) { |destination|\n                 let alias = destination;\n"
+    },
+    {
+      "case": "N05",
+      "v1_sha256": "58cf2b487cd0a447fe7405e44822ada1b655fbab88df9f542e93921feb093b00",
+      "v2_sha256": "9568817c67737694ab69ef700500726de649672f5ba90507dccf1c82a3f96796",
+      "v1_bytes": 891,
+      "v2_bytes": 885,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained"
+      ],
+      "diff": "--- V1/source/N05.nl\n+++ V2/source/N05.nl\n@@ -10,7 +10,7 @@\n     let entry_selected = root@hot;\n     let entry_sibling = root@cold;\n     let starting_phase = usize(0);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(0)) {\n         if (phase < usize(2)) {\n             let escaped = loan_write(root@hot) { |destination|\n                 reflect(destination)\n"
+    },
+    {
+      "case": "N06",
+      "v1_sha256": "46eb1bd748b4e5092bb3aab37f2cc6727a05213839c068cbfa5a2e97380f0e42",
+      "v2_sha256": "f479bc1fdadcb06555bb572364171a2dec9291e1b43cbc8b08a65c0b08427eef",
+      "v1_bytes": 1146,
+      "v2_bytes": 1064,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "diff": "--- V1/source/N06.nl\n+++ V2/source/N06.nl\n@@ -17,11 +17,9 @@\n     let entry_selected = root@hot;\n     let entry_sibling = root@cold;\n     let starting_phase = usize(0);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(0)) {\n         if (phase < usize(3)) {\n-            let actual = phase;\n-            let actual_copy = actual;\n-            let returned = sample(actual_copy);\n+            let returned = sample(phase);\n             let incoming = returned;\n             let old = loan_write(root@hot) { |destination|\n                 replace(destination, incoming)\n"
+    },
+    {
+      "case": "N07",
+      "v1_sha256": "8d016915c52e85f3cd6a8eaa4ae3147fe0b758948f532f276d08bcd96e5b06cd",
+      "v2_sha256": "c2d1c8251a766c1d6d51e35a67b54431f3327f24e1820de1ce7edcc3e6681531",
+      "v1_bytes": 1067,
+      "v2_bytes": 985,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "diff": "--- V1/source/N07.nl\n+++ V2/source/N07.nl\n@@ -13,11 +13,9 @@\n     let entry_selected = root@hot;\n     let entry_sibling = root@cold;\n     let starting_phase = usize(0);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(0)) {\n         if (phase < usize(2)) {\n-            let actual = phase;\n-            let actual_copy = actual;\n-            let returned = sample(actual_copy);\n+            let returned = sample(phase);\n             let incoming = returned;\n             let old = loan_write(root@hot) { |destination|\n                 replace(destination, incoming)\n"
+    },
+    {
+      "case": "N08",
+      "v1_sha256": "eb4d3ea036ff18acd097d3df993397c82f70750ffa5b756169731738faa35d34",
+      "v2_sha256": "95ac880ab4d8163a0975939fbb32901ccb47a0383b3e9d985d7f4c36e3595a6a",
+      "v1_bytes": 1072,
+      "v2_bytes": 1066,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained"
+      ],
+      "diff": "--- V1/source/N08.nl\n+++ V2/source/N08.nl\n@@ -13,7 +13,7 @@\n     let entry_selected = root@hot;\n     let entry_sibling = root@cold;\n     let starting_phase = usize(0);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(0)) {\n         if (phase < usize(3)) {\n             let first = sample(phase);\n             let shifted = phase + usize(1);\n"
+    },
+    {
+      "case": "P01",
+      "v1_sha256": "d55b8ac19c33a723fcc2fcf2ec21d258ea9e97a46e43663db66b0313be2929ae",
+      "v2_sha256": "8964e7073872badc08fe53963941b45eb1861f66b60e000b7a6bb9c9d743c018",
+      "v1_bytes": 1070,
+      "v2_bytes": 988,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "diff": "--- V1/source/P01.nl\n+++ V2/source/P01.nl\n@@ -13,11 +13,9 @@\n     let entry_selected = root@crest;\n     let entry_sibling = root@guard;\n     let starting_phase = usize(5);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(5)) {\n         if (phase < usize(5)) {\n-            let actual = phase;\n-            let actual_copy = actual;\n-            let returned = choose(actual_copy);\n+            let returned = choose(phase);\n             let incoming = returned;\n             let old = loan_write(root@crest) { |destination|\n                 replace(destination, incoming)\n"
+    },
+    {
+      "case": "P02",
+      "v1_sha256": "fb47d3886b9ec84b812f987ecfbe377c232a97fb7667f7013da1196a7c2ad432",
+      "v2_sha256": "b0654f0d2b5408ae53e8b1acbb9ed9f89dc0a29976069f62b99720a05d0ac3d7",
+      "v1_bytes": 1176,
+      "v2_bytes": 1065,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03",
+        "callee usize formal alias in LT/EQ condition; condition now reads fresh formal directly"
+      ],
+      "diff": "--- V1/source/P02.nl\n+++ V2/source/P02.nl\n@@ -5,11 +5,9 @@\n     let entry_selected = root@signal;\n     let entry_sibling = root@reserve;\n     let starting_phase = usize(1);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(1)) {\n         if (phase < usize(3)) {\n-            let actual = phase;\n-            let actual_copy = actual;\n-            let returned = choose(actual_copy);\n+            let returned = choose(phase);\n             let incoming = returned;\n             let old = loan_write(root@signal) { |destination|\n                 replace(destination, incoming)\n@@ -30,8 +28,7 @@\n }\n \n fn choose(tick: usize) -> u8 {\n-    let examined = tick;\n-    let chosen = if (examined == usize(1)) {\n+    let chosen = if (tick == usize(1)) {\n         u8(67)\n     } else {\n         u8(183)\n"
+    },
+    {
+      "case": "P03",
+      "v1_sha256": "3fb1cfd0700926f2c75f627b7a4c7a2cbdc301139b2ce0bd44ed6cab448c312c",
+      "v2_sha256": "d5c80f02c878d59cfff414bf1e734bcebbc484c552403b611d7e449d101ee203",
+      "v1_bytes": 1069,
+      "v2_bytes": 987,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "diff": "--- V1/source/P03.nl\n+++ V2/source/P03.nl\n@@ -13,11 +13,9 @@\n     let entry_selected = root@level;\n     let entry_sibling = root@stamp;\n     let starting_phase = usize(0);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(0)) {\n         if (phase < usize(5)) {\n-            let actual = phase;\n-            let actual_copy = actual;\n-            let returned = choose(actual_copy);\n+            let returned = choose(phase);\n             let incoming = returned;\n             let old = loan_write(root@level) { |destination|\n                 replace(destination, incoming)\n"
+    },
+    {
+      "case": "P04",
+      "v1_sha256": "44ae2545bf5f14055efc81e822566ca043edae088fc0d0222c358e2cfe523f7f",
+      "v2_sha256": "19b5a76b3c7c829bf030a84c469874b5431887fef305f2552bf559fd09b73146",
+      "v1_bytes": 1186,
+      "v2_bytes": 1075,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03",
+        "callee usize formal alias in LT/EQ condition; condition now reads fresh formal directly"
+      ],
+      "diff": "--- V1/source/P04.nl\n+++ V2/source/P04.nl\n@@ -5,11 +5,9 @@\n     let entry_selected = root@active;\n     let entry_sibling = root@unchanged;\n     let starting_phase = usize(1);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(1)) {\n         if (phase < usize(8)) {\n-            let actual = phase;\n-            let actual_copy = actual;\n-            let returned = choose(actual_copy);\n+            let returned = choose(phase);\n             let incoming = returned;\n             let old = loan_write(root@active) { |destination|\n                 replace(destination, incoming)\n@@ -30,8 +28,7 @@\n }\n \n fn choose(tick: usize) -> u8 {\n-    let examined = tick;\n-    let chosen = if (examined == usize(5)) {\n+    let chosen = if (tick == usize(5)) {\n         u8(76)\n     } else {\n         u8(187)\n"
+    },
+    {
+      "case": "P05",
+      "v1_sha256": "187638bc13c84f1133cc475266761c432d611c30e1e4d394bb65bd5cb935d520",
+      "v2_sha256": "ee4599018f3abdae830fc71ac58effb811ed886af12e5a3fe1a24727b80703ab",
+      "v1_bytes": 1057,
+      "v2_bytes": 975,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "diff": "--- V1/source/P05.nl\n+++ V2/source/P05.nl\n@@ -13,11 +13,9 @@\n     let entry_selected = root@face;\n     let entry_sibling = root@seal;\n     let starting_phase = usize(3);\n-    let stopped = loop (phase = starting_phase) {\n+    let stopped = loop (phase = usize(3)) {\n         if (phase < usize(4)) {\n-            let actual = phase;\n-            let actual_copy = actual;\n-            let returned = choose(actual_copy);\n+            let returned = choose(phase);\n             let incoming = returned;\n             let old = loan_write(root@face) { |destination|\n                 replace(destination, incoming)\n"
+    },
+    {
+      "case": "P06",
+      "v1_sha256": "3d6215ef8abad4813a194d4279bcff2d5c9b91a0e1c62ece081a17a5250c7bf9",
+      "v2_sha256": "9232efe1054f0df037722aea031d32f607256409bb081dafb3bf0106cead3f32",
+      "v1_bytes": 1146,
+      "v2_bytes": 1044,
+      "removed_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03",
+        "callee usize formal alias in LT/EQ condition; condition now reads fresh formal directly"
+      ],
+      "diff": "--- V1/source/P06.nl\n+++ V2/source/P06.nl\n@@ -5,11 +5,9 @@\n     let entry_selected = root@moving;\n     let entry_sibling = root@anchor;\n     let phase = usize(2);\n-    let stopped = loop (phase = phase) {\n+    let stopped = loop (phase = usize(2)) {\n         if (phase < usize(9)) {\n-            let actual = phase;\n-            let actual_copy = actual;\n-            let returned = choose(actual_copy);\n+            let returned = choose(phase);\n             let incoming = returned;\n             let old = loan_write(root@moving) { |destination|\n                 replace(destination, incoming)\n@@ -30,8 +28,7 @@\n }\n \n fn choose(phase: usize) -> u8 {\n-    let examined = phase;\n-    let chosen = if (examined == usize(5)) {\n+    let chosen = if (phase == usize(5)) {\n         u8(244)\n     } else {\n         u8(18)\n"
+    }
+  ]
+}
