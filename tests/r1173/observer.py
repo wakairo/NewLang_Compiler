@@ -1,4 +1,4 @@
-"""Passive C observer V1. Derive roles from C syntax, never oracle values.
+"""Passive C observer V2. Derive roles from C syntax, never oracle values.
 
 The bounded recognizer fails closed on unsupported emitter spelling. Insertions
 are fprintf calls reading live scalar/record lvalues at existing sequence points.
@@ -91,7 +91,7 @@ def instrument(text):
     if not break_candidates:
         raise Unobservable("no actual outer usize result assignment before Break")
     result = break_candidates[-1][1]
-    comparisons = list(re.finditer(r"\b(" + IDENT + r")\s*<\s*(?:" + IDENT + r"|[0-9])", code[loop.end():loop_end]))
+    comparisons = list(re.finditer(r"\b(" + IDENT + r")\s*<(?![<=])", code[loop.end():loop_end]))
     if len(comparisons) != 1:
         raise Unobservable("no unique less-than guard")
     lhs = comparisons[0][1]
@@ -163,9 +163,41 @@ def instrument(text):
         index = target(store[1])
         if index is not None:
             emit(store.end(), "STORE", index, root + "." + fields[index])
-            store_sites.append(index)
+            store_sites.append({"index": index, "start": store.start(), "end": store.end()})
     if len(store_sites) != 1:
         raise Unobservable(f"expected one recognized actual field store, got {store_sites}")
+    # Follow actual generated scalar copies from the replace capture through the
+    # loan result to the source old binding. No expected value enters this pass.
+    store_site = store_sites[0]
+    captures = [d for d in declarations
+                if loop.end() < d["start"] < store_site["start"]
+                and d["expression"] and simple(d["expression"]).startswith("*")
+                and target(d["expression"]) == store_site["index"]]
+    if len(captures) != 1:
+        raise Unobservable("no unique actual replace-old indirect capture")
+    old_capture = captures[0]["name"]
+    loan_returns = [a for a in assignments
+                    if store_site["end"] <= a.start() < continue_pos
+                    and simple(a[2]) == old_capture]
+    if len(loan_returns) != 1:
+        raise Unobservable("no unique actual loan result from replace-old capture")
+    loan_return = loan_returns[0]
+    source_olds = [d for d in declarations
+                   if loan_return.end() <= d["start"] < continue_pos
+                   and d["expression"] and simple(d["expression"]) == loan_return[1]]
+    if len(source_olds) != 1:
+        raise Unobservable("no unique actual source old binding from loan result")
+    source_old = source_olds[0]
+    emit(source_old["end"], "OLD_RESULT", store_site["index"], source_old["name"])
+    # Read the values produced by the actual post-loop guest loads as well as
+    # the original record lvalues at FINAL. Both are required by the oracle.
+    postloads = [d for d in declarations if d["start"] > loop_end
+                 and d["expression"] and target(d["expression"]) is not None]
+    if len(postloads) != 2 or sorted(target(d["expression"]) for d in postloads) != [0, 1]:
+        raise Unobservable("expected one actual post-Break guest load of each field")
+    for declaration in postloads:
+        emit(declaration["end"], "POSTLOAD", target(declaration["expression"]),
+             declaration["name"])
     emit(continue_pos, "CONTINUE")
     emit(break_pos, "BREAK", value=result)
     emit(loop_end + 1, "FINAL", value=result)
@@ -173,7 +205,9 @@ def instrument(text):
     for position in sorted(inserts, reverse=True):
         rewritten = rewritten[:position] + "".join(inserts[position]) + rewritten[position:]
     rewritten = "#include <stdio.h>\n" + rewritten
-    mapping = {"schema": "R1173_PASSIVE_C_V1", "root": root, "fields": fields,
+    mapping = {"schema": "R1173_PASSIVE_C_V2", "root": root, "fields": fields,
+               "old_capture": old_capture, "loan_result": loan_return[1],
+               "source_old": source_old["name"],
                "carry": carry, "result": result, "aliases": aliases, "sites": sites,
                "oracle_used_by_instrumenter": False,
                "insertions": "read-only fprintf; no guest stores, branches or helper state"}
@@ -218,6 +252,13 @@ def check_trace(stderr, case):
         raise AssertionError("actual Break/result differs")
     if finals[0]["fields"][selected] != case["final_selected"] or finals[0]["fields"][1 - selected] != case["final_sibling"]:
         raise AssertionError("actual post-Break selected/sibling differs")
+    postloads = [e for e in events if e["event"] == "POSTLOAD"]
+    if len(postloads) != 2 or sorted(e["index"] for e in postloads) != [0, 1]:
+        raise AssertionError("actual post-Break guest read events differ")
+    for event in postloads:
+        expected_value = case["final_selected"] if event["index"] == selected else case["final_sibling"]
+        if event["value"] != expected_value:
+            raise AssertionError("actual post-Break guest loaded value differs")
     groups = []
     current = None
     for event in events:
@@ -243,7 +284,12 @@ def check_trace(stderr, case):
             raise AssertionError("actual selected value immediately after store differs")
         if any(e["fields"][1 - selected] != expected["sibling"] for e in group):
             raise AssertionError("actual known-disjoint sibling changed")
-        old_values.append(preceding[-1]["value"])
+        returned = [e for e in group if e["event"] == "OLD_RESULT"]
+        if len(returned) != 1 or returned[0]["index"] != selected:
+            raise AssertionError("actual source old result event differs")
+        if returned[0]["value"] != expected["old"]:
+            raise AssertionError("actual returned replace-old source value differs")
+        old_values.append(returned[0]["value"])
     return {"status": "PASS", "events": events, "headers": headers,
             "actual_old_values": old_values, "physical_identity": original,
             "current_fact_freshness": "not inferred from native values/addresses"}

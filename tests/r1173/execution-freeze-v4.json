@@ -1,0 +1,172 @@
+{
+  "schema": "R1173_EXECUTION_FREEZE_V4",
+  "previous_commit": "1ed41067d17adab7513be017c5e549203b79f532",
+  "reason": "actual C guard/old/post-Break observation, fixed-P root relocation, affected-source native STOP enforcement",
+  "files": [
+    {
+      "path": "CMakeLists.txt",
+      "bytes": 140651,
+      "sha256": "4e7fb4ebfcd3b8dfb6e19965f1749c81f443e8908cab7f8aa7ba46b202121b6d"
+    },
+    {
+      "path": "tests/r1173/README.md",
+      "bytes": 5109,
+      "sha256": "8e473e64086e0b00574848a08c0ed9c649870ff6ffb781a203509c3cea769c9b"
+    },
+    {
+      "path": "tests/r1173/driver.py",
+      "bytes": 13612,
+      "sha256": "461ad22147c82446828c8d099e130a472e230bfa7d3b25e010fdc0240f814a15"
+    },
+    {
+      "path": "tests/r1173/execution-freeze-v1.json",
+      "bytes": 4649,
+      "sha256": "625e3b638a047407f23c1f252e4d537f98252b2a67255f521e9c3f98d414d3f6"
+    },
+    {
+      "path": "tests/r1173/execution-freeze-v2.json",
+      "bytes": 5006,
+      "sha256": "113fb064c5b95082e3b2e4d256d14ba29ae2dde82263fad15170588376716fd4"
+    },
+    {
+      "path": "tests/r1173/execution-freeze-v3.json",
+      "bytes": 5305,
+      "sha256": "eaa19e30174b0666648a319a29ac63f8c3c5e236b6e60584341759dbde250497"
+    },
+    {
+      "path": "tests/r1173/export.py",
+      "bytes": 1018,
+      "sha256": "e1dc22603b7657d0ffa1b2c1b5ea97bf8e9fd069cb41a9aaa1aa6a24e53c7902"
+    },
+    {
+      "path": "tests/r1173/fixed-CMakeLists.txt",
+      "bytes": 140585,
+      "sha256": "36aa296210aeaa1f57ebaaaf1e642227f3e5816bfe827bad9de2199833e13d36"
+    },
+    {
+      "path": "tests/r1173/fixed-commit.raw",
+      "bytes": 283,
+      "sha256": "37aae826c0f40d456b244529d8bc91ed8364987e13c5600a6086e0277c958f1b"
+    },
+    {
+      "path": "tests/r1173/fixed-tree.json",
+      "bytes": 970108,
+      "sha256": "6c9bb7be8845915b95b4990ab085c28b67bdfc7566cfab61dc7b3cbe0b4632e7"
+    },
+    {
+      "path": "tests/r1173/observer.py",
+      "bytes": 15346,
+      "sha256": "1f612f37231a36b7030eb935f16010abaa58d4329a5ee005cad7e0ea2082fbbe"
+    },
+    {
+      "path": "tests/r1173/oracle-v1.json",
+      "bytes": 10745,
+      "sha256": "342849659bc1b655c5c559352ae2dee96bca4a20731fc8e1989a9a129af05479"
+    },
+    {
+      "path": "tests/r1173/probe.c",
+      "bytes": 7310,
+      "sha256": "a18c7bcf23e91f608d431fc30e6c44821ab333f179d81b2198a5c6636f830a8c"
+    },
+    {
+      "path": "tests/r1173/register.cmake",
+      "bytes": 2717,
+      "sha256": "da048cf241eafcb89e6cb71bab5cdda4a533dda5a02ee26e3ee6983cbda087fb"
+    },
+    {
+      "path": "tests/r1173/repair-v2.md",
+      "bytes": 877,
+      "sha256": "89dec3143bda2db00d7d91c5daa5c6049e9e3a931b1f51c9089482719078f847"
+    },
+    {
+      "path": "tests/r1173/repair-v3.md",
+      "bytes": 681,
+      "sha256": "3cfba0985ff97f503f286f96d5551f276395bd4a4d5adb06804652e5916b84f7"
+    },
+    {
+      "path": "tests/r1173/repair-v4.md",
+      "bytes": 3188,
+      "sha256": "4348a06dbdd488c9b7ede7d3ea4da6fc8427061c571d68484f3d04e523da0cbf"
+    },
+    {
+      "path": "tests/r1173/snapshot.py",
+      "bytes": 5931,
+      "sha256": "5e46ce57bbc7eae2e32ed57ecef1e1dd16b82b2de8805cd542adc18bd2f1c599"
+    },
+    {
+      "path": "tests/r1173/source-freeze-v1.json",
+      "bytes": 2414,
+      "sha256": "dc77f34f81c9b9c045245c8693dbd151699b6ea621dc0e204342ecd27986e072"
+    },
+    {
+      "path": "tests/r1173/sources/multi_first.nl",
+      "bytes": 586,
+      "sha256": "a32e465c2f685babcd986c9a074bde2dcf6e4bc625693927789293764302645f"
+    },
+    {
+      "path": "tests/r1173/sources/multi_second.nl",
+      "bytes": 581,
+      "sha256": "d38149ed7bd684cfa897ef299876e59a9a0e85c4f63de11d07e09289c9fc08a2"
+    },
+    {
+      "path": "tests/r1173/sources/one_second.nl",
+      "bytes": 581,
+      "sha256": "6b9ae77bbeaaea4f90b4de7201dcf71831c2829dbf2c8b03ae368831b56f5003"
+    },
+    {
+      "path": "tests/r1173/sources/overflow_edge.nl",
+      "bytes": 624,
+      "sha256": "5411b03a1a087a167983bff477c97b80a9afcbf40b21e04db19bf6c06ff538ff"
+    },
+    {
+      "path": "tests/r1173/sources/read_access.nl",
+      "bytes": 579,
+      "sha256": "0cfe01af5fb222de8c0d65e48970f1aa6418eb702e95f7be918e453718602360"
+    },
+    {
+      "path": "tests/r1173/sources/replace_wrong_type.nl",
+      "bytes": 589,
+      "sha256": "81890beaf5dff4ca9428add2cc6b86dd24b7f840dd1c8d20b4d0ce9b147d20dd"
+    },
+    {
+      "path": "tests/r1173/sources/same_bits.nl",
+      "bytes": 587,
+      "sha256": "a2acd5f975fd973d6eb014becf7a12fbb42b6215fb60bcbf7ff573a24413850b"
+    },
+    {
+      "path": "tests/r1173/sources/scoped_ref_escape.nl",
+      "bytes": 568,
+      "sha256": "c7488041ff9bc9f14c6bad9387f791b67f8979c86d24f94893714b93fdaf839c"
+    },
+    {
+      "path": "tests/r1173/sources/unknown_field.nl",
+      "bytes": 587,
+      "sha256": "31468834a550c51c5c9dea8a65087bd9ee493a56d4d6aa5e053b6dc90ed05afb"
+    },
+    {
+      "path": "tests/r1173/sources/wrong_continue_arity.nl",
+      "bytes": 574,
+      "sha256": "e30724c22cc3ff770695b42cbcb2fb94ad677ee18d532a9102d47403ab8a1a21"
+    },
+    {
+      "path": "tests/r1173/sources/wrong_continue_type.nl",
+      "bytes": 579,
+      "sha256": "642c24c83b80caafde0c9196a0e55bd90f8793a1adb189beb6ddd3537bf6205c"
+    },
+    {
+      "path": "tests/r1173/sources/wrong_guard_arm.nl",
+      "bytes": 586,
+      "sha256": "8b1c384fc6283d0685be823e28c2c48e574c29a277534e34834eababf6311791"
+    },
+    {
+      "path": "tests/r1173/sources/zero_first.nl",
+      "bytes": 586,
+      "sha256": "1c814dcba835c263db1632e962609da58cb52a61cb76f85781d0442f69c832d3"
+    },
+    {
+      "path": "tests/r1173/sources/zero_second.nl",
+      "bytes": 581,
+      "sha256": "fb1ae4480b168d8d7e82ea3d1d5684734d7323874096f28424e4431c0b6a6b71"
+    }
+  ]
+}

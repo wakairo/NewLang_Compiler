@@ -23,6 +23,10 @@ FAILURES = []
 SEQUENCE = 0
 
 
+class AffectedCaseStop(RuntimeError):
+    """The affected source gets no further native/observer/sanitizer execution."""
+
+
 def write_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
@@ -70,7 +74,7 @@ def failure(case, layer, category, detail):
 
 
 def check_frozen():
-    manifest = json.loads((OWN / "execution-freeze-v3.json").read_text())
+    manifest = json.loads((OWN / "execution-freeze-v4.json").read_text())
     for entry in manifest["files"]:
         path = REPO / entry["path"]
         if path.stat().st_size != entry["bytes"] or digest(path) != entry["sha256"]:
@@ -103,31 +107,38 @@ def check_frozen():
     return json.loads((OWN / "oracle-v1.json").read_text())
 
 
-def native(case, c_path, mode, compilers, sanitizer="none", mapping=None):
-    records = []
-    for compiler in compilers:
-        for opt in ("O0", "O2"):
-            label = "-".join((case["name"], mode, Path(compiler).name, opt, sanitizer))
-            binary = OUT.parent / ("r1173-bin-" + label)
+def native_plan(mode, compilers, sanitizer="none"):
+    return [{"compiler": compiler, "optimization": opt, "guest_sanitizer": sanitizer,
+             "mode": mode, "compile_returncode": None, "run": "NOT_RUN"}
+            for compiler in compilers for opt in ("O0", "O2")]
+
+
+def native(case, c_path, mode, compilers, sanitizer="none", mapping=None, records=None):
+    if records is None:
+        records = native_plan(mode, compilers, sanitizer)
+    for row in records:
+        compiler, opt = row["compiler"], row["optimization"]
+        label = "-".join((case["name"], mode, Path(compiler).name, opt, sanitizer))
+        binary = OUT.parent / ("r1173-bin-" + label)
+        try:
             args = [compiler, "-std=c17", "-Wall", "-Wextra", "-Wpedantic", "-Werror",
                     "-" + opt, str(c_path), "-o", str(binary)]
             if sanitizer != "none":
                 args.extend(["-g", "-fno-omit-frame-pointer", "-fsanitize=" + sanitizer,
                              "-fno-sanitize-recover=all"])
             rc, _, stderr = command(label + "-compile", args)
-            row = {"compiler": compiler, "optimization": opt, "guest_sanitizer": sanitizer,
-                   "mode": mode, "compile_returncode": rc, "run": "NOT_RUN"}
-            records.append(row)
+            row["compile_returncode"] = rc
             if rc:
                 category = "OBSERVER_OR_TOOLCHAIN_REVIEW" if mode == "passive" else "C17_OR_TOOLCHAIN_STOP"
                 failure(case["name"], "native-compile", category, label)
-                continue
+                raise AffectedCaseStop(label + " native compile failed")
             row["binary_sha256"] = digest(binary)
             rc, stdout, stderr = command(label + "-run", [str(binary)], timeout=10)
-            row.update(run_returncode=rc, run="PASS" if rc == 0 else "RED")
+            row.update(run_returncode=rc, run="PASS" if rc == 0 and not stdout else "RED")
             if rc or stdout:
                 failure(case["name"], "native", "AFFECTED_STOP", label + " returncode/stdout")
-            elif mode == "passive":
+                raise AffectedCaseStop(label + " native returncode/stdout anomaly")
+            if mode == "passive":
                 try:
                     observed = check_trace(stderr.decode("utf-8", "replace"), case)
                     write_json(OUT / "observations" / (label + ".json"), observed)
@@ -138,8 +149,12 @@ def native(case, c_path, mode, compilers, sanitizer="none", mapping=None):
                 except (AssertionError, ValueError) as error:
                     row["observation"] = "RED"
                     failure(case["name"], "passive", "AFFECTED_STOP", str(error))
+                    raise AffectedCaseStop(label + " passive value/identity anomaly") from error
             elif stderr:
+                row["run"] = "RED"
                 failure(case["name"], "native", "AFFECTED_STOP", label + " unexpected stderr")
+                raise AffectedCaseStop(label + " unexpected native stderr")
+        finally:
             binary.unlink(missing_ok=True)
     return records
 
@@ -172,7 +187,8 @@ def positive(case, compilers):
     c_path = OUT / (name + "-unmodified.c")
     c_path.write_bytes(raw)
     result["generated_c_sha256"] = digest(c_path)
-    result["unmodified"] = native(case, c_path, "unmodified", compilers)
+    result["unmodified"] = native_plan("unmodified", compilers)
+    native(case, c_path, "unmodified", compilers, records=result["unmodified"])
     try:
         observed_c, mapping = instrument(raw.decode("utf-8"))
     except (Unobservable, UnicodeDecodeError) as error:
@@ -183,15 +199,19 @@ def positive(case, compilers):
     observer_path.write_text(observed_c)
     write_json(OUT / (name + "-observer-map.json"), mapping)
     result["passive_c_sha256"] = digest(observer_path)
-    result["passive"] = native(case, observer_path, "passive", compilers, mapping=mapping)
+    result["passive"] = native_plan("passive", compilers)
+    native(case, observer_path, "passive", compilers, mapping=mapping, records=result["passive"])
     if SAN in ("address", "undefined") and name in ("multi_first", "multi_second", "same_bits"):
         clang = next((c for c in compilers if "clang" in Path(c).name), None)
         if clang is None:
             failure(name, "guest-sanitizer", "MACHINERY_NOT_RUN", "pinned Clang missing")
         else:
-            result["guest_sanitizer"] = (
-                native(case, c_path, "unmodified", [clang], sanitizer=SAN) +
-                native(case, observer_path, "passive", [clang], sanitizer=SAN, mapping=mapping))
+            guest_original = native_plan("unmodified", [clang], SAN)
+            guest_passive = native_plan("passive", [clang], SAN)
+            result["guest_sanitizer"] = guest_original + guest_passive
+            native(case, c_path, "unmodified", [clang], sanitizer=SAN, records=guest_original)
+            native(case, observer_path, "passive", [clang], sanitizer=SAN,
+                   mapping=mapping, records=guest_passive)
 
 
 def negative(case):
@@ -230,14 +250,20 @@ try:
     for compiler in compilers:
         command("toolchain-" + Path(compiler).name, [compiler, "--version"])
     for case in oracle["positives"]:
-        positive(case, compilers)
+        try:
+            positive(case, compilers)
+        except AffectedCaseStop as error:
+            RESULTS[-1]["affected_case_stop"] = {
+                "reason": str(error), "later_operations": "NOT_RUN",
+                "unaffected_sources": "continue independently"}
     for case in oracle["negatives"]:
         negative(case)
 except Exception as error:
     failure("runner", "equipment", "REVIEW_REQUIRED", repr(error))
     (OUT / "runner-exception.txt").write_text(traceback.format_exc())
 finally:
-    summary = {"schema": "R1173_FIRST_V1", "host_sanitizer": SAN, "host_compiler": HOST_CC,
+    summary = {"schema": "R1173_FIRST_V1", "execution_freeze": "execution-freeze-v4.json",
+               "host_sanitizer": SAN, "host_compiler": HOST_CC,
                "cases": RESULTS, "failures": FAILURES, "commands": len(COMMANDS),
                "public_negative_mutations": "NOT_RUN: no matching public validator in inspected API",
                "ghost_limits": "read-only source-issued public field/loop views only; native values are not freshness proof",

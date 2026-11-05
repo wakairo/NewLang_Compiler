@@ -6,7 +6,9 @@ if(BUILD_TESTING)
         foreach(r1173_arg IN LISTS ARGV)
             string(FIND "${r1173_arg}" "${CMAKE_SOURCE_DIR}/tests/"
                 r1173_source_prefix)
-            if(r1173_source_prefix EQUAL 0)
+            if(r1173_arg STREQUAL "${CMAKE_SOURCE_DIR}")
+                set(r1173_arg "${R1173_FIXED_SOURCE}")
+            elseif(r1173_source_prefix EQUAL 0)
                 string(REPLACE "${CMAKE_SOURCE_DIR}/" "${R1173_FIXED_SOURCE}/"
                     r1173_arg "${r1173_arg}")
             endif()
