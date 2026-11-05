@@ -56,6 +56,23 @@ void __wrap_nl_semantic_destroy(NLSemanticContext *c)
         ++untracked;
     __real_nl_semantic_destroy(c);
 }
+/* nl_sem_commit consumes its candidate via a same-TU destroy in semantic.c.
+ * GNU --wrap cannot intercept that internal definition reference. Record the
+ * real consumption here; the exact original commit still performs all work. */
+void __real_nl_sem_commit(NLSemanticContext *, NLSemanticContext *);
+void __wrap_nl_sem_commit(NLSemanticContext *c, NLSemanticContext *candidate)
+{
+    bool found = false;
+    for (size_t i = 0; i < 1024; ++i)
+        if (worlds[i] == candidate) {
+            worlds[i] = NULL;
+            --live;
+            found = true;
+            break;
+        }
+    assert(found);
+    __real_nl_sem_commit(c, candidate);
+}
 static const NLCheckedFragment *visited[1024];
 static size_t graphs, nodes;
 static void walk(const NLCheckedFragment *f)

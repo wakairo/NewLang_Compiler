@@ -1239,7 +1239,8 @@ if(BUILD_TESTING)
     target_compile_options(p1176_oom PRIVATE -fno-pie)
     target_link_options(p1176_oom PRIVATE -no-pie -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
     target_link_options(p1176_census PRIVATE -Wl,--wrap=nl_sem_clone
-        -Wl,--wrap=nl_semantic_create -Wl,--wrap=nl_semantic_destroy)
+        -Wl,--wrap=nl_semantic_create -Wl,--wrap=nl_semantic_destroy
+        -Wl,--wrap=nl_sem_commit)
     foreach(profile 01-phase-left 02-phase-right 03-one-edge 04-zero-edge 05-phase-equality 06-incoming-alias)
         add_test(NAME p1176_${profile}_current.unit COMMAND p1176_safety
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1176/sources/${profile}.nl")

@@ -1,0 +1,20 @@
+{
+  "created_utc": "2026-11-05T05:46:10.563451+00:00",
+  "files": {
+    "check.py": "8d6802aa8d13b471e8fb160fdd41730f281d3949d835704dcf27c8c0caf99566",
+    "safety.c": "c73ca5d3794ef5e2377cdb376b9a2e1441bfdf8c0457eefca55cb81a975c7320",
+    "run.py": "81ae1f54ea835f45d0be89d00642619e20dcf78f1965dddb267b1499988f7f4a",
+    "census.c": "d51ac4a9037d24d04c57a656a9f507eb60af105a7b14383e2f22b457898b2273"
+  },
+  "oracle_sha256": "0df0009d82427765341c0279032477c5bce7af20760a120a3826b30cd655e184",
+  "reason": {
+    "reason": "Context observer v1 missed semantic.c same-TU candidate destruction in nl_sem_commit. Original cleanup assertion live=2/untracked=0 is preserved; physical context counts from v1 are excluded. New wrapper records the actual existing commit consumption; no Production/semantic/cleanup assertion is changed.",
+    "Production_HEAD": "f278924875000ab9c62b3e19c954666ba39353c6",
+    "old_equipment_freeze_sha256": "455004138829adcc180902ac46c4d99dd59671fd0a485fb9bee75dc8b01dedc5",
+    "valid_unaffected_evidence": [
+      "current-v1: six sources, 40 tamper +14 unrestored display challenges each",
+      "native-v1: 48 strict native",
+      "OOM allocation census: 3528+3630=7158, no injection yet"
+    ]
+  }
+}
