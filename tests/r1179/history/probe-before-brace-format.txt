@@ -1,0 +1,311 @@
+/* R1179: independently authored public, read-only owned observation. */
+#include "newlang/checked.h"
+#include "newlang/parser.h"
+#include "newlang/semantic.h"
+#include "newlang/source.h"
+
+#include <limits.h>
+#include <stdio.h>
+#include <string.h>
+
+static const NLCheckedFragment *seen[512];
+static const NLSemanticContext *worlds[512];
+static size_t seen_count, world_count;
+
+static const char *kind_name(NLCheckedKind kind) {
+    switch (kind) {
+    case NL_CHECKED_BINDING:
+        return "BINDING";
+    case NL_CHECKED_IDENTIFIER:
+        return "IDENTIFIER";
+    case NL_CHECKED_REGISTERED_CALL:
+        return "CALL";
+    case NL_CHECKED_AGGREGATE:
+        return "AGGREGATE";
+    case NL_CHECKED_AGGREGATE_BINDING:
+        return "AGGREGATE_BINDING";
+    case NL_CHECKED_FIELD_READ:
+        return "FIELD_READ";
+    case NL_CHECKED_REPLACE:
+        return "REPLACE";
+    case NL_CHECKED_LOAN_HEADER:
+        return "LOAN";
+    case NL_CHECKED_IF:
+        return "IF";
+    case NL_CHECKED_LOOP:
+        return "LOOP";
+    case NL_CHECKED_CONTINUE:
+        return "CONTINUE";
+    case NL_CHECKED_BREAK:
+        return "BREAK";
+    case NL_CHECKED_RETURN:
+        return "RETURN";
+    case NL_CHECKED_USIZE_ADDITION:
+        return "USIZE_ADD";
+    case NL_CHECKED_USIZE_EQUALITY:
+        return "USIZE_EQ";
+    case NL_CHECKED_USIZE_LESS_THAN:
+        return "USIZE_LT";
+    case NL_CHECKED_U8_LITERAL:
+        return "U8_LITERAL";
+    case NL_CHECKED_USIZE_LITERAL:
+        return "USIZE_LITERAL";
+    case NL_CHECKED_UNIT:
+        return "UNIT";
+    default:
+        return "OTHER";
+    }
+}
+
+static void quoted_span(const NLSource *source, NLSourceSpan span) {
+    NLSourceView view;
+    putchar('"');
+    if (source != NULL && nl_source_view(source, span, &view)) {
+        for (size_t i = 0; i < view.length; ++i) {
+            unsigned char c = view.bytes[i];
+            if (c >= 32 && c < 127 && c != '"' && c != '\\') {
+                putchar((int)c);
+            } else {
+                printf("\\u%04x", (unsigned int)c);
+            }
+        }
+    }
+    putchar('"');
+}
+
+static size_t world_number(const NLSemanticContext *world) {
+    for (size_t i = 0; i < world_count; ++i) {
+        if (worlds[i] == world) {
+            return i + 1;
+        }
+    }
+    if (world_count == 512) {
+        return 0;
+    }
+    worlds[world_count++] = world;
+    return world_count;
+}
+
+static void value(const NLSemanticContext *world, NLValueId id) {
+    NLSemanticValueView view;
+    if (id == 0 || !nl_semantic_value_view(world, id, &view)) {
+        printf("null");
+        return;
+    }
+    printf("{\"id\":%zu,\"type\":%zu,\"carrier\":%d,\"owner_place\":%zu,"
+           "\"dependencies\":%d,\"scalar_known\":%s,\"scalar_value\":%zu,"
+           "\"field_count\":%zu,\"fields\":[",
+           id, view.type, (int)view.carrier, view.owner_place,
+           (int)view.dependencies, view.scalar_known ? "true" : "false",
+           view.scalar_value, view.field_count);
+    for (size_t i = 0; i < view.field_count; ++i) {
+        printf("%s%zu", i == 0 ? "" : ",", view.fields[i]);
+    }
+    printf("]}");
+}
+
+static void place(const NLSemanticContext *world, NLPlaceId id) {
+    NLSemanticPlaceView view;
+    if (id == 0 || !nl_semantic_place_view(world, id, &view)) {
+        printf("null");
+        return;
+    }
+    printf("{\"id\":%zu,\"live\":%s,\"type\":%zu,\"incarnation\":%zu,"
+           "\"current_fact\":%zu,\"current_value\":%zu,\"parent\":%zu,"
+           "\"parent_incarnation\":%zu,\"field_index\":%zu,"
+           "\"independent_root\":%s,\"implicit_local\":%s,"
+           "\"fixed_field_count\":%zu,\"fixed_fields\":[",
+           id, view.live ? "true" : "false", view.type, view.incarnation,
+           view.current_fact, view.current_value, view.parent_aggregate,
+           view.parent_incarnation, view.parent_field_index,
+           view.independent_root ? "true" : "false",
+           view.implicit_local ? "true" : "false", view.fixed_field_count);
+    for (size_t i = 0; i < view.fixed_field_count; ++i) {
+        printf("%s%zu", i == 0 ? "" : ",", view.fixed_fields[i]);
+    }
+    printf("]}");
+}
+
+static int observe(const NLCheckedFragment *fragment, size_t parent,
+                   size_t via, const char *edge, size_t arm, size_t depth) {
+    if (fragment == NULL) {
+        return 1;
+    }
+    if (depth > 96 || seen_count == 512) {
+        return 0;
+    }
+    for (size_t i = 0; i < seen_count; ++i) {
+        if (seen[i] == fragment) {
+            printf("{\"record\":\"borrow\",\"fragment\":%zu,"
+                   "\"parent_fragment\":%zu,\"via\":%zu,\"edge\":\"%s\","
+                   "\"arm\":%zu}\n",
+                   i + 1, parent, via, edge, arm);
+            return 1;
+        }
+    }
+    size_t fid = ++seen_count;
+    seen[fid - 1] = fragment;
+    const NLSemanticContext *world = nl_checked_context(fragment);
+    const NLSource *source = nl_checked_source(fragment);
+    size_t wid = world_number(world);
+    if (world == NULL || wid == 0) {
+        return 0;
+    }
+    size_t count = nl_checked_node_count(fragment);
+    printf("{\"record\":\"fragment\",\"fragment\":%zu,\"world\":%zu,"
+           "\"parent_fragment\":%zu,\"via\":%zu,\"edge\":\"%s\","
+           "\"arm\":%zu,\"root\":%zu,\"node_count\":%zu}\n",
+           fid, wid, parent, via, edge, arm, nl_checked_root(fragment), count);
+    for (size_t id = 1; id <= count; ++id) {
+        const NLCheckedNodeView *node = nl_checked_node_view(fragment, id);
+        if (node == NULL) {
+            return 0;
+        }
+        printf("{\"record\":\"node\",\"fragment\":%zu,\"world\":%zu,"
+               "\"id\":%zu,\"kind\":\"%s\",\"kind_number\":%d,"
+               "\"start\":%zu,\"end\":%zu,\"name\":",
+               fid, wid, id, kind_name(node->kind), (int)node->kind,
+               node->span.start_byte, node->span.end_byte);
+        quoted_span(source, node->name);
+        printf(",\"type\":%zu,\"symbol\":%zu,\"initializer\":%zu,"
+               "\"first_argument\":%zu,\"next_argument\":%zu,"
+               "\"first_item\":%zu,\"next_item\":%zu,\"tail\":%zu,"
+               "\"argument_count\":%zu,\"result_count\":%zu,"
+               "\"value_use\":%d,\"terminates\":%s,\"normal_arms\":%zu,"
+               "\"header_inductive\":%s,\"continue_edges\":%zu,"
+               "\"break_edges\":%zu,\"return_edges\":%zu,"
+               "\"has_scalar_result\":%s,\"scalar_known\":%s,"
+               "\"scalar_value\":%zu,\"results\":[",
+               node->type, node->symbol, node->initializer,
+               node->first_argument, node->next_argument, node->first_item,
+               node->next_item, node->tail, node->argument_count,
+               node->result_count, (int)node->value_use,
+               node->terminates ? "true" : "false", node->normal_arms,
+               node->header_inductive ? "true" : "false",
+               node->continue_edges, node->break_edges, node->return_edges,
+               node->has_scalar_result ? "true" : "false",
+               node->scalar_result.known ? "true" : "false",
+               node->scalar_result.value);
+        for (size_t i = 0; i < node->result_count && i < 2; ++i) {
+            if (i != 0) {
+                putchar(',');
+            }
+            value(world, node->results[i].value);
+        }
+        const NLCheckedField *field = &node->field;
+        printf("],\"field\":{\"present\":%s,\"base\":%zu,\"index\":%zu,"
+               "\"nominal\":%zu,\"type\":%zu,\"parent\":%zu,\"child\":%zu,"
+               "\"parent_incarnation\":%zu,\"child_incarnation\":%zu,"
+               "\"parent_fact\":%zu,\"child_fact\":%zu,"
+               "\"parent_post_fact\":%zu,\"child_post_fact\":%zu,"
+               "\"dependency_compatible\":%s,\"old\":",
+               field->present ? "true" : "false", field->base, field->index,
+               field->nominal, field->type, field->parent, field->child,
+               field->parent_incarnation, field->child_incarnation,
+               field->parent_fact, field->child_fact, field->parent_post_fact,
+               field->child_post_fact,
+               field->dependency_compatible ? "true" : "false");
+        value(world, field->old_value);
+        printf(",\"incoming\":");
+        value(world, field->new_value);
+        printf(",\"parent_final_context\":");
+        place(world, field->parent);
+        printf(",\"child_final_context\":");
+        place(world, field->child);
+        printf("},\"loan\":{\"scope\":%zu,\"dependency_scope\":%zu,"
+               "\"place\":%zu,\"incarnation\":%zu,\"body_nonescape\":%s,"
+               "\"normal_result_forwarded\":%s}}\n",
+               node->loan.scope, node->loan.dependency_scope,
+               node->loan.place, node->loan.incarnation,
+               node->loan.body_nonescape_proved ? "true" : "false",
+               node->loan.normal_result_forwarded ? "true" : "false");
+        if (node->kind == NL_CHECKED_REGISTERED_CALL &&
+            !observe(nl_checked_call_body(fragment, id), fid, id,
+                     "call_body", 0, depth + 1)) {
+            return 0;
+        }
+        if (node->kind == NL_CHECKED_LOOP &&
+            !observe(nl_checked_loop_body(fragment, id), fid, id,
+                     "abstract_loop_body", 0, depth + 1)) {
+            return 0;
+        }
+        if (node->kind == NL_CHECKED_IF) {
+            for (size_t a = 0; a < 2; ++a) {
+                if (!observe(nl_checked_if_arm(fragment, id, a), fid, id,
+                             "if_arm", a, depth + 1)) {
+                    return 0;
+                }
+            }
+        }
+    }
+    return 1;
+}
+
+int main(int argc, char **argv) {
+    NLSource *source = NULL, *entry = NULL;
+    NLParser *parser = NULL, *entry_parser = NULL;
+    NLSyntaxTree *unit = NULL, *entry_tree = NULL;
+    NLSemanticContext *context = NULL;
+    NLCheckedFragment *checked = NULL;
+    NLParseDiagnostic pd;
+    NLFunctionUnitDiagnostic ud;
+    NLCheckDiagnostic cd;
+    int result = 1;
+    if (argc != 2) {
+        return 2;
+    }
+    printf("{\"record\":\"contract\",\"public_whole_loop_validation\":"
+           "\"NOT_RUN/NO_APPLICABLE_PUBLIC_API\","
+           "\"mode\":\"read-only source-issued owned observations\","
+           "\"usize_bits\":%zu}\n",
+           sizeof(size_t) * (size_t)CHAR_BIT);
+    if (nl_source_load(argv[1], &source) != NL_SOURCE_OK ||
+        nl_parser_create(source, &parser) != NL_PARSE_OK) {
+        goto done;
+    }
+    NLParseStatus ps = nl_parser_parse_function_unit(parser, &unit, &pd);
+    printf("{\"record\":\"parse\",\"status\":%d}\n", (int)ps);
+    if (ps != NL_PARSE_OK) {
+        (void)nl_parse_diagnostic_render(stderr, source, &pd);
+        goto done;
+    }
+    if (nl_semantic_create(&context) != NL_CHECK_OK) {
+        goto done;
+    }
+    const NLSyntaxTree *inputs[1] = {unit};
+    NLCheckStatus cs =
+        nl_semantic_register_function_unit(context, inputs, 1, &ud);
+    printf("{\"record\":\"register\",\"status\":%d}\n", (int)cs);
+    if (cs != NL_CHECK_OK) {
+        (void)nl_check_diagnostic_render(stderr, source, &ud.diagnostic);
+        goto done;
+    }
+    const char call[] = "main()";
+    if (nl_source_create(call, strlen(call), "r1179-ordinary-main-call",
+                         &entry) != NL_SOURCE_OK ||
+        nl_parser_create(entry, &entry_parser) != NL_PARSE_OK ||
+        nl_parser_parse_expression_fragment(entry_parser, &entry_tree, &pd) !=
+            NL_PARSE_OK) {
+        goto done;
+    }
+    cs = nl_semantic_check_expression(context, entry_tree, &checked, &cd);
+    printf("{\"record\":\"ordinary_call\",\"status\":%d}\n", (int)cs);
+    if (cs != NL_CHECK_OK) {
+        (void)nl_check_diagnostic_render(stderr, entry, &cd);
+        goto done;
+    }
+    if (!observe(checked, 0, 0, "entry", 0, 0)) {
+        goto done;
+    }
+    result = ferror(stdout) ? 1 : 0;
+done:
+    nl_checked_destroy(checked);
+    nl_syntax_tree_destroy(entry_tree);
+    nl_parser_destroy(entry_parser);
+    nl_source_destroy(entry);
+    nl_semantic_destroy(context);
+    nl_syntax_tree_destroy(unit);
+    nl_parser_destroy(parser);
+    nl_source_destroy(source);
+    return result;
+}
