@@ -1,0 +1,32 @@
+{
+  "authority": "C245",
+  "base": "bb8b33cefc030ed99941c9c93fef9c7ef89b0ac0",
+  "tree": "d8fd0b0a95184d3449d7e1525ba56574429dbf8f",
+  "historical_gate0_archive_sha256": "a6216233676675b3b5f7af7cbf93fc70208c6912a1b235f43a8b3eb701b1fa25",
+  "initial_plan": "6/12/2, ordinary CHECK/public-owned/private-current/C17/native; actual phase/helper in-out/original address/old/current/sibling/carry/Break; first census before full OOM; final GCC full and focused sanitizers; no new R inputs",
+  "files": {
+    "evidence/80-inline-control.c17": "c61b72bdbb136e2a29465498cea658a31893103e2ae8cbf97ff6664461425cae",
+    "evidence/81-pure-control.c17": "482816babdf0866d2f7faec18dbf3ef5f53aa142297817080f5a675ddd977ea4",
+    "oracle.json": "89c267c52e18821c178881ccfe0a37689bba44385cf60fcc9235c82c819981ae",
+    "sources/01-helper-loop.nl": "31873ab92f0497a1c00d519d030a9efcb5091c512a0e805451600159fc44e664",
+    "sources/02-helper-alias-loop.nl": "3dc95818db2994cbea12b2563042bf482e45b3545d3ec7fa84c3ec6465259a1b",
+    "sources/03-one-edge.nl": "66d4be268db21f0cbe476a227e39ec2a8f5034c2efc2373f15b84c3579c3eab9",
+    "sources/04-zero-edge.nl": "53f80b55fc0e91689439ba9c1083142c66034792ba65b89b2c36672382b96f0c",
+    "sources/05-same-bits.nl": "0870e247a5c264834a635a21b2c95fcca9e410cc5532b3a220b08b66c13864d5",
+    "sources/06-after-main-alias.nl": "af50daa26e6b9f3918f6d5a865600c725bee011009d432ddd627dcbbfce9f16d",
+    "sources/100-extra-helper.nl": "36e5e7880d097de9f813ead9b5f42a4c13d42a6b34191c81a6098319477b5447",
+    "sources/101-zero-step.nl": "c548c49b3dbe4ce9481dcd7adbe69a0a1067f8d01eb442eeea4b3f4f13b63abf",
+    "sources/80-inline-control.nl": "b44db6b770275cc386e3f8a788b28936c5e21285c002635f1bddd9125398d279",
+    "sources/81-pure-control.nl": "149494374b7f55e224f112d191766079eeb6cbd51617742315ea7223213199be",
+    "sources/90-wrong-result.nl": "557851d6929b90bf93cb4d1a47dbafd8fa5834d61f34e7955931ebe9b1b347b6",
+    "sources/91-wrong-actual.nl": "ea06887e31373212525a371631d7970f317ededdca4b0ce699cc91e1dd482159",
+    "sources/92-arm-type.nl": "f58e3f5dcb4e0a58299e2828ac01cfe0a42393b64856a009cf5413071886d635",
+    "sources/93-helper-effect.nl": "86dd5341b8b0e05f2d912271af34fb2ea04aa256f08089669376e09ac21b3634",
+    "sources/94-wrong-phase.nl": "5143b5bf70f5d723fe6df071d254dc2a07834dce71c4eee78ec0d74df7a041c7",
+    "sources/95-unrelated-incoming.nl": "c260a0da8f009c2610d3f3dfc4697af29b90375ce6a9d252ef57d990fe81a969",
+    "sources/96-loan-escape.nl": "116a0e960a7e4b394e08e7f22b880c3f548405f82472dfd3f2881c456cb1f0ca",
+    "sources/97-formal-arity.nl": "3c17f9b1f9330ccb4d504fef90ba91fc77692f7f4cc21c94a37507a55bd59112",
+    "sources/98-second-selection.nl": "92892803f67fabb135ac58410c954f409a5d9b5178118cdac07db7afd74c42a7",
+    "sources/99-literal-helper.nl": "a3a15bfd79425292ab8bd6b1f2163c384c0abb74b3b1062e58d7273af264c6fc"
+  }
+}

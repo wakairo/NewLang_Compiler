@@ -5,6 +5,7 @@
 #include "linear_break_internal.h"
 #include "newlang/parser.h"
 #include "producer_local_internal.h"
+#include "pure_u8_internal.h"
 #include "semantic_internal.h"
 #include "stutter_control_internal.h"
 

@@ -1,0 +1,11 @@
+{
+  "authority": "C245",
+  "files": {
+    "safety.c": "45afaabdac193dd3842972748459001bcb98b23fd3dae96740fa950b4a111189",
+    "census.c": "53fa98bcb8deb9c843e04438bcb85ef932e2dfd23a121f11a16cd9fbfbca4125"
+  },
+  "oracle": "oracle.json source-freeze-v1 unchanged",
+  "safety": "real registration/main() CHECK, owned private current, original-root/child fresh facts and sibling, callee/argument/result/function/world/arm tamper, 22 unrestored A/B/count/table challenges; no new issuer",
+  "census": "original clone/create/destroy/commit wrappers; track both canonical arms and bodies; cleanup live0/untracked0 mandatory. Counts measured before allocation injection; no assumed old29/+5",
+  "oom": "all actually reached registration/actual CHECK/named ordinals, status OOM, rollback/output null, named bytes/inode/mtime unchanged, cleanup/retry; run only after census accepted finite cost"
+}

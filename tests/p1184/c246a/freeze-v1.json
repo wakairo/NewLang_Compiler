@@ -1,0 +1,14 @@
+{
+  "authority": "Issue1184 C246a/F1187 F-1",
+  "original_head": "d7436585b74d0d6564df7cdf77da280903fb5234",
+  "execution": "repaired candidate only; original known-unsafe challenge not executed",
+  "files": {
+    "src/current_loop_check_internal.h": "f5726d3283e5fdd2d7be9c65f094f281ff41cbafa9d8373ade8fd49929afe167",
+    "tests/p1184/c246a/signature.c": "022dbc55ce1a3ccb521c82b5b1be24c8b59eb7e896abac4e4045952848c66e0b",
+    "tests/p1184/c246a/signature_driver.c": "06462d8f372aadcf74a9254be0fe27f0e32b015c8cd703bf20e494d1c0e5c863",
+    "tests/p1184/c246a/run.py": "591073bce6cca60dfdd6591973c93cb64f8e4ec7db763cb4651be1022273faf4",
+    "tests/p1184/c246a/oracle-v1.json": "cfb758cf45ccea20fb8ea4b77abcee01c73b75970bf40b762db9f2cff59a5d49",
+    "tests/p1184/sources/01-helper-loop.nl": "31873ab92f0497a1c00d519d030a9efcb5091c512a0e805451600159fc44e664",
+    "tests/p1184/sources/06-after-main-alias.nl": "af50daa26e6b9f3918f6d5a865600c725bee011009d432ddd627dcbbfce9f16d"
+  }
+}

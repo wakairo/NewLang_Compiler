@@ -1,0 +1,12 @@
+{
+  "authority": "Issue1184 C246a / F1187 static F-1; repaired code only",
+  "sources": [
+    "tests/p1184/sources/01-helper-loop.nl",
+    "tests/p1184/sources/06-after-main-alias.nl"
+  ],
+  "world_slots": ["loop", "continue", "break", "helper", "helper_then", "helper_else", "actual_caller", "post", "continue_exit", "break_exit", "union_continue", "union_break"],
+  "modes": ["one_live_foreign_byte", "one_past_live_type_allocation", "same_bits_foreign_signature", "NULL_signature", "short_signature_count_zero", "short_signature_count_MAX", "NULL_table", "one_live_foreign_table_byte", "function_count_zero", "function_count_MAX"],
+  "trials_per_source": 120,
+  "expected": "genuine CHECK and healthy emission; every mutation rejects with ANALYSIS_PRECISION_LIMIT before reading foreign contents, view and real admission/emitter sink unchanged; restore/retry, independent B survival, leak-free cleanup and fresh CHECK retry",
+  "execution_limit": "Never execute this challenged host graph against the known-unsafe original d743; no R inputs; no general soundness claim"
+}

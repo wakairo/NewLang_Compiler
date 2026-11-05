@@ -1,0 +1,379 @@
+{
+  "authority": "C245 Issue1184 / fixed PR1180 bb8b33cefc030ed99941c9c93fef9c7ef89b0ac0 / Draft17.34",
+  "cases": {
+    "01-helper-loop": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 0,
+      "initial": 26,
+      "sibling": 211,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "header_child": [
+        26,
+        53,
+        53,
+        149,
+        149,
+        149
+      ],
+      "olds": [
+        26,
+        53,
+        53,
+        149,
+        149
+      ],
+      "incoming": [
+        53,
+        53,
+        149,
+        149,
+        149
+      ],
+      "final": 149,
+      "result": 5,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true,
+      "helper_args": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "helper_results": [
+        53,
+        53,
+        149,
+        149,
+        149
+      ],
+      "helper_call": true
+    },
+    "02-helper-alias-loop": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 1,
+      "initial": 34,
+      "sibling": 158,
+      "headers": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "header_child": [
+        34,
+        202,
+        87,
+        202,
+        202
+      ],
+      "olds": [
+        34,
+        202,
+        87,
+        202
+      ],
+      "incoming": [
+        202,
+        87,
+        202,
+        202
+      ],
+      "final": 202,
+      "result": 9,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true,
+      "helper_args": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "helper_results": [
+        202,
+        87,
+        202,
+        202
+      ],
+      "helper_call": true
+    },
+    "03-one-edge": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 0,
+      "initial": 91,
+      "sibling": 17,
+      "headers": [
+        3,
+        5
+      ],
+      "header_child": [
+        91,
+        65
+      ],
+      "olds": [
+        91
+      ],
+      "incoming": [
+        65
+      ],
+      "final": 65,
+      "result": 5,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true,
+      "helper_args": [
+        3
+      ],
+      "helper_results": [
+        65
+      ],
+      "helper_call": true
+    },
+    "04-zero-edge": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 1,
+      "initial": 37,
+      "sibling": 192,
+      "headers": [
+        7
+      ],
+      "header_child": [
+        37
+      ],
+      "olds": [],
+      "incoming": [],
+      "final": 37,
+      "result": 7,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true,
+      "helper_args": [],
+      "helper_results": [],
+      "helper_call": true
+    },
+    "05-same-bits": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 0,
+      "initial": 26,
+      "sibling": 211,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "header_child": [
+        26,
+        26,
+        26,
+        26,
+        26,
+        26
+      ],
+      "olds": [
+        26,
+        26,
+        26,
+        26,
+        26
+      ],
+      "incoming": [
+        26,
+        26,
+        26,
+        26,
+        26
+      ],
+      "final": 26,
+      "result": 5,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true,
+      "helper_args": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "helper_results": [
+        26,
+        26,
+        26,
+        26,
+        26
+      ],
+      "helper_call": true
+    },
+    "06-after-main-alias": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 1,
+      "initial": 34,
+      "sibling": 158,
+      "headers": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "header_child": [
+        34,
+        87,
+        87,
+        202,
+        202
+      ],
+      "olds": [
+        34,
+        87,
+        87,
+        202
+      ],
+      "incoming": [
+        87,
+        87,
+        202,
+        202
+      ],
+      "final": 202,
+      "result": 9,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true,
+      "helper_args": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "helper_results": [
+        87,
+        87,
+        202,
+        202
+      ],
+      "helper_call": true
+    },
+    "90-wrong-result": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "invalid",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "91-wrong-actual": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "invalid",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "92-arm-type": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "invalid",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "93-helper-effect": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "legal outside finite one-IF actual-phase family",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "94-wrong-phase": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "legal outside finite one-IF actual-phase family",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "95-unrelated-incoming": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "legal outside finite one-IF actual-phase family",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "96-loan-escape": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "invalid",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "97-formal-arity": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "invalid",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "98-second-selection": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "legal outside finite one-IF actual-phase family",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "99-literal-helper": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "legal outside finite one-IF actual-phase family",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "100-extra-helper": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "legal outside finite one-IF actual-phase family",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "101-zero-step": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "semantic_legality": "legal outside finite one-IF actual-phase family",
+      "expected_layer": "type/loan or finite current relation refusal; early precision is not evidence of masked deeper guards"
+    },
+    "80-inline-control": {
+      "category": "control",
+      "check": 0,
+      "emit": 0,
+      "c17_sha256": "c61b72bdbb136e2a29465498cea658a31893103e2ae8cbf97ff6664461425cae"
+    },
+    "81-pure-control": {
+      "category": "control",
+      "check": 0,
+      "emit": 0,
+      "c17_sha256": "482816babdf0866d2f7faec18dbf3ef5f53aa142297817080f5a675ddd977ea4"
+    }
+  }
+}

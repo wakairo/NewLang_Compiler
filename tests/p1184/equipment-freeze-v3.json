@@ -1,0 +1,8 @@
+{
+  "authority": "C245",
+  "reason": "new check observer retained legacy overlay filename; failed before compiler execution. Original v2 bytes/log archived. C245 uses original oracle only; no Production/source/oracle change.",
+  "files": {
+    "check.py": "eb2d52825852796be63582b0b3fa70d8cb26548398c04ca4e211004a665268cf"
+  },
+  "v2_archive_sha256": "137b63bf53c4dbc53f23db9c4f40e92faf8b39b0073e19ef9d250569f3bed97f"
+}

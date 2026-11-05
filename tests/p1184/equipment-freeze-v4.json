@@ -1,0 +1,8 @@
+{
+  "authority": "C245",
+  "reason": "same legacy overlay reference in the native observer failed before source/guest execution; original run bytes already in v2 archive, native first log additionally preserved",
+  "files": {
+    "run.py": "bfc6d2c9c7137bce6f8b6c8c08f738877336304ea8797022d23873291e8b858d"
+  },
+  "v3_native_archive_sha256": "248a925684f77bafaa66007b1541dea5732ae337684e829e7bc4ce519ab59014"
+}
