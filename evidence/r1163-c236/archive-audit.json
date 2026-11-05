@@ -1,0 +1,15 @@
+{
+  "final_head": "df73c2913d18045a7c97a90f6bf5088644868782",
+  "FAST_actual_jobs": 3,
+  "normal_actual_jobs": 12,
+  "manual_jobs": 0,
+  "all_final_actions_success": false,
+  "all_final_R_finite_pass": true,
+  "final_native_runs": 288,
+  "first_native_runs": 0,
+  "generated_C_identical_across_final_jobs": true,
+  "local_execution": "hash/JSON/zip/gzip/text observation only; compiler/native/formatter/CMake/CTest zero",
+  "old_failures_preserved": true,
+  "V1_V2": "NOT_RUN",
+  "V3_oracle_sha256": "cfd4cd373e3b1b1e3c358b546cdd5691687bbc87ccc7de8e1eb31f83bc71fc63"
+}

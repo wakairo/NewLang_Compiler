@@ -1,0 +1,922 @@
+{
+  "status": "PASS",
+  "layer": null,
+  "error": null,
+  "github": {
+    "GITHUB_SHA": "c15349a2aec6d712920961093f970086c666f61a",
+    "GITHUB_RUN_ID": "41940197950",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_JOB": "validate",
+    "GITHUB_EVENT_NAME": "pull_request"
+  },
+  "host_compiler": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+  "host_sanitizer": "address",
+  "guest_sanitizer": "address",
+  "versions": {
+    "gcc": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "clang": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin\n",
+    "host": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin\n"
+  },
+  "oracle_sha256": "cfd4cd373e3b1b1e3c358b546cdd5691687bbc87ccc7de8e1eb31f83bc71fc63",
+  "native_builds": 48,
+  "native_runs": 48,
+  "passive_runs": 24,
+  "unmodified_runs": 24,
+  "positive": [
+    {
+      "id": "a_add_zero_left_early",
+      "status": "PASS",
+      "source_sha256": "08b8863cba11e11c4b809defacf16aaeb8e372c213cf474219042f2ecec3b008",
+      "emitted_sha256": "ecc4d4ffff462f82538624689b41efd7616cfe97b819376dacc09cd9b796241e",
+      "passive_sha256": "573013dc21541d32c9f8d37f339e711aa0fb1dbdaaa0435358777b435c88fd63",
+      "lanes": 8,
+      "c_condition_negated": false,
+      "source_arm_mapping": [
+        0,
+        1
+      ],
+      "old_copy_lineage": [
+        "nl_local_6",
+        "nl_local_5",
+        "nl_if_result_19",
+        "nl_loan_result_1",
+        "nl_replace_old_4"
+      ],
+      "actual_loop_value_lineage": {
+        "carry": "nl_loop_carry_10",
+        "phase": "nl_loop_phase_10",
+        "break_result": "nl_local_2",
+        "copy": "nl_local_3",
+        "root": "nl_local_1",
+        "root_record_locals": 1,
+        "initial_fields": [
+          37,
+          109
+        ],
+        "definition_offsets": {
+          "nl_loop_carry_10": 1225,
+          "nl_loop_phase_10": 1296,
+          "nl_local_2": 1556,
+          "nl_local_3": 1672
+        },
+        "progress_assignment_offset": 1456,
+        "classification": "post-run actual C/AST structural and raw-trace audit only"
+      }
+    },
+    {
+      "id": "b_add_one_right_early",
+      "status": "PASS",
+      "source_sha256": "954f785f68b75d57062c06970253514e005a32da6f510fba6d2732f1070e3c3b",
+      "emitted_sha256": "d43c1bfc3211231650a60adbf82a45039cb5f41d1e7c90b9e87b6bfc1453b1e3",
+      "passive_sha256": "ca21b6724add5a0ccc92453f76c604842ece4a809336a23137ef24b0294d48fd",
+      "lanes": 8,
+      "c_condition_negated": false,
+      "source_arm_mapping": [
+        0,
+        1
+      ],
+      "old_copy_lineage": [
+        "nl_local_6",
+        "nl_local_5",
+        "nl_if_result_19",
+        "nl_loan_result_1",
+        "nl_replace_old_4"
+      ],
+      "actual_loop_value_lineage": {
+        "carry": "nl_loop_carry_10",
+        "phase": "nl_loop_phase_10",
+        "break_result": "nl_local_2",
+        "copy": "nl_local_3",
+        "root": "nl_local_1",
+        "root_record_locals": 1,
+        "initial_fields": [
+          61,
+          173
+        ],
+        "definition_offsets": {
+          "nl_loop_carry_10": 1225,
+          "nl_loop_phase_10": 1297,
+          "nl_local_2": 1558,
+          "nl_local_3": 1674
+        },
+        "progress_assignment_offset": 1458,
+        "classification": "post-run actual C/AST structural and raw-trace audit only"
+      }
+    },
+    {
+      "id": "c_add_three_left_normal",
+      "status": "PASS",
+      "source_sha256": "75d2c697ab6d945fdd123848f78c11145dbe718f45bcca7e8ea7613f1fd59729",
+      "emitted_sha256": "320f2039ada224f07802f1dabdbb96c5d947abf6e6e9b065f7edfccb1bc2fbb1",
+      "passive_sha256": "83b1d4139d7bd104db860230b90e313107152fa97b68dc413656a6229ac54577",
+      "lanes": 8,
+      "c_condition_negated": false,
+      "source_arm_mapping": [
+        0,
+        1
+      ],
+      "old_copy_lineage": [
+        "nl_local_6",
+        "nl_local_5",
+        "nl_if_result_19",
+        "nl_loan_result_1",
+        "nl_replace_old_4"
+      ],
+      "actual_loop_value_lineage": {
+        "carry": "nl_loop_carry_10",
+        "phase": "nl_loop_phase_10",
+        "break_result": "nl_local_2",
+        "copy": "nl_local_3",
+        "root": "nl_local_1",
+        "root_record_locals": 1,
+        "initial_fields": [
+          43,
+          157
+        ],
+        "definition_offsets": {
+          "nl_loop_carry_10": 1225,
+          "nl_loop_phase_10": 1297,
+          "nl_local_2": 1558,
+          "nl_local_3": 1674
+        },
+        "progress_assignment_offset": 1458,
+        "classification": "post-run actual C/AST structural and raw-trace audit only"
+      }
+    },
+    {
+      "id": "d_sub_zero_right_normal",
+      "status": "PASS",
+      "source_sha256": "2607c5c652ce6f040916359bfa9ff5653c675aa902f900ac50b70fedd5e97202",
+      "emitted_sha256": "2efeebe5022c4b2b9b76ee632cb612b3dc4099a23cd1f7a473f0b92cae36c32a",
+      "passive_sha256": "7d8ecebfe43e71f191c0b5e682b180d75b4623e59455741808febb56a6ff9ff0",
+      "lanes": 8,
+      "c_condition_negated": false,
+      "source_arm_mapping": [
+        0,
+        1
+      ],
+      "old_copy_lineage": [
+        "nl_local_6",
+        "nl_local_5",
+        "nl_if_result_19",
+        "nl_loan_result_1",
+        "nl_replace_old_4"
+      ],
+      "actual_loop_value_lineage": {
+        "carry": "nl_loop_carry_10",
+        "phase": "nl_loop_phase_10",
+        "break_result": "nl_local_2",
+        "copy": "nl_local_3",
+        "root": "nl_local_1",
+        "root_record_locals": 1,
+        "initial_fields": [
+          71,
+          131
+        ],
+        "definition_offsets": {
+          "nl_loop_carry_10": 1225,
+          "nl_loop_phase_10": 1296,
+          "nl_local_2": 1559,
+          "nl_local_3": 1675
+        },
+        "progress_assignment_offset": 1459,
+        "classification": "post-run actual C/AST structural and raw-trace audit only"
+      }
+    },
+    {
+      "id": "e_sub_one_left_early",
+      "status": "PASS",
+      "source_sha256": "74829dd7013e04f2dc1336baa2745908ab2c410c9ee54c4c221d77263b0de207",
+      "emitted_sha256": "8a24499cc1ec4b921ce98ebdb74241a125c58e9483efb5266f1ec509cc4738b9",
+      "passive_sha256": "953301f75a42e641d072dc34836a82b3275f71c6b5c40e45589cc95481545129",
+      "lanes": 8,
+      "c_condition_negated": false,
+      "source_arm_mapping": [
+        0,
+        1
+      ],
+      "old_copy_lineage": [
+        "nl_local_6",
+        "nl_local_5",
+        "nl_if_result_19",
+        "nl_loan_result_1",
+        "nl_replace_old_4"
+      ],
+      "actual_loop_value_lineage": {
+        "carry": "nl_loop_carry_10",
+        "phase": "nl_loop_phase_10",
+        "break_result": "nl_local_2",
+        "copy": "nl_local_3",
+        "root": "nl_local_1",
+        "root_record_locals": 1,
+        "initial_fields": [
+          83,
+          149
+        ],
+        "definition_offsets": {
+          "nl_loop_carry_10": 1225,
+          "nl_loop_phase_10": 1297,
+          "nl_local_2": 1561,
+          "nl_local_3": 1677
+        },
+        "progress_assignment_offset": 1461,
+        "classification": "post-run actual C/AST structural and raw-trace audit only"
+      }
+    },
+    {
+      "id": "f_sub_three_right_normal",
+      "status": "PASS",
+      "source_sha256": "4114d5a50f483a7caa7c5a4b49b4d63c67907a9a3fdbdb91671cb705255febfa",
+      "emitted_sha256": "603e43e424d70bcd9b584d13f50a14c7a4d2a114738e95c003b09c5eaa0707b3",
+      "passive_sha256": "203634f3f6d2a4ed1c6a12a03ea642b7dd63b6e9fd647bb9569c8a64bb69f339",
+      "lanes": 8,
+      "c_condition_negated": false,
+      "source_arm_mapping": [
+        0,
+        1
+      ],
+      "old_copy_lineage": [
+        "nl_local_6",
+        "nl_local_5",
+        "nl_if_result_19",
+        "nl_loan_result_1",
+        "nl_replace_old_4"
+      ],
+      "actual_loop_value_lineage": {
+        "carry": "nl_loop_carry_10",
+        "phase": "nl_loop_phase_10",
+        "break_result": "nl_local_2",
+        "copy": "nl_local_3",
+        "root": "nl_local_1",
+        "root_record_locals": 1,
+        "initial_fields": [
+          97,
+          163
+        ],
+        "definition_offsets": {
+          "nl_loop_carry_10": 1225,
+          "nl_loop_phase_10": 1297,
+          "nl_local_2": 1561,
+          "nl_local_3": 1677
+        },
+        "progress_assignment_offset": 1461,
+        "classification": "post-run actual C/AST structural and raw-trace audit only"
+      }
+    }
+  ],
+  "negative": [
+    {
+      "id": "n_condition_usize",
+      "status": "REJECTED",
+      "first_observed_layer": "SEMANTIC_OR_REGISTRATION",
+      "diagnostic": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1163/sources/n_condition_usize.nl:12:17-12:28: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_return_payload",
+      "status": "REJECTED",
+      "first_observed_layer": "SEMANTIC_OR_REGISTRATION",
+      "diagnostic": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1163/sources/n_return_payload.nl:13:5-13:18: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_loan_escape",
+      "status": "REJECTED",
+      "first_observed_layer": "SEMANTIC_OR_REGISTRATION",
+      "diagnostic": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1163/sources/n_loan_escape.nl:15:5-17:6: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_return_in_loan",
+      "status": "REJECTED",
+      "first_observed_layer": "SEMANTIC_OR_REGISTRATION",
+      "diagnostic": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1163/sources/n_return_in_loan.nl:16:7-16:19: error(unsupported)[P9-RETURN-CONTEXT]: return requires a registered ordinary function body\n",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_unknown_child",
+      "status": "REJECTED",
+      "first_observed_layer": "SEMANTIC_OR_REGISTRATION",
+      "diagnostic": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1163/sources/n_unknown_child.nl:15:16-15:29: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_sub_underflow",
+      "status": "REJECTED",
+      "first_observed_layer": "SEMANTIC_OR_REGISTRATION",
+      "diagnostic": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1163/sources/n_sub_underflow.nl:6:25-6:26: error(semantic)[USIZE-SUBTRACTION-UNDERFLOW]: mathematical usize difference is outside target range\n",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_loop_fallthrough",
+      "status": "REJECTED",
+      "first_observed_layer": "SEMANTIC_OR_REGISTRATION",
+      "diagnostic": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1163/sources/n_loop_fallthrough.nl:6:14-6:15: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    }
+  ],
+  "negative_route_audit": [
+    {
+      "id": "n_condition_usize",
+      "actual_exit_by_route": {
+        "check": 3,
+        "emit": 3,
+        "named": 3
+      },
+      "category": "semantic",
+      "diagnostic_code": "P13-IF-CONDITION",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_return_payload",
+      "actual_exit_by_route": {
+        "check": 3,
+        "emit": 3,
+        "named": 3
+      },
+      "category": "semantic",
+      "diagnostic_code": "P9-RETURN-TYPE",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_loan_escape",
+      "actual_exit_by_route": {
+        "check": 3,
+        "emit": 3,
+        "named": 3
+      },
+      "category": "semantic",
+      "diagnostic_code": "P8-EXIT-DEPENDENCY",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_return_in_loan",
+      "actual_exit_by_route": {
+        "check": 3,
+        "emit": 3,
+        "named": 3
+      },
+      "category": "unsupported",
+      "diagnostic_code": "P9-RETURN-CONTEXT",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_unknown_child",
+      "actual_exit_by_route": {
+        "check": 3,
+        "emit": 3,
+        "named": 3
+      },
+      "category": "semantic",
+      "diagnostic_code": "FIELD-UNKNOWN-FIELD",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_sub_underflow",
+      "actual_exit_by_route": {
+        "check": 3,
+        "emit": 3,
+        "named": 3
+      },
+      "category": "semantic",
+      "diagnostic_code": "USIZE-SUBTRACTION-UNDERFLOW",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    },
+    {
+      "id": "n_loop_fallthrough",
+      "actual_exit_by_route": {
+        "check": 3,
+        "emit": 3,
+        "named": 3
+      },
+      "category": "precision",
+      "diagnostic_code": "USIZE-ADDITION-PRECISION",
+      "owned": "NOT_REACHED",
+      "native": "NOT_RUN"
+    }
+  ],
+  "guest_sanitizer_build_flags_verified": "address",
+  "command_count": 150,
+  "command_bytes_verified": true,
+  "all_frozen_inputs_verified": true,
+  "positive_summary_count": 6,
+  "reached_positive_commands": [
+    {
+      "name": "a_add_zero_left_early-check",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-public",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-emit",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-named",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-ast",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-gcc-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-gcc-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-gcc-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-gcc-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-gcc-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-gcc-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-gcc-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-gcc-O2-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-clang-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-clang-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-clang-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-clang-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-clang-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-clang-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-clang-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "a_add_zero_left_early-clang-O2-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-check",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-public",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-emit",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-named",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-ast",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-gcc-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-gcc-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-gcc-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-gcc-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-gcc-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-gcc-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-gcc-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-gcc-O2-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-clang-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-clang-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-clang-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-clang-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-clang-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-clang-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-clang-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "b_add_one_right_early-clang-O2-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-check",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-public",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-emit",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-named",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-ast",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-gcc-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-gcc-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-gcc-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-gcc-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-gcc-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-gcc-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-gcc-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-gcc-O2-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-clang-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-clang-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-clang-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-clang-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-clang-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-clang-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-clang-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "c_add_three_left_normal-clang-O2-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-check",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-public",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-emit",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-named",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-ast",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-gcc-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-gcc-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-gcc-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-gcc-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-gcc-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-gcc-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-gcc-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-gcc-O2-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-clang-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-clang-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-clang-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-clang-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-clang-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-clang-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-clang-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "d_sub_zero_right_normal-clang-O2-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-check",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-public",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-emit",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-named",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-ast",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-gcc-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-gcc-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-gcc-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-gcc-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-gcc-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-gcc-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-gcc-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-gcc-O2-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-clang-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-clang-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-clang-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-clang-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-clang-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-clang-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-clang-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "e_sub_one_left_early-clang-O2-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-check",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-public",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-emit",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-named",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-ast",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-gcc-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-gcc-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-gcc-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-gcc-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-gcc-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-gcc-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-gcc-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-gcc-O2-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-clang-O0-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-clang-O0-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-clang-O0-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-clang-O0-passive-run",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-clang-O2-unmodified-build",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-clang-O2-unmodified-run",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-clang-O2-passive-build",
+      "exit": 0
+    },
+    {
+      "name": "f_sub_three_right_normal-clang-O2-passive-run",
+      "exit": 0
+    }
+  ]
+}

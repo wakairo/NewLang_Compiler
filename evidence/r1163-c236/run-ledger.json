@@ -1,0 +1,1617 @@
+{
+  "branch": "r-fast/r1163-runtime-return",
+  "final_head": "df73c2913d18045a7c97a90f6bf5088644868782",
+  "overall": "STOP: full regression RED; normal budget exhausted",
+  "runs": [
+    {
+      "id": 41940198010,
+      "name": "Compiler frontend/C17 reference (NO LLVM; PARTIAL)",
+      "head_branch": "r-fast/r1163-runtime-return",
+      "head_sha": "df73c2913d18045a7c97a90f6bf5088644868782",
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "failure",
+      "run_attempt": 1,
+      "created_at": "2026-11-05T00:17:15Z",
+      "updated_at": "2026-11-05T00:24:43Z",
+      "run_started_at": "2026-11-05T00:17:15Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41940198010"
+    },
+    {
+      "id": 41940197950,
+      "name": "Compiler validation",
+      "head_branch": "r-fast/r1163-runtime-return",
+      "head_sha": "df73c2913d18045a7c97a90f6bf5088644868782",
+      "path": ".github/workflows/compiler-ci.yml",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "failure",
+      "run_attempt": 1,
+      "created_at": "2026-11-05T00:17:15Z",
+      "updated_at": "2026-11-05T00:32:12Z",
+      "run_started_at": "2026-11-05T00:17:15Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41940197950"
+    },
+    {
+      "id": 41940191325,
+      "name": "R-FAST self-service pre-PR preparation (NOT R validation)",
+      "head_branch": "r-fast/r1163-runtime-return",
+      "head_sha": "df73c2913d18045a7c97a90f6bf5088644868782",
+      "path": ".github/workflows/r-preflight.yml",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "created_at": "2026-11-05T00:17:11Z",
+      "updated_at": "2026-11-05T00:17:55Z",
+      "run_started_at": "2026-11-05T00:17:11Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41940191325"
+    },
+    {
+      "id": 41937577311,
+      "name": "Compiler validation",
+      "head_branch": "r-fast/r1163-runtime-return",
+      "head_sha": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "path": ".github/workflows/compiler-ci.yml",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "failure",
+      "run_attempt": 1,
+      "created_at": "2026-11-04T23:56:25Z",
+      "updated_at": "2026-11-05T00:11:19Z",
+      "run_started_at": "2026-11-04T23:56:25Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937577311"
+    },
+    {
+      "id": 41937577335,
+      "name": "Compiler frontend/C17 reference (NO LLVM; PARTIAL)",
+      "head_branch": "r-fast/r1163-runtime-return",
+      "head_sha": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "failure",
+      "run_attempt": 1,
+      "created_at": "2026-11-04T23:56:25Z",
+      "updated_at": "2026-11-05T00:00:14Z",
+      "run_started_at": "2026-11-04T23:56:25Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937577335"
+    },
+    {
+      "id": 41937346694,
+      "name": "R-FAST self-service pre-PR preparation (NOT R validation)",
+      "head_branch": "r-fast/r1163-runtime-return",
+      "head_sha": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "path": ".github/workflows/r-preflight.yml",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "created_at": "2026-11-04T23:54:33Z",
+      "updated_at": "2026-11-04T23:55:21Z",
+      "run_started_at": "2026-11-04T23:54:33Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937346694"
+    },
+    {
+      "id": 41937122452,
+      "name": "R-FAST self-service pre-PR preparation (NOT R validation)",
+      "head_branch": "r-fast/r1163-runtime-return",
+      "head_sha": "735677fbc462c70fbe1af844a4542720b2263361",
+      "path": ".github/workflows/r-preflight.yml",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "failure",
+      "run_attempt": 1,
+      "created_at": "2026-11-04T23:52:45Z",
+      "updated_at": "2026-11-04T23:53:14Z",
+      "run_started_at": "2026-11-04T23:52:45Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937122452"
+    }
+  ],
+  "jobs": [
+    {
+      "id": 126958733286,
+      "run_id": 41940198010,
+      "run_attempt": 1,
+      "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+      "head_sha": "df73c2913d18045a7c97a90f6bf5088644868782",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T00:17:18Z",
+      "completed_at": "2026-11-05T00:24:43Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41940198010/job/126958733286",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T00:17:18Z",
+          "completed_at": "2026-11-05T00:17:19Z"
+        },
+        {
+          "name": "Check out source without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T00:17:19Z",
+          "completed_at": "2026-11-05T00:17:22Z"
+        },
+        {
+          "name": "Verify available Ubuntu runner tools (no LLVM install)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T00:17:22Z",
+          "completed_at": "2026-11-05T00:17:23Z"
+        },
+        {
+          "name": "Configure and build the actual Production frontend with GCC (no LLVM)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T00:17:23Z",
+          "completed_at": "2026-11-05T00:17:46Z"
+        },
+        {
+          "name": "Inventory all CTests and assert Production CHECK, C17/native and public validators",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T00:17:46Z",
+          "completed_at": "2026-11-05T00:17:46Z"
+        },
+        {
+          "name": "Execute every registered frontend/C17 CTest (NO LLVM; PARTIAL)",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 6,
+          "started_at": "2026-11-05T00:17:46Z",
+          "completed_at": "2026-11-05T00:24:40Z"
+        },
+        {
+          "name": "Verify real Production source/checker CLI path (NO LLVM; PARTIAL)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-05T00:24:40Z",
+          "completed_at": "2026-11-05T00:24:40Z"
+        },
+        {
+          "name": "Post Check out source without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-05T00:24:40Z",
+          "completed_at": "2026-11-05T00:24:41Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-11-05T00:24:41Z",
+          "completed_at": "2026-11-05T00:24:41Z"
+        }
+      ]
+    },
+    {
+      "id": 126958733018,
+      "run_id": 41940197950,
+      "run_attempt": 1,
+      "name": "GCC",
+      "head_sha": "df73c2913d18045a7c97a90f6bf5088644868782",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T00:17:18Z",
+      "completed_at": "2026-11-05T00:24:12Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41940197950/job/126958733018",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T00:17:18Z",
+          "completed_at": "2026-11-05T00:17:19Z"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T00:17:19Z",
+          "completed_at": "2026-11-05T00:17:22Z"
+        },
+        {
+          "name": "Host prerequisites from signed Ubuntu repositories",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T00:17:22Z",
+          "completed_at": "2026-11-05T00:17:31Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T00:17:31Z",
+          "completed_at": "2026-11-05T00:17:32Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T00:17:32Z",
+          "completed_at": "2026-11-05T00:17:33Z"
+        },
+        {
+          "name": "Check C formatting and provide exact pinned-formatter correction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-05T00:17:33Z",
+          "completed_at": "2026-11-05T00:17:33Z"
+        },
+        {
+          "name": "Upload formatter suggestions (untrusted; inspect before git apply)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-05T00:17:33Z",
+          "completed_at": "2026-11-05T00:17:33Z"
+        },
+        {
+          "name": "Configure, build, and test",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 8,
+          "started_at": "2026-11-05T00:17:33Z",
+          "completed_at": "2026-11-05T00:24:10Z"
+        },
+        {
+          "name": "Save verified original archive only on trusted successful main push",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-05T00:24:10Z",
+          "completed_at": "2026-11-05T00:24:10Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T00:24:10Z",
+          "completed_at": "2026-11-05T00:24:11Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T00:24:11Z",
+          "completed_at": "2026-11-05T00:24:11Z"
+        }
+      ]
+    },
+    {
+      "id": 126958733238,
+      "run_id": 41940197950,
+      "run_attempt": 1,
+      "name": "ASan",
+      "head_sha": "df73c2913d18045a7c97a90f6bf5088644868782",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T00:17:18Z",
+      "completed_at": "2026-11-05T00:32:12Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41940197950/job/126958733238",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T00:17:19Z",
+          "completed_at": "2026-11-05T00:17:20Z"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T00:17:20Z",
+          "completed_at": "2026-11-05T00:17:24Z"
+        },
+        {
+          "name": "Host prerequisites from signed Ubuntu repositories",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T00:17:24Z",
+          "completed_at": "2026-11-05T00:17:30Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T00:17:30Z",
+          "completed_at": "2026-11-05T00:17:33Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T00:17:33Z",
+          "completed_at": "2026-11-05T00:17:34Z"
+        },
+        {
+          "name": "Check C formatting and provide exact pinned-formatter correction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-05T00:17:34Z",
+          "completed_at": "2026-11-05T00:17:34Z"
+        },
+        {
+          "name": "Upload formatter suggestions (untrusted; inspect before git apply)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-05T00:17:34Z",
+          "completed_at": "2026-11-05T00:17:34Z"
+        },
+        {
+          "name": "Configure, build, and test",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 8,
+          "started_at": "2026-11-05T00:17:34Z",
+          "completed_at": "2026-11-05T00:32:09Z"
+        },
+        {
+          "name": "Save verified original archive only on trusted successful main push",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-05T00:32:09Z",
+          "completed_at": "2026-11-05T00:32:09Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T00:32:09Z",
+          "completed_at": "2026-11-05T00:32:09Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T00:32:09Z",
+          "completed_at": "2026-11-05T00:32:09Z"
+        }
+      ]
+    },
+    {
+      "id": 126958733403,
+      "run_id": 41940197950,
+      "run_attempt": 1,
+      "name": "UBSan",
+      "head_sha": "df73c2913d18045a7c97a90f6bf5088644868782",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T00:17:18Z",
+      "completed_at": "2026-11-05T00:26:38Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41940197950/job/126958733403",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T00:17:19Z",
+          "completed_at": "2026-11-05T00:17:21Z"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T00:17:21Z",
+          "completed_at": "2026-11-05T00:17:24Z"
+        },
+        {
+          "name": "Host prerequisites from signed Ubuntu repositories",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T00:17:24Z",
+          "completed_at": "2026-11-05T00:17:34Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T00:17:34Z",
+          "completed_at": "2026-11-05T00:17:36Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T00:17:36Z",
+          "completed_at": "2026-11-05T00:17:37Z"
+        },
+        {
+          "name": "Check C formatting and provide exact pinned-formatter correction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-05T00:17:37Z",
+          "completed_at": "2026-11-05T00:17:37Z"
+        },
+        {
+          "name": "Upload formatter suggestions (untrusted; inspect before git apply)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-05T00:17:37Z",
+          "completed_at": "2026-11-05T00:17:37Z"
+        },
+        {
+          "name": "Configure, build, and test",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 8,
+          "started_at": "2026-11-05T00:17:37Z",
+          "completed_at": "2026-11-05T00:26:36Z"
+        },
+        {
+          "name": "Save verified original archive only on trusted successful main push",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-05T00:26:36Z",
+          "completed_at": "2026-11-05T00:26:36Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T00:26:36Z",
+          "completed_at": "2026-11-05T00:26:36Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T00:26:36Z",
+          "completed_at": "2026-11-05T00:26:36Z"
+        }
+      ]
+    },
+    {
+      "id": 126958733478,
+      "run_id": 41940197950,
+      "run_attempt": 1,
+      "name": "GCC Release",
+      "head_sha": "df73c2913d18045a7c97a90f6bf5088644868782",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T00:17:18Z",
+      "completed_at": "2026-11-05T00:23:23Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41940197950/job/126958733478",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T00:17:19Z",
+          "completed_at": "2026-11-05T00:17:20Z"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T00:17:20Z",
+          "completed_at": "2026-11-05T00:17:23Z"
+        },
+        {
+          "name": "Host prerequisites from signed Ubuntu repositories",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T00:17:23Z",
+          "completed_at": "2026-11-05T00:17:29Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T00:17:29Z",
+          "completed_at": "2026-11-05T00:17:31Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T00:17:31Z",
+          "completed_at": "2026-11-05T00:17:32Z"
+        },
+        {
+          "name": "Check C formatting and provide exact pinned-formatter correction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-05T00:17:32Z",
+          "completed_at": "2026-11-05T00:17:32Z"
+        },
+        {
+          "name": "Upload formatter suggestions (untrusted; inspect before git apply)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-05T00:17:32Z",
+          "completed_at": "2026-11-05T00:17:32Z"
+        },
+        {
+          "name": "Configure, build, and test",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 8,
+          "started_at": "2026-11-05T00:17:32Z",
+          "completed_at": "2026-11-05T00:23:11Z"
+        },
+        {
+          "name": "Save verified original archive only on trusted successful main push",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-05T00:23:11Z",
+          "completed_at": "2026-11-05T00:23:11Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T00:23:11Z",
+          "completed_at": "2026-11-05T00:23:11Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T00:23:11Z",
+          "completed_at": "2026-11-05T00:23:11Z"
+        }
+      ]
+    },
+    {
+      "id": 126958733522,
+      "run_id": 41940197950,
+      "run_attempt": 1,
+      "name": "Clang",
+      "head_sha": "df73c2913d18045a7c97a90f6bf5088644868782",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T00:17:18Z",
+      "completed_at": "2026-11-05T00:24:46Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41940197950/job/126958733522",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T00:17:20Z",
+          "completed_at": "2026-11-05T00:17:21Z"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T00:17:21Z",
+          "completed_at": "2026-11-05T00:17:24Z"
+        },
+        {
+          "name": "Host prerequisites from signed Ubuntu repositories",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T00:17:24Z",
+          "completed_at": "2026-11-05T00:17:37Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T00:17:37Z",
+          "completed_at": "2026-11-05T00:17:40Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T00:17:40Z",
+          "completed_at": "2026-11-05T00:17:42Z"
+        },
+        {
+          "name": "Check C formatting and provide exact pinned-formatter correction",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-05T00:17:42Z",
+          "completed_at": "2026-11-05T00:17:45Z"
+        },
+        {
+          "name": "Upload formatter suggestions (untrusted; inspect before git apply)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-05T00:17:45Z",
+          "completed_at": "2026-11-05T00:17:45Z"
+        },
+        {
+          "name": "Configure, build, and test",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 8,
+          "started_at": "2026-11-05T00:17:45Z",
+          "completed_at": "2026-11-05T00:24:43Z"
+        },
+        {
+          "name": "Save verified original archive only on trusted successful main push",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-05T00:24:43Z",
+          "completed_at": "2026-11-05T00:24:43Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T00:24:43Z",
+          "completed_at": "2026-11-05T00:24:43Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T00:24:43Z",
+          "completed_at": "2026-11-05T00:24:43Z"
+        }
+      ]
+    },
+    {
+      "id": 126958710768,
+      "run_id": 41940191325,
+      "run_attempt": 1,
+      "name": "R-FAST pinned format + GCC build + CTest registration only",
+      "head_sha": "df73c2913d18045a7c97a90f6bf5088644868782",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-05T00:17:14Z",
+      "completed_at": "2026-11-05T00:17:54Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41940191325/job/126958710768",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T00:17:15Z",
+          "completed_at": "2026-11-05T00:17:16Z"
+        },
+        {
+          "name": "Checkout immutable push SHA without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T00:17:16Z",
+          "completed_at": "2026-11-05T00:17:19Z"
+        },
+        {
+          "name": "Verify opt-in R-FAST push and exact immutable checkout",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T00:17:19Z",
+          "completed_at": "2026-11-05T00:17:19Z"
+        },
+        {
+          "name": "Signed Ubuntu prerequisites (unchanged trust)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T00:17:19Z",
+          "completed_at": "2026-11-05T00:17:24Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T00:17:24Z",
+          "completed_at": "2026-11-05T00:17:25Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified pinned LLVM 23.1.3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-05T00:17:25Z",
+          "completed_at": "2026-11-05T00:17:26Z"
+        },
+        {
+          "name": "Strict pinned formatting (fail closed; never alter source)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-05T00:17:26Z",
+          "completed_at": "2026-11-05T00:17:29Z"
+        },
+        {
+          "name": "Upload review-only formatter suggestions on failure",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-05T00:17:29Z",
+          "completed_at": "2026-11-05T00:17:29Z"
+        },
+        {
+          "name": "GCC frontend-only host build and CTest registration inventory (NO tests executed)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-05T00:17:29Z",
+          "completed_at": "2026-11-05T00:17:53Z"
+        },
+        {
+          "name": "Post Checkout immutable push SHA without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T00:17:53Z",
+          "completed_at": "2026-11-05T00:17:53Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T00:17:53Z",
+          "completed_at": "2026-11-05T00:17:53Z"
+        }
+      ]
+    },
+    {
+      "id": 126949834394,
+      "run_id": 41937577311,
+      "run_attempt": 1,
+      "name": "GCC",
+      "head_sha": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-04T23:56:28Z",
+      "completed_at": "2026-11-05T00:01:38Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937577311/job/126949834394",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-04T23:56:29Z",
+          "completed_at": "2026-11-04T23:56:30Z"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-04T23:56:30Z",
+          "completed_at": "2026-11-04T23:56:33Z"
+        },
+        {
+          "name": "Host prerequisites from signed Ubuntu repositories",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-04T23:56:33Z",
+          "completed_at": "2026-11-04T23:56:39Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-04T23:56:39Z",
+          "completed_at": "2026-11-04T23:56:40Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-04T23:56:40Z",
+          "completed_at": "2026-11-04T23:56:41Z"
+        },
+        {
+          "name": "Check C formatting and provide exact pinned-formatter correction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-04T23:56:41Z",
+          "completed_at": "2026-11-04T23:56:41Z"
+        },
+        {
+          "name": "Upload formatter suggestions (untrusted; inspect before git apply)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-04T23:56:41Z",
+          "completed_at": "2026-11-04T23:56:41Z"
+        },
+        {
+          "name": "Configure, build, and test",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 8,
+          "started_at": "2026-11-04T23:56:41Z",
+          "completed_at": "2026-11-05T00:01:36Z"
+        },
+        {
+          "name": "Save verified original archive only on trusted successful main push",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-05T00:01:36Z",
+          "completed_at": "2026-11-05T00:01:36Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T00:01:36Z",
+          "completed_at": "2026-11-05T00:01:36Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T00:01:36Z",
+          "completed_at": "2026-11-05T00:01:36Z"
+        }
+      ]
+    },
+    {
+      "id": 126949834503,
+      "run_id": 41937577311,
+      "run_attempt": 1,
+      "name": "UBSan",
+      "head_sha": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-04T23:56:28Z",
+      "completed_at": "2026-11-05T00:02:17Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937577311/job/126949834503",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-04T23:56:29Z",
+          "completed_at": "2026-11-04T23:56:31Z"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-04T23:56:31Z",
+          "completed_at": "2026-11-04T23:56:37Z"
+        },
+        {
+          "name": "Host prerequisites from signed Ubuntu repositories",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-04T23:56:37Z",
+          "completed_at": "2026-11-04T23:56:52Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-04T23:56:52Z",
+          "completed_at": "2026-11-04T23:56:53Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-04T23:56:53Z",
+          "completed_at": "2026-11-04T23:56:54Z"
+        },
+        {
+          "name": "Check C formatting and provide exact pinned-formatter correction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-04T23:56:54Z",
+          "completed_at": "2026-11-04T23:56:54Z"
+        },
+        {
+          "name": "Upload formatter suggestions (untrusted; inspect before git apply)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-04T23:56:54Z",
+          "completed_at": "2026-11-04T23:56:54Z"
+        },
+        {
+          "name": "Configure, build, and test",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 8,
+          "started_at": "2026-11-04T23:56:54Z",
+          "completed_at": "2026-11-05T00:02:15Z"
+        },
+        {
+          "name": "Save verified original archive only on trusted successful main push",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-05T00:02:15Z",
+          "completed_at": "2026-11-05T00:02:15Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T00:02:15Z",
+          "completed_at": "2026-11-05T00:02:15Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T00:02:15Z",
+          "completed_at": "2026-11-05T00:02:15Z"
+        }
+      ]
+    },
+    {
+      "id": 126949834527,
+      "run_id": 41937577311,
+      "run_attempt": 1,
+      "name": "ASan",
+      "head_sha": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-04T23:56:29Z",
+      "completed_at": "2026-11-05T00:11:18Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937577311/job/126949834527",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-04T23:56:30Z",
+          "completed_at": "2026-11-04T23:56:31Z"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-04T23:56:31Z",
+          "completed_at": "2026-11-04T23:56:34Z"
+        },
+        {
+          "name": "Host prerequisites from signed Ubuntu repositories",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-04T23:56:34Z",
+          "completed_at": "2026-11-04T23:56:40Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-04T23:56:40Z",
+          "completed_at": "2026-11-04T23:56:43Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-04T23:56:43Z",
+          "completed_at": "2026-11-04T23:56:44Z"
+        },
+        {
+          "name": "Check C formatting and provide exact pinned-formatter correction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-04T23:56:44Z",
+          "completed_at": "2026-11-04T23:56:44Z"
+        },
+        {
+          "name": "Upload formatter suggestions (untrusted; inspect before git apply)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-04T23:56:44Z",
+          "completed_at": "2026-11-04T23:56:44Z"
+        },
+        {
+          "name": "Configure, build, and test",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 8,
+          "started_at": "2026-11-04T23:56:44Z",
+          "completed_at": "2026-11-05T00:11:14Z"
+        },
+        {
+          "name": "Save verified original archive only on trusted successful main push",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-05T00:11:14Z",
+          "completed_at": "2026-11-05T00:11:14Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T00:11:14Z",
+          "completed_at": "2026-11-05T00:11:15Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T00:11:15Z",
+          "completed_at": "2026-11-05T00:11:15Z"
+        }
+      ]
+    },
+    {
+      "id": 126949834610,
+      "run_id": 41937577311,
+      "run_attempt": 1,
+      "name": "Clang",
+      "head_sha": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-04T23:56:29Z",
+      "completed_at": "2026-11-05T00:02:01Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937577311/job/126949834610",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-04T23:56:30Z",
+          "completed_at": "2026-11-04T23:56:31Z"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-04T23:56:31Z",
+          "completed_at": "2026-11-04T23:56:34Z"
+        },
+        {
+          "name": "Host prerequisites from signed Ubuntu repositories",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-04T23:56:34Z",
+          "completed_at": "2026-11-04T23:56:40Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-04T23:56:40Z",
+          "completed_at": "2026-11-04T23:56:43Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-04T23:56:43Z",
+          "completed_at": "2026-11-04T23:56:44Z"
+        },
+        {
+          "name": "Check C formatting and provide exact pinned-formatter correction",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-04T23:56:44Z",
+          "completed_at": "2026-11-04T23:56:47Z"
+        },
+        {
+          "name": "Upload formatter suggestions (untrusted; inspect before git apply)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-04T23:56:47Z",
+          "completed_at": "2026-11-04T23:56:47Z"
+        },
+        {
+          "name": "Configure, build, and test",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 8,
+          "started_at": "2026-11-04T23:56:47Z",
+          "completed_at": "2026-11-05T00:01:57Z"
+        },
+        {
+          "name": "Save verified original archive only on trusted successful main push",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-05T00:01:57Z",
+          "completed_at": "2026-11-05T00:01:57Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T00:01:57Z",
+          "completed_at": "2026-11-05T00:01:58Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T00:01:58Z",
+          "completed_at": "2026-11-05T00:01:58Z"
+        }
+      ]
+    },
+    {
+      "id": 126949834650,
+      "run_id": 41937577311,
+      "run_attempt": 1,
+      "name": "GCC Release",
+      "head_sha": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-04T23:56:29Z",
+      "completed_at": "2026-11-05T00:01:02Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937577311/job/126949834650",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-04T23:56:30Z",
+          "completed_at": "2026-11-04T23:56:32Z"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-04T23:56:32Z",
+          "completed_at": "2026-11-04T23:56:38Z"
+        },
+        {
+          "name": "Host prerequisites from signed Ubuntu repositories",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-04T23:56:38Z",
+          "completed_at": "2026-11-04T23:56:54Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-04T23:56:54Z",
+          "completed_at": "2026-11-04T23:56:58Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-04T23:56:58Z",
+          "completed_at": "2026-11-04T23:56:59Z"
+        },
+        {
+          "name": "Check C formatting and provide exact pinned-formatter correction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-04T23:56:59Z",
+          "completed_at": "2026-11-04T23:56:59Z"
+        },
+        {
+          "name": "Upload formatter suggestions (untrusted; inspect before git apply)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-04T23:56:59Z",
+          "completed_at": "2026-11-04T23:56:59Z"
+        },
+        {
+          "name": "Configure, build, and test",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 8,
+          "started_at": "2026-11-04T23:56:59Z",
+          "completed_at": "2026-11-05T00:00:58Z"
+        },
+        {
+          "name": "Save verified original archive only on trusted successful main push",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-05T00:00:58Z",
+          "completed_at": "2026-11-05T00:00:58Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T00:00:58Z",
+          "completed_at": "2026-11-05T00:00:59Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T00:00:59Z",
+          "completed_at": "2026-11-05T00:00:59Z"
+        }
+      ]
+    },
+    {
+      "id": 126949834380,
+      "run_id": 41937577335,
+      "run_attempt": 1,
+      "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+      "head_sha": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-04T23:56:28Z",
+      "completed_at": "2026-11-05T00:00:13Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937577335/job/126949834380",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-04T23:56:29Z",
+          "completed_at": "2026-11-04T23:56:29Z"
+        },
+        {
+          "name": "Check out source without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-04T23:56:29Z",
+          "completed_at": "2026-11-04T23:56:32Z"
+        },
+        {
+          "name": "Verify available Ubuntu runner tools (no LLVM install)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-04T23:56:32Z",
+          "completed_at": "2026-11-04T23:56:32Z"
+        },
+        {
+          "name": "Configure and build the actual Production frontend with GCC (no LLVM)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-04T23:56:32Z",
+          "completed_at": "2026-11-04T23:56:47Z"
+        },
+        {
+          "name": "Inventory all CTests and assert Production CHECK, C17/native and public validators",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-04T23:56:47Z",
+          "completed_at": "2026-11-04T23:56:47Z"
+        },
+        {
+          "name": "Execute every registered frontend/C17 CTest (NO LLVM; PARTIAL)",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 6,
+          "started_at": "2026-11-04T23:56:47Z",
+          "completed_at": "2026-11-05T00:00:11Z"
+        },
+        {
+          "name": "Verify real Production source/checker CLI path (NO LLVM; PARTIAL)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-05T00:00:11Z",
+          "completed_at": "2026-11-05T00:00:11Z"
+        },
+        {
+          "name": "Post Check out source without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-05T00:00:11Z",
+          "completed_at": "2026-11-05T00:00:11Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-11-05T00:00:11Z",
+          "completed_at": "2026-11-05T00:00:11Z"
+        }
+      ]
+    },
+    {
+      "id": 126949041752,
+      "run_id": 41937346694,
+      "run_attempt": 1,
+      "name": "R-FAST pinned format + GCC build + CTest registration only",
+      "head_sha": "52b5b577e33b7be45419a797f6994565f2923b28",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-04T23:54:37Z",
+      "completed_at": "2026-11-04T23:55:21Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937346694/job/126949041752",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-04T23:54:38Z",
+          "completed_at": "2026-11-04T23:54:39Z"
+        },
+        {
+          "name": "Checkout immutable push SHA without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-04T23:54:39Z",
+          "completed_at": "2026-11-04T23:54:42Z"
+        },
+        {
+          "name": "Verify opt-in R-FAST push and exact immutable checkout",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-04T23:54:42Z",
+          "completed_at": "2026-11-04T23:54:43Z"
+        },
+        {
+          "name": "Signed Ubuntu prerequisites (unchanged trust)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-04T23:54:43Z",
+          "completed_at": "2026-11-04T23:54:48Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-04T23:54:48Z",
+          "completed_at": "2026-11-04T23:54:51Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified pinned LLVM 23.1.3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-04T23:54:51Z",
+          "completed_at": "2026-11-04T23:54:52Z"
+        },
+        {
+          "name": "Strict pinned formatting (fail closed; never alter source)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-04T23:54:52Z",
+          "completed_at": "2026-11-04T23:54:55Z"
+        },
+        {
+          "name": "Upload review-only formatter suggestions on failure",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-04T23:54:55Z",
+          "completed_at": "2026-11-04T23:54:55Z"
+        },
+        {
+          "name": "GCC frontend-only host build and CTest registration inventory (NO tests executed)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-04T23:54:55Z",
+          "completed_at": "2026-11-04T23:55:18Z"
+        },
+        {
+          "name": "Post Checkout immutable push SHA without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-04T23:55:18Z",
+          "completed_at": "2026-11-04T23:55:19Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-04T23:55:19Z",
+          "completed_at": "2026-11-04T23:55:19Z"
+        }
+      ]
+    },
+    {
+      "id": 126948281687,
+      "run_id": 41937122452,
+      "run_attempt": 1,
+      "name": "R-FAST pinned format + GCC build + CTest registration only",
+      "head_sha": "735677fbc462c70fbe1af844a4542720b2263361",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-04T23:52:48Z",
+      "completed_at": "2026-11-04T23:53:14Z",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41937122452/job/126948281687",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-04T23:52:48Z",
+          "completed_at": "2026-11-04T23:52:49Z"
+        },
+        {
+          "name": "Checkout immutable push SHA without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-04T23:52:49Z",
+          "completed_at": "2026-11-04T23:52:53Z"
+        },
+        {
+          "name": "Verify opt-in R-FAST push and exact immutable checkout",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-04T23:52:53Z",
+          "completed_at": "2026-11-04T23:52:53Z"
+        },
+        {
+          "name": "Signed Ubuntu prerequisites (unchanged trust)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-04T23:52:53Z",
+          "completed_at": "2026-11-04T23:53:02Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-04T23:53:02Z",
+          "completed_at": "2026-11-04T23:53:03Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified pinned LLVM 23.1.3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-04T23:53:03Z",
+          "completed_at": "2026-11-04T23:53:04Z"
+        },
+        {
+          "name": "Strict pinned formatting (fail closed; never alter source)",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 7,
+          "started_at": "2026-11-04T23:53:04Z",
+          "completed_at": "2026-11-04T23:53:11Z"
+        },
+        {
+          "name": "Upload review-only formatter suggestions on failure",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-04T23:53:11Z",
+          "completed_at": "2026-11-04T23:53:12Z"
+        },
+        {
+          "name": "GCC frontend-only host build and CTest registration inventory (NO tests executed)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-11-04T23:53:12Z",
+          "completed_at": "2026-11-04T23:53:12Z"
+        },
+        {
+          "name": "Post Checkout immutable push SHA without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-04T23:53:12Z",
+          "completed_at": "2026-11-04T23:53:13Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-04T23:53:13Z",
+          "completed_at": "2026-11-04T23:53:13Z"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "FAST": 3,
+    "normal": 12,
+    "manual": 0
+  }
+}

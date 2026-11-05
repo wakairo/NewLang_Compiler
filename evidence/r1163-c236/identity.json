@@ -1,0 +1,72 @@
+{
+  "authority": {
+    "commit": "449ccf0dc567c05f3fd6dc4430b265759e22d571",
+    "tree": "74a1bdc728398eb85bb690a9eaff34194f316b50",
+    "CURRENT_SPEC": "Draft17.34"
+  },
+  "compiler": {
+    "commit": "9030055314600b804fafde64adebb03c4d6315a1",
+    "tree": "261a8e404a1cf1982e13d3b94e3223d5da0e0499",
+    "verified_fixed_P_snapshot_leaves": 5992
+  },
+  "archive_branch": "r-archive/r1163-c236-evidence",
+  "archive_sole_parent": "df73c2913d18045a7c97a90f6bf5088644868782",
+  "measured_tree": "d977df728458b985c3738f20b3d64af91da67097",
+  "measured_leaves_to_preserve": 6048,
+  "first_checkout": "75ee7c3bea0e83b1b6207021cc4071dc39a9f906",
+  "final_checkout": "c15349a2aec6d712920961093f970086c666f61a",
+  "final_checkout_parents": [
+    "9030055314600b804fafde64adebb03c4d6315a1",
+    "df73c2913d18045a7c97a90f6bf5088644868782"
+  ],
+  "workflow_blobs": [
+    {
+      "path": ".github/workflows/r-preflight.yml",
+      "sha": "9fea1afeeef948127c73e9ca86c476091036116e",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "sha": "23655288e60f0d3d08a12c9a542346bf31829a08",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "sha": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5",
+      "mode": "100644"
+    }
+  ],
+  "archive_trigger_contract": "FULL/PARTIAL pull_request or main push; FAST r-fast/** push; no archive PR; archive r-archive/** does not match",
+  "archive_release_comment": 6645882146,
+  "M2_freeze_comment": 6645933169,
+  "M2_actual_run_comment": 6645944952,
+  "affected_STOP_comment": 6646078962,
+  "archive_work": "read/hash/text/JSON/zip/gzip/Git object transport only; compiler/native/build/formatter/CTest/manual Actions zero",
+  "machinery": [
+    {
+      "path": "tests/r1163/probe.c",
+      "sha256": "9b8ee5a05a531f669b124d4396b158f46eb92feae45207bd284a834b81169db4",
+      "git_blob": "44e297eae32a7527c263c3380d4098602526f769"
+    },
+    {
+      "path": "tests/r1163/driver.py",
+      "sha256": "9beaff14bb6adef13827985a577a6a06d415f2469b955e5e767db6e833564f54",
+      "git_blob": "b64403882f0221679d43075659839b6d146fcb9c"
+    },
+    {
+      "path": "tests/r1163/observer.py",
+      "sha256": "9a8b7acd82ec4a37f615333c399a915d5978d45daa827067a19864e688650410",
+      "git_blob": "b671493003edfc12961b1a15a2bcfff3f7c792e6"
+    },
+    {
+      "path": "tests/r1163/register.cmake",
+      "sha256": "4d9c45eadbb7edd5f7d608abca4a668fb7604ef4e496676d4d6e2799d938429d",
+      "git_blob": "ea69fa1d92e816862709046e22cb36cd09310ee8"
+    },
+    {
+      "path": "tests/r1163/snapshot.py",
+      "sha256": "113c2c52a20151e278e3eae598e33177bdde22c04b060bc3c63c51ea731befb3",
+      "git_blob": "21a0e529b3b9e491959b24eb45f9d65dd8e9ec03"
+    }
+  ]
+}
