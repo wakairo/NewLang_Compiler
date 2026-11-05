@@ -1,0 +1,31 @@
+[  0%] Built target newlang_diagnostic
+[  0%] Built target newlang_source
+[ 11%] Built target newlang_syntax
+[ 11%] Built target newlang_lexer
+[ 22%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p1184_signature.dir/tests/p1184/c246a/signature.c.o
+In file included from /tmp/p1184-c245/tests/p1184/c246a/signature.c:3:
+/tmp/p1184-c245/tests/p1184/c246a/signature.c: In function ‘rejected’:
+/tmp/p1184-c245/tests/p1184/c246a/signature.c:93:18: error: implicit declaration of function ‘fileno’ [-Werror=implicit-function-declaration]
+   93 |     assert(fstat(fileno(stream), &saved) == 0);
+      |                  ^~~~~~
+/tmp/p1184-c245/tests/p1184/c246a/signature.c:98:18: error: ‘struct stat’ has no member named ‘st_mtim’; did you mean ‘st_mtime’?
+   98 |            saved.st_mtim.tv_sec == after.st_mtim.tv_sec &&
+      |                  ^~~~~~~
+/tmp/p1184-c245/tests/p1184/c246a/signature.c:98:42: error: ‘struct stat’ has no member named ‘st_mtim’; did you mean ‘st_mtime’?
+   98 |            saved.st_mtim.tv_sec == after.st_mtim.tv_sec &&
+      |                                          ^~~~~~~
+/tmp/p1184-c245/tests/p1184/c246a/signature.c:99:18: error: ‘struct stat’ has no member named ‘st_mtim’; did you mean ‘st_mtime’?
+   99 |            saved.st_mtim.tv_nsec == after.st_mtim.tv_nsec);
+      |                  ^~~~~~~
+/tmp/p1184-c245/tests/p1184/c246a/signature.c:99:43: error: ‘struct stat’ has no member named ‘st_mtim’; did you mean ‘st_mtime’?
+   99 |            saved.st_mtim.tv_nsec == after.st_mtim.tv_nsec);
+      |                                           ^~~~~~~
+cc1: all warnings being treated as errors
+gmake[3]: *** [CMakeFiles/p1184_signature.dir/build.make:79: CMakeFiles/p1184_signature.dir/tests/p1184/c246a/signature.c.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:7139: CMakeFiles/p1184_signature.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:7146: CMakeFiles/p1184_signature.dir/rule] Error 2
+gmake: *** [Makefile:2357: p1184_signature] Error 2

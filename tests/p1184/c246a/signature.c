@@ -1,4 +1,5 @@
 /* Only this test TU sees the private issued proof, not a new Production API. */
+#define _POSIX_C_SOURCE 200809L
 #include "semantic_check.c"
 #include <assert.h>
 #include <sys/stat.h>

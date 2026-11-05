@@ -7,7 +7,10 @@ import sys
 
 root = Path(__file__).resolve().parents[3]
 here = Path(__file__).resolve().parent
-frozen = json.loads((here / "freeze-v1.json").read_bytes())
+previous = here / "freeze-v1.json"
+assert hashlib.sha256(previous.read_bytes()).hexdigest() == \
+    "33a3febd5760810ca25f8346ed70b0fe5975e2f4c22b8d64be5e3bfb3371bb34"
+frozen = json.loads((here / "freeze-v2.json").read_bytes())
 for name, expected in frozen["files"].items():
     assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected, name
 oracle = json.loads((here / "oracle-v1.json").read_bytes())
