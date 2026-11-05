@@ -62,8 +62,10 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
     const NLSyntaxView *guard =
         v && v->kind == NL_SYNTAX_IF
             ? nl_syntax_node_view(v->data.conditional.condition) : NULL;
-    const NLSyntaxView *lhs = guard ? nl_syntax_node_view(guard->data.equality.left) : NULL;
-    const NLSyntaxView *rhs = guard ? nl_syntax_node_view(guard->data.equality.right) : NULL;
+    const NLSyntaxView *lhs = guard && guard->kind == NL_SYNTAX_USIZE_LESS_THAN
+        ? nl_syntax_node_view(guard->data.equality.left) : NULL;
+    const NLSyntaxView *rhs = guard && guard->kind == NL_SYNTAX_USIZE_LESS_THAN
+        ? nl_syntax_node_view(guard->data.equality.right) : NULL;
     if (!p || !init || init->kind != NL_SYNTAX_USIZE_LITERAL || !b ||
         b->kind != NL_SYNTAX_BLOCK || b->data.block.items || !v ||
         !guard || guard->kind != NL_SYNTAX_USIZE_LESS_THAN || !lhs || !rhs ||
