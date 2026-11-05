@@ -2981,6 +2981,15 @@ static bool emit_current_copy(FILE *stream, const NLLinearBreakView *p,
            fprintf(stream, "(void)nl_local_%zu;\n", binding->symbol) >= 0;
 }
 
+static bool emit_current_discard(FILE *stream, const NLLinearBreakView *p,
+                                 NLCheckedNodeId loop,
+                                 const NLCheckedNodeView *value, size_t depth)
+{
+    return v0_indent(stream, depth) && fputs("(void)", stream) >= 0 &&
+           emit_current_quantity(stream, p, loop, value) &&
+           fputs(";\n", stream) >= 0;
+}
+
 static bool emit_current_helper(FILE *stream, const NLLinearBreakView *p,
                                 NLCheckedNodeId loop, NLSymbolId binding,
                                 size_t depth)
@@ -3037,9 +3046,16 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
             n && n->kind == NL_CHECKED_BINDING
                 ? nl_checked_node_view(arm, n->first_argument)
                 : NULL;
+        const NLCheckedNodeView *discard =
+            n && n->kind == NL_CHECKED_STATEMENT
+                ? nl_checked_node_view(arm, n->initializer)
+                : NULL;
         if (!n ||
-            !(receiver && receiver->type ==
-                              nl_semantic_core_type(arm->context, NL_TYPE_USIZE)
+            !(discard && discard->type ==
+                             nl_semantic_core_type(arm->context, NL_TYPE_USIZE)
+                  ? emit_current_discard(stream, p, id, discard, depth + 2)
+              : receiver && receiver->type == nl_semantic_core_type(
+                                                  arm->context, NL_TYPE_USIZE)
                   ? emit_current_copy(stream, p, id, n, depth + 2)
               : p->incoming_if && n->kind == NL_CHECKED_BINDING &&
                       n->initializer == p->incoming_if
