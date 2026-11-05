@@ -1,0 +1,18 @@
+{
+  "job": 127073738880,
+  "event": "local-prefix custody anomaly",
+  "cause": "UNDETERMINED",
+  "affected": "local decoded-log working copy only; completed staging and retained tool response intact",
+  "prefix": {
+    "bytes": 315002,
+    "sha256": "22eb4f0436119a53317ca9a83b99134a76077e8e42ffe20a5fde2bed5e96ae99",
+    "retained_file": "custody-local-prefix-anomaly-127073738880.log"
+  },
+  "complete": {
+    "bytes": 341360,
+    "sha256": "e58b1436372f3c79f868c331b06e0ebb9b6cbb7e208cc1609f774e5d71339e29"
+  },
+  "fresh_GitHub_response": "byte-for-byte string equality with original complete response verified in orchestrator",
+  "action": "prefix retained separately; complete working file restored atomically from already verified complete staging copy",
+  "CI_or_semantic_execution": 0
+}

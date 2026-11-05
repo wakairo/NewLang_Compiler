@@ -1,0 +1,379 @@
+﻿2026-11-05T05:12:55.7206444Z Current runner version: '2.338.2'
+2026-11-05T05:12:55.7232242Z ##[group]Runner Image Provisioner
+2026-11-05T05:12:55.7233225Z Hosted Compute Agent
+2026-11-05T05:12:55.7233797Z Version: 20261028.624
+2026-11-05T05:12:55.7234464Z Commit: 54898b74c23fde5556c9b3c3a2290865feef0dfe
+2026-11-05T05:12:55.7235374Z Build Date: 2026-10-28T21:51:42Z
+2026-11-05T05:12:55.7236101Z Worker ID: {c767789f-62c9-4103-8ad1-89a85afba606}
+2026-11-05T05:12:55.7236804Z Region: westus2
+2026-11-05T05:12:55.7237314Z Cloud: Azure
+2026-11-05T05:12:55.7238315Z ##[endgroup]
+2026-11-05T05:12:55.7240336Z ##[group]Operating System
+2026-11-05T05:12:55.7240976Z Ubuntu
+2026-11-05T05:12:55.7241504Z 24.04.5
+2026-11-05T05:12:55.7242005Z LTS
+2026-11-05T05:12:55.7242567Z ##[endgroup]
+2026-11-05T05:12:55.7243144Z ##[group]Runner Image
+2026-11-05T05:12:55.7243729Z Image: ubuntu-24.04
+2026-11-05T05:12:55.7244296Z Version: 20261101.360.1
+2026-11-05T05:12:55.7245546Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261101.360/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-05T05:12:55.7247101Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261101.360
+2026-11-05T05:12:55.7248046Z ##[endgroup]
+2026-11-05T05:12:55.7249388Z ##[group]GITHUB_TOKEN Permissions
+2026-11-05T05:12:55.7251909Z Contents: read
+2026-11-05T05:12:55.7252544Z Metadata: read
+2026-11-05T05:12:55.7253085Z ##[endgroup]
+2026-11-05T05:12:55.7255368Z Secret source: Actions
+2026-11-05T05:12:55.7256289Z Cache mode: write
+2026-11-05T05:12:55.7257024Z Prepare workflow directory
+2026-11-05T05:12:55.7586363Z Prepare all required actions
+2026-11-05T05:12:55.7637719Z Getting action download info
+2026-11-05T05:12:56.1403263Z Download action repository 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
+2026-11-05T05:12:56.2994991Z Download action repository 'actions/cache@3edfce9056124e459a23f683a21433670d47daca' (SHA:3edfce9056124e459a23f683a21433670d47daca)
+2026-11-05T05:12:56.6368299Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-05T05:12:56.9053014Z Complete job name: R-FAST pinned format + GCC build + CTest registration only
+2026-11-05T05:12:56.9968326Z ##[group]Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+2026-11-05T05:12:56.9969958Z with:
+2026-11-05T05:12:56.9970732Z   ref: 5f3f7ee2c494643843eda1d10260a50bf246bae3
+2026-11-05T05:12:56.9971499Z   fetch-depth: 3
+2026-11-05T05:12:56.9972082Z   persist-credentials: false
+2026-11-05T05:12:56.9972820Z   repository: wakairo/NewLang_Compiler
+2026-11-05T05:12:56.9977247Z   token: ***
+2026-11-05T05:12:56.9977894Z   ssh-strict: true
+2026-11-05T05:12:56.9978476Z   ssh-user: git
+2026-11-05T05:12:56.9979230Z   clean: true
+2026-11-05T05:12:56.9979864Z   sparse-checkout-cone-mode: true
+2026-11-05T05:12:56.9980554Z   fetch-tags: false
+2026-11-05T05:12:56.9981160Z   show-progress: true
+2026-11-05T05:12:56.9981806Z   lfs: false
+2026-11-05T05:12:56.9982404Z   submodules: false
+2026-11-05T05:12:56.9983030Z   set-safe-directory: true
+2026-11-05T05:12:56.9983872Z ##[endgroup]
+2026-11-05T05:12:57.2840648Z Syncing repository: wakairo/NewLang_Compiler
+2026-11-05T05:12:57.2843186Z ##[group]Getting Git version info
+2026-11-05T05:12:57.2844478Z Working directory is '/home/runner/work/NewLang_Compiler/NewLang_Compiler'
+2026-11-05T05:12:57.2845873Z [command]/usr/bin/git version
+2026-11-05T05:12:57.2932551Z git version 2.56.0
+2026-11-05T05:12:57.2956763Z ##[endgroup]
+2026-11-05T05:12:57.2974195Z Temporarily overriding HOME='/home/runner/work/_temp/26f430df-9f74-4075-8862-eb1e66bc708a' before making global git config changes
+2026-11-05T05:12:57.2976581Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T05:12:57.2980427Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-05T05:12:57.3038308Z Deleting the contents of '/home/runner/work/NewLang_Compiler/NewLang_Compiler'
+2026-11-05T05:12:57.3045434Z ##[group]Initializing the repository
+2026-11-05T05:12:57.3050831Z [command]/usr/bin/git init /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-05T05:12:57.3186439Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-05T05:12:57.3187860Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-05T05:12:57.3189215Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-05T05:12:57.3190190Z hint: call:
+2026-11-05T05:12:57.3190898Z hint:
+2026-11-05T05:12:57.3191612Z hint: 	git config --global init.defaultBranch <name>
+2026-11-05T05:12:57.3192343Z hint:
+2026-11-05T05:12:57.3193037Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-05T05:12:57.3194412Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-05T05:12:57.3195468Z hint:
+2026-11-05T05:12:57.3196174Z hint: 	git branch -m <name>
+2026-11-05T05:12:57.3197041Z hint:
+2026-11-05T05:12:57.3197910Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-05T05:12:57.3204723Z Initialized empty Git repository in /home/runner/work/NewLang_Compiler/NewLang_Compiler/.git/
+2026-11-05T05:12:57.3213374Z [command]/usr/bin/git remote add origin https://github.com/wakairo/NewLang_Compiler
+2026-11-05T05:12:57.3320908Z ##[endgroup]
+2026-11-05T05:12:57.3322918Z ##[group]Disabling automatic garbage collection
+2026-11-05T05:12:57.3324332Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-05T05:12:57.3360382Z ##[endgroup]
+2026-11-05T05:12:57.3362173Z ##[group]Setting up auth
+2026-11-05T05:12:57.3366048Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T05:12:57.3401318Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-05T05:12:57.3790464Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T05:12:57.3829887Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-05T05:12:57.4044517Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-05T05:12:57.4092055Z ##[endgroup]
+2026-11-05T05:12:57.4093726Z ##[group]Fetching the repository
+2026-11-05T05:12:57.4106295Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=3 origin 5f3f7ee2c494643843eda1d10260a50bf246bae3
+2026-11-05T05:12:59.7180442Z From https://github.com/wakairo/NewLang_Compiler
+2026-11-05T05:12:59.7181675Z  * branch            5f3f7ee2c494643843eda1d10260a50bf246bae3 -> FETCH_HEAD
+2026-11-05T05:12:59.7184811Z ##[endgroup]
+2026-11-05T05:12:59.7185946Z ##[group]Determining the checkout info
+2026-11-05T05:12:59.7187031Z ##[endgroup]
+2026-11-05T05:12:59.7193063Z [command]/usr/bin/git sparse-checkout disable
+2026-11-05T05:12:59.7256243Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-05T05:12:59.7291461Z ##[group]Checking out the ref
+2026-11-05T05:12:59.7296531Z [command]/usr/bin/git checkout --progress --force 5f3f7ee2c494643843eda1d10260a50bf246bae3
+2026-11-05T05:13:00.1691498Z Note: switching to '5f3f7ee2c494643843eda1d10260a50bf246bae3'.
+2026-11-05T05:13:00.1692048Z 
+2026-11-05T05:13:00.1692733Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-05T05:13:00.1693560Z changes and commit them, and you can discard any commits you make in this
+2026-11-05T05:13:00.1694347Z state without impacting any branches by switching back to a branch.
+2026-11-05T05:13:00.1694842Z 
+2026-11-05T05:13:00.1695267Z If you want to create a new branch to retain commits you create, you may
+2026-11-05T05:13:00.1696025Z do so (now or later) by using -c with the switch command. Example:
+2026-11-05T05:13:00.1696909Z 
+2026-11-05T05:13:00.1697143Z   git switch -c <new-branch-name>
+2026-11-05T05:13:00.1697590Z 
+2026-11-05T05:13:00.1697849Z Or undo this operation with:
+2026-11-05T05:13:00.1698160Z 
+2026-11-05T05:13:00.1698356Z   git switch -
+2026-11-05T05:13:00.1698864Z 
+2026-11-05T05:13:00.1726461Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-05T05:13:00.1726938Z 
+2026-11-05T05:13:00.1727325Z HEAD is now at 5f3f7ee test(r1173): freeze independent changing-current cohort and Actions-only evidence
+2026-11-05T05:13:00.1769797Z ##[endgroup]
+2026-11-05T05:13:00.1775451Z [command]/usr/bin/git log -1 --format=%H
+2026-11-05T05:13:00.1811501Z 5f3f7ee2c494643843eda1d10260a50bf246bae3
+2026-11-05T05:13:00.1818361Z ##[group]Removing auth
+2026-11-05T05:13:00.1823857Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T05:13:00.1859880Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-05T05:13:00.2066384Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T05:13:00.2096403Z http.https://github.com/.extraheader
+2026-11-05T05:13:00.2104157Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-05T05:13:00.2139602Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-05T05:13:00.2342536Z ##[endgroup]
+2026-11-05T05:13:00.2576886Z ##[group]Run set -euo pipefail
+2026-11-05T05:13:00.2577538Z [36;1mset -euo pipefail[0m
+2026-11-05T05:13:00.2577942Z [36;1mtest "$GITHUB_EVENT_NAME" = "push"[0m
+2026-11-05T05:13:00.2578351Z [36;1mcase "$GITHUB_REF" in[0m
+2026-11-05T05:13:00.2579026Z [36;1m  refs/heads/r-fast/*) ;;[0m
+2026-11-05T05:13:00.2579500Z [36;1m  *) echo "STOP: not an opt-in R-FAST ref"; exit 1 ;;[0m
+2026-11-05T05:13:00.2579901Z [36;1mesac[0m
+2026-11-05T05:13:00.2580267Z [36;1mtest "$GITHUB_REF_TYPE" = "branch"[0m
+2026-11-05T05:13:00.2580725Z [36;1mtest "$(git rev-parse HEAD)" = "$GITHUB_SHA"[0m
+2026-11-05T05:13:00.2581191Z [36;1mtest "$(git status --porcelain)" = ""[0m
+2026-11-05T05:13:00.2581641Z [36;1mtest "wakairo/NewLang_Compiler" = "$GITHUB_REPOSITORY"[0m
+2026-11-05T05:13:00.2582228Z [36;1mecho "R-FAST event=$GITHUB_EVENT_NAME repository=$GITHUB_REPOSITORY branch=$GITHUB_REF"[0m
+2026-11-05T05:13:00.2583082Z [36;1mecho "R-FAST immutable_HEAD=$(git rev-parse HEAD) event_SHA=$GITHUB_SHA attempt=$GITHUB_RUN_ATTEMPT"[0m
+2026-11-05T05:13:00.2583936Z [36;1mecho "R-FAST preparation only: semantic CHECK execution, source-issued owned proof, native/C17, negative/OOM, ASan and UBSan NOT TESTED"[0m
+2026-11-05T05:13:00.2605361Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T05:13:00.2605989Z ##[endgroup]
+2026-11-05T05:13:00.4553291Z R-FAST event=push repository=wakairo/NewLang_Compiler branch=refs/heads/r-fast/r1173-changing-current
+2026-11-05T05:13:00.4569453Z R-FAST immutable_HEAD=5f3f7ee2c494643843eda1d10260a50bf246bae3 event_SHA=5f3f7ee2c494643843eda1d10260a50bf246bae3 attempt=1
+2026-11-05T05:13:00.4570518Z R-FAST preparation only: semantic CHECK execution, source-issued owned proof, native/C17, negative/OOM, ASan and UBSan NOT TESTED
+2026-11-05T05:13:00.4621052Z ##[group]Run set -euo pipefail
+2026-11-05T05:13:00.4621546Z [36;1mset -euo pipefail[0m
+2026-11-05T05:13:00.4621918Z [36;1mcmake_before=$(command -v cmake)[0m
+2026-11-05T05:13:00.4622471Z [36;1mcmake_version=$(cmake --version | sed -n '1s/^cmake version //p')[0m
+2026-11-05T05:13:00.4622985Z [36;1mpython3 - "$cmake_version" <<'PY'[0m
+2026-11-05T05:13:00.4623359Z [36;1mimport re[0m
+2026-11-05T05:13:00.4623694Z [36;1mimport sys[0m
+2026-11-05T05:13:00.4624081Z [36;1mmatch = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", sys.argv[1])[0m
+2026-11-05T05:13:00.4624671Z [36;1mif not match:[0m
+2026-11-05T05:13:00.4625096Z [36;1m    sys.exit("STOP: unexpected CMake version")[0m
+2026-11-05T05:13:00.4625551Z [36;1mmajor, minor, patch = map(int, match.groups())[0m
+2026-11-05T05:13:00.4626045Z [36;1mif not ((3, 28) <= (major, minor) < (4, 0)):[0m
+2026-11-05T05:13:00.4626521Z [36;1m    sys.exit("STOP: CMake outside reviewed interval")[0m
+2026-11-05T05:13:00.4626920Z [36;1mPY[0m
+2026-11-05T05:13:00.4627387Z [36;1msudo apt-get update[0m
+2026-11-05T05:13:00.4627782Z [36;1msudo apt-get install --no-install-recommends -y \[0m
+2026-11-05T05:13:00.4628258Z [36;1m  gcc-13 g++-13 make python3 zstd \[0m
+2026-11-05T05:13:00.4629286Z [36;1m  libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev[0m
+2026-11-05T05:13:00.4629823Z [36;1mtest "$(command -v cmake)" = "$cmake_before"[0m
+2026-11-05T05:13:00.4630350Z [36;1mtest "$(cmake --version | sed -n '1s/^cmake version //p')" = "$cmake_version"[0m
+2026-11-05T05:13:00.4646069Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T05:13:00.4646523Z ##[endgroup]
+2026-11-05T05:13:01.6507497Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-05T05:13:01.6955854Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-11-05T05:13:01.7281388Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-11-05T05:13:01.7297033Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-11-05T05:13:01.7349521Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-11-05T05:13:01.7376967Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-11-05T05:13:01.7704664Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [731 kB]
+2026-11-05T05:13:01.7920330Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [663 kB]
+2026-11-05T05:13:01.8737835Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1409 kB]
+2026-11-05T05:13:01.8821280Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [311 kB]
+2026-11-05T05:13:01.8849112Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1707 kB]
+2026-11-05T05:13:01.9736479Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1157 kB]
+2026-11-05T05:13:01.9801000Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [233 kB]
+2026-11-05T05:13:01.9826669Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1225 kB]
+2026-11-05T05:13:01.9888853Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [247 kB]
+2026-11-05T05:13:01.9912827Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1721 kB]
+2026-11-05T05:13:02.0002596Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [394 kB]
+2026-11-05T05:13:02.0033084Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [12.4 kB]
+2026-11-05T05:13:05.3986535Z Fetched 10.2 MB in 1s (8985 kB/s)
+2026-11-05T05:13:06.5582727Z Reading package lists...
+2026-11-05T05:13:06.5978118Z Reading package lists...
+2026-11-05T05:13:06.8561914Z Building dependency tree...
+2026-11-05T05:13:06.8567768Z Reading state information...
+2026-11-05T05:13:07.0770902Z gcc-13 is already the newest version (13.3.0-6ubuntu2~24.04.1).
+2026-11-05T05:13:07.0771552Z gcc-13 set to manually installed.
+2026-11-05T05:13:07.0772144Z g++-13 is already the newest version (13.3.0-6ubuntu2~24.04.1).
+2026-11-05T05:13:07.0772894Z make is already the newest version (4.3-4.1build2).
+2026-11-05T05:13:07.0773536Z python3 is already the newest version (3.12.3-0ubuntu2.1).
+2026-11-05T05:13:07.0774307Z zstd is already the newest version (1.5.5+dfsg2-2build1.1).
+2026-11-05T05:13:07.0774776Z zstd set to manually installed.
+2026-11-05T05:13:07.0775340Z libstdc++6 is already the newest version (14.2.0-4ubuntu2~24.04.1).
+2026-11-05T05:13:07.0775895Z zlib1g-dev is already the newest version (1:1.3.dfsg-3.1ubuntu2.3).
+2026-11-05T05:13:07.0776546Z libzstd-dev is already the newest version (1.5.5+dfsg2-2build1.1).
+2026-11-05T05:13:07.0777609Z libzstd-dev set to manually installed.
+2026-11-05T05:13:07.0778086Z libncurses-dev is already the newest version (6.4+20240113-1ubuntu2.2).
+2026-11-05T05:13:07.0778728Z libncurses-dev set to manually installed.
+2026-11-05T05:13:07.0779275Z libxml2-dev is already the newest version (2.9.14+dfsg-1.3ubuntu3.10).
+2026-11-05T05:13:07.0779752Z libxml2-dev set to manually installed.
+2026-11-05T05:13:07.0780188Z 0 upgraded, 0 newly installed, 0 to remove and 23 not upgraded.
+2026-11-05T05:13:07.0883644Z ##[group]Run actions/cache/restore@3edfce9056124e459a23f683a21433670d47daca
+2026-11-05T05:13:07.0884233Z with:
+2026-11-05T05:13:07.0884681Z   path: .deps/downloads/newlang-llvm-23.1.3-linux-x64-final.tar.zst
+2026-11-05T05:13:07.0885363Z   key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-05T05:13:07.0885926Z   enableCrossOsArchive: false
+2026-11-05T05:13:07.0886389Z   fail-on-cache-miss: false
+2026-11-05T05:13:07.0886742Z   lookup-only: false
+2026-11-05T05:13:07.0887081Z ##[endgroup]
+2026-11-05T05:13:07.4790410Z Cache hit for: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-05T05:13:08.7724232Z Received 25165824 of 126417585 (19.9%), 24.0 MBs/sec
+2026-11-05T05:13:09.7047726Z Received 126417585 of 126417585 (100.0%), 62.3 MBs/sec
+2026-11-05T05:13:09.7049637Z Cache Size: ~121 MB (126417585 B)
+2026-11-05T05:13:09.7093158Z [command]/usr/bin/tar -xf /home/runner/work/_temp/65d7432f-540e-4ec4-989e-239e47566f65/cache.tzst -P -C /home/runner/work/NewLang_Compiler/NewLang_Compiler --use-compress-program unzstd
+2026-11-05T05:13:09.8477730Z Cache restored successfully
+2026-11-05T05:13:09.8693806Z Cache restored from key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-05T05:13:09.8850648Z ##[group]Run set -euo pipefail
+2026-11-05T05:13:09.8851063Z [36;1mset -euo pipefail[0m
+2026-11-05T05:13:09.8851467Z [36;1mpython3 scripts/bootstrap.py[0m
+2026-11-05T05:13:09.8851866Z [36;1m. .deps/activate.sh[0m
+2026-11-05T05:13:09.8852289Z [36;1mclang-format-23 --version | grep -F '23.1.3'[0m
+2026-11-05T05:13:09.8866000Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T05:13:09.8866476Z ##[endgroup]
+2026-11-05T05:13:09.9443475Z SDK cache candidate: verify exact SHA and size
+2026-11-05T05:13:10.0512914Z SDK archive independently SHA256 verified (126520077 bytes) in 0.11s
+2026-11-05T05:13:10.6771067Z SDK authenticated decompression 448040960 bytes in 0.63s
+2026-11-05T05:13:10.9870267Z SDK fail-closed tar inspection and rootless extraction 570 members
+2026-11-05T05:13:11.2126388Z LLVM 23.1.3 exact curated SDK ready at /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64; total 1.27s
+2026-11-05T05:13:11.2231532Z clang-format version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)
+2026-11-05T05:13:11.2290957Z ##[group]Run set -euo pipefail
+2026-11-05T05:13:11.2291457Z [36;1mset -euo pipefail[0m
+2026-11-05T05:13:11.2291838Z [36;1m. .deps/activate.sh[0m
+2026-11-05T05:13:11.2292213Z [36;1mbash scripts/check-format.sh[0m
+2026-11-05T05:13:11.2292627Z [36;1mecho 'R-FAST FORMAT PASS (not semantics)'[0m
+2026-11-05T05:13:11.2306861Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T05:13:11.2307323Z env:
+2026-11-05T05:13:11.2307836Z   FORMAT_SUGGESTIONS_PATCH: /home/runner/work/_temp/r-fast-format-suggestions.patch
+2026-11-05T05:13:11.2308342Z ##[endgroup]
+2026-11-05T05:13:13.5706144Z tests/r1173/probe.c:107:63: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-05T05:13:13.5707325Z         } else if (node->kind == NL_CHECKED_REGISTERED_CALL && node->body_backed) {
+2026-11-05T05:13:13.5708264Z                                                               ^
+2026-11-05T05:13:14.0627952Z clang-format failed (exit 1); generating exact suggestions with /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-format-23
+2026-11-05T05:13:14.0644941Z Checked checkout: 5f3f7ee2c494643843eda1d10260a50bf246bae3
+2026-11-05T05:13:14.0664616Z clang-format version: clang-format version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)
+2026-11-05T05:13:18.5987432Z Suggested patch for 2 C/H file(s): /home/runner/work/_temp/r-fast-format-suggestions.patch
+2026-11-05T05:13:18.5989159Z Review the complete patch, then: git apply --check '/home/runner/work/_temp/r-fast-format-suggestions.patch' && git apply '/home/runner/work/_temp/r-fast-format-suggestions.patch'
+2026-11-05T05:13:18.5990948Z Alternative after review: bash scripts/format.sh
+2026-11-05T05:13:18.5991499Z ----- BEGIN EXACT clang-format SUGGESTIONS -----
+2026-11-05T05:13:18.5996544Z --- a/tests/p1117/lineage.c
+2026-11-05T05:13:18.5997182Z +++ b/tests/p1117/lineage.c
+2026-11-05T05:13:18.5997651Z @@ -1,70 +0,0 @@
+2026-11-05T05:13:18.5998024Z -#define main p1117_driver_main
+2026-11-05T05:13:18.5998497Z -#include "main.c"
+2026-11-05T05:13:18.5999037Z -#undef main
+2026-11-05T05:13:18.5999392Z -#include <assert.h>
+2026-11-05T05:13:18.6000335Z -static bool accepts(const NLCheckedFragment *f, NLCheckedNodeId call,
+2026-11-05T05:13:18.6000993Z -                    const NLSemanticContext *c) {
+2026-11-05T05:13:18.6001507Z -  V0Program p = {.unit = nl_semantic_unit_type(c),
+2026-11-05T05:13:18.6002080Z -                 .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
+2026-11-05T05:13:18.6002623Z -  return predicate_call(f, call, &p);
+2026-11-05T05:13:18.6003147Z -}
+2026-11-05T05:13:18.6003527Z -int main(int argc, char **argv) {
+2026-11-05T05:13:18.6004090Z -  assert(argc == 2);
+2026-11-05T05:13:18.6004624Z -  NLSource *source = NULL, *entry_source = NULL;
+2026-11-05T05:13:18.6005212Z -  NLParser *parser = NULL, *entry_parser = NULL;
+2026-11-05T05:13:18.6005836Z -  NLSyntaxTree *unit = NULL, *tree = NULL;
+2026-11-05T05:13:18.6006216Z -  NLSemanticContext *c = NULL;
+2026-11-05T05:13:18.6006572Z -  NLCheckedFragment *owned = NULL;
+2026-11-05T05:13:18.6007055Z -  assert(nl_source_load(argv[1], &source) == NL_SOURCE_OK);
+2026-11-05T05:13:18.6007514Z -  assert(nl_parser_create(source, &parser) == NL_PARSE_OK);
+2026-11-05T05:13:18.6008053Z -  assert(nl_parser_parse_function_unit(parser, &unit, NULL) == NL_PARSE_OK);
+2026-11-05T05:13:18.6008537Z -  assert(nl_semantic_create(&c) == NL_CHECK_OK);
+2026-11-05T05:13:18.6009591Z -  const NLSyntaxTree *units[] = {unit};
+2026-11-05T05:13:18.6010069Z -  assert(nl_semantic_register_function_unit(c, units, 1, NULL) == NL_CHECK_OK);
+2026-11-05T05:13:18.6010610Z -  assert(nl_source_create("main()", 6, "<P1117-lineage>", &entry_source) ==
+2026-11-05T05:13:18.6011107Z -         NL_SOURCE_OK);
+2026-11-05T05:13:18.6011554Z -  assert(nl_parser_create(entry_source, &entry_parser) == NL_PARSE_OK);
+2026-11-05T05:13:18.6012406Z -  assert(nl_parser_parse_expression_fragment(entry_parser, &tree, NULL) ==
+2026-11-05T05:13:18.6013015Z -         NL_PARSE_OK);
+2026-11-05T05:13:18.6013644Z -  assert(nl_semantic_check_expression(c, tree, &owned, NULL) == NL_CHECK_OK);
+2026-11-05T05:13:18.6014318Z -  NLCheckedFragment *body =
+2026-11-05T05:13:18.6014964Z -      (NLCheckedFragment *)nl_checked_call_body(owned, nl_checked_root(owned));
+2026-11-05T05:13:18.6015609Z -  assert(body);
+2026-11-05T05:13:18.6016182Z -  NLCheckedNodeId calls[2] = {0};
+2026-11-05T05:13:18.6016632Z -  size_t count = 0;
+2026-11-05T05:13:18.6017147Z -  for (size_t n = 1; n <= body->count && count < 2; ++n)
+2026-11-05T05:13:18.6017676Z -    if (body->nodes[n - 1].kind == NL_CHECKED_REGISTERED_CALL)
+2026-11-05T05:13:18.6018126Z -      calls[count++] = n;
+2026-11-05T05:13:18.6018517Z -  assert(count == 2 && accepts(body, calls[0], c));
+2026-11-05T05:13:18.6019356Z -  NLCheckedNodeView *call = &body->nodes[calls[0] - 1];
+2026-11-05T05:13:18.6019830Z -  const NLCheckedNodeView *other = &body->nodes[calls[1] - 1];
+2026-11-05T05:13:18.6020342Z -  NLCheckedFragment *callee =
+2026-11-05T05:13:18.6020751Z -      (NLCheckedFragment *)nl_checked_call_body(body, calls[0]);
+2026-11-05T05:13:18.6021269Z -  assert(callee && call->results[0].value != other->results[0].value);
+2026-11-05T05:13:18.6021773Z -  NLCheckedNodeView *root = &callee->nodes[callee->root - 1];
+2026-11-05T05:13:18.6022353Z -  printf("P1117 actual result call=%zu body_returned=%zu body_normal=%zu "
+2026-11-05T05:13:18.6022808Z -         "other=%zu\n",
+2026-11-05T05:13:18.6023226Z -         call->results[0].value, root->returned.value, root->results[0].value,
+2026-11-05T05:13:18.6023700Z -         other->results[0].value);
+2026-11-05T05:13:18.6024157Z -  const NLCheckedNodeView saved_call = *call, saved_root = *root;
+2026-11-05T05:13:18.6024627Z -  call->results[0] = other->results[0];
+2026-11-05T05:13:18.6025034Z -  const bool foreign = accepts(body, calls[0], c);
+2026-11-05T05:13:18.6025429Z -  root->returned = other->results[0];
+2026-11-05T05:13:18.6025897Z -  const bool coherent_foreign = accepts(body, calls[0], c);
+2026-11-05T05:13:18.6026321Z -  *call = saved_call;
+2026-11-05T05:13:18.6026639Z -  *root = saved_root;
+2026-11-05T05:13:18.6026970Z -  assert(accepts(body, calls[0], c));
+2026-11-05T05:13:18.6027334Z -  printf(
+2026-11-05T05:13:18.6027770Z -      "P1117 foreign result accepted=%d coherent_foreign_return accepted=%d\n",
+2026-11-05T05:13:18.6028397Z -      foreign, coherent_foreign);
+2026-11-05T05:13:18.6029134Z -  /* No emission or execution of either altered artifact. */
+2026-11-05T05:13:18.6029566Z -  nl_checked_destroy(owned);
+2026-11-05T05:13:18.6029891Z -  nl_semantic_destroy(c);
+2026-11-05T05:13:18.6030261Z -  nl_syntax_tree_destroy(tree);
+2026-11-05T05:13:18.6030672Z -  nl_parser_destroy(entry_parser);
+2026-11-05T05:13:18.6031048Z -  nl_source_destroy(entry_source);
+2026-11-05T05:13:18.6031401Z -  nl_syntax_tree_destroy(unit);
+2026-11-05T05:13:18.6031726Z -  nl_parser_destroy(parser);
+2026-11-05T05:13:18.6032133Z -  nl_source_destroy(source);
+2026-11-05T05:13:18.6032529Z -  return foreign || coherent_foreign ? 1 : 0;
+2026-11-05T05:13:18.6032915Z -}
+2026-11-05T05:13:18.6033205Z --- a/tests/r1173/probe.c
+2026-11-05T05:13:18.6033603Z +++ b/tests/r1173/probe.c
+2026-11-05T05:13:18.6033960Z @@ -104,7 +104,8 @@
+2026-11-05T05:13:18.6034503Z                           path, id, arm);
+2026-11-05T05:13:18.6035042Z                  visit(owned, child_path, depth + 1);
+2026-11-05T05:13:18.6035574Z              }
+2026-11-05T05:13:18.6036128Z -        } else if (node->kind == NL_CHECKED_REGISTERED_CALL && node->body_backed) {
+2026-11-05T05:13:18.6036898Z +        } else if (node->kind == NL_CHECKED_REGISTERED_CALL &&
+2026-11-05T05:13:18.6037453Z +                   node->body_backed) {
+2026-11-05T05:13:18.6038107Z              snprintf(child_path, sizeof(child_path), "%s/call%zu", path, id);
+2026-11-05T05:13:18.6039288Z              visit(nl_checked_call_body(fragment, id), child_path, depth + 1);
+2026-11-05T05:13:18.6039738Z          }
+2026-11-05T05:13:18.6040382Z ----- END EXACT clang-format SUGGESTIONS -----
+2026-11-05T05:13:18.6051543Z ##[error]Process completed with exit code 1.
+2026-11-05T05:13:18.6144122Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-11-05T05:13:18.6144635Z with:
+2026-11-05T05:13:18.6145108Z   name: r-fast-format-suggestions-5f3f7ee2c494643843eda1d10260a50bf246bae3-attempt1
+2026-11-05T05:13:18.6145841Z   path: /home/runner/work/_temp/r-fast-format-suggestions.patch
+2026-11-05T05:13:18.6146311Z   if-no-files-found: ignore
+2026-11-05T05:13:18.6146685Z   retention-days: 7
+2026-11-05T05:13:18.6147048Z   compression-level: 6
+2026-11-05T05:13:18.6147381Z   overwrite: false
+2026-11-05T05:13:18.6147751Z   include-hidden-files: false
+2026-11-05T05:13:18.6148103Z ##[endgroup]
+2026-11-05T05:13:18.7842020Z (node:3803) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-05T05:13:18.7843188Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-05T05:13:18.7887669Z With the provided path, there will be 1 file uploaded
+2026-11-05T05:13:18.7914006Z Artifact name is valid!
+2026-11-05T05:13:18.7914631Z Root directory input is valid!
+2026-11-05T05:13:19.2174876Z Beginning upload of artifact content to blob storage
+2026-11-05T05:13:19.2351265Z (node:3803) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-05T05:13:19.5343839Z Uploaded bytes 1423
+2026-11-05T05:13:19.6142908Z Finished uploading artifact content to blob storage!
+2026-11-05T05:13:19.6143987Z SHA256 digest of uploaded artifact zip is eddd93922fa07868cef432f070a5e498ec8fc7faf2fddebd82197f29a1851b34
+2026-11-05T05:13:19.6145019Z Finalizing artifact upload
+2026-11-05T05:13:20.1271352Z Artifact r-fast-format-suggestions-5f3f7ee2c494643843eda1d10260a50bf246bae3-attempt1.zip successfully finalized. Artifact ID 13390915569
+2026-11-05T05:13:20.1272549Z Artifact r-fast-format-suggestions-5f3f7ee2c494643843eda1d10260a50bf246bae3-attempt1 has been successfully uploaded! Final size is 1423 bytes. Artifact ID is 13390915569
+2026-11-05T05:13:20.1276552Z Artifact download URL: https://github.com/wakairo/NewLang_Compiler/actions/runs/41972573890/artifacts/13390915569
+2026-11-05T05:13:20.1485033Z Post job cleanup.
+2026-11-05T05:13:20.2370538Z [command]/usr/bin/git version
+2026-11-05T05:13:20.2411376Z git version 2.56.0
+2026-11-05T05:13:20.2452027Z Temporarily overriding HOME='/home/runner/work/_temp/c7e32e5c-e797-447b-85be-1e7ec72a773b' before making global git config changes
+2026-11-05T05:13:20.2453102Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T05:13:20.2453913Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-05T05:13:20.2494901Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T05:13:20.2531480Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-05T05:13:20.2776089Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T05:13:20.2814897Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-05T05:13:20.3201093Z Cleaning up orphan processes
+2026-11-05T05:13:20.3594024Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
