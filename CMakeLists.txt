@@ -2170,4 +2170,8 @@ if(BUILD_TESTING)
     foreach(profile 01-add-many 05-sub-many)
         set_tests_properties(p1139_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
+    # Apply after the global default: preserve all C247 OOM ordinals/retries.
+    foreach(profile 04-all-one 05-all-two)
+        set_tests_properties(p1188_${profile}_oom.unit PROPERTIES TIMEOUT 300)
+    endforeach()
 endif()
