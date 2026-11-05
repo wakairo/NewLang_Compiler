@@ -554,7 +554,8 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
     if (!s->helper || !source || source->kind != NL_SYNTAX_EXPR_CALL ||
         r->scalar || r->changed || !v || !stutter_span(v->span, source->span) ||
         !stutter_span(v->name, source->data.call.callee) ||
-        !nl_pure_u8_call(r->arm, id, &pure))
+        !(s->sealed ? nl_pure_u8_call(r->arm, id, &pure)
+                    : nl_pure_u8_contents(r->arm, id, &pure)))
         return false;
     const NLCheckedNodeView *arg = current_take(r, v->first_argument);
     const NLSyntaxView *actual =
@@ -858,7 +859,8 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
                 return bad;
             if (s->helper) {
                 NLPureU8Call pure;
-                if (!nl_pure_u8_call(arm, scalar, &pure) ||
+                if (!(s->sealed ? nl_pure_u8_call(arm, scalar, &pure)
+                                : nl_pure_u8_contents(arm, scalar, &pure)) ||
                     (s->sealed && s->helper_choice != pure.selection))
                     return bad;
                 if (!s->sealed)

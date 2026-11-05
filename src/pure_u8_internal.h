@@ -302,11 +302,9 @@ typedef struct {
 
 /* An actual CHECK-owned synchronous call, not a host-supplied summary.
  * Caller placement/quantity-expression policy belongs to each consumer. */
-static bool nl_pure_u8_call(const NLCheckedFragment *f, NLCheckedNodeId id,
-                            NLPureU8Call *out)
+static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                NLPureU8Call *out)
 {
-    if (!nl_h_custody_result_valid(f, id))
-        return false;
     const NLSemanticContext *c = nl_checked_context(f);
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLCheckedFragment *body = nl_checked_call_body(f, id);
@@ -356,6 +354,15 @@ static bool nl_pure_u8_call(const NLCheckedFragment *f, NLCheckedNodeId id,
         return false;
     *out = (NLPureU8Call){body, formal, selection, call->function};
     return true;
+}
+
+/* Published consumers require the original finished-result receipt. The
+ * contents walk is also used by CHECK on its own unpublished definition
+ * prefix, where source_call deliberately has not issued that receipt. */
+static bool nl_pure_u8_call(const NLCheckedFragment *f, NLCheckedNodeId id,
+                            NLPureU8Call *out)
+{
+    return nl_h_custody_result_valid(f, id) && nl_pure_u8_contents(f, id, out);
 }
 
 #endif
