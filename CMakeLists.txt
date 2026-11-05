@@ -1342,6 +1342,18 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1188_safety>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
         "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1188-native")
+    add_executable(p1188_c250a_probe tests/p1188/c250a/probe.c)
+    target_include_directories(p1188_c250a_probe PRIVATE src)
+    target_compile_options(p1188_c250a_probe PRIVATE -UNDEBUG)
+    target_link_libraries(p1188_c250a_probe PRIVATE
+        newlang_semantic newlang_parser newlang_checked_c_node)
+    add_test(NAME p1188_c250a_discard.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c250a/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1188_c250a_probe>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1188-c250a")
+    add_test(NAME p1188_c250a_evidence.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c250a/evidence_test.py")
 
     add_test(NAME p1169_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1169/evidence_test.py")
