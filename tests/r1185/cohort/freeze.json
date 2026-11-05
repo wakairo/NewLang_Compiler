@@ -1,0 +1,11 @@
+{
+  "edition": "V2",
+  "frozen_utc": "2026-11-05T09:26:19Z",
+  "frozen_jst": "2026-11-05T18:26:19+09:00",
+  "status": "NOT_RUN",
+  "candidate_p_sha": "d7436585b74d0d6564df7cdf77da280903fb5234",
+  "candidate_p_tree": "38070e6b209168c251ee427cc2a716aebc932fb8",
+  "v1_unmodified": true,
+  "oracle_sha256": "29410e20b599aa8ddb243c1dd20895692e2635b32366ebdd6343a3bd45633801",
+  "source_changes": 15
+}

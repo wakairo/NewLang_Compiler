@@ -1,0 +1,1527 @@
+{
+  "schema": "newlang-r1185-prefreeze-v2",
+  "edition": "V2",
+  "created_utc": "2026-11-05T09:26:19Z",
+  "created_jst": "2026-11-05T18:26:19+09:00",
+  "authority_commit": "63658cd546be8b99599baf19476486a475adb320",
+  "canonical_spec": "https://github.com/wakairo/NewLang_Compiler/blob/63658cd546be8b99599baf19476486a475adb320/docs/reference/NewLang_v0_spec_Draft17_34.md",
+  "candidate_p_sha": "d7436585b74d0d6564df7cdf77da280903fb5234",
+  "derivation": "pre-execution frozen independent V1 / scope-calibrated V2; C-supplied finite-profile boundaries. All values and semantic traces are preserved from V1; only declared alias profile scaffolding is removed before any execution.",
+  "counts": {
+    "positive": 6,
+    "ordinary_control": 1,
+    "negative_invalid": 6,
+    "negative_legal_scope_probes": 2,
+    "negative_total": 8
+  },
+  "status": "NOT_RUN",
+  "GLOBAL_IDENTITY_CONTRACT": {
+    "symbols": {
+      "R": "the single original direct lexical T root in main",
+      "L": "its selected fixed child, resolved by nominal type + declared field index",
+      "S": "its known-disjoint sibling child",
+      "I_k": "fresh loop phase binding for iteration k",
+      "F_k": "fresh formal binding at helper invocation k"
+    },
+    "preserved": [
+      "incarnation(R), incarnation(L), incarnation(S) through every successful replace",
+      "same original R and selected child L across every backedge",
+      "S current value and current fact across Change(L)",
+      "pre-loop copied u8 snapshots retain their old values"
+    ],
+    "changed": [
+      "each replacement installs the incoming helper-result u8 package into L",
+      "R current structural value changes compositionally with L",
+      "replace returns the immediately preceding current value, not the entry snapshot",
+      "same-bits replacement remains a replacement/Change event; numeric equality is not permission to claim a skipped store as measured evidence"
+    ],
+    "per_run_addresses": [
+      "Every observed guest store destination equals the previously identified selected-child address L in the same run.",
+      "Selected address L and sibling address S are distinct; both remain tied to the same root R.",
+      "L and S stay stable across the observed update loop; the root is not replaced with a reconstructed aggregate.",
+      "Do not assert absolute addresses, C offsets, cross-run equality, or root-address inequality with the first child.",
+      "Semantic formal/iteration identities are fresh even if native stack addresses are reused. A copied scalar result does not carry root or owner authority."
+    ],
+    "no_mint": [
+      "No extra lifetime root, Allocation, LifetimeDomain, BackingRegion, owner claim, or independent field incarnation follows from the helper value or Copy.",
+      "Caller phase, formal binding, helper result, old Copy, and original root/child authority remain separate even when values or names coincide."
+    ],
+    "zero_break": [
+      "No helper call or selected store occurs in the false outer-guard / Break arm.",
+      "Actual break phase is the loop result; entry phase is not silently substituted."
+    ]
+  },
+  "layer_policy": {
+    "positive": "Semantic CHECK acceptance is predicted for the C-released finite profile. Use authentic source-issued public owned facts where applicable. Public whole-loop validator is NO_APPLICABLE_PUBLIC_API/NOT_RUN under C release; this known absence is not a new STOP. Then independently assess ordinary C17 and native.",
+    "invalid": "Expected semantic rejection. A preceding parser/profile/precision rejection does not prove the deeper intended rule. Invalid acceptance is affected STOP -> C.",
+    "legal_scope_probe": "Expected conservative refusal at the first unsupported finite body/call eligibility gate, whose exact implementation stage is unknown without reading P. CHECK acceptance can be legal; unsupported lowering must not fabricate proof or partial C. Record actual first barrier.",
+    "diagnostics": "No diagnostic codes, private API, native exit code/hash, or nonexistent whole-loop validator are predicted.",
+    "all_unreached": "NOT_RUN or NOT_REACHED, never PASS from a prior layer."
+  },
+  "cases": [
+    {
+      "id": "P01",
+      "kind": "positive",
+      "canonical_legality": "LEGAL",
+      "finite_contract": "IN_SCOPE",
+      "status": "NOT_RUN",
+      "source": "source/P01.nl",
+      "focus": [
+        "zero backedges",
+        "zero helper calls",
+        "zero stores",
+        "selected index 0"
+      ],
+      "canonical": [
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "SOURCE admissible; semantic CHECK expected to accept within the announced finite helper-loop contract; no downstream result inferred",
+      "exact_diagnostic_prediction": null,
+      "root_type": "Beacon",
+      "declared_fields": [
+        "crest",
+        "guard"
+      ],
+      "selected_field": "crest",
+      "selected_index": 0,
+      "sibling_field": "guard",
+      "initial_selected": 91,
+      "initial_sibling": 174,
+      "phase_headers": [
+        5
+      ],
+      "outer_guard_results": [
+        false
+      ],
+      "helper_predicate": {
+        "operator": "<",
+        "constant": 4,
+        "true_result": 31,
+        "false_result": 202
+      },
+      "helper_arguments": [],
+      "fresh_formal_values": [],
+      "helper_branch_results": [],
+      "helper_normal_results": [],
+      "replace_old_results": [],
+      "selected_after_each_store": [],
+      "sibling_after_each_store": [],
+      "continue_arguments": [],
+      "helper_call_count": 0,
+      "store_count": 0,
+      "continue_count": 0,
+      "break_count": 1,
+      "events": [
+        {
+          "iteration": 0,
+          "phase": 5,
+          "guard": false,
+          "helper_calls": 0,
+          "stores": 0,
+          "break_value": 5
+        }
+      ],
+      "post": {
+        "break_result": 5,
+        "selected": 91,
+        "sibling": 174,
+        "entry_selected_copy": 91,
+        "entry_sibling_copy": 174,
+        "starting_phase_copy": 5,
+        "main_result": "unit"
+      },
+      "identity_contract": "GLOBAL_IDENTITY_CONTRACT",
+      "execution_layers": {
+        "CHECK": "NOT_RUN",
+        "public_owned": "NOT_RUN",
+        "C17": "NOT_RUN",
+        "native_plain": "NOT_RUN",
+        "passive": "NOT_RUN",
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      },
+      "source_sha256": "8964e7073872badc08fe53963941b45eb1861f66b60e000b7a6bb9c9d743c018",
+      "v1_source_sha256": "d55b8ac19c33a723fcc2fcf2ec21d258ea9e97a46e43663db66b0313be2929ae",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ]
+    },
+    {
+      "id": "P02",
+      "kind": "positive",
+      "canonical_legality": "LEGAL",
+      "finite_contract": "IN_SCOPE",
+      "status": "NOT_RUN",
+      "source": "source/P02.nl",
+      "focus": [
+        "one backedge",
+        "EQ true",
+        "selected index 1",
+        "helper after main",
+        "named initializer reverse order",
+        "normal-result u8 binding/Copy aliases; fresh formal condition direct"
+      ],
+      "canonical": [
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "SOURCE admissible; semantic CHECK expected to accept within the announced finite helper-loop contract; no downstream result inferred",
+      "exact_diagnostic_prediction": null,
+      "root_type": "Ledger",
+      "declared_fields": [
+        "reserve",
+        "signal"
+      ],
+      "selected_field": "signal",
+      "selected_index": 1,
+      "sibling_field": "reserve",
+      "initial_selected": 42,
+      "initial_sibling": 155,
+      "phase_headers": [
+        1,
+        3
+      ],
+      "outer_guard_results": [
+        true,
+        false
+      ],
+      "helper_predicate": {
+        "operator": "==",
+        "constant": 1,
+        "true_result": 67,
+        "false_result": 183
+      },
+      "helper_arguments": [
+        1
+      ],
+      "fresh_formal_values": [
+        1
+      ],
+      "helper_branch_results": [
+        true
+      ],
+      "helper_normal_results": [
+        67
+      ],
+      "replace_old_results": [
+        42
+      ],
+      "selected_after_each_store": [
+        67
+      ],
+      "sibling_after_each_store": [
+        155
+      ],
+      "continue_arguments": [
+        3
+      ],
+      "helper_call_count": 1,
+      "store_count": 1,
+      "continue_count": 1,
+      "break_count": 1,
+      "events": [
+        {
+          "iteration": 0,
+          "phase": 1,
+          "guard": true,
+          "actual": 1,
+          "formal": 1,
+          "helper_condition": true,
+          "normal_result": 67,
+          "caller_returned": 67,
+          "incoming_copy": 67,
+          "selected_before": 42,
+          "replace_old": 42,
+          "old_copy": 42,
+          "store_value": 67,
+          "selected_after": 67,
+          "sibling_after": 155,
+          "continue_argument": 3,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F0",
+          "fresh_iteration_binding_identity": "I0"
+        },
+        {
+          "iteration": 1,
+          "phase": 3,
+          "guard": false,
+          "helper_calls": 0,
+          "stores": 0,
+          "break_value": 3
+        }
+      ],
+      "post": {
+        "break_result": 3,
+        "selected": 67,
+        "sibling": 155,
+        "entry_selected_copy": 42,
+        "entry_sibling_copy": 155,
+        "starting_phase_copy": 1,
+        "main_result": "unit"
+      },
+      "identity_contract": "GLOBAL_IDENTITY_CONTRACT",
+      "execution_layers": {
+        "CHECK": "NOT_RUN",
+        "public_owned": "NOT_RUN",
+        "C17": "NOT_RUN",
+        "native_plain": "NOT_RUN",
+        "passive": "NOT_RUN",
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      },
+      "source_sha256": "b0654f0d2b5408ae53e8b1acbb9ed9f89dc0a29976069f62b99720a05d0ac3d7",
+      "v1_source_sha256": "fb47d3886b9ec84b812f987ecfbe377c232a97fb7667f7013da1196a7c2ad432",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03",
+        "callee usize formal alias in LT/EQ condition; condition now reads fresh formal directly"
+      ]
+    },
+    {
+      "id": "P03",
+      "kind": "positive",
+      "canonical_legality": "LEGAL",
+      "finite_contract": "IN_SCOPE",
+      "status": "NOT_RUN",
+      "source": "source/P03.nl",
+      "focus": [
+        "three backedges",
+        "LT both branches",
+        "repeated same-bits middle store",
+        "old/current sequence",
+        "selected index 0"
+      ],
+      "canonical": [
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "SOURCE admissible; semantic CHECK expected to accept within the announced finite helper-loop contract; no downstream result inferred",
+      "exact_diagnostic_prediction": null,
+      "root_type": "Gauge",
+      "declared_fields": [
+        "level",
+        "stamp"
+      ],
+      "selected_field": "level",
+      "selected_index": 0,
+      "sibling_field": "stamp",
+      "initial_selected": 14,
+      "initial_sibling": 208,
+      "phase_headers": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "outer_guard_results": [
+        true,
+        true,
+        true,
+        false
+      ],
+      "helper_predicate": {
+        "operator": "<",
+        "constant": 3,
+        "true_result": 109,
+        "false_result": 231
+      },
+      "helper_arguments": [
+        0,
+        2,
+        4
+      ],
+      "fresh_formal_values": [
+        0,
+        2,
+        4
+      ],
+      "helper_branch_results": [
+        true,
+        true,
+        false
+      ],
+      "helper_normal_results": [
+        109,
+        109,
+        231
+      ],
+      "replace_old_results": [
+        14,
+        109,
+        109
+      ],
+      "selected_after_each_store": [
+        109,
+        109,
+        231
+      ],
+      "sibling_after_each_store": [
+        208,
+        208,
+        208
+      ],
+      "continue_arguments": [
+        2,
+        4,
+        6
+      ],
+      "helper_call_count": 3,
+      "store_count": 3,
+      "continue_count": 3,
+      "break_count": 1,
+      "events": [
+        {
+          "iteration": 0,
+          "phase": 0,
+          "guard": true,
+          "actual": 0,
+          "formal": 0,
+          "helper_condition": true,
+          "normal_result": 109,
+          "caller_returned": 109,
+          "incoming_copy": 109,
+          "selected_before": 14,
+          "replace_old": 14,
+          "old_copy": 14,
+          "store_value": 109,
+          "selected_after": 109,
+          "sibling_after": 208,
+          "continue_argument": 2,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F0",
+          "fresh_iteration_binding_identity": "I0"
+        },
+        {
+          "iteration": 1,
+          "phase": 2,
+          "guard": true,
+          "actual": 2,
+          "formal": 2,
+          "helper_condition": true,
+          "normal_result": 109,
+          "caller_returned": 109,
+          "incoming_copy": 109,
+          "selected_before": 109,
+          "replace_old": 109,
+          "old_copy": 109,
+          "store_value": 109,
+          "selected_after": 109,
+          "sibling_after": 208,
+          "continue_argument": 4,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F1",
+          "fresh_iteration_binding_identity": "I1"
+        },
+        {
+          "iteration": 2,
+          "phase": 4,
+          "guard": true,
+          "actual": 4,
+          "formal": 4,
+          "helper_condition": false,
+          "normal_result": 231,
+          "caller_returned": 231,
+          "incoming_copy": 231,
+          "selected_before": 109,
+          "replace_old": 109,
+          "old_copy": 109,
+          "store_value": 231,
+          "selected_after": 231,
+          "sibling_after": 208,
+          "continue_argument": 6,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F2",
+          "fresh_iteration_binding_identity": "I2"
+        },
+        {
+          "iteration": 3,
+          "phase": 6,
+          "guard": false,
+          "helper_calls": 0,
+          "stores": 0,
+          "break_value": 6
+        }
+      ],
+      "post": {
+        "break_result": 6,
+        "selected": 231,
+        "sibling": 208,
+        "entry_selected_copy": 14,
+        "entry_sibling_copy": 208,
+        "starting_phase_copy": 0,
+        "main_result": "unit"
+      },
+      "identity_contract": "GLOBAL_IDENTITY_CONTRACT",
+      "execution_layers": {
+        "CHECK": "NOT_RUN",
+        "public_owned": "NOT_RUN",
+        "C17": "NOT_RUN",
+        "native_plain": "NOT_RUN",
+        "passive": "NOT_RUN",
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      },
+      "source_sha256": "d5c80f02c878d59cfff414bf1e734bcebbc484c552403b611d7e449d101ee203",
+      "v1_source_sha256": "3fb1cfd0700926f2c75f627b7a4c7a2cbdc301139b2ce0bd44ed6cab448c312c",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ]
+    },
+    {
+      "id": "P04",
+      "kind": "positive",
+      "canonical_legality": "LEGAL",
+      "finite_contract": "IN_SCOPE",
+      "status": "NOT_RUN",
+      "source": "source/P04.nl",
+      "focus": [
+        "four backedges",
+        "EQ false false true false",
+        "helper after main",
+        "selected index 1",
+        "branch changes back"
+      ],
+      "canonical": [
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "SOURCE admissible; semantic CHECK expected to accept within the announced finite helper-loop contract; no downstream result inferred",
+      "exact_diagnostic_prediction": null,
+      "root_type": "Marker",
+      "declared_fields": [
+        "unchanged",
+        "active"
+      ],
+      "selected_field": "active",
+      "selected_index": 1,
+      "sibling_field": "unchanged",
+      "initial_selected": 33,
+      "initial_sibling": 120,
+      "phase_headers": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "outer_guard_results": [
+        true,
+        true,
+        true,
+        true,
+        false
+      ],
+      "helper_predicate": {
+        "operator": "==",
+        "constant": 5,
+        "true_result": 76,
+        "false_result": 187
+      },
+      "helper_arguments": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "fresh_formal_values": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "helper_branch_results": [
+        false,
+        false,
+        true,
+        false
+      ],
+      "helper_normal_results": [
+        187,
+        187,
+        76,
+        187
+      ],
+      "replace_old_results": [
+        33,
+        187,
+        187,
+        76
+      ],
+      "selected_after_each_store": [
+        187,
+        187,
+        76,
+        187
+      ],
+      "sibling_after_each_store": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "continue_arguments": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "helper_call_count": 4,
+      "store_count": 4,
+      "continue_count": 4,
+      "break_count": 1,
+      "events": [
+        {
+          "iteration": 0,
+          "phase": 1,
+          "guard": true,
+          "actual": 1,
+          "formal": 1,
+          "helper_condition": false,
+          "normal_result": 187,
+          "caller_returned": 187,
+          "incoming_copy": 187,
+          "selected_before": 33,
+          "replace_old": 33,
+          "old_copy": 33,
+          "store_value": 187,
+          "selected_after": 187,
+          "sibling_after": 120,
+          "continue_argument": 3,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F0",
+          "fresh_iteration_binding_identity": "I0"
+        },
+        {
+          "iteration": 1,
+          "phase": 3,
+          "guard": true,
+          "actual": 3,
+          "formal": 3,
+          "helper_condition": false,
+          "normal_result": 187,
+          "caller_returned": 187,
+          "incoming_copy": 187,
+          "selected_before": 187,
+          "replace_old": 187,
+          "old_copy": 187,
+          "store_value": 187,
+          "selected_after": 187,
+          "sibling_after": 120,
+          "continue_argument": 5,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F1",
+          "fresh_iteration_binding_identity": "I1"
+        },
+        {
+          "iteration": 2,
+          "phase": 5,
+          "guard": true,
+          "actual": 5,
+          "formal": 5,
+          "helper_condition": true,
+          "normal_result": 76,
+          "caller_returned": 76,
+          "incoming_copy": 76,
+          "selected_before": 187,
+          "replace_old": 187,
+          "old_copy": 187,
+          "store_value": 76,
+          "selected_after": 76,
+          "sibling_after": 120,
+          "continue_argument": 7,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F2",
+          "fresh_iteration_binding_identity": "I2"
+        },
+        {
+          "iteration": 3,
+          "phase": 7,
+          "guard": true,
+          "actual": 7,
+          "formal": 7,
+          "helper_condition": false,
+          "normal_result": 187,
+          "caller_returned": 187,
+          "incoming_copy": 187,
+          "selected_before": 76,
+          "replace_old": 76,
+          "old_copy": 76,
+          "store_value": 187,
+          "selected_after": 187,
+          "sibling_after": 120,
+          "continue_argument": 9,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F3",
+          "fresh_iteration_binding_identity": "I3"
+        },
+        {
+          "iteration": 4,
+          "phase": 9,
+          "guard": false,
+          "helper_calls": 0,
+          "stores": 0,
+          "break_value": 9
+        }
+      ],
+      "post": {
+        "break_result": 9,
+        "selected": 187,
+        "sibling": 120,
+        "entry_selected_copy": 33,
+        "entry_sibling_copy": 120,
+        "starting_phase_copy": 1,
+        "main_result": "unit"
+      },
+      "identity_contract": "GLOBAL_IDENTITY_CONTRACT",
+      "execution_layers": {
+        "CHECK": "NOT_RUN",
+        "public_owned": "NOT_RUN",
+        "C17": "NOT_RUN",
+        "native_plain": "NOT_RUN",
+        "passive": "NOT_RUN",
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      },
+      "source_sha256": "19b5a76b3c7c829bf030a84c469874b5431887fef305f2552bf559fd09b73146",
+      "v1_source_sha256": "44ae2545bf5f14055efc81e822566ca043edae088fc0d0222c358e2cfe523f7f",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03",
+        "callee usize formal alias in LT/EQ condition; condition now reads fresh formal directly"
+      ]
+    },
+    {
+      "id": "P05",
+      "kind": "positive",
+      "canonical_legality": "LEGAL",
+      "finite_contract": "IN_SCOPE",
+      "status": "NOT_RUN",
+      "source": "source/P05.nl",
+      "focus": [
+        "one backedge",
+        "LT false",
+        "initial same-bits replacement",
+        "real store evidence distinct from numerical change",
+        "selected index 0"
+      ],
+      "canonical": [
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "SOURCE admissible; semantic CHECK expected to accept within the announced finite helper-loop contract; no downstream result inferred",
+      "exact_diagnostic_prediction": null,
+      "root_type": "Badge",
+      "declared_fields": [
+        "face",
+        "seal"
+      ],
+      "selected_field": "face",
+      "selected_index": 0,
+      "sibling_field": "seal",
+      "initial_selected": 198,
+      "initial_sibling": 49,
+      "phase_headers": [
+        3,
+        4
+      ],
+      "outer_guard_results": [
+        true,
+        false
+      ],
+      "helper_predicate": {
+        "operator": "<",
+        "constant": 2,
+        "true_result": 13,
+        "false_result": 198
+      },
+      "helper_arguments": [
+        3
+      ],
+      "fresh_formal_values": [
+        3
+      ],
+      "helper_branch_results": [
+        false
+      ],
+      "helper_normal_results": [
+        198
+      ],
+      "replace_old_results": [
+        198
+      ],
+      "selected_after_each_store": [
+        198
+      ],
+      "sibling_after_each_store": [
+        49
+      ],
+      "continue_arguments": [
+        4
+      ],
+      "helper_call_count": 1,
+      "store_count": 1,
+      "continue_count": 1,
+      "break_count": 1,
+      "events": [
+        {
+          "iteration": 0,
+          "phase": 3,
+          "guard": true,
+          "actual": 3,
+          "formal": 3,
+          "helper_condition": false,
+          "normal_result": 198,
+          "caller_returned": 198,
+          "incoming_copy": 198,
+          "selected_before": 198,
+          "replace_old": 198,
+          "old_copy": 198,
+          "store_value": 198,
+          "selected_after": 198,
+          "sibling_after": 49,
+          "continue_argument": 4,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F0",
+          "fresh_iteration_binding_identity": "I0"
+        },
+        {
+          "iteration": 1,
+          "phase": 4,
+          "guard": false,
+          "helper_calls": 0,
+          "stores": 0,
+          "break_value": 4
+        }
+      ],
+      "post": {
+        "break_result": 4,
+        "selected": 198,
+        "sibling": 49,
+        "entry_selected_copy": 198,
+        "entry_sibling_copy": 49,
+        "starting_phase_copy": 3,
+        "main_result": "unit"
+      },
+      "identity_contract": "GLOBAL_IDENTITY_CONTRACT",
+      "execution_layers": {
+        "CHECK": "NOT_RUN",
+        "public_owned": "NOT_RUN",
+        "C17": "NOT_RUN",
+        "native_plain": "NOT_RUN",
+        "passive": "NOT_RUN",
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      },
+      "source_sha256": "ee4599018f3abdae830fc71ac58effb811ed886af12e5a3fe1a24727b80703ab",
+      "v1_source_sha256": "187638bc13c84f1133cc475266761c432d611c30e1e4d394bb65bd5cb935d520",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ]
+    },
+    {
+      "id": "P06",
+      "kind": "positive",
+      "canonical_legality": "LEGAL",
+      "finite_contract": "IN_SCOPE",
+      "status": "NOT_RUN",
+      "source": "source/P06.nl",
+      "focus": [
+        "three backedges",
+        "step 3",
+        "outer/carry/formal same spelling",
+        "outer/carry/formal identities with literal loop initializer; no initializer Copy claim",
+        "selected index 1",
+        "both branches"
+      ],
+      "canonical": [
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "SOURCE admissible; semantic CHECK expected to accept within the announced finite helper-loop contract; no downstream result inferred",
+      "exact_diagnostic_prediction": null,
+      "root_type": "Emblem",
+      "declared_fields": [
+        "anchor",
+        "moving"
+      ],
+      "selected_field": "moving",
+      "selected_index": 1,
+      "sibling_field": "anchor",
+      "initial_selected": 77,
+      "initial_sibling": 221,
+      "phase_headers": [
+        2,
+        5,
+        8,
+        11
+      ],
+      "outer_guard_results": [
+        true,
+        true,
+        true,
+        false
+      ],
+      "helper_predicate": {
+        "operator": "==",
+        "constant": 5,
+        "true_result": 244,
+        "false_result": 18
+      },
+      "helper_arguments": [
+        2,
+        5,
+        8
+      ],
+      "fresh_formal_values": [
+        2,
+        5,
+        8
+      ],
+      "helper_branch_results": [
+        false,
+        true,
+        false
+      ],
+      "helper_normal_results": [
+        18,
+        244,
+        18
+      ],
+      "replace_old_results": [
+        77,
+        18,
+        244
+      ],
+      "selected_after_each_store": [
+        18,
+        244,
+        18
+      ],
+      "sibling_after_each_store": [
+        221,
+        221,
+        221
+      ],
+      "continue_arguments": [
+        5,
+        8,
+        11
+      ],
+      "helper_call_count": 3,
+      "store_count": 3,
+      "continue_count": 3,
+      "break_count": 1,
+      "events": [
+        {
+          "iteration": 0,
+          "phase": 2,
+          "guard": true,
+          "actual": 2,
+          "formal": 2,
+          "helper_condition": false,
+          "normal_result": 18,
+          "caller_returned": 18,
+          "incoming_copy": 18,
+          "selected_before": 77,
+          "replace_old": 77,
+          "old_copy": 77,
+          "store_value": 18,
+          "selected_after": 18,
+          "sibling_after": 221,
+          "continue_argument": 5,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F0",
+          "fresh_iteration_binding_identity": "I0"
+        },
+        {
+          "iteration": 1,
+          "phase": 5,
+          "guard": true,
+          "actual": 5,
+          "formal": 5,
+          "helper_condition": true,
+          "normal_result": 244,
+          "caller_returned": 244,
+          "incoming_copy": 244,
+          "selected_before": 18,
+          "replace_old": 18,
+          "old_copy": 18,
+          "store_value": 244,
+          "selected_after": 244,
+          "sibling_after": 221,
+          "continue_argument": 8,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F1",
+          "fresh_iteration_binding_identity": "I1"
+        },
+        {
+          "iteration": 2,
+          "phase": 8,
+          "guard": true,
+          "actual": 8,
+          "formal": 8,
+          "helper_condition": false,
+          "normal_result": 18,
+          "caller_returned": 18,
+          "incoming_copy": 18,
+          "selected_before": 244,
+          "replace_old": 244,
+          "old_copy": 244,
+          "store_value": 18,
+          "selected_after": 18,
+          "sibling_after": 221,
+          "continue_argument": 11,
+          "store_destination": "L",
+          "root": "R",
+          "sibling_place": "S",
+          "fresh_formal_identity": "F2",
+          "fresh_iteration_binding_identity": "I2"
+        },
+        {
+          "iteration": 3,
+          "phase": 11,
+          "guard": false,
+          "helper_calls": 0,
+          "stores": 0,
+          "break_value": 11
+        }
+      ],
+      "post": {
+        "break_result": 11,
+        "selected": 18,
+        "sibling": 221,
+        "entry_selected_copy": 77,
+        "entry_sibling_copy": 221,
+        "starting_phase_copy": 2,
+        "main_result": "unit"
+      },
+      "identity_contract": "GLOBAL_IDENTITY_CONTRACT",
+      "execution_layers": {
+        "CHECK": "NOT_RUN",
+        "public_owned": "NOT_RUN",
+        "C17": "NOT_RUN",
+        "native_plain": "NOT_RUN",
+        "passive": "NOT_RUN",
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      },
+      "source_sha256": "9232efe1054f0df037722aea031d32f607256409bb081dafb3bf0106cead3f32",
+      "v1_source_sha256": "3d6215ef8abad4813a194d4279bcff2d5c9b91a0e1c62ece081a17a5250c7bf9",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03",
+        "callee usize formal alias in LT/EQ condition; condition now reads fresh formal directly"
+      ]
+    },
+    {
+      "id": "C01",
+      "kind": "ordinary_control",
+      "canonical_legality": "LEGAL",
+      "finite_contract": "CONTROL_ONLY",
+      "status": "NOT_RUN",
+      "source": "source/C01.nl",
+      "canonical": [
+        "13.5a",
+        "18.1",
+        "18.2",
+        "18.5",
+        "27.4"
+      ],
+      "predicted_first_layer": "SOURCE admissible; semantic CHECK accept for ordinary known-direct pure call",
+      "expected": {
+        "actual": 5,
+        "fresh_formal": 5,
+        "condition": false,
+        "normal_result": 162,
+        "normal_copy": 162,
+        "phase_after": 5,
+        "main_result": "unit",
+        "calls": 1,
+        "stores": 0,
+        "loops": 0
+      },
+      "limitation": "Helper-only success cannot prove helper result connected to a loop, original T storage, or a store.",
+      "source_sha256": "116ab8a57841c3efb2562f59514e4df89036d5fc6ca01b0b9e9a302f6fe12672",
+      "v1_source_sha256": "df9b7325ed0ffb2b7c7c99ce8d5ccae59d3443707db2401ec0e6f2dab0d4d2e7",
+      "removed_alias_claims": [
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03",
+        "callee usize formal alias in LT/EQ condition; condition now reads fresh formal directly"
+      ],
+      "execution_layers": {
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      }
+    },
+    {
+      "id": "N01",
+      "kind": "negative",
+      "canonical_legality": "INVALID",
+      "finite_contract": "INVALID_ATTACK",
+      "source": "source/N01.nl",
+      "status": "NOT_RUN",
+      "focus": [
+        "non-bool helper condition"
+      ],
+      "predicted_first_layer": "SEMANTIC_DEFINITION / IF condition type, before a valid helper call/result can be issued",
+      "exact_diagnostic_prediction": null,
+      "canonical": [
+        "18.1",
+        "27.4"
+      ],
+      "reason": "The condition has type usize. if requires bool exactly; its numerical value is not a truthiness conversion.",
+      "earlier_precision_rejection": "If any earlier implementation/source-profile precision gate rejects, record that actual first layer and mark the intended semantic target NOT_REACHED; no target-level rejection credit.",
+      "expected_runtime_trace": "NO_VALID_RUNTIME_TRACE: invalid source must not execute; no C17/native evidence is predicted.",
+      "unexpected_result_policy": "Invalid CHECK=0 or downstream unsafe emission: affected STOP -> C; do not change the oracle.",
+      "source_sha256": "0600221d6af1bf2b3a535307b0d270cdabd7e17d4de9fafdfbd4e7ad4f6b2fa7",
+      "v1_source_sha256": "bcfad1dbaaa08c36e59da13de763200d54c7596417e9628c29c0bf2462b9ffb0",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "execution_layers": {
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      }
+    },
+    {
+      "id": "N02",
+      "kind": "negative",
+      "canonical_legality": "INVALID",
+      "finite_contract": "INVALID_ATTACK",
+      "source": "source/N02.nl",
+      "status": "NOT_RUN",
+      "focus": [
+        "normal-arm u8/usize mismatch"
+      ],
+      "predicted_first_layer": "SEMANTIC_DEFINITION / IF normal result join",
+      "exact_diagnostic_prediction": null,
+      "canonical": [
+        "5.1",
+        "18.1",
+        "27.4"
+      ],
+      "reason": "Both arms are normal and have distinct types. There is no implicit numeric conversion at the join; caller-known values cannot launder the incompatible definition.",
+      "earlier_precision_rejection": "If any earlier implementation/source-profile precision gate rejects, record that actual first layer and mark the intended semantic target NOT_REACHED; no target-level rejection credit.",
+      "expected_runtime_trace": "NO_VALID_RUNTIME_TRACE: invalid source must not execute; no C17/native evidence is predicted.",
+      "unexpected_result_policy": "Invalid CHECK=0 or downstream unsafe emission: affected STOP -> C; do not change the oracle.",
+      "source_sha256": "acc60c6276ac667568239ce7127500e0b51c3334d3682853bfcca8e2f14caa2a",
+      "v1_source_sha256": "74ff7e39207c3f5e5a423c6073f328885d30feb982e56a6a1d7a4a11ad1503a8",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "execution_layers": {
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      }
+    },
+    {
+      "id": "N03",
+      "kind": "negative",
+      "canonical_legality": "INVALID",
+      "finite_contract": "INVALID_ATTACK",
+      "source": "source/N03.nl",
+      "status": "NOT_RUN",
+      "focus": [
+        "actual/formal exact-type mismatch"
+      ],
+      "predicted_first_layer": "SEMANTIC_CALL / actual u8 against formal usize",
+      "exact_diagnostic_prediction": null,
+      "canonical": [
+        "5.1",
+        "18.1",
+        "18.2",
+        "18.4"
+      ],
+      "reason": "The helper signature has one usize formal, but the actual argument is u8. Equal numeric bits do not make these types or bindings interchangeable.",
+      "earlier_precision_rejection": "If any earlier implementation/source-profile precision gate rejects, record that actual first layer and mark the intended semantic target NOT_REACHED; no target-level rejection credit.",
+      "expected_runtime_trace": "NO_VALID_RUNTIME_TRACE: invalid source must not execute; no C17/native evidence is predicted.",
+      "unexpected_result_policy": "Invalid CHECK=0 or downstream unsafe emission: affected STOP -> C; do not change the oracle.",
+      "source_sha256": "8970394ba7554851623aa3596b158fd29a1c21160a6b18dec6b639e628a8d72d",
+      "v1_source_sha256": "4ba25697f9b31c03d0ac6fdcb7946fc669398cf6a9965fa94aae50d8e345d881",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "execution_layers": {
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      }
+    },
+    {
+      "id": "N04",
+      "kind": "negative",
+      "canonical_legality": "INVALID",
+      "finite_contract": "INVALID_ATTACK",
+      "source": "source/N04.nl",
+      "status": "NOT_RUN",
+      "focus": [
+        "ending field-loan ref escape through Copy alias"
+      ],
+      "predicted_first_layer": "SEMANTIC_SCOPE_EXIT / loan normal-result compatibility before escaped is available",
+      "exact_diagnostic_prediction": null,
+      "canonical": [
+        "11.1",
+        "13.5a",
+        "13.8",
+        "17.1 Draft17.33"
+      ],
+      "reason": "The returned ref and its alias depend on the ending loan scope. Forwarding must preserve dependencies and reject; the later replace cannot recover authority from the alias.",
+      "earlier_precision_rejection": "If any earlier implementation/source-profile precision gate rejects, record that actual first layer and mark the intended semantic target NOT_REACHED; no target-level rejection credit.",
+      "expected_runtime_trace": "NO_VALID_RUNTIME_TRACE: invalid source must not execute; no C17/native evidence is predicted.",
+      "unexpected_result_policy": "Invalid CHECK=0 or downstream unsafe emission: affected STOP -> C; do not change the oracle.",
+      "source_sha256": "a44000849d6b3d8b6a453a424be74dd9550e9015af8040a501252f0f60d28237",
+      "v1_source_sha256": "c49bd1d246d0b7f1d4b2a228846bc98a899bba5c226454ff3c6e3181b8d427ed",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "execution_layers": {
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      }
+    },
+    {
+      "id": "N05",
+      "kind": "negative",
+      "canonical_legality": "INVALID",
+      "finite_contract": "INVALID_ATTACK",
+      "source": "source/N05.nl",
+      "status": "NOT_RUN",
+      "focus": [
+        "ordinary ref result through helper and ending loan"
+      ],
+      "predicted_first_layer": "SEMANTIC_DEFINITION / nonescaping ordinary ref function result; at latest call/loan scope exit",
+      "exact_diagnostic_prediction": null,
+      "canonical": [
+        "11.1",
+        "13.5a",
+        "13.8",
+        "18.2",
+        "18.5"
+      ],
+      "reason": "ref is nonescaping and cannot be returned by an ordinary function. Copying the formal, passing through a function result, and then a loan result cannot remove its scope dependency. This attack deliberately leaves the scalar-helper capability slice.",
+      "earlier_precision_rejection": "A ref type/body/result profile rejection may precede the intended dependency test. Such rejection is safe containment, not evidence that function-result dependency propagation was exercised.",
+      "expected_runtime_trace": "NO_VALID_RUNTIME_TRACE: invalid source must not execute; no C17/native evidence is predicted.",
+      "unexpected_result_policy": "Invalid CHECK=0 or downstream unsafe emission: affected STOP -> C; do not change the oracle.",
+      "source_sha256": "9568817c67737694ab69ef700500726de649672f5ba90507dccf1c82a3f96796",
+      "v1_source_sha256": "58cf2b487cd0a447fe7405e44822ada1b655fbab88df9f542e93921feb093b00",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained"
+      ],
+      "execution_layers": {
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      }
+    },
+    {
+      "id": "N06",
+      "kind": "coverage_negative",
+      "canonical_legality": "LEGAL",
+      "finite_contract": "LEGAL_OUT_OF_SCOPE",
+      "source": "source/N06.nl",
+      "status": "NOT_RUN",
+      "focus": [
+        "nested second IF outside one-IF helper body"
+      ],
+      "predicted_first_layer": "Predicted finite helper-body analysis/eligibility precision gate; if CHECK accepts, any unsupported owned/C17 representation must fail closed before emission",
+      "exact_diagnostic_prediction": null,
+      "canonical": [
+        "18.1",
+        "18.2",
+        "18.5",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7"
+      ],
+      "reason": "Nested if is explicitly legal canonical composition. The declared finite target admits one IF only, so a bounded implementation may safely reject; this is coverage debt, not a language-invalid program.",
+      "earlier_precision_rejection": "If any earlier implementation/source-profile precision gate rejects, record that actual first layer and mark the intended semantic target NOT_REACHED; no target-level rejection credit.",
+      "expected_runtime_trace": {
+        "headers": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "arguments": [
+          0,
+          1,
+          2
+        ],
+        "outer_conditions": [
+          true,
+          true,
+          false
+        ],
+        "inner_conditions": [
+          true,
+          false,
+          null
+        ],
+        "normal_results": [
+          41,
+          93,
+          157
+        ],
+        "old": [
+          25,
+          41,
+          93
+        ],
+        "current": [
+          41,
+          93,
+          157
+        ],
+        "siblings": [
+          234,
+          234,
+          234
+        ],
+        "continue_arguments": [
+          1,
+          2,
+          3
+        ],
+        "break": 3,
+        "post_selected": 157,
+        "post_sibling": 234,
+        "calls": 3,
+        "stores": 3
+      },
+      "unexpected_result_policy": "Sound acceptance is not automatically a safety defect. Preserve raw results and ask C to calibrate the demonstrated extra coverage; do not relabel as an in-scope positive or language-invalid source.",
+      "source_sha256": "f479bc1fdadcb06555bb572364171a2dec9291e1b43cbc8b08a65c0b08427eef",
+      "v1_source_sha256": "46eb1bd748b4e5092bb3aab37f2cc6727a05213839c068cbfa5a2e97380f0e42",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "execution_layers": {
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      }
+    },
+    {
+      "id": "N07",
+      "kind": "negative",
+      "canonical_legality": "INVALID",
+      "finite_contract": "INVALID_ATTACK",
+      "source": "source/N07.nl",
+      "status": "NOT_RUN",
+      "focus": [
+        "normal result violates explicit function result type"
+      ],
+      "predicted_first_layer": "SEMANTIC_DEFINITION / function normal result type",
+      "exact_diagnostic_prediction": null,
+      "canonical": [
+        "5.1",
+        "18.1",
+        "18.5",
+        "27.4"
+      ],
+      "reason": "Both normal IF arms agree on usize, but the explicit function result type is u8. This isolates function-result checking from N02 arm-join mismatch.",
+      "earlier_precision_rejection": "If any earlier implementation/source-profile precision gate rejects, record that actual first layer and mark the intended semantic target NOT_REACHED; no target-level rejection credit.",
+      "expected_runtime_trace": "NO_VALID_RUNTIME_TRACE: invalid source must not execute; no C17/native evidence is predicted.",
+      "unexpected_result_policy": "Invalid CHECK=0 or downstream unsafe emission: affected STOP -> C; do not change the oracle.",
+      "source_sha256": "c2d1c8251a766c1d6d51e35a67b54431f3327f24e1820de1ce7edcc3e6681531",
+      "v1_source_sha256": "8d016915c52e85f3cd6a8eaa4ae3147fe0b758948f532f276d08bcd96e5b06cd",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained",
+        "intermediate caller usize actual/actual_copy alias bindings; actual is direct phase read except intentional invalid N03"
+      ],
+      "execution_layers": {
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      }
+    },
+    {
+      "id": "N08",
+      "kind": "coverage_negative",
+      "canonical_legality": "LEGAL",
+      "finite_contract": "LEGAL_OUT_OF_SCOPE",
+      "source": "source/N08.nl",
+      "status": "NOT_RUN",
+      "focus": [
+        "two call sites and transformed second actual outside single phase-to-formal flow"
+      ],
+      "predicted_first_layer": "Predicted finite caller/call-body composition eligibility precision gate; if CHECK accepts, any unsupported owned/C17 representation must fail closed before emission",
+      "exact_diagnostic_prediction": null,
+      "canonical": [
+        "5.2",
+        "13.5a",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "27.5",
+        "27.6",
+        "27.7"
+      ],
+      "reason": "Two ordinary pure calls are canonically legal and both scalar additions are representable. The second call result, not the first, feeds the sole store. The finite Issue target does not promise this composition.",
+      "earlier_precision_rejection": "If any earlier implementation/source-profile precision gate rejects, record that actual first layer and mark the intended semantic target NOT_REACHED; no target-level rejection credit.",
+      "expected_runtime_trace": {
+        "headers": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "call_arguments_in_order": [
+          0,
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        "call_results_in_order": [
+          58,
+          58,
+          58,
+          219,
+          219,
+          219
+        ],
+        "store_inputs": [
+          58,
+          219,
+          219
+        ],
+        "old": [
+          37,
+          58,
+          219
+        ],
+        "current": [
+          58,
+          219,
+          219
+        ],
+        "siblings": [
+          166,
+          166,
+          166
+        ],
+        "continue_arguments": [
+          1,
+          2,
+          3
+        ],
+        "break": 3,
+        "post_selected": 219,
+        "post_sibling": 166,
+        "calls": 6,
+        "stores": 3
+      },
+      "unexpected_result_policy": "Sound acceptance is not automatically a safety defect. Preserve raw results and ask C to calibrate the demonstrated extra coverage; do not relabel as an in-scope positive or language-invalid source.",
+      "source_sha256": "95ac880ab4d8163a0975939fbb32901ccb47a0383b3e9d985d7f4c36e3595a6a",
+      "v1_source_sha256": "eb4d3ea036ff18acd097d3df993397c82f70750ffa5b756169731738faa35d34",
+      "removed_alias_claims": [
+        "outer binding -> loop initializer Copy provenance; identical initial scalar value retained"
+      ],
+      "execution_layers": {
+        "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+      }
+    }
+  ],
+  "candidate_p_tree": "38070e6b209168c251ee427cc2a716aebc932fb8",
+  "v1_oracle_sha256": "8d1aeb41e6c5791adef86795960e5086c83d9e15868475d17015547bab2268c2",
+  "calibration": "calibration.json"
+}
