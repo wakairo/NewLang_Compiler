@@ -1,7 +1,8 @@
 # C243: phase-selected current on one original T
 
-Local research parent is fixed PR1171 `870e4f0972abb9725b7cf9f38d09178e51ff1280`,
-not adopted main425. Authority is CURRENT_SPEC to Draft17.34
+Implementation parent is fixed PR1171 `870e4f0972abb9725b7cf9f38d09178e51ff1280`,
+adopted as main `217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2` with the same tree.
+Authority is CURRENT_SPEC to Draft17.34
 13.5a/17.4/27.4-27.7. The implementation is private faithful composition;
 public source/API/ABI/issuers and canonical custody/destruction are unchanged.
 
