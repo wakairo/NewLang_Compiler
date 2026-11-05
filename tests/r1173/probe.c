@@ -104,7 +104,8 @@ static void visit(const NLCheckedFragment *fragment, const char *path,
                          path, id, arm);
                 visit(owned, child_path, depth + 1);
             }
-        } else if (node->kind == NL_CHECKED_REGISTERED_CALL && node->body_backed) {
+        } else if (node->kind == NL_CHECKED_REGISTERED_CALL &&
+                   node->body_backed) {
             snprintf(child_path, sizeof(child_path), "%s/call%zu", path, id);
             visit(nl_checked_call_body(fragment, id), child_path, depth + 1);
         }

@@ -70,7 +70,7 @@ def failure(case, layer, category, detail):
 
 
 def check_frozen():
-    manifest = json.loads((OWN / "execution-freeze-v1.json").read_text())
+    manifest = json.loads((OWN / "execution-freeze-v2.json").read_text())
     for entry in manifest["files"]:
         path = REPO / entry["path"]
         if path.stat().st_size != entry["bytes"] or digest(path) != entry["sha256"]:
