@@ -1,0 +1,96 @@
+#define main c232_cli_main
+#include "main.c"
+#undef main
+#include <assert.h>
+
+int main(int argc, char **argv)
+{
+    assert(argc == 2);
+    NLSource *source = NULL, *entry = NULL;
+    NLParser *parser = NULL, *ep = NULL;
+    NLSyntaxTree *tree = NULL, *et = NULL;
+    NLSemanticContext *c = NULL;
+    NLCheckedFragment *root = NULL;
+    assert(nl_source_load(argv[1], &source) == NL_SOURCE_OK);
+    assert(nl_parser_create(source, &parser) == NL_PARSE_OK);
+    assert(nl_parser_parse_function_unit(parser, &tree, NULL) == NL_PARSE_OK);
+    assert(nl_semantic_create(&c) == NL_CHECK_OK);
+    const NLSyntaxTree *units[] = {tree};
+    assert(nl_semantic_register_function_unit(c, units, 1, NULL) == NL_CHECK_OK);
+    assert(nl_source_create("main()", 6, "C232 actual call", &entry) == NL_SOURCE_OK);
+    assert(nl_parser_create(entry, &ep) == NL_PARSE_OK);
+    assert(nl_parser_parse_expression_fragment(ep, &et, NULL) == NL_PARSE_OK);
+    assert(nl_semantic_check_expression(c, et, &root, NULL) == NL_CHECK_OK);
+    const NLCheckedFragment *f = nl_checked_call_body(root, nl_checked_root(root));
+    assert(f);
+    printf("actual main owner validate=%d\n", nl_linear_break_owner_validate(f));
+    for (size_t id = 1; id <= nl_checked_node_count(f); ++id) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        if (n->kind == NL_CHECKED_LOOP) {
+            NLLinearBreakView v = {0};
+            const NLCheckStatus status = nl_linear_break_validate(f, id, &v);
+            printf("loop=%zu status=%d scalar=%d result=%zu/%zu\n", id,
+                   status, v.scalar_loop, v.result.type, v.result.value);
+        }
+    }
+    V0Program full = {.unit = nl_semantic_unit_type(c),
+                      .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
+    printf("actual driver root validate=%d\n",
+           v0_validate_call(root, nl_checked_root(root), &full));
+    V0Program p = {.unit = nl_semantic_unit_type(c),
+                   .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
+    const NLCheckedNodeView *block = nl_checked_node_view(f, nl_checked_root(f));
+    assert(block && block->kind == NL_CHECKED_BLOCK);
+    for (NLCheckedNodeId id = block->first_item; id;) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        assert(n);
+        const bool ok = v0_validate_node(f, id, &p);
+        printf("source-ordered item=%zu kind=%d initializer=%zu valid=%d "
+               "aggregate=%zu scalar_loop=%d\n",
+               id, n->kind, n->initializer, ok, p.aggregate, p.scalar_loop);
+        if (!ok) {
+            const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
+            if (init && init->kind == NL_CHECKED_REGISTERED_CALL) {
+                NLSymbolId formal = 0;
+                const bool parameters = v1_call_parameter_kind(f, n->initializer,
+                                                              &p, &formal, true);
+                const NLCheckedFragment *body = nl_checked_call_body(f, n->initializer);
+                printf("call=%zu custody=%d actual/formal=%d formal=%zu pure_body=%d "
+                       "aggregate_guard=%d\n", n->initializer,
+                       nl_h_custody_result_valid(f, n->initializer), parameters,
+                       formal, body && parameters && predicate_body(body, formal, &p),
+                       p.aggregate != 0);
+            }
+            break;
+        }
+        id = n->next_item;
+    }
+
+    for (size_t id=1; id<=nl_checked_node_count(f); ++id) {
+        const NLCheckedNodeView *n=nl_checked_node_view(f,id);
+        if (n->kind != NL_CHECKED_IF) continue;
+        NLIfReturnView v={0};
+        const bool got=nl_checked_if_return_view(f,id,&v);
+        const NLCheckStatus current=got?nl_checked_if_return_validate(f,id,&v):NL_CHECK_INTERNAL_ERROR;
+        printf("IF_RETURN id=%zu GET=%d CURRENT=%d normal_arm=%zu replay_events=%zu replay_changes=%zu return_node=%zu root=%zu child=%zu index=%zu\n",id,got,current,v.normal_arm,v.replay_events,v.replay_changes,v.return_node,v.field.root,v.field.child,v.field.index);
+        if (got) {
+            const NLCheckedNodeView *condition=nl_checked_node_view(f,v.field.condition);
+            NLSemanticValueView b={0};
+            assert(condition && nl_semantic_value_view(nl_checked_context(f),condition->results[0].value,&b));
+            V0Program flags={.unit=nl_semantic_unit_type(c),.u8=nl_semantic_core_type(c,NL_TYPE_U8)};
+            const bool known=boolean_scalar_at(f,v.field.condition,&flags,id);
+            const bool runtime=runtime_boolean_scalar_at(f,v.field.condition,&flags,id);
+            printf("condition known=%d deps=%d count=%zu old_known_consumer=%d runtime_origin=%d\n",b.scalar_known,b.dependencies,b.value_dependency_count,known,runtime);
+        }
+    }
+
+    nl_checked_destroy(root);
+    nl_semantic_destroy(c);
+    nl_syntax_tree_destroy(et);
+    nl_parser_destroy(ep);
+    nl_source_destroy(entry);
+    nl_syntax_tree_destroy(tree);
+    nl_parser_destroy(parser);
+    nl_source_destroy(source);
+    return 0;
+}

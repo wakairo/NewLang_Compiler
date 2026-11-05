@@ -2332,14 +2332,13 @@ static bool v0_validate_block(const NLCheckedFragment *fragment,
 }
 
 static bool if_original_carrier(const NLCheckedFragment *f, NLCheckedNodeId id,
-                                const NLIfFieldView *proof, V0Program *p,
-                                bool runtime_condition)
+                                const NLIfFieldView *proof, V0Program *p)
 {
     const NLIfFieldView view = *proof;
+    /* The respective current validators establish the normal/RETURN worlds.
+     * Both consumers then require the same owned runtime condition origin. */
     if (p->u8_export || p->scalar_depth || !avs_shape(f, view.nominal, p) ||
-        !(runtime_condition
-              ? runtime_boolean_scalar_at(f, view.condition, p, id)
-              : boolean_scalar_at(f, view.condition, p, id)))
+        !runtime_boolean_scalar_at(f, view.condition, p, id))
         return false;
     /* The formal pointer maps to the caller original only through a validated
      * actual->formal handoff. No callee constructor or copied byte is a
@@ -2384,7 +2383,7 @@ static bool if_field_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
     NLCheckStatus status = nl_checked_if_field_validate(f, id, &v);
     if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
         p->copy_body_status = status;
-    return status == NL_CHECK_OK && if_original_carrier(f, id, &v, p, true);
+    return status == NL_CHECK_OK && if_original_carrier(f, id, &v, p);
 }
 static bool if_return_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
                                 V0Program *p)
@@ -2395,8 +2394,7 @@ static bool if_return_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
     NLCheckStatus status = nl_checked_if_return_validate(f, id, &v);
     if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
         p->copy_body_status = status;
-    return status == NL_CHECK_OK &&
-           if_original_carrier(f, id, &v.field, p, false);
+    return status == NL_CHECK_OK && if_original_carrier(f, id, &v.field, p);
 }
 static bool copy_or_field_if(const NLCheckedFragment *f, NLCheckedNodeId id,
                              V0Program *p)

@@ -1,0 +1,24 @@
+{
+  "fixed_candidate": "af16bbaebcaada68ff45afdf236d1debfc90b565",
+  "candidate_tree": "74a1bdc728398eb85bb690a9eaff34194f316b50",
+  "normative_main": "cdf23f6b8cf6a38caca62e135365277bdb833206",
+  "compiler_sha256": "ae3da6887b27c9a23b9aa0cc4eecaf27a50a1c3c2229d807ff2ecf49df53c993",
+  "probe_sha256": "c1d1f0c572e5a70b37fc41640130538c80c17d4f7cbf5ca8f87820159be542f6",
+  "files": {
+    "gate0.py": "283b356553576f91ce795be69034a0fe3bf070f9817a6c18367f0a8f08b473ee",
+    "oracle.json": "1cb1be48403caf408e401c17fda16d59affe1ff12ea56b19eba34a96d13fbdf2",
+    "probe.c": "84042a1611956fa0e65b44d39c9ffccbba484fa3a5d2be6beaaf419c56a0afa5",
+    "source-generator.py": "aac5b6f5d28ccfd423fdd1077ff0bbea477a996337c4e7344c5cc5b70b7a7703",
+    "sources/01-add-return-left.nl": "b905b094e9db89930e066750e9a5d986fd8e5c6bc0f7459bda646321da8d1713",
+    "sources/02-zero-normal-right.nl": "2dc899e67a23ed08ae9ca1ac12c8ed54a4f54d28e3caaef42db8086949bb7abf",
+    "sources/03-sub-return-right.nl": "7f5578eec15fe12c0bbccd1f9c7cb31ee33efca03815c5f60429c7e959e31004",
+    "sources/04-one-normal-left.nl": "b26d9a5a54f26d2aba2428c95adf3595207a2c33bce6549d61bb013d1ae4c7d4",
+    "sources/80-known-return-control.nl": "974ebaf3eec771c0dcca0832b59d26fc06596d88720d6cf18932cceeab6c946b",
+    "sources/81-two-normal-control.nl": "1b741310c98f3244f6bc431b4d7b34b61bdf377ab0d50fd174f2581bcb11f79f",
+    "sources/82-extra-return-control.nl": "95b9240e04f8fa02c8da0c7c4c4241b84f3cf51cfbeae4943614841db0573ba8",
+    "sources/90-overflow.nl": "321451e2c438cb321568560dab15444cd9a28e773a700b90d75e07bfd371619e",
+    "sources/91-read-mode.nl": "c426ef2dd10ec9681553fe02ad6d4bef33e1a2ec83f1e74e71a5997afa7654a9",
+    "sources/92-ending-reference.nl": "d2843ee1d406bd147e5d44df3edae4cbc1b8274720d0979fab546f094ee37ed8",
+    "sources/93-incoming-type.nl": "946f23060347c24ee297547e4d09626046f670383badb2973df164c12e0a8b70"
+  }
+}
