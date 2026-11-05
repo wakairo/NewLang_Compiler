@@ -1272,7 +1272,7 @@ if(BUILD_TESTING)
     target_link_libraries(p1184_signature PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
     foreach(profile 01-helper-loop 06-after-main-alias)
         add_test(NAME p1184_${profile}_signature_origin.unit COMMAND "${Python3_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1184/c246a/run.py"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/signature_forward.py"
             "$<TARGET_FILE:p1184_signature>" "tests/p1184/sources/${profile}.nl")
     endforeach()
     foreach(target p1184_safety p1184_oom p1184_census)

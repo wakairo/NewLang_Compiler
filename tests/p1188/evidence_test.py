@@ -32,3 +32,8 @@ failures = {
 for path, expected in failures.items():
     assert sha((here / 'evidence' / path).read_bytes()) == expected, path
 print('C247 original source/oracle/FIRST/RED and versioned equipment PASS')
+
+forward = json.loads((here / 'equipment-freeze-v4.json').read_bytes())
+for path, expected in forward['files'].items():
+    assert sha((root / path).read_bytes()) == expected, path
+print('C247 unchanged C246a oracle/fixed-header archive and forward adapter PASS')
