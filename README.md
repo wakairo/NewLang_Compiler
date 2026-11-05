@@ -62,14 +62,54 @@ unsupported**; this is not a language-level prohibition or a decision on their
 source eligibility. No indexing, element borrowing or container operations are
 provided by this construction path.
 
+## Setup: choose a route
+
+Choose the tools needed for your task, rather than treating the CI operating
+system as a requirement for every use of NewLang.
+
+| Your task | Start here | What it covers |
+| --- | --- | --- |
+| Build/develop the compiler or try source CHECK and bounded C17/native examples | [LLVM-independent frontend build](#llvm-independent-frontend-build); [first-user example](#initial-some-first-user-quickstart-no-llvm) | No LLVM bootstrap, SDK download or LLVM linkage. **NO LLVM / PARTIAL** validation. |
+| Build with the pinned SDK and run LLVM infrastructure validation | [Full SDK setup](#full-sdk-setup) | Exact curated LLVM **23.1.3**, including the LLVM C API link/run smoke. The current automatic bootstrap is restricted to **Ubuntu 24.04 x86_64**. |
+| Check or apply C/H formatting only | [Formatter only](#formatter-only) | Use an already authenticated, version-checked **clang-format 23.1.3** executable. No compiler build or LLVM C API smoke is required. |
+
+### Requirements and verified environments
+
+[CMakeLists.txt](CMakeLists.txt) requires a C17-capable GNU or Clang host
+compiler and **CMake >=3.28, <4.0**. The normal test-enabled build also
+requires **Python >=3.12**. A build tool such as make is needed for the
+chosen CMake generator. These requirements apply to the selected build
+route; formatter-only use does not require CMake or a compiler build.
+The existing host code/tests also use POSIX facilities and linker features
+such as `--wrap`; merely having a C17 compiler does not establish support
+for every OS, Linux distribution or toolchain.
+
+The following are separate records of development, tooling and CI use,
+not a universal compatibility matrix or minimum-version table.
+
+| Role / environment | Verified or reported scope | Evidence and limits |
+| --- | --- | --- |
+| **Compiler development: Debian GNU/Linux 13 x86_64**, existing Codex P environment | P reports GCC **13.3.0 (Ubuntu package)**, SDK Clang **23.1.3**, CMake/CTest **3.31.10**, Python **3.12.14**; frontend-only Debug/strict C17, O0/O2 native and targeted sanitizers. | [P1158 environment card](https://github.com/wakairo/NewLang_Compiler/issues/1158#issuecomment-6632171039), [local result](https://github.com/wakairo/NewLang_Compiler/issues/1158#issuecomment-6630010102), candidate `900533803a2690fa35083e43908123e504b26627`. P-reported, not an independent host audit. **Local LLVM smoke was not tested**; this is not a clean-bootstrap or Debian full-SDK result. |
+| **Formatter only: Debian 13.6 x86_64**, separate T environment | Authenticated curated SDK's clang-format **23.1.3**, loader/version readiness and bounded formatter-script cases. | [T1141 result](https://github.com/wakairo/NewLang_Compiler/issues/1141#issuecomment-6627522407), candidate `06d06fc72d031102632c379bc94f10cd60303d81`. No local compiler build, LLVM smoke or full CTest run. Candidate-script results are not proof of adoption on main. |
+| **CI: Ubuntu 24.04 x86_64**, GitHub Actions | FULL5: GCC13 Debug/Release, curated Clang23.1.3, ASan and UBSan; separate GCC frontend-only PARTIAL lane. | [FULL workflow](.github/workflows/compiler-ci.yml), [PARTIAL workflow](.github/workflows/compiler-frontend-ci.yml). Recorded successful main-push [FULL](https://github.com/wakairo/NewLang_Compiler/actions/runs/41812752417) / [PARTIAL](https://github.com/wakairo/NewLang_Compiler/actions/runs/41812753111) at `cdf23f6b8cf6a38caca62e135365277bdb833206`. These results belong to that SHA, not every later checkout. |
+
+P's GCC package origin is Ubuntu, but the reported **host OS is Debian**.
+P reports that detailed tool paths/build flags are in existing local
+receipts; those unpublished bytes have not been independently audited here.
+The exact P OS point release, loader and complete SDK acquisition/activation
+details remain unconfirmed here. The environment card is not a fresh-setup
+test. Reported host-tool versions are observations, not newly imposed
+minimum versions; SDK/formatter **23.1.3** remains a fixed identity.
+
 ## Two-byte settings swap (ordinary CLI, no LLVM)
 
-On Ubuntu 24.04 x86_64, the standalone
+The standalone
 [`examples/device_settings_swap.nl`](examples/device_settings_swap.nl) uses
 Draft17.33's bounded two-u8 nominal fields: two separate scoped writes swap
 `port=7, mode=31` to `port=31, mode=7`, forwarding the first `replace`'s actual
-old Copy to the second write. With the frontend-only setup below (GCC13,
-CMake >=3.28,<4, Python >=3.12), run:
+old Copy to the second write. Complete the
+[frontend-only build](#llvm-independent-frontend-build) first. The commands
+below use GCC13 as the host compiler example:
 
 ```sh
 ./build-frontend/newlangc --check examples/device_settings_swap.nl
@@ -99,15 +139,23 @@ safe-library guarantee. See [the contract, commands and evidence](tests/p688/REA
 
 ## Initial Some: first-user quickstart (no LLVM)
 
-On **Ubuntu 24.04 x86_64** (including WSL2 Ubuntu 24.04), the existing
+The existing
 [`tests/fixtures/node_initial_some.nl`](tests/fixtures/node_initial_some.nl)
 demonstrates a bounded **source → semantic check / checked-owned → C17 →
 native execution** path. It constructs two lexical `Node` locals; the second
 initializes `Option<ptr<Node>>::Some(peer_ptr)` pointing to the first.
 This is **not** a heap-allocation example.
 
-From a fresh checkout (skip `git clone` and `cd` if already in the repository
-root), install GCC 13, make, CMake **>=3.28, <4.0**, and Python **>=3.12**:
+The complete installation example below uses **Ubuntu 24.04 x86_64**
+(including WSL2 Ubuntu 24.04); this is an example environment, not an OS
+requirement for the frontend. It installs GCC13, make, CMake **>=3.28,
+<4.0**, and Python **>=3.12**. Skip `git clone`/`cd` when already in the
+repository root and skip package installation when the prerequisites are
+already present. On another prepared host, use the
+[frontend-only build](#llvm-independent-frontend-build), then run the same
+CHECK/emission steps and compile the generated C with your configured host
+C compiler. The commands below name `gcc-13` explicitly; no Debian package
+installation or fresh-bootstrap procedure is implied.
 
 ```sh
 git clone https://github.com/wakairo/NewLang_Compiler.git
@@ -150,20 +198,36 @@ allocation, nonCopy ownership, general graphs, full soundness or Product GO.
 See [CLI contract](#cli-contract) and
 [frontend-only build details](#llvm-independent-frontend-build).
 
+<a id="full-sdk-setup"></a>
+
 ## Full setup — adopted curated LLVM 23.1.3 (Ubuntu 24.04)
 
 The curated LLVM 23.1.3 toolchain is **adopted on main** (merged PR #451);
 this is the full infrastructure/validation route, not required for the
-LLVM-independent quickstart. Canonical Draft 17.30 remains unchanged.
-The full route exercises the LLVM C API smoke; it does not establish
-general LLVM lowering or a general language backend.
+LLVM-independent quickstart. The current canonical language Draft is
+selected by [CURRENT_SPEC](docs/reference/CURRENT_SPEC.md), independently
+of this toolchain adoption. The full route exercises the LLVM C API smoke;
+it does not establish general LLVM lowering or a general language backend,
+and is not a build or installation of every upstream LLVM component.
 
-Full curated LLVM SDK bootstrap is supported on **Ubuntu 24.04 x86_64**
-(including WSL2 Ubuntu 24.04 userspace when prerequisites match). It does
-**not** fetch the original 1.19 GB official archive, or the old 23.1.2
-apt.llvm.org .deb packages. Requires Python >=3.12, CMake >=3.28,<4.0,
-GCC13/G++13, make, zstd, and standard signed Ubuntu static-link developer
-libraries (zlib/zstd/tinfo/XML as required by LLVM).
+The current [bootstrap implementation](scripts/bootstrap.py) and
+[toolchain lock](scripts/toolchain-lock.json) select the curated SDK only
+for **Ubuntu 24.04 x86_64** (including matching WSL2 Ubuntu userspace).
+This is an automatic-setup restriction, not proof that the upstream-derived
+Linux x86_64 binaries cannot run on another compatible distribution.
+Conversely, Linux x86_64 alone is not a sufficient compatibility guarantee:
+loader/runtime and link-time dependencies must also be satisfied. Minimum
+libc/C++ runtime versions for this curated archive have not been established
+here; do not reuse ABI limits from the older 23.1.2 packages.
+
+This route does **not** fetch the original 1.19 GB official archive or the
+old 23.1.2 apt.llvm.org .deb packages. Use Python >=3.12, CMake >=3.28,<4.0,
+a working C/C++ host toolchain, make and zstd. The Ubuntu recipe below
+installs the tested GCC13/G++13 toolchain and signed host development
+libraries required for LLVM's static-link closure (zlib/zstd/tinfo/XML).
+The bootstrap requires **at least 3 GiB of free staging space** for a new
+SDK installation; this is not the total disk-space requirement of a build.
+Run the commands from the repository root:
 
 ```sh
 sudo apt-get update
@@ -202,8 +266,8 @@ the *committed exact GitHub-hosted archive SHA*, plus its internal
 for authorship, credits, limitations, and the disclosed Unicode-notice date
 discrepancy.
 
-`bash scripts/check-format.sh` uses the active `clang-format-23`; the
-ordinary five-way workflow still executes GCC, GCC Release, Clang, ASan,
+For formatting without a compiler build, see [Formatter only](#formatter-only).
+The ordinary five-way workflow still executes GCC, GCC Release, Clang, ASan,
 UBSan, every registered CTest, and the unchanged `llvm.c_api`. An
 independent `NEWLANG_FRONTEND_ONLY=ON` **NO LLVM / PARTIAL** lane remains
 available for Production source/checker/C17 reference work during SDK
@@ -211,25 +275,29 @@ infrastructure incidents; it never replaces full backend/native proof.
 
 ### Debian 13 developer hosts (not a supported full-LLVM setup)
 
-The older **Debian 13** snapshot .deb lock is retained for historical
-reproducibility, **not** as a maintained alternative to the supported Ubuntu
-24.04 full-LLVM route. In independent [R #656's frozen Debian 13 logs](https://github.com/wakairo/NewLang_Compiler/tree/e419168cb42b8045daeb25ca161cb200317f5353/tests/r-normal-native/evidence/local),
+This limitation concerns the **full automatic bootstrap**, not the
+reported Debian frontend development or formatter-only use above.
+On `debian-13-x86_64`, bootstrap still selects the historical **23.1.2**
+.deb lock, not the curated **23.1.3** SDK required by the default full build.
+That lock is retained for historical reproducibility, **not** as a
+maintained full-LLVM alternative. In independent [R #656's frozen Debian 13 logs](https://github.com/wakairo/NewLang_Compiler/tree/e419168cb42b8045daeb25ca161cb200317f5353/tests/r-normal-native/evidence/local),
 `python3 scripts/bootstrap.py` selected the legacy Debian packages and
 failed fetching the exact locked `libclang-cpp23` URL with HTTP 404.
 This is a dependency-availability failure, not permission to select a moving
 package, mirror or version, or to bypass HTTPS/TLS or SHA-256 validation.
 
-For a **full** LLVM C API build/test, use the supported **Ubuntu 24.04
-x86_64** setup above (including `libxml2-dev` from the signed distribution
-packages). On an experimental Debian 13 managed host, the documented
+For the currently documented automatic **full** LLVM C API build/test,
+use the Ubuntu setup above, including its host development libraries.
+For frontend/C17 work, use the
 [LLVM-independent frontend-only build](#llvm-independent-frontend-build)
-does not run bootstrap or link LLVM. With its stated GCC/Clang, make, CMake
-and Python prerequisites, it can run the ordinary CLI `--check`, generate
-bounded C17, and run native reference tests; it remains **NO LLVM / PARTIAL**
-and cannot replace the full smoke/validation gate.
+with its stated prerequisites; it does not run bootstrap or link LLVM.
+P's Debian13 development report supports that bounded use, not a clean
+Debian full-SDK setup. Frontend results remain **NO LLVM / PARTIAL** and
+cannot replace the full smoke/validation gate. Do not spoof the OS identity,
+substitute pins or bypass SDK markers/checks to force the full route.
 
-R #656 also experimentally used the **unchanged SHA-256-verified Ubuntu
-23.1.3 SDK** on Debian 13: its initial `llvm_smoke` link failed at
+R #656 also experimentally used the **unchanged SHA-256-verified curated
+23.1.3 SDK selected by the Ubuntu lock entry** on Debian 13: its initial `llvm_smoke` link failed at
 `/usr/bin/ld: cannot find -lxml2` because the host had
 `libxml2.so.2` but not the link-time `libxml2.so` name. R made an
 isolated linker-name symlink for that run. Debian's `libxml2-dev` package
@@ -241,7 +309,48 @@ The old 23.1.2 Debian/Noble guidance in historical P0 decisions is not the
 curated installation path. When changing toolchains, use a **fresh** CMake
 build directory to avoid retained LLVM smoke link targets.
 
+## Formatter only
+
+C/H formatting requires the repository checkout, Bash, Git, the host
+utilities used by the scripts, and the **authenticated, version-checked
+clang-format 23.1.3** executable. It does not require a NewLang compiler
+build, CMake configuration or the LLVM C API smoke.
+
+After a successful full bootstrap, `. .deps/activate.sh` selects the pinned
+formatter. To use an existing verified executable without full bootstrap,
+run from the repository root (replace the placeholder with its real path):
+
+```sh
+# Preconditions: provenance, fixed 23.1.3 version and host readiness
+# have already been checked. This is not a download/installation recipe.
+export CLANG_FORMAT="/absolute/path/to/verified/clang-format"
+"$CLANG_FORMAT" --version
+bash scripts/check-format.sh
+```
+
+The version display is not a substitute for authenticating the executable.
+Both formatter scripts honor `CLANG_FORMAT`; otherwise they look for
+`clang-format-23`. A binary's filename or a matching major version is not
+enough. The check does not rewrite source files; on failure it may produce
+a suggestion patch, which must be reviewed before applying. To deliberately
+format tracked C/H files in place with the same selected executable:
+
+```sh
+bash scripts/format.sh
+```
+
+T's Debian13.6 result above establishes formatter-only operation of the
+locked SDK tool and the tested script candidate, not full-SDK setup or
+adoption of that candidate. See [T1141](https://github.com/wakairo/NewLang_Compiler/issues/1141)
+for the ignored-input suggestion issue and its separately reviewed fix.
+A general non-Ubuntu formatter acquisition procedure is not documented
+here; no new download, OS-spoofing or verification-bypass recipe is implied.
+
 ## Other validated configurations
+
+These are LLVM-enabled configurations: complete the full SDK setup and
+activate it first. See the linked FULL workflow for the exact CI flags and
+runner configuration; these commands do not validate a new host platform.
 
 ```sh
 . .deps/activate.sh
@@ -312,7 +421,13 @@ C backend and does not replace LLVM as the planned primary backend.
 
 ### LLVM-independent frontend build
 
-On a Linux host with GCC or Clang, make, CMake >=3.28,<4.0 and Python >=3.12:
+Use this route to develop/build the compiler and run its existing bounded
+C17 reference tests without installing LLVM. From the repository root,
+with the [build requirements](#requirements-and-verified-environments)
+already satisfied, use a fresh build directory. The example uses `gcc`;
+select the intended installed GNU/Clang C compiler via `CC`.
+P's Debian13 report and the Ubuntu PARTIAL CI are distinct evidence for
+their recorded configurations, not a guarantee for every Linux host:
 
 ```sh
 CC=gcc cmake -S . -B build-frontend -DCMAKE_BUILD_TYPE=Debug \
@@ -329,9 +444,10 @@ validators and existing C17/native reference tests, remain enabled: that C17
 emitter has no LLVM dependency and its ordinary CLI behavior is preserved.
 `--check` is available in both builds; existing help/version output is unchanged.
 
-The option defaults **OFF**. The normal Ubuntu 24.04 full build requires
-exact curated LLVM **23.1.3**, and the normal five-configuration CI uses
-that default. Frontend-only results
+The option defaults **OFF**. The default LLVM-enabled build requires
+exact curated LLVM **23.1.3** from the verified SDK prefix, and the normal
+five-configuration CI uses that default. Its automatic bootstrap's Ubuntu
+restriction is separate from the frontend build requirements. Frontend-only results
 are separately scoped partial validation and cannot replace the full gate or
 justify merging new backend safety features. No native or Product PASS follows
 from checking source alone.
