@@ -1,0 +1,608 @@
+{
+  "schema": "R1185_FINAL_FINITE_ACCEPTED_RESULT",
+  "fixed_P": "faad092b5b0deb608a048ff60bee0056082f9a59",
+  "R_head": "a6367e6bc8e52acfee620ca9d840afdc4b700d38",
+  "R_tree": "43ab70ee1fd91d7d17e3054b9831345767f31c6e",
+  "R_parent": "290f852ac1acbdde6eed3dc388b1fdf8923b115f",
+  "normal_runs": [
+    42032683026,
+    42032683094
+  ],
+  "FAST_run": 42032672362,
+  "jobs": {
+    "FAST": 4,
+    "normal": 18,
+    "manual": 0,
+    "terminal_total": 22
+  },
+  "native": {
+    "old_plain": 252,
+    "old_control_passive": 36,
+    "new_positive_passive_attempts": 216,
+    "new_positive_passive_completed": 216,
+    "new_positive_passive_rc0": 216,
+    "timeouts": 0,
+    "total": 504
+  },
+  "cases": [
+    {
+      "case": "P01",
+      "values": {
+        "phase_headers": [
+          5
+        ],
+        "outer_guard_results": [
+          false
+        ],
+        "helper_arguments": [],
+        "fresh_formal_values": [],
+        "helper_branch_results": [],
+        "helper_normal_results": [],
+        "replace_old_results": [],
+        "selected_after_each_store": [],
+        "sibling_after_each_store": [],
+        "continue_arguments": [],
+        "helper_call_count": 0,
+        "store_count": 0,
+        "continue_count": 0,
+        "break_count": 1,
+        "post": {
+          "break_result": 5,
+          "actual_break_phase": 5,
+          "selected": 91,
+          "sibling": 174,
+          "entry_selected_copy": 91,
+          "entry_sibling_copy": 174,
+          "starting_phase_copy": 5
+        }
+      }
+    },
+    {
+      "case": "P02",
+      "values": {
+        "phase_headers": [
+          1,
+          3
+        ],
+        "outer_guard_results": [
+          true,
+          false
+        ],
+        "helper_arguments": [
+          1
+        ],
+        "fresh_formal_values": [
+          1
+        ],
+        "helper_branch_results": [
+          true
+        ],
+        "helper_normal_results": [
+          67
+        ],
+        "replace_old_results": [
+          42
+        ],
+        "selected_after_each_store": [
+          67
+        ],
+        "sibling_after_each_store": [
+          155
+        ],
+        "continue_arguments": [
+          3
+        ],
+        "helper_call_count": 1,
+        "store_count": 1,
+        "continue_count": 1,
+        "break_count": 1,
+        "post": {
+          "break_result": 3,
+          "actual_break_phase": 3,
+          "selected": 67,
+          "sibling": 155,
+          "entry_selected_copy": 42,
+          "entry_sibling_copy": 155,
+          "starting_phase_copy": 1
+        }
+      }
+    },
+    {
+      "case": "P03",
+      "values": {
+        "phase_headers": [
+          0,
+          2,
+          4,
+          6
+        ],
+        "outer_guard_results": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "helper_arguments": [
+          0,
+          2,
+          4
+        ],
+        "fresh_formal_values": [
+          0,
+          2,
+          4
+        ],
+        "helper_branch_results": [
+          true,
+          true,
+          false
+        ],
+        "helper_normal_results": [
+          109,
+          109,
+          231
+        ],
+        "replace_old_results": [
+          14,
+          109,
+          109
+        ],
+        "selected_after_each_store": [
+          109,
+          109,
+          231
+        ],
+        "sibling_after_each_store": [
+          208,
+          208,
+          208
+        ],
+        "continue_arguments": [
+          2,
+          4,
+          6
+        ],
+        "helper_call_count": 3,
+        "store_count": 3,
+        "continue_count": 3,
+        "break_count": 1,
+        "post": {
+          "break_result": 6,
+          "actual_break_phase": 6,
+          "selected": 231,
+          "sibling": 208,
+          "entry_selected_copy": 14,
+          "entry_sibling_copy": 208,
+          "starting_phase_copy": 0
+        }
+      }
+    },
+    {
+      "case": "P04",
+      "values": {
+        "phase_headers": [
+          1,
+          3,
+          5,
+          7,
+          9
+        ],
+        "outer_guard_results": [
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        "helper_arguments": [
+          1,
+          3,
+          5,
+          7
+        ],
+        "fresh_formal_values": [
+          1,
+          3,
+          5,
+          7
+        ],
+        "helper_branch_results": [
+          false,
+          false,
+          true,
+          false
+        ],
+        "helper_normal_results": [
+          187,
+          187,
+          76,
+          187
+        ],
+        "replace_old_results": [
+          33,
+          187,
+          187,
+          76
+        ],
+        "selected_after_each_store": [
+          187,
+          187,
+          76,
+          187
+        ],
+        "sibling_after_each_store": [
+          120,
+          120,
+          120,
+          120
+        ],
+        "continue_arguments": [
+          3,
+          5,
+          7,
+          9
+        ],
+        "helper_call_count": 4,
+        "store_count": 4,
+        "continue_count": 4,
+        "break_count": 1,
+        "post": {
+          "break_result": 9,
+          "actual_break_phase": 9,
+          "selected": 187,
+          "sibling": 120,
+          "entry_selected_copy": 33,
+          "entry_sibling_copy": 120,
+          "starting_phase_copy": 1
+        }
+      }
+    },
+    {
+      "case": "P05",
+      "values": {
+        "phase_headers": [
+          3,
+          4
+        ],
+        "outer_guard_results": [
+          true,
+          false
+        ],
+        "helper_arguments": [
+          3
+        ],
+        "fresh_formal_values": [
+          3
+        ],
+        "helper_branch_results": [
+          false
+        ],
+        "helper_normal_results": [
+          198
+        ],
+        "replace_old_results": [
+          198
+        ],
+        "selected_after_each_store": [
+          198
+        ],
+        "sibling_after_each_store": [
+          49
+        ],
+        "continue_arguments": [
+          4
+        ],
+        "helper_call_count": 1,
+        "store_count": 1,
+        "continue_count": 1,
+        "break_count": 1,
+        "post": {
+          "break_result": 4,
+          "actual_break_phase": 4,
+          "selected": 198,
+          "sibling": 49,
+          "entry_selected_copy": 198,
+          "entry_sibling_copy": 49,
+          "starting_phase_copy": 3
+        }
+      }
+    },
+    {
+      "case": "P06",
+      "values": {
+        "phase_headers": [
+          2,
+          5,
+          8,
+          11
+        ],
+        "outer_guard_results": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "helper_arguments": [
+          2,
+          5,
+          8
+        ],
+        "fresh_formal_values": [
+          2,
+          5,
+          8
+        ],
+        "helper_branch_results": [
+          false,
+          true,
+          false
+        ],
+        "helper_normal_results": [
+          18,
+          244,
+          18
+        ],
+        "replace_old_results": [
+          77,
+          18,
+          244
+        ],
+        "selected_after_each_store": [
+          18,
+          244,
+          18
+        ],
+        "sibling_after_each_store": [
+          221,
+          221,
+          221
+        ],
+        "continue_arguments": [
+          5,
+          8,
+          11
+        ],
+        "helper_call_count": 3,
+        "store_count": 3,
+        "continue_count": 3,
+        "break_count": 1,
+        "post": {
+          "break_result": 11,
+          "actual_break_phase": 11,
+          "selected": 18,
+          "sibling": 221,
+          "entry_selected_copy": 77,
+          "entry_sibling_copy": 221,
+          "starting_phase_copy": 2
+        }
+      }
+    }
+  ],
+  "negative_first_barriers": {
+    "N01": {
+      "source_sha256": "0600221d6af1bf2b3a535307b0d270cdabd7e17d4de9fafdfbd4e7ad4f6b2fa7",
+      "CHECK_rc": 3,
+      "public_rc": 21,
+      "public_first_barrier": {
+        "record": "stage",
+        "stage": "register_unit",
+        "status": 1,
+        "code": "P13-IF-CONDITION"
+      },
+      "C17": "NOT_RUN"
+    },
+    "N02": {
+      "source_sha256": "acc60c6276ac667568239ce7127500e0b51c3334d3682853bfcca8e2f14caa2a",
+      "CHECK_rc": 3,
+      "public_rc": 21,
+      "public_first_barrier": {
+        "record": "stage",
+        "stage": "register_unit",
+        "status": 1,
+        "code": "P13-IF-RESULT"
+      },
+      "C17": "NOT_RUN"
+    },
+    "N03": {
+      "source_sha256": "8970394ba7554851623aa3596b158fd29a1c21160a6b18dec6b639e628a8d72d",
+      "CHECK_rc": 3,
+      "public_rc": 21,
+      "public_first_barrier": {
+        "record": "stage",
+        "stage": "register_unit",
+        "status": 1,
+        "code": "P3-TYPE-MISMATCH"
+      },
+      "C17": "NOT_RUN"
+    },
+    "N04": {
+      "source_sha256": "a44000849d6b3d8b6a453a424be74dd9550e9015af8040a501252f0f60d28237",
+      "CHECK_rc": 3,
+      "public_rc": 21,
+      "public_first_barrier": {
+        "record": "stage",
+        "stage": "register_unit",
+        "status": 1,
+        "code": "P8-EXIT-DEPENDENCY"
+      },
+      "C17": "NOT_RUN"
+    },
+    "N05": {
+      "source_sha256": "9568817c67737694ab69ef700500726de649672f5ba90507dccf1c82a3f96796",
+      "CHECK_rc": 3,
+      "public_rc": 21,
+      "public_first_barrier": {
+        "record": "stage",
+        "stage": "register_unit",
+        "status": 3,
+        "code": "P8-SIGNATURE-PRECISION"
+      },
+      "C17": "NOT_RUN"
+    },
+    "N06": {
+      "source_sha256": "f479bc1fdadcb06555bb572364171a2dec9291e1b43cbc8b08a65c0b08427eef",
+      "CHECK_rc": 3,
+      "public_rc": 21,
+      "public_first_barrier": {
+        "record": "stage",
+        "stage": "register_unit",
+        "status": 3,
+        "code": "P14-LOOP-PRECISION"
+      },
+      "C17": "NOT_RUN"
+    },
+    "N07": {
+      "source_sha256": "c2d1c8251a766c1d6d51e35a67b54431f3327f24e1820de1ce7edcc3e6681531",
+      "CHECK_rc": 3,
+      "public_rc": 21,
+      "public_first_barrier": {
+        "record": "stage",
+        "stage": "register_unit",
+        "status": 1,
+        "code": "P8-BODY-RESULT"
+      },
+      "C17": "NOT_RUN"
+    },
+    "N08": {
+      "source_sha256": "95ac880ab4d8163a0975939fbb32901ccb47a0383b3e9d985d7f4c36e3595a6a",
+      "CHECK_rc": 3,
+      "public_rc": 21,
+      "public_first_barrier": {
+        "record": "stage",
+        "stage": "register_unit",
+        "status": 3,
+        "code": "USIZE-ADDITION-PRECISION"
+      },
+      "C17": "NOT_RUN"
+    }
+  },
+  "hosts": {
+    "gcc": {
+      "analysis_sha256": "8d2da742d0f93107625b3841dc59fa9a6765cb481361271d6a3fdddde222edb7",
+      "raw_custody": {
+        "original_log": "execution/ci/normal3/gcc/job-127262808362.log",
+        "original_log_bytes": 3433813,
+        "original_log_sha256": "ca38ff33e591e149b18fcc22e114fe69d261916684d2c7311533db9862f1dd7d",
+        "gzip_bytes": 2366975,
+        "gzip_sha256": "dc949546998c06a367810e17f4394ce266d32913b6ce6f95b2e48a5e080a8ceb",
+        "member_count": 1336,
+        "indexed_files": 1335,
+        "member_index_sha256": "0dbfe467445a6c250580cc60e0a8f3ffa8cbc01b1c53f7a65c130e3a4a73bab7",
+        "status": "EXACT_ARCHIVE_AND_ALL_MEMBER_HASHES_VERIFIED",
+        "execution": "NONE; text/base64/gzip/tar/hash only"
+      },
+      "versions": {
+        "gcc": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "clang": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)"
+      }
+    },
+    "clang": {
+      "analysis_sha256": "7e063ccd40149338df5c1402d74ab70ca18ac242be495eaa8e149629045999ea",
+      "raw_custody": {
+        "original_log": "execution/ci/normal3/clang/job-127262808412.log",
+        "original_log_bytes": 3444688,
+        "original_log_sha256": "148e255b525d76a82e12e8e5aa141588f4f929ada272f29eb062de2e0fbb7de9",
+        "gzip_bytes": 2373476,
+        "gzip_sha256": "e9ff3d4fc4a03749b2a481f2a171b1187425fbf92c6dc65d2cbf4904be454c7c",
+        "member_count": 1336,
+        "indexed_files": 1335,
+        "member_index_sha256": "651ab15b424d1b574a5e1411dc5f9d19fd9670268502b6eaf07c18e93f917519",
+        "status": "EXACT_ARCHIVE_AND_ALL_MEMBER_HASHES_VERIFIED",
+        "execution": "NONE; text/base64/gzip/tar/hash only"
+      },
+      "versions": {
+        "gcc": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "clang": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)"
+      }
+    },
+    "gcc_release": {
+      "analysis_sha256": "86b6f8a7f7d5a5e4a9fa78b4e5b042f952eafe7e9a82a9a02cec75302658cffb",
+      "raw_custody": {
+        "original_log": "execution/ci/normal3/gcc_release/job-127262808062.log",
+        "original_log_bytes": 3435491,
+        "original_log_sha256": "431c9db077beccc97825f8294d91df60701b2bcff2d0bc00f605151876f0206b",
+        "gzip_bytes": 2368469,
+        "gzip_sha256": "2fcc01f31659849ed292989f6ed7a8fe04953e138f81d44b056e820a7ccdf96c",
+        "member_count": 1336,
+        "indexed_files": 1335,
+        "member_index_sha256": "cead428d06a3ce83e9b5f6c5522a572ebe56696d1820ce9cfafb74c4d8f470dc",
+        "status": "EXACT_ARCHIVE_AND_ALL_MEMBER_HASHES_VERIFIED",
+        "execution": "NONE; text/base64/gzip/tar/hash only"
+      },
+      "versions": {
+        "gcc": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "clang": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)"
+      }
+    },
+    "partial": {
+      "analysis_sha256": "b458781a39f41f8ea2fa6b9fcf5498c57582bd30ef90bbf5d3d905f37a9e80f5",
+      "raw_custody": {
+        "original_log": "execution/ci/normal3/partial/job-127262808700.log",
+        "original_log_bytes": 3487202,
+        "original_log_sha256": "fe29f1c2afa544fe97c547fd15ae5a05bac965d5eb01720db826252ef74f5f52",
+        "gzip_bytes": 2373025,
+        "gzip_sha256": "d517cd6e35853e2b4ec006f4c3c8ea8631a69f4497a09cb4c6f39349f4368746",
+        "member_count": 1336,
+        "indexed_files": 1335,
+        "member_index_sha256": "f88f7cad14dc791e28cbee39f6bd1d4e84b8692053777f4cfbf1300b474e5381",
+        "status": "EXACT_ARCHIVE_AND_ALL_MEMBER_HASHES_VERIFIED",
+        "execution": "NONE; text/base64/gzip/tar/hash only"
+      },
+      "versions": {
+        "gcc": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "clang": "Ubuntu clang version 18.1.3 (1ubuntu1)"
+      }
+    },
+    "ubsan": {
+      "analysis_sha256": "ec064dd5bd6cdff42889f1230422a3f070a383ae96c101dd6c116f501806f98c",
+      "raw_custody": {
+        "original_log": "execution/ci/normal3/ubsan/job-127262808183.log",
+        "original_log_bytes": 3443273,
+        "original_log_sha256": "2a4d9563a33ff331ba6eb8c52d0372544fee857e0bec30027baa10576a029733",
+        "gzip_bytes": 2374101,
+        "gzip_sha256": "143e0a2a1e761569317820f77670e854aa2bee3c5ab295905064a9f1abcde591",
+        "member_count": 1336,
+        "indexed_files": 1335,
+        "member_index_sha256": "7d52fa9e6493506ee3bdde937a11436d0a9e4b723e8f16560a2de890cc6c3f4e",
+        "status": "EXACT_ARCHIVE_AND_ALL_MEMBER_HASHES_VERIFIED",
+        "execution": "NONE; text/base64/gzip/tar/hash only"
+      },
+      "versions": {
+        "gcc": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "clang": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)"
+      }
+    },
+    "asan": {
+      "analysis_sha256": "7b156717345b8ec415a14a49e24d95699ba3fd7b910091cbf35b82d180ee8641",
+      "raw_custody": {
+        "original_log": "execution/ci/normal3/asan/job-127262807923.log",
+        "original_log_bytes": 3443653,
+        "original_log_sha256": "74b26f8f15a1f501b7896357eb9e88c06eb30b321c54694391a39472855786ac",
+        "gzip_bytes": 2374164,
+        "gzip_sha256": "3061e7ae464b8898a9044a08ca06fb8a066943cb8695a2264b34376d167ad840",
+        "member_count": 1336,
+        "indexed_files": 1335,
+        "member_index_sha256": "301b08deca7cfd2cec862823ba464440877f3f315276014fee3849973caad2ac",
+        "status": "EXACT_ARCHIVE_AND_ALL_MEMBER_HASHES_VERIFIED",
+        "execution": "NONE; text/base64/gzip/tar/hash only"
+      },
+      "versions": {
+        "gcc": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "clang": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)"
+      }
+    }
+  },
+  "FINAL_issue": "https://github.com/wakairo/NewLang_Compiler/issues/1185#issuecomment-6659217082",
+  "C_finite_accept": "https://github.com/wakairo/NewLang_Compiler/issues/1185#issuecomment-6659250946",
+  "V1": "NOT_RUN",
+  "V2_oracle_sha256": "29410e20b599aa8ddb243c1dd20895692e2635b32366ebdd6343a3bd45633801",
+  "limits": [
+    "pre-execution frozen independent V1 / scope-calibrated V2; C-supplied finite-profile boundaries",
+    "V1 initializer/caller-usize/formal-condition alias paths remain untested",
+    "N05 deep escape and N08 later call NOT_REACHED; N06/N08 legal coverage probes",
+    "ternary choice inferred from captured operands and AST; internal RETURN_VALUE separate from caller VALUE",
+    "native addresses only within each passive run; public IDs qualified by artifact/world",
+    "no machine CALL/STORE survival, general authority/freshness/soundness or whole-loop public validator proof"
+  ],
+  "execution_STOP": true
+}
