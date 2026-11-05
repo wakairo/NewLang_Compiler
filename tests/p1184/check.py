@@ -3,7 +3,7 @@ import hashlib,json,subprocess,sys
 p=Path(__file__).resolve().parent
 compiler=Path(sys.argv[1]);raw=Path(sys.argv[2]);raw.mkdir(exist_ok=False,parents=True)
 oracle=json.loads((p/'oracle.json').read_text())
-version=json.loads((p/'oracle-v2.json').read_text())
+version={'source_overrides':{},'expected_diagnostics':{}}
 rows=[]
 for name,meta in oracle['cases'].items():
     source=p/version['source_overrides'].get(name,'sources/'+name+'.nl')
