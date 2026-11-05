@@ -1,0 +1,113 @@
+{
+  "created_utc": "2026-11-05T05:25:55.046896+00:00",
+  "fixed_base": "870e4f0972abb9725b7cf9f38d09178e51ff1280",
+  "base_tree": "5db3576a09f2627f8975a21295419dee6433a629",
+  "files": {
+    "sources/01-phase-left.nl": {
+      "bytes": 551,
+      "sha256": "b44db6b770275cc386e3f8a788b28936c5e21285c002635f1bddd9125398d279"
+    },
+    "sources/02-phase-right.nl": {
+      "bytes": 551,
+      "sha256": "7f549da3a1173aac3122c069811e33434863d1ac123c650bcd9ac7d7e294348d"
+    },
+    "sources/03-one-edge.nl": {
+      "bytes": 550,
+      "sha256": "7988aff843641a3b5db0bcda11a44a05430ad1ff5f74eec6b9871e3826599a6b"
+    },
+    "sources/04-zero-edge.nl": {
+      "bytes": 552,
+      "sha256": "5f8baa425c966281d7ef301b5440eca0443fba79abf8007deee3c1f1bb75a4f7"
+    },
+    "sources/05-phase-equality.nl": {
+      "bytes": 552,
+      "sha256": "01ef703d16c725bf1ae478688d304705ce261b2b1f9a2a988511aab2beb8823c"
+    },
+    "sources/06-incoming-alias.nl": {
+      "bytes": 601,
+      "sha256": "a1a3b78c4ad8f627ed8d82ce603dc951e7e172955234676e4f2170fe7ac09cfa"
+    },
+    "sources/100-zero-step.nl": {
+      "bytes": 551,
+      "sha256": "92e4589835743ed7c41f24c6e6bbeea1e64f3a1ad4ed99ca4e3fd96d9a2d646c"
+    },
+    "sources/101-arm-type.nl": {
+      "bytes": 554,
+      "sha256": "13cd601b6bec04e96eea4cde403fb766cbde03231d1ceb38e655890d3651d70b"
+    },
+    "sources/80-literal-control.nl": {
+      "bytes": 496,
+      "sha256": "1cedd7fb7a5d87b5598c86b1e634d8c43eb14385b0c0c90e0c7b132e4b3a2b85"
+    },
+    "sources/81-stutter-control.nl": {
+      "bytes": 309,
+      "sha256": "c21827ac467cc9d22996c563005852b653d4fec10c0b450efbae1fac2ca8e6bb"
+    },
+    "sources/90-incoming-usize.nl": {
+      "bytes": 557,
+      "sha256": "6bea2d24881954c806fff59727fbdf704bf3194128515b015f84d1a1321eb51c"
+    },
+    "sources/91-phase-shadow.nl": {
+      "bytes": 575,
+      "sha256": "5d75d5affb70f1ad8ee19e25d6f5f9f2530d2791f078223ea912838bd442d50d"
+    },
+    "sources/92-inner-effect.nl": {
+      "bytes": 625,
+      "sha256": "b75576de47548efc18899ea33d83ac6a4bb3245a292089810f8fc6914e8bc1bc"
+    },
+    "sources/93-overflow.nl": {
+      "bytes": 570,
+      "sha256": "f2475886bee9944f0585ad109f2420d6a498d478030de2a775e174e9d9db1f7c"
+    },
+    "sources/94-other-phase.nl": {
+      "bytes": 581,
+      "sha256": "5a3b047925c06d6cfed5945400860e6276fad81b6859ddafe9f6824013222f7d"
+    },
+    "sources/95-unrelated-literal.nl": {
+      "bytes": 549,
+      "sha256": "7791da181671397b6af596709e3e44684c06a8b415bc150a47d7cf4b1962d30d"
+    },
+    "sources/96-escaping-arm.nl": {
+      "bytes": 618,
+      "sha256": "99ee79f241db9e7f4d5bacc597f0a65811646eb06cc28d08dcc9253eddfc711d"
+    },
+    "sources/97-break-store.nl": {
+      "bytes": 623,
+      "sha256": "08dba4a06e67840cd953413c315cf5af2cf3a0f9c7b4903c5c3a7742b03bf476"
+    },
+    "sources/98-second-if.nl": {
+      "bytes": 621,
+      "sha256": "00e23577e945548590833d489db99405cd358ae306dc06e43668907d926edf80"
+    },
+    "sources/99-unrelated-copy.nl": {
+      "bytes": 567,
+      "sha256": "d60ac1ec882a770f486ddd9420dcc3a1d9e89277b3a5e35fc2d144e79dd6ad75"
+    },
+    "evidence/80-literal-control.c17": {
+      "bytes": 3314,
+      "sha256": "e1f5e25bfb53b7a1dcd9663e7f3ad2a06e5b8dc2d58dddde4c95b7b792efa5af"
+    },
+    "evidence/81-stutter-control.c17": {
+      "bytes": 2032,
+      "sha256": "0c1c145f77d35f38427e71fc459314fa4fd97eb23ee07412f3a6fb7f6352e17e"
+    },
+    "evidence/p1174-checkpoint.zip": {
+      "bytes": 3846500,
+      "sha256": "bc02b244cccccdfe5d882b3a820d629f484c74bc58c245d465ebfb47001da02a"
+    },
+    "oracle.json": {
+      "bytes": 7917,
+      "sha256": "0df0009d82427765341c0279032477c5bce7af20760a120a3826b30cd655e184"
+    },
+    "predecessor-oracle.json": {
+      "bytes": 4973,
+      "sha256": "d71c97815eb630564112ce65c25288608e7dfd819f6857fb7bc21689cc46c8c7"
+    }
+  },
+  "at_freeze": {
+    "source_executions": 0,
+    "Production_candidate_executions": 0,
+    "publication": 0
+  },
+  "expected": "Successor candidate: six runtime-pure-IF positives CHECK/current/C17/native; twelve negatives reject; two exact-byte controls. P1174 original refusal remains historical."
+}

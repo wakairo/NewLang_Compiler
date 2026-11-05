@@ -21,6 +21,7 @@ typedef struct {
     bool changing_current;
     const NLCheckedFragment *iteration;
     NLCheckedNodeId continue_node;
+    NLCheckedNodeId incoming_if; /* authenticated iteration-local scalar join */
     NLSymbolId phase_symbol;
     /* Tagged payload: literal successor normally; arithmetic step when
      * computed_carry is true. A computed successor is never known here. */

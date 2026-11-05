@@ -1,0 +1,350 @@
+{
+  "authority": "C243 / fixed PR1171 870e4f0972abb9725b7cf9f38d09178e51ff1280",
+  "cases": {
+    "01-phase-left": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 0,
+      "initial": 26,
+      "sibling": 211,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "header_child": [
+        26,
+        53,
+        53,
+        149,
+        149,
+        149
+      ],
+      "olds": [
+        26,
+        53,
+        53,
+        149,
+        149
+      ],
+      "incoming": [
+        53,
+        53,
+        149,
+        149,
+        149
+      ],
+      "final": 149,
+      "result": 5,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true
+    },
+    "02-phase-right": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 1,
+      "initial": 34,
+      "sibling": 158,
+      "headers": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "header_child": [
+        34,
+        87,
+        87,
+        202,
+        202
+      ],
+      "olds": [
+        34,
+        87,
+        87,
+        202
+      ],
+      "incoming": [
+        87,
+        87,
+        202,
+        202
+      ],
+      "final": 202,
+      "result": 9,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true
+    },
+    "03-one-edge": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 0,
+      "initial": 91,
+      "sibling": 17,
+      "headers": [
+        3,
+        5
+      ],
+      "header_child": [
+        91,
+        65
+      ],
+      "olds": [
+        91
+      ],
+      "incoming": [
+        65
+      ],
+      "final": 65,
+      "result": 5,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true
+    },
+    "04-zero-edge": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 1,
+      "initial": 37,
+      "sibling": 192,
+      "headers": [
+        7
+      ],
+      "header_child": [
+        37
+      ],
+      "olds": [],
+      "incoming": [],
+      "final": 37,
+      "result": 7,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true
+    },
+    "05-phase-equality": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 0,
+      "initial": 26,
+      "sibling": 211,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "header_child": [
+        26,
+        149,
+        149,
+        53,
+        149,
+        149
+      ],
+      "olds": [
+        26,
+        149,
+        149,
+        53,
+        149
+      ],
+      "incoming": [
+        149,
+        149,
+        53,
+        149,
+        149
+      ],
+      "final": 149,
+      "result": 5,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true
+    },
+    "06-incoming-alias": {
+      "category": "positive",
+      "semantic_legality": "dependency-free finite source family",
+      "index": 1,
+      "initial": 34,
+      "sibling": 158,
+      "headers": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "header_child": [
+        34,
+        87,
+        87,
+        202,
+        202
+      ],
+      "olds": [
+        34,
+        87,
+        87,
+        202
+      ],
+      "incoming": [
+        87,
+        87,
+        202,
+        202
+      ],
+      "final": 202,
+      "result": 9,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": true
+    },
+    "100-zero-step": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "private_current": null,
+      "reason": "outside finite phase-pure-IF/one-writer contract or invalid type/loan/quantity; first actual rejection will be recorded"
+    },
+    "101-arm-type": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "private_current": null,
+      "reason": "outside finite phase-pure-IF/one-writer contract or invalid type/loan/quantity; first actual rejection will be recorded"
+    },
+    "80-literal-control": {
+      "category": "control",
+      "index": 0,
+      "initial": 112,
+      "sibling": 39,
+      "headers": [
+        1,
+        5,
+        9,
+        13
+      ],
+      "header_child": [
+        112,
+        203,
+        203,
+        203
+      ],
+      "olds": [
+        112,
+        203,
+        203
+      ],
+      "incoming": [
+        203,
+        203,
+        203
+      ],
+      "final": 203,
+      "result": 13,
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "runtime_incoming": false
+    },
+    "81-stutter-control": {
+      "category": "control",
+      "check": 0,
+      "emit": 0,
+      "private_current": 0,
+      "changing_current": false
+    },
+    "90-incoming-usize": {
+      "category": "negative",
+      "reason": "invalid replace incoming type",
+      "check": 3,
+      "emit": 3,
+      "private_current": null
+    },
+    "91-phase-shadow": {
+      "category": "negative",
+      "reason": "legal source outside exact unchanged-phase finite family",
+      "check": 3,
+      "emit": 3,
+      "private_current": null
+    },
+    "92-inner-effect": {
+      "category": "negative",
+      "reason": "legal source outside pure-IF/one-writer family",
+      "check": 3,
+      "emit": 3,
+      "private_current": null
+    },
+    "93-overflow": {
+      "category": "negative",
+      "reason": "actual first ADD is not representable on the fixed 64-bit target",
+      "check": 3,
+      "emit": 3,
+      "private_current": null
+    },
+    "94-other-phase": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "private_current": null,
+      "reason": "outside finite phase-pure-IF/one-writer contract or invalid type/loan/quantity; first actual rejection will be recorded"
+    },
+    "95-unrelated-literal": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "private_current": null,
+      "reason": "outside finite phase-pure-IF/one-writer contract or invalid type/loan/quantity; first actual rejection will be recorded"
+    },
+    "96-escaping-arm": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "private_current": null,
+      "reason": "outside finite phase-pure-IF/one-writer contract or invalid type/loan/quantity; first actual rejection will be recorded"
+    },
+    "97-break-store": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "private_current": null,
+      "reason": "outside finite phase-pure-IF/one-writer contract or invalid type/loan/quantity; first actual rejection will be recorded"
+    },
+    "98-second-if": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "private_current": null,
+      "reason": "outside finite phase-pure-IF/one-writer contract or invalid type/loan/quantity; first actual rejection will be recorded"
+    },
+    "99-unrelated-copy": {
+      "category": "negative",
+      "check": 3,
+      "emit": 3,
+      "private_current": null,
+      "reason": "outside finite phase-pure-IF/one-writer contract or invalid type/loan/quantity; first actual rejection will be recorded"
+    }
+  },
+  "semantics": "Actual phase selects exactly one pure u8 arm per Continue; original T, one scoped replace, old and sibling preserved. Zero-edge has no IF evaluation or store.",
+  "limits": {
+    "positive": 6,
+    "negative": 12,
+    "control": 2
+  },
+  "expected_first_before_implementation": "P1174 first registration USIZE-ADDITION-PRECISION retained; new oracle predicts only successor candidate behavior",
+  "ownership": "No view/count/foreign arm becomes destructor authority; preserve fresh same-bits facts; complete graph/current correspondence required"
+}
