@@ -1,0 +1,36 @@
+{
+  "execution_released": true,
+  "compiler_sha": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+  "tree_sha": "f0aebb423a1c38908fde83f219886cf387b3705e",
+  "parents": [
+    "a45b95616b09b2a1fca756333ac4d5f899954e1c"
+  ],
+  "adopted_main": "70059189c2030f927ad3daa0044c8898848b4548",
+  "base_branch": "p-c247-phase-usize-copy",
+  "branch": "r-fast/r1190-phase-usize-copy",
+  "release": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6662186349",
+  "resume": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6662202352",
+  "FIRST_bundle_sha256": "eb06080e3c5e94109870ddc794c4fc2de6edf87ae2b913d105f1fdeb723a2acd",
+  "FIRST_manifest_sha256": "bc0ad8a62f57860805ae8671ce680e92a00ce156a1e77fd60ed64b379db513a9",
+  "FIRST_oracle_sha256": "15b50df7981dc98f076fb164d36114878356520fae88cc53580583e126cca7b4",
+  "environment": "GitHub dedicated branch + Actions only; P-equivalent local execution forbidden",
+  "budgets": {
+    "FAST_actual_runs": 6,
+    "normal_actual_jobs": 12,
+    "initial_normal_jobs": 6,
+    "recovery_sets": 1,
+    "manual_rerun_or_dispatch": 0,
+    "native_invocations_per_job": 72
+  },
+  "status_limits": [
+    "audit locality UNMEASURED",
+    "GO624 PAUSED",
+    "H1 HOLD",
+    "P1036–PR1050 STOP"
+  ],
+  "historical_execution_release": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6660038351",
+  "preparation_release": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6661926285",
+  "worker_succession": "New isolated reviewer in the new C thread, inheriting original independently frozen R1190 FIRST and E2; not the predecessor and not a newly authored cohort",
+  "status": "C252_EXECUTION_RELEASED_FIXED_7B7095",
+  "preparation_resume": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6661980163"
+}

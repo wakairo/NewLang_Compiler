@@ -1,0 +1,246 @@
+{
+  "schema": "R1190_POSTFREEZE_MACHINERY_INPUTS",
+  "old_machinery_commit": "a6367e6bc8e52acfee620ca9d840afdc4b700d38",
+  "fixed_public_commit": "8585d9199d2075b18109438dc096dbe0619d1bfe",
+  "independence": "FIRST pre-execution independently chosen source/oracle, incidental authority-history exposure before freeze; narrow C250 postfreeze generic machinery reuse, not unrestricted blind",
+  "not_read": [
+    "P/F implementation, source, oracle, report bodies",
+    "other R cohort, reuse, raw, results, reports",
+    "recovery_driver.py",
+    "other directories or agent lists"
+  ],
+  "files": [
+    {
+      "path": "tests/r1185/compare.py",
+      "git_blob_sha1": "233778a8f3423b6b8e7622f820b98ee745a74750",
+      "sha256": "6cd94a1d581eea72cc16076bba2386b26bfdeffdbb56326c8322f545dcbf2fbd",
+      "bytes": 33393
+    },
+    {
+      "path": "tests/r1185/direct_helper.py",
+      "git_blob_sha1": "64bc9d53b19327700e3bd7eb74d4f09028056417",
+      "sha256": "a2cebaba6b04de3cedebb47b7724443179b56cc3d58a2908a6fcf84cb82db7e4",
+      "bytes": 10598
+    },
+    {
+      "path": "tests/r1185/driver.py",
+      "git_blob_sha1": "0ce563896a328c5f0ad1baf7719d3dd576004def",
+      "sha256": "922c75398064a98b62658e91e4a9df69ecfde3469202a6b00eb057edc69893d2",
+      "bytes": 18898
+    },
+    {
+      "path": "tests/r1185/export.py",
+      "git_blob_sha1": "aa22c0fd4e74c6a8c61a6d31862fe2a7eaef51e7",
+      "sha256": "944b1846f408ba04d44c2ab69fad5505bca741ae9fac64433a7d23ebb7f39a7a",
+      "bytes": 1455
+    },
+    {
+      "path": "tests/r1185/link_actual_ast.py",
+      "git_blob_sha1": "a115d56f71e69ad763a704c6e612eca272333b1b",
+      "sha256": "2741d5bb870886b42bdbb90db62804afb6afa6ec207b58ea0d6c28e7ee71fc6f",
+      "bytes": 5442
+    },
+    {
+      "path": "tests/r1185/observe.py",
+      "git_blob_sha1": "5f115aa092b208ad589b84a08aeccfbcd23e503b",
+      "sha256": "ef51ce437f25eb0da8c2934cbbba20fb33a0fcaa520a74ff6a7c42a1663b127d",
+      "bytes": 27515
+    },
+    {
+      "path": "tests/r1185/public_probe.c",
+      "git_blob_sha1": "ef5df5a7b03b9de78db2d32340f08001f02622a2",
+      "sha256": "60445990820bd8aaaa3fcb93a5caeaff29a5d8f8d7116de70106ca7789347e88",
+      "bytes": 13960
+    },
+    {
+      "path": "tests/r1185/register.cmake",
+      "git_blob_sha1": "b28e9de31e7894c9ee9ac1736d91ae2dbfe7ba5c",
+      "sha256": "4d8ed0a60987659e47d4f9dbdda8d605daf15b2eeef93c2e9516f28e9d988921",
+      "bytes": 3751
+    },
+    {
+      "path": "tests/r1185/snapshot.py",
+      "git_blob_sha1": "a78f3a0f5cfa7afedbb296bb89902521b8263a04",
+      "sha256": "bf498a146d5aa3288377452ed5940e9c504f91cf85f750f7bc4f43380415756a",
+      "bytes": 6228
+    }
+  ],
+  "C252_successor": {
+    "worker": "new isolated C-thread successor; original worker/source/oracle history retained",
+    "fixed_public_commit": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+    "fixed_tree": "f0aebb423a1c38908fde83f219886cf387b3705e",
+    "read_scope": "Issue1190; predecessor known path; canonical/Compass goal and process authority; allowed public headers/CMake/plumbing; new commit/tree and R branch/run metadata",
+    "incidental_exposure": "CURRENT_SPEC authority-document historical compiler-coverage text read after original FIRST freeze; no P/F implementation/source/oracle/finding/report/rationale fetched",
+    "allowed_paths": [
+      {
+        "path": ".clang-format",
+        "old": {
+          "bytes": 555,
+          "sha256": "173e338d5266ad0a079f100b0df66c2f94e1f41c969c48d37adad0ceaf8d47d1",
+          "git_blob_sha1": "9d52cbe0e9e9ea42761c8802a17d8baad4852c52"
+        },
+        "new": {
+          "bytes": 555,
+          "sha256": "173e338d5266ad0a079f100b0df66c2f94e1f41c969c48d37adad0ceaf8d47d1",
+          "git_blob_sha1": "9d52cbe0e9e9ea42761c8802a17d8baad4852c52"
+        },
+        "identical": true
+      },
+      {
+        "path": ".github/workflows/compiler-ci.yml",
+        "old": {
+          "bytes": 6976,
+          "sha256": "811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742",
+          "git_blob_sha1": "23655288e60f0d3d08a12c9a542346bf31829a08"
+        },
+        "new": {
+          "bytes": 6976,
+          "sha256": "811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742",
+          "git_blob_sha1": "23655288e60f0d3d08a12c9a542346bf31829a08"
+        },
+        "identical": true
+      },
+      {
+        "path": ".github/workflows/compiler-frontend-ci.yml",
+        "old": {
+          "bytes": 6418,
+          "sha256": "33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74",
+          "git_blob_sha1": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5"
+        },
+        "new": {
+          "bytes": 6418,
+          "sha256": "33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74",
+          "git_blob_sha1": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5"
+        },
+        "identical": true
+      },
+      {
+        "path": ".github/workflows/r-preflight.yml",
+        "old": {
+          "bytes": 6749,
+          "sha256": "4e905e3abe62fffaf936824f53c4078d20dae1375b4f8f2b4d199c8da9048df9",
+          "git_blob_sha1": "9fea1afeeef948127c73e9ca86c476091036116e"
+        },
+        "new": {
+          "bytes": 6749,
+          "sha256": "4e905e3abe62fffaf936824f53c4078d20dae1375b4f8f2b4d199c8da9048df9",
+          "git_blob_sha1": "9fea1afeeef948127c73e9ca86c476091036116e"
+        },
+        "identical": true
+      },
+      {
+        "path": "CMakeLists.txt",
+        "old": {
+          "bytes": 148046,
+          "sha256": "108bc2ce4bb1b254e925e68281d0f94085bc4a70a9ee53d1e7a1aec222b1d0f8",
+          "git_blob_sha1": "389aed7b792cb86f12388099383750d4a0638b42"
+        },
+        "new": {
+          "bytes": 148841,
+          "sha256": "8fa24fd6470ef43ca863b9c87af0dc35f5e13d4dcb2d42efec8ea65a7916816b",
+          "git_blob_sha1": "5f4fdf55f3e9fc7f64a0c3397971aa874ccf22e7"
+        },
+        "identical": false
+      },
+      {
+        "path": "cmake/independent-r-tests-hook.cmake",
+        "old": {
+          "bytes": 4180,
+          "sha256": "ecd14067f30cac138607b606916e84464b2391b61703ebe2e530940e27ec64af",
+          "git_blob_sha1": "a1063d203068bd02bee807cb141cbe74b37fad83"
+        },
+        "new": {
+          "bytes": 4180,
+          "sha256": "ecd14067f30cac138607b606916e84464b2391b61703ebe2e530940e27ec64af",
+          "git_blob_sha1": "a1063d203068bd02bee807cb141cbe74b37fad83"
+        },
+        "identical": true
+      },
+      {
+        "path": "include/newlang/checked.h",
+        "old": {
+          "bytes": 15396,
+          "sha256": "04c8f62df29b46dda02e7d7cc3e565db2688373b462a80757bb1958ae3e13f42",
+          "git_blob_sha1": "b329b13382b2cff4091c2711df5ab659f81bd218"
+        },
+        "new": {
+          "bytes": 15396,
+          "sha256": "04c8f62df29b46dda02e7d7cc3e565db2688373b462a80757bb1958ae3e13f42",
+          "git_blob_sha1": "b329b13382b2cff4091c2711df5ab659f81bd218"
+        },
+        "identical": true
+      },
+      {
+        "path": "include/newlang/parser.h",
+        "old": {
+          "bytes": 4478,
+          "sha256": "6f22979df969ffe033a8c9a26b9bcb15e1a2cefad4d55a1e556e5a42ee29f126",
+          "git_blob_sha1": "20584427e155e88917a3a819ac24b9d7b0850eaf"
+        },
+        "new": {
+          "bytes": 4478,
+          "sha256": "6f22979df969ffe033a8c9a26b9bcb15e1a2cefad4d55a1e556e5a42ee29f126",
+          "git_blob_sha1": "20584427e155e88917a3a819ac24b9d7b0850eaf"
+        },
+        "identical": true
+      },
+      {
+        "path": "include/newlang/semantic.h",
+        "old": {
+          "bytes": 22089,
+          "sha256": "928f892877c99cedbb5bf919efb28e09e7b1f98ef3f4d245aa1557e44a1a27c6",
+          "git_blob_sha1": "a2b4e786878617d048335db51ca0f7ea0d877bd5"
+        },
+        "new": {
+          "bytes": 22089,
+          "sha256": "928f892877c99cedbb5bf919efb28e09e7b1f98ef3f4d245aa1557e44a1a27c6",
+          "git_blob_sha1": "a2b4e786878617d048335db51ca0f7ea0d877bd5"
+        },
+        "identical": true
+      },
+      {
+        "path": "include/newlang/source.h",
+        "old": {
+          "bytes": 2813,
+          "sha256": "511238c5f041551906dc2a0d98429f2056acbc977b803e1dfc05e08c56a71524",
+          "git_blob_sha1": "269b2723c07bed009455e5e3f2766b9086a33dd2"
+        },
+        "new": {
+          "bytes": 2813,
+          "sha256": "511238c5f041551906dc2a0d98429f2056acbc977b803e1dfc05e08c56a71524",
+          "git_blob_sha1": "269b2723c07bed009455e5e3f2766b9086a33dd2"
+        },
+        "identical": true
+      },
+      {
+        "path": "include/newlang/syntax.h",
+        "old": {
+          "bytes": 7034,
+          "sha256": "6d85f3851126fba5283113ab7446a1903735f1c48a293473f8dd9540c8eb9364",
+          "git_blob_sha1": "5ec6d1a0cca4fe48ca4df2abddd4a4818d8951f5"
+        },
+        "new": {
+          "bytes": 7034,
+          "sha256": "6d85f3851126fba5283113ab7446a1903735f1c48a293473f8dd9540c8eb9364",
+          "git_blob_sha1": "5ec6d1a0cca4fe48ca4df2abddd4a4818d8951f5"
+        },
+        "identical": true
+      },
+      {
+        "path": "scripts/check-format.sh",
+        "old": {
+          "bytes": 2908,
+          "sha256": "44c8ba75dfb613eeb98a60fbab9997742488dec920cc3ff6b33344dca3e30267",
+          "git_blob_sha1": "422a512d932384f61600fe15a4353eef932943b8"
+        },
+        "new": {
+          "bytes": 2908,
+          "sha256": "44c8ba75dfb613eeb98a60fbab9997742488dec920cc3ff6b33344dca3e30267",
+          "git_blob_sha1": "422a512d932384f61600fe15a4353eef932943b8"
+        },
+        "identical": true
+      }
+    ],
+    "predecessor_all_files_preserved": true
+  }
+}

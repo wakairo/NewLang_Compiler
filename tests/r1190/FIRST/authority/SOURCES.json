@@ -1,0 +1,154 @@
+{
+  "commit": "63658cd546be8b99599baf19476486a475adb320",
+  "tree": "a376e3c6e111f7283daa8be82d766dc0282c16b2",
+  "documents": [
+    {
+      "path": "docs/NewLang_Project_Compass.md",
+      "git_blob_sha": "0f9b170ce26504a16acec8e4b84beab11f9fbd4e",
+      "role": "navigation only; full Compass read",
+      "url": "https://github.com/wakairo/NewLang_Compiler/blob/63658cd546be8b99599baf19476486a475adb320/docs/NewLang_Project_Compass.md"
+    },
+    {
+      "path": "docs/NewLang_Product_Value_Strategy.md",
+      "git_blob_sha": "c75f1601f13070bc5a588bd78957b54662bdfd23",
+      "role": "§1.1 authority; incidental §1 historical summaries exposure disclosed",
+      "url": "https://github.com/wakairo/NewLang_Compiler/blob/63658cd546be8b99599baf19476486a475adb320/docs/NewLang_Product_Value_Strategy.md"
+    },
+    {
+      "path": "docs/NewLang_Project_Development_Process.md",
+      "git_blob_sha": "9810567557ee0243b3180c77f41da86737997e55",
+      "role": "§§4.1.2/4.3.1/7 operational authority",
+      "url": "https://github.com/wakairo/NewLang_Compiler/blob/63658cd546be8b99599baf19476486a475adb320/docs/NewLang_Project_Development_Process.md"
+    },
+    {
+      "path": "docs/NewLang_Compiler_Review_Guidelines.md",
+      "git_blob_sha": "8413e4a13f2639784867bc36cf6db390280bc404",
+      "role": "§§0–4/7–8/15–16/23–24 review discipline; not language semantics",
+      "url": "https://github.com/wakairo/NewLang_Compiler/blob/63658cd546be8b99599baf19476486a475adb320/docs/NewLang_Compiler_Review_Guidelines.md"
+    },
+    {
+      "path": "docs/reference/CURRENT_SPEC.md",
+      "git_blob_sha": "18b2d6b089c1507743f14325c7a2723b1c341db6",
+      "role": "selects canonical Draft17.34",
+      "url": "https://github.com/wakairo/NewLang_Compiler/blob/63658cd546be8b99599baf19476486a475adb320/docs/reference/CURRENT_SPEC.md"
+    },
+    {
+      "path": "docs/reference/NewLang_v0_spec_Draft17_34.md",
+      "git_blob_sha": "84236f4bc29ae35f01f8eca4238d56c2f62d34a0",
+      "role": "canonical semantic authority for source/oracle",
+      "url": "https://github.com/wakairo/NewLang_Compiler/blob/63658cd546be8b99599baf19476486a475adb320/docs/reference/NewLang_v0_spec_Draft17_34.md"
+    }
+  ],
+  "canonical_ranges": [
+    {
+      "label": "Copy and scalar properties",
+      "start_line": 3138,
+      "end_line": 3147
+    },
+    {
+      "label": "core properties",
+      "start_line": 3178,
+      "end_line": 3211
+    },
+    {
+      "label": "value use",
+      "start_line": 3309,
+      "end_line": 3335
+    },
+    {
+      "label": "quantity arithmetic",
+      "start_line": 3471,
+      "end_line": 3504
+    },
+    {
+      "label": "explicit conversion",
+      "start_line": 3570,
+      "end_line": 3620
+    },
+    {
+      "label": "typed literals",
+      "start_line": 3621,
+      "end_line": 3642
+    },
+    {
+      "label": "dependency packages",
+      "start_line": 4455,
+      "end_line": 4529
+    },
+    {
+      "label": "loan body source",
+      "start_line": 5709,
+      "end_line": 5761
+    },
+    {
+      "label": "aggregate construction",
+      "start_line": 6463,
+      "end_line": 6519
+    },
+    {
+      "label": "direct field Copy and Change",
+      "start_line": 7078,
+      "end_line": 7140
+    },
+    {
+      "label": "two-u8 nominal source",
+      "start_line": 7265,
+      "end_line": 7293
+    },
+    {
+      "label": "replace transition",
+      "start_line": 7337,
+      "end_line": 7414
+    },
+    {
+      "label": "ordinary function declaration and fresh formal",
+      "start_line": 7711,
+      "end_line": 7838
+    },
+    {
+      "label": "argument and result",
+      "start_line": 8814,
+      "end_line": 8898
+    },
+    {
+      "label": "function exit",
+      "start_line": 8976,
+      "end_line": 9001
+    },
+    {
+      "label": "block source sequencing",
+      "start_line": 9002,
+      "end_line": 9069
+    },
+    {
+      "label": "ordinary binding",
+      "start_line": 11692,
+      "end_line": 11734
+    },
+    {
+      "label": "IF",
+      "start_line": 11827,
+      "end_line": 11950
+    },
+    {
+      "label": "loop initializer/header/first-later",
+      "start_line": 11951,
+      "end_line": 12166
+    },
+    {
+      "label": "Continue",
+      "start_line": 12167,
+      "end_line": 12238
+    },
+    {
+      "label": "Break",
+      "start_line": 12239,
+      "end_line": 12293
+    },
+    {
+      "label": "loop termination",
+      "start_line": 12294,
+      "end_line": 12346
+    }
+  ]
+}
