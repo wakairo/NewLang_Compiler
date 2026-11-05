@@ -1,0 +1,227 @@
+{
+  "schema": "newlang-c-r1190-c253-first-archive-v1",
+  "repository": "wakairo/NewLang_Compiler",
+  "destination": "evidence/r1190-c253-first/",
+  "sole_parent": "fe18e136197b25bad77214bc5a9aa000daee3113",
+  "base_tree": "d46cabb7125d544ddc969e840262190226c4eb82",
+  "current_disposition": "C253 HOLD; archival only; no execution or recovery authorization",
+  "r_final_checkpoint": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6662834282",
+  "finite_reach": "All six initial normal jobs preserve original C0 CHECK precision refusal; R native actual 0 per job; other 12 cases CHECK NOT_RUN. Source/oracle/expectations unchanged.",
+  "stored_packet": {
+    "name": "r1190_C253_INITIAL6_COMPLETE.tar.xz",
+    "bytes": 6531876,
+    "sha256": "14c6c01ae8c39ced70631c5095592432af17f3ef96e5c5910f7fcb45af82d385",
+    "git_blob_sha1_identity_only": "ad954690eac8d267a7ecfc3f98da89109d694f8c",
+    "representation": "Each listed chunk is standard base64 ASCII with no whitespace or trailing newline. Decode in index order and concatenate the decoded bytes.",
+    "binary_chunk_bytes_max": 393216,
+    "chunk_count": 17
+  },
+  "decompressed_tar": {
+    "bytes": 27955200,
+    "sha256": "1cfa11aa11683fb022bae6eb996d4c302b34cb751e83bb7fe5d59d0aef938aaf",
+    "members": 769,
+    "data_members": 768,
+    "manifest_member": "PACKET-MANIFEST.json",
+    "manifest_bytes": 174236,
+    "manifest_sha256": "433d7e8c37114e382ac0fcc75f56d9457099c231e8d7352ec36c144d8e1bcb73"
+  },
+  "original_gzip": {
+    "name": "r1190_C253_INITIAL6_COMPLETE.tar.gz",
+    "bytes": 11459825,
+    "sha256": "1aa8329c52712fd3cc1d1703ce403febf59118b9f3c3dec4210cd5f526597e22",
+    "retained_local_unchanged": true,
+    "original_compressed_bytes_archived": false,
+    "relationship": "The preserved original gzip and stored xz decompress to byte-identical tar streams. This archive does not claim reconstruction of the original gzip compressed bytes."
+  },
+  "chunks": [
+    {
+      "index": 1,
+      "path": "chunks/part-0001.base64",
+      "binary_offset": 0,
+      "binary_bytes": 393216,
+      "binary_sha256": "4811b023038c8eb1311945af156a8807ad630762b357a3728344384be96183e7",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "4dd0457375c1cdb709562b60cc3eefa6471b91ca117c3954bc08b480e1aac6af",
+      "git_blob_sha1": "51e380293a709fac4e03154edf8c1e7b36f8eaeb"
+    },
+    {
+      "index": 2,
+      "path": "chunks/part-0002.base64",
+      "binary_offset": 393216,
+      "binary_bytes": 393216,
+      "binary_sha256": "2ba7866e0a5404e45ca7abc8453bb28df616a9cd07b7d5348e7450d599739efb",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "7d75dda3290ced2acbd7c3bd787e6ed5aa21f487ca94e1142f7bcb6191edcf9c",
+      "git_blob_sha1": "7a2989797f5ab0d7095ceffad23db5863f8eea3d"
+    },
+    {
+      "index": 3,
+      "path": "chunks/part-0003.base64",
+      "binary_offset": 786432,
+      "binary_bytes": 393216,
+      "binary_sha256": "9c46d7aa9d6e1ebee12cdbf2a5111c5d7621ed6f8710404b86d98d30840731a3",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "37671321e17a7c15d425779f67f4e2da5ad17b38be9c3ac5abcc5275be5e8818",
+      "git_blob_sha1": "d66da6557b517cd11689334897c36216034bf45b"
+    },
+    {
+      "index": 4,
+      "path": "chunks/part-0004.base64",
+      "binary_offset": 1179648,
+      "binary_bytes": 393216,
+      "binary_sha256": "83c7db37cd82359ba5438b8fb272a32288e7ea666860f98fce6570f25627a74a",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "0008e687ea7be8c8761cb7ada67725b9bae63c121a00e21276ec5a202aba7adc",
+      "git_blob_sha1": "a24243b73becfea8d8c8eb7024d832d9f6c2f1c4"
+    },
+    {
+      "index": 5,
+      "path": "chunks/part-0005.base64",
+      "binary_offset": 1572864,
+      "binary_bytes": 393216,
+      "binary_sha256": "35dd0b15831d52770f8328dedc30428461bd2d317d751a85cc9a735f33d305ed",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "6678613923817fcad791b72fac62b28481da8cc8c954256dfe49934cdd3ce1c8",
+      "git_blob_sha1": "480f966a88a6f87f47528e4ed69eb9efd6cbab72"
+    },
+    {
+      "index": 6,
+      "path": "chunks/part-0006.base64",
+      "binary_offset": 1966080,
+      "binary_bytes": 393216,
+      "binary_sha256": "181f254f88a810c3f0127f5e2f8aeb7b070544cbb5033f00b118deb6604e111c",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "8d098899a053f5c79cefe6350b8e93b828539ed6d4137a0bde2a14453ca83b6f",
+      "git_blob_sha1": "71b0c5a51bed47dcb0bbdaae5667bb185a04c54d"
+    },
+    {
+      "index": 7,
+      "path": "chunks/part-0007.base64",
+      "binary_offset": 2359296,
+      "binary_bytes": 393216,
+      "binary_sha256": "6514b73655c7ba934401da08ca63bd5a4f92d4ef990c180bc636615f0b2c39ab",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "a09dd4ea33c805f641f4ee9b019431cf6ca819cfb38fcfdb7e526eeae4e08d3c",
+      "git_blob_sha1": "9e32142416e6df005be8a84c1d01ec27e2c21bf7"
+    },
+    {
+      "index": 8,
+      "path": "chunks/part-0008.base64",
+      "binary_offset": 2752512,
+      "binary_bytes": 393216,
+      "binary_sha256": "170348157d0753b477b8dc44799bd71046f92eea217c0e396eba6997a62abbf4",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "a6c64aa55e4071386b0fcc8fee28c7cfae2374efc43914f3fe269d989a38af14",
+      "git_blob_sha1": "841aa1fa6bf212a42d120a9f7321deb50b07af26"
+    },
+    {
+      "index": 9,
+      "path": "chunks/part-0009.base64",
+      "binary_offset": 3145728,
+      "binary_bytes": 393216,
+      "binary_sha256": "6b0894778f50dcea9c3eeb2159a3d0440e524cf6d2085fdba80e07bb294a9a7b",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "3ae3d80f8b7ce1fdf5125584a9483b02db673b43d97ccad3db4131bba6cbb9ad",
+      "git_blob_sha1": "245157cfad96524670367efdc5774c30dd7c156b"
+    },
+    {
+      "index": 10,
+      "path": "chunks/part-0010.base64",
+      "binary_offset": 3538944,
+      "binary_bytes": 393216,
+      "binary_sha256": "3d9f0ed59f86938997faf5ad8f7983d8bfebdb21a99bd7737305cd0529a371fb",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "8fd2fa1326767ff235149efbb25d4e517dc9785a220f64c86a8f00100183751a",
+      "git_blob_sha1": "bf33c4c66320164dec7735a97b637ce08f80e9c0"
+    },
+    {
+      "index": 11,
+      "path": "chunks/part-0011.base64",
+      "binary_offset": 3932160,
+      "binary_bytes": 393216,
+      "binary_sha256": "fb12cb913c241805b2eccc6a75e63e572a395573497af66a68377fe937254452",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "a25d29e0f5a1e2788e6284856f76e065de7b6f8b863ef407118f0d0f610bfccb",
+      "git_blob_sha1": "85e2938bd9364e84c8504a1b4bfe26b2ee4c702a"
+    },
+    {
+      "index": 12,
+      "path": "chunks/part-0012.base64",
+      "binary_offset": 4325376,
+      "binary_bytes": 393216,
+      "binary_sha256": "78576af0a23502a331e6c1a591d61c435b6e17d32fca0b65d45aed37c45c3c07",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "8b18a454d94a8ef96a92dac77d6c6c59da478947d6d98664f1dac90564324dc1",
+      "git_blob_sha1": "c7e683b2775e9e4b33ee30f4bb13a1716ef44644"
+    },
+    {
+      "index": 13,
+      "path": "chunks/part-0013.base64",
+      "binary_offset": 4718592,
+      "binary_bytes": 393216,
+      "binary_sha256": "a58aaec60e3bc875c0b22751391ce5672f68bc29babc8df4012bd2578e7a2517",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "c36998e4f9ea92335a9aa493a89fd83f44bd8b565d811563b26f4336d78ca0b6",
+      "git_blob_sha1": "0e71cefacf72590b0074cecd4354d14f15c9a62c"
+    },
+    {
+      "index": 14,
+      "path": "chunks/part-0014.base64",
+      "binary_offset": 5111808,
+      "binary_bytes": 393216,
+      "binary_sha256": "8c9e622ac3dccfab3d5968f1c704b8f392448e83fd923ece57dee3c6bd5c6658",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "72adb3eab6a2ca7b3983c4e2a81a15d2d574c77c9163b990dac082a14fac98b4",
+      "git_blob_sha1": "93dd78dcbf4a69eb769e6edd6725c7abaeefc61b"
+    },
+    {
+      "index": 15,
+      "path": "chunks/part-0015.base64",
+      "binary_offset": 5505024,
+      "binary_bytes": 393216,
+      "binary_sha256": "304d2422492eba0bb52f66de53de699c6559f9a02ff12e53fb04b258efe09cad",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "ecedca9470efb9eb242f9b1884123d2ab49d82f925edec33644f381df9f0fdf8",
+      "git_blob_sha1": "705ace9070c862d37b47353680facc350717b12a"
+    },
+    {
+      "index": 16,
+      "path": "chunks/part-0016.base64",
+      "binary_offset": 5898240,
+      "binary_bytes": 393216,
+      "binary_sha256": "d355663d75fab46f9237c5b2c50555e7ef9139d9a0f4d24c52ba2847d2f7373d",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "2f8b2005db718a82fa4bd98f4478636e45857f0e5d11faeb0a0323fa389e8784",
+      "git_blob_sha1": "f46c6c2f310e6bf18d5c81016741431dc77027d8"
+    },
+    {
+      "index": 17,
+      "path": "chunks/part-0017.base64",
+      "binary_offset": 6291456,
+      "binary_bytes": 240420,
+      "binary_sha256": "5e639669e4a866e1e255921d8723fa57d01909c540e2f9b59e36e01bddffca00",
+      "ascii_bytes": 320560,
+      "ascii_sha256": "165b4f5e061c9eb78f4c85484a901cdddbac14a3a7ef44c7fa583d3aed3eaa3f",
+      "git_blob_sha1": "d5076ca14d15106575b81fa61288c8d25dbbbae3"
+    }
+  ],
+  "separate_c_evidence": [
+    {
+      "path": "c-audit/c-audit-final.json",
+      "bytes": 9438,
+      "sha256": "3e4cbac2cd6b42c23872925e39ed3876fdd0c562f67954c4770f16c0a2a92035",
+      "git_blob_sha1": "86c9a5a224648c0bc9513dc9917fe8fa156e5056",
+      "source_path": "/workspace/scratch/e415f00ca312/c252-r1190-ci-audit/c-audit-final.json",
+      "scope": "Separate C evidence; not inserted into or substituted for original packet contents."
+    },
+    {
+      "path": "c-audit/raw-custody-audit.json",
+      "bytes": 7970,
+      "sha256": "085dadef4e74b74b8e937a2a0d64f63456969fef9fa3f6c3d09609275d63295f",
+      "git_blob_sha1": "22c3497bded725b35e0389113fa2459e2176efd2",
+      "source_path": "/workspace/scratch/e415f00ca312/c252-r1190-ci-audit/raw-custody-audit.json",
+      "scope": "Separate C evidence; not inserted into or substituted for original packet contents."
+    }
+  ],
+  "semantic_limits": "Custody verification preserves every original byte. Historical execution_released=true files are history; current authority remains C253 HOLD. This archive is not semantic repair, successful Copy-boundary measurement, recovery, Product/adoption PASS, or audit-locality measurement."
+}

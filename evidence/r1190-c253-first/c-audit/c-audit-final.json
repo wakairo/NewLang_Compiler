@@ -1,0 +1,201 @@
+{
+  "schema": "C252_R1190_INITIAL_NORMAL_C_AUDIT_V1",
+  "status": "COMPLETE_RECORDED_CI_FAILURES_WITH_CUSTODY_VERIFIED",
+  "role": "C supporting read-only audit, not independent R or F and not adoption PASS",
+  "recorded_utc": "2026-11-05T16:03:00Z",
+  "R_head": "fe18e136197b25bad77214bc5a9aa000daee3113",
+  "R_tree": "d46cabb7125d544ddc969e840262190226c4eb82",
+  "fixed_P_base": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+  "actual_checkout": {
+    "sha": "7eeba5bd063f2e32aaf403d8ebd6661c33d10b57",
+    "tree": "d46cabb7125d544ddc969e840262190226c4eb82",
+    "parents": [
+      "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+      "fe18e136197b25bad77214bc5a9aa000daee3113"
+    ]
+  },
+  "PR1194": {
+    "number": 1194,
+    "url": "https://github.com/wakairo/NewLang_Compiler/pull/1194",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "head": "fe18e136197b25bad77214bc5a9aa000daee3113",
+    "base": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+    "merge_commit_sha": "7eeba5bd063f2e32aaf403d8ebd6661c33d10b57"
+  },
+  "actual_total_ctest_completions": 4481,
+  "actual_P_inherited_passes": 4475,
+  "actual_R_integration_failures": 6,
+  "all_inherited_P_names_and_passes_preserved": true,
+  "all_test_IDs_names_ordinals_complete_and_unique": true,
+  "all_required12_actually_passed": true,
+  "sanitizer_diagnostics_in_logs": 0,
+  "skipped_timeout_notrun_ctest_rows": [],
+  "PARTIAL_post_CTest_Production_CLI": "NOT_RUN: GitHub step skipped after failing CTest; preceding P CI success is not imported",
+  "all_six_raw_archives_exactly_recovered_from_logs": true,
+  "raw_members_each": 61,
+  "indexed_payloads_each": 60,
+  "all_original_FIRST26_bytes_unchanged": true,
+  "budget": {
+    "FAST_actual_runs": 1,
+    "FAST_authorized_max": 6,
+    "normal_actual_jobs": 6,
+    "normal_authorized_max": 12,
+    "manual_reruns_dispatch_observed": 0,
+    "extra_actions_by_C_auditor": 0
+  },
+  "jobs": [
+    {
+      "job_id": 127351610277,
+      "name": "UBSan",
+      "run_id": 42058011677,
+      "status": "completed/failure",
+      "actual_tests": 747,
+      "P_passes": 746,
+      "R_failures": 1,
+      "log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011677/job127351610277.log",
+      "log_bytes": 754941,
+      "log_sha256": "3563768884f5bdd62b001162695a56a377a1a4a89a07b7691866d8172b92f915",
+      "raw_archive_bytes": 381392,
+      "raw_archive_sha256": "705b82d26aa2b02fe9b9daae1baef7e08af79c4e070595f49ff08dcf972f3750",
+      "failed_test": "r1190.phase_usize_copy.integration",
+      "failure_line": "2026-11-05T15:54:48.3809199Z 747/747 Test #747: r1190.phase_usize_copy.integration ....................***Failed    0.47 sec",
+      "summary": "2026-11-05T15:54:48.3822849Z 99% tests passed, 1 tests failed out of 747",
+      "required12_pass": true,
+      "raw_custody": "PASS"
+    },
+    {
+      "job_id": 127351610851,
+      "name": "ASan",
+      "run_id": 42058011677,
+      "status": "completed/failure",
+      "actual_tests": 747,
+      "P_passes": 746,
+      "R_failures": 1,
+      "log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011677/job127351610851.log",
+      "log_bytes": 754846,
+      "log_sha256": "ad7de4a9147c3d73b0b5f9b05ebb1f6da8a30bef4fe2e80530ec0a88ade58526",
+      "raw_archive_bytes": 381385,
+      "raw_archive_sha256": "ba3999dcb0886cc68633ec84cc09062b2481b13484d368601ddcee981f91ce7c",
+      "failed_test": "r1190.phase_usize_copy.integration",
+      "failure_line": "2026-11-05T16:01:43.7774184Z 747/747 Test #747: r1190.phase_usize_copy.integration ....................***Failed    0.42 sec",
+      "summary": "2026-11-05T16:01:43.7790601Z 99% tests passed, 1 tests failed out of 747",
+      "required12_pass": true,
+      "raw_custody": "PASS"
+    },
+    {
+      "job_id": 127351610870,
+      "name": "Clang",
+      "run_id": 42058011677,
+      "status": "completed/failure",
+      "actual_tests": 747,
+      "P_passes": 746,
+      "R_failures": 1,
+      "log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011677/job127351610870.log",
+      "log_bytes": 756697,
+      "log_sha256": "caf482fbd554aa9c913080465d3c5cfe8672966c24cbe36ca7e7c27280831336",
+      "raw_archive_bytes": 381338,
+      "raw_archive_sha256": "2e13204c2538efd5758dd71c522d1611499639b6bdb03f6a0f1c39942ea168a9",
+      "failed_test": "r1190.phase_usize_copy.integration",
+      "failure_line": "2026-11-05T15:51:11.8050422Z 747/747 Test #747: r1190.phase_usize_copy.integration ....................***Failed    0.40 sec",
+      "summary": "2026-11-05T15:51:11.8065024Z 99% tests passed, 1 tests failed out of 747",
+      "required12_pass": true,
+      "raw_custody": "PASS"
+    },
+    {
+      "job_id": 127351610928,
+      "name": "GCC Release",
+      "run_id": 42058011677,
+      "status": "completed/failure",
+      "actual_tests": 747,
+      "P_passes": 746,
+      "R_failures": 1,
+      "log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011677/job127351610928.log",
+      "log_bytes": 754537,
+      "log_sha256": "02f9797a812c73a5088fccb147254a05f301a53001a66f80e2b32b34803e4fe0",
+      "raw_archive_bytes": 381203,
+      "raw_archive_sha256": "b42587ac88f6f9631ef057aed2da778c266c6b53dcfbd924827b9a7d66029921",
+      "failed_test": "r1190.phase_usize_copy.integration",
+      "failure_line": "2026-11-05T15:53:17.3513791Z 747/747 Test #747: r1190.phase_usize_copy.integration ....................***Failed    0.55 sec",
+      "summary": "2026-11-05T15:53:17.3528854Z 99% tests passed, 1 tests failed out of 747",
+      "required12_pass": true,
+      "raw_custody": "PASS"
+    },
+    {
+      "job_id": 127351611057,
+      "name": "GCC",
+      "run_id": 42058011677,
+      "status": "completed/failure",
+      "actual_tests": 747,
+      "P_passes": 746,
+      "R_failures": 1,
+      "log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011677/job127351611057.log",
+      "log_bytes": 754532,
+      "log_sha256": "21d30fa36f56494d6eca58becd1f8d4a2be525e5b32b76a6ab28be7f66354542",
+      "raw_archive_bytes": 381224,
+      "raw_archive_sha256": "a0ef1019f36d9480a1bc5ef5dcabf0c238879134cf3c90cc8cfd7eda71c46b4f",
+      "failed_test": "r1190.phase_usize_copy.integration",
+      "failure_line": "2026-11-05T15:53:06.4271871Z 747/747 Test #747: r1190.phase_usize_copy.integration ....................***Failed    0.55 sec",
+      "summary": "2026-11-05T15:53:06.4287878Z 99% tests passed, 1 tests failed out of 747",
+      "required12_pass": true,
+      "raw_custody": "PASS"
+    },
+    {
+      "job_id": 127351609197,
+      "name": "NO-LLVM PARTIAL",
+      "run_id": 42058011336,
+      "status": "completed/failure",
+      "actual_tests": 746,
+      "P_passes": 745,
+      "R_failures": 1,
+      "log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011336/job127351609197.log",
+      "log_bytes": 800055,
+      "log_sha256": "6ae208e9c7f01b566c3e81e3b60f53d3a9e7ecb8c671535a05ffca875b532cd4",
+      "raw_archive_bytes": 381221,
+      "raw_archive_sha256": "e01e5ebd1c7e89582b1f3f5e30b8899fddd29d3e59ec15adafd4c36226772bfa",
+      "failed_test": "r1190.phase_usize_copy.integration",
+      "failure_line": "2026-11-05T15:53:13.1217037Z 746/746 Test #746: r1190.phase_usize_copy.integration ....................***Failed    0.45 sec",
+      "summary": "2026-11-05T15:53:13.1231210Z 99% tests passed, 1 tests failed out of 746",
+      "required12_pass": true,
+      "raw_custody": "PASS"
+    }
+  ],
+  "scope_limits": [
+    "R owns original cohort interpretation and first-layer adjudication. This audit preserves six recorded failures; it does not change source/oracle or classify a compiler safety defect.",
+    "The source tree / CMake one-line enrollment identity was checked by root C and is distinct from log inventory equivalence. Passing logs do not reveal every successful test argv or internal stdout.",
+    "Whole logs are saved decoded UTF-8 connector output, not byte-identical original GitHub ZIP assertions.",
+    "The raw-custody parser first assumed uninterrupted stdout frames. Two logs interleave the recorded CTest failing stderr; the parser now extracts only explicit R1190_RAW payload lines while preserving that stderr and verifying unchanged advertised archive hashes. First parsing receipt is retained.",
+    "No build/compiler/native/CTest/rerun/dispatch/Git commit/ref/push/PR/Issue writes by this auditor. No duplicate log download."
+  ],
+  "files": {
+    "audit-six-logs.json": {
+      "bytes": 20812,
+      "sha256": "4f232194ad67586ea4a4ca8c3d6ea244915e57ecc23f93d89c7c636fbaf6d020"
+    },
+    "raw-custody-audit.json": {
+      "bytes": 7970,
+      "sha256": "085dadef4e74b74b8e937a2a0d64f63456969fef9fa3f6c3d09609275d63295f"
+    },
+    "api-final-receipt.json": {
+      "bytes": 16685,
+      "sha256": "841b7ea59b28209e7fc33efb8f2f934be3f56d837a49bb4c82e2b92ed157fdf7"
+    },
+    "api-first-receipt.json": {
+      "bytes": 3494,
+      "sha256": "2311c5b8bedc3ac022030f89ea12d0404f4d5e0ebcc3122648fb507693f76ca6"
+    },
+    "raw-custody-first-parser-interleaving.json": {
+      "bytes": 4259,
+      "sha256": "c11dc8bff6f1de14464b350fa1f5629db83373e77889482521ac3b01d6a9cc8a"
+    },
+    "audit_existing_logs.py": {
+      "bytes": 9504,
+      "sha256": "b86802fac00a44a5ae73089f1aaee13054de5366140494d0991c31a7ff33abf0"
+    },
+    "audit_raw_custody.py": {
+      "bytes": 4698,
+      "sha256": "213d42d65ec10b1ba6b663e6e51fceddd9e62b7e472915352d1e2831e64c19d4"
+    }
+  }
+}

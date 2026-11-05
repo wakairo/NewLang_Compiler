@@ -1,0 +1,172 @@
+{
+  "scope": "C custody audit only, not independent R",
+  "jobs": [
+    {
+      "run_id": 42058011677,
+      "job_id": 127351610277,
+      "status": "RAW_CUSTODY_PASS",
+      "raw_log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011677/job127351610277.log",
+      "archive_bytes": 381392,
+      "archive_sha256": "705b82d26aa2b02fe9b9daae1baef7e08af79c4e070595f49ff08dcf972f3750",
+      "archive_exactly_recovered_from_saved_log": true,
+      "preserved_interleaved_stderr": [
+        "Errors while running CTest"
+      ],
+      "members": 61,
+      "indexed_payloads": 60,
+      "every_member_size_and_sha256_match": true,
+      "FIRST26_unchanged": true,
+      "fixed_context": {
+        "schema": "R1190_FIXED_GIT_V1",
+        "commit": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+        "tree": "f0aebb423a1c38908fde83f219886cf387b3705e",
+        "leaves": 6233,
+        "trees": 355,
+        "index_sha256": "d7ea09317bc3f3950ab1b7c71adede676478b53fd80a6839f2c39b6446fcdedf",
+        "source_head": "7eeba5bd063f2e32aaf403d8ebd6661c33d10b57",
+        "source_tree": "d46cabb7125d544ddc969e840262190226c4eb82",
+        "status": "VERIFIED_CANONICAL_OBJECTS_INDEX_AND_WORKTREE",
+        "boundary": "one genuine fixed commit; parent history not materialized"
+      },
+      "scope_limit": "Custody/metadata only; no oracle mutation or semantic cohort rerun/interpretation."
+    },
+    {
+      "run_id": 42058011677,
+      "job_id": 127351610851,
+      "status": "RAW_CUSTODY_PASS",
+      "raw_log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011677/job127351610851.log",
+      "archive_bytes": 381385,
+      "archive_sha256": "ba3999dcb0886cc68633ec84cc09062b2481b13484d368601ddcee981f91ce7c",
+      "archive_exactly_recovered_from_saved_log": true,
+      "preserved_interleaved_stderr": [],
+      "members": 61,
+      "indexed_payloads": 60,
+      "every_member_size_and_sha256_match": true,
+      "FIRST26_unchanged": true,
+      "fixed_context": {
+        "schema": "R1190_FIXED_GIT_V1",
+        "commit": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+        "tree": "f0aebb423a1c38908fde83f219886cf387b3705e",
+        "leaves": 6233,
+        "trees": 355,
+        "index_sha256": "d7ea09317bc3f3950ab1b7c71adede676478b53fd80a6839f2c39b6446fcdedf",
+        "source_head": "7eeba5bd063f2e32aaf403d8ebd6661c33d10b57",
+        "source_tree": "d46cabb7125d544ddc969e840262190226c4eb82",
+        "status": "VERIFIED_CANONICAL_OBJECTS_INDEX_AND_WORKTREE",
+        "boundary": "one genuine fixed commit; parent history not materialized"
+      },
+      "scope_limit": "Custody/metadata only; no oracle mutation or semantic cohort rerun/interpretation."
+    },
+    {
+      "run_id": 42058011677,
+      "job_id": 127351610870,
+      "status": "RAW_CUSTODY_PASS",
+      "raw_log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011677/job127351610870.log",
+      "archive_bytes": 381338,
+      "archive_sha256": "2e13204c2538efd5758dd71c522d1611499639b6bdb03f6a0f1c39942ea168a9",
+      "archive_exactly_recovered_from_saved_log": true,
+      "preserved_interleaved_stderr": [],
+      "members": 61,
+      "indexed_payloads": 60,
+      "every_member_size_and_sha256_match": true,
+      "FIRST26_unchanged": true,
+      "fixed_context": {
+        "schema": "R1190_FIXED_GIT_V1",
+        "commit": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+        "tree": "f0aebb423a1c38908fde83f219886cf387b3705e",
+        "leaves": 6233,
+        "trees": 355,
+        "index_sha256": "d7ea09317bc3f3950ab1b7c71adede676478b53fd80a6839f2c39b6446fcdedf",
+        "source_head": "7eeba5bd063f2e32aaf403d8ebd6661c33d10b57",
+        "source_tree": "d46cabb7125d544ddc969e840262190226c4eb82",
+        "status": "VERIFIED_CANONICAL_OBJECTS_INDEX_AND_WORKTREE",
+        "boundary": "one genuine fixed commit; parent history not materialized"
+      },
+      "scope_limit": "Custody/metadata only; no oracle mutation or semantic cohort rerun/interpretation."
+    },
+    {
+      "run_id": 42058011677,
+      "job_id": 127351610928,
+      "status": "RAW_CUSTODY_PASS",
+      "raw_log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011677/job127351610928.log",
+      "archive_bytes": 381203,
+      "archive_sha256": "b42587ac88f6f9631ef057aed2da778c266c6b53dcfbd924827b9a7d66029921",
+      "archive_exactly_recovered_from_saved_log": true,
+      "preserved_interleaved_stderr": [
+        "Errors while running CTest"
+      ],
+      "members": 61,
+      "indexed_payloads": 60,
+      "every_member_size_and_sha256_match": true,
+      "FIRST26_unchanged": true,
+      "fixed_context": {
+        "schema": "R1190_FIXED_GIT_V1",
+        "commit": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+        "tree": "f0aebb423a1c38908fde83f219886cf387b3705e",
+        "leaves": 6233,
+        "trees": 355,
+        "index_sha256": "d7ea09317bc3f3950ab1b7c71adede676478b53fd80a6839f2c39b6446fcdedf",
+        "source_head": "7eeba5bd063f2e32aaf403d8ebd6661c33d10b57",
+        "source_tree": "d46cabb7125d544ddc969e840262190226c4eb82",
+        "status": "VERIFIED_CANONICAL_OBJECTS_INDEX_AND_WORKTREE",
+        "boundary": "one genuine fixed commit; parent history not materialized"
+      },
+      "scope_limit": "Custody/metadata only; no oracle mutation or semantic cohort rerun/interpretation."
+    },
+    {
+      "run_id": 42058011677,
+      "job_id": 127351611057,
+      "status": "RAW_CUSTODY_PASS",
+      "raw_log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011677/job127351611057.log",
+      "archive_bytes": 381224,
+      "archive_sha256": "a0ef1019f36d9480a1bc5ef5dcabf0c238879134cf3c90cc8cfd7eda71c46b4f",
+      "archive_exactly_recovered_from_saved_log": true,
+      "preserved_interleaved_stderr": [],
+      "members": 61,
+      "indexed_payloads": 60,
+      "every_member_size_and_sha256_match": true,
+      "FIRST26_unchanged": true,
+      "fixed_context": {
+        "schema": "R1190_FIXED_GIT_V1",
+        "commit": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+        "tree": "f0aebb423a1c38908fde83f219886cf387b3705e",
+        "leaves": 6233,
+        "trees": 355,
+        "index_sha256": "d7ea09317bc3f3950ab1b7c71adede676478b53fd80a6839f2c39b6446fcdedf",
+        "source_head": "7eeba5bd063f2e32aaf403d8ebd6661c33d10b57",
+        "source_tree": "d46cabb7125d544ddc969e840262190226c4eb82",
+        "status": "VERIFIED_CANONICAL_OBJECTS_INDEX_AND_WORKTREE",
+        "boundary": "one genuine fixed commit; parent history not materialized"
+      },
+      "scope_limit": "Custody/metadata only; no oracle mutation or semantic cohort rerun/interpretation."
+    },
+    {
+      "run_id": 42058011336,
+      "job_id": 127351609197,
+      "status": "RAW_CUSTODY_PASS",
+      "raw_log": "/workspace/scratch/e415f00ca312/r1190_c252_successor/runs/42058011336/job127351609197.log",
+      "archive_bytes": 381221,
+      "archive_sha256": "e01e5ebd1c7e89582b1f3f5e30b8899fddd29d3e59ec15adafd4c36226772bfa",
+      "archive_exactly_recovered_from_saved_log": true,
+      "preserved_interleaved_stderr": [],
+      "members": 61,
+      "indexed_payloads": 60,
+      "every_member_size_and_sha256_match": true,
+      "FIRST26_unchanged": true,
+      "fixed_context": {
+        "schema": "R1190_FIXED_GIT_V1",
+        "commit": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+        "tree": "f0aebb423a1c38908fde83f219886cf387b3705e",
+        "leaves": 6233,
+        "trees": 355,
+        "index_sha256": "d7ea09317bc3f3950ab1b7c71adede676478b53fd80a6839f2c39b6446fcdedf",
+        "source_head": "7eeba5bd063f2e32aaf403d8ebd6661c33d10b57",
+        "source_tree": "d46cabb7125d544ddc969e840262190226c4eb82",
+        "status": "VERIFIED_CANONICAL_OBJECTS_INDEX_AND_WORKTREE",
+        "boundary": "one genuine fixed commit; parent history not materialized"
+      },
+      "scope_limit": "Custody/metadata only; no oracle mutation or semantic cohort rerun/interpretation."
+    }
+  ],
+  "status": "SIX_RAW_ARCHIVES_CUSTODY_PASS"
+}
