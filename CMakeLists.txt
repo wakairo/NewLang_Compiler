@@ -1227,6 +1227,33 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1146_safety>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_BINARY_DIR}/p1146-native")
+    add_test(NAME p1169_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1169/evidence_test.py")
+    add_executable(p1169_safety tests/p1169/safety.c)
+    add_executable(p1169_oom tests/p1169/safety.c)
+    foreach(target p1169_safety p1169_oom)
+        target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+        target_link_libraries(${target} PRIVATE newlang_checked_c_node newlang_semantic)
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+    endforeach()
+    target_compile_definitions(p1169_oom PRIVATE P1169_OOM)
+    target_compile_options(p1169_oom PRIVATE -fno-pie)
+    target_link_options(p1169_oom PRIVATE -no-pie -Wl,--wrap=malloc
+        -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    foreach(profile 01-zero 02-one 03-multiple 04-same-bits 05-high-bound 06-alias-right)
+        add_test(NAME p1169_${profile}_current.unit COMMAND p1169_safety
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1169/sources/${profile}.nl")
+    endforeach()
+    foreach(profile 03-multiple 06-alias-right)
+        add_test(NAME p1169_${profile}_oom.unit COMMAND p1169_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1169/sources/${profile}.nl")
+        set_tests_properties(p1169_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 300)
+    endforeach()
+    add_test(NAME p1169_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1169/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1169_safety>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1169-native")
     add_test(NAME p1158_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1158/evidence_test.py")
     add_executable(p1158_safety tests/p1158/safety.c)

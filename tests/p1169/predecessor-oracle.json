@@ -1,0 +1,165 @@
+{
+  "authority": "Compiler main449 / canonical Draft17.34; C236 diagnostic only",
+  "independence": "P-owned values/source/expectations; no R1163 input or report used",
+  "positive_prediction": {
+    "canonical": "legal: one unchanged original root/children/incarnations; closed iteration loan; old Copy used locally",
+    "fixed_compiler": "CHECK precision/invariant rejection predicted; exact diagnostic is observation, not oracle rewrite",
+    "owned_backend_native": "NOT_REACHED after CHECK rejection; no native execution authorized",
+    "fact_rule": "Every actual replace issues a fresh current-value fact even if new scalar bits equal old bits"
+  },
+  "cases": {
+    "01-zero": {
+      "category": "positive",
+      "canonical_legal": true,
+      "headers": [
+        9
+      ],
+      "backedges": 0,
+      "loop_result": 9,
+      "old_values": [],
+      "iteration_current_values": [],
+      "final_child": 45,
+      "sibling": 173,
+      "target_index": 0,
+      "preserved_root_child_incarnations": true,
+      "fresh_current_transitions": 0,
+      "current_fact_numeric_ids": "not predicted or minted; must derive from actual state transition"
+    },
+    "02-one": {
+      "category": "positive",
+      "canonical_legal": true,
+      "headers": [
+        2,
+        7
+      ],
+      "backedges": 1,
+      "loop_result": 7,
+      "old_values": [
+        156
+      ],
+      "iteration_current_values": [
+        98
+      ],
+      "final_child": 98,
+      "sibling": 67,
+      "target_index": 1,
+      "preserved_root_child_incarnations": true,
+      "fresh_current_transitions": 1,
+      "current_fact_numeric_ids": "not predicted or minted; must derive from actual state transition"
+    },
+    "03-multiple": {
+      "category": "positive",
+      "canonical_legal": true,
+      "headers": [
+        1,
+        5,
+        9,
+        13
+      ],
+      "backedges": 3,
+      "loop_result": 13,
+      "old_values": [
+        112,
+        203,
+        203
+      ],
+      "iteration_current_values": [
+        203,
+        203,
+        203
+      ],
+      "final_child": 203,
+      "sibling": 39,
+      "target_index": 0,
+      "preserved_root_child_incarnations": true,
+      "fresh_current_transitions": 3,
+      "current_fact_numeric_ids": "not predicted or minted; must derive from actual state transition"
+    },
+    "04-same-bits": {
+      "category": "positive",
+      "canonical_legal": true,
+      "headers": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "backedges": 3,
+      "loop_result": 3,
+      "old_values": [
+        54,
+        54,
+        54
+      ],
+      "iteration_current_values": [
+        54,
+        54,
+        54
+      ],
+      "final_child": 54,
+      "sibling": 182,
+      "target_index": 1,
+      "preserved_root_child_incarnations": true,
+      "fresh_current_transitions": 3,
+      "current_fact_numeric_ids": "not predicted or minted; must derive from actual state transition"
+    },
+    "90-ending-reference": {
+      "category": "negative",
+      "canonical_legal": false,
+      "required_property": "ref result escapes the iteration loan; dependency rejection required if path reached",
+      "fixed_check": "nonzero",
+      "earlier_precision_rejection": "record actual diagnostic; it does not demonstrate the masked negative gate",
+      "stdout": "empty on rejection",
+      "named_output": "same bytes/inode/mtime; no temporary residue on rejection"
+    },
+    "91-overflow": {
+      "category": "negative",
+      "canonical_legal": false,
+      "required_property": "first reachable continue computes usize(1)+MAX and must reject, never wrap",
+      "fixed_check": "nonzero",
+      "earlier_precision_rejection": "record actual diagnostic; it does not demonstrate the masked negative gate",
+      "stdout": "empty on rejection",
+      "named_output": "same bytes/inode/mtime; no temporary residue on rejection"
+    },
+    "92-incoming-type": {
+      "category": "negative",
+      "canonical_legal": false,
+      "required_property": "replace current u8 with usize: exact type mismatch",
+      "fixed_check": "nonzero",
+      "earlier_precision_rejection": "record actual diagnostic; it does not demonstrate the masked negative gate",
+      "stdout": "empty on rejection",
+      "named_output": "same bytes/inode/mtime; no temporary residue on rejection"
+    },
+    "93-read-mode": {
+      "category": "negative",
+      "canonical_legal": false,
+      "required_property": "replace through loan_read cannot obtain write access",
+      "fixed_check": "nonzero",
+      "earlier_precision_rejection": "record actual diagnostic; it does not demonstrate the masked negative gate",
+      "stdout": "empty on rejection",
+      "named_output": "same bytes/inode/mtime; no temporary residue on rejection"
+    },
+    "80-stutter-control": {
+      "category": "control",
+      "canonical_legal": true,
+      "fixed_check": 0,
+      "fixed_emit": 0,
+      "fixed_named": 0,
+      "headers": [
+        1,
+        5,
+        9,
+        13
+      ],
+      "loop_result": 13,
+      "final_child": 112,
+      "sibling": 39,
+      "fresh_current_transitions": 0,
+      "public_loop_validate": 0,
+      "genuine_main_owner_validate": 0,
+      "native": "NOT_RUN by C236 scope"
+    }
+  },
+  "runner": "check then stdout C17 then named C17 for each reject/control; existing real-CHECK probe only after control CHECK success; no generated native",
+  "stop": "Unexpected CHECK acceptance or crash/no-clobber violation pauses affected execution; inspect read-only, preserve first result"
+}

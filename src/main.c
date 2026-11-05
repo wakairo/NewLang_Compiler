@@ -74,6 +74,7 @@ typedef struct {
     bool linear_break; /* independently validated private CHECK consumer */
     bool stuttering_loop;
     bool scalar_loop;
+    bool current_loop;
     bool two_normal_unit; /* validated new profile; passive C hooks only */
     const NLCopyBodyParameters *unit_parameters;
     const NLCheckedFragment *formal_body; /* current validation only */
@@ -190,6 +191,12 @@ static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
                 return false;
             if (loop_origin)
                 *loop_origin = id;
+            if (loop.changing_current) {
+                if (p->aggregate != loop.nominal || p->u8_export ||
+                    p->scalar_depth || p->formal_body)
+                    return false;
+                p->current_loop = true;
+            }
             p->uses_usize = p->scalar_loop = true;
             return true;
         }
@@ -2966,6 +2973,66 @@ static bool emit_scalar_loop(FILE *stream, const NLLinearBreakView *p,
            fprintf(stream, "(void)nl_local_%zu;\n", result) >= 0;
 }
 
+/* The distinct current consumer already checked the complete ordered body.
+ * Use the same loan/scalar emitter for its source items, in the actual native
+ * iteration scope. No abstract header/phi operation is emitted. */
+static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
+                              NLCheckedNodeId id, NLSymbolId result,
+                              size_t depth)
+{
+    const NLCheckedFragment *arm = p->iteration;
+    const NLCheckedNodeView *wrapper =
+        nl_checked_node_view(arm, nl_checked_root(arm));
+    const NLCheckedNodeView *block =
+        wrapper ? nl_checked_node_view(arm, wrapper->initializer) : NULL;
+    if (!block || !v0_indent(stream, depth) ||
+        fprintf(stream, "size_t nl_local_%zu;\n", result) < 0 ||
+        !v0_indent(stream, depth) ||
+        fprintf(stream, "size_t nl_loop_carry_%zu = (size_t)UINTMAX_C(%zu);\n",
+                id, p->initial_phase) < 0 ||
+        !v0_indent(stream, depth) || fputs("for (;;) {\n", stream) < 0 ||
+        !v0_indent(stream, depth + 1) ||
+        fprintf(stream, "const size_t nl_loop_phase_%zu = nl_loop_carry_%zu;\n",
+                id, id) < 0 ||
+        !v0_indent(stream, depth + 1) ||
+        fprintf(stream,
+                "NL_CURRENT_PHASE(nl_loop_phase_%zu, &nl_local_%zu.f0, "
+                "&nl_local_%zu.f1);\n",
+                id, p->base, p->base) < 0 ||
+        !v0_indent(stream, depth + 1) ||
+        fprintf(stream, "if (nl_loop_phase_%zu < (size_t)UINTMAX_C(%zu)) {\n",
+                id, p->limit) < 0)
+        return false;
+    NLCheckedNodeId item = block->first_item;
+    while (item && item != p->continue_node) {
+        const NLCheckedNodeView *n = nl_checked_node_view(arm, item);
+        if (!n || !v0_emit_node(stream, arm, item, depth + 2))
+            return false;
+        if (n->kind == NL_CHECKED_BINDING &&
+            (!v0_indent(stream, depth + 2) ||
+             fprintf(stream, "NL_CURRENT_LOCAL(%zu, nl_local_%zu);\n",
+                     n->symbol, n->symbol) < 0))
+            return false;
+        item = n->next_item;
+    }
+    return item == p->continue_node && v0_indent(stream, depth + 2) &&
+           fprintf(stream,
+                   "nl_loop_carry_%zu = nl_loop_phase_%zu + "
+                   "(size_t)UINTMAX_C(%zu);\n",
+                   id, id, p->next_phase) >= 0 &&
+           v0_indent(stream, depth + 2) && fputs("continue;\n", stream) >= 0 &&
+           v0_indent(stream, depth + 1) && fputs("}\n", stream) >= 0 &&
+           v0_indent(stream, depth + 1) &&
+           fprintf(stream, "nl_local_%zu = nl_loop_phase_%zu;\n", result, id) >=
+               0 &&
+           v0_indent(stream, depth + 1) &&
+           fprintf(stream, "NL_CURRENT_RESULT(nl_local_%zu);\n", result) >= 0 &&
+           v0_indent(stream, depth + 1) && fputs("break;\n", stream) >= 0 &&
+           v0_indent(stream, depth) && fputs("}\n", stream) >= 0 &&
+           v0_indent(stream, depth) &&
+           fprintf(stream, "(void)nl_local_%zu;\n", result) >= 0;
+}
+
 static bool emit_stuttering_loop(FILE *stream, const NLLinearBreakView *p,
                                  NLCheckedNodeId id, NLSymbolId result,
                                  size_t depth)
@@ -3106,6 +3173,9 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
             if (nl_linear_break_validate(fragment, view->initializer, &proof) !=
                 NL_CHECK_OK)
                 return false;
+            if (proof.changing_current)
+                return emit_current_loop(stream, &proof, view->initializer,
+                                         view->symbol, depth);
             if (proof.scalar_loop)
                 return emit_scalar_loop(stream, &proof, view->initializer,
                                         view->symbol, depth);
@@ -3477,6 +3547,18 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         fprintf(stream,
                 "typedef struct { uint8_t f0; uint8_t f1; } nl_type_%zu;\n\n",
                 program->aggregate) < 0)
+        return false;
+
+    if (program->current_loop &&
+        fputs("#ifdef NEWLANG_CURRENT_LOOP_OBSERVER\n"
+              "#include NEWLANG_CURRENT_LOOP_OBSERVER\n#endif\n"
+              "#ifndef NL_CURRENT_PHASE\n#define NL_CURRENT_PHASE(...) "
+              "((void)0)\n#endif\n"
+              "#ifndef NL_CURRENT_LOCAL\n#define NL_CURRENT_LOCAL(...) "
+              "((void)0)\n#endif\n"
+              "#ifndef NL_CURRENT_RESULT\n#define NL_CURRENT_RESULT(...) "
+              "((void)0)\n#endif\n\n",
+              stream) < 0)
         return false;
 
     if ((program->linear_break ||
