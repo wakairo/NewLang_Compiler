@@ -1,0 +1,386 @@
+{
+  "schema": "R1173_INDEPENDENT_V1",
+  "authority": {
+    "main": "425e7f6c8c54643765e861b8235620348a3c91a3",
+    "compiler": "870e4f0972abb9725b7cf9f38d09178e51ff1280",
+    "compiler_tree": "5db3576a09f2627f8975a21295419dee6433a629",
+    "canonical": "Draft17.34",
+    "sections": [
+      "5.2",
+      "13.5a",
+      "17.1",
+      "17.4",
+      "27.5",
+      "27.6",
+      "27.7"
+    ]
+  },
+  "positives": [
+    {
+      "name": "zero_first",
+      "source": "sources/zero_first.nl",
+      "selected_index": 0,
+      "initial_fields": [
+        37,
+        149
+      ],
+      "replacement": 211,
+      "initial": 9,
+      "limit": 5,
+      "step": 2,
+      "headers": [
+        9
+      ],
+      "events": [],
+      "write_count": 0,
+      "break_result": 9,
+      "final_selected": 37,
+      "final_sibling": 149,
+      "expected": [
+        "CLI_CHECK_ACCEPT",
+        "SOURCE_ISSUED_OWNED",
+        "C17",
+        "GCC_CLANG_O0_O2",
+        "PASSIVE_VALUES_AND_PHYSICAL_IDENTITY"
+      ],
+      "sha256": "1c814dcba835c263db1632e962609da58cb52a61cb76f85781d0442f69c832d3",
+      "bytes": 586
+    },
+    {
+      "name": "one_second",
+      "source": "sources/one_second.nl",
+      "selected_index": 1,
+      "initial_fields": [
+        64,
+        18
+      ],
+      "replacement": 203,
+      "initial": 3,
+      "limit": 4,
+      "step": 1,
+      "headers": [
+        3,
+        4
+      ],
+      "events": [
+        {
+          "carry": 3,
+          "before": 18,
+          "old": 18,
+          "after": 203,
+          "sibling": 64
+        }
+      ],
+      "write_count": 1,
+      "break_result": 4,
+      "final_selected": 203,
+      "final_sibling": 64,
+      "expected": [
+        "CLI_CHECK_ACCEPT",
+        "SOURCE_ISSUED_OWNED",
+        "C17",
+        "GCC_CLANG_O0_O2",
+        "PASSIVE_VALUES_AND_PHYSICAL_IDENTITY"
+      ],
+      "sha256": "6b9ae77bbeaaea4f90b4de7201dcf71831c2829dbf2c8b03ae368831b56f5003",
+      "bytes": 581
+    },
+    {
+      "name": "multi_first",
+      "source": "sources/multi_first.nl",
+      "selected_index": 0,
+      "initial_fields": [
+        29,
+        151
+      ],
+      "replacement": 197,
+      "initial": 1,
+      "limit": 8,
+      "step": 3,
+      "headers": [
+        1,
+        4,
+        7,
+        10
+      ],
+      "events": [
+        {
+          "carry": 1,
+          "before": 29,
+          "old": 29,
+          "after": 197,
+          "sibling": 151
+        },
+        {
+          "carry": 4,
+          "before": 197,
+          "old": 197,
+          "after": 197,
+          "sibling": 151
+        },
+        {
+          "carry": 7,
+          "before": 197,
+          "old": 197,
+          "after": 197,
+          "sibling": 151
+        }
+      ],
+      "write_count": 3,
+      "break_result": 10,
+      "final_selected": 197,
+      "final_sibling": 151,
+      "expected": [
+        "CLI_CHECK_ACCEPT",
+        "SOURCE_ISSUED_OWNED",
+        "C17",
+        "GCC_CLANG_O0_O2",
+        "PASSIVE_VALUES_AND_PHYSICAL_IDENTITY"
+      ],
+      "sha256": "a32e465c2f685babcd986c9a074bde2dcf6e4bc625693927789293764302645f",
+      "bytes": 586
+    },
+    {
+      "name": "multi_second",
+      "source": "sources/multi_second.nl",
+      "selected_index": 1,
+      "initial_fields": [
+        157,
+        43
+      ],
+      "replacement": 7,
+      "initial": 2,
+      "limit": 10,
+      "step": 2,
+      "headers": [
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "events": [
+        {
+          "carry": 2,
+          "before": 43,
+          "old": 43,
+          "after": 7,
+          "sibling": 157
+        },
+        {
+          "carry": 4,
+          "before": 7,
+          "old": 7,
+          "after": 7,
+          "sibling": 157
+        },
+        {
+          "carry": 6,
+          "before": 7,
+          "old": 7,
+          "after": 7,
+          "sibling": 157
+        },
+        {
+          "carry": 8,
+          "before": 7,
+          "old": 7,
+          "after": 7,
+          "sibling": 157
+        }
+      ],
+      "write_count": 4,
+      "break_result": 10,
+      "final_selected": 7,
+      "final_sibling": 157,
+      "expected": [
+        "CLI_CHECK_ACCEPT",
+        "SOURCE_ISSUED_OWNED",
+        "C17",
+        "GCC_CLANG_O0_O2",
+        "PASSIVE_VALUES_AND_PHYSICAL_IDENTITY"
+      ],
+      "sha256": "d38149ed7bd684cfa897ef299876e59a9a0e85c4f63de11d07e09289c9fc08a2",
+      "bytes": 581
+    },
+    {
+      "name": "same_bits",
+      "source": "sources/same_bits.nl",
+      "selected_index": 0,
+      "initial_fields": [
+        101,
+        222
+      ],
+      "replacement": 101,
+      "initial": 0,
+      "limit": 3,
+      "step": 1,
+      "headers": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "events": [
+        {
+          "carry": 0,
+          "before": 101,
+          "old": 101,
+          "after": 101,
+          "sibling": 222
+        },
+        {
+          "carry": 1,
+          "before": 101,
+          "old": 101,
+          "after": 101,
+          "sibling": 222
+        },
+        {
+          "carry": 2,
+          "before": 101,
+          "old": 101,
+          "after": 101,
+          "sibling": 222
+        }
+      ],
+      "write_count": 3,
+      "break_result": 3,
+      "final_selected": 101,
+      "final_sibling": 222,
+      "expected": [
+        "CLI_CHECK_ACCEPT",
+        "SOURCE_ISSUED_OWNED",
+        "C17",
+        "GCC_CLANG_O0_O2",
+        "PASSIVE_VALUES_AND_PHYSICAL_IDENTITY"
+      ],
+      "sha256": "a2acd5f975fd973d6eb014becf7a12fbb42b6215fb60bcbf7ff573a24413850b",
+      "bytes": 587
+    },
+    {
+      "name": "zero_second",
+      "source": "sources/zero_second.nl",
+      "selected_index": 1,
+      "initial_fields": [
+        11,
+        239
+      ],
+      "replacement": 19,
+      "initial": 4,
+      "limit": 4,
+      "step": 1,
+      "headers": [
+        4
+      ],
+      "events": [],
+      "write_count": 0,
+      "break_result": 4,
+      "final_selected": 239,
+      "final_sibling": 11,
+      "expected": [
+        "CLI_CHECK_ACCEPT",
+        "SOURCE_ISSUED_OWNED",
+        "C17",
+        "GCC_CLANG_O0_O2",
+        "PASSIVE_VALUES_AND_PHYSICAL_IDENTITY"
+      ],
+      "sha256": "fb1ae4480b168d8d7e82ea3d1d5684734d7323874096f28424e4431c0b6a6b71",
+      "bytes": 581
+    }
+  ],
+  "negatives": [
+    {
+      "name": "wrong_continue_type",
+      "source": "sources/wrong_continue_type.nl",
+      "reason": "\u00a727.6 exact parameter type",
+      "expected": "CHECK type rejection or earlier structured eligibility rejection",
+      "native": "NOT_RUN_AFTER_REJECTION",
+      "sha256": "642c24c83b80caafde0c9196a0e55bd90f8793a1adb189beb6ddd3537bf6205c",
+      "bytes": 579
+    },
+    {
+      "name": "wrong_continue_arity",
+      "source": "sources/wrong_continue_arity.nl",
+      "reason": "\u00a727.6 exact arity",
+      "expected": "CHECK arity rejection or earlier structured eligibility rejection",
+      "native": "NOT_RUN_AFTER_REJECTION",
+      "sha256": "e30724c22cc3ff770695b42cbcb2fb94ad677ee18d532a9102d47403ab8a1a21",
+      "bytes": 574
+    },
+    {
+      "name": "replace_wrong_type",
+      "source": "sources/replace_wrong_type.nl",
+      "reason": "\u00a717.4 exact destination/result type",
+      "expected": "CHECK type rejection",
+      "native": "NOT_RUN_AFTER_REJECTION",
+      "sha256": "81890beaf5dff4ca9428add2cc6b86dd24b7f840dd1c8d20b4d0ce9b147d20dd",
+      "bytes": 589
+    },
+    {
+      "name": "unknown_field",
+      "source": "sources/unknown_field.nl",
+      "reason": "\u00a717.1 declared field identity",
+      "expected": "CHECK field rejection",
+      "native": "NOT_RUN_AFTER_REJECTION",
+      "sha256": "31468834a550c51c5c9dea8a65087bd9ee493a56d4d6aa5e053b6dc90ed05afb",
+      "bytes": 587
+    },
+    {
+      "name": "read_access",
+      "source": "sources/read_access.nl",
+      "reason": "\u00a717.4 write authority required; read ref cannot promote",
+      "expected": "CHECK access rejection; precision rejection is reported separately",
+      "native": "NOT_RUN_AFTER_REJECTION",
+      "sha256": "0cfe01af5fb222de8c0d65e48970f1aa6418eb702e95f7be918e453718602360",
+      "bytes": 579
+    },
+    {
+      "name": "scoped_ref_escape",
+      "source": "sources/scoped_ref_escape.nl",
+      "reason": "\u00a713.5a ending loan-scope dependency cannot survive",
+      "expected": "CHECK scope/escape rejection; earlier precision is not loan-check reach",
+      "native": "NOT_RUN_AFTER_REJECTION",
+      "sha256": "c7488041ff9bc9f14c6bad9387f791b67f8979c86d24f94893714b93fdaf839c",
+      "bytes": 568
+    },
+    {
+      "name": "overflow_edge",
+      "source": "sources/overflow_edge.nl",
+      "reason": "\u00a75.2 native64 usize ADD exceeds representable maximum on first Continue",
+      "expected": "structured rejection by CHECK/owned/C17 before any native execution; front-end literal restriction is recorded at its actual layer",
+      "native": "NOT_RUN_AFTER_REJECTION",
+      "sha256": "5411b03a1a087a167983bff477c97b80a9afcbf40b21e04db19bf6c06ff538ff",
+      "bytes": 624
+    },
+    {
+      "name": "wrong_guard_arm",
+      "source": "sources/wrong_guard_arm.nl",
+      "reason": "Continue is in the greater-than-limit phase; this guard supplies no ADD upper bound and repeated positive ADD eventually overflows",
+      "expected": "structured rejection by CHECK/owned/C17 before native; no precision rejection is misreported as reached overflow proof",
+      "native": "NOT_RUN_AFTER_REJECTION",
+      "sha256": "8b1c384fc6283d0685be823e28c2c48e574c29a277534e34834eababf6311791",
+      "bytes": 586
+    }
+  ],
+  "invariants": [
+    "original root and both fixed-child PlaceId/incarnations are preserved by replace",
+    "selected child and ancestor current facts change at each semantic replacement, including same-bits",
+    "known-disjoint sibling current fact and value are preserved",
+    "old values follow actual previous selected current; no restore to loop entry at backedge or break",
+    "iteration-local ordinary Copy reads do not mint write/ending authority",
+    "zero-edge execution performs zero guest replacements",
+    "all public IDs are owner/world qualified; numeric equality across different worlds is not identity proof",
+    "native address and value observations do not prove ghost freshness"
+  ],
+  "public_negative_intents": [
+    "changed owner/artifact identity is rejected",
+    "changed root/child or selected/sibling identity is rejected",
+    "changed current/fact or edge phase/arm association is rejected",
+    "ending-scope or read-to-write authority cannot be created by observations"
+  ],
+  "limits": [
+    "6 finite positive cases; source negatives plus public-view mutations only within max12 independent categories",
+    "no heap/nonCopy/extra call effects; no universal soundness or audit-locality conclusion"
+  ]
+}

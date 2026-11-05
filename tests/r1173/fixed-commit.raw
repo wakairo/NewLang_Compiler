@@ -1,0 +1,6 @@
+tree 5db3576a09f2627f8975a21295419dee6433a629
+parent 63756b87a84708e2c7ec2fdc8ec93ca176b7da0c
+author J W <a_kg@ninegw.sakura.ne.jp> 1793851889 +0000
+committer J W <a_kg@ninegw.sakura.ne.jp> 1793851889 +0000
+
+Record bounded changing-current loop validation and complete snapshot cost
