@@ -442,17 +442,25 @@ static bool current_pure_if(CurrentWalk *r, NLCheckedNodeId id,
         nl_syntax_node_view(source->data.conditional.condition);
     if (!test || !left || !right || !guard || test->argument_count != 2 ||
         !stutter_span(test->span, guard->span) ||
+        !stutter_span(test->name, guard->data.equality.operator_span) ||
         test->kind != (guard->kind == NL_SYNTAX_USIZE_LESS_THAN
                            ? NL_CHECKED_USIZE_LESS_THAN
                            : NL_CHECKED_USIZE_EQUALITY) ||
         test->type != nl_semantic_core_type(c, NL_TYPE_BOOL) ||
         test->result_count != 1 || !test->has_scalar_result ||
+        !nl_copy_plain(c, test->results[0].value, test->type) ||
+        c->values[test->results[0].value - 1].scalar_known ||
         test->scalar_result.known || left->kind != NL_CHECKED_IDENTIFIER ||
         left->symbol != s->phase || left->value_use != NL_VALUE_COPIED ||
+        left->result_count != 1 || left->type != usize ||
         !stutter_free_quantity(c, left->results[0].value, usize) ||
         !right->has_scalar_result ||
         !stutter_literal(right, usize, right->scalar_result.value) ||
-        right->next_argument)
+        right->next_argument ||
+        !nl_copy_plain(c, right->results[0].value, usize) ||
+        !c->values[right->results[0].value - 1].scalar_known ||
+        c->values[right->results[0].value - 1].scalar_value !=
+            right->scalar_result.value)
         return false;
     const NLCheckedFragment *arms[2];
     for (size_t i = 0; i < 2; ++i) {
@@ -468,6 +476,12 @@ static bool current_pure_if(CurrentWalk *r, NLCheckedNodeId id,
             root ? nl_checked_node_view(a, root->initializer) : NULL;
         const NLCheckedNodeView *tail =
             block ? nl_checked_node_view(a, block->tail) : NULL;
+        const NLSyntaxView *source_block =
+            nl_syntax_node_view(i ? source->data.conditional.else_block
+                                  : source->data.conditional.then_block);
+        const NLSyntaxView *source_tail =
+            source_block ? nl_syntax_node_view(source_block->data.block.tail)
+                         : NULL;
         if (!root || root->kind != NL_CHECKED_IF_ARM || root->terminates ||
             root->result_count != 1 || !block ||
             block->kind != NL_CHECKED_BLOCK || block->first_item ||
@@ -476,8 +490,13 @@ static bool current_pure_if(CurrentWalk *r, NLCheckedNodeId id,
             tail->type != u8 || !tail->has_scalar_result ||
             !tail->scalar_result.known || tail->scalar_result.value > 255 ||
             root->results[0].value != tail->results[0].value ||
-            block->results[0].value != tail->results[0].value ||
+            block->results[0].value != tail->results[0].value || !source_tail ||
+            !stutter_span(block->span, source_block->span) ||
+            !stutter_span(tail->span, source_tail->span) ||
             !nl_copy_plain(a->context, tail->results[0].value, u8) ||
+            !a->context->values[tail->results[0].value - 1].scalar_known ||
+            a->context->values[tail->results[0].value - 1].scalar_value !=
+                tail->scalar_result.value ||
             a->context->value_count != a->branch_value_prefix + 1 ||
             tail->results[0].value != a->context->value_count ||
             v->results[0].value != a->branch_value_prefix + 1 ||
