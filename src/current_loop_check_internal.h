@@ -906,16 +906,24 @@ static const NLCheckedFragment *current_graph_at(const NLCurrentLoopProof *s,
     return iteration ? nl_checked_if_arm(iteration, s->scalar, i - 3) : NULL;
 }
 
+static const NLFunctionEntry *
+current_helper_function(const NLCurrentLoopProof *s, const NLSemanticContext *c)
+{
+    return c && c->functions && s->helper_function &&
+                   s->helper_function <= c->function_count
+               ? &c->functions[s->helper_function - 1]
+               : NULL;
+}
+
 /* Current helper admission authenticates the actual retained plan and
  * each world's original signature allocation before indexing it. Plan owner
  * counts may change; syntax/source/parameter identity may not. */
 static bool current_helper_entry(const NLCurrentLoopProof *s,
                                  const NLSemanticContext *c, size_t slot)
 {
-    if (!c || !c->functions || !s->helper_function ||
-        s->helper_function > c->function_count)
+    const NLFunctionEntry *fn = current_helper_function(s, c);
+    if (!fn)
         return false;
-    const NLFunctionEntry *fn = &c->functions[s->helper_function - 1];
     return fn->kind == NL_CHECKED_REGISTERED_CALL &&
            fn->body == s->helper_plan && fn->count == 1 &&
            fn->parameters == s->helper_parameters[slot] && fn->parameters &&
@@ -946,10 +954,13 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
         s->helper_source = s->helper_plan->source;
         s->helper_parameter_name = s->helper_plan->parameter_names[0];
         s->helper_name = nl_checked_node_view(iteration, s->scalar)->name;
-        s->helper_parameters[6] =
-            p->final_storage.functions[s->helper_function - 1].parameters;
-        s->helper_parameters[7] =
-            p->post->functions[s->helper_function - 1].parameters;
+        const NLFunctionEntry *actual =
+                                  current_helper_function(s, &p->final_storage),
+                              *post = current_helper_function(s, p->post);
+        if (!actual || !post || !actual->parameters || !post->parameters)
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        s->helper_parameters[6] = actual->parameters;
+        s->helper_parameters[7] = post->parameters;
     }
     for (size_t i = 0; i < (s->helper ? 6u : s->scalar ? 5u : 3u); ++i) {
         StutterGraph *a = &s->graphs[i];
@@ -960,10 +971,13 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
         a->count = a->fragment->count;
         a->root = a->fragment->root;
         a->source = a->fragment->source;
-        if (s->helper)
-            s->helper_parameters[i] =
-                a->fragment->context->functions[s->helper_function - 1]
-                    .parameters;
+        if (s->helper) {
+            const NLFunctionEntry *fn =
+                current_helper_function(s, a->fragment->context);
+            if (!fn || !fn->parameters)
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+            s->helper_parameters[i] = fn->parameters;
+        }
         NLCheckStatus status = linear_seal_graph(a->fragment, &a->nodes);
         if (status == NL_CHECK_OK)
             status = stutter_anchor_world(&a->world, a->fragment->context);
