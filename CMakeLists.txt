@@ -1261,6 +1261,38 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1176_safety>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
         "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1176-native")
+    add_executable(p1184_safety tests/p1184/safety.c)
+    add_executable(p1184_oom tests/p1184/safety.c)
+    add_executable(p1184_census tests/p1184/census.c)
+    foreach(target p1184_safety p1184_oom p1184_census)
+        target_include_directories(${target} PRIVATE src)
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    endforeach()
+    target_compile_definitions(p1184_oom PRIVATE P1184_OOM)
+    target_compile_options(p1184_oom PRIVATE -fno-pie)
+    target_link_options(p1184_oom PRIVATE -no-pie -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    target_link_options(p1184_census PRIVATE -Wl,--wrap=nl_sem_clone
+        -Wl,--wrap=nl_semantic_create -Wl,--wrap=nl_semantic_destroy
+        -Wl,--wrap=nl_sem_commit)
+    foreach(profile 01-helper-loop 02-helper-alias-loop 03-one-edge 04-zero-edge 05-same-bits 06-after-main-alias)
+        add_test(NAME p1184_${profile}_current.unit COMMAND p1184_safety
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1184/sources/${profile}.nl")
+    endforeach()
+    foreach(profile 01-helper-loop 06-after-main-alias)
+        add_test(NAME p1184_${profile}_oom.unit COMMAND p1184_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1184/sources/${profile}.nl")
+        set_tests_properties(p1184_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 300)
+    endforeach()
+    foreach(profile 01-helper-loop 80-inline-control)
+        add_test(NAME p1184_${profile}_census.unit COMMAND p1184_census
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1184/sources/${profile}.nl")
+    endforeach()
+    add_test(NAME p1184_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1184/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1184_safety>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1184-native")
 
     add_test(NAME p1169_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1169/evidence_test.py")
