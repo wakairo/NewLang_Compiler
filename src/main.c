@@ -91,6 +91,8 @@ static V0Function *v0_find_function(V0Program *program, size_t function)
     return NULL;
 }
 
+static bool current_helper_selection(const NLLinearBreakView *, V0Program *);
+
 /* Shared resolved projection predicate. Point-in-time proof is supplied by
  * the checker; final local liveness is not a replay of that proof. */
 static bool bounded_field(const NLCheckedFragment *f, const NLCheckedField *e,
@@ -194,6 +196,8 @@ static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
             if (loop.changing_current) {
                 if (p->aggregate != loop.nominal || p->u8_export ||
                     p->scalar_depth || p->formal_body)
+                    return false;
+                if (!current_helper_selection(&loop, p))
                     return false;
                 p->current_loop = true;
             }
@@ -2347,6 +2351,28 @@ static bool v0_unit_loan_binding(const NLCheckedFragment *fragment,
            initializer->type == unit && initializer->result_count == 0;
 }
 
+/* Both scalar-result and field-result loop admission paths collect the
+ * same authenticated helper. No Program placement guard is removed. */
+static bool current_helper_selection(const NLLinearBreakView *v, V0Program *p)
+{
+    if (v->incoming_call) {
+        NLPureU8Call pure;
+        if (!nl_pure_u8_call(v->iteration, v->incoming_call, &pure))
+            return false;
+        V0Function *prior = v0_find_function(p, pure.function);
+        if (prior) {
+            if (!prior->quantity_parameter || prior->result != p->u8)
+                return false;
+        } else {
+            if (p->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
+                return false;
+            p->functions[p->count++] = (V0Function){
+                pure.function, pure.body, p->u8, pure.formal, 0, true};
+        }
+    }
+    return true;
+}
+
 static bool linear_break_selection(const NLCheckedFragment *f,
                                    NLCheckedNodeId id, V0Program *p)
 {
@@ -2360,21 +2386,8 @@ static bool linear_break_selection(const NLCheckedFragment *f,
         return false;
     if (v.call && !v0_validate_call(v.caller, v.call, p))
         return false;
-    if (v.incoming_call) {
-        NLPureU8Call pure;
-        if (!nl_pure_u8_call(v.iteration, v.incoming_call, &pure))
-            return false;
-        V0Function *prior = v0_find_function(p, pure.function);
-        if (prior) {
-            if (!prior->quantity_parameter || prior->result != p->u8)
-                return false;
-        } else {
-            if (p->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
-                return false;
-            p->functions[p->count++] = (V0Function){
-                pure.function, pure.body, p->u8, pure.formal, 0, true};
-        }
-    }
+    if (!current_helper_selection(&v, p))
+        return false;
     p->linear_break = true;
     if (v.stuttering) {
         p->stuttering_loop = true;
