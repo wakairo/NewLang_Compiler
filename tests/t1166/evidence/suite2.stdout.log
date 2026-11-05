@@ -1,0 +1,19 @@
+nested_context_and_complete_inventory PASS
+consumer_argv_and_environment PASS
+missing_commit PASS
+wrong_fixed_tree PASS
+missing_source_blob PASS
+index_missing_entry PASS
+index_nonzero_stage PASS
+index_wrong_mode PASS
+index_wrong_blob PASS
+working_bytes_changed PASS
+working_mode_changed PASS
+same_bytes_untracked_rejected PASS
+copy_failure_cleanup PASS
+outward_input_symlinks_rejected PASS
+owned_cleanup_does_not_follow_symlink PASS
+cleanup_ownership_refusal PASS
+independent_objects_survive_source_unavailable PASS
+bootstrap_io_failure_cleanup_or_retained_receipt PASS
+{"status": "PASS", "command_count": 300, "elapsed_seconds": 0.9337408020001021, "first_failure": null}

@@ -1,0 +1,80 @@
+{
+  "actual_P": {
+    "commit": "9030055314600b804fafde64adebb03c4d6315a1",
+    "fetch_attempts": 0,
+    "fetch_maximum": 1,
+    "leaves": 5992,
+    "status": "NOT_RUN_ACCESS_STOP",
+    "tree": "261a8e404a1cf1982e13d3b94e3223d5da0e0499"
+  },
+  "authority": "C238 issuecomment-6648363017; access STOP accepted issuecomment-6648398421",
+  "evidence": "Raw argv/stdin/stdout/stderr in commands.jsonl with reversible base64 and SHA256, outer stdout/stderr, results.json, source file/mode/hash/mtime inventories.",
+  "excluded": [
+    "unchanged actual-P five-attack/render/untracked integration",
+    "compiler/native",
+    "CMake/CTest",
+    "SDK/Lean",
+    "Actions/CI",
+    "R1163 rerun"
+  ],
+  "execution_argv": [
+    "python3",
+    "tests/t1166/run_suite.py",
+    "--suite-slot",
+    "2",
+    "--output",
+    "tests/t1166/evidence/suite2"
+  ],
+  "expected_cases": [
+    "nested_context_and_complete_inventory",
+    "consumer_argv_and_environment",
+    "missing_commit",
+    "wrong_fixed_tree",
+    "missing_source_blob",
+    "index_missing_entry",
+    "index_nonzero_stage",
+    "index_wrong_mode",
+    "index_wrong_blob",
+    "working_bytes_changed",
+    "working_mode_changed",
+    "same_bytes_untracked_rejected",
+    "copy_failure_cleanup",
+    "outward_input_symlinks_rejected",
+    "owned_cleanup_does_not_follow_symlink",
+    "cleanup_ownership_refusal",
+    "independent_objects_survive_source_unavailable",
+    "bootstrap_io_failure_cleanup_or_retained_receipt"
+  ],
+  "expected_result": "Original 17 cases plus bootstrap_io_failure_cleanup_or_retained_receipt all PASS. Partial marker-write failure cleans proved owned inode; unavailable first lstat reports and retains unproved path. Only the fault injector, which recorded that exact synthetic inode, cleans that deliberate retained fixture. No unexpected FIRST failure; original source fingerprint equal; normal context cleanup complete.",
+  "first_policy": "First unexpected failure retained; stop remaining cases; no in-suite retry.",
+  "previous_source_archive": "evidence/suite1/inputs/",
+  "repair_reason": "C-authorized mechanical repair: cover post-mkdtemp initial lstat/marker-write failure; preserve original suite1 source/FIRST/raw. README timeout and required suite-slot corrected.",
+  "sources": {
+    "README.md": {
+      "bytes": 5717,
+      "sha256": "eaff5e25bc5f18471b02f02a1e1299fba418845985ddc6818aafb226ef6e13d4"
+    },
+    "fixed_git_context.py": {
+      "bytes": 12946,
+      "sha256": "6c36d0f47d6cefa072b385d8865e8cd48495114998292932834508d07e17abb1"
+    },
+    "fixture.json": {
+      "bytes": 4728,
+      "sha256": "b92ed0c1096cdc6cef96d0dab693394e776c5a9a55b04bbcb4ab31c29178dfd8"
+    },
+    "run_suite.py": {
+      "bytes": 22283,
+      "sha256": "0446ea36508a52d5caa2780992d3dbb16db0a682fee1da9c840766fa09ea331f"
+    }
+  },
+  "stage": "PRE_EXECUTION_FREEZE",
+  "suite_budget": {
+    "already_executed": 1,
+    "maximum": 3,
+    "this_slot": 2
+  },
+  "synthetic_commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+  "synthetic_leaves": 6,
+  "synthetic_tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+  "working_directory": "/workspace/scratch/809a1b02c5d4/t1166_c238"
+}

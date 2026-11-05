@@ -1,0 +1,57 @@
+{
+  "actions_before": {
+    "total_count": 0,
+    "workflow_runs": []
+  },
+  "base_tree": "261a8e404a1cf1982e13d3b94e3223d5da0e0499",
+  "branch": "t-research/t1166-git-context",
+  "branch_read": "404 absent",
+  "checked_at_utc": "2026-11-05T03:13:32.729536+00:00",
+  "checked_main": "425e7f6c8c54643765e861b8235620348a3c91a3",
+  "decision": "All three current workflows are accounted for: push restricted to main or r-fast/**; no create event; no PR will be created. The dedicated t-research branch triggers none.",
+  "workflows": [
+    {
+      "blob": "23655288e60f0d3d08a12c9a542346bf31829a08",
+      "branch_matches_push": false,
+      "complete_workflow_read": true,
+      "other_events": [
+        "pull_request"
+      ],
+      "path": ".github/workflows/compiler-ci.yml",
+      "push_branches": [
+        "main"
+      ],
+      "sha256": "811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742",
+      "trigger_prefix": "name: Compiler validation\n\non:\n  pull_request:\n  push:\n    branches: [main]\n\n",
+      "url": "https://github.com/wakairo/NewLang_Compiler/blob/425e7f6c8c54643765e861b8235620348a3c91a3/.github/workflows/compiler-ci.yml"
+    },
+    {
+      "blob": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5",
+      "branch_matches_push": false,
+      "complete_workflow_read": true,
+      "other_events": [
+        "pull_request"
+      ],
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "push_branches": [
+        "main"
+      ],
+      "sha256": "33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74",
+      "trigger_prefix": "# LLVM-independent Production source/checker and existing C17/native reference\n# regression only. PARTIAL evidence; never replaces the LLVM 23.1.2 full matrix.\nname: Compiler frontend/C17 reference (NO LLVM; PARTIAL)\n\non:\n  pull_request:\n  push:\n    branches: [main]\n\n",
+      "url": "https://github.com/wakairo/NewLang_Compiler/blob/425e7f6c8c54643765e861b8235620348a3c91a3/.github/workflows/compiler-frontend-ci.yml"
+    },
+    {
+      "blob": "9fea1afeeef948127c73e9ca86c476091036116e",
+      "branch_matches_push": false,
+      "complete_workflow_read": true,
+      "other_events": [],
+      "path": ".github/workflows/r-preflight.yml",
+      "push_branches": [
+        "r-fast/**"
+      ],
+      "sha256": "4e905e3abe62fffaf936824f53c4078d20dae1375b4f8f2b4d199c8da9048df9",
+      "trigger_prefix": "name: R-FAST self-service pre-PR preparation (NOT R validation)\n\non:\n  push:\n    branches:\n      - 'r-fast/**'\n\n",
+      "url": "https://github.com/wakairo/NewLang_Compiler/blob/425e7f6c8c54643765e861b8235620348a3c91a3/.github/workflows/r-preflight.yml"
+    }
+  ]
+}

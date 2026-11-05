@@ -1,0 +1,697 @@
+{
+  "actual_P_fetch_attempts": 0,
+  "actual_P_integration": "NOT_RUN_ACCESS_STOP",
+  "argv": [
+    "tests/t1166/run_suite.py",
+    "--suite-slot",
+    "2",
+    "--output",
+    "tests/t1166/evidence/suite2"
+  ],
+  "classification": "SYNTHETIC_ONLY_NOT_ACTUAL_P",
+  "command_count": 300,
+  "commands_sha256": "fba9b940859527d875f44989fa56e89f6299f2a07f4343ea48e927a599bd1de6",
+  "compiler_native_CMake_CTest_SDK_Actions_CI": 0,
+  "elapsed_seconds": 0.9337408020001021,
+  "expected_cases": [
+    "nested_context_and_complete_inventory",
+    "consumer_argv_and_environment",
+    "missing_commit",
+    "wrong_fixed_tree",
+    "missing_source_blob",
+    "index_missing_entry",
+    "index_nonzero_stage",
+    "index_wrong_mode",
+    "index_wrong_blob",
+    "working_bytes_changed",
+    "working_mode_changed",
+    "same_bytes_untracked_rejected",
+    "copy_failure_cleanup",
+    "outward_input_symlinks_rejected",
+    "owned_cleanup_does_not_follow_symlink",
+    "cleanup_ownership_refusal",
+    "independent_objects_survive_source_unavailable",
+    "bootstrap_io_failure_cleanup_or_retained_receipt"
+  ],
+  "first_failure": null,
+  "git": "git version 2.51.1",
+  "input_sha256": {
+    "README.md": "eaff5e25bc5f18471b02f02a1e1299fba418845985ddc6818aafb226ef6e13d4",
+    "fixed_git_context.py": "6c36d0f47d6cefa072b385d8865e8cd48495114998292932834508d07e17abb1",
+    "fixture.json": "b92ed0c1096cdc6cef96d0dab693394e776c5a9a55b04bbcb4ab31c29178dfd8",
+    "run_suite.py": "0446ea36508a52d5caa2780992d3dbb16db0a682fee1da9c840766fa09ea331f"
+  },
+  "os": "Linux-6.18.57-x86_64-with-glibc2.39",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "receipts": [
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-ni337g3w/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-ni337g3w/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.038709847000063746,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-ni337g3w/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-7px6w52_/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-7px6w52_/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03813224099940271,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-7px6w52_/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-gy45ne73/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-gy45ne73/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.037455204999787384,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-gy45ne73/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-kk6ma9cl/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-kk6ma9cl/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03702237899960892,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-kk6ma9cl/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-4a9n4i6z/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-4a9n4i6z/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03912405499977467,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-4a9n4i6z/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-odc9ql_6/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-odc9ql_6/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.04110759600007441,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-odc9ql_6/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-jxow8z4f/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-jxow8z4f/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03823329800070496,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-jxow8z4f/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-rxi5jke6/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-rxi5jke6/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03946721200009051,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-rxi5jke6/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-wzkzfirv/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-wzkzfirv/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03813063300003705,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-wzkzfirv/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-xd2jrsxx/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-xd2jrsxx/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03795083200020599,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-xd2jrsxx/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-nz_xhlst/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-nz_xhlst/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03939767299925734,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-nz_xhlst/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-0u4853t2/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-0u4853t2/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03777925500071433,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-0u4853t2/work"
+    }
+  ],
+  "results": [
+    {
+      "case": "nested_context_and_complete_inventory",
+      "details": {
+        "leaves": 6,
+        "modes": [
+          "100644",
+          "100755"
+        ]
+      },
+      "elapsed_seconds": 0.05916207199879864,
+      "status": "PASS"
+    },
+    {
+      "case": "consumer_argv_and_environment",
+      "details": {
+        "argv_preserved": true,
+        "non_git_environment_preserved": true,
+        "nonzero_return_preserved": 23
+      },
+      "elapsed_seconds": 0.16332322699963697,
+      "status": "PASS"
+    },
+    {
+      "case": "missing_commit",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "Git failed (128): cat-file commit ffffffffffffffffffffffffffffffffffffffff"
+      },
+      "elapsed_seconds": 0.010309761999451439,
+      "status": "PASS"
+    },
+    {
+      "case": "wrong_fixed_tree",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "fixed commit/tree identity mismatch"
+      },
+      "elapsed_seconds": 0.01079274199946667,
+      "status": "PASS"
+    },
+    {
+      "case": "missing_source_blob",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "Git failed (128): pack-objects --stdout"
+      },
+      "elapsed_seconds": 0.01926307899884705,
+      "status": "PASS"
+    },
+    {
+      "case": "index_missing_entry",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "index inventory/mode/blob mismatch"
+      },
+      "elapsed_seconds": 0.05808613800036255,
+      "status": "PASS"
+    },
+    {
+      "case": "index_nonzero_stage",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "nonzero/duplicate index stage"
+      },
+      "elapsed_seconds": 0.05605951799952891,
+      "status": "PASS"
+    },
+    {
+      "case": "index_wrong_mode",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "index inventory/mode/blob mismatch"
+      },
+      "elapsed_seconds": 0.05877323300046555,
+      "status": "PASS"
+    },
+    {
+      "case": "index_wrong_blob",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "index inventory/mode/blob mismatch"
+      },
+      "elapsed_seconds": 0.05991911000091932,
+      "status": "PASS"
+    },
+    {
+      "case": "working_bytes_changed",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "working mode/blob mismatch: inherited/inputs.json"
+      },
+      "elapsed_seconds": 0.055102003998399596,
+      "status": "PASS"
+    },
+    {
+      "case": "working_mode_changed",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "working mode/blob mismatch: tools/unexecuted"
+      },
+      "elapsed_seconds": 0.05670480500157282,
+      "status": "PASS"
+    },
+    {
+      "case": "same_bytes_untracked_rejected",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "untracked prospective input: inherited/ambient.json"
+      },
+      "elapsed_seconds": 0.07033767199936847,
+      "status": "PASS"
+    },
+    {
+      "case": "copy_failure_cleanup",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "fixed copy mode/blob mismatch: inherited/inputs.json"
+      },
+      "elapsed_seconds": 0.026149283001359436,
+      "status": "PASS"
+    },
+    {
+      "case": "outward_input_symlinks_rejected",
+      "details": {
+        "expected_rejection": "OSError",
+        "message": "[Errno 40] Too many levels of symbolic links: '/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/copy-with-outward-link/fixtures/space name.txt'"
+      },
+      "elapsed_seconds": 0.02765090699904249,
+      "status": "PASS"
+    },
+    {
+      "case": "owned_cleanup_does_not_follow_symlink",
+      "details": {
+        "outside_sentinel_unchanged": true,
+        "owned_root_removed": true
+      },
+      "elapsed_seconds": 0.04138937900097517,
+      "status": "PASS"
+    },
+    {
+      "case": "cleanup_ownership_refusal",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "cleanup ownership mismatch; retained: /workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-nz_xhlst",
+        "restored_known_test_marker_and_cleaned": true
+      },
+      "elapsed_seconds": 0.043647775000863476,
+      "status": "PASS"
+    },
+    {
+      "case": "independent_objects_survive_source_unavailable",
+      "details": {
+        "context_still_valid": true,
+        "source_gitdir_temporarily_unavailable": true
+      },
+      "elapsed_seconds": 0.06083804500121914,
+      "status": "PASS"
+    },
+    {
+      "case": "bootstrap_io_failure_cleanup_or_retained_receipt",
+      "details": {
+        "partial_marker_failure": {
+          "expected_rejection": "OSError",
+          "message": "injected partial owner-marker write failure"
+        },
+        "retained_path_reported": true,
+        "test_owned_cleanup_complete": true,
+        "unproven_identity_failure": {
+          "expected_rejection": "SnapshotError",
+          "message": "cleanup ownership mismatch; retained: /workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-zoxasot9/parent-repository/build/nested/t1166-oughgqrd"
+        }
+      },
+      "elapsed_seconds": 0.0038014460005797446,
+      "status": "PASS"
+    }
+  ],
+  "source_fingerprint_equal": true,
+  "status": "PASS",
+  "suite_fixture_cleanup": "complete",
+  "suite_slot": 2
+}

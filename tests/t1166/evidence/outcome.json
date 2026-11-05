@@ -1,0 +1,105 @@
+{
+  "PRs": 0,
+  "R1163_reruns": 0,
+  "R_FIRST_RED": "retained; no overall R recovery claim",
+  "Ready_merge_self_close": 0,
+  "actual_P_commit": "9030055314600b804fafde64adebb03c4d6315a1",
+  "actual_P_fetch_attempts": 0,
+  "actual_P_fetch_maximum": 1,
+  "actual_P_integration": "NOT_RUN_ACCESS_STOP",
+  "actual_P_old_history": "five attacks/render/untracked unchanged integration not run",
+  "authority": "https://github.com/wakairo/NewLang_Compiler/issues/1166#issuecomment-6648363017",
+  "base_commit": "425e7f6c8c54643765e861b8235620348a3c91a3",
+  "base_tree": "261a8e404a1cf1982e13d3b94e3223d5da0e0499",
+  "branch": "t-research/t1166-git-context",
+  "branch_limit": 1,
+  "compiler_native_formatter_CMake_CTest_Lean_SDK_Actions_CI": 0,
+  "forward_commit_limit": 2,
+  "maintenance_contract": "Regular modes 100644/100755; canonical UTF-8 paths; independent finite object closure and stage-0 index; sanitized Git-only environment; exclusive synchronous owner cleanup.",
+  "original_suite1_inputs": "suite1/inputs/",
+  "planned_forward_commits": 1,
+  "remaining_suites_unused": 1,
+  "repair1": {
+    "finding": "Post-mkdtemp initial lstat/marker writes were outside cleanup try in initial source. Initial 17 cases did not cover this.",
+    "fix": "Guard initial I/O; cleanup known owned inode before marker publication; explicit retained-path error if inode cannot be proved.",
+    "freeze2": "https://github.com/wakairo/NewLang_Compiler/issues/1166#issuecomment-6648630304",
+    "validation": "Added bootstrap I/O fault case in pre-frozen suite2; all18 PASS; original suite1 source/raw/freeze retained."
+  },
+  "repair_suites_executed": 1,
+  "results": [
+    {
+      "cases": 17,
+      "copied_bytes_per_context": [
+        142
+      ],
+      "elapsed_seconds": 0.9043365950001316,
+      "exit_code": 0,
+      "filesystem_bytes_per_context": [
+        4748
+      ],
+      "gzip_bytes": 21893,
+      "gzip_sha256": "3413c07494222910c5f34adf015f63469ad0abafc83ab7f64c4ca7dd63ce50a4",
+      "lossless_storage": "suite1/commands.jsonl.gz",
+      "owned_cleanup": "complete",
+      "pack_bytes_per_context": [
+        815
+      ],
+      "preparation_seconds_max": 0.04357650500060117,
+      "preparation_seconds_median": 0.03704424699935771,
+      "preparation_seconds_min": 0.034240812999996706,
+      "raw_commands_bytes": 367667,
+      "raw_commands_sha256": "a0c2cc9b78a0d6a4b0bc198d8f5a30cf70ce12cdaacbe0092c210b8f923c0602",
+      "recorded_subprocess_calls": 300,
+      "results_sha256": "609e371e49c1fd11f9904ff8102cb86692f6bc740edfb6a8a9f602af02045aa8",
+      "source_before_after_equal": true,
+      "status": "PASS",
+      "successful_contexts": 12,
+      "suite_slot": 1,
+      "unexpected_FIRST_failure": null
+    },
+    {
+      "cases": 18,
+      "copied_bytes_per_context": [
+        142
+      ],
+      "elapsed_seconds": 0.9337408020001021,
+      "exit_code": 0,
+      "filesystem_bytes_per_context": [
+        4748
+      ],
+      "gzip_bytes": 21914,
+      "gzip_sha256": "44d7625effbed051f8620c5bfc1b4bbfac4dcf913ab276e0c6da53ab8779d46d",
+      "lossless_storage": "suite2/commands.jsonl.gz",
+      "owned_cleanup": "complete",
+      "pack_bytes_per_context": [
+        815
+      ],
+      "preparation_seconds_max": 0.04110759600007441,
+      "preparation_seconds_median": 0.03818276950005384,
+      "preparation_seconds_min": 0.03702237899960892,
+      "raw_commands_bytes": 367670,
+      "raw_commands_sha256": "fba9b940859527d875f44989fa56e89f6299f2a07f4343ea48e927a599bd1de6",
+      "recorded_subprocess_calls": 300,
+      "results_sha256": "3ffe283ef6260e805c5dbbd541dfecaf507d4f542bbfad0d570ecd22d9345be8",
+      "source_before_after_equal": true,
+      "status": "PASS",
+      "successful_contexts": 12,
+      "suite_slot": 2,
+      "unexpected_FIRST_failure": null
+    }
+  ],
+  "source_lines": {
+    "README.md": 89,
+    "fixed_git_context.py": 279,
+    "run_suite.py": 439
+  },
+  "suite_maximum": 3,
+  "suites_executed": 2,
+  "unmeasured": [
+    "actual P scale and 5992-leaf integration",
+    "Actions runner equivalence",
+    "full compiler/native/R behavior",
+    "default consumer timeout equivalence",
+    "interruption recovery and adversarial concurrency"
+  ]
+}

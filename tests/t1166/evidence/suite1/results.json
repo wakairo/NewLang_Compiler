@@ -1,0 +1,679 @@
+{
+  "actual_P_fetch_attempts": 0,
+  "actual_P_integration": "NOT_RUN_ACCESS_STOP",
+  "argv": [
+    "tests/t1166/run_suite.py",
+    "--suite-slot",
+    "1",
+    "--output",
+    "tests/t1166/evidence/suite1"
+  ],
+  "classification": "SYNTHETIC_ONLY_NOT_ACTUAL_P",
+  "command_count": 300,
+  "commands_sha256": "a0c2cc9b78a0d6a4b0bc198d8f5a30cf70ce12cdaacbe0092c210b8f923c0602",
+  "compiler_native_CMake_CTest_SDK_Actions_CI": 0,
+  "elapsed_seconds": 0.9043365950001316,
+  "expected_cases": [
+    "nested_context_and_complete_inventory",
+    "consumer_argv_and_environment",
+    "missing_commit",
+    "wrong_fixed_tree",
+    "missing_source_blob",
+    "index_missing_entry",
+    "index_nonzero_stage",
+    "index_wrong_mode",
+    "index_wrong_blob",
+    "working_bytes_changed",
+    "working_mode_changed",
+    "same_bytes_untracked_rejected",
+    "copy_failure_cleanup",
+    "outward_input_symlinks_rejected",
+    "owned_cleanup_does_not_follow_symlink",
+    "cleanup_ownership_refusal",
+    "independent_objects_survive_source_unavailable"
+  ],
+  "first_failure": null,
+  "git": "git version 2.51.1",
+  "input_sha256": {
+    "README.md": "b2cd174652c7a10328309e1cff3d4a55c554db88353b30b8da282e46b655361f",
+    "fixed_git_context.py": "584a248fa19a5bc7d6281abf2a29ae5b070a4d73909de29a379c387a6d287304",
+    "fixture.json": "b92ed0c1096cdc6cef96d0dab693394e776c5a9a55b04bbcb4ab31c29178dfd8",
+    "run_suite.py": "24e94c2ecbcde7802685e0fffd9d85118254218c7a9ec08853c7bd89f84049cd"
+  },
+  "os": "Linux-6.18.57-x86_64-with-glibc2.39",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "receipts": [
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-0ui4mxa_/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-0ui4mxa_/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.04357650500060117,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-0ui4mxa_/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-nthkedcp/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-nthkedcp/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.036953441998775816,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-nthkedcp/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-k5yupyc0/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-k5yupyc0/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03531968100105587,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-k5yupyc0/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-xth7mvth/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-xth7mvth/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.04193487199881929,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-xth7mvth/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-qa6nz9ye/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-qa6nz9ye/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.034240812999996706,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-qa6nz9ye/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-y_d85n0y/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-y_d85n0y/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03795423300107359,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-y_d85n0y/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-0np2qwrd/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-0np2qwrd/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.03528179699969769,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-0np2qwrd/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-s4f0bg0r/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-s4f0bg0r/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.04114260400092462,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-s4f0bg0r/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-h93lkgjh/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-h93lkgjh/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.034953862999827834,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-h93lkgjh/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-nceewr75/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-nceewr75/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.039533500999823445,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-nceewr75/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-butejm4j/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-butejm4j/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.037135051999939606,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-butejm4j/work"
+    },
+    {
+      "commit": "2bdbd14bc5fe0e322a71f6fd56ac83e6dd570c6f",
+      "copied_bytes": 142,
+      "filesystem_bytes": 4748,
+      "gitdir": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-9h9p2uf7/git",
+      "index": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-9h9p2uf7/git/index",
+      "inventory": {
+        "CMakeLists.txt": [
+          "100644",
+          "0147fdada3d3d7a48b88e5cb14e86cdb3f7d2ac6"
+        ],
+        "fixtures/raw.bin": [
+          "100644",
+          "8d0acacad02d75ad1e2b77e434bada345a7a8431"
+        ],
+        "fixtures/space name.txt": [
+          "100644",
+          "989426a48d997da4036d80e02a2303acecc1e6a4"
+        ],
+        "inherited/inputs.json": [
+          "100644",
+          "dd334b4cc594e4df13c8bd0ba9591c5a9162ebcc"
+        ],
+        "tests/history.txt": [
+          "100644",
+          "d67b099b0647753ad089e5e34accdaa8399514da"
+        ],
+        "tools/unexecuted": [
+          "100755",
+          "e1bcf859ff7c9ef5409f8308eb7efcd7dea4e094"
+        ]
+      },
+      "leaves": 6,
+      "object_count": 12,
+      "pack_bytes": 815,
+      "preparation_seconds": 0.0364191539993044,
+      "tree": "cc48280d0c5fa54d9c1503051f2fd1a2280f0560",
+      "work": "/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-9h9p2uf7/work"
+    }
+  ],
+  "results": [
+    {
+      "case": "nested_context_and_complete_inventory",
+      "details": {
+        "leaves": 6,
+        "modes": [
+          "100644",
+          "100755"
+        ]
+      },
+      "elapsed_seconds": 0.06109004400059348,
+      "status": "PASS"
+    },
+    {
+      "case": "consumer_argv_and_environment",
+      "details": {
+        "argv_preserved": true,
+        "non_git_environment_preserved": true,
+        "nonzero_return_preserved": 23
+      },
+      "elapsed_seconds": 0.15946384000017133,
+      "status": "PASS"
+    },
+    {
+      "case": "missing_commit",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "Git failed (128): cat-file commit ffffffffffffffffffffffffffffffffffffffff"
+      },
+      "elapsed_seconds": 0.011947943999985,
+      "status": "PASS"
+    },
+    {
+      "case": "wrong_fixed_tree",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "fixed commit/tree identity mismatch"
+      },
+      "elapsed_seconds": 0.01070203899871558,
+      "status": "PASS"
+    },
+    {
+      "case": "missing_source_blob",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "Git failed (128): pack-objects --stdout"
+      },
+      "elapsed_seconds": 0.017007002999889664,
+      "status": "PASS"
+    },
+    {
+      "case": "index_missing_entry",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "index inventory/mode/blob mismatch"
+      },
+      "elapsed_seconds": 0.053410726999572944,
+      "status": "PASS"
+    },
+    {
+      "case": "index_nonzero_stage",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "nonzero/duplicate index stage"
+      },
+      "elapsed_seconds": 0.05959984400033136,
+      "status": "PASS"
+    },
+    {
+      "case": "index_wrong_mode",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "index inventory/mode/blob mismatch"
+      },
+      "elapsed_seconds": 0.05247844400037138,
+      "status": "PASS"
+    },
+    {
+      "case": "index_wrong_blob",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "index inventory/mode/blob mismatch"
+      },
+      "elapsed_seconds": 0.05630899500101805,
+      "status": "PASS"
+    },
+    {
+      "case": "working_bytes_changed",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "working mode/blob mismatch: inherited/inputs.json"
+      },
+      "elapsed_seconds": 0.052341145999889704,
+      "status": "PASS"
+    },
+    {
+      "case": "working_mode_changed",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "working mode/blob mismatch: tools/unexecuted"
+      },
+      "elapsed_seconds": 0.056968458000483224,
+      "status": "PASS"
+    },
+    {
+      "case": "same_bytes_untracked_rejected",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "untracked prospective input: inherited/ambient.json"
+      },
+      "elapsed_seconds": 0.06571852399974887,
+      "status": "PASS"
+    },
+    {
+      "case": "copy_failure_cleanup",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "fixed copy mode/blob mismatch: inherited/inputs.json"
+      },
+      "elapsed_seconds": 0.023744860000078916,
+      "status": "PASS"
+    },
+    {
+      "case": "outward_input_symlinks_rejected",
+      "details": {
+        "expected_rejection": "OSError",
+        "message": "[Errno 40] Too many levels of symbolic links: '/workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/copy-with-outward-link/fixtures/space name.txt'"
+      },
+      "elapsed_seconds": 0.024564368000937975,
+      "status": "PASS"
+    },
+    {
+      "case": "owned_cleanup_does_not_follow_symlink",
+      "details": {
+        "outside_sentinel_unchanged": true,
+        "owned_root_removed": true
+      },
+      "elapsed_seconds": 0.044538103000377305,
+      "status": "PASS"
+    },
+    {
+      "case": "cleanup_ownership_refusal",
+      "details": {
+        "expected_rejection": "SnapshotError",
+        "message": "cleanup ownership mismatch; retained: /workspace/scratch/809a1b02c5d4/t1166_c238/tests/t1166/suite-owned-nze487t0/parent-repository/build/nested/t1166-butejm4j",
+        "restored_known_test_marker_and_cleaned": true
+      },
+      "elapsed_seconds": 0.04105711099873588,
+      "status": "PASS"
+    },
+    {
+      "case": "independent_objects_survive_source_unavailable",
+      "details": {
+        "context_still_valid": true,
+        "source_gitdir_temporarily_unavailable": true
+      },
+      "elapsed_seconds": 0.05822216099841171,
+      "status": "PASS"
+    }
+  ],
+  "source_fingerprint_equal": true,
+  "status": "PASS",
+  "suite_fixture_cleanup": "complete",
+  "suite_slot": 1
+}

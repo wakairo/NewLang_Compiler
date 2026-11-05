@@ -1,0 +1,182 @@
+{
+  "actual_P_integration": "NOT_RUN_ACCESS_STOP",
+  "base_commit": "425e7f6c8c54643765e861b8235620348a3c91a3",
+  "base_tree": "261a8e404a1cf1982e13d3b94e3223d5da0e0499",
+  "branch": "t-research/t1166-git-context",
+  "classification": "C238 Git/Python-only synthetic prototype and retained original evidence",
+  "entries": [
+    {
+      "bytes": 5717,
+      "git_blob_sha1": "2ddc0a2f436ca3f810bb75d2805461dc01127c88",
+      "mode": "100644",
+      "path": "tests/t1166/README.md",
+      "sha256": "eaff5e25bc5f18471b02f02a1e1299fba418845985ddc6818aafb226ef6e13d4"
+    },
+    {
+      "bytes": 2652,
+      "git_blob_sha1": "bce072f5419b1ee40b58d36809d321daa403fa19",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/freeze-suite1.json",
+      "sha256": "409565332d067389df27e8a42a335856a292cd598b935e80c795048ce8e122c0"
+    },
+    {
+      "bytes": 3166,
+      "git_blob_sha1": "443912596b3d812b27889f81f828a069c7c3bd41",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/freeze-suite2.json",
+      "sha256": "661d71401cef4d1d524304ccfb1f97d380fb57dd5115303a92280cb3afad8ea6"
+    },
+    {
+      "bytes": 4191,
+      "git_blob_sha1": "d1db015f7ddc782100d5aa685750986ec80b4c90",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/outcome.json",
+      "sha256": "a3603d1a6ca5926dc25a1b26fb78bcbbfb5015381ba9f0f7dcae7fcbe329fa9b"
+    },
+    {
+      "bytes": 2667,
+      "git_blob_sha1": "53321519bbd35e6872805ed94675a5eeb685d317",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/publication-preflight.json",
+      "sha256": "1b9f6d447a90f30c973cb7e5b3475b923f1749ba6ff65c4d44fb9f96d480276f"
+    },
+    {
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite1.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 619,
+      "git_blob_sha1": "d187b34158a89ec420033123bd41788dbdb42156",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite1.stdout.log",
+      "sha256": "72be42439ffeacd97cf69849b5532b9a496938b0b75b72089d88c73e131e682c"
+    },
+    {
+      "bytes": 21893,
+      "git_blob_sha1": "c5b964b4159ce47b6d76b6748c63213c6f07a6af",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite1/commands.jsonl.gz",
+      "sha256": "3413c07494222910c5f34adf015f63469ad0abafc83ab7f64c4ca7dd63ce50a4"
+    },
+    {
+      "bytes": 5289,
+      "git_blob_sha1": "97654042bb7c0a3607e8f434022f2043e3a49db1",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite1/inputs/README.md",
+      "sha256": "b2cd174652c7a10328309e1cff3d4a55c554db88353b30b8da282e46b655361f"
+    },
+    {
+      "bytes": 12638,
+      "git_blob_sha1": "18a6cd59906a99594eeb8e650c7d8a633eb638e1",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite1/inputs/fixed_git_context.py",
+      "sha256": "584a248fa19a5bc7d6281abf2a29ae5b070a4d73909de29a379c387a6d287304"
+    },
+    {
+      "bytes": 4728,
+      "git_blob_sha1": "e62178e584aa7a871929afb39e303581e2e5cd4d",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite1/inputs/fixture.json",
+      "sha256": "b92ed0c1096cdc6cef96d0dab693394e776c5a9a55b04bbcb4ab31c29178dfd8"
+    },
+    {
+      "bytes": 20232,
+      "git_blob_sha1": "ae77dd34464717dcc97b994bf7809e51efe803ca",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite1/inputs/run_suite.py",
+      "sha256": "24e94c2ecbcde7802685e0fffd9d85118254218c7a9ec08853c7bd89f84049cd"
+    },
+    {
+      "bytes": 24141,
+      "git_blob_sha1": "561c6fa499567e189b968a85ad2d39b9a9609eaf",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite1/results.json",
+      "sha256": "609e371e49c1fd11f9904ff8102cb86692f6bc740edfb6a8a9f602af02045aa8"
+    },
+    {
+      "bytes": 6625,
+      "git_blob_sha1": "47635c0ebbfaf927281c2ac606143f2f7c77e3c8",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite1/source-after.json",
+      "sha256": "9d23687b6e2ae8799c6006655074661f6dff2d01b547a12e76381b6509942f9b"
+    },
+    {
+      "bytes": 6625,
+      "git_blob_sha1": "47635c0ebbfaf927281c2ac606143f2f7c77e3c8",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite1/source-before.json",
+      "sha256": "9d23687b6e2ae8799c6006655074661f6dff2d01b547a12e76381b6509942f9b"
+    },
+    {
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite2.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 673,
+      "git_blob_sha1": "73e77dd0332dfbc7e32f30c0d8e68421be17cefc",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite2.stdout.log",
+      "sha256": "b451ff188e5c92f4dd5f0e954c8b2ba0f428003c5e570fb4dc1d26e178b1ccf8"
+    },
+    {
+      "bytes": 21914,
+      "git_blob_sha1": "67b845580107fb3258b0ac6e05c0b4d2d84e1169",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite2/commands.jsonl.gz",
+      "sha256": "44d7625effbed051f8620c5bfc1b4bbfac4dcf913ab276e0c6da53ab8779d46d"
+    },
+    {
+      "bytes": 24895,
+      "git_blob_sha1": "227be8abc9da9ce61bb09bcad37ed856cb9f1806",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite2/results.json",
+      "sha256": "3ffe283ef6260e805c5dbbd541dfecaf507d4f542bbfad0d570ecd22d9345be8"
+    },
+    {
+      "bytes": 6625,
+      "git_blob_sha1": "841e8c63021e934b7d21f4be49ce89c85448c856",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite2/source-after.json",
+      "sha256": "d8f035119165eceb8b999e187a6e32e5107d15a0361fa8e2b12bba08d78a877a"
+    },
+    {
+      "bytes": 6625,
+      "git_blob_sha1": "841e8c63021e934b7d21f4be49ce89c85448c856",
+      "mode": "100644",
+      "path": "tests/t1166/evidence/suite2/source-before.json",
+      "sha256": "d8f035119165eceb8b999e187a6e32e5107d15a0361fa8e2b12bba08d78a877a"
+    },
+    {
+      "bytes": 12946,
+      "git_blob_sha1": "85d1002059155ca2b9b51eade3c9cc25fc9a2241",
+      "mode": "100644",
+      "path": "tests/t1166/fixed_git_context.py",
+      "sha256": "6c36d0f47d6cefa072b385d8865e8cd48495114998292932834508d07e17abb1"
+    },
+    {
+      "bytes": 4728,
+      "git_blob_sha1": "e62178e584aa7a871929afb39e303581e2e5cd4d",
+      "mode": "100644",
+      "path": "tests/t1166/fixture.json",
+      "sha256": "b92ed0c1096cdc6cef96d0dab693394e776c5a9a55b04bbcb4ab31c29178dfd8"
+    },
+    {
+      "bytes": 22283,
+      "git_blob_sha1": "3a50a1308ca52a27d40887641679721d4a65ad98",
+      "mode": "100644",
+      "path": "tests/t1166/run_suite.py",
+      "sha256": "0446ea36508a52d5caa2780992d3dbb16db0a682fee1da9c840766fa09ea331f"
+    }
+  ],
+  "manifest_self": "This manifest excludes itself to avoid a circular hash. Its actual Git blob is included in publication/readback receipt.",
+  "path_scope": "tests/t1166/** only",
+  "raw_logs": "commands.jsonl.gz is a lossless gzip of original commands.jsonl. Uncompressed SHA256 and raw sizes are recorded in each suite results.json and evidence/outcome.json. Original plain raw logs remain locally unchanged.",
+  "suite_budget_maximum": 3,
+  "suite_budget_used": 2
+}
