@@ -29,6 +29,15 @@ if(BUILD_TESTING)
             "${CMAKE_SOURCE_DIR}/tests/r1173" "${CMAKE_BINARY_DIR}/r1173-evidence")
         set_tests_properties(r1173.changing_current.integration PROPERTIES
             TIMEOUT 600 RUN_SERIAL TRUE)
+        get_property(r1173_registered DIRECTORY PROPERTY TESTS)
+        list(FILTER r1173_registered INCLUDE
+            REGEX "^r1173[.]changing_current[.]integration$")
+        list(LENGTH r1173_registered r1173_registration_count)
+        if(NOT r1173_registration_count EQUAL 1)
+            message(FATAL_ERROR "R1173 actual test registration is not unique")
+        endif()
+        message(STATUS
+            "R1173 ACTUAL_CTEST_REGISTRATION r1173.changing_current.integration count=${r1173_registration_count}")
         # Export read-only evidence after CTest even when a passing test is quiet.
         # This is a log observer, never a semantic test or a workflow mutation.
         file(WRITE "${CMAKE_BINARY_DIR}/CTestCustom.cmake"
