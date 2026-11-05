@@ -1,0 +1,31 @@
+{
+  "authority": "Issue1188 C247 target runner; sources/oracle unchanged after Gate0",
+  "predecessor": {
+    "path": "tests/p1188/source-freeze-v2.json",
+    "sha256": "88874783b29d9b49ecefb133a3449cd40574eaf63c9fbd878f7a67e315ec9dde"
+  },
+  "files": {
+    "tests/p1188/gate0-v3.py": "7504712bb3bfd9bd1d2e27916e3bf516c04f92b43c8ea0243eb49b791df38a06",
+    "tests/p1188/oracle-v1.json": "82e3a2b12072618323728469b84e8384a87c179a03eb435c7f45b17bb705c36f",
+    "tests/p1188/sources/01-init-one.nl": "4fa97e7d0932ea38b3519a1567f9acdb99cce32859667200ae46f426c0e6c15d",
+    "tests/p1188/sources/02-actual-one.nl": "a76e5c18d7ba73ad43bbca81d4ff80eca1064d11d130e68cca1d873e1b2f2f42",
+    "tests/p1188/sources/03-formal-one.nl": "0b9450df5cd203557c4dd830d6bcf3b906ba56043e3632b6fdf38af545490804",
+    "tests/p1188/sources/04-all-one.nl": "042a4d15369985c99433792f96a53a7315a222c0d3735cd38c38088dd7ec41cd",
+    "tests/p1188/sources/05-all-two.nl": "5e53b56c8d3c6c9abe55c5ef698b78a040fd2a8f8af7fbcc036d8774eadc768b",
+    "tests/p1188/sources/06-eq-two.nl": "472e6ca477042c44d87e63749f4e9ab18d9d16d0a0dcf4b9f991d804dd82402e",
+    "tests/p1188/sources/100-wrong-formal-type.nl": "162ad4f0737b14c6efeaa3fc22344e6a0952a18cbfd6c358fde2ab2a57b44ee7",
+    "tests/p1188/sources/101-rhs-alias.nl": "c13b080b4598169dcd7cc6d2403fc00e3bce885d6ad176434ed7dec4fbba497a",
+    "tests/p1188/sources/80-direct-control.nl": "113b453e8207cec661a803f2173a3ad785d5e1d6d67f75737c03ac7ac15036d7",
+    "tests/p1188/sources/81-result-control.nl": "6fa4df3f15d8054af76415866b7b76d2875b9351209b34969dbb16ad5930c5a0",
+    "tests/p1188/sources/90-foreign-actual-literal.nl": "877bf32627146a7440703f2fae21574ec590b74922cc2de8829ce5b663682bea",
+    "tests/p1188/sources/91-foreign-actual-outer.nl": "ecd0139147b9ce9966d8c6c8fd88e4e2296236456423011982f517d95c169c43",
+    "tests/p1188/sources/92-foreign-formal-literal.nl": "76128c8796c7a1bbe15d81d32740e3132777d4560e60dd11b71f5f4e01b2c86b",
+    "tests/p1188/sources/93-actual-arithmetic.nl": "3e667e2a3905503185d6d868827e961bbf7c40b23d6442146cb022297f109a91",
+    "tests/p1188/sources/94-formal-arithmetic.nl": "9cae2c5488683acba1abce154753e5d306a1cfc4e17041d7253581a5da9ac315",
+    "tests/p1188/sources/95-init-arithmetic.nl": "bab7dbb00030e42363f7a7fa952e95dbea078c8e4a126cb9313100d3c0d77f75",
+    "tests/p1188/sources/96-init-chain-three.nl": "e0f7a54cdebb40540ddc81d24a20de80c7b7a1e10e30671e12f9d8681308a4b8",
+    "tests/p1188/sources/97-actual-chain-three.nl": "819cb317896b57c63a9a1e89447fe4376308820210b551d37bccd523aa1acc46",
+    "tests/p1188/sources/98-formal-chain-three.nl": "8bc4200a1ac05c1ebb33807d0cc3fff78d3c35c4aef2d5cc8c4109dc86b5e4af",
+    "tests/p1188/sources/99-wrong-actual-type.nl": "8c99c0aa5a13bab45da9f38be01d82c6bdb89dd35d7a195085c76633fa20928d"
+  }
+}

@@ -7,6 +7,146 @@
 typedef struct {
     const NLSyntaxNode *parameter, *conditional, *field, *carry, *scalar;
 } CurrentSource;
+
+/* A bounded, read-only provenance walk for the three ordinary usize Copy
+ * boundaries used by the current loop profile. It follows actual checked
+ * declarations in one owned fragment; equal scalar bits, inherited bindings,
+ * and a name in another world are never an origin proof. The budget counts
+ * identifier-to-identifier Copy edges. A literal seed binding is the root,
+ * not another Copy edge. */
+static bool current_copy_name(const NLCheckedFragment *f, NLSourceSpan span,
+                              const char *name)
+{
+    NLSourceView text;
+    return f && name && nl_source_view(nl_checked_source(f), span, &text) &&
+           text.length && text.length == strlen(name) &&
+           !memcmp(text.bytes, name, text.length);
+}
+
+static bool current_copy_value(const NLCheckedFragment *f,
+                               const NLCheckedNodeView *n, NLTypeId type,
+                               NLSemanticValueView *out)
+{
+    return f && n && !n->terminates && n->type == type &&
+           n->result_count == 1 && n->results[0].type == type &&
+           nl_semantic_value_view(nl_checked_context(f), n->results[0].value,
+                                  out) &&
+           copy_if_plain(*out, type) &&
+           (!n->has_scalar_result ||
+            (n->scalar_result.type == type &&
+             n->scalar_result.known == out->scalar_known &&
+             n->scalar_result.value == out->scalar_value));
+}
+
+static const NLCheckedNodeView *
+current_copy_binding(const NLCheckedFragment *f, NLCheckedNodeId use,
+                     NLSymbolId symbol, const NLCheckedNodeView **initializer)
+{
+    const NLSemanticContext *c = nl_checked_context(f);
+    const NLCheckedNodeView *found = NULL;
+    if (!f || !c || !symbol || symbol > c->binding_count ||
+        symbol > NL_SEMANTIC_MAX_ENTRIES || !initializer)
+        return NULL;
+    for (NLCheckedNodeId id = 1; id < use; ++id) {
+        const NLCheckedNodeView *b = nl_checked_node_view(f, id);
+        if (!b || b->kind != NL_CHECKED_BINDING || b->symbol != symbol)
+            continue;
+        if (found)
+            return NULL;
+        const NLCheckedNodeView *receiver =
+            nl_checked_node_view(f, b->first_argument);
+        const NLCheckedNodeView *init =
+            nl_checked_node_view(f, b->initializer);
+        const NLCheckedNodeView *use_node = nl_checked_node_view(f, use);
+        if (!receiver || !init || !use_node ||
+            b->type != nl_semantic_unit_type(c) || b->result_count ||
+            b->argument_count != 1 || b->initializer >= id ||
+            b->first_argument <= id || b->first_argument >= use ||
+            receiver->next_argument ||
+            receiver->kind != NL_CHECKED_RECEIVER ||
+            receiver->value_use != NL_VALUE_RECEIVED ||
+            receiver->symbol != symbol || receiver->type != init->type ||
+            !current_copy_name(f, b->name, c->bindings[symbol - 1].name) ||
+            !current_copy_name(f, receiver->name,
+                               c->bindings[symbol - 1].name) ||
+            b->span.end_byte > use_node->span.start_byte ||
+            c->bindings[symbol - 1].view.type != init->type ||
+            c->bindings[symbol - 1].view.value != init->results[0].value)
+            return NULL;
+        found = b;
+        *initializer = init;
+    }
+    return found;
+}
+
+static bool current_copy_origin(const NLCheckedFragment *f,
+                                NLCheckedNodeId id, NLSymbolId root_symbol,
+                                bool literal_root, size_t max_copies,
+                                size_t *literal)
+{
+    const NLSemanticContext *c = nl_checked_context(f);
+    const NLTypeId type = c ? nl_semantic_core_type(c, NL_TYPE_USIZE) : 0;
+    NLSemanticValueView expected = {0};
+    bool first = true;
+    size_t copies = 0;
+    while (f && c && id && id <= nl_checked_node_count(f)) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        NLSemanticValueView value;
+        if (!current_copy_value(f, n, type, &value) ||
+            (!first &&
+             (value.scalar_known != expected.scalar_known ||
+              value.scalar_value != expected.scalar_value)))
+            return false;
+        if (first) {
+            expected = value;
+            first = false;
+        }
+        if (n->kind == NL_CHECKED_USIZE_LITERAL) {
+            if (!literal_root || root_symbol || !value.scalar_known ||
+                !n->has_scalar_result || !n->scalar_result.known ||
+                n->scalar_result.value != value.scalar_value ||
+                copies > max_copies)
+                return false;
+            if (literal)
+                *literal = value.scalar_value;
+            return true;
+        }
+        if (n->kind != NL_CHECKED_IDENTIFIER || !n->symbol ||
+            n->symbol > c->binding_count ||
+            n->symbol > NL_SEMANTIC_MAX_ENTRIES ||
+            n->value_use != NL_VALUE_COPIED ||
+            n->span.start_byte != n->name.start_byte ||
+            n->span.end_byte != n->name.end_byte ||
+            !current_copy_name(f, n->name,
+                               c->bindings[n->symbol - 1].name))
+            return false;
+        if (root_symbol && n->symbol == root_symbol) {
+            NLSemanticValueView root;
+            return !literal_root && copies <= max_copies &&
+                   c->bindings[root_symbol - 1].view.type == type &&
+                   nl_semantic_value_view(
+                       c, c->bindings[root_symbol - 1].view.value, &root) &&
+                   copy_if_plain(root, type) &&
+                   root.scalar_known == value.scalar_known &&
+                   root.scalar_value == value.scalar_value;
+        }
+        const NLCheckedNodeView *init = NULL;
+        if (!current_copy_binding(f, id, n->symbol, &init))
+            return false;
+        NLSemanticValueView source;
+        if (!current_copy_value(f, init, type, &source) ||
+            source.scalar_known != value.scalar_known ||
+            source.scalar_value != value.scalar_value)
+            return false;
+        if (init->kind == NL_CHECKED_IDENTIFIER && ++copies > max_copies)
+            return false;
+        if (init->kind != NL_CHECKED_IDENTIFIER &&
+            init->kind != NL_CHECKED_USIZE_LITERAL)
+            return false;
+        id = (NLCheckedNodeId)(init - f->nodes) + 1;
+    }
+    return false;
+}
 typedef struct NLCurrentLoopProof {
     NLControlState *entry, *header;
     NLCheckedFragment *graph;
@@ -56,15 +196,49 @@ static void destroy_current_cycle(NLCurrentLoopProof *s)
 
 /* One phase predicate, two literal u8 normal results, no effects or exits.
  * This is a source envelope, never a substitute for the issued graph walk. */
+static bool current_source_alias(Check *c, const NLSyntaxNode *first,
+                                 const NLSyntaxNode *stop, NLSourceSpan phase,
+                                 NLSourceSpan use)
+{
+    NLSourceSpan aliases[2] = {{0}};
+    size_t depths[2] = {0}, count = 0;
+    if (stutter_name(c, use, phase))
+        return true;
+    for (const NLSyntaxNode *n = first; n && n != stop;
+         n = nl_syntax_next_argument(n)) {
+        const NLSyntaxView *item = nl_syntax_node_view(n);
+        const NLSyntaxView *init =
+            item && item->kind == NL_SYNTAX_BINDING
+                ? nl_syntax_node_view(item->data.binding.initializer)
+                : NULL;
+        if (!init || init->kind != NL_SYNTAX_EXPR_NAME)
+            continue;
+        size_t depth = stutter_name(c, init->data.name, phase) ? 1 : 0;
+        for (size_t i = 0; !depth && i < count; ++i)
+            if (stutter_name(c, init->data.name, aliases[i]))
+                depth = depths[i] + 1;
+        if (!depth || depth > 2 || count == 2)
+            continue;
+        aliases[count] = item->data.binding.name;
+        depths[count++] = depth;
+    }
+    for (size_t i = 0; i < count; ++i)
+        if (stutter_name(c, use, aliases[i]))
+            return true;
+    return false;
+}
+
 static bool current_scalar_source(Check *c, const NLSyntaxNode *node,
-                                  NLSourceSpan phase)
+                                  NLSourceSpan phase,
+                                  const NLSyntaxNode *first,
+                                  const NLSyntaxNode *stop)
 {
     const NLSyntaxView *v = nl_syntax_node_view(node);
     if (v && v->kind == NL_SYNTAX_EXPR_CALL) {
         const NLSyntaxView *arg = nl_syntax_node_view(v->data.call.arguments);
         return v->data.call.argument_count == 1 && arg &&
                arg->kind == NL_SYNTAX_EXPR_NAME &&
-               stutter_name(c, arg->data.name, phase);
+               current_source_alias(c, first, stop, phase, arg->data.name);
     }
     if (!v || v->kind != NL_SYNTAX_IF)
         return false;
@@ -122,7 +296,10 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
         guard && guard->kind == NL_SYNTAX_USIZE_LESS_THAN
             ? nl_syntax_node_view(guard->data.equality.right)
             : NULL;
-    if (!p || !init || init->kind != NL_SYNTAX_USIZE_LITERAL || !b ||
+    if (!p || !init ||
+        (init->kind != NL_SYNTAX_USIZE_LITERAL &&
+         init->kind != NL_SYNTAX_EXPR_NAME) ||
+        !b ||
         b->kind != NL_SYNTAX_BLOCK || b->data.block.items || !v || !guard ||
         guard->kind != NL_SYNTAX_USIZE_LESS_THAN || !lhs || !rhs ||
         lhs->kind != NL_SYNTAX_EXPR_NAME ||
@@ -162,7 +339,8 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
             (expr->kind == NL_SYNTAX_IF || expr->kind == NL_SYNTAX_EXPR_CALL)) {
             if (scalar || writers ||
                 !current_scalar_source(c, item->data.binding.initializer,
-                                       p->data.binding.name))
+                                       p->data.binding.name,
+                                       arm->data.block.items, n))
                 return false;
             scalar = item->data.binding.initializer;
             continue;
@@ -582,15 +760,17 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
     const NLCheckedNodeView *right =
         left ? nl_checked_node_view(pure.body, left->next_argument) : NULL;
     if (!arg || !actual || !stutter_span(arg->span, actual->span) ||
-        arg->kind != NL_CHECKED_IDENTIFIER || arg->symbol != s->phase ||
-        arg->value_use != NL_VALUE_COPIED || arg->next_argument ||
+        arg->next_argument ||
+        !current_copy_origin(r->arm, v->first_argument, s->phase, false, 2,
+                             NULL) ||
         !stutter_free_quantity(r->arm->context, arg->results[0].value,
                                quantity) ||
         !root || root->terminates || pure.body->body_count ||
         pure.body->arm_count != 2 || !choice || !test || !left || !right ||
         (test->kind != NL_CHECKED_USIZE_LESS_THAN &&
          test->kind != NL_CHECKED_USIZE_EQUALITY) ||
-        left->kind != NL_CHECKED_IDENTIFIER || left->symbol != pure.formal ||
+        !current_copy_origin(pure.body, test->first_argument, pure.formal,
+                             false, 2, NULL) ||
         !stutter_literal(right, quantity, right->scalar_result.value) ||
         right->next_argument)
         return false;
@@ -626,7 +806,13 @@ static bool current_scalar(CurrentWalk *r, const NLCheckedNodeView *v)
     if (v->kind == NL_CHECKED_U8_LITERAL)
         return v->has_scalar_result && v->scalar_result.known &&
                v->scalar_result.value <= 255;
-    if (v->kind == NL_CHECKED_IDENTIFIER)
+    if (v->kind == NL_CHECKED_IDENTIFIER) {
+        if (v->symbol == r->proof->phase) {
+            const NLCheckedNodeId id =
+                (NLCheckedNodeId)(v - r->arm->nodes) + 1;
+            return current_copy_origin(r->arm, id, r->proof->phase, false, 0,
+                                       NULL);
+        }
         return v->symbol && v->symbol <= NL_SEMANTIC_MAX_ENTRIES &&
                v->symbol <= r->arm->context->binding_count &&
                r->bound[v->symbol - 1] && v->value_use == NL_VALUE_COPIED &&
@@ -635,6 +821,7 @@ static bool current_scalar(CurrentWalk *r, const NLCheckedNodeView *v)
                current_intrinsic(
                    r->arm->context->values[v->results[0].value - 1],
                    r->arm->context->values[r->bound[v->symbol - 1] - 1]);
+    }
     if (v->kind != NL_CHECKED_FIELD_READ)
         return false;
     const NLCurrentLoopProof *s = r->proof;
@@ -1090,6 +1277,7 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                             *call = nl_checked_node_view(p->root, p->call);
     const NLSemanticContext *e = nl_control_state_context(s->entry),
                             *h = nl_control_state_context(s->header);
+    size_t initial = 0;
     if (!n || !call || n->kind != NL_CHECKED_LOOP || !n->header_inductive ||
         n->continue_edges != 1 || n->break_edges != 1 || n->return_edges ||
         n->first_argument != s->initial_node || n->argument_count != 1 ||
@@ -1097,8 +1285,8 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         n->results[0].type != p->result.type || p->target != s->target ||
         call->function != p->function || call->argument_count ||
         nl_checked_call_body(p->root, p->call) != f ||
-        !stutter_literal(nl_checked_node_view(f, s->initial_node),
-                         p->result.type, s->initial) ||
+        !current_copy_origin(f, s->initial_node, 0, true, 2, &initial) ||
+        initial != s->initial ||
         !current_projection(s, e, p->post) ||
         !stutter_free_quantity(p->post, p->result.value, p->result.type) ||
         p->result.value != p->post->value_count ||
@@ -1123,6 +1311,7 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                                .iteration = s->graphs[1].fragment,
                                .continue_node = s->terminal,
                                .phase_symbol = s->phase,
+                               .initial_node = s->initial_node,
                                .initial_phase = s->initial,
                                .limit = s->limit,
                                .next_phase = s->step};
@@ -1164,7 +1353,11 @@ static NLCheckedNodeId source_current_loop(Check *check,
     s->initial_node = expression(check, param->data.binding.initializer);
     if (!s->initial_node)
         goto cleanup;
-    s->initial = view(check, s->initial_node)->scalar_result.value;
+    if (!current_copy_origin(check->artifact, s->initial_node, 0, true, 2,
+                             &s->initial)) {
+        loop_precision(check, syntax->span);
+        goto cleanup;
+    }
     if (!host(check, nl_control_target_create(NL_TARGET_LOOP, &target),
               syntax->span) ||
         !host(check, nl_control_state_create(check->context, &s->entry),

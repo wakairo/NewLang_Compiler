@@ -21,6 +21,7 @@ typedef struct {
     bool changing_current;
     const NLCheckedFragment *iteration;
     NLCheckedNodeId continue_node;
+    NLCheckedNodeId initial_node; /* caller-owned authenticated Copy source */
     NLCheckedNodeId incoming_if; /* authenticated iteration-local scalar join */
     NLCheckedNodeId incoming_call; /* authenticated iteration-local pure call */
     NLSymbolId phase_symbol;
