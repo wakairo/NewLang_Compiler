@@ -392,32 +392,49 @@ blocked.
 
 ## 27. Merge rule
 
-Codex does not self-merge unless explicitly instructed.
+P and other implementing Tracks do not self-merge. For ordinary language-implementation
+PRs that faithfully implement already selected semantics within an authorized scope,
+the user delegates merge execution to Coordination (C). This delegation does not
+automatically extend to other PR categories or evidence-only / NEVERMERGE PRs.
 
-Normal flow:
+Normal flow for a delegated implementation PR:
 
 ```text
 feature branch
  -> PR
- -> current-head CI green
- -> review/adjudication
- -> user merge after PASS
+ -> exact-current-head required CI green
+ -> risk-proportionate independent review
+ -> C substantive PASS
+ -> C merge, or user review/merge where personally reserved
 ```
 
 Review outcome is `PASS`, `CONDITIONAL PASS`, or `CHANGES REQUIRED`.
+Unmet conditions do not authorize merge.
 
-**Default after substantive PASS:** once a coherent, authorized bounded increment has
-reconciled its final implementation, tests and PR support/limitations with actual
-evidence, and has required local checks, exact-current-head CI and risk-proportionate review,
-the normal next decision is a **timely user merge into main** under the flow above;
-do not keep piling draft ancestors solely until all future legal sources/backend
-coverage are supported. For a dependent PR, first integrate an independently safe
-predecessor where possible; hold the dependent change for a documented **material**
-semantic/authority, FIRST-evidence, ownership, cleanup or CI blocker—not merely
-unrelated coverage debt, lack of Product GO, or preference for a larger batch.
-This is **neither self-merge authorization nor a calendar/commit-count cadence**.
-Only the user merges after the applicable PASS and adjudication; scope or issuer
-changes still require their existing review and Coordination release.
+Before substantive PASS, reconcile the final implementation, tests and declared
+support/limitations with actual evidence. Require the applicable local checks and
+review independent of P, including appropriate R/F evidence for material semantic,
+authority, ownership or failure risks. Preserve independent inputs and original
+FIRST/RED evidence. Do not require every Track's sign-off or replay old R inputs
+for every bounded change.
+
+Immediately before merging, C checks the current head, base and applicable evidence,
+and merges only the reviewed head. If the head or an integration-relevant base change
+invalidates that evidence, reassess the affected scope first. After merging, C records
+and verifies the actual main commit, parents and tree, and follows the applicable
+postmerge CI requirements.
+
+Return to the user when personal review was requested, when a change particularly
+requires confirmation of the user's intended outcome, or when unresolved policy,
+semantic or material investment choices exceed the delegated implementation scope.
+An unresolved safety BLOCKER requires repair; user approval is not a waiver.
+Existing scope/issuer adjudication, independence, budget and STOP rules remain in force.
+
+**Default after substantive PASS:** integrate a coherent, independently safe increment
+promptly. Do not accumulate draft ancestors solely for future coverage, lack of Product
+GO or a preferred larger batch. A dependent change may remain held for a documented
+material blocker without delaying a safe predecessor. This is delegated C judgment
+and execution, not unconditional automatic merging or a calendar/commit-count cadence.
 
 ## 28. Definition of review-ready
 
