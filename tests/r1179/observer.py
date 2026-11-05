@@ -75,14 +75,51 @@ def is_usize(node):
 def instrument(source_path, ast_path, passive_path, map_path):
     source = Path(source_path).read_text(encoding="utf-8")
     tree = json.loads(Path(ast_path).read_text(encoding="utf-8"))
-    functions = [
-        n for n in tree.get("inner", [])
-        if n.get("kind") == "FunctionDecl" and n.get("name") == "main"
+    require(source.isascii(), "this finite emitted-C mapping requires ASCII byte offsets")
+    functions = {
+        n["name"]: n for n in tree.get("inner", [])
+        if n.get("kind") == "FunctionDecl"
         and any(x.get("kind") == "CompoundStmt" for x in n.get("inner", []))
-    ]
-    require(len(functions) == 1, "exactly one actual C main definition required")
-    main = functions[0]
-    body = next(x for x in main["inner"] if x.get("kind") == "CompoundStmt")
+    }
+    require("main" in functions, "actual C main definition required")
+    reachable, active, call_edges = set(), set(), []
+
+    def visit_function(name):
+        require(name not in active, "recursive C call graph is outside the finite mapping")
+        if name in reachable:
+            return
+        active.add(name)
+        function = functions[name]
+        function_body = next(x for x in function["inner"]
+                             if x.get("kind") == "CompoundStmt")
+        for node in descendants(function_body):
+            if node.get("kind") != "CallExpr":
+                continue
+            callee = unwrap(node["inner"][0])
+            require(callee.get("kind") == "DeclRefExpr" and
+                    callee.get("referencedDecl", {}).get("kind") == "FunctionDecl",
+                    "indirect C call is outside the finite mapping")
+            called = callee["referencedDecl"]["name"]
+            if called in functions:
+                call_edges.append({"caller": name, "callee": called,
+                                   "offset": bounds(node)[0]})
+                visit_function(called)
+        active.remove(name)
+        reachable.add(name)
+
+    visit_function("main")
+    loop_functions = []
+    for name in reachable:
+        function = functions[name]
+        function_body = next(x for x in function["inner"]
+                             if x.get("kind") == "CompoundStmt")
+        found = [n for n in descendants(function_body)
+                 if n.get("kind") in ("ForStmt", "WhileStmt", "DoStmt")]
+        if found:
+            loop_functions.append((name, function_body, found))
+    require(len(loop_functions) == 1 and len(loop_functions[0][2]) == 1,
+            "one actual loop in one reachable C function required")
+    guest_function, body, _ = loop_functions[0]
     all_nodes = list(descendants(body))
     parent = {}
     for node in all_nodes:
@@ -115,14 +152,38 @@ def instrument(source_path, ast_path, passive_path, map_path):
             "one real Break and one real Continue required")
 
     def statement_end(node):
-        start, end = bounds(node)
+        _, end = bounds(node)
         if source[end - 1:end] == ";":
             return end
         pos = end
         while pos < len(source) and source[pos].isspace():
             pos += 1
+        endpoint = node.get("range", {}).get("end", {})
+        if "expansionLoc" in endpoint and pos < len(source) and source[pos] == "(":
+            # Clang's expansion endpoint may name UINTMAX_C but omit its
+            # invocation arguments. Extend only this one balanced invocation,
+            # never search forward for an unrelated semicolon or statement.
+            start = loc(endpoint)["offset"]
+            require(re.fullmatch(r"[A-Za-z_][A-Za-z_0-9]*", source[start:end]) is not None,
+                    "macro endpoint is not one identifier")
+            depth = 0
+            while pos < len(source):
+                character = source[pos]
+                require(character not in ";{}\"'\\/",
+                        "unsupported token or statement boundary in macro invocation")
+                if character == "(":
+                    depth += 1
+                elif character == ")":
+                    depth -= 1
+                    if depth == 0:
+                        pos += 1
+                        break
+                pos += 1
+            require(depth == 0, "unterminated macro invocation")
+            while pos < len(source) and source[pos].isspace():
+                pos += 1
         require(pos < len(source) and source[pos] == ";",
-                "full statement does not terminate at actual semicolon")
+                "full statement does not terminate at its actual semicolon")
         return pos + 1
 
     def declaration_statement(node):
@@ -176,27 +237,51 @@ def instrument(source_path, ast_path, passive_path, map_path):
     root_decl = declarations[root_id]
     root_name = root_decl["name"]
     root_type = type_text(root_decl)
+    node_index = {n["id"]: n for n in descendants(tree) if "id" in n}
+    record_ids = set()
+    alias = node_index.get(root_decl.get("type", {}).get("typeAliasDeclId"))
+    if alias is not None:
+        require(alias.get("kind") == "TypedefDecl", "root type alias is not a typedef")
+        for node in descendants(alias):
+            for key in ("decl", "ownedTagDecl"):
+                target = node.get(key, {})
+                if target.get("kind") == "RecordDecl":
+                    record_ids.add(target["id"])
     records = []
     for node in descendants(tree):
         if node.get("kind") == "RecordDecl":
             fs = [x for x in node.get("inner", []) if x.get("kind") == "FieldDecl"]
             name = node.get("name", "")
-            if name and re.search(r"\b" + re.escape(name) + r"\b", root_type):
+            matched = node.get("id") in record_ids or (
+                name and re.search(r"\b" + re.escape(name) + r"\b", root_type))
+            if matched and node.get("tagUsed") == "struct":
                 if len(fs) == 2 and all(type_text(x) == "unsigned char" for x in fs):
                     records.append(fs)
-    require(len(records) == 1, "root must name exactly one actual two-u8 C record")
+    require(len(records) == 1, "root must resolve to one actual two-u8 C struct")
+    same_type_roots = [
+        n for name in reachable for n in descendants(functions[name])
+        if n.get("kind") == "VarDecl" and type_text(n) == root_type
+    ]
+    require(len(same_type_roots) == 1 and same_type_roots[0]["id"] == root_id,
+            "one physical original aggregate, with no substitute aggregate copy")
     fields = [f["name"] for f in records[0]]
     require(selected_path[0] in fields, "store does not select an actual root child")
     selected = fields.index(selected_path[0])
 
     outer_ifs = []
     for node in loop_nodes:
-        if node.get("kind") == "IfStmt":
+        if node.get("kind") == "IfStmt" and parent.get(id(node)) is loop_body:
             kinds = [x.get("kind") for x in descendants(node)]
-            if "BreakStmt" in kinds and "ContinueStmt" in kinds:
+            if "ContinueStmt" in kinds:
                 outer_ifs.append(node)
-    require(len(outer_ifs) == 1, "unique outer condition with both control transfers")
-    condition = outer_ifs[0]["inner"][0]
+    require(len(outer_ifs) == 1, "unique top-level Continue condition")
+    outer_if = outer_ifs[0]
+    nested_break = any(n is breaks[0] for n in descendants(outer_if))
+    if not nested_break:
+        require(parent.get(id(breaks[0])) is loop_body and
+                bounds(outer_if)[1] < bounds(breaks[0])[0],
+                "fallthrough Break must follow the completed top-level Continue arm")
+    condition = outer_if["inner"][0]
 
     def phase_origins(node, visited=()):
         node = unwrap(node)
@@ -220,6 +305,23 @@ def instrument(source_path, ast_path, passive_path, map_path):
     require(len(phase_ids) == 1, "outer condition must trace to one carried usize")
     phase_id = next(iter(phase_ids))
     phase_name = declarations[phase_id]["name"]
+    runtime_phase_ids = {
+        n["referencedDecl"]["id"] for n in descendants(condition)
+        if n.get("kind") == "DeclRefExpr"
+        and n["referencedDecl"]["id"] in declarations
+        and is_usize(declarations[n["referencedDecl"]["id"]])
+        and loop_start < bounds(declarations[n["referencedDecl"]["id"]])[0]
+        < bounds(outer_if)[0]
+    }
+    require(len(runtime_phase_ids) == 1, "one actual current-phase binding in the header")
+    runtime_phase_id = next(iter(runtime_phase_ids))
+    runtime_definitions = definitions.get(runtime_phase_id, [])
+    require(len(runtime_definitions) == 1 and
+            runtime_definitions[0][3] == "bind" and
+            phase_origins(runtime_definitions[0][1]) == {phase_id},
+            "actual runtime phase must receive the carried usize")
+    runtime_phase = {"id": runtime_phase_id, "event": "bind",
+                     "offset": runtime_definitions[0][0]}
 
     def direct_read(node):
         plain = unwrap(node)
@@ -280,6 +382,42 @@ def instrument(source_path, ast_path, passive_path, map_path):
             "actual old result transfer and source Copy must both be observable")
     old_copies.sort(key=lambda x: x["offset"])
 
+    incoming_bindings = []
+    incoming_expression = unwrap(store["inner"][1])
+    incoming_seen = set()
+    while incoming_expression.get("kind") == "DeclRefExpr":
+        incoming_id = incoming_expression["referencedDecl"]["id"]
+        require(incoming_id in declarations and incoming_id not in incoming_seen,
+                "incoming scalar carrier is not a finite local copy chain")
+        incoming_seen.add(incoming_id)
+        definitions_for_incoming = definitions.get(incoming_id, [])
+        require(len(definitions_for_incoming) == 1 and
+                type_text(declarations[incoming_id]) == "unsigned char",
+                "incoming must use a single-definition u8 carrier")
+        offset, expression, node, event = definitions_for_incoming[0]
+        require(event == "bind" and loop_start < offset < store_start,
+                "incoming source binding must precede the actual write in this iteration")
+        incoming_bindings.append({"id": incoming_id, "offset": offset, "event": event})
+        incoming_expression = unwrap(expression)
+    incoming_bindings.reverse()
+    if incoming_expression.get("kind") == "ConditionalOperator":
+        selector = incoming_expression["inner"][0]
+        require(phase_origins(selector) == {phase_id} and
+                any(n.get("kind") == "DeclRefExpr" and
+                    n.get("referencedDecl", {}).get("id") == runtime_phase_id
+                    for n in descendants(selector)),
+                "incoming conditional must use the actual current phase")
+        require(len(incoming_bindings) >= 2 and
+                all(unwrap(x).get("kind") == "IntegerLiteral"
+                    for x in incoming_expression["inner"][1:]),
+                "phase selection must yield literal u8 through ordinary copies")
+        incoming_kind = "phase_conditional"
+    else:
+        require(incoming_expression.get("kind") == "IntegerLiteral" and
+                not incoming_bindings,
+                "literal control must be a direct literal without invented copies")
+        incoming_kind = "literal"
+
     break_start, break_end = bounds(breaks[0])
     break_branch = parent[id(breaks[0])]
     require(break_branch.get("kind") == "CompoundStmt", "compound Break branch")
@@ -302,8 +440,11 @@ def instrument(source_path, ast_path, passive_path, map_path):
                 if offset > loop_end and is_usize(declarations[did]):
                     finished.append({"id": did, "offset": offset,
                                      "node": node, "event": event})
-    require(finished, "actual receiving binding of loop result must exist")
+    # The Break assignment may already target the source's finished binding.
+    # That same real carrier is also read after the loop, without inventing a
+    # nonexistent post-loop Copy declaration.
     finished.sort(key=lambda x: x["offset"])
+    result_name = declarations[result_id]["name"]
 
     insertions = {}
     events = []
@@ -377,20 +518,27 @@ def instrument(source_path, ast_path, passive_path, map_path):
     for node, name in [(continues[0], "continue"), (breaks[0], "break")]:
         require(parent.get(id(node), {}).get("kind") == "CompoundStmt",
                 "control transfer must have its real compound scope")
-        add(bounds(node)[0], "\n" + state(name) + "\n")
-    add(loop_end, "\n" + state("loop_exit") + "\n")
+        extra = {"finished": result_name} if name == "break" else None
+        add(bounds(node)[0], "\n" + state(name, extra=extra) + "\n")
+    add(loop_end, "\n" + state("loop_exit", extra={"finished": result_name}) + "\n")
     post_end = max(statement_end(declaration_statement(r["node"]))
                    if r["event"] == "bind" else statement_end(r["node"])
                    for r in (post_current, post_sibling))
-    add(post_end, "\n" + state("post_loads") + "\n")
+    add(post_end, "\n" + state("post_loads", extra={"finished": result_name}) + "\n")
 
     role_names = {
+        "runtime_phase": runtime_phase,
         "prewrite": prewrite, "sibling_before": sibling_before,
         "old_load": old_load, "current": current, "sibling": sibling,
         "post_current": post_current, "post_sibling": post_sibling,
     }
     mapping = {
-        "schema": "R1179_AST_DERIVED_PASSIVE_V1",
+        "schema": "R1179_AST_DERIVED_PASSIVE_V2",
+        "guest_function": guest_function, "reachable_call_edges": call_edges,
+        "unique_physical_original": True,
+        "control_shape": "nested_break" if nested_break else "continue_if_then_fallthrough_break",
+        "incoming": {"kind": incoming_kind, "bindings": incoming_bindings},
+        "finished_storage": "actual Break receiving carrier, re-read after loop",
         "inputs": ["unmodified C bytes", "Clang AST of those exact C bytes"],
         "oracle_input": False, "original": root_name, "original_id": root_id,
         "fields_in_declaration_order": fields, "selected_declaration_index": selected,

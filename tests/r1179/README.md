@@ -71,3 +71,30 @@ top-level const/qualifiers without losing pointer checks, and restricting passiv
 RHS rereads to explicit non-effectful scalar AST forms. Actual post-Break source
 field loads and their final address checkpoint are separately recorded.
 V2 source/oracle bytes are unchanged by these equipment corrections.
+
+## FIRST normal execution and finite machinery repair
+
+The first natural six jobs at e9d5941e1ef770d73ad1866fd87909974ca39555
+reached all seven positive/control CLI CHECK, public observations and C17 outputs,
+and all eight negative classifications. Guest/native execution remained zero:
+the initial observer required the loop immediately inside main, while actual C
+uses an ordinary direct call to one static unit function. FIRST logs, archives,
+all 161 indexed files per job, and the old immutable R commits are preserved.
+The full result is recorded at:
+https://github.com/wakairo/NewLang_Compiler/issues/1179#issuecomment-6652929154
+
+The finite machinery repair follows actual C/AST links, not guessed names:
+reachable direct function definitions, anonymous typedef-to-record identity,
+the sole original aggregate, actual current-phase binding and incoming Copy
+chain, the top-level Continue IF followed by a fallthrough Break, and the real
+shared Break/finished receiver re-read after the loop and actual post-Break loads.
+Macro expansion endpoints extend only through one balanced invocation and its
+immediate semicolon. Existing compiler-emitted observer macros remain disabled.
+
+With C's existing pure-text permission explicitly confirmed, the observer was
+replayed locally on the six saved P01 C/AST pairs. Each transform returned zero;
+original input bytes, output diff/map and receipts were preserved. No oracle or
+source was passed to the observer. This was existing-data text diagnosis, not
+new Clang AST generation, compiler/semantic/build/SDK/guest/native execution or
+CI success. The remaining cases had only static comparison of their saved C.
+The final natural Actions round must establish native and sanitizer outcomes.

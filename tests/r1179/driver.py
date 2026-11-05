@@ -101,6 +101,9 @@ def check_passive(data, case, mapping):
     require(len(headers) == len(case["rows"]) + 1,
             "NATIVE_PHASE", "header count does not include real final Break header")
     role_map = mapping["roles"]
+    require(mapping["incoming"]["kind"] ==
+            ("literal" if case["category"] == "LITERAL_CONTROL" else "phase_conditional"),
+            "NATIVE_ROLE_MAP", "actual incoming family differs from frozen source category")
 
     def binding(segment, role, expected):
         events = [x for x in segment if x["e"] == role["event"] and x.get("id") == role["id"]]
@@ -135,6 +138,9 @@ def check_passive(data, case, mapping):
                 c["f" + str(selected)] == row["current"] and
                 c["f" + str(1 - selected)] == row["sibling"],
                 "NATIVE_CARRY", "actual outgoing carry/state mismatch")
+        phase_i = binding(segment, role_map["runtime_phase"], row["phase"])
+        incoming_i = [binding(segment, role, row["incoming"])
+                      for role in mapping["incoming"]["bindings"]]
         pi = binding(segment, role_map["prewrite"], row["prewrite"])
         sbi = binding(segment, role_map["sibling_before"], row["sibling_before"])
         oi = binding(segment, role_map["old_load"], row["old"])
@@ -142,7 +148,8 @@ def check_passive(data, case, mapping):
         sibling_i = binding(segment, role_map["sibling"], row["sibling"])
         copies = [binding(segment, role, row["old_copy"])
                   for role in mapping["old_result_and_copy"]]
-        require(pi < oi < wi < ai < min(copies) and sbi < wi and
+        require(phase_i < pi < oi < wi < ai < min(copies) and sbi < wi and
+                all(pi < ii < oi for ii in incoming_i) and
                 max(copies) < current_i < ci and sibling_i < ci,
                 "NATIVE_ORDER", "real load/store/result/Copy/current/Continue order mismatch")
     final = trace[headers[-1]:]
@@ -155,8 +162,10 @@ def check_passive(data, case, mapping):
             "NATIVE_BREAK", "actual Break, loop exit and post-load checkpoint required")
     for event in [breaks[0], exits[0], post_loads[0]]:
         require(event["phase"] == case["break"]["phase"] and
+                event["finished"] == case["outer_loop_result_usize"] and
                 [event["f0"], event["f1"]] == case["break"]["original"],
                 "NATIVE_BREAK", "actual Break/post-Break phase or original mismatch")
+    binding(final, role_map["runtime_phase"], case["break"]["phase"])
     binding(final, {"id": mapping["break_result_id"], "event": "assign"},
             case["break"]["result"])
     for role in mapping["finished"]:

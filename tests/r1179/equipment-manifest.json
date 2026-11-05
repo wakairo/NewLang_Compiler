@@ -1,17 +1,16 @@
 {
-  "schema": "R1179_EQUIPMENT_PREFLIGHT_V2",
+  "schema": "R1179_EQUIPMENT_NORMAL_REPAIR_V3",
   "fixed_compiler": "bb8b33cefc030ed99941c9c93fef9c7ef89b0ac0",
   "fixed_tree": "d8fd0b0a95184d3449d7e1525ba56574429dbf8f",
   "bundle_sha256": "2dff96cd7271a2b5637c46e7a45ab798fbbf84249b447fdf82657b484a69d680",
   "oracle_sha256": "4fe82f7bec6315d85a1c4eb4b41634d0135e2f363c1e38640ae1fa7f9c511cff",
   "source_oracle_changes": 0,
-  "local_execution": 0,
   "files": [
     {
       "path": "tests/r1179/README.md",
-      "bytes": 4700,
-      "sha256": "7f8e5a21728bc0e19ba4e5302653c1706f7d6c337be7398f0ee9256467076e43",
-      "git_blob": "20f1b0284c9694c682ffb1aadd1fc84ac587d954"
+      "bytes": 6439,
+      "sha256": "52fd610854942ab6a423eeb0748feb865769bb42c521b3b61dd15b72ab351cfd",
+      "git_blob": "24070a62a4d6c6f333ca6f8896ec7366d6800aa2"
     },
     {
       "path": "tests/r1179/c244_r1179_calibration_v2.txt",
@@ -123,9 +122,9 @@
     },
     {
       "path": "tests/r1179/driver.py",
-      "bytes": 23732,
-      "sha256": "0d1cbcb9ffdf7a518a000df3311178d531bb2ad76a4478498be3a73cc3547262",
-      "git_blob": "0a15e5fb336f9f6622ccab3f2eed5af5858aac5d"
+      "bytes": 24376,
+      "sha256": "86cbf6cdf56dbd1eb986ea69d4c6d319e8dbbc92d70fcc5114ef47fc00a3d401",
+      "git_blob": "92e0b610064ccac34639e46a01802a3251ea058e"
     },
     {
       "path": "tests/r1179/export.py",
@@ -171,9 +170,9 @@
     },
     {
       "path": "tests/r1179/observer.py",
-      "bytes": 19256,
-      "sha256": "b66da4aed615dae19c74d31c4d504c4db162e360a5129fd381911632168e75a6",
-      "git_blob": "4ddac61c20561c6d9a86f935bdcb60ba0b7c88f7"
+      "bytes": 27191,
+      "sha256": "67b2a4b431cd76133fc8fd92635f06e280dd12223a4ba3b327d0f368054b23ec",
+      "git_blob": "1135ab82f7dc3091469e50bc7f4e144261fa6eb0"
     },
     {
       "path": "tests/r1179/probe.c",
@@ -200,7 +199,7 @@
       "git_blob": "b5aeae644f24eaaeae29c114444cc610342e0004"
     }
   ],
-  "previous_r_head": "333ace592984e4de55f30b4e80a7101b0b7e7d72",
+  "previous_r_head": "e9d5941e1ef770d73ad1866fd87909974ca39555",
   "mechanical_repair": {
     "log_bytes": 36457,
     "log_sha256": "7a1dff36e7e8b798024e872377324d62896427991d4c3e84f7f7ed3e1917b4d8",
@@ -213,5 +212,23 @@
     "old_probe_sha256": "e162c78fad817bdf3c1555540c3f7c2fb0ac9c1c53d31eb526ac5f77fc130b18",
     "new_probe_sha256": "805fb0f93ea2c533ede8c5a8e7d5f76173d32e76e51e5db1587fbf3580aacf37",
     "source_oracle_changes": 0
+  },
+  "local_pure_text_existing_ast_replays": 6,
+  "local_semantic_execution": 0,
+  "normal_first_repair": {
+    "first_head": "e9d5941e1ef770d73ad1866fd87909974ca39555",
+    "result_url": "https://github.com/wakairo/NewLang_Compiler/issues/1179#issuecomment-6652929154",
+    "first_normal_jobs": 6,
+    "first_guest_runs_per_job": 0,
+    "observer_expected_value_inputs": 0,
+    "source_oracle_changes": 0,
+    "original_C_AST_preserved": true,
+    "repair_scope": [
+      "reachable direct function and anonymous typedef record",
+      "current phase and incoming scalar Copy chain",
+      "Continue IF then fallthrough Break",
+      "shared Break/finished carrier observed after loop",
+      "one balanced macro invocation statement end"
+    ]
   }
 }
