@@ -22,6 +22,7 @@ typedef struct {
     const NLCheckedFragment *iteration;
     NLCheckedNodeId continue_node;
     NLCheckedNodeId incoming_if; /* authenticated iteration-local scalar join */
+    NLCheckedNodeId incoming_call; /* authenticated iteration-local pure call */
     NLSymbolId phase_symbol;
     /* Tagged payload: literal successor normally; arithmetic step when
      * computed_carry is true. A computed successor is never known here. */

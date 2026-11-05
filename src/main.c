@@ -465,78 +465,8 @@ static bool boolean_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
 
 /* One pure, two-normal-u8 IF expression. This is a driver proof consumer,
  * not an effect/CFG join or permission to lower original-object mutation. */
-static bool copy_if_plain(NLSemanticValueView v, NLTypeId type)
-{
-    return v.type == type && v.dependencies == NL_DEPENDENCY_FREE &&
-           v.value_dependency_count == 0 && v.reference_count == 0 &&
-           v.reference.place == 0 && v.reference.scope == 0 &&
-           v.reference.incarnation == 0 &&
-           v.reference.provenance == NL_PROVENANCE_UNKNOWN &&
-           !v.reference.readable && !v.reference.writable &&
-           v.reference.occurrence_dependency == 0 && v.domain == 0 &&
-           v.slot_place == 0 && v.allocation_region == 0 &&
-           v.occupancy.region == 0 && v.field_count == 0 &&
-           v.aggregate_owner == 0 && v.sum_owner == 0 && v.sum_payload == 0 &&
-           v.variant == 0;
-}
-static bool copy_if_gap(const NLSource *source, size_t start, size_t end,
-                        const char *expected)
-{
-    NLSourceView bytes;
-    if (!nl_source_view(source, (NLSourceSpan){start, end}, &bytes))
-        return false;
-    for (size_t i = 0; i < bytes.length; ++i) {
-        const unsigned char ch = bytes.bytes[i];
-        if (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r')
-            continue;
-        if (*expected == 0 || ch != (unsigned char)*expected++)
-            return false;
-    }
-    return *expected == 0;
-}
-static bool copy_if_literal(const NLCheckedFragment *f,
-                            const NLCheckedNodeView *v)
-{
-    NLSemanticValueView value;
-    NLSourceView text;
-    if (v == NULL || v->kind != NL_CHECKED_U8_LITERAL || v->result_count != 1 ||
-        !v->has_scalar_result || !v->scalar_result.known ||
-        v->scalar_result.type != v->type || v->scalar_result.value > 255 ||
-        !nl_semantic_value_view(nl_checked_context(f), v->results[0].value,
-                                &value) ||
-        !copy_if_plain(value, v->type) || !value.scalar_known ||
-        value.scalar_value != v->scalar_result.value ||
-        !nl_source_view(nl_checked_source(f), v->span, &text) ||
-        text.length < 5 || text.bytes[0] != 'u' ||
-        text.bytes[text.length - 1] != ')')
-        return false;
-    /* Read-only consistency with the already parsed source; no source
-     * spelling is emitted as C and no new syntax is admitted. */
-    size_t i = 0, number = 0, digits = 0;
-    const char *prefix = "u8(";
-    while (i < text.length && *prefix != 0) {
-        unsigned char ch = text.bytes[i++];
-        if (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r')
-            continue;
-        if (ch != (unsigned char)*prefix++)
-            return false;
-    }
-    if (*prefix != 0)
-        return false;
-    while (i < text.length) {
-        unsigned char ch = text.bytes[i];
-        if (ch < '0' || ch > '9')
-            break;
-        if (number > (255U - (ch - '0')) / 10)
-            return false;
-        number = number * 10 + ch - '0';
-        ++i;
-        ++digits;
-    }
-    return digits != 0 && number == value.scalar_value &&
-           copy_if_gap(nl_checked_source(f), v->span.start_byte + i,
-                       v->span.end_byte, ")");
-}
+#include "scalar_view_internal.h"
+
 static bool v0_validate_call(const NLCheckedFragment *, NLCheckedNodeId,
                              V0Program *);
 
@@ -587,23 +517,6 @@ static bool copy_if_u8(const NLCheckedFragment *f, NLCheckedNodeId id,
  * the child view under inspection; matching mutable child metadata alone is
  * insufficient. This private check grants no source/memory authority and is
  * not protection against writes to that trusted parent record itself. */
-static bool copy_if_arm_origin(const NLCheckedFragment *parent,
-                               NLCheckedNodeId id, size_t index,
-                               const NLCheckedFragment *arm)
-{
-    if (parent == NULL || arm == NULL || arm->context == NULL ||
-        arm->if_parent != parent || arm->if_parent_node != id ||
-        arm->if_arm_index != index || arm->source != parent->source)
-        return false;
-    size_t found = 0;
-    for (size_t i = 0; i < parent->arm_count; ++i) {
-        const NLCheckedArm *issued = &parent->arms[i];
-        if (issued->match == id && found++ == index)
-            return issued->artifact == arm &&
-                   issued->context_origin == arm->context;
-    }
-    return false;
-}
 /* Consume one already-issued, ended arm-local Copy binding. No arm ID or
  * fresh fact is imported into the caller and no semantic state is built. */
 static bool copy_if_arm_local_places(const NLCheckedFragment *f,
@@ -2447,6 +2360,21 @@ static bool linear_break_selection(const NLCheckedFragment *f,
         return false;
     if (v.call && !v0_validate_call(v.caller, v.call, p))
         return false;
+    if (v.incoming_call) {
+        NLPureU8Call pure;
+        if (!nl_pure_u8_call(v.iteration, v.incoming_call, &pure))
+            return false;
+        V0Function *prior = v0_find_function(p, pure.function);
+        if (prior) {
+            if (!prior->quantity_parameter || prior->result != p->u8)
+                return false;
+        } else {
+            if (p->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
+                return false;
+            p->functions[p->count++] = (V0Function){
+                pure.function, pure.body, p->u8, pure.formal, 0, true};
+        }
+    }
     p->linear_break = true;
     if (v.stuttering) {
         p->stuttering_loop = true;
@@ -3016,6 +2944,21 @@ static bool emit_current_selection(FILE *stream, const NLLinearBreakView *p,
            fprintf(stream, "(void)nl_local_%zu;\n", binding) >= 0;
 }
 
+static bool emit_current_helper(FILE *stream, const NLLinearBreakView *p,
+                                NLCheckedNodeId loop, NLSymbolId binding,
+                                size_t depth)
+{
+    const NLCheckedNodeView *call =
+        nl_checked_node_view(p->iteration, p->incoming_call);
+    return call && v0_indent(stream, depth) &&
+           fprintf(
+               stream,
+               "const uint8_t nl_local_%zu = nl_fn_%zu(nl_loop_phase_%zu);\n",
+               binding, call->function, loop) >= 0 &&
+           v0_indent(stream, depth) &&
+           fprintf(stream, "(void)nl_local_%zu;\n", binding) >= 0;
+}
+
 static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
                               NLCheckedNodeId id, NLSymbolId result,
                               size_t depth)
@@ -3050,6 +2993,9 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
             !(p->incoming_if && n->kind == NL_CHECKED_BINDING &&
                       n->initializer == p->incoming_if
                   ? emit_current_selection(stream, p, id, n->symbol, depth + 2)
+              : p->incoming_call && n->kind == NL_CHECKED_BINDING &&
+                      n->initializer == p->incoming_call
+                  ? emit_current_helper(stream, p, id, n->symbol, depth + 2)
                   : v0_emit_node(stream, arm, item, depth + 2)))
             return false;
         if (n->kind == NL_CHECKED_BINDING &&
