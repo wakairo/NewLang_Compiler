@@ -1,0 +1,8 @@
+{
+  "authority": "C245",
+  "reason": "self-review: snapshot stable helper plan syntax/parameter identity and each original signature allocation; owners count excluded. Add safe restored plan/signature substitutions, retaining v1 equipment archive. No source/oracle/emission changes.",
+  "files": {
+    "safety.c": "5438ba777840bc18fcf7845ea645b1c573e66d4cdc0bf6791fe1d9398ebf91f8"
+  },
+  "v1_archive_sha256": "6a56319143a92aaf27eb3d353a7bb2962b9d1e8488d980404be68d2bdca202e6"
+}

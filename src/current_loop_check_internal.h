@@ -20,6 +20,13 @@ typedef struct NLCurrentLoopProof {
     StutterGraph graphs[6];
     bool helper;
     NLCheckedNodeId helper_choice;
+    size_t helper_function;
+    NLFunctionBody *helper_plan;
+    const NLSyntaxTree *helper_syntax;
+    const NLSource *helper_source;
+    const char *helper_parameter_name;
+    NLSourceSpan helper_name;
+    NLTypeId *helper_parameters[8]; /* six graphs, actual caller, post */
     StutterWorld exits[4];
     NLControlExitView exit_views[4];
     bool graph_owned, sealed;
@@ -863,8 +870,11 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
                                 : nl_pure_u8_contents(arm, scalar, &pure)) ||
                     (s->sealed && s->helper_choice != pure.selection))
                     return bad;
-                if (!s->sealed)
+                if (!s->sealed) {
                     s->helper_choice = pure.selection;
+                    s->helper_function = pure.function;
+                } else if (s->helper_function != pure.function)
+                    return bad;
             }
             if (!s->sealed) {
                 s->scalar = scalar;
@@ -896,9 +906,51 @@ static const NLCheckedFragment *current_graph_at(const NLCurrentLoopProof *s,
     return iteration ? nl_checked_if_arm(iteration, s->scalar, i - 3) : NULL;
 }
 
+/* Current helper admission authenticates the actual retained plan and
+ * each world's original signature allocation before indexing it. Plan owner
+ * counts may change; syntax/source/parameter identity may not. */
+static bool current_helper_entry(const NLCurrentLoopProof *s,
+                                 const NLSemanticContext *c, size_t slot)
+{
+    if (!c || !c->functions || !s->helper_function ||
+        s->helper_function > c->function_count)
+        return false;
+    const NLFunctionEntry *fn = &c->functions[s->helper_function - 1];
+    return fn->kind == NL_CHECKED_REGISTERED_CALL &&
+           fn->body == s->helper_plan && fn->count == 1 &&
+           fn->parameters == s->helper_parameters[slot] && fn->parameters &&
+           fn->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
+           fn->result == nl_semantic_core_type(c, NL_TYPE_U8) &&
+           !fn->caller_effects && !fn->hidden_dependencies &&
+           !fn->owner_receiver && !fn->owner_producer &&
+           !fn->custody_recipient &&
+           predicate_name(s->graphs[1].fragment, s->helper_name, fn->name) &&
+           fn->body->syntax == s->helper_syntax &&
+           fn->body->source == s->helper_source && fn->body->count == 1 &&
+           fn->body->parameter_names[0] == s->helper_parameter_name &&
+           !fn->body->owner_definition.definition_checked &&
+           !fn->body->custody_definition.definition_checked;
+}
+
 static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
 {
     NLCurrentLoopProof *s = p->current_cycle;
+    if (s->helper) {
+        const NLCheckedFragment *iteration =
+            nl_checked_if_arm(s->graph, s->conditional, 0);
+        NLPureU8Call pure;
+        if (!nl_pure_u8_contents(iteration, s->scalar, &pure))
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        s->helper_plan = pure.body->body_owner;
+        s->helper_syntax = s->helper_plan->syntax;
+        s->helper_source = s->helper_plan->source;
+        s->helper_parameter_name = s->helper_plan->parameter_names[0];
+        s->helper_name = nl_checked_node_view(iteration, s->scalar)->name;
+        s->helper_parameters[6] =
+            p->final_storage.functions[s->helper_function - 1].parameters;
+        s->helper_parameters[7] =
+            p->post->functions[s->helper_function - 1].parameters;
+    }
     for (size_t i = 0; i < (s->helper ? 6u : s->scalar ? 5u : 3u); ++i) {
         StutterGraph *a = &s->graphs[i];
         a->fragment = current_graph_at(s, i);
@@ -908,6 +960,10 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
         a->count = a->fragment->count;
         a->root = a->fragment->root;
         a->source = a->fragment->source;
+        if (s->helper)
+            s->helper_parameters[i] =
+                a->fragment->context->functions[s->helper_function - 1]
+                    .parameters;
         NLCheckStatus status = linear_seal_graph(a->fragment, &a->nodes);
         if (status == NL_CHECK_OK)
             status = stutter_anchor_world(&a->world, a->fragment->context);
@@ -957,9 +1013,13 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
             a->fragment->source != a->source ||
             a->fragment->context != a->world.world ||
             !linear_world_matches(a->world.world, &a->world.storage,
-                                  a->world.copy, &a->world.anchor))
+                                  a->world.copy, &a->world.anchor) ||
+            (s->helper && !current_helper_entry(s, a->world.world, i)))
             return bad;
     }
+    if (s->helper && (!current_helper_entry(s, f->context, 6) ||
+                      !current_helper_entry(s, p->post, 7)))
+        return bad;
     for (size_t i = 0; i < 4; ++i) {
         const NLControlExitView *x =
             i < 2 ? nl_control_exit_view(s->graphs[i + 1].fragment->exits, 0)

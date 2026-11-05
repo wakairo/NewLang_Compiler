@@ -436,6 +436,28 @@ int main(int argc, char **argv)
         scalar->nodes[scalar->root - 1].results[0].value = 0);
     NLFunctionBody *body_owner = scalar->body_owner;
     BAD(scalar->body_owner = body_owner, scalar->body_owner = NULL);
+    NLTypeId forged_parameter[] = {nl_semantic_core_type(world, NL_TYPE_USIZE)};
+    BAD(*callee = callee_saved, callee->parameters = forged_parameter);
+    NLSyntaxTree *different_tree = NULL;
+    assert(nl_parser_parse_function_unit(a.parser, &different_tree, NULL) ==
+           NL_PARSE_OK);
+    NLSyntaxTree *original_tree = body_owner->syntax;
+    BAD(body_owner->syntax = original_tree,
+        body_owner->syntax = different_tree);
+    nl_syntax_tree_destroy(different_tree);
+    char replacement_name[] = "phase";
+    char *original_name = body_owner->parameter_names[0];
+    BAD(body_owner->parameter_names[0] = original_name,
+        body_owner->parameter_names[0] = replacement_name);
+    bool definition = body_owner->owner_definition.definition_checked;
+    BAD(body_owner->owner_definition.definition_checked = definition,
+        body_owner->owner_definition.definition_checked = true);
+    NLTypeId *caller_signature =
+        caller->functions[call_saved.function - 1].parameters;
+    BAD(caller->functions[call_saved.function - 1].parameters =
+            caller_signature,
+        caller->functions[call_saved.function - 1].parameters =
+            forged_parameter);
     Input other = {0};
     parse(&other, argv[1]);
     assert(registration(&other) == NL_CHECK_OK &&
