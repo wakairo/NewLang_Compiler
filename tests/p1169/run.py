@@ -33,6 +33,7 @@ def observer(meta, symbols):
         for i,name in enumerate(symbols))
     initial=meta['old_values'][0] if meta['old_values'] else meta['final_child']
     fields=[initial,meta['sibling']] if meta['target_index']==0 else [meta['sibling'],initial]
+    final=[meta['final_child'],meta['sibling']] if meta['target_index']==0 else [meta['sibling'],meta['final_child']]
     header_child=('(phases<'+str(meta['backedges'])+'?olds[phases]:'+str(meta['final_child'])+')'
                   if meta['backedges'] else str(meta['final_child']))
     return '''#include <assert.h>
@@ -65,8 +66,14 @@ static void local(size_t symbol,uint8_t value) {
  assert(phases && phases<='''+str(meta['backedges'])+''');
  switch(symbol){'''+cases+''' default: assert(0); }
 }
-static void result(size_t n) { assert(n==SIZE_C('''+str(meta['loop_result'])+''')); ++results; }
-static void read_value(uint8_t *a,uint8_t v) { assert((a==a0 || a==a1) && v==*a); ++reads; }
+static void result(size_t n) {
+ assert(n==SIZE_C('''+str(meta['loop_result'])+'''));
+ assert(*a0=='''+str(final[0])+''' && *a1=='''+str(final[1])+'''); ++results;
+}
+static void read_value(uint8_t *a,uint8_t v) {
+ assert((a==a0 || a==a1) && v==*a);
+ assert(v==(a==a0?'''+str(final[0])+''':'''+str(final[1])+''')); ++reads;
+}
 #define NL_LOOP_BIND(a,b) bind(a,b)
 #define NL_LOOP_READ(a,v) read_value(a,v)
 #define NL_CURRENT_PHASE(n,a,b) phase(n,a,b)

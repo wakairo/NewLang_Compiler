@@ -55,6 +55,12 @@ header is needed relative to the analogous retained stutter relation.
 The full package/node sizes and allocator census are candidate-dependent;
 the measured direct allocation PCs include shared clone/seal helpers.
 
+The current-equipment v2 strengthens native observations at the actual Break
+result and post-loop reads against the frozen final field/sibling values.
+The complete first-equipment v1 and its unchanged manifest remain in a sealed
+archive; source/oracle values and all first RED are unchanged. This prevents
+an extra Break store after the last phase observation from escaping the test.
+
 Audit locality remains UNMEASURED; GO624 PAUSED, H1 HOLD and P1036/PR1050 STOP
 remain. Snapshot/source-walk/validator/emitter maintenance is a real cost;
 independent fixed-candidate F/R and Coordination adoption remain separate.

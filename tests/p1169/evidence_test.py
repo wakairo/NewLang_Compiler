@@ -4,8 +4,15 @@ import hashlib,json,zipfile
 
 p=Path(__file__).resolve().parent
 sha=lambda data:hashlib.sha256(data).hexdigest()
-for name,expected in json.loads((p/'freeze-v1.json').read_bytes()).items():
+for name,expected in json.loads((p/'freeze-v2.json').read_bytes()).items():
     assert sha((p/name).read_bytes())==expected,name
+with zipfile.ZipFile(p/'evidence/equipment-v1.zip') as z:
+    old=json.loads((p/'freeze-v1.json').read_bytes())
+    assert z.read('freeze-v1.json')==(p/'freeze-v1.json').read_bytes()
+    for name,expected in old.items():
+        assert sha(z.read(name))==expected,name
+        if name.startswith('sources/') or name.endswith('oracle.json'):
+            assert sha((p/name).read_bytes())==expected,name
 with zipfile.ZipFile(p/'evidence/inputs-prefreeze-v1.zip') as z:
     manifest=json.loads(z.read('freeze.json'))
     for name,expected in manifest['files'].items():
