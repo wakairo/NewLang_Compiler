@@ -190,6 +190,12 @@ static bool current_frame(const NLCurrentLoopProof *s,
         if (!same_scope(a->scopes[i], b->scopes[i]))
             return false;
     const NLValueId old = a->places[s->root - 1].current_value;
+    const NLPlaceId sibling = a->places[s->root - 1].fixed_fields[1 - s->index];
+    const NLValueId peer = a->places[sibling - 1].current_value;
+    NLSemanticValueView peer_after = b->values[peer - 1];
+    peer_after.aggregate_owner = old;
+    if (!nl_node_value_same(a->values[peer - 1], peer_after))
+        return false;
     for (size_t i = 0; i < a->value_count; ++i) {
         if (i + 1 == old || i + 1 == a->values[old - 1].fields[0] ||
             i + 1 == a->values[old - 1].fields[1])
@@ -230,7 +236,9 @@ static bool current_projection(const NLCurrentLoopProof *s,
         return false;
     const NLSemanticPlaceView r = b->places[s->root - 1], c = b->places[s->child - 1];
     const NLSemanticValueView v = b->values[c.current_value - 1];
-    return !v.scalar_known && r.current_fact > a->last_value_fact &&
+    return !v.scalar_known && b->last_incarnation == a->last_incarnation &&
+           b->last_value_fact - a->last_value_fact == 2 &&
+           r.current_fact > a->last_value_fact &&
            c.current_fact > a->last_value_fact && r.current_fact != c.current_fact &&
            r.current_value > a->value_count && c.current_value > a->value_count &&
            b->values[a->places[s->root - 1].current_value - 1].carrier == NL_CARRIER_ENDED &&
@@ -355,6 +363,7 @@ static bool current_loan(CurrentWalk *r, const NLCheckedNodeView *loan)
         op->field.parent_fact != r->header->places[s->root - 1].current_fact ||
         op->field.child_fact != r->header->places[s->child - 1].current_fact ||
         op->field.old_value != r->header->places[s->child - 1].current_value ||
+        op->field.parent_post_fact == op->field.child_post_fact ||
         op->results[0].value != op->field.old_value ||
         value->results[0].value != op->field.new_value ||
         loan->results[0].value != op->results[0].value)
