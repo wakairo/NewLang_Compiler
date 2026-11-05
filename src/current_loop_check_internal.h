@@ -50,6 +50,9 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
         c->in_match_arm || c->capture_copy_body || c->allocated_slice ||
         c->artifact->if_parent || c->artifact->node_join_parent)
         return false;
+    for (size_t i = 0; i < c->artifact->count; ++i)
+        if (c->artifact->nodes[i].kind == NL_CHECKED_LOOP)
+            return false;
     const NLSyntaxView *p = nl_syntax_node_view(s->data.loop.parameters);
     const NLSyntaxView *init =
         p ? nl_syntax_node_view(p->data.binding.initializer) : NULL;
