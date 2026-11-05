@@ -1,0 +1,24 @@
+C244 R1179 V2 pre-execution source freeze
+V1 source15/oracle/authority payload17 remains unchanged and unmeasured.
+V1 bundle SHA256 b1a671dad926d2ad3e57eb33f6c7fb80bb12eab3a7d18b7faf84280c862aa893
+V1 Issue https://github.com/wakairo/NewLang_Compiler/issues/1179#issuecomment-6651324251
+Release https://github.com/wakairo/NewLang_Compiler/issues/1179#issuecomment-6651737917
+Authority main 11d4d078c2a9deb68b77c428bba079431dee72fc
+Authority tree 78f5a3c0d50c6be0727c836e0772b86ae8a839cc (C-recorded)
+CURRENT_SPEC blob 18b2d6b089c1507743f14325c7a2723b1c341db6 still selects Draft17.34.
+Semantic/source grammar remains V1 pinned canonical; no new semantic choice.
+Fixed candidate bb8b33cefc030ed99941c9c93fef9c7ef89b0ac0
+Fixed tree d8fd0b0a95184d3449d7e1525ba56574429dbf8f
+Parents 212bd3a8789a51b1afaf11d6088ed346f983c354 + 217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2
+Base p-c243-phase-selected-current verified at that exact candidate.
+Isolation: pre-execution frozen independent cohort / scope-calibrated V2.
+No P source/fixture/oracle/rationale/implementation, PR1180 body, P1176 return, F1181 result, or old R source/oracle/driver/observer/probe/README/report was read.
+Allowed old context/register/export plumbing has NOT been opened at this freeze.
+V1 authority annotation/directory-name incidental exposure remains disclosed in original manifest.
+Changes: unit main; one usize phase carry; Continue(next_phase); Break phase; old Copy remains a source binding; post-Break original field loads retained.
+N08 keeps marker u8(173) as a local binding and returns unit; it remains legal scope-negative.
+All original nominal/fields/initial values/conditions/steps/incoming/old/current/sibling numeric predictions retained.
+Every .nl and JSON payload is UTF-8, no BOM, LF only, exactly one final LF.
+At freeze: compiler/native/Lean/build/SDK/tests/Actions0; no object writes/ref/branch/push/PR.
+After Issue byte readback, C244 permits dedicated branch+Actions without another GO.
+Budgets: r-fast/r1179-phase-selected-current one branch; DRAFT/NEVERMERGE one PR; FAST<=6 actual jobs; natural FULL5+PARTIAL<=12 actual jobs; manual0; first reliable all-green stops new push/CI.
