@@ -261,7 +261,7 @@ static bool stutter_quantity_bound(const NLStutterProof *s)
     return s->computed && s->less && s->limit &&
            (s->subtract
                 ? s->continue_arm == 1 && s->next <= s->limit
-                : s->continue_arm == 0 && s->next <= SIZE_MAX - (s->limit - 1));
+                : s->continue_arm == 0 && finite_add_bound(s->limit, s->next));
 }
 static bool stutter_quantity(Check *c, const NLSyntaxNode *source,
                              NLCheckedNodeId left, NLCheckedNodeId right)

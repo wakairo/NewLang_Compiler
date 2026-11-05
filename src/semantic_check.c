@@ -23,6 +23,7 @@ typedef struct LoopControl {
     NLLoopHeader *header;
     bool stuttering; /* private whole-source relation, not generic closure */
     struct NLStutterProof *stutter; /* borrowed during this whole-source walk */
+    struct NLCurrentLoopProof *current; /* distinct changing-current relation */
     /* Non-recurrent source execution only. This is the actual working world,
      * never the separate owned Break snapshot's numeric namespace. */
     NLSemanticContext *normal_context;
@@ -2537,6 +2538,13 @@ static NLCheckedNodeId usize_comparison(Check *check,
 static bool stutter_quantity(Check *, const NLSyntaxNode *, NLCheckedNodeId,
                              NLCheckedNodeId);
 static void stutter_quantity_record(Check *, NLCheckedNodeId);
+static bool current_quantity(Check *, const NLSyntaxNode *, NLCheckedNodeId,
+                              NLCheckedNodeId);
+static void current_quantity_record(Check *, NLCheckedNodeId);
+static bool finite_add_bound(size_t limit, size_t step)
+{
+    return limit && step <= SIZE_MAX - (limit - 1);
+}
 
 static NLCheckedNodeId usize_arithmetic(Check *check,
                                         const NLSyntaxNode *source)
@@ -2569,7 +2577,8 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
     if (a.dependencies != NL_DEPENDENCY_FREE ||
         b.dependencies != NL_DEPENDENCY_FREE || a.value_dependency_count != 0 ||
         b.value_dependency_count != 0 ||
-        (!known && !stutter_quantity(check, source, left, right))) {
+        (!known && !stutter_quantity(check, source, left, right) &&
+         !current_quantity(check, source, left, right))) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
              syntax->data.equality.operator_span,
              subtraction ? "USIZE-SUBTRACTION-PRECISION"
@@ -2623,8 +2632,12 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
               nl_usize_arithmetic_capture(check->artifact, id, source, c),
               syntax->span))
         return 0;
-    if (id && !known)
-        stutter_quantity_record(check, id);
+    if (id && !known) {
+        if (check->loop && check->loop->current)
+            current_quantity_record(check, id);
+        else
+            stutter_quantity_record(check, id);
+    }
     return id;
 }
 
@@ -5084,7 +5097,7 @@ static NLCheckedNodeId source_control(Check *check, const NLSyntaxView *syntax)
         status = nl_control_source_break_append(
             &check->artifact->exits, loop->target, post, results[0],
             check->artifact, control_node, loop->source_parent);
-    } else if (loop->stuttering) {
+    } else if (loop->stuttering || loop->current) {
         control_node =
             add(check, (NLCheckedNodeView){.kind = NL_CHECKED_CONTINUE,
                                            .span = syntax->span,
@@ -5615,6 +5628,8 @@ static NLCheckStatus linear_break_graph(Check *body, const LoopControl *loop)
  * at consumption. Its ghost recheck emits no source operation. */
 struct NLStutterProof;
 static void destroy_stutter_cycle(struct NLStutterProof *);
+struct NLCurrentLoopProof;
+static void destroy_current_cycle(struct NLCurrentLoopProof *);
 typedef struct NLLinearBreakProof {
     struct NLLinearBreakProof *next;
     const NLCheckedFragment *owner, *root, *body;
@@ -5643,6 +5658,7 @@ typedef struct NLLinearBreakProof {
     NLSemanticContext final_storage, body_storage; /* nonowning bases/counts */
     bool sealed;
     struct NLStutterProof *cycle;
+    struct NLCurrentLoopProof *current_cycle;
 } NLLinearBreakProof;
 static const NLCheckedFragment *stutter_graph(const NLLinearBreakProof *);
 static bool save_stutter_graph(Check *, NLCheckedNodeId,
@@ -5654,6 +5670,10 @@ static bool stutter_scalar(const NLLinearBreakProof *);
 static NLCheckStatus validate_scalar_cycle(const NLLinearBreakProof *,
                                            const NLCheckedFragment *,
                                            NLLinearBreakView *);
+static NLCheckStatus seal_current_cycle(NLLinearBreakProof *);
+static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *,
+                                            const NLCheckedFragment *,
+                                            NLLinearBreakView *);
 
 static void destroy_linear_breaks(NLCheckedFragment *f)
 {
@@ -5661,6 +5681,7 @@ static void destroy_linear_breaks(NLCheckedFragment *f)
     while (p) {
         NLLinearBreakProof *next = p->next;
         destroy_stutter_cycle(p->cycle);
+        destroy_current_cycle(p->current_cycle);
         nl_control_state_destroy(p->entry);
         nl_semantic_destroy(p->post);
         nl_semantic_destroy(p->final);
@@ -5815,6 +5836,8 @@ static NLCheckStatus seal_linear_breaks(NLCheckedFragment *root,
                 s = nl_copy_state_anchor(final, &p->final_anchor);
             if (s == NL_CHECK_OK && p->cycle)
                 s = seal_stutter_cycle(p);
+            if (s == NL_CHECK_OK && p->current_cycle)
+                s = seal_current_cycle(p);
             if (s != NL_CHECK_OK)
                 return s;
             p->sealed = true;
@@ -5916,6 +5939,8 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
     const NLLinearBreakProof *p = f->linear_breaks;
     while (p && p->loop != id)
         p = p->next;
+    if (p && p->current_cycle)
+        return validate_current_cycle(p, f, out);
     if (p && stutter_scalar(p))
         return validate_scalar_cycle(p, f, out);
     if (!p || p->owner != f || !p->sealed || f->context != p->world ||
@@ -6140,11 +6165,15 @@ cleanup:
 }
 
 #include "stutter_loop_check_internal.h"
+#include "current_loop_check_internal.h"
 
 static NLCheckedNodeId source_loop(Check *check, const NLSyntaxView *syntax)
 {
     if (stutter_source_shape(check, syntax))
         return source_stutter_loop(check, syntax);
+    CurrentSource current = {0};
+    if (current_source_shape(check, syntax, &current))
+        return source_current_loop(check, syntax, &current);
     if (linear_break_source(check, syntax))
         return source_linear_break(check, syntax, NULL, NULL);
     const size_t count = syntax->data.loop.count;

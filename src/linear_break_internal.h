@@ -18,6 +18,10 @@ typedef struct {
     bool stuttering, less, continue_on_true;
     bool computed_carry, subtract_carry;
     bool scalar_loop; /* free usize normal result, no field authority */
+    bool changing_current;
+    const NLCheckedFragment *iteration;
+    NLCheckedNodeId continue_node;
+    NLSymbolId phase_symbol;
     /* Tagged payload: literal successor normally; arithmetic step when
      * computed_carry is true. A computed successor is never known here. */
     size_t initial_phase, next_phase, limit;
