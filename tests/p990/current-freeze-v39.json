@@ -55,7 +55,7 @@
     "src/copy_body.c": "6a869166da948ddba6b179dcd16865645e6f28cd7386fd55f94fab7c098cb2b7",
     "src/copy_body_internal.h": "374c468c92c6fe7140534da385451a60b7bfe96da1483bcdeb58bf92254071ae",
     "src/copy_old_result_internal.h": "f725fe157f345ff191ca1723523f45b6b90616247063dc8a4d773409ec6f5d3a",
-    "src/current_loop_check_internal.h": "a1921819628cc9b0bf0a932f148b5b6f1f8d584346865d3d788a1e5a1f2f5f92",
+    "src/current_loop_check_internal.h": "7abc5c622b156d3290b4bbdf1181da185e083279cd02c87723cd9ead28403355",
     "src/custody.c": "4a0a081d78151736cf8140413d985c26d0c1d214b12ecde9e2dde0e18d2e0147",
     "src/diagnostic.c": "d7ea292b9b68625259bb8ae2a512e81cb20fce42a360804ea8dbac399447be96",
     "src/fixed_field.c": "959f6b412296ee1f3c28f085ba97347c8ba72435c1bbc22cb149da1bb8e90588",

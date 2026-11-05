@@ -797,7 +797,12 @@ static NLCheckedNodeId source_current_loop(Check *check,
         const NLValueId result = new_value(
             check, (NLSemanticValueView){.type = loop.types[0]}, syntax->span);
         normal.normal_result = (NLCheckedResult){loop.types[0], result};
-        if (result)
+        /* Recheck the real caller summary before even an unpublished
+         * header_inductive node is built. The consumer checks it again. */
+        if (result && !current_projection(s, nl_control_state_context(s->entry),
+                                          check->context))
+            loop_precision(check, syntax->span);
+        if (result && check->status == NL_CHECK_OK)
             id = add(check,
                      (NLCheckedNodeView){.kind = NL_CHECKED_LOOP,
                                          .span = syntax->span,
