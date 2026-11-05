@@ -271,18 +271,23 @@ current／loan／owner／provenanceの権限偽造、C17/nativeのUB、OOM・rol
 SHA／rawを上書きせず**、不正受理や独立R findingを隠すための縮小は認めない。
 RはPの最終宣言範囲内だけでなく、範囲外の危険な誤受理も独立に検証できる。
 
-Pは§4.1.2の裁量で自分のprivate実装・test・局所修復・再検証を自律的に進め、
-初回RED、元source／oracle／SHA／rawと後続修復の証拠を分離する。
-有限の対応範囲について必要なlocal検査と**同じ最終HEADのCI**が成立したら、
-Review Guidelinesの**実質リスクに比例するレビュー**へ送り、重要な
-ownership／failure／source-issued authority変更では適切な独立R/Fと
-固定されたBLIND証拠を維持する。全Trackの形式的承認や旧Rの再実行を
-あらゆる小変更の一律gateにせず、**レビュー上の実質PASS後は
-ユーザーのmerge判断へ速やかにつなぐ**。将来の一般coverage完成だけを理由に
-安全な先行incrementのmain統合を何段も保留しない。
-これは**自動merge／READYの許可ではなく**、Review Guidelines §27の
-ユーザーmerge権限と、§4.2のsource／issuer変更審査、§4.3の投資裁定、
-§7のR独立性・既存STOPを一切緩めない。
+Pは認可scope内のprivate実装・test・局所修復・再検証を自律的に進め、
+元FIRST/RED・source／oracle／SHA／rawを後続結果と区別して保持する。
+**選択済み意味論に従う通常の言語実装PR**では、実装・テスト・最終対応範囲を
+整合させ、必要なlocal検査、同じ最終HEADのrequired CI green、Pから独立した
+実質リスクに比例する検証を満たした後、**Cのsubstantive PASSに基づき
+Cがmergeを実行してよい**。重要なownership／failure／source-issued authority
+変更には適切な独立R/Fを用い、全Trackの署名や旧Rの再実行を一律gateにしない。
+Cは採用直前のHEAD・base・証拠を確認し、review済みHEADとの一致を条件にmergeして、
+採用後の実main SHA／parents／treeと必要なpostmerge CIを確認・記録する。
+将来の一般coverage完成だけを理由に、安全な先行incrementの採用を保留しない。
+
+この委任はPの自己mergeや他種のPR、証拠用NEVERMERGE PRには自動適用しない。
+ユーザーが確認を留保したPR、依頼意図の本人確認が特に必要な変更、
+未裁定の方針・意味論・重大投資判断はユーザーへ戻す。
+未解決の安全性BLOCKERは修復が必要であり、本人承認によって免除しない。
+詳細はReview Guidelines §27に従い、§4.2のsource／issuer変更審査、
+§4.3の投資裁定、§7のR独立性、既存STOP・scope・予算を維持する。
 
 **Coordinationへ戻す境界：** canonical／公開source・API・ABI・意味論・権限の
 変更が必要な場合、認可scope・固定SHA・実行環境・CI／費用上限を超える場合、
