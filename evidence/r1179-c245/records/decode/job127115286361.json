@@ -1,0 +1,13 @@
+{
+  "log_bytes": 403111,
+  "log_sha256": "bd1d69993129b1c7bc19811df45dc90e0be6d0cb905dfa21126af564e825e3e3",
+  "archive_count": 1,
+  "export_status": "VERIFIED_LOSSLESS",
+  "archive_sha256": "cca9490a4fed9c76f042a2b04b68efdb4a6f7938cd07d8dab964843e7366b40d",
+  "archive_bytes": 126696,
+  "evidence_files": 161,
+  "state": "STOP",
+  "stop_layer": "MECHANISM_RECOGNIZER",
+  "stop_reason": "P01 C correspondence unrecognized; original C/AST preserved",
+  "counts": null
+}

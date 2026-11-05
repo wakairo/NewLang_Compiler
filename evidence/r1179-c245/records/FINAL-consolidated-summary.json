@@ -1,0 +1,911 @@
+{
+  "schema": "R1179_C244A_FINAL_EVIDENCE_AUDIT_V1",
+  "state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+  "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API",
+  "independence": "pre-execution frozen independent cohort / scope-calibrated V2; post-freeze incidental P CI-summary exposure",
+  "counts": {
+    "commands": 1350,
+    "guest_asan": 84,
+    "guest_executions": 504,
+    "guest_ubsan": 84,
+    "negative_classifications": 48,
+    "positive_control": 42
+  },
+  "job_count": 6,
+  "full_ctest_pass_each": 720,
+  "partial_ctest_pass": 719,
+  "full_only_test": [
+    "llvm.c_api"
+  ],
+  "unmodified_guest_executions": 252,
+  "passive_guest_executions": 252,
+  "jobs": [
+    {
+      "job": "127127053063",
+      "state": "SAVED_EVIDENCE_AUDIT_OK",
+      "ctest_count": 720,
+      "counts": {
+        "commands": 225,
+        "guest_asan": 14,
+        "guest_executions": 84,
+        "guest_ubsan": 14,
+        "negative_classifications": 8,
+        "positive_control": 7
+      },
+      "decode": {
+        "log_bytes": 858010,
+        "log_sha256": "1c3cff0d1e6d8d6492c090e48eab40ad28d2ef33a22e6137d571321c02a9c454",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "79a27ef5f4c7fa3a0ff2204490bbd5bdba3449659b4e546396cdade81455556e",
+        "archive_bytes": 463534,
+        "evidence_files": 730,
+        "state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+        "stop_layer": null,
+        "stop_reason": null,
+        "counts": {
+          "commands": 225,
+          "guest_asan": 14,
+          "guest_executions": 84,
+          "guest_ubsan": 14,
+          "negative_classifications": 8,
+          "positive_control": 7
+        }
+      },
+      "github": {
+        "GITHUB_BASE_REF": "p-c243-phase-selected-current",
+        "GITHUB_HEAD_REF": "r-fast/r1179-phase-selected-current",
+        "GITHUB_JOB": "validate",
+        "GITHUB_REF": "refs/pull/1183/merge",
+        "GITHUB_RUN_ATTEMPT": "1",
+        "GITHUB_RUN_ID": "41992273219",
+        "GITHUB_SHA": "2193444841acdac9308cf697e45b0985900f881c"
+      },
+      "host_compiler": "/usr/bin/gcc-13",
+      "host_sanitizer": "none"
+    },
+    {
+      "job": "127127053249",
+      "state": "SAVED_EVIDENCE_AUDIT_OK",
+      "ctest_count": 720,
+      "counts": {
+        "commands": 225,
+        "guest_asan": 14,
+        "guest_executions": 84,
+        "guest_ubsan": 14,
+        "negative_classifications": 8,
+        "positive_control": 7
+      },
+      "decode": {
+        "log_bytes": 860337,
+        "log_sha256": "5ebabbe8ccea879d8259a8eeb2a35d6ff6fc5c757cc1498089370c918690230d",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "f27cd802ae932ce9fa3d5c1f95147d92eaf4007cf834af184f27ea307a4be81c",
+        "archive_bytes": 464089,
+        "evidence_files": 730,
+        "state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+        "stop_layer": null,
+        "stop_reason": null,
+        "counts": {
+          "commands": 225,
+          "guest_asan": 14,
+          "guest_executions": 84,
+          "guest_ubsan": 14,
+          "negative_classifications": 8,
+          "positive_control": 7
+        }
+      },
+      "github": {
+        "GITHUB_BASE_REF": "p-c243-phase-selected-current",
+        "GITHUB_HEAD_REF": "r-fast/r1179-phase-selected-current",
+        "GITHUB_JOB": "validate",
+        "GITHUB_REF": "refs/pull/1183/merge",
+        "GITHUB_RUN_ATTEMPT": "1",
+        "GITHUB_RUN_ID": "41992273219",
+        "GITHUB_SHA": "2193444841acdac9308cf697e45b0985900f881c"
+      },
+      "host_compiler": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "host_sanitizer": "none"
+    },
+    {
+      "job": "127127053303",
+      "state": "SAVED_EVIDENCE_AUDIT_OK",
+      "ctest_count": 720,
+      "counts": {
+        "commands": 225,
+        "guest_asan": 14,
+        "guest_executions": 84,
+        "guest_ubsan": 14,
+        "negative_classifications": 8,
+        "positive_control": 7
+      },
+      "decode": {
+        "log_bytes": 858173,
+        "log_sha256": "ed50377f15320a0b3e9fc294b3324eb63024e620992d07e8d9f755ef8be1a992",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "5d153cb327b66065a9ba9be77be212f43540b08a251db21af08a00eed9e66c95",
+        "archive_bytes": 464011,
+        "evidence_files": 730,
+        "state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+        "stop_layer": null,
+        "stop_reason": null,
+        "counts": {
+          "commands": 225,
+          "guest_asan": 14,
+          "guest_executions": 84,
+          "guest_ubsan": 14,
+          "negative_classifications": 8,
+          "positive_control": 7
+        }
+      },
+      "github": {
+        "GITHUB_BASE_REF": "p-c243-phase-selected-current",
+        "GITHUB_HEAD_REF": "r-fast/r1179-phase-selected-current",
+        "GITHUB_JOB": "validate",
+        "GITHUB_REF": "refs/pull/1183/merge",
+        "GITHUB_RUN_ATTEMPT": "1",
+        "GITHUB_RUN_ID": "41992273219",
+        "GITHUB_SHA": "2193444841acdac9308cf697e45b0985900f881c"
+      },
+      "host_compiler": "/usr/bin/gcc-13",
+      "host_sanitizer": "none"
+    },
+    {
+      "job": "127127053418",
+      "state": "SAVED_EVIDENCE_AUDIT_OK",
+      "ctest_count": 720,
+      "counts": {
+        "commands": 225,
+        "guest_asan": 14,
+        "guest_executions": 84,
+        "guest_ubsan": 14,
+        "negative_classifications": 8,
+        "positive_control": 7
+      },
+      "decode": {
+        "log_bytes": 858440,
+        "log_sha256": "34b8ba1022b0ed0ac62dc61d46c9ceee292da3aed2680d2676e9efc61b31259e",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "2c4244116b1f0c4d8f8021b17eb4820c74bac05fab0c5fadc39ac6b7c70ec5e6",
+        "archive_bytes": 464097,
+        "evidence_files": 730,
+        "state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+        "stop_layer": null,
+        "stop_reason": null,
+        "counts": {
+          "commands": 225,
+          "guest_asan": 14,
+          "guest_executions": 84,
+          "guest_ubsan": 14,
+          "negative_classifications": 8,
+          "positive_control": 7
+        }
+      },
+      "github": {
+        "GITHUB_BASE_REF": "p-c243-phase-selected-current",
+        "GITHUB_HEAD_REF": "r-fast/r1179-phase-selected-current",
+        "GITHUB_JOB": "validate",
+        "GITHUB_REF": "refs/pull/1183/merge",
+        "GITHUB_RUN_ATTEMPT": "1",
+        "GITHUB_RUN_ID": "41992273219",
+        "GITHUB_SHA": "2193444841acdac9308cf697e45b0985900f881c"
+      },
+      "host_compiler": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "host_sanitizer": "address"
+    },
+    {
+      "job": "127127053423",
+      "state": "SAVED_EVIDENCE_AUDIT_OK",
+      "ctest_count": 720,
+      "counts": {
+        "commands": 225,
+        "guest_asan": 14,
+        "guest_executions": 84,
+        "guest_ubsan": 14,
+        "negative_classifications": 8,
+        "positive_control": 7
+      },
+      "decode": {
+        "log_bytes": 858719,
+        "log_sha256": "86b7c06a39e67ad6c1eee5a8e187c263705915ef4dcb95a319564237c1a5b5a3",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "f7eaa187086d925315cfdf8bbfcb540e396d63f4ff376da8a18a55447c111b32",
+        "archive_bytes": 463864,
+        "evidence_files": 730,
+        "state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+        "stop_layer": null,
+        "stop_reason": null,
+        "counts": {
+          "commands": 225,
+          "guest_asan": 14,
+          "guest_executions": 84,
+          "guest_ubsan": 14,
+          "negative_classifications": 8,
+          "positive_control": 7
+        }
+      },
+      "github": {
+        "GITHUB_BASE_REF": "p-c243-phase-selected-current",
+        "GITHUB_HEAD_REF": "r-fast/r1179-phase-selected-current",
+        "GITHUB_JOB": "validate",
+        "GITHUB_REF": "refs/pull/1183/merge",
+        "GITHUB_RUN_ATTEMPT": "1",
+        "GITHUB_RUN_ID": "41992273219",
+        "GITHUB_SHA": "2193444841acdac9308cf697e45b0985900f881c"
+      },
+      "host_compiler": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "host_sanitizer": "undefined"
+    },
+    {
+      "job": "127127054015",
+      "state": "SAVED_EVIDENCE_AUDIT_OK",
+      "ctest_count": 719,
+      "counts": {
+        "commands": 225,
+        "guest_asan": 14,
+        "guest_executions": 84,
+        "guest_ubsan": 14,
+        "negative_classifications": 8,
+        "positive_control": 7
+      },
+      "decode": {
+        "log_bytes": 905845,
+        "log_sha256": "ddb88d113d4e60af285a91d06e60e88a62ff216b15ae2b4c43224baac30d1b52",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "a3f436619f4a18ff308b9447b1298786c9a02f2454c0acf7f5e98830ff5d708f",
+        "archive_bytes": 466220,
+        "evidence_files": 730,
+        "state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+        "stop_layer": null,
+        "stop_reason": null,
+        "counts": {
+          "commands": 225,
+          "guest_asan": 14,
+          "guest_executions": 84,
+          "guest_ubsan": 14,
+          "negative_classifications": 8,
+          "positive_control": 7
+        }
+      },
+      "github": {
+        "GITHUB_BASE_REF": "p-c243-phase-selected-current",
+        "GITHUB_HEAD_REF": "r-fast/r1179-phase-selected-current",
+        "GITHUB_JOB": "frontend-c17-partial",
+        "GITHUB_REF": "refs/pull/1183/merge",
+        "GITHUB_RUN_ATTEMPT": "1",
+        "GITHUB_RUN_ID": "41992273473",
+        "GITHUB_SHA": "2193444841acdac9308cf697e45b0985900f881c"
+      },
+      "host_compiler": "/usr/bin/gcc",
+      "host_sanitizer": "none"
+    }
+  ],
+  "trace_values": {
+    "P01": {
+      "headers": [
+        5
+      ],
+      "incoming": [],
+      "old": [],
+      "current": [],
+      "sibling": [],
+      "carry_out": [],
+      "break": 5,
+      "final": [
+        17,
+        91
+      ],
+      "events": 10
+    },
+    "P02": {
+      "headers": [
+        2,
+        3
+      ],
+      "incoming": [
+        47
+      ],
+      "old": [
+        19
+      ],
+      "current": [
+        47
+      ],
+      "sibling": [
+        83
+      ],
+      "carry_out": [
+        3
+      ],
+      "break": 3,
+      "final": [
+        83,
+        47
+      ],
+      "events": 26
+    },
+    "P03": {
+      "headers": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "incoming": [
+        34,
+        34,
+        78,
+        78
+      ],
+      "old": [
+        12,
+        34,
+        34,
+        78
+      ],
+      "current": [
+        34,
+        34,
+        78,
+        78
+      ],
+      "sibling": [
+        93,
+        93,
+        93,
+        93
+      ],
+      "carry_out": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "break": 9,
+      "final": [
+        78,
+        93
+      ],
+      "events": 74
+    },
+    "P04": {
+      "headers": [
+        0,
+        3,
+        6,
+        9
+      ],
+      "incoming": [
+        52,
+        52,
+        86
+      ],
+      "old": [
+        22,
+        52,
+        52
+      ],
+      "current": [
+        52,
+        52,
+        86
+      ],
+      "sibling": [
+        109,
+        109,
+        109
+      ],
+      "carry_out": [
+        3,
+        6,
+        9
+      ],
+      "break": 9,
+      "final": [
+        109,
+        86
+      ],
+      "events": 58
+    },
+    "P05": {
+      "headers": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "incoming": [
+        61,
+        97,
+        97
+      ],
+      "old": [
+        61,
+        61,
+        97
+      ],
+      "current": [
+        61,
+        97,
+        97
+      ],
+      "sibling": [
+        131,
+        131,
+        131
+      ],
+      "carry_out": [
+        1,
+        2,
+        3
+      ],
+      "break": 3,
+      "final": [
+        97,
+        131
+      ],
+      "events": 58
+    },
+    "P06": {
+      "headers": [
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "incoming": [
+        27,
+        149,
+        27,
+        27
+      ],
+      "old": [
+        39,
+        27,
+        149,
+        27
+      ],
+      "current": [
+        27,
+        149,
+        27,
+        27
+      ],
+      "sibling": [
+        157,
+        157,
+        157,
+        157
+      ],
+      "carry_out": [
+        4,
+        6,
+        8,
+        10
+      ],
+      "break": 10,
+      "final": [
+        157,
+        27
+      ],
+      "events": 78
+    },
+    "L01": {
+      "headers": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "incoming": [
+        78,
+        78,
+        78,
+        78
+      ],
+      "old": [
+        12,
+        78,
+        78,
+        78
+      ],
+      "current": [
+        78,
+        78,
+        78,
+        78
+      ],
+      "sibling": [
+        93,
+        93,
+        93,
+        93
+      ],
+      "carry_out": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "break": 9,
+      "final": [
+        78,
+        93
+      ],
+      "events": 66
+    }
+  },
+  "public_observations": {
+    "P01": {
+      "records": 83,
+      "worlds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "loops": 1,
+      "field_changes": 1,
+      "replace_field_observability": "OBSERVED",
+      "usize_bits": 64
+    },
+    "P02": {
+      "records": 83,
+      "worlds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "loops": 1,
+      "field_changes": 1,
+      "replace_field_observability": "OBSERVED",
+      "usize_bits": 64
+    },
+    "P03": {
+      "records": 83,
+      "worlds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "loops": 1,
+      "field_changes": 1,
+      "replace_field_observability": "OBSERVED",
+      "usize_bits": 64
+    },
+    "P04": {
+      "records": 83,
+      "worlds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "loops": 1,
+      "field_changes": 1,
+      "replace_field_observability": "OBSERVED",
+      "usize_bits": 64
+    },
+    "P05": {
+      "records": 83,
+      "worlds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "loops": 1,
+      "field_changes": 1,
+      "replace_field_observability": "OBSERVED",
+      "usize_bits": 64
+    },
+    "P06": {
+      "records": 86,
+      "worlds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "loops": 1,
+      "field_changes": 1,
+      "replace_field_observability": "OBSERVED",
+      "usize_bits": 64
+    },
+    "L01": {
+      "records": 66,
+      "worlds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "loops": 1,
+      "field_changes": 1,
+      "replace_field_observability": "OBSERVED",
+      "usize_bits": 64
+    }
+  },
+  "passive_edits": {
+    "P01": {
+      "original_sha256": "7727f26c7cf44df800c9c63aaad406737abb9ab4702a2d50ff6cf549a420e579",
+      "insertion_positions": 23,
+      "printf_count": 24,
+      "original_bytes_preserved": true
+    },
+    "P02": {
+      "original_sha256": "eedf8d1919e0e7882314b978325f9a7e5b960153170a54223b366cdaaf9857b9",
+      "insertion_positions": 23,
+      "printf_count": 24,
+      "original_bytes_preserved": true
+    },
+    "P03": {
+      "original_sha256": "564d92be90cf2f9551339d6ab557598bc0981f01a0140c23cabbc3032c3ffdcb",
+      "insertion_positions": 23,
+      "printf_count": 24,
+      "original_bytes_preserved": true
+    },
+    "P04": {
+      "original_sha256": "a79def5a3a7d650b564339f9cfe05fa33c6a2029a05922ae7ac58c602fc8561e",
+      "insertion_positions": 23,
+      "printf_count": 24,
+      "original_bytes_preserved": true
+    },
+    "P05": {
+      "original_sha256": "e07a2d1eee4091fa90238e9f810cf895403b778cafac7786dd9c612913ebbd43",
+      "insertion_positions": 23,
+      "printf_count": 24,
+      "original_bytes_preserved": true
+    },
+    "P06": {
+      "original_sha256": "626a454ed593b42fc1cd8105f3bd0bfb2d487d454c59e251260a2cdc1c70b14a",
+      "insertion_positions": 24,
+      "printf_count": 25,
+      "original_bytes_preserved": true
+    },
+    "L01": {
+      "original_sha256": "f52f0e8a8fdd30bc8893c0d9ce390bdb758f9267685cb6285cea2a255f82aa39",
+      "insertion_positions": 21,
+      "printf_count": 22,
+      "original_bytes_preserved": true
+    }
+  },
+  "negatives": [
+    {
+      "id": "N01",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostic": [
+        "P13-IF-CONDITION"
+      ],
+      "native": "NOT_RUN_INVALID_SOURCE"
+    },
+    {
+      "id": "N02",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostic": [
+        "P13-IF-RESULT"
+      ],
+      "native": "NOT_RUN_INVALID_SOURCE"
+    },
+    {
+      "id": "N03",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostic": [
+        "P3-TYPE-MISMATCH"
+      ],
+      "native": "NOT_RUN_INVALID_SOURCE"
+    },
+    {
+      "id": "N04",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostic": [
+        "P8-EXIT-DEPENDENCY"
+      ],
+      "native": "NOT_RUN_INVALID_SOURCE"
+    },
+    {
+      "id": "N05",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostic": [
+        "USIZE-ADDITION-PRECISION"
+      ],
+      "native": "NOT_RUN_INVALID_SOURCE"
+    },
+    {
+      "id": "N06",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostic": [
+        "FIELD-UNKNOWN-FIELD"
+      ],
+      "native": "NOT_RUN_INVALID_SOURCE"
+    },
+    {
+      "id": "N07",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostic": [
+        "USIZE-ADDITION-PRECISION"
+      ],
+      "native": "NOT_RUN_SCOPE_NEGATIVE"
+    },
+    {
+      "id": "N08",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostic": [
+        "USIZE-ADDITION-PRECISION"
+      ],
+      "native": "NOT_RUN_SCOPE_NEGATIVE"
+    }
+  ],
+  "actual_tool_versions": [
+    {
+      "job": "127127053063",
+      "tools": [
+        {
+          "label": "gcc-version",
+          "argv": [
+            "/usr/bin/gcc-13",
+            "--version"
+          ],
+          "stdout_firstline": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+        },
+        {
+          "label": "clang-version",
+          "argv": [
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+            "--version"
+          ],
+          "stdout_firstline": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)"
+        }
+      ]
+    },
+    {
+      "job": "127127053249",
+      "tools": [
+        {
+          "label": "gcc-version",
+          "argv": [
+            "/usr/bin/gcc-13",
+            "--version"
+          ],
+          "stdout_firstline": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+        },
+        {
+          "label": "clang-version",
+          "argv": [
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+            "--version"
+          ],
+          "stdout_firstline": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)"
+        }
+      ]
+    },
+    {
+      "job": "127127053303",
+      "tools": [
+        {
+          "label": "gcc-version",
+          "argv": [
+            "/usr/bin/gcc-13",
+            "--version"
+          ],
+          "stdout_firstline": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+        },
+        {
+          "label": "clang-version",
+          "argv": [
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+            "--version"
+          ],
+          "stdout_firstline": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)"
+        }
+      ]
+    },
+    {
+      "job": "127127053418",
+      "tools": [
+        {
+          "label": "gcc-version",
+          "argv": [
+            "/usr/bin/gcc-13",
+            "--version"
+          ],
+          "stdout_firstline": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+        },
+        {
+          "label": "clang-version",
+          "argv": [
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+            "--version"
+          ],
+          "stdout_firstline": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)"
+        }
+      ]
+    },
+    {
+      "job": "127127053423",
+      "tools": [
+        {
+          "label": "gcc-version",
+          "argv": [
+            "/usr/bin/gcc-13",
+            "--version"
+          ],
+          "stdout_firstline": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+        },
+        {
+          "label": "clang-version",
+          "argv": [
+            "/home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+            "--version"
+          ],
+          "stdout_firstline": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)"
+        }
+      ]
+    },
+    {
+      "job": "127127054015",
+      "tools": [
+        {
+          "label": "gcc-version",
+          "argv": [
+            "/usr/bin/gcc-13",
+            "--version"
+          ],
+          "stdout_firstline": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+        },
+        {
+          "label": "clang-version",
+          "argv": [
+            "/usr/bin/clang",
+            "--version"
+          ],
+          "stdout_firstline": "Ubuntu clang version 18.1.3 (1ubuntu1)"
+        }
+      ]
+    }
+  ],
+  "fixed_context": {
+    "schema": "R1179_FIXED_GIT_V1",
+    "commit": "bb8b33cefc030ed99941c9c93fef9c7ef89b0ac0",
+    "tree": "d8fd0b0a95184d3449d7e1525ba56574429dbf8f",
+    "leaves": 6086,
+    "trees": 345,
+    "index_sha256": "519d2e34304ca13da364ef49cdc593c32ce69e3546a400c2562480b53811c2e3",
+    "source_head": "2193444841acdac9308cf697e45b0985900f881c",
+    "source_tree": "11f66a5e660d4d59cf3bb599aecad24fb895fa2a",
+    "status": "VERIFIED_CANONICAL_OBJECTS_INDEX_AND_WORKTREE",
+    "boundary": "one genuine fixed commit; parent history not materialized"
+  },
+  "ledger_file": "final-run-job-ledger.json",
+  "boundary": "Derived audit of saved Actions bytes only; no compiler/new AST/build/observer/guest/native local execution"
+}

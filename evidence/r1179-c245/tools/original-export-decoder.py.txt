@@ -1,0 +1,77 @@
+"""Read already-generated R1179 Actions evidence. Never execute archive files."""
+import base64
+import hashlib
+import io
+import json
+from pathlib import Path, PurePosixPath
+import re
+import sys
+import tarfile
+
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def decode(input_json, destination):
+    out = Path(destination)
+    out.mkdir(parents=True, exist_ok=True)
+    payload = json.loads(Path(input_json).read_bytes())
+    log = payload["content"]
+    raw_log = log.encode("utf-8")
+    (out / "job.log").write_bytes(raw_log)
+    headers = re.findall(r"R1179_RAW_BEGIN sha256=([0-9a-f]{64}) bytes=(\d+)", log)
+    summary = {"log_bytes": len(raw_log), "log_sha256": sha(raw_log),
+               "archive_count": len(headers)}
+    if len(headers) != 1:
+        summary["export_status"] = "MISSING_OR_NONUNIQUE"
+        (out / "decode-summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+        print(json.dumps(summary))
+        return
+    pieces = []
+    for line in log.splitlines():
+        match = re.search(r"(?:^|\s)R1179_RAW ([A-Za-z0-9+/=]+)$", line)
+        if match:
+            pieces.append(match[1])
+    raw = base64.b64decode("".join(pieces), validate=True)
+    assert len(raw) == int(headers[0][1]) and sha(raw) == headers[0][0]
+    assert len(raw) <= 4 * 1024 * 1024
+    (out / "raw-evidence.tar.gz").write_bytes(raw)
+    folder = out / "evidence"
+    folder.mkdir(exist_ok=True)
+    with tarfile.open(fileobj=io.BytesIO(raw), mode="r:gz") as archive:
+        members = archive.getmembers()
+        assert len(members) <= 5000 and sum(m.size for m in members) <= 128 * 1024 * 1024
+        seen = set()
+        for member in members:
+            name = PurePosixPath(member.name)
+            assert member.isfile() and not member.issym() and not member.islnk()
+            assert not name.is_absolute() and ".." not in name.parts and name.parts
+            assert member.name not in seen
+            seen.add(member.name)
+            target = folder.joinpath(*name.parts)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            data = archive.extractfile(member).read()
+            assert len(data) == member.size
+            if target.exists():
+                assert target.read_bytes() == data, "never overwrite different raw evidence"
+            else:
+                target.write_bytes(data)
+    index = json.loads((folder / "evidence-index.json").read_bytes())
+    for item in index["files"]:
+        path = PurePosixPath(item["path"])
+        assert not path.is_absolute() and ".." not in path.parts
+        data = folder.joinpath(*path.parts).read_bytes()
+        assert len(data) == item["bytes"] and sha(data) == item["sha256"]
+    assert seen == {x["path"] for x in index["files"]} | {"evidence-index.json"}
+    report = json.loads((folder / "report.json").read_bytes())
+    summary.update(export_status="VERIFIED_LOSSLESS", archive_sha256=sha(raw),
+                   archive_bytes=len(raw), evidence_files=len(index["files"]) + 1,
+                   state=report["state"], stop_layer=report.get("stop_layer"),
+                   stop_reason=report.get("stop_reason"), counts=report.get("counts"))
+    (out / "decode-summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+    print(json.dumps(summary))
+
+
+if __name__ == "__main__":
+    decode(*sys.argv[1:3])

@@ -1,0 +1,769 @@
+{
+  "jobs": [
+    {
+      "job": 127115286119,
+      "decode": {
+        "log_bytes": 403268,
+        "log_sha256": "c28138591ce69c401604ea5a6d84e9b0d872ba0cab3efd88cc8ff60d3faa6b27",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "d6a59be955df224d961b57e0f9bf932ac0feb11d0820d4a48031135cea9fcc57",
+        "archive_bytes": 126637,
+        "evidence_files": 161,
+        "state": "STOP",
+        "stop_layer": "MECHANISM_RECOGNIZER",
+        "stop_reason": "P01 C correspondence unrecognized; original C/AST preserved",
+        "counts": null
+      },
+      "stages": {
+        "positive_check": 7,
+        "public_observation": 7,
+        "c17": 7,
+        "negative_classifications": 8,
+        "guest_runs": 0
+      },
+      "negative_diagnostics": [
+        {
+          "id": "N01",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-CONDITION"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N02",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-RESULT"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N03",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P3-TYPE-MISMATCH"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N04",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P8-EXIT-DEPENDENCY"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N05",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "TARGET_WIDTH_CONDITIONAL_CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N06",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "FIELD-UNKNOWN-FIELD"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N07",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        },
+        {
+          "id": "N08",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        }
+      ],
+      "c_hashes": {
+        "P01": "7727f26c7cf44df800c9c63aaad406737abb9ab4702a2d50ff6cf549a420e579",
+        "P02": "eedf8d1919e0e7882314b978325f9a7e5b960153170a54223b366cdaaf9857b9",
+        "P03": "564d92be90cf2f9551339d6ab557598bc0981f01a0140c23cabbc3032c3ffdcb",
+        "P04": "a79def5a3a7d650b564339f9cfe05fa33c6a2029a05922ae7ac58c602fc8561e",
+        "P05": "e07a2d1eee4091fa90238e9f810cf895403b778cafac7786dd9c612913ebbd43",
+        "P06": "626a454ed593b42fc1cd8105f3bd0bfb2d487d454c59e251260a2cdc1c70b14a",
+        "L01": "f52f0e8a8fdd30bc8893c0d9ce390bdb758f9267685cb6285cea2a255f82aa39"
+      },
+      "ctests": 720,
+      "failed": [
+        [
+          "720",
+          "r1179.phase_selected_current.integration",
+          "***Failed"
+        ]
+      ],
+      "ctest_passed": 719
+    },
+    {
+      "job": 127115285777,
+      "decode": {
+        "log_bytes": 446976,
+        "log_sha256": "b63a8cf20d267b41b866901399d381a1b074936aafa261882d2396311b431f3b",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "023460e90602db5ecac6950d0c05dfff66a4f288ed788b45b0a83045baecad13",
+        "archive_bytes": 126978,
+        "evidence_files": 161,
+        "state": "STOP",
+        "stop_layer": "MECHANISM_RECOGNIZER",
+        "stop_reason": "P01 C correspondence unrecognized; original C/AST preserved",
+        "counts": null
+      },
+      "stages": {
+        "positive_check": 7,
+        "public_observation": 7,
+        "c17": 7,
+        "negative_classifications": 8,
+        "guest_runs": 0
+      },
+      "negative_diagnostics": [
+        {
+          "id": "N01",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-CONDITION"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N02",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-RESULT"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N03",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P3-TYPE-MISMATCH"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N04",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P8-EXIT-DEPENDENCY"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N05",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "TARGET_WIDTH_CONDITIONAL_CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N06",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "FIELD-UNKNOWN-FIELD"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N07",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        },
+        {
+          "id": "N08",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        }
+      ],
+      "c_hashes": {
+        "P01": "7727f26c7cf44df800c9c63aaad406737abb9ab4702a2d50ff6cf549a420e579",
+        "P02": "eedf8d1919e0e7882314b978325f9a7e5b960153170a54223b366cdaaf9857b9",
+        "P03": "564d92be90cf2f9551339d6ab557598bc0981f01a0140c23cabbc3032c3ffdcb",
+        "P04": "a79def5a3a7d650b564339f9cfe05fa33c6a2029a05922ae7ac58c602fc8561e",
+        "P05": "e07a2d1eee4091fa90238e9f810cf895403b778cafac7786dd9c612913ebbd43",
+        "P06": "626a454ed593b42fc1cd8105f3bd0bfb2d487d454c59e251260a2cdc1c70b14a",
+        "L01": "f52f0e8a8fdd30bc8893c0d9ce390bdb758f9267685cb6285cea2a255f82aa39"
+      },
+      "ctests": 719,
+      "failed": [
+        [
+          "719",
+          "r1179.phase_selected_current.integration",
+          "***Failed"
+        ]
+      ],
+      "ctest_passed": 718
+    },
+    {
+      "job": 127115286361,
+      "decode": {
+        "log_bytes": 403111,
+        "log_sha256": "bd1d69993129b1c7bc19811df45dc90e0be6d0cb905dfa21126af564e825e3e3",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "cca9490a4fed9c76f042a2b04b68efdb4a6f7938cd07d8dab964843e7366b40d",
+        "archive_bytes": 126696,
+        "evidence_files": 161,
+        "state": "STOP",
+        "stop_layer": "MECHANISM_RECOGNIZER",
+        "stop_reason": "P01 C correspondence unrecognized; original C/AST preserved",
+        "counts": null
+      },
+      "stages": {
+        "positive_check": 7,
+        "public_observation": 7,
+        "c17": 7,
+        "negative_classifications": 8,
+        "guest_runs": 0
+      },
+      "negative_diagnostics": [
+        {
+          "id": "N01",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-CONDITION"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N02",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-RESULT"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N03",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P3-TYPE-MISMATCH"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N04",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P8-EXIT-DEPENDENCY"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N05",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "TARGET_WIDTH_CONDITIONAL_CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N06",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "FIELD-UNKNOWN-FIELD"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N07",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        },
+        {
+          "id": "N08",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        }
+      ],
+      "c_hashes": {
+        "P01": "7727f26c7cf44df800c9c63aaad406737abb9ab4702a2d50ff6cf549a420e579",
+        "P02": "eedf8d1919e0e7882314b978325f9a7e5b960153170a54223b366cdaaf9857b9",
+        "P03": "564d92be90cf2f9551339d6ab557598bc0981f01a0140c23cabbc3032c3ffdcb",
+        "P04": "a79def5a3a7d650b564339f9cfe05fa33c6a2029a05922ae7ac58c602fc8561e",
+        "P05": "e07a2d1eee4091fa90238e9f810cf895403b778cafac7786dd9c612913ebbd43",
+        "P06": "626a454ed593b42fc1cd8105f3bd0bfb2d487d454c59e251260a2cdc1c70b14a",
+        "L01": "f52f0e8a8fdd30bc8893c0d9ce390bdb758f9267685cb6285cea2a255f82aa39"
+      },
+      "ctests": 720,
+      "failed": [
+        [
+          "720",
+          "r1179.phase_selected_current.integration",
+          "***Failed"
+        ]
+      ],
+      "ctest_passed": 719
+    },
+    {
+      "job": 127115286373,
+      "decode": {
+        "log_bytes": 405623,
+        "log_sha256": "316d43f6dda0f4ecbd070d1415172f1d42d9299a0dcdd2172ef5701858edf56f",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "1c07047544a4b28832eb92d2fbe0dc7cb5a992dbd9f8cec73d41fc57719d78c9",
+        "archive_bytes": 126777,
+        "evidence_files": 161,
+        "state": "STOP",
+        "stop_layer": "MECHANISM_RECOGNIZER",
+        "stop_reason": "P01 C correspondence unrecognized; original C/AST preserved",
+        "counts": null
+      },
+      "stages": {
+        "positive_check": 7,
+        "public_observation": 7,
+        "c17": 7,
+        "negative_classifications": 8,
+        "guest_runs": 0
+      },
+      "negative_diagnostics": [
+        {
+          "id": "N01",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-CONDITION"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N02",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-RESULT"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N03",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P3-TYPE-MISMATCH"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N04",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P8-EXIT-DEPENDENCY"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N05",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "TARGET_WIDTH_CONDITIONAL_CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N06",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "FIELD-UNKNOWN-FIELD"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N07",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        },
+        {
+          "id": "N08",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        }
+      ],
+      "c_hashes": {
+        "P01": "7727f26c7cf44df800c9c63aaad406737abb9ab4702a2d50ff6cf549a420e579",
+        "P02": "eedf8d1919e0e7882314b978325f9a7e5b960153170a54223b366cdaaf9857b9",
+        "P03": "564d92be90cf2f9551339d6ab557598bc0981f01a0140c23cabbc3032c3ffdcb",
+        "P04": "a79def5a3a7d650b564339f9cfe05fa33c6a2029a05922ae7ac58c602fc8561e",
+        "P05": "e07a2d1eee4091fa90238e9f810cf895403b778cafac7786dd9c612913ebbd43",
+        "P06": "626a454ed593b42fc1cd8105f3bd0bfb2d487d454c59e251260a2cdc1c70b14a",
+        "L01": "f52f0e8a8fdd30bc8893c0d9ce390bdb758f9267685cb6285cea2a255f82aa39"
+      },
+      "ctests": 720,
+      "failed": [
+        [
+          "720",
+          "r1179.phase_selected_current.integration",
+          "***Failed"
+        ]
+      ],
+      "ctest_passed": 719
+    },
+    {
+      "job": 127115286486,
+      "decode": {
+        "log_bytes": 403343,
+        "log_sha256": "acd0c942528de6888ce000c11234e6f2b6a03d10a60d7bcd3122be563f0f3d7c",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "81df6a52ee3eac2dd6c4fa3f0dd7cf655213c166673c91279801e6448d6dc489",
+        "archive_bytes": 126678,
+        "evidence_files": 161,
+        "state": "STOP",
+        "stop_layer": "MECHANISM_RECOGNIZER",
+        "stop_reason": "P01 C correspondence unrecognized; original C/AST preserved",
+        "counts": null
+      },
+      "stages": {
+        "positive_check": 7,
+        "public_observation": 7,
+        "c17": 7,
+        "negative_classifications": 8,
+        "guest_runs": 0
+      },
+      "negative_diagnostics": [
+        {
+          "id": "N01",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-CONDITION"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N02",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-RESULT"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N03",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P3-TYPE-MISMATCH"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N04",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P8-EXIT-DEPENDENCY"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N05",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "TARGET_WIDTH_CONDITIONAL_CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N06",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "FIELD-UNKNOWN-FIELD"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N07",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        },
+        {
+          "id": "N08",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        }
+      ],
+      "c_hashes": {
+        "P01": "7727f26c7cf44df800c9c63aaad406737abb9ab4702a2d50ff6cf549a420e579",
+        "P02": "eedf8d1919e0e7882314b978325f9a7e5b960153170a54223b366cdaaf9857b9",
+        "P03": "564d92be90cf2f9551339d6ab557598bc0981f01a0140c23cabbc3032c3ffdcb",
+        "P04": "a79def5a3a7d650b564339f9cfe05fa33c6a2029a05922ae7ac58c602fc8561e",
+        "P05": "e07a2d1eee4091fa90238e9f810cf895403b778cafac7786dd9c612913ebbd43",
+        "P06": "626a454ed593b42fc1cd8105f3bd0bfb2d487d454c59e251260a2cdc1c70b14a",
+        "L01": "f52f0e8a8fdd30bc8893c0d9ce390bdb758f9267685cb6285cea2a255f82aa39"
+      },
+      "ctests": 720,
+      "failed": [
+        [
+          "720",
+          "r1179.phase_selected_current.integration",
+          "***Failed"
+        ]
+      ],
+      "ctest_passed": 719
+    },
+    {
+      "job": 127115286512,
+      "decode": {
+        "log_bytes": 403428,
+        "log_sha256": "9f943455ee00d9ff2f0d9f50f628389919840f310e9b17e690e4116c31e76447",
+        "archive_count": 1,
+        "export_status": "VERIFIED_LOSSLESS",
+        "archive_sha256": "b57d23580e96a9a9126254f50e66e79e4ac8a9d4a5fcccc56c21494c808f31fa",
+        "archive_bytes": 126874,
+        "evidence_files": 161,
+        "state": "STOP",
+        "stop_layer": "MECHANISM_RECOGNIZER",
+        "stop_reason": "P01 C correspondence unrecognized; original C/AST preserved",
+        "counts": null
+      },
+      "stages": {
+        "positive_check": 7,
+        "public_observation": 7,
+        "c17": 7,
+        "negative_classifications": 8,
+        "guest_runs": 0
+      },
+      "negative_diagnostics": [
+        {
+          "id": "N01",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-CONDITION"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N02",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P13-IF-RESULT"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N03",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P3-TYPE-MISMATCH"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N04",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "P8-EXIT-DEPENDENCY"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N05",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "TARGET_WIDTH_CONDITIONAL_CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N06",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "FIELD-UNKNOWN-FIELD"
+          ],
+          "class": "CANONICAL_INVALID",
+          "native": "NOT_RUN_INVALID_SOURCE"
+        },
+        {
+          "id": "N07",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        },
+        {
+          "id": "N08",
+          "check_rc": 3,
+          "emit_rc": 3,
+          "codes": [
+            "USIZE-ADDITION-PRECISION"
+          ],
+          "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+          "native": "NOT_RUN_SCOPE_NEGATIVE"
+        }
+      ],
+      "c_hashes": {
+        "P01": "7727f26c7cf44df800c9c63aaad406737abb9ab4702a2d50ff6cf549a420e579",
+        "P02": "eedf8d1919e0e7882314b978325f9a7e5b960153170a54223b366cdaaf9857b9",
+        "P03": "564d92be90cf2f9551339d6ab557598bc0981f01a0140c23cabbc3032c3ffdcb",
+        "P04": "a79def5a3a7d650b564339f9cfe05fa33c6a2029a05922ae7ac58c602fc8561e",
+        "P05": "e07a2d1eee4091fa90238e9f810cf895403b778cafac7786dd9c612913ebbd43",
+        "P06": "626a454ed593b42fc1cd8105f3bd0bfb2d487d454c59e251260a2cdc1c70b14a",
+        "L01": "f52f0e8a8fdd30bc8893c0d9ce390bdb758f9267685cb6285cea2a255f82aa39"
+      },
+      "ctests": 720,
+      "failed": [
+        [
+          "720",
+          "r1179.phase_selected_current.integration",
+          "***Failed"
+        ]
+      ],
+      "ctest_passed": 719
+    }
+  ],
+  "local_text_replays": [
+    {
+      "job": 127115285777,
+      "rc": 0,
+      "stderr": ""
+    },
+    {
+      "job": 127115286361,
+      "rc": 0,
+      "stderr": ""
+    },
+    {
+      "job": 127115286373,
+      "rc": 0,
+      "stderr": ""
+    },
+    {
+      "job": 127115286486,
+      "rc": 0,
+      "stderr": ""
+    },
+    {
+      "job": 127115286512,
+      "rc": 0,
+      "stderr": ""
+    }
+  ]
+}

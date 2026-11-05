@@ -1,0 +1,20 @@
+{
+  "log_bytes": 905845,
+  "log_sha256": "ddb88d113d4e60af285a91d06e60e88a62ff216b15ae2b4c43224baac30d1b52",
+  "archive_count": 1,
+  "export_status": "VERIFIED_LOSSLESS",
+  "archive_sha256": "a3f436619f4a18ff308b9447b1298786c9a02f2454c0acf7f5e98830ff5d708f",
+  "archive_bytes": 466220,
+  "evidence_files": 730,
+  "state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+  "stop_layer": null,
+  "stop_reason": null,
+  "counts": {
+    "commands": 225,
+    "guest_asan": 14,
+    "guest_executions": 84,
+    "guest_ubsan": 14,
+    "negative_classifications": 8,
+    "positive_control": 7
+  }
+}

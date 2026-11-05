@@ -1,0 +1,316 @@
+{
+  "captured_at": {
+    "current_time": "2026-11-05 08:30:02 UTC"
+  },
+  "kind": "Read-only C CI/raw receipt audit; no oracle/code semantic judgment or execution",
+  "fixed_P": "bb8b33cefc030ed99941c9c93fef9c7ef89b0ac0",
+  "fixed_P_tree": "d8fd0b0a95184d3449d7e1525ba56574429dbf8f",
+  "R_head": "9b58f0f4bf7d09619c904adc61b4e40db6294bdb",
+  "R_tree": "11f66a5e660d4d59cf3bb599aecad24fb895fa2a",
+  "R_parents": [
+    "e9d5941e1ef770d73ad1866fd87909974ca39555"
+  ],
+  "actual_checkout": "2193444841acdac9308cf697e45b0985900f881c",
+  "checkout_tree": "11f66a5e660d4d59cf3bb599aecad24fb895fa2a",
+  "checkout_parents": [
+    "bb8b33cefc030ed99941c9c93fef9c7ef89b0ac0",
+    "9b58f0f4bf7d09619c904adc61b4e40db6294bdb"
+  ],
+  "pr": {
+    "number": 1183,
+    "state": "open",
+    "draft": true,
+    "head": "9b58f0f4bf7d09619c904adc61b4e40db6294bdb",
+    "head_ref": "r-fast/r1179-phase-selected-current",
+    "base": "bb8b33cefc030ed99941c9c93fef9c7ef89b0ac0",
+    "base_ref": "p-c243-phase-selected-current",
+    "merge_commit": "2193444841acdac9308cf697e45b0985900f881c",
+    "mergeable": true
+  },
+  "actual_jobs": {
+    "FAST": 3,
+    "normal": 12,
+    "total": 15,
+    "manual": 0
+  },
+  "budget": {
+    "FAST_max": 6,
+    "normal_max": 12
+  },
+  "FIRST_preserved": {
+    "normal_jobs": 6,
+    "FULL_pass": 719,
+    "FULL_total": 720,
+    "PARTIAL_pass": 718,
+    "PARTIAL_total": 719,
+    "guest_runs": 0,
+    "partial_followup_CLI": "NOT_RUN / skipped"
+  },
+  "FINAL": {
+    "FULL5_pass_total": [
+      720,
+      720
+    ],
+    "PARTIAL_pass_total": [
+      719,
+      719
+    ],
+    "partial_required12": "actual PASS 12/12",
+    "partial_followup_CLI": "actual exit0 / zero stdout stderr receipt",
+    "all_unique_ids_names_ordinals": true,
+    "full_sets_equal": true,
+    "full_only_test": "llvm.c_api",
+    "anomaly_count": 0,
+    "guest_executions": 504,
+    "unmodified": 252,
+    "passive": 252,
+    "guest_ASan": 84,
+    "guest_UBSan": 84,
+    "commands": 1350,
+    "per_command_raw_receipts_identical": 1350,
+    "raw_stream_hash_matches": 2700,
+    "native_raw_returncodes": {
+      "0": 504
+    }
+  },
+  "testset_comparison": [
+    {
+      "job_id": 127127053063,
+      "final_equals_first_testset": true,
+      "added_to_P": [
+        "r1179.phase_selected_current.integration"
+      ],
+      "removed_from_P": [],
+      "all_P_tests_actual_pass": true
+    },
+    {
+      "job_id": 127127053249,
+      "final_equals_first_testset": true,
+      "added_to_P": [
+        "r1179.phase_selected_current.integration"
+      ],
+      "removed_from_P": [],
+      "all_P_tests_actual_pass": true
+    },
+    {
+      "job_id": 127127053303,
+      "final_equals_first_testset": true,
+      "added_to_P": [
+        "r1179.phase_selected_current.integration"
+      ],
+      "removed_from_P": [],
+      "all_P_tests_actual_pass": true
+    },
+    {
+      "job_id": 127127053418,
+      "final_equals_first_testset": true,
+      "added_to_P": [
+        "r1179.phase_selected_current.integration"
+      ],
+      "removed_from_P": [],
+      "all_P_tests_actual_pass": true
+    },
+    {
+      "job_id": 127127053423,
+      "final_equals_first_testset": true,
+      "added_to_P": [
+        "r1179.phase_selected_current.integration"
+      ],
+      "removed_from_P": [],
+      "all_P_tests_actual_pass": true
+    },
+    {
+      "job_id": 127127054015,
+      "final_equals_first_testset": true,
+      "added_to_P": [
+        "r1179.phase_selected_current.integration"
+      ],
+      "removed_from_P": [],
+      "all_P_tests_actual_pass": true
+    }
+  ],
+  "job_ledger": [
+    {
+      "phase": "first_fast1",
+      "run_id": 41987779956,
+      "job_id": 127112527398,
+      "name": "R-FAST pinned format + GCC build + CTest registration only",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T07:31:09Z",
+      "completed_at": "2026-11-05T07:31:36Z"
+    },
+    {
+      "phase": "first_fast2",
+      "run_id": 41988343142,
+      "job_id": 127114331484,
+      "name": "R-FAST pinned format + GCC build + CTest registration only",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-05T07:35:49Z",
+      "completed_at": "2026-11-05T07:36:38Z"
+    },
+    {
+      "phase": "first_full",
+      "run_id": 41988634241,
+      "job_id": 127115286119,
+      "name": "GCC",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T07:38:20Z",
+      "completed_at": "2026-11-05T07:44:52Z"
+    },
+    {
+      "phase": "first_full",
+      "run_id": 41988634241,
+      "job_id": 127115286361,
+      "name": "UBSan",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T07:38:20Z",
+      "completed_at": "2026-11-05T07:46:57Z"
+    },
+    {
+      "phase": "first_full",
+      "run_id": 41988634241,
+      "job_id": 127115286373,
+      "name": "Clang",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T07:38:20Z",
+      "completed_at": "2026-11-05T07:45:52Z"
+    },
+    {
+      "phase": "first_full",
+      "run_id": 41988634241,
+      "job_id": 127115286486,
+      "name": "GCC Release",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T07:38:20Z",
+      "completed_at": "2026-11-05T07:46:13Z"
+    },
+    {
+      "phase": "first_full",
+      "run_id": 41988634241,
+      "job_id": 127115286512,
+      "name": "ASan",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T07:38:21Z",
+      "completed_at": "2026-11-05T07:50:24Z"
+    },
+    {
+      "phase": "first_partial",
+      "run_id": 41988634273,
+      "job_id": 127115285777,
+      "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-11-05T07:38:20Z",
+      "completed_at": "2026-11-05T07:45:51Z"
+    },
+    {
+      "phase": "fast3",
+      "run_id": 41992265581,
+      "job_id": 127127028279,
+      "name": "R-FAST pinned format + GCC build + CTest registration only",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-05T08:09:03Z",
+      "completed_at": "2026-11-05T08:09:37Z"
+    },
+    {
+      "phase": "full",
+      "run_id": 41992273219,
+      "job_id": 127127053063,
+      "name": "GCC",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-05T08:09:06Z",
+      "completed_at": "2026-11-05T08:14:04Z"
+    },
+    {
+      "phase": "full",
+      "run_id": 41992273219,
+      "job_id": 127127053249,
+      "name": "Clang",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-05T08:09:06Z",
+      "completed_at": "2026-11-05T08:16:49Z"
+    },
+    {
+      "phase": "full",
+      "run_id": 41992273219,
+      "job_id": 127127053303,
+      "name": "GCC Release",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-05T08:09:06Z",
+      "completed_at": "2026-11-05T08:17:15Z"
+    },
+    {
+      "phase": "full",
+      "run_id": 41992273219,
+      "job_id": 127127053418,
+      "name": "ASan",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-05T08:09:06Z",
+      "completed_at": "2026-11-05T08:28:15Z"
+    },
+    {
+      "phase": "full",
+      "run_id": 41992273219,
+      "job_id": 127127053423,
+      "name": "UBSan",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-05T08:09:07Z",
+      "completed_at": "2026-11-05T08:19:59Z"
+    },
+    {
+      "phase": "partial",
+      "run_id": 41992273473,
+      "job_id": 127127054015,
+      "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-05T08:09:06Z",
+      "completed_at": "2026-11-05T08:15:06Z"
+    }
+  ],
+  "files": [
+    {
+      "path": "/workspace/scratch/809a1b02c5d4/c245_r1179_ci_audit/normal2_final_metadata.json",
+      "bytes": 141233,
+      "sha256": "88349e5ad860c3aad831e1e3dbcdc04a9b4104633248354be00e84a4a71951f5"
+    },
+    {
+      "path": "/workspace/scratch/809a1b02c5d4/c245_r1179_ci_audit/normal2_summary.json",
+      "bytes": 849885,
+      "sha256": "5fce505cb5748b42adb41d1355654bd2a49e8b359979cc5e253a92067d0e1415"
+    },
+    {
+      "path": "/workspace/scratch/809a1b02c5d4/c245_r1179_ci_audit/normal2_exports_summary.json",
+      "bytes": 91395,
+      "sha256": "8f6668376ca79e82eaf31430f9d8d1192924e724b37a1eda0956cca97ad958c4"
+    },
+    {
+      "path": "/workspace/scratch/809a1b02c5d4/c245_r1179_ci_audit/normal2_report_metadata.json",
+      "bytes": 9327,
+      "sha256": "fdc98f392d5096e53706a25a932ddb7677f0c2636d8ffd22bd2b45dafc6b3c9c"
+    },
+    {
+      "path": "/workspace/scratch/809a1b02c5d4/c245_r1179_ci_audit/r1179_all_original_logs_exports_manifest.json",
+      "bytes": 5952,
+      "sha256": "136f64052ea38e008e5e259cef8badb700b869132f49cafdba6836b7a2577c90"
+    },
+    {
+      "path": "/workspace/scratch/809a1b02c5d4/c245_r1179_ci_audit/first_audit_receipt.json",
+      "bytes": 2881,
+      "sha256": "30a92bada695d6475790687322ece3f97b6b25ce3ff4b685ea58c580cc7f9653"
+    }
+  ]
+}

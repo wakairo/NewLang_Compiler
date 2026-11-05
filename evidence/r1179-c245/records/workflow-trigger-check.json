@@ -1,0 +1,35 @@
+{
+  "schema": "R1179_C245_WORKFLOW_TRIGGER_CHECK_V1",
+  "branch": "r-archive/r1179-c245-evidence",
+  "new_PR": false,
+  "workflows": [
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "sha": "23655288e60f0d3d08a12c9a542346bf31829a08",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "sha": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/workflows/r-preflight.yml",
+      "sha": "9fea1afeeef948127c73e9ca86c476091036116e",
+      "mode": "100644"
+    }
+  ],
+  "push_filters": {
+    "compiler-ci.yml": [
+      "main"
+    ],
+    "compiler-frontend-ci.yml": [
+      "main"
+    ],
+    "r-preflight.yml": [
+      "r-fast/**"
+    ]
+  },
+  "static_expected_archive_push_matches": 0,
+  "boundary": "Static trigger scope only; actual Actions0 confirmed after ref creation in Issue FINAL."
+}

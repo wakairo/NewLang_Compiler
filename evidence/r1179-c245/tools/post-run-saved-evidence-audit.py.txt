@@ -1,0 +1,167 @@
+"""Post-run R1179 evidence audit: reads saved bytes only; executes no guest/tool."""
+from collections import Counter
+import hashlib
+import json
+from pathlib import Path
+import re
+
+BASE = Path("/workspace/scratch/809a1b02c5d4")
+EVIDENCE = BASE / "r1179_c244_evidence"
+PIN = "bb8b33cefc030ed99941c9c93fef9c7ef89b0ac0"
+TREE = "d8fd0b0a95184d3449d7e1525ba56574429dbf8f"
+MERGE = "2193444841acdac9308cf697e45b0985900f881c"
+R_TREE = "11f66a5e660d4d59cf3bb599aecad24fb895fa2a"
+ORACLE_SHA = "4fe82f7bec6315d85a1c4eb4b41634d0135e2f363c1e38640ae1fa7f9c511cff"
+BUNDLE_SHA = "2dff96cd7271a2b5637c46e7a45ab798fbbf84249b447fdf82657b484a69d680"
+MODES = {"gcc-O0", "gcc-O2", "clang-O0", "clang-O2", "guest-ASan", "guest-UBSan"}
+SHA = lambda b: hashlib.sha256(b).hexdigest()
+oracle_bytes = (BASE / "r1179_source_freeze_v2/c244_r1179_oracle_v2.json").read_bytes()
+assert SHA(oracle_bytes) == ORACLE_SHA
+oracle = {c["id"]: c for c in json.loads(oracle_bytes)["positive_and_control"]}
+
+
+def read_json(path):
+    return json.loads(path.read_bytes())
+
+
+def selected(trace, event):
+    return [x for x in trace if x["e"] == event]
+
+
+def audit_job(directory):
+    evidence = directory / "evidence"
+    report = read_json(evidence / "report.json")
+    decode = read_json(directory / "decode-summary.json")
+    assert decode["export_status"] == "VERIFIED_LOSSLESS"
+    assert report["state"] == "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS"
+    assert (report["compiler_commit"], report["compiler_tree"]) == (PIN, TREE)
+    assert (report["oracle_sha256"], report["source_bundle_sha256"]) == (ORACLE_SHA, BUNDLE_SHA)
+    assert report["github"]["GITHUB_SHA"] == MERGE
+    assert report["github"]["GITHUB_RUN_ATTEMPT"] == "1"
+    assert report["whole_loop_validator"] == "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+    fixed = read_json(evidence / "fixed-context.json")
+    assert (fixed["commit"], fixed["tree"], fixed["source_head"], fixed["source_tree"]) == (PIN, TREE, MERGE, R_TREE)
+    assert (fixed["leaves"], fixed["trees"]) == (6086, 345)
+    commands = read_json(evidence / "commands.json")
+    assert [c["serial"] for c in commands] == list(range(1, 226))
+    by_serial = {c["serial"]: c for c in commands}
+    by_label = {c["label"]: c for c in commands}
+    for c in commands:
+        for stream in ["stdout", "stderr"]:
+            data = (evidence / c[stream]["file"]).read_bytes()
+            assert (len(data), SHA(data)) == (c[stream]["bytes"], c[stream]["sha256"])
+    assert (evidence / commands[0]["stdout"]["file"]).read_text().strip() == PIN
+    assert (evidence / commands[1]["stdout"]["file"]).read_text().strip() == TREE
+    assert commands[2]["returncode"] == 0 and commands[2]["stdout"]["bytes"] == 0
+    expected_combinations = {(case, mode, kind) for case in oracle for mode in MODES for kind in ["unmodified", "passive"]}
+    runs = report["guest_runs"]
+    assert len(runs) == 84
+    assert {(r["id"], r["mode"], r["kind"]) for r in runs} == expected_combinations
+    traces = {}
+    public = {}
+    passive_edits = {}
+    for case_id, case in oracle.items():
+        for suffix in ["check", "owned", "emit"]:
+            c = by_label[case_id + "-" + suffix]
+            assert c["returncode"] == 0 and c["stderr"]["bytes"] == 0
+            assert any(Path(a).name == case["source_file"] for a in c["argv"])
+        sub = evidence / case_id
+        original = (sub / "original.c").read_bytes()
+        first_original = (EVIDENCE / "normal1/job127115286119/evidence" / case_id / "original.c").read_bytes()
+        assert original == first_original
+        mapping = read_json(sub / "role-map.json")
+        assert mapping["oracle_input"] is False and mapping["unique_physical_original"] is True
+        assert mapping["selected_declaration_index"] == case["selected_declaration_index"]
+        transformed = original.decode()
+        for insertion in sorted(mapping["insertions"], key=lambda x: x["offset"], reverse=True):
+            offset = insertion["offset"]
+            assert 0 <= offset <= len(original)
+            transformed = transformed[:offset] + insertion["text"] + transformed[offset:]
+        assert ("#include <stdio.h>\n" + transformed).encode() == (sub / "passive.c").read_bytes()
+        added_lines = [line[1:] for line in (sub / "passive.c.diff").read_text().splitlines() if line.startswith("+") and not line.startswith("+++")]
+        deleted_lines = [line for line in (sub / "passive.c.diff").read_text().splitlines() if line.startswith("-") and not line.startswith("---")]
+        guest_lines = [line for line in added_lines if line.strip() and line != "#include <stdio.h>" and not line.lstrip().startswith('printf("R1179 ')]
+        # Inserting at a statement token moves existing indentation before a
+        # printf/newline; the exact-byte reconstruction above proves retention.
+        assert [line.lstrip() for line in guest_lines] == [line[1:].lstrip() for line in deleted_lines]
+        assert all(not line.strip() or line.lstrip().startswith('printf("R1179 ') for item in mapping["insertions"] for line in item["text"].splitlines())
+        passive_edits[case_id] = {"original_sha256": SHA(original), "insertion_positions": len(mapping["insertions"]), "printf_count": sum(line.lstrip().startswith('printf("R1179 ') for line in added_lines), "original_bytes_preserved": True}
+        summary = read_json(sub / "public-summary.json")
+        assert summary["usize_bits"] == 64 and summary["whole_loop_validator"] == "NOT_RUN/NO_APPLICABLE_PUBLIC_API"
+        assert summary["loops"] and all(x["header_inductive"] for x in summary["loops"])
+        assert all(x["field"]["index"] == case["selected_declaration_index"] for x in summary["field_changes"])
+        public[case_id] = {"records": summary["records"], "worlds": summary["worlds"], "loops": len(summary["loops"]), "field_changes": len(summary["field_changes"]), "replace_field_observability": summary["replace_field_observability"], "usize_bits": 64}
+    for run in runs:
+        case = oracle[run["id"]]
+        native = by_serial[run["native_receipt"]]
+        compile_ = by_serial[run["compile_receipt"]]
+        assert native["label"] == "-".join([run["id"], run["mode"], run["kind"], "execute"])
+        assert compile_["label"] == native["label"].removesuffix("execute") + "compile"
+        assert native["returncode"] == compile_["returncode"] == run["returncode"] == 0
+        assert native["stderr"]["bytes"] == compile_["stderr"]["bytes"] == 0
+        assert native["serial"] > 40
+        assert all(x in compile_["argv"] for x in ["-std=c17", "-Wall", "-Wextra", "-Wpedantic", "-Werror"])
+        assert run["binary_bytes"] > 0 and re.fullmatch("[a-f0-9]{64}", run["binary_sha256"])
+        if run["mode"].startswith("guest-"):
+            sanitizer = "address" if run["mode"] == "guest-ASan" else "undefined"
+            assert "-fsanitize=" + sanitizer in compile_["argv"]
+            assert "-fno-sanitize-recover=all" in compile_["argv"]
+            variable = "ASAN_OPTIONS" if sanitizer == "address" else "UBSAN_OPTIONS"
+            assert "halt_on_error=1" in native["env_delta"][variable]
+        else:
+            assert "-" + run["mode"].split("-")[-1] in compile_["argv"]
+        raw = (evidence / native["stdout"]["file"]).read_text()
+        if run["kind"] == "unmodified":
+            assert raw == ""
+            continue
+        trace = [json.loads(line[6:]) for line in raw.splitlines()]
+        assert all(line.startswith("R1179 ") for line in raw.splitlines())
+        assert run["trace"]["all_frozen_values_compared"] is True
+        chosen = case["selected_declaration_index"]
+        other = 1 - chosen
+        before, after, carries = [selected(trace, event) for event in ["store_before", "store_after", "continue"]]
+        assert [x["phase"] for x in selected(trace, "header")] == case["header_phases"]
+        assert [x["incoming"] for x in before] == [x["incoming"] for x in case["rows"]]
+        assert [x["f" + str(chosen)] for x in before] == [x["old"] for x in case["rows"]]
+        assert [x["f" + str(chosen)] for x in after] == [x["current"] for x in case["rows"]]
+        assert [x["f" + str(other)] for x in after] == [x["sibling"] for x in case["rows"]]
+        assert [x["phase"] for x in carries] == [x["carry_out"] for x in case["rows"]]
+        base, = selected(trace, "B0")
+        assert [base["f0"], base["f1"]] == case["initial_original"]
+        assert base["c0"] != base["c1"]
+        for x in trace:
+            if "root" in x:
+                assert [x[k] for k in ["root", "c0", "c1"]] == [base[k] for k in ["root", "c0", "c1"]]
+        assert all(x["destination"] == base["c" + str(chosen)] for x in before)
+        for event in ["break", "loop_exit", "post_loads"]:
+            x, = selected(trace, event)
+            assert (x["phase"], x["finished"], [x["f0"], x["f1"]]) == (case["break"]["phase"], case["outer_loop_result_usize"], case["break"]["original"])
+        value_summary = {"headers": [x["phase"] for x in selected(trace, "header")], "incoming": [x["incoming"] for x in before], "old": [x["f" + str(chosen)] for x in before], "current": [x["f" + str(chosen)] for x in after], "sibling": [x["f" + str(other)] for x in after], "carry_out": [x["phase"] for x in carries], "break": selected(trace, "break")[0]["phase"], "final": [selected(trace, "post_loads")[0][k] for k in ["f0", "f1"]], "events": len(trace)}
+        if run["id"] in traces:
+            assert traces[run["id"]] == value_summary
+        traces[run["id"]] = value_summary
+    negatives = []
+    for n in report["negatives"]:
+        check, emit = by_label[n["id"] + "-check"], by_label[n["id"] + "-emit-classification"]
+        assert check["returncode"] == emit["returncode"] == 3
+        assert emit["stdout"]["bytes"] == 0
+        marker = re.findall(r"\[([A-Z0-9-]+)\]", (evidence / check["stderr"]["file"]).read_text())
+        negatives.append({"id": n["id"], "check_rc": 3, "emit_rc": 3, "diagnostic": marker, "native": n["native"]})
+    log = (directory / "job.log").read_text(encoding="utf-8-sig")
+    tests = re.findall(r"\d+/\d+\s+Test\s+#(\d+):\s+(\S+)\s+\.{2,}\s*(\*\*\*Failed|Passed|Timeout)", log)
+    assert len(tests) in [719, 720] and all(t[2] == "Passed" for t in tests)
+    assert len({x[0] for x in tests}) == len(tests) == len({x[1] for x in tests})
+    assert sum(x[1] == "r1179.phase_selected_current.integration" for x in tests) == 1
+    assert "100% tests passed, 0 tests failed out of " + str(len(tests)) in log
+    result = {"job": directory.name, "state": "SAVED_EVIDENCE_AUDIT_OK", "boundary": "post-run byte/receipt/trace audit only; no compiler, AST generation, build, observer or guest executed locally", "decode": decode, "ctest_count": len(tests), "ctest_names": sorted(x[1] for x in tests), "github": report["github"], "host_compiler": report["host_compiler"], "host_sanitizer": report["host_sanitizer"], "counts": report["counts"], "native_combinations": len(runs), "native_modes": dict(Counter(r["mode"] for r in runs)), "all_native_rc_zero_stderr_empty": True, "trace_values": traces, "public_observations": public, "passive_edits": passive_edits, "negatives": negatives, "fixed_context": fixed}
+    (directory / "saved-evidence-audit.json").write_text(json.dumps(result, indent=2) + "\n")
+    return result
+
+
+if __name__ == "__main__":
+    summaries = []
+    for directory in sorted((EVIDENCE / "normal2").iterdir()):
+        if (directory / "evidence/report.json").is_file():
+            result = audit_job(directory)
+            summaries.append({k: result[k] for k in ["job", "state", "ctest_count", "counts", "native_modes", "all_native_rc_zero_stderr_empty"]})
+    print(json.dumps(summaries, indent=2))

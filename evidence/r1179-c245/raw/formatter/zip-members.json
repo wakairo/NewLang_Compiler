@@ -1,0 +1,14 @@
+{
+  "schema": "R1179_C245_ORIGINAL_FORMATTER_ZIP_MEMBERS_V1",
+  "zip_bytes": 1784,
+  "zip_sha256": "ec1d8dbcfe028639d03b22af6075ebc4b712737bce928275d022a950f54d0fac",
+  "actual_bytes_obtained": true,
+  "old_P_block": "opaque preservation only; not displayed or applied",
+  "members": [
+    {
+      "path": "r-fast-format-suggestions.patch",
+      "bytes": 5299,
+      "sha256": "2ccd8092e4dbc6a2c3d5c2c6be4381f6a315e2c1e49eaac40ccd024884f94032"
+    }
+  ]
+}

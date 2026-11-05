@@ -1,0 +1,70 @@
+C243 / Track R / Issue1179 / pre-ref source-freeze v1
+STATUS: SOURCE-FROZEN / UNMEASURED. No candidate fixed.
+Issue: https://github.com/wakairo/NewLang_Compiler/issues/1179
+START: https://github.com/wakairo/NewLang_Compiler/issues/1179#issuecomment-6651168353
+Authority/source grammar commit: 217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2
+Authority tree, recorded by C in Issue1179: 5db3576a09f2627f8975a21295419dee6433a629
+No Git object/ref operation was performed to derive/reconfirm that tree.
+Canonical: CURRENT_SPEC -> Draft17.34
+
+REFERENCES, ALL AT THE EXACT AUTHORITY COMMIT
+docs/NewLang_Project_Compass.md
+  GitHub returned blob SHA: 0f9b170ce26504a16acec8e4b84beab11f9fbd4e
+  Read scope: Full navigation; links followed only to authority below.
+  URL: https://github.com/wakairo/NewLang_Compiler/blob/217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2/docs/NewLang_Project_Compass.md
+docs/NewLang_Product_Value_Strategy.md
+  GitHub returned blob SHA: c75f1601f13070bc5a588bd78957b54662bdfd23
+  Read scope: Sections 1 and 1.1; value/audit locality and evidence boundary.
+  URL: https://github.com/wakairo/NewLang_Compiler/blob/217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2/docs/NewLang_Product_Value_Strategy.md
+docs/NewLang_Project_Development_Process.md
+  GitHub returned blob SHA: c777512dba935410cb1060569e0f4aeeaff427d5
+  Read scope: Section 2 and section 7 including 7.6/R-FAST; future budgets do not grant execution in this issue.
+  URL: https://github.com/wakairo/NewLang_Compiler/blob/217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2/docs/NewLang_Project_Development_Process.md
+docs/reference/CURRENT_SPEC.md
+  GitHub returned blob SHA: 18b2d6b089c1507743f14325c7a2723b1c341db6
+  Read scope: Selects Draft17.34; historical external links not followed.
+  URL: https://github.com/wakairo/NewLang_Compiler/blob/217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2/docs/reference/CURRENT_SPEC.md
+docs/reference/NewLang_v0_spec_Draft17_34.md
+  GitHub returned blob SHA: 84236f4bc29ae35f01f8eca4238d56c2f62d34a0
+  Read scope: Sections 4.2-4.3,5.1-5.2,6,7,13.5a-13.5b,13.8,16.1-16.2,17.1,17.4,18.1,19.1,27.1,27.3-27.8; headings and limited section33 read.
+  URL: https://github.com/wakairo/NewLang_Compiler/blob/217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2/docs/reference/NewLang_v0_spec_Draft17_34.md
+include/newlang/parser.h
+  GitHub returned blob SHA: 20584427e155e88917a3a819ac24b9d7b0850eaf
+  Read scope: Public leading two-u8 struct/function-unit source spelling, parser statuses and resource boundary.
+  URL: https://github.com/wakairo/NewLang_Compiler/blob/217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2/include/newlang/parser.h
+include/newlang/usize_addition.h
+  GitHub returned blob SHA: 18839fe451d66d54209324d35a20bd524cbdffc9
+  Read scope: Public diagnostic source-issued arithmetic receipt contract; observation is not validation. No API invoked.
+  URL: https://github.com/wakairo/NewLang_Compiler/blob/217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2/include/newlang/usize_addition.h
+include/newlang/experimental_c17_u8_export_v0.h
+  GitHub returned blob SHA: a228f2c3b0688f48fb1956ad17dd2c793752c66b
+  Read scope: Public experimental uint8_t entry contract only; no observer/foreign TU created.
+  URL: https://github.com/wakairo/NewLang_Compiler/blob/217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2/include/newlang/experimental_c17_u8_export_v0.h
+README.md
+  GitHub returned blob SHA: b3d57442f4c18ff9b91cfba670c5eaeac9425de4
+  Read scope: Only CLI contract lines287-311 used; command result conventions are predictions, not executions.
+  URL: https://github.com/wakairo/NewLang_Compiler/blob/217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2/README.md
+
+PROVENANCE / ISOLATION
+Initial semantic input was Issue1179 plus this independent Track R's startup task, not root's previous conversation or producer conclusions.
+Read-only Contents API directory metadata for root, docs, include and include/newlang was used to locate public headers/CLI material. Report/test/implementation filenames were visible as directory metadata; their contents were not opened.
+CURRENT_SPEC, canonical and Process contain historical report links and a few old P/R result annotations. Those annotations were incidental authority-text exposure, not source/oracle/report evidence; their external links, sources and reports were not opened or used as an expected result.
+P1174/P1176 bodies/comments and new/old F returns, P implementation/fixtures/oracles/reports, old R sources/oracles/runners/reports were not read or reused.
+Full canonical documents were retained in tool memory and searched for relevant sections; no whole-canonical context dump was used.
+Operational-only cloud-environment-runtime SKILL.md was read before pure text/hash work; it contributed no language expectation. No environment credentials, SDK or P checkout was inspected.
+All source constants, nominal/field/binding names, source composition and oracle traces were chosen independently here.
+
+BYTE CONTRACT
+Each .nl file is the literal UTF-8 text included in the freeze, with LF lines, no BOM, no CR, and exactly one final LF.
+The oracle JSON and this authority text follow the same LF/no-BOM/final-LF rule.
+SHA256SUMS covers all source files, oracle and authority text. MANIFEST.tsv records byte counts and SHA256 for the same payloads.
+A JSON bundle embeds each payload's exact content string plus filename, byte count and SHA256. JSON decoding reconstructs exact UTF-8 bytes; do not normalize whitespace.
+The bundle itself also has a SHA256 recorded in the Issue. Local creation/readback/hashing are the only local operations.
+
+EXECUTION / STOP
+compiler/native/Lean/build/SDK/tests: 0
+Git objects/refs/branches/pushes/PRs/Actions/manual reruns/dispatches: 0
+No runner, observer, CI registration, workflow or P substitute was created.
+Only a later C release can authorize execution on a fixed candidate, using GitHub dedicated branch plus Actions. P-equivalent execution environments are forbidden.
+Do not call these unmeasured sources PASS. Keep original v1 bytes/oracles even if a later spelling correction is needed.
+audit locality UNMEASURED / GO624 PAUSED / H1 HOLD / P1036-PR1050 STOP.

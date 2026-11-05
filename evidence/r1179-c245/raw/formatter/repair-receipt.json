@@ -1,0 +1,13 @@
+{
+  "log_bytes": 36457,
+  "log_sha256": "7a1dff36e7e8b798024e872377324d62896427991d4c3e84f7f7ed3e1917b4d8",
+  "zip_bytes": 1784,
+  "zip_sha256": "ec1d8dbcfe028639d03b22af6075ebc4b712737bce928275d022a950f54d0fac",
+  "patch_sha256": "2ccd8092e4dbc6a2c3d5c2c6be4381f6a315e2c1e49eaac40ccd024884f94032",
+  "patch_section_count": 2,
+  "applied_path": "tests/r1179/probe.c",
+  "applied_hunks": 3,
+  "old_probe_sha256": "e162c78fad817bdf3c1555540c3f7c2fb0ac9c1c53d31eb526ac5f77fc130b18",
+  "new_probe_sha256": "805fb0f93ea2c533ede8c5a8e7d5f76173d32e76e51e5db1587fbf3580aacf37",
+  "source_oracle_changes": 0
+}

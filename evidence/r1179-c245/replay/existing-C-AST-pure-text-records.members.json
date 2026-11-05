@@ -1,0 +1,196 @@
+{
+  "schema": "R1179_C245_PURE_TEXT_REPLAY_PACKAGE_V1",
+  "replay_count": 6,
+  "original_record_count": 36,
+  "created_for_archive_only": true,
+  "not_original_Actions_export": true,
+  "package": {
+    "path": "replay/existing-C-AST-pure-text-records.tar.gz",
+    "bytes": 19182,
+    "sha256": "45795e4959d9f5f9eb09beda4adad8f3c65da0b9884b862afcb50e323a091ed3",
+    "git_blob_sha": "2ffb683ad94829b63ef8dd38d339f7bfb3f50f30"
+  },
+  "members": [
+    {
+      "path": "attempt1/passive.c",
+      "bytes": 8282,
+      "sha256": "b4a8b539fabe01710a8b236ca849005a9d27b06f8c2f9b4cc1d95847eadc6f70"
+    },
+    {
+      "path": "attempt1/passive.c.diff",
+      "bytes": 7225,
+      "sha256": "af691a59ca1c4be18cad7e8dd5452fc88db430695a727703dff85f4ab1166f0d"
+    },
+    {
+      "path": "attempt1/receipt.json",
+      "bytes": 1510,
+      "sha256": "ef04eb4a2727a31e6ca194870e016d3be0aadf4306d887baa9ae37221b620b35"
+    },
+    {
+      "path": "attempt1/role-map.json",
+      "bytes": 12355,
+      "sha256": "e4e87694b16fca657430c054f42159ba4f9466e36c2ff5dc671cea19a6da6ab2"
+    },
+    {
+      "path": "attempt1/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "attempt1/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "job127115285777/passive.c",
+      "bytes": 8282,
+      "sha256": "8e0ab0892f2ef5ecf6efaf2255f726c8d7b3ad6e37d303c2528e92838d2d3e52"
+    },
+    {
+      "path": "job127115285777/passive.c.diff",
+      "bytes": 7225,
+      "sha256": "b06b2a2d42dd11a58d659f8af787a3f1488689ab7bcd0a6a6d3ea5cc8afadba3"
+    },
+    {
+      "path": "job127115285777/receipt.json",
+      "bytes": 1455,
+      "sha256": "4cc66f6fd2dc7352d02c5bc31beaa9bb59cfb17871b544618632ad7568d0002d"
+    },
+    {
+      "path": "job127115285777/role-map.json",
+      "bytes": 12355,
+      "sha256": "c940986e37c11d606f24069251398842b83214c0f59b31c1eb46f78520296111"
+    },
+    {
+      "path": "job127115285777/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "job127115285777/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "job127115286361/passive.c",
+      "bytes": 8282,
+      "sha256": "9f27e15b430683cea793367c7a55f18b6dcb9bb628ea9c8c92aa5d9c4ccd9b16"
+    },
+    {
+      "path": "job127115286361/passive.c.diff",
+      "bytes": 7225,
+      "sha256": "7c825ef2d5fecee88c20c30850234ee6e18a1567b92adb892512e79e9b01dca4"
+    },
+    {
+      "path": "job127115286361/receipt.json",
+      "bytes": 1455,
+      "sha256": "ddb7713dd6da53aa7d62d5e9e9f9e02966ca31d9f387c797b9c169481d53b28f"
+    },
+    {
+      "path": "job127115286361/role-map.json",
+      "bytes": 12355,
+      "sha256": "2e7daa57c2d2d4514051d2e23f418aae0cc1c904038ccd75d18673f7bf3670eb"
+    },
+    {
+      "path": "job127115286361/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "job127115286361/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "job127115286373/passive.c",
+      "bytes": 8282,
+      "sha256": "6ef892e7a658c505ab3a928f569ccc293b1384876858ab60b32b9d6e8ff4a198"
+    },
+    {
+      "path": "job127115286373/passive.c.diff",
+      "bytes": 7225,
+      "sha256": "efc9feecfd896480ab1bd9ae53e8dcb8d1154a2ab4e0e5ee529431e3b1d8b829"
+    },
+    {
+      "path": "job127115286373/receipt.json",
+      "bytes": 1455,
+      "sha256": "e3788c70b5cd54ecd2939f4b7ca6851664305ce4d54b023db91b020fc282d5da"
+    },
+    {
+      "path": "job127115286373/role-map.json",
+      "bytes": 12355,
+      "sha256": "c7fbb7e451c7c4a408be84eb833c087ee0a2434e4e9390026b8c35379df81d32"
+    },
+    {
+      "path": "job127115286373/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "job127115286373/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "job127115286486/passive.c",
+      "bytes": 8282,
+      "sha256": "08d6254a7081a3598822e064343bf15b531fc86041f632b99c3b5a3cda9bb827"
+    },
+    {
+      "path": "job127115286486/passive.c.diff",
+      "bytes": 7225,
+      "sha256": "72b620ce203c1bef5d32dce8d566ead1cb5c8b19a9e0a4e9fbfcb92610a12133"
+    },
+    {
+      "path": "job127115286486/receipt.json",
+      "bytes": 1455,
+      "sha256": "b2e37a5692fbf7678f98979777bdeb6d4e70e98aa9bfab3c09b800de2e196c3f"
+    },
+    {
+      "path": "job127115286486/role-map.json",
+      "bytes": 12355,
+      "sha256": "fd299c095eed6fadac9a3ed6f40e888ad5201aeb877618127cf7ff759cb10f0c"
+    },
+    {
+      "path": "job127115286486/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "job127115286486/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "job127115286512/passive.c",
+      "bytes": 8282,
+      "sha256": "54da8fb87713d32c767b66b09248c9acfc0561fc06d5fd80903165a0b65ba38e"
+    },
+    {
+      "path": "job127115286512/passive.c.diff",
+      "bytes": 7225,
+      "sha256": "55b1c7048598cfa20d6b06987419358fe5bc455ce44ff78aab50b310ff776770"
+    },
+    {
+      "path": "job127115286512/receipt.json",
+      "bytes": 1455,
+      "sha256": "5b94fccc1a3985250d1750fc3a6f082ed62821206e2fca0c612acc77aac73956"
+    },
+    {
+      "path": "job127115286512/role-map.json",
+      "bytes": 12355,
+      "sha256": "e9aa9372a44d69439b813d05299e54f27a4c625c5dfaa9c31ed409b2623fbd50"
+    },
+    {
+      "path": "job127115286512/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "job127115286512/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "boundary": "Existing FIRST C and existing AST only; no compiler, new AST, SDK/build, native or guest execution. Input pairs remain in the original FIRST exports."
+}

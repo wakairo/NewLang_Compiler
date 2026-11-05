@@ -1,0 +1,23 @@
+{
+  "artifacts": [
+    {
+      "id": 13396064981,
+      "name": "r-fast-format-suggestions-333ace592984e4de55f30b4e80a7101b0b7e7d72-attempt1",
+      "size_in_bytes": 1784,
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/artifacts/13396064981",
+      "archive_download_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/artifacts/13396064981/zip",
+      "expired": false,
+      "created_at": "2026-11-05T07:31:34Z",
+      "expires_at": "2026-11-12T07:31:33Z",
+      "updated_at": "2026-11-05T07:31:34Z",
+      "digest": "sha256:ec1d8dbcfe028639d03b22af6075ebc4b712737bce928275d022a950f54d0fac",
+      "workflow_run": {
+        "id": 41987779956,
+        "repository_id": 1404213211,
+        "head_repository_id": 1404213211,
+        "head_branch": "r-fast/r1179-phase-selected-current",
+        "head_sha": "333ace592984e4de55f30b4e80a7101b0b7e7d72"
+      }
+    }
+  ]
+}

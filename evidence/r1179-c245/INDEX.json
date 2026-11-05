@@ -1,0 +1,476 @@
+{
+  "schema": "R1179_C245_PACKAGED_ORIGINAL_IDENTITIES_V1",
+  "archive_parent": "9b58f0f4bf7d09619c904adc61b4e40db6294bdb",
+  "archive_base_tree": "11f66a5e660d4d59cf3bb599aecad24fb895fa2a",
+  "jobs": [
+    {
+      "run_id": 41992273473,
+      "job_id": 127127054015,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "9b58f0f4bf7d09619c904adc61b4e40db6294bdb",
+      "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+      "round": "FINAL_NORMAL",
+      "conclusion": "success",
+      "log": {
+        "path": "raw/logs/job127127054015.log",
+        "bytes": 905845,
+        "sha256": "ddb88d113d4e60af285a91d06e60e88a62ff216b15ae2b4c43224baac30d1b52",
+        "git_blob_sha": "5a44fba9e7a8c198fb3b347540a9ac13de3edb8c"
+      },
+      "export": {
+        "path": "raw/exports/job127127054015.tar.gz",
+        "bytes": 466220,
+        "sha256": "a3f436619f4a18ff308b9447b1298786c9a02f2454c0acf7f5e98830ff5d708f",
+        "git_blob_sha": "42c76ce990c16e45135c1e63a6260e187db390a5"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127127054015.members.json",
+        "bytes": 248894,
+        "sha256": "f3c265c7baaa2422fa78ae348733317c86bbb02cb5c11bf8ee3f6db83799efba",
+        "git_blob_sha": "9bf17925b3bcb7ae00ad6a12a8686d27ac061498"
+      },
+      "report_state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+      "guest_executions": 84
+    },
+    {
+      "run_id": 41992273219,
+      "job_id": 127127053063,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "9b58f0f4bf7d09619c904adc61b4e40db6294bdb",
+      "name": "GCC",
+      "round": "FINAL_NORMAL",
+      "conclusion": "success",
+      "log": {
+        "path": "raw/logs/job127127053063.log",
+        "bytes": 858010,
+        "sha256": "1c3cff0d1e6d8d6492c090e48eab40ad28d2ef33a22e6137d571321c02a9c454",
+        "git_blob_sha": "1826f97d0203d69cef94890a5095dab39111e2ef"
+      },
+      "export": {
+        "path": "raw/exports/job127127053063.tar.gz",
+        "bytes": 463534,
+        "sha256": "79a27ef5f4c7fa3a0ff2204490bbd5bdba3449659b4e546396cdade81455556e",
+        "git_blob_sha": "bbb9fb1d67524f83f9dbd47912ae81391d97cd49"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127127053063.members.json",
+        "bytes": 248896,
+        "sha256": "12b8957a4cc9dc0757b776d30010c6ecce01bf2ee5c94afa5db0638be87ce845",
+        "git_blob_sha": "b14121c38de83f2e0b726867066c256e604256a0"
+      },
+      "report_state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+      "guest_executions": 84
+    },
+    {
+      "run_id": 41992273219,
+      "job_id": 127127053249,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "9b58f0f4bf7d09619c904adc61b4e40db6294bdb",
+      "name": "Clang",
+      "round": "FINAL_NORMAL",
+      "conclusion": "success",
+      "log": {
+        "path": "raw/logs/job127127053249.log",
+        "bytes": 860337,
+        "sha256": "5ebabbe8ccea879d8259a8eeb2a35d6ff6fc5c757cc1498089370c918690230d",
+        "git_blob_sha": "cb386e4e4c7da4a0d980a3f8412b89643a85e638"
+      },
+      "export": {
+        "path": "raw/exports/job127127053249.tar.gz",
+        "bytes": 464089,
+        "sha256": "f27cd802ae932ce9fa3d5c1f95147d92eaf4007cf834af184f27ea307a4be81c",
+        "git_blob_sha": "618bcc041708a60a67f0b4b38273eabf5dea170a"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127127053249.members.json",
+        "bytes": 248870,
+        "sha256": "67a00fe23c81b39bdef0b5abb2ee2000b84e97ec7a75c11ae84f1313dd6c27f5",
+        "git_blob_sha": "50507019adad981079c0a099d7b337dbe9eb11b3"
+      },
+      "report_state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+      "guest_executions": 84
+    },
+    {
+      "run_id": 41992273219,
+      "job_id": 127127053303,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "9b58f0f4bf7d09619c904adc61b4e40db6294bdb",
+      "name": "GCC Release",
+      "round": "FINAL_NORMAL",
+      "conclusion": "success",
+      "log": {
+        "path": "raw/logs/job127127053303.log",
+        "bytes": 858173,
+        "sha256": "ed50377f15320a0b3e9fc294b3324eb63024e620992d07e8d9f755ef8be1a992",
+        "git_blob_sha": "db75cdb68900340bdd38aa03c1be2f6b007f81eb"
+      },
+      "export": {
+        "path": "raw/exports/job127127053303.tar.gz",
+        "bytes": 464011,
+        "sha256": "5d153cb327b66065a9ba9be77be212f43540b08a251db21af08a00eed9e66c95",
+        "git_blob_sha": "e3adc31b9ef8c46a0a2dbb1c331d7383de2bfee8"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127127053303.members.json",
+        "bytes": 248867,
+        "sha256": "ec56bf6c962bfbca2039a4b5cd001154ce6ce60faf9f1f51868c428eb059d193",
+        "git_blob_sha": "d85d435a402eee65e39a39f31b9e858d0fa96432"
+      },
+      "report_state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+      "guest_executions": 84
+    },
+    {
+      "run_id": 41992273219,
+      "job_id": 127127053418,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "9b58f0f4bf7d09619c904adc61b4e40db6294bdb",
+      "name": "ASan",
+      "round": "FINAL_NORMAL",
+      "conclusion": "success",
+      "log": {
+        "path": "raw/logs/job127127053418.log",
+        "bytes": 858440,
+        "sha256": "34b8ba1022b0ed0ac62dc61d46c9ceee292da3aed2680d2676e9efc61b31259e",
+        "git_blob_sha": "4c3ff59035ff7b66f6d43f3a122de9517956bf31"
+      },
+      "export": {
+        "path": "raw/exports/job127127053418.tar.gz",
+        "bytes": 464097,
+        "sha256": "2c4244116b1f0c4d8f8021b17eb4820c74bac05fab0c5fadc39ac6b7c70ec5e6",
+        "git_blob_sha": "fb0672bdfd5f2565af0d5f12d8506800b63a6d80"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127127053418.members.json",
+        "bytes": 248893,
+        "sha256": "fe42a841c05a4e1051235e16bcda2db41f87fc752baf56b34a3c6b50f5e7c3a3",
+        "git_blob_sha": "13c264b9f62f2fd3f7fa14e53260fc7e049f104a"
+      },
+      "report_state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+      "guest_executions": 84
+    },
+    {
+      "run_id": 41992273219,
+      "job_id": 127127053423,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "9b58f0f4bf7d09619c904adc61b4e40db6294bdb",
+      "name": "UBSan",
+      "round": "FINAL_NORMAL",
+      "conclusion": "success",
+      "log": {
+        "path": "raw/logs/job127127053423.log",
+        "bytes": 858719,
+        "sha256": "86b7c06a39e67ad6c1eee5a8e187c263705915ef4dcb95a319564237c1a5b5a3",
+        "git_blob_sha": "d8d190b0745f722698d346bd362d5711fbc619ca"
+      },
+      "export": {
+        "path": "raw/exports/job127127053423.tar.gz",
+        "bytes": 463864,
+        "sha256": "f7eaa187086d925315cfdf8bbfcb540e396d63f4ff376da8a18a55447c111b32",
+        "git_blob_sha": "73992c7f973382d665d306e67acd32b82e8ddd14"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127127053423.members.json",
+        "bytes": 248880,
+        "sha256": "0e5f5b16db7b86436917db63b7245ad93419885ef9ac6616fd021161af146275",
+        "git_blob_sha": "20504c67450d7e61b73be4bb227f4d79f98d55ac"
+      },
+      "report_state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+      "guest_executions": 84
+    },
+    {
+      "run_id": 41992265581,
+      "job_id": 127127028279,
+      "attempt": 1,
+      "event": "push",
+      "head": "9b58f0f4bf7d09619c904adc61b4e40db6294bdb",
+      "name": "R-FAST pinned format + GCC build + CTest registration only",
+      "round": "FAST3",
+      "conclusion": "success",
+      "log": {
+        "path": "raw/logs/job127127028279.log",
+        "bytes": 87161,
+        "sha256": "15e4bb5b8110806339a0b8d461290bc4aaec3513a9270d741869e9580db31b93",
+        "git_blob_sha": "520ca9c192f99a466c0b47559a9b5ea4e642f663"
+      }
+    },
+    {
+      "run_id": 41988634241,
+      "job_id": 127115286119,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "e9d5941e1ef770d73ad1866fd87909974ca39555",
+      "name": "GCC",
+      "round": "FIRST_NORMAL",
+      "conclusion": "failure",
+      "log": {
+        "path": "raw/logs/job127115286119.log",
+        "bytes": 403268,
+        "sha256": "c28138591ce69c401604ea5a6d84e9b0d872ba0cab3efd88cc8ff60d3faa6b27",
+        "git_blob_sha": "66a4f19d13fe9d9efd7424ab2a75aa5467c3e212"
+      },
+      "export": {
+        "path": "raw/exports/job127115286119.tar.gz",
+        "bytes": 126637,
+        "sha256": "d6a59be955df224d961b57e0f9bf932ac0feb11d0820d4a48031135cea9fcc57",
+        "git_blob_sha": "cf6d74b1c9f61bb40e96be90b872292954c24fe1"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127115286119.members.json",
+        "bytes": 53226,
+        "sha256": "1806a49864963a6c9d9b6a82463732d314eeeb54ac1deb990e6fff2bdefa1fc4",
+        "git_blob_sha": "29b809d0a56f5768a4cd21a83db24eb984dd29e7"
+      },
+      "report_state": "STOP",
+      "guest_executions": 0
+    },
+    {
+      "run_id": 41988634241,
+      "job_id": 127115286361,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "e9d5941e1ef770d73ad1866fd87909974ca39555",
+      "name": "UBSan",
+      "round": "FIRST_NORMAL",
+      "conclusion": "failure",
+      "log": {
+        "path": "raw/logs/job127115286361.log",
+        "bytes": 403111,
+        "sha256": "bd1d69993129b1c7bc19811df45dc90e0be6d0cb905dfa21126af564e825e3e3",
+        "git_blob_sha": "5c5d4933521cde2949580a75d76428af2da6a092"
+      },
+      "export": {
+        "path": "raw/exports/job127115286361.tar.gz",
+        "bytes": 126696,
+        "sha256": "cca9490a4fed9c76f042a2b04b68efdb4a6f7938cd07d8dab964843e7366b40d",
+        "git_blob_sha": "d4bb260bdefdb3a9da887adc9fbe07a1b5838865"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127115286361.members.json",
+        "bytes": 53216,
+        "sha256": "d9f698e21bb493a59cf651663934ef0a2e9e5425e6134f6ab9d2b6804f4e3441",
+        "git_blob_sha": "6041ade0b42913530602907bd79cac7a221ec14c"
+      },
+      "report_state": "STOP",
+      "guest_executions": 0
+    },
+    {
+      "run_id": 41988634241,
+      "job_id": 127115286373,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "e9d5941e1ef770d73ad1866fd87909974ca39555",
+      "name": "Clang",
+      "round": "FIRST_NORMAL",
+      "conclusion": "failure",
+      "log": {
+        "path": "raw/logs/job127115286373.log",
+        "bytes": 405623,
+        "sha256": "316d43f6dda0f4ecbd070d1415172f1d42d9299a0dcdd2172ef5701858edf56f",
+        "git_blob_sha": "e7194f83922b400c3e695b55074e40b43b437cc1"
+      },
+      "export": {
+        "path": "raw/exports/job127115286373.tar.gz",
+        "bytes": 126777,
+        "sha256": "1c07047544a4b28832eb92d2fbe0dc7cb5a992dbd9f8cec73d41fc57719d78c9",
+        "git_blob_sha": "338ac74e106a9da79a76e0d4cc56e6191683c34c"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127115286373.members.json",
+        "bytes": 53224,
+        "sha256": "4d6549eef00973363a099c3b439288552619edfa5414b84c1f6bd66e08992690",
+        "git_blob_sha": "2ed5d68d8fd3cd218052493a06f9b402a49357a1"
+      },
+      "report_state": "STOP",
+      "guest_executions": 0
+    },
+    {
+      "run_id": 41988634241,
+      "job_id": 127115286486,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "e9d5941e1ef770d73ad1866fd87909974ca39555",
+      "name": "GCC Release",
+      "round": "FIRST_NORMAL",
+      "conclusion": "failure",
+      "log": {
+        "path": "raw/logs/job127115286486.log",
+        "bytes": 403343,
+        "sha256": "acd0c942528de6888ce000c11234e6f2b6a03d10a60d7bcd3122be563f0f3d7c",
+        "git_blob_sha": "7f8b34c3b31ec07b37fb0984238871beb0a79edb"
+      },
+      "export": {
+        "path": "raw/exports/job127115286486.tar.gz",
+        "bytes": 126678,
+        "sha256": "81df6a52ee3eac2dd6c4fa3f0dd7cf655213c166673c91279801e6448d6dc489",
+        "git_blob_sha": "b76b2072061f381fc0d8b66f45cdd2718c7c62b0"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127115286486.members.json",
+        "bytes": 53224,
+        "sha256": "210635e7618fc8819e3975ff57e2b157de8853219866c8b3a412a9be97ffd5f6",
+        "git_blob_sha": "a911c2f827b64247c86a79658e725952f9dda53b"
+      },
+      "report_state": "STOP",
+      "guest_executions": 0
+    },
+    {
+      "run_id": 41988634241,
+      "job_id": 127115286512,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "e9d5941e1ef770d73ad1866fd87909974ca39555",
+      "name": "ASan",
+      "round": "FIRST_NORMAL",
+      "conclusion": "failure",
+      "log": {
+        "path": "raw/logs/job127115286512.log",
+        "bytes": 403428,
+        "sha256": "9f943455ee00d9ff2f0d9f50f628389919840f310e9b17e690e4116c31e76447",
+        "git_blob_sha": "e47e2ee2da5de142acf65d6288eb750a9d11ec1e"
+      },
+      "export": {
+        "path": "raw/exports/job127115286512.tar.gz",
+        "bytes": 126874,
+        "sha256": "b57d23580e96a9a9126254f50e66e79e4ac8a9d4a5fcccc56c21494c808f31fa",
+        "git_blob_sha": "f814a18ff9869266836feb350f88e4c63e7181ac"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127115286512.members.json",
+        "bytes": 53209,
+        "sha256": "820c2cd15f65fe5db0d15835a2bfe04c85bdfcdd0ade56c7823944e4d995a7c2",
+        "git_blob_sha": "bfa712de8b87a8f54fb4868dc044a31dd31ea781"
+      },
+      "report_state": "STOP",
+      "guest_executions": 0
+    },
+    {
+      "run_id": 41988634273,
+      "job_id": 127115285777,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "e9d5941e1ef770d73ad1866fd87909974ca39555",
+      "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+      "round": "FIRST_NORMAL",
+      "conclusion": "failure",
+      "log": {
+        "path": "raw/logs/job127115285777.log",
+        "bytes": 446976,
+        "sha256": "b63a8cf20d267b41b866901399d381a1b074936aafa261882d2396311b431f3b",
+        "git_blob_sha": "554f9e6bd1e465b468a0d7c043fd09d4ae1ddf2e"
+      },
+      "export": {
+        "path": "raw/exports/job127115285777.tar.gz",
+        "bytes": 126978,
+        "sha256": "023460e90602db5ecac6950d0c05dfff66a4f288ed788b45b0a83045baecad13",
+        "git_blob_sha": "852d0bfa6b275edc603316c60a912bd497aabc26"
+      },
+      "whole_member_manifest": {
+        "path": "raw/exports/job127115285777.members.json",
+        "bytes": 53213,
+        "sha256": "f6f27cbb416336e1746f8e9f9ef51b94bc9ecbab15fde34af72ffa8b00f38e06",
+        "git_blob_sha": "77b2689799c876ef68e57d4e9f9ac591f9316495"
+      },
+      "report_state": "STOP",
+      "guest_executions": 0
+    },
+    {
+      "run_id": 41988343142,
+      "job_id": 127114331484,
+      "attempt": 1,
+      "event": "push",
+      "head": "e9d5941e1ef770d73ad1866fd87909974ca39555",
+      "name": "R-FAST pinned format + GCC build + CTest registration only",
+      "round": "FAST2",
+      "conclusion": "success",
+      "log": {
+        "path": "raw/logs/job127114331484.log",
+        "bytes": 87152,
+        "sha256": "d0e6e56a9fb783965f33504e4b79a3b754e22f6f575955c1d9f870d45a6698c6",
+        "git_blob_sha": "230e8e2e6598d31d411305d0c80231a69ac4987f"
+      }
+    },
+    {
+      "run_id": 41987779956,
+      "job_id": 127112527398,
+      "attempt": 1,
+      "event": "push",
+      "head": "333ace592984e4de55f30b4e80a7101b0b7e7d72",
+      "name": "R-FAST pinned format + GCC build + CTest registration only",
+      "round": "FAST1",
+      "conclusion": "failure",
+      "log": {
+        "path": "raw/logs/job127112527398.log",
+        "bytes": 36457,
+        "sha256": "7a1dff36e7e8b798024e872377324d62896427991d4c3e84f7f7ed3e1917b4d8",
+        "git_blob_sha": "ae3b8cd82757ee688f20c1caf63b528823396296"
+      }
+    }
+  ],
+  "identity_count": 27,
+  "identity_C_comparison": "ALL_27_EQUAL",
+  "freezes": [
+    {
+      "version": "v1",
+      "bundle": "freeze/v1/c243_r1179_freeze_v1.json",
+      "bytes": 49260,
+      "sha256": "b1a671dad926d2ad3e57eb33f6c7fb80bb12eab3a7d18b7faf84280c862aa893",
+      "payloads": 17,
+      "all_payloads_exact": true,
+      "status": "UNMEASURED"
+    },
+    {
+      "version": "v2",
+      "bundle": "freeze/v2/c244_r1179_freeze_v2.json",
+      "bytes": 46854,
+      "sha256": "2dff96cd7271a2b5637c46e7a45ab798fbbf84249b447fdf82657b484a69d680",
+      "payloads": 17,
+      "all_payloads_exact": true,
+      "status": "ORIGINAL_PRE_EXECUTION_FREEZE_UNCHANGED"
+    }
+  ],
+  "original_export_member_total": 5346,
+  "pure_text_replay_records": 36,
+  "archive_created_original_semantic_results": 0,
+  "archive_branch": "r-archive/r1179-c245-evidence",
+  "archive_prefix": "evidence/r1179-c245/",
+  "archive_release": "https://github.com/wakairo/NewLang_Compiler/issues/1179#issuecomment-6653493272",
+  "archive_start": "https://github.com/wakairo/NewLang_Compiler/issues/1179#issuecomment-6653519905",
+  "measurement_final": "https://github.com/wakairo/NewLang_Compiler/issues/1179#issuecomment-6653415834",
+  "measurement_state": "PASS_FINITE_RUNTIME_AND_PUBLIC_OBSERVATIONS",
+  "whole_loop_validator": "NOT_RUN/NO_APPLICABLE_PUBLIC_API",
+  "measurement_budgets": {
+    "FAST": 3,
+    "normal": 12,
+    "manual": 0
+  },
+  "measurement_total": {
+    "unique_positive": 6,
+    "unique_negative": 8,
+    "unique_literal_control": 1,
+    "native_executions": 504,
+    "unmodified": 252,
+    "passive": 252,
+    "guest_ASan": 84,
+    "guest_UBSan": 84
+  },
+  "archive_semantic_execution": 0,
+  "archive_new_PR": 0,
+  "independence": "pre-execution frozen independent cohort / scope-calibrated V2; post-freeze incidental P CI-summary exposure",
+  "limits": [
+    "V1 unmeasured",
+    "N05 overflow-specific guard not reached; precision refusal",
+    "N07/N08 legal scope-negative; precision refusal",
+    "whole-loop validator no applicable public API",
+    "ELF bytes outside original exports; Actions binary hash receipt only",
+    "finite observations do not prove general ghost/private authority"
+  ],
+  "inherited_leaves": 6118,
+  "unchanged_workflows": 3,
+  "publication_readback": "Issue ARCHIVE FINAL; manifest itself cannot contain its own checksum or future commit SHA"
+}

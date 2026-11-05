@@ -1,0 +1,115 @@
+--- a/tests/p1117/lineage.c
++++ b/tests/p1117/lineage.c
+@@ -1,70 +0,0 @@
+-#define main p1117_driver_main
+-#include "main.c"
+-#undef main
+-#include <assert.h>
+-static bool accepts(const NLCheckedFragment *f, NLCheckedNodeId call,
+-                    const NLSemanticContext *c) {
+-  V0Program p = {.unit = nl_semantic_unit_type(c),
+-                 .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
+-  return predicate_call(f, call, &p);
+-}
+-int main(int argc, char **argv) {
+-  assert(argc == 2);
+-  NLSource *source = NULL, *entry_source = NULL;
+-  NLParser *parser = NULL, *entry_parser = NULL;
+-  NLSyntaxTree *unit = NULL, *tree = NULL;
+-  NLSemanticContext *c = NULL;
+-  NLCheckedFragment *owned = NULL;
+-  assert(nl_source_load(argv[1], &source) == NL_SOURCE_OK);
+-  assert(nl_parser_create(source, &parser) == NL_PARSE_OK);
+-  assert(nl_parser_parse_function_unit(parser, &unit, NULL) == NL_PARSE_OK);
+-  assert(nl_semantic_create(&c) == NL_CHECK_OK);
+-  const NLSyntaxTree *units[] = {unit};
+-  assert(nl_semantic_register_function_unit(c, units, 1, NULL) == NL_CHECK_OK);
+-  assert(nl_source_create("main()", 6, "<P1117-lineage>", &entry_source) ==
+-         NL_SOURCE_OK);
+-  assert(nl_parser_create(entry_source, &entry_parser) == NL_PARSE_OK);
+-  assert(nl_parser_parse_expression_fragment(entry_parser, &tree, NULL) ==
+-         NL_PARSE_OK);
+-  assert(nl_semantic_check_expression(c, tree, &owned, NULL) == NL_CHECK_OK);
+-  NLCheckedFragment *body =
+-      (NLCheckedFragment *)nl_checked_call_body(owned, nl_checked_root(owned));
+-  assert(body);
+-  NLCheckedNodeId calls[2] = {0};
+-  size_t count = 0;
+-  for (size_t n = 1; n <= body->count && count < 2; ++n)
+-    if (body->nodes[n - 1].kind == NL_CHECKED_REGISTERED_CALL)
+-      calls[count++] = n;
+-  assert(count == 2 && accepts(body, calls[0], c));
+-  NLCheckedNodeView *call = &body->nodes[calls[0] - 1];
+-  const NLCheckedNodeView *other = &body->nodes[calls[1] - 1];
+-  NLCheckedFragment *callee =
+-      (NLCheckedFragment *)nl_checked_call_body(body, calls[0]);
+-  assert(callee && call->results[0].value != other->results[0].value);
+-  NLCheckedNodeView *root = &callee->nodes[callee->root - 1];
+-  printf("P1117 actual result call=%zu body_returned=%zu body_normal=%zu "
+-         "other=%zu\n",
+-         call->results[0].value, root->returned.value, root->results[0].value,
+-         other->results[0].value);
+-  const NLCheckedNodeView saved_call = *call, saved_root = *root;
+-  call->results[0] = other->results[0];
+-  const bool foreign = accepts(body, calls[0], c);
+-  root->returned = other->results[0];
+-  const bool coherent_foreign = accepts(body, calls[0], c);
+-  *call = saved_call;
+-  *root = saved_root;
+-  assert(accepts(body, calls[0], c));
+-  printf(
+-      "P1117 foreign result accepted=%d coherent_foreign_return accepted=%d\n",
+-      foreign, coherent_foreign);
+-  /* No emission or execution of either altered artifact. */
+-  nl_checked_destroy(owned);
+-  nl_semantic_destroy(c);
+-  nl_syntax_tree_destroy(tree);
+-  nl_parser_destroy(entry_parser);
+-  nl_source_destroy(entry_source);
+-  nl_syntax_tree_destroy(unit);
+-  nl_parser_destroy(parser);
+-  nl_source_destroy(source);
+-  return foreign || coherent_foreign ? 1 : 0;
+-}
+--- a/tests/r1179/probe.c
++++ b/tests/r1179/probe.c
+@@ -131,8 +131,8 @@
+     printf("]}");
+ }
+ 
+-static int observe(const NLCheckedFragment *fragment, size_t parent,
+-                   size_t via, const char *edge, size_t arm, size_t depth)
++static int observe(const NLCheckedFragment *fragment, size_t parent, size_t via,
++                   const char *edge, size_t arm, size_t depth)
+ {
+     if (fragment == NULL) {
+         return 1;
+@@ -187,8 +187,8 @@
+                node->next_item, node->tail, node->argument_count,
+                node->result_count, (int)node->value_use,
+                node->terminates ? "true" : "false", node->normal_arms,
+-               node->header_inductive ? "true" : "false",
+-               node->continue_edges, node->break_edges, node->return_edges,
++               node->header_inductive ? "true" : "false", node->continue_edges,
++               node->break_edges, node->return_edges,
+                node->has_scalar_result ? "true" : "false",
+                node->scalar_result.known ? "true" : "false",
+                node->scalar_result.value);
+@@ -221,13 +221,13 @@
+         printf("},\"loan\":{\"scope\":%zu,\"dependency_scope\":%zu,"
+                "\"place\":%zu,\"incarnation\":%zu,\"body_nonescape\":%s,"
+                "\"normal_result_forwarded\":%s}}\n",
+-               node->loan.scope, node->loan.dependency_scope,
+-               node->loan.place, node->loan.incarnation,
++               node->loan.scope, node->loan.dependency_scope, node->loan.place,
++               node->loan.incarnation,
+                node->loan.body_nonescape_proved ? "true" : "false",
+                node->loan.normal_result_forwarded ? "true" : "false");
+         if (node->kind == NL_CHECKED_REGISTERED_CALL &&
+-            !observe(nl_checked_call_body(fragment, id), fid, id,
+-                     "call_body", 0, depth + 1)) {
++            !observe(nl_checked_call_body(fragment, id), fid, id, "call_body",
++                     0, depth + 1)) {
+             return 0;
+         }
+         if (node->kind == NL_CHECKED_LOOP &&

@@ -1,0 +1,764 @@
+{
+  "schema": "C243-R1179-source-freeze-v1",
+  "status": "SOURCE_FROZEN_UNMEASURED",
+  "authority_commit": "217dda0c0c786f64ef4376aec1cb7e72b2a4ecc2",
+  "authority_tree_as_recorded_by_C": "5db3576a09f2627f8975a21295419dee6433a629",
+  "canonical": "docs/reference/NewLang_v0_spec_Draft17_34.md",
+  "candidate": null,
+  "future_execution": "GitHub dedicated branch plus Actions only; requires separate C release; no branch/ref exists from this freeze",
+  "counts": {
+    "positive": 6,
+    "negative": 8,
+    "literal_control": 1
+  },
+  "execution_counts": {
+    "compiler": 0,
+    "native": 0,
+    "Lean": 0,
+    "build": 0,
+    "SDK": 0,
+    "tests": 0,
+    "git_objects": 0,
+    "git_refs": 0,
+    "branches": 0,
+    "pushes": 0,
+    "PRs": 0,
+    "Actions": 0,
+    "manual_reruns": 0,
+    "dispatches": 0
+  },
+  "encoding": {
+    "source": "UTF-8",
+    "bom": false,
+    "line_ending": "LF",
+    "final_newline": "exactly one LF",
+    "normalization": "none"
+  },
+  "positive_and_control": [
+    {
+      "id": "P01",
+      "source_file": "c243_r1179_p01_zero_f0.nl",
+      "category": "POSITIVE_SOURCE_INTENT_UNMEASURED",
+      "nominal": "Basin",
+      "declared_fields": [
+        "ember",
+        "quartz"
+      ],
+      "selected_field": "ember",
+      "selected_declaration_index": 0,
+      "sibling_field": "quartz",
+      "initial_original": [
+        17,
+        91
+      ],
+      "initial_carry": 208,
+      "header_phases": [
+        5
+      ],
+      "continue_count": 0,
+      "writer_count_per_continue": 1,
+      "rows": [],
+      "break": {
+        "phase": 5,
+        "outer_condition": false,
+        "carry": 208,
+        "result": 208,
+        "original": [
+          17,
+          91
+        ],
+        "selected_current": 17,
+        "sibling_current": 91
+      },
+      "function_result_u8": 208,
+      "expected_future_target_behavior": "CANDIDATE_UNFIXED; source legality and exact finite behavior are independently predicted; compiler/CHECK/owned/C17/native NOT RUN; no PASS claim"
+    },
+    {
+      "id": "P02",
+      "source_file": "c243_r1179_p02_one_f1.nl",
+      "category": "POSITIVE_SOURCE_INTENT_UNMEASURED",
+      "nominal": "Cairn",
+      "declared_fields": [
+        "ridge",
+        "moss"
+      ],
+      "selected_field": "moss",
+      "selected_declaration_index": 1,
+      "sibling_field": "ridge",
+      "initial_original": [
+        83,
+        19
+      ],
+      "initial_carry": 206,
+      "header_phases": [
+        2,
+        3
+      ],
+      "continue_count": 1,
+      "writer_count_per_continue": 1,
+      "rows": [
+        {
+          "phase": 2,
+          "outer_condition": true,
+          "inner_condition": true,
+          "incoming": 47,
+          "prewrite": 19,
+          "sibling_before": 83,
+          "old": 19,
+          "old_copy": 19,
+          "current": 47,
+          "sibling": 83,
+          "carry_in": 206,
+          "carry_out": 19,
+          "next_phase": 3
+        }
+      ],
+      "break": {
+        "phase": 3,
+        "outer_condition": false,
+        "carry": 19,
+        "result": 19,
+        "original": [
+          83,
+          47
+        ],
+        "selected_current": 47,
+        "sibling_current": 83
+      },
+      "function_result_u8": 19,
+      "expected_future_target_behavior": "CANDIDATE_UNFIXED; source legality and exact finite behavior are independently predicted; compiler/CHECK/owned/C17/native NOT RUN; no PASS claim"
+    },
+    {
+      "id": "P03",
+      "source_file": "c243_r1179_p03_multi_f0.nl",
+      "category": "POSITIVE_SOURCE_INTENT_UNMEASURED",
+      "nominal": "Kestrel",
+      "declared_fields": [
+        "wing",
+        "beak"
+      ],
+      "selected_field": "wing",
+      "selected_declaration_index": 0,
+      "sibling_field": "beak",
+      "initial_original": [
+        12,
+        93
+      ],
+      "initial_carry": 204,
+      "header_phases": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "continue_count": 4,
+      "writer_count_per_continue": 1,
+      "rows": [
+        {
+          "phase": 1,
+          "outer_condition": true,
+          "inner_condition": true,
+          "incoming": 34,
+          "prewrite": 12,
+          "sibling_before": 93,
+          "old": 12,
+          "old_copy": 12,
+          "current": 34,
+          "sibling": 93,
+          "carry_in": 204,
+          "carry_out": 12,
+          "next_phase": 3
+        },
+        {
+          "phase": 3,
+          "outer_condition": true,
+          "inner_condition": true,
+          "incoming": 34,
+          "prewrite": 34,
+          "sibling_before": 93,
+          "old": 34,
+          "old_copy": 34,
+          "current": 34,
+          "sibling": 93,
+          "carry_in": 12,
+          "carry_out": 34,
+          "next_phase": 5
+        },
+        {
+          "phase": 5,
+          "outer_condition": true,
+          "inner_condition": false,
+          "incoming": 78,
+          "prewrite": 34,
+          "sibling_before": 93,
+          "old": 34,
+          "old_copy": 34,
+          "current": 78,
+          "sibling": 93,
+          "carry_in": 34,
+          "carry_out": 34,
+          "next_phase": 7
+        },
+        {
+          "phase": 7,
+          "outer_condition": true,
+          "inner_condition": false,
+          "incoming": 78,
+          "prewrite": 78,
+          "sibling_before": 93,
+          "old": 78,
+          "old_copy": 78,
+          "current": 78,
+          "sibling": 93,
+          "carry_in": 34,
+          "carry_out": 78,
+          "next_phase": 9
+        }
+      ],
+      "break": {
+        "phase": 9,
+        "outer_condition": false,
+        "carry": 78,
+        "result": 78,
+        "original": [
+          78,
+          93
+        ],
+        "selected_current": 78,
+        "sibling_current": 93
+      },
+      "function_result_u8": 78,
+      "expected_future_target_behavior": "CANDIDATE_UNFIXED; source legality and exact finite behavior are independently predicted; compiler/CHECK/owned/C17/native NOT RUN; no PASS claim"
+    },
+    {
+      "id": "P04",
+      "source_file": "c243_r1179_p04_multi_f1.nl",
+      "category": "POSITIVE_SOURCE_INTENT_UNMEASURED",
+      "nominal": "Lotus",
+      "declared_fields": [
+        "seed",
+        "petal"
+      ],
+      "selected_field": "petal",
+      "selected_declaration_index": 1,
+      "sibling_field": "seed",
+      "initial_original": [
+        109,
+        22
+      ],
+      "initial_carry": 203,
+      "header_phases": [
+        0,
+        3,
+        6,
+        9
+      ],
+      "continue_count": 3,
+      "writer_count_per_continue": 1,
+      "rows": [
+        {
+          "phase": 0,
+          "outer_condition": true,
+          "inner_condition": true,
+          "incoming": 52,
+          "prewrite": 22,
+          "sibling_before": 109,
+          "old": 22,
+          "old_copy": 22,
+          "current": 52,
+          "sibling": 109,
+          "carry_in": 203,
+          "carry_out": 22,
+          "next_phase": 3
+        },
+        {
+          "phase": 3,
+          "outer_condition": true,
+          "inner_condition": true,
+          "incoming": 52,
+          "prewrite": 52,
+          "sibling_before": 109,
+          "old": 52,
+          "old_copy": 52,
+          "current": 52,
+          "sibling": 109,
+          "carry_in": 22,
+          "carry_out": 52,
+          "next_phase": 6
+        },
+        {
+          "phase": 6,
+          "outer_condition": true,
+          "inner_condition": false,
+          "incoming": 86,
+          "prewrite": 52,
+          "sibling_before": 109,
+          "old": 52,
+          "old_copy": 52,
+          "current": 86,
+          "sibling": 109,
+          "carry_in": 52,
+          "carry_out": 52,
+          "next_phase": 9
+        }
+      ],
+      "break": {
+        "phase": 9,
+        "outer_condition": false,
+        "carry": 52,
+        "result": 52,
+        "original": [
+          109,
+          86
+        ],
+        "selected_current": 86,
+        "sibling_current": 109
+      },
+      "function_result_u8": 52,
+      "expected_future_target_behavior": "CANDIDATE_UNFIXED; source legality and exact finite behavior are independently predicted; compiler/CHECK/owned/C17/native NOT RUN; no PASS claim"
+    },
+    {
+      "id": "P05",
+      "source_file": "c243_r1179_p05_same_bits.nl",
+      "category": "POSITIVE_SOURCE_INTENT_UNMEASURED",
+      "nominal": "Mica",
+      "declared_fields": [
+        "facet",
+        "vein"
+      ],
+      "selected_field": "facet",
+      "selected_declaration_index": 0,
+      "sibling_field": "vein",
+      "initial_original": [
+        61,
+        131
+      ],
+      "initial_carry": 202,
+      "header_phases": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "continue_count": 3,
+      "writer_count_per_continue": 1,
+      "rows": [
+        {
+          "phase": 0,
+          "outer_condition": true,
+          "inner_condition": true,
+          "incoming": 61,
+          "prewrite": 61,
+          "sibling_before": 131,
+          "old": 61,
+          "old_copy": 61,
+          "current": 61,
+          "sibling": 131,
+          "carry_in": 202,
+          "carry_out": 61,
+          "next_phase": 1
+        },
+        {
+          "phase": 1,
+          "outer_condition": true,
+          "inner_condition": false,
+          "incoming": 97,
+          "prewrite": 61,
+          "sibling_before": 131,
+          "old": 61,
+          "old_copy": 61,
+          "current": 97,
+          "sibling": 131,
+          "carry_in": 61,
+          "carry_out": 61,
+          "next_phase": 2
+        },
+        {
+          "phase": 2,
+          "outer_condition": true,
+          "inner_condition": false,
+          "incoming": 97,
+          "prewrite": 97,
+          "sibling_before": 131,
+          "old": 97,
+          "old_copy": 97,
+          "current": 97,
+          "sibling": 131,
+          "carry_in": 61,
+          "carry_out": 97,
+          "next_phase": 3
+        }
+      ],
+      "break": {
+        "phase": 3,
+        "outer_condition": false,
+        "carry": 97,
+        "result": 97,
+        "original": [
+          97,
+          131
+        ],
+        "selected_current": 97,
+        "sibling_current": 131
+      },
+      "function_result_u8": 97,
+      "expected_future_target_behavior": "CANDIDATE_UNFIXED; source legality and exact finite behavior are independently predicted; compiler/CHECK/owned/C17/native NOT RUN; no PASS claim"
+    },
+    {
+      "id": "P06",
+      "source_file": "c243_r1179_p06_copy_eq.nl",
+      "category": "POSITIVE_SOURCE_INTENT_UNMEASURED",
+      "nominal": "Nimbus",
+      "declared_fields": [
+        "crest",
+        "shade"
+      ],
+      "selected_field": "shade",
+      "selected_declaration_index": 1,
+      "sibling_field": "crest",
+      "initial_original": [
+        157,
+        39
+      ],
+      "initial_carry": 201,
+      "header_phases": [
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "continue_count": 4,
+      "writer_count_per_continue": 1,
+      "rows": [
+        {
+          "phase": 2,
+          "outer_condition": true,
+          "inner_condition": false,
+          "incoming": 27,
+          "prewrite": 39,
+          "sibling_before": 157,
+          "old": 39,
+          "old_copy": 39,
+          "current": 27,
+          "sibling": 157,
+          "carry_in": 201,
+          "carry_out": 39,
+          "next_phase": 4
+        },
+        {
+          "phase": 4,
+          "outer_condition": true,
+          "inner_condition": true,
+          "incoming": 149,
+          "prewrite": 27,
+          "sibling_before": 157,
+          "old": 27,
+          "old_copy": 27,
+          "current": 149,
+          "sibling": 157,
+          "carry_in": 39,
+          "carry_out": 27,
+          "next_phase": 6
+        },
+        {
+          "phase": 6,
+          "outer_condition": true,
+          "inner_condition": false,
+          "incoming": 27,
+          "prewrite": 149,
+          "sibling_before": 157,
+          "old": 149,
+          "old_copy": 149,
+          "current": 27,
+          "sibling": 157,
+          "carry_in": 27,
+          "carry_out": 149,
+          "next_phase": 8
+        },
+        {
+          "phase": 8,
+          "outer_condition": true,
+          "inner_condition": false,
+          "incoming": 27,
+          "prewrite": 27,
+          "sibling_before": 157,
+          "old": 27,
+          "old_copy": 27,
+          "current": 27,
+          "sibling": 157,
+          "carry_in": 149,
+          "carry_out": 27,
+          "next_phase": 10
+        }
+      ],
+      "break": {
+        "phase": 10,
+        "outer_condition": false,
+        "carry": 27,
+        "result": 27,
+        "original": [
+          157,
+          27
+        ],
+        "selected_current": 27,
+        "sibling_current": 157
+      },
+      "function_result_u8": 27,
+      "expected_future_target_behavior": "CANDIDATE_UNFIXED; source legality and exact finite behavior are independently predicted; compiler/CHECK/owned/C17/native NOT RUN; no PASS claim"
+    },
+    {
+      "id": "L01",
+      "source_file": "c243_r1179_l01_literal_control.nl",
+      "category": "LITERAL_CONTROL",
+      "nominal": "Orbit",
+      "declared_fields": [
+        "axis",
+        "mark"
+      ],
+      "selected_field": "axis",
+      "selected_declaration_index": 0,
+      "sibling_field": "mark",
+      "initial_original": [
+        12,
+        93
+      ],
+      "initial_carry": 204,
+      "header_phases": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
+      "continue_count": 4,
+      "writer_count_per_continue": 1,
+      "rows": [
+        {
+          "phase": 1,
+          "outer_condition": true,
+          "inner_condition": null,
+          "incoming": 78,
+          "prewrite": 12,
+          "sibling_before": 93,
+          "old": 12,
+          "old_copy": 12,
+          "current": 78,
+          "sibling": 93,
+          "carry_in": 204,
+          "carry_out": 12,
+          "next_phase": 3
+        },
+        {
+          "phase": 3,
+          "outer_condition": true,
+          "inner_condition": null,
+          "incoming": 78,
+          "prewrite": 78,
+          "sibling_before": 93,
+          "old": 78,
+          "old_copy": 78,
+          "current": 78,
+          "sibling": 93,
+          "carry_in": 12,
+          "carry_out": 78,
+          "next_phase": 5
+        },
+        {
+          "phase": 5,
+          "outer_condition": true,
+          "inner_condition": null,
+          "incoming": 78,
+          "prewrite": 78,
+          "sibling_before": 93,
+          "old": 78,
+          "old_copy": 78,
+          "current": 78,
+          "sibling": 93,
+          "carry_in": 78,
+          "carry_out": 78,
+          "next_phase": 7
+        },
+        {
+          "phase": 7,
+          "outer_condition": true,
+          "inner_condition": null,
+          "incoming": 78,
+          "prewrite": 78,
+          "sibling_before": 93,
+          "old": 78,
+          "old_copy": 78,
+          "current": 78,
+          "sibling": 93,
+          "carry_in": 78,
+          "carry_out": 78,
+          "next_phase": 9
+        }
+      ],
+      "break": {
+        "phase": 9,
+        "outer_condition": false,
+        "carry": 78,
+        "result": 78,
+        "original": [
+          78,
+          93
+        ],
+        "selected_current": 78,
+        "sibling_current": 93
+      },
+      "function_result_u8": 78,
+      "expected_future_target_behavior": "CANDIDATE_UNFIXED; source legality and exact finite behavior are independently predicted; compiler/CHECK/owned/C17/native NOT RUN; no PASS claim"
+    }
+  ],
+  "negatives": [
+    {
+      "id": "N01",
+      "source_file": "c243_r1179_n01_nonbool.nl",
+      "class": "CANONICAL_INVALID",
+      "basis": [
+        "27.4 condition exactly bool"
+      ],
+      "predicted_first_relevant_layer": "semantic condition type",
+      "prediction": "phase has usize type; reject a non-bool IF condition. No claim of reaching replace/loop-owned/backend."
+    },
+    {
+      "id": "N02",
+      "source_file": "c243_r1179_n02_arm_types.nl",
+      "class": "CANONICAL_INVALID",
+      "basis": [
+        "27.4 result/normal join exact same type; no implicit numeric conversion"
+      ],
+      "predicted_first_relevant_layer": "semantic IF normal-result join",
+      "prediction": "two normal arms are u8 and usize; reject. Does not reach a valid u8 IF incoming package."
+    },
+    {
+      "id": "N03",
+      "source_file": "c243_r1179_n03_incoming_type.nl",
+      "class": "CANONICAL_INVALID",
+      "basis": [
+        "17.4 replace(ref<write,T>,T)->T",
+        "5.1 usize distinct from u8"
+      ],
+      "predicted_first_relevant_layer": "semantic replace operand type",
+      "prediction": "both normal arms yield usize, so IF join itself is type-consistent; copying does not turn usize into u8. Reject replace through ref<write,u8>."
+    },
+    {
+      "id": "N04",
+      "source_file": "c243_r1179_n04_loan_escape.nl",
+      "class": "CANONICAL_INVALID",
+      "basis": [
+        "13.8 loan normal-result forwarding; ending-scope dependency preserved",
+        "17.1 bounded two-u8 field loan nonescaping"
+      ],
+      "predicted_first_relevant_layer": "loan scope-exit/dependency compatibility",
+      "prediction": "escaping writer retains its loan-bound ref dependency; reject at loan boundary. Later use is not permission to extend/mint the loan. Earlier conservative profile rejection would not prove that dependency check ran."
+    },
+    {
+      "id": "N05",
+      "source_file": "c243_r1179_n05_overflow_guard.nl",
+      "class": "TARGET_WIDTH_CONDITIONAL_CANONICAL_INVALID",
+      "basis": [
+        "5.2 representable mathematical ordinary/usize sum required",
+        "6 typed literal target range check"
+      ],
+      "predicted_first_relevant_layer": "literal range or guarded arithmetic applicability",
+      "prediction": "On an unsigned 64-bit usize target, first reachable phase is 1 and outer 1<2 is true; 1+18446744073709551615=18446744073709551616 is unrepresentable, so checked rejection is required. On a 32-bit usize target, reject the step literal first. For a wider-than-64-bit usize target this is not an overflow negative; C must retain the source and classify applicability before any execution. No wraparound oracle and no assertion that a prior profile/type reject reaches overflow."
+    },
+    {
+      "id": "N06",
+      "source_file": "c243_r1179_n06_unknown_field.nl",
+      "class": "CANONICAL_INVALID",
+      "basis": [
+        "17.1 bounded two-u8 exact declared field labels; no silent fallback"
+      ],
+      "predicted_first_relevant_layer": "field source/name resolution",
+      "prediction": "Pebble declares rim,nub only; absent is not a field. Reject without synthesizing a child/root or treating it as another source category."
+    },
+    {
+      "id": "N07",
+      "source_file": "c243_r1179_n07_impure_arm.nl",
+      "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+      "basis": [
+        "27.4 value IF evaluates exactly selected normal arm",
+        "13.8 loan forwarding",
+        "17.4 replace",
+        "Issue1179 excludes inner write/multiple writers"
+      ],
+      "predicted_first_relevant_layer": "future candidate capability/family boundary, not a language-invalid type rule",
+      "prediction": "The IF true arm writes the sibling before yielding u8; it is outside the released pure two-normal-arm family and has two writers on that path. Canonical sequencing permits these dependency-free u8 operations. A sound implementation may support it separately, so acceptance is not itself a canonical bug or C243 positive PASS. Do not execute without C's actual-scope decision.",
+      "conditional_canonical_result": 43,
+      "conditional_canonical_original_final": [
+        71,
+        67
+      ],
+      "conditional_canonical_rows": [
+        {
+          "phase": 0,
+          "inner_sibling_old": 87,
+          "inner_sibling_new": 67,
+          "incoming": 43,
+          "selected_old": 14,
+          "selected_new": 43,
+          "carry_out": 14
+        },
+        {
+          "phase": 1,
+          "inner_write": false,
+          "incoming": 71,
+          "selected_old": 43,
+          "selected_new": 71,
+          "carry_out": 43
+        }
+      ]
+    },
+    {
+      "id": "N08",
+      "source_file": "c243_r1179_n08_return_arm.nl",
+      "class": "SCOPE_NEGATIVE_CANONICALLY_LEGAL_CONDITIONAL",
+      "basis": [
+        "19.1 explicit return-enabled lexical context; no loan boundary crossed",
+        "27.4 terminating arms excluded from normal join",
+        "Issue1179 excludes inner RETURN and requires two normal arms"
+      ],
+      "predicted_first_relevant_layer": "future candidate capability/family boundary, not a mandatory canonical reject",
+      "prediction": "The true arm returns from main; only the else arm has a normal u8 IF result. This is outside the released pure two-normal-arm family. Canonically the first phase 0 returns 173 before replace, Continue, or Break. Acceptance is not by itself a canonical bug. Do not execute without C's actual-scope decision.",
+      "conditional_canonical_result": 173,
+      "conditional_canonical_original_at_return": [
+        14,
+        87
+      ],
+      "conditional_continue_count": 0,
+      "conditional_break_count": 0
+    }
+  ],
+  "common_value_oracle": [
+    "Each positive has one original two-u8 lexical T, one loop, one syntactic Continue and one syntactic Break, and one scoped replace in the Continue arm.",
+    "At each reachable Continue phase the pure inner IF evaluates only its selected arm. Its u8 result passes through ordinary binding/Copy; both operands are dependency-free typed literals.",
+    "old/old_copy equal the selected field immediately before replacement; they remain u8 copies of that old package after the original field changes. Copy aliases are value copies, not borrowed aliases to original storage.",
+    "current is the selected incoming value; known-disjoint sibling remains its initial value; original is the same live root with that selected field changed. No reconstructed T substitutes for original.",
+    "continue transfers next phase and old_copy to fresh iteration bindings. Break returns the actual current memory carry, including the initial seed when there are zero Continues.",
+    "P04 deliberately ends with current=86 and Break=52. L01 and P03 both return 78, but their traces differ, so function result alone cannot validate selection or old/current correctness.",
+    "Every positive phase and addition is at most 10 and representable on ordinary supported usize targets; all u8 literals are 0..255.",
+    "Native returned bits/address equality are observations, not proofs of ghost ValueFact freshness, provenance, scope authority, or sound cyclic header joins."
+  ],
+  "address_and_identity_oracle": {
+    "reference_points": "B0 after original construction before loop; Wk inside each real scoped writer before/after replace; Bk after each Continue transfer when same original is still live; BX immediately after the real Break and before main exits",
+    "root": "For a later C-approved read-only observer, identify storage of the source-created original T, not a trace reconstruction. Compare its address at every point to B0: equality required while live.",
+    "children": "Identify the actual two declared child subobjects of that same original. Each child's address must stay equal to its own B0 address; child0 and child1 occupy distinct disjoint u8 subobjects. Compare writer destination with exactly the selected child's address; never infer selection merely from equal numeric bits.",
+    "layout_boundary": "Do not require root address to differ from first-child address: offset-zero equality is possible. Do not prescribe ABI offsets, struct padding, unrelated old_copy local addresses, or numeric address constants.",
+    "ghost": "Original root/child PlaceId and incarnation relationships remain those of original. Selected child and ancestor current facts follow each actual replace; the known-disjoint sibling fact remains valid. Same-bits replacements do not license reuse of stale selected/root fact evidence. A future genuine source-issued owned inspection must establish these separately; native bits/addresses cannot.",
+    "observer_boundary": "No observer/runner is created in this freeze. Future observation may only read actual emitted/issued guest state at the named source roles, may not fabricate guest state, rebuild original, mutate results, insert an additional guest writer, or infer PASS from lack of trace.",
+    "status": "ALL address/owned/native observations UNMEASURED; emitted identifier mapping and approved observer mechanics await fixed candidate and C release."
+  },
+  "grammar_and_scope_caveats": [
+    "Source spelling is independently read from canonical sections 4.2-4.3,5.1-5.2,6,13.5a-13.5b,13.8,16.2,17.1,17.4,18.1,19.1,27.1,27.4-27.8 and the fixed-main public parser header.",
+    "No canonical grammar contradiction is known from text review; no parser/CHECK/source-eligibility result is claimed. Existing finite production acceptance of captured field reads, alias depth, equality condition, reversed initializer order and retained observation bindings has not been measured.",
+    "N05 is explicitly width-conditional; C must fix target usize width or record nonapplicability before executing it. The source and first prediction remain frozen.",
+    "N07/N08 are capability/scope negatives, not canonical-invalid programs. Their execution would require a separate C scope decision.",
+    "Source uncertainty that needs execution stays unresolved; it is not repaired by looking at producer fixtures or by running P's environment.",
+    "Actual candidate may cover less than this pre-ref proposal. C adjudicates actual-scope differences; no silent oracle/source rewrite and no expansion of this authorization."
+  ],
+  "project_boundary": "audit locality UNMEASURED; GO624 PAUSED; H1 HOLD; P1036-PR1050 STOP. Finite CLI preparation only; no general soundness, termination, range, safe-library or product proof."
+}
