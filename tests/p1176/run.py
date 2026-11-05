@@ -4,6 +4,7 @@ import json,re,subprocess,sys
 p=Path(__file__).resolve().parent
 compiler,probe,gcc,clang,sanitizer,output=sys.argv[1:]
 oracle=json.loads((p/'oracle.json').read_text())
+version=json.loads((p/'oracle-v2.json').read_text())
 raw=Path(output);raw.mkdir(exist_ok=False,parents=True);rows=[];native_runs=0
 def run(cmd,label,allowed=(0,)):
     r=subprocess.run(list(map(str,cmd)),capture_output=True,timeout=90)
@@ -70,9 +71,10 @@ static void c243_read(uint8_t *a,uint8_t v){
 
 summary={}
 for name,meta in oracle['cases'].items():
-    src=p/'sources'/(name+'.nl');category=meta['category']
+    src=p/version['source_overrides'].get(name,'sources/'+name+'.nl');category=meta['category']
     check=run([compiler,'--check',src],name+'-check',(meta['check'],))
     if category=='negative' and check.returncode==0:raise AssertionError(('STOP negative CHECK accepted',name))
+    if name in version['expected_diagnostics']:assert version['expected_diagnostics'][name].encode() in check.stderr
     proof=None
     if category=='positive':proof=run([probe,src],name+'-owned-trace')
     emitted=run([compiler,src],name+'-emit',(meta['emit'],))
