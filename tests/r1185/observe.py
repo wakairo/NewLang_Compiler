@@ -99,6 +99,8 @@ class Observer:
         self.functions = []
         self.events = []
         self.unobservable = []
+        self.statement_end_repairs = {}
+        self.direct_declaration_reads = []
         self.field_count = 0
         self._records(ast)
         self._typedef_records(ast)
@@ -148,7 +150,7 @@ class Observer:
                 self.ambiguous_declarations.update(declarations)
                 self.unobservable.append({"kind": "declaration_spelling_collision",
                     "declarations": declarations,
-                    "reason": "all same-spelling declarations in this function omitted; no general lexical resolver"})
+                    "reason": "same-spelling declarations omitted from snapshots/argument lookahead; only their own initialized direct declaration boundary may read them"})
 
     def _records(self, node):
         if node.get("kind") == "RecordDecl" and node.get("completeDefinition"):
@@ -222,6 +224,24 @@ class Observer:
         end = region[1]
         if self.original[max(region[0], end - 1):end] == b";":
             return end
+        raw_end = node.get("range", {}).get("end", {})
+        expansion = raw_end.get("expansionLoc")
+        # Captured actual Clang ranges end at the UINTMAX_C macro name for
+        # the standalone carry assignment. Accept only this finite decimal
+        # invocation followed immediately by whitespace and its semicolon.
+        # Never substitute a scratch-space spelling offset or scan forward to
+        # an unrelated semicolon.
+        if (node.get("kind") == "BinaryOperator" and node.get("opcode") == "="
+                and expansion and expansion.get("tokLen") == 9
+                and self.original[expansion.get("offset", -1):end] == b"UINTMAX_C"
+                and self.parent[id(node)] is not None
+                and self.parent[id(node)].get("kind") == "CompoundStmt"):
+            suffix = re.match(rb"\([ \t]*[0-9]+[ \t]*\)(?=[ \t\r\n]*;)", self.original[end:])
+            if suffix:
+                end += suffix.end()
+                self.statement_end_repairs[self.node_ids[id(node)]] = {
+                    "kind": "actual_UINTMAX_C_decimal_invocation",
+                    "raw_ast_end": region[1], "invocation_end": end}
         while end < len(self.original) and self.original[end:end + 1] in b" \t\r\n":
             end += 1
         if self.original[end:end + 1] != b";":
@@ -238,8 +258,8 @@ class Observer:
     def marker(self, event, kind):
         return f'(void)fprintf(stderr, "R1185|EVENT|{event}|{kind}\\n");\n'
 
-    def log_variable(self, event, decl):
-        if decl in self.ambiguous_declarations:
+    def log_variable(self, event, decl, direct_declaration=False):
+        if decl in self.ambiguous_declarations and not direct_declaration:
             return ""
         info = self.variables[decl]
         name = info["name"]
@@ -346,7 +366,13 @@ class Observer:
                 for child in node.get("inner", []):
                     decl = self.decl_ids.get(child.get("id"))
                     if decl and self.variables[decl]["initialized"]:
-                        text += self.log_variable(event, decl)
+                        text += self.log_variable(event, decl, direct_declaration=True)
+                        if decl in self.ambiguous_declarations:
+                            self.direct_declaration_reads.append({
+                                "declaration": decl, "event": event,
+                                "statement": self.node_ids[id(node)],
+                                "after_statement": self.after_statement(node),
+                                "basis": "this initialized VarDecl at its own direct CompoundStmt declaration boundary"})
                 self.add(self.after_statement(node), text)
                 declarations = node.get("inner", [])
                 direct = None
@@ -486,6 +512,8 @@ class Observer:
                  "functions": self.functions, "records": self.records,
                  "variables": self.variables, "nodes": metadata,
                  "events": self.events, "insertions": edits,
+                 "statement_end_repairs": self.statement_end_repairs,
+                 "direct_declaration_reads": self.direct_declaration_reads,
                  "not_observable": self.unobservable,
                  "limits": ["no claim of machine CALL from C source call",
                             "store markers identify actual original-C AST boundaries, not proof an optimized machine STORE survives",

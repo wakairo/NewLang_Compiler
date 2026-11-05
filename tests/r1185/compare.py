@@ -11,6 +11,8 @@ import json
 from pathlib import Path
 import sys
 
+from direct_helper import decode_direct_helper
+
 
 class Incomplete(RuntimeError):
     pass
@@ -54,7 +56,9 @@ class Decoder:
                     left = self.unwrap(node["children"][0])
                     if left["kind"] == "DeclRefExpr" and left.get("ref_decl"):
                         self.assignments.setdefault(left["ref_decl"], []).append(node["id"])
-        self.events = self.parse(raw)
+        # None is reserved for a static same-AST role check. It creates no raw
+        # events and cannot complete decode(), which requires actual boundaries.
+        self.events = [] if raw is None else self.parse(raw)
 
     def unwrap(self, node):
         node = self.nodes[node] if isinstance(node, str) else node
@@ -194,41 +198,8 @@ class Decoder:
         return {"address": row[2], "value": int(row[3])}
 
     def helper(self, nodes):
-        candidates = []
-        for node in nodes:
-            if node["kind"] != "IfStmt" or not node.get("hasElse"):
-                continue
-            arms = node["children"][-2:]
-            targets = []
-            for arm in arms:
-                found = set()
-                for child in self.descendants(arm):
-                    if child["kind"] != "BinaryOperator" or child.get("opcode") != "=":
-                        continue
-                    left = self.unwrap(child["children"][0])
-                    decl = left.get("ref_decl") if left["kind"] == "DeclRefExpr" else None
-                    if decl and u8_type(self.variables[decl]["type"]):
-                        found.add(decl)
-                targets.append(found)
-            common = targets[0] & targets[1]
-            if len(common) == 1:
-                candidates.append((node, next(iter(common))))
-        node, result = one(candidates, "one normal-u8 IF result join")
-        condition = node["children"][0]
-        comparisons = {x["id"]: x for x in self.expanded(condition)
-                       if x["kind"] == "BinaryOperator" and x.get("opcode") in ("<", "==")}
-        comparison = one(comparisons.values(), "helper LT/EQ comparison")
-        left = self.unwrap(comparison["children"][0])
-        if left["kind"] != "DeclRefExpr" or not left.get("ref_decl"):
-            raise Incomplete("helper comparison operand is not an actual scalar read")
-        operand = left["ref_decl"]
-        branch_events = sorted(self.matching("IF_TRUE", node["id"])
-                               + self.matching("IF_FALSE", node["id"]), key=lambda e: e["sequence"])
-        result_writes = [e for e in self.matching("ASSIGN_AFTER")
-                         if self.unwrap(e["static"]["lhs"]).get("ref_decl") == result]
-        return {"if": node, "result": result, "comparison": comparison,
-                "operand": operand, "branches": branch_events,
-                "results": result_writes}
+        return decode_direct_helper(self, list(nodes), Incomplete, Mismatch,
+                                    one, u8_type, usize_type)
 
     def declared_values(self, decl, after=None, before=None):
         result = []
@@ -261,9 +232,18 @@ class Decoder:
             raise Incomplete("do-loop observation requires a distinct edge decoder")
         breaks = [n for n in descendants if n["kind"] == "BreakStmt"]
         break_node = one(breaks, "actual loop Break statement")
-        outer = one((n for n in descendants if n["kind"] == "IfStmt" and n.get("hasElse")
-                     and any(x["id"] == break_node["id"] for x in self.descendants(n))),
-                    "outer guard IF enclosing actual Break")
+        body = self.nodes[loop["children"][-1]]
+        if body["kind"] != "CompoundStmt" or break_node.get("parent") != body["id"]:
+            raise Incomplete("finite loop requires a direct fallthrough Break in its compound body")
+        outer = one((n for n in descendants if n["kind"] == "IfStmt" and not n.get("hasElse")
+                     and n.get("parent") == body["id"]
+                     and any(x["kind"] == "ContinueStmt" for x in self.descendants(n))),
+                    "outer guard IF whose true region continues before fallthrough Break")
+        if len(outer["children"]) != 2 or outer["range"][1] >= break_node["range"][0]:
+            raise Incomplete("outer true region and fallthrough Break are not finite ordered siblings")
+        tail_ids = body["children"][body["children"].index(outer["id"]) + 1:
+                                    body["children"].index(break_node["id"])]
+        break_tail = [n for node in tail_ids for n in self.descendants(node)]
         condition = outer["children"][0]
         counter = one((d for d in self.dependencies(condition)
                        if d in self.assignments and usize_type(self.variables[d]["type"]) and
@@ -272,10 +252,21 @@ class Decoder:
         if not header_events:
             raise Incomplete("actual loop header events absent")
         phase_headers = [self.value(e, counter) for e in header_events]
-        outer_events = sorted(self.matching("IF_TRUE", outer["id"])
-                              + self.matching("IF_FALSE", outer["id"]), key=lambda e: e["sequence"])
+        outer_events = self.matching("IF_TRUE", outer["id"])
+        outer_choices = []
+        for index, header in enumerate(header_events):
+            stop = header_events[index + 1]["sequence"] if index + 1 < len(header_events) else len(self.events)
+            true_hits = [e for e in outer_events if header["sequence"] < e["sequence"] < stop]
+            break_hits = [e for e in self.matching("BREAK", break_node["id"])
+                          if header["sequence"] < e["sequence"] < stop]
+            if len(true_hits) == 1 and not break_hits:
+                outer_choices.append(True)
+            elif len(break_hits) == 1 and not true_hits:
+                outer_choices.append(False)
+            else:
+                raise Incomplete("actual header has no unique true-entry or fallthrough-Break path")
         helper = self.helper(n for n in descendants if n["id"] != outer["id"])
-        if counter not in self.dependencies(helper["comparison"]["children"][0]):
+        if counter not in self.dependencies(helper["argument"]):
             raise Incomplete("actual C helper operand path does not establish direct carry flow")
         store_nodes = []
         for node in descendants:
@@ -379,7 +370,7 @@ class Decoder:
                     raise Incomplete("entry Copy not directly observed at actual Break")
                 observed.append(break_values[decl])
         break_targets = set()
-        for node in self.descendants(outer["children"][-1]):
+        for node in break_tail:
             if node["kind"] == "BinaryOperator" and node.get("opcode") == "=":
                 left = self.unwrap(node["children"][0])
                 decl = left.get("ref_decl") if left["kind"] == "DeclRefExpr" else None
@@ -390,7 +381,8 @@ class Decoder:
         starting_phase_copies = []
         for decl, initializer in self.initializers.items():
             node = self.nodes[self.variables[decl]["node"]]
-            if node["range"][0] <= loop["range"][1] or not usize_type(self.variables[decl]["type"]):
+            if (node["function"] != loop["function"] or node["range"][0] <= loop["range"][1]
+                    or not usize_type(self.variables[decl]["type"])):
                 continue
             values = self.declared_values(decl)
             if loop_result in self.dependencies(initializer):
@@ -403,7 +395,7 @@ class Decoder:
         sibling_post_values = [v for d in post_sibling for v in self.declared_values(d)]
         if not selected_post_values or not sibling_post_values:
             raise Incomplete("post-loop current/sibling loads not observed")
-        helper_results = [self.destination(e)["value"] for e in helper["results"]]
+        helper_results = helper["result_values"]
         normal_copies = [d for d, initializer in self.initializers.items()
                          if u8_type(self.variables[d]["type"])
                          and helper["result"] in self.dependencies(initializer)
@@ -418,16 +410,18 @@ class Decoder:
         if not old_copies:
             raise Incomplete("replace old-result Copy path absent from actual C graph")
         return {"kind": "loop", "phase_headers": phase_headers,
-                "outer_guard_results": [e["static"]["kind"] == "IF_TRUE" for e in outer_events],
-                "helper_arguments": [self.value(e, helper["operand"]) for e in helper["branches"]],
-                "fresh_formal_values": [self.value(e, helper["operand"]) for e in helper["branches"]],
-                "formal_evidence_limit": "inlined C operand Copy chain linked to carry; source-issued public callee facts are separate; no machine formal address/freshness claim",
-                "helper_branch_results": [e["static"]["kind"] == "IF_TRUE" for e in helper["branches"]],
+                "outer_guard_results": outer_choices,
+                "outer_guard_evidence_limit": "true entry observed; false is actual fallthrough-Break path inference within each observed loop-header interval",
+                "helper_arguments": helper["arguments"],
+                "fresh_formal_values": helper["formals"],
+                "formal_evidence_limit": helper["evidence_limit"],
+                "helper_branch_results": helper["choices"],
+                "helper_observations": helper["observations"],
                 "helper_normal_results": helper_results,
                 "replace_old_results": old_values,
                 "selected_after_each_store": current, "sibling_after_each_store": siblings,
                 "continue_arguments": [self.value(e, counter) for e in continue_events],
-                "helper_call_count": len(helper["branches"]), "store_count": len(after_stores),
+                "helper_call_count": len(helper["arguments"]), "store_count": len(after_stores),
                 "continue_count": len(continue_events), "break_count": len(break_events),
                 "actual_incoming": incoming, "caller_result_copies": copy_values,
                 "old_result_copies": {d: self.declared_values(d) for d in old_copies},
@@ -449,23 +443,25 @@ class Decoder:
                              "aliases": alias_decls,
                              "limit": "within this passive run only; no C layout/source-index equivalence or cross-run/ghost authority"},
                 "roles": {"loop": loop["id"], "counter": counter, "outer_if": outer["id"],
-                          "helper_if": helper["if"]["id"], "helper_u8_join": helper["result"],
+                          "helper_conditional": helper["if"]["id"], "helper_call_result": helper["result"],
+                          "helper_call": helper["call"]["id"], "callee_function": helper["callee_function"],
                           "helper_operand": helper["operand"], "store": store["id"],
                           "old_load": old_load, "loop_result": loop_result}}
 
     def control(self):
+        if any(n["kind"] in ("BinaryOperator", "CompoundAssignOperator")
+               and n.get("opcode") in ("=", "+=", "-=") for n in self.nodes.values()):
+            raise Incomplete("ordinary helper-only control contains an actual assignment/store")
         helper = self.helper(self.nodes.values())
-        branches = helper["branches"]
-        branch = one(branches, "ordinary control helper IF execution")
-        result_write = one(helper["results"], "ordinary normal u8 result")
+        observation = one(helper["observations"], "ordinary actual helper invocation")
         copies = [d for d, initializer in self.initializers.items()
                   if u8_type(self.variables[d]["type"])
+                  and self.variables[d]["function"] == helper["caller_function"]
                   and helper["result"] in self.dependencies(initializer)]
         copy_values = {d: self.declared_values(d) for d in copies}
         if not copies or any(not v for v in copy_values.values()):
             raise Incomplete("ordinary helper caller Copy observation absent")
-        value = self.value(branch, helper["operand"])
-        operand_dependencies = self.dependencies(helper["comparison"]["children"][0])
+        operand_dependencies = self.dependencies(helper["argument"])
         phase_origins = []
         for decl in operand_dependencies:
             if decl not in self.initializers or not usize_type(self.variables[decl]["type"]):
@@ -478,24 +474,27 @@ class Decoder:
         for decl, initializer in self.initializers.items():
             node = self.nodes[self.variables[decl]["node"]]
             if (usize_type(self.variables[decl]["type"])
-                    and node["range"][0] > helper["if"]["range"][1]
+                    and node["function"] == helper["caller_function"]
+                    and node["range"][0] > helper["call"]["range"][1]
                     and origin in self.dependencies(initializer)):
                 post_phase.extend(self.declared_values(decl))
         if not post_phase:
             raise Incomplete("ordinary caller phase-after Copy path not observed")
         return {"kind": "ordinary_control", "expected": {
-                    "actual": value, "fresh_formal": value,
-                    "condition": branch["static"]["kind"] == "IF_TRUE",
-                    "normal_result": self.destination(result_write)["value"],
+                    "actual": observation["actual_argument"], "fresh_formal": observation["formal_value"],
+                    "condition": observation["conditional_choice_inferred"],
+                    "normal_result": observation["caller_call_result_observed"],
                     "normal_copy": next(iter(copy_values.values()))[-1],
                     "phase_after": post_phase[-1],
-                    "calls": len(branches), "stores": 0, "loops": 0},
+                    "calls": len(helper["observations"]), "stores": 0, "loops": 0},
+                "helper_observations": helper["observations"],
                 "caller_result_copies": copy_values,
                 "post_phase_copies": post_phase,
-                "roles": {"helper_if": helper["if"]["id"], "helper_u8_join": helper["result"],
+                "roles": {"helper_conditional": helper["if"]["id"], "helper_call_result": helper["result"],
+                          "helper_call": helper["call"]["id"], "callee_function": helper["callee_function"],
                           "helper_operand": helper["operand"], "actual_origin": origin},
                 "limits": ["helper-only evidence; no loop/store claim",
-                           "inlined semantic flow only; no machine CALL/fresh address claim"]}
+                           helper["evidence_limit"]]}
 
 
 def compare(observed, expected):

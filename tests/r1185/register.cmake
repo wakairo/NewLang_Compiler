@@ -45,12 +45,13 @@ if(BUILD_TESTING)
             newlang_semantic newlang_parser)
         _add_test(NAME r1185.helper_result_current.integration
             COMMAND "${Python3_EXECUTABLE}"
-            "${CMAKE_SOURCE_DIR}/tests/r1185/driver.py"
+            "${CMAKE_SOURCE_DIR}/tests/r1185/recovery_driver.py"
             "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r1185_public>"
             "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
             "${CMAKE_SOURCE_DIR}/tests/r1185"
             "${CMAKE_BINARY_DIR}/r1185-evidence"
-            "${CMAKE_BINARY_DIR}/r1185-fixed-context.json")
+            "${CMAKE_BINARY_DIR}/r1185-fixed-context.json"
+            "${CMAKE_BUILD_TYPE}")
         set_tests_properties(r1185.helper_result_current.integration PROPERTIES
             TIMEOUT 600 RUN_SERIAL TRUE
             ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")

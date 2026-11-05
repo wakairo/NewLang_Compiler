@@ -14,7 +14,7 @@ if not root.is_dir():
     raise SystemExit(0)
 members = []
 for path in sorted(root.rglob("*")):
-    if path.is_file() and not path.is_symlink() and path.name != "MEMBER-INDEX.json":
+    if path.is_file() and not path.is_symlink() and path != root / "MEMBER-INDEX.json":
         data = path.read_bytes()
         members.append({"path": str(path.relative_to(root)), "bytes": len(data),
                         "sha256": hashlib.sha256(data).hexdigest()})
