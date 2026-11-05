@@ -2989,11 +2989,11 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
         fprintf(stream, "size_t nl_loop_carry_%zu = (size_t)UINTMAX_C(%zu);\n", id, p->initial_phase) < 0 ||
         !v0_indent(stream, depth) || fputs("for (;;) {\n", stream) < 0 ||
         !v0_indent(stream, depth + 1) ||
-        fprintf(stream, "const size_t nl_local_%zu = nl_loop_carry_%zu;\n", p->phase_symbol, id) < 0 ||
+        fprintf(stream, "const size_t nl_loop_phase_%zu = nl_loop_carry_%zu;\n", id, id) < 0 ||
         !v0_indent(stream, depth + 1) ||
-        fprintf(stream, "NL_CURRENT_PHASE(nl_local_%zu, &nl_local_%zu.f0, &nl_local_%zu.f1);\n", p->phase_symbol, p->base, p->base) < 0 ||
+        fprintf(stream, "NL_CURRENT_PHASE(nl_loop_phase_%zu, &nl_local_%zu.f0, &nl_local_%zu.f1);\n", id, p->base, p->base) < 0 ||
         !v0_indent(stream, depth + 1) ||
-        fprintf(stream, "if (nl_local_%zu < (size_t)UINTMAX_C(%zu)) {\n", p->phase_symbol, p->limit) < 0)
+        fprintf(stream, "if (nl_loop_phase_%zu < (size_t)UINTMAX_C(%zu)) {\n", id, p->limit) < 0)
         return false;
     NLCheckedNodeId item = block->first_item;
     while (item && item != p->continue_node) {
@@ -3007,11 +3007,11 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
         item = n->next_item;
     }
     return item == p->continue_node && v0_indent(stream, depth + 2) &&
-           fprintf(stream, "nl_loop_carry_%zu = nl_local_%zu + (size_t)UINTMAX_C(%zu);\n", id, p->phase_symbol, p->next_phase) >= 0 &&
+           fprintf(stream, "nl_loop_carry_%zu = nl_loop_phase_%zu + (size_t)UINTMAX_C(%zu);\n", id, id, p->next_phase) >= 0 &&
            v0_indent(stream, depth + 2) && fputs("continue;\n", stream) >= 0 &&
            v0_indent(stream, depth + 1) && fputs("}\n", stream) >= 0 &&
            v0_indent(stream, depth + 1) &&
-           fprintf(stream, "nl_local_%zu = nl_local_%zu;\n", result, p->phase_symbol) >= 0 &&
+           fprintf(stream, "nl_local_%zu = nl_loop_phase_%zu;\n", result, id) >= 0 &&
            v0_indent(stream, depth + 1) &&
            fprintf(stream, "NL_CURRENT_RESULT(nl_local_%zu);\n", result) >= 0 &&
            v0_indent(stream, depth + 1) && fputs("break;\n", stream) >= 0 &&
