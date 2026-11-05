@@ -1227,6 +1227,8 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1146_safety>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_BINARY_DIR}/p1146-native")
+    add_test(NAME p1176_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1176/evidence_test.py")
     add_executable(p1176_safety tests/p1176/safety.c)
     add_executable(p1176_oom tests/p1176/safety.c)
     add_executable(p1176_census tests/p1176/census.c)

@@ -396,8 +396,10 @@ static bool current_pure_prefix(const NLCurrentLoopProof *s,
         return false;
     for (size_t i = 0; i < a->binding_count; ++i) {
         const NLBindingEntry x = a->bindings[i], y = b->bindings[i];
-        if (strcmp(x.name, y.name) || x.hidden != y.hidden ||
-            memcmp(&x.view, &y.view, sizeof(x.view)))
+        if (!x.name || !y.name || strcmp(x.name, y.name) ||
+            x.hidden != y.hidden || x.view.type != y.view.type ||
+            x.view.value != y.view.value || x.view.place != y.view.place ||
+            x.view.availability != y.view.availability)
             return false;
     }
     for (size_t i = 0; i < a->place_count; ++i)
@@ -513,8 +515,11 @@ static bool current_pure_if(CurrentWalk *r, NLCheckedNodeId id,
     for (size_t i = 0; i < a->binding_count; ++i)
         if (strcmp(a->bindings[i].name, b->bindings[i].name) ||
             a->bindings[i].hidden != b->bindings[i].hidden ||
-            memcmp(&a->bindings[i].view, &b->bindings[i].view,
-                   sizeof(NLSemanticBindingView)))
+            a->bindings[i].view.type != b->bindings[i].view.type ||
+            a->bindings[i].view.value != b->bindings[i].view.value ||
+            a->bindings[i].view.place != b->bindings[i].view.place ||
+            a->bindings[i].view.availability !=
+                b->bindings[i].view.availability)
             return false;
     for (size_t i = 0; i < a->place_count; ++i)
         if (memcmp(&a->places[i], &b->places[i], sizeof(NLSemanticPlaceView)))
