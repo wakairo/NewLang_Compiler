@@ -1,14 +1,22 @@
 # R1163-only registration. Existing assertions run from a byte-verified fixed-P
-# tree where the two historical root-CMake digests remain meaningful.
+# tree where the historical root-CMake digests remain meaningful.
 if(BUILD_TESTING)
     set(R1163_FIXED_SOURCE "${CMAKE_BINARY_DIR}/r1163-fixed-p")
     function(add_test)
         set(r1163_args ${ARGV})
-        if(ARGV0 STREQUAL "NAME" AND
-           (ARGV1 STREQUAL "p965_freeze.unit" OR ARGV1 STREQUAL "p982_freeze.unit"))
+        set(r1163_history_tests
+            p965_freeze.unit p982_freeze.unit p1088_evidence.unit
+            p990_new_native.integration p1107_evidence_history.unit
+            p1117_evidence_history.unit p1098_evidence_history.unit
+            p990_freeze_protocol.unit p1045_two_original_native.integration
+            p1055_old_origin_0.integration p1058_closed_h_0.integration
+            p1062_h_body_0.integration)
+        if(ARGV0 STREQUAL "NAME" AND ARGV1 IN_LIST r1163_history_tests)
             set(r1163_relocated)
             foreach(r1163_arg IN LISTS r1163_args)
-                if(r1163_arg MATCHES "^${CMAKE_SOURCE_DIR}/tests/p(965|982)/freeze_test.py$")
+                string(FIND "${r1163_arg}" "${CMAKE_SOURCE_DIR}/tests/"
+                    r1163_source_prefix)
+                if(r1163_source_prefix EQUAL 0)
                     string(REPLACE "${CMAKE_SOURCE_DIR}/" "${R1163_FIXED_SOURCE}/"
                         r1163_arg "${r1163_arg}")
                 endif()

@@ -1,0 +1,97 @@
+{
+  "classification": "PURE_TEXT_MACHINERY_CHECK_ONLY_NOT_COMPILER_OR_NATIVE",
+  "cases": [
+    {
+      "job": "job_126949834380",
+      "archive_sha256": "97d06c39d99becd8e8dbab7041e39e18d4a1f5450b462a5eb185769264ac4de1",
+      "original_c_sha256": "ecc4d4ffff462f82538624689b41efd7616cfe97b819376dacc09cd9b796241e",
+      "pure_text_insertion_reconstruction": true,
+      "events": 20,
+      "old_copy_lineage": [
+        "nl_local_6",
+        "nl_local_5",
+        "nl_if_result_19",
+        "nl_loan_result_1",
+        "nl_replace_old_4"
+      ],
+      "c_branch_to_source_arm": [
+        0,
+        1
+      ]
+    },
+    {
+      "job": "job_126949834394",
+      "archive_sha256": "fc7e024e42b4040e48cdd583fe7abf2f23d9dd4957c4ced4df401c6588aa2930",
+      "original_c_sha256": "ecc4d4ffff462f82538624689b41efd7616cfe97b819376dacc09cd9b796241e",
+      "pure_text_insertion_reconstruction": true,
+      "events": 20,
+      "old_copy_lineage": [
+        "nl_local_6",
+        "nl_local_5",
+        "nl_if_result_19",
+        "nl_loan_result_1",
+        "nl_replace_old_4"
+      ],
+      "c_branch_to_source_arm": [
+        0,
+        1
+      ]
+    },
+    {
+      "job": "job_126949834503",
+      "archive_sha256": "fac44b3b8a24fe5df29aa6598380271c0884bf9c5522a929328a33c2aeaf90b2",
+      "original_c_sha256": "ecc4d4ffff462f82538624689b41efd7616cfe97b819376dacc09cd9b796241e",
+      "pure_text_insertion_reconstruction": true,
+      "events": 20,
+      "old_copy_lineage": [
+        "nl_local_6",
+        "nl_local_5",
+        "nl_if_result_19",
+        "nl_loan_result_1",
+        "nl_replace_old_4"
+      ],
+      "c_branch_to_source_arm": [
+        0,
+        1
+      ]
+    },
+    {
+      "job": "job_126949834610",
+      "archive_sha256": "5ed9a8124465460ff9a3a7411abce94f1f8e46f6485b021e4a7cd3a6291ef33e",
+      "original_c_sha256": "ecc4d4ffff462f82538624689b41efd7616cfe97b819376dacc09cd9b796241e",
+      "pure_text_insertion_reconstruction": true,
+      "events": 20,
+      "old_copy_lineage": [
+        "nl_local_6",
+        "nl_local_5",
+        "nl_if_result_19",
+        "nl_loan_result_1",
+        "nl_replace_old_4"
+      ],
+      "c_branch_to_source_arm": [
+        0,
+        1
+      ]
+    },
+    {
+      "job": "job_126949834650",
+      "archive_sha256": "fa4ee4e5326e20167c951a040ff0efdaf4d874a1dc0fc4ec8e190dc4d4d55127",
+      "original_c_sha256": "ecc4d4ffff462f82538624689b41efd7616cfe97b819376dacc09cd9b796241e",
+      "pure_text_insertion_reconstruction": true,
+      "events": 20,
+      "old_copy_lineage": [
+        "nl_local_6",
+        "nl_local_5",
+        "nl_if_result_19",
+        "nl_loan_result_1",
+        "nl_replace_old_4"
+      ],
+      "c_branch_to_source_arm": [
+        0,
+        1
+      ]
+    }
+  ],
+  "oracle_sha256": "cfd4cd373e3b1b1e3c358b546cdd5691687bbc87ccc7de8e1eb31f83bc71fc63",
+  "observer_sha256": "9a8b7acd82ec4a37f615333c399a915d5978d45daa827067a19864e688650410"
+}

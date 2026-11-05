@@ -1,6 +1,6 @@
 """Materialize exactly the fixed-P tree for unchanged history hash tests.
 
-Only two history-checker launch paths are relocated. Every leaf is verified as
+Only the twelve recorded history-checker launch paths are relocated. Every leaf is verified as
 its Git blob and mode; no expectation, assertion, producer test or source changes.
 """
 import hashlib
@@ -58,7 +58,13 @@ def main():
                'tree':'261a8e404a1cf1982e13d3b94e3223d5da0e0499',
                'verified_leaves':len(manifest),
                'manifest_sha256':hashlib.sha256((own/'fixed_p_manifest.json').read_bytes()).hexdigest(),
-               'only_relocated_tests':['p965_freeze.unit','p982_freeze.unit'],
+               'only_relocated_tests':[
+                   'p965_freeze.unit','p982_freeze.unit','p1088_evidence.unit',
+                   'p990_new_native.integration','p1107_evidence_history.unit',
+                   'p1117_evidence_history.unit','p1098_evidence_history.unit',
+                   'p990_freeze_protocol.unit','p1045_two_original_native.integration',
+                   'p1055_old_origin_0.integration','p1058_closed_h_0.integration',
+                   'p1062_h_body_0.integration'],
                'source':str(current),'snapshot':str(destination)}
     destination.with_suffix('.receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
     print('R1163 FIXED-P history snapshot: '+json.dumps(receipt,sort_keys=True))

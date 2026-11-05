@@ -24,9 +24,13 @@ observation, identical ordinary stdout and named C17 output, strict C17 builds,
 and native execution under GCC and Clang at O0/O2. Host and guest sanitizer
 labels are separate; ASan/UBSan jobs add the same sanitizer to each guest lane.
 `observer.py` derives passive insertion points from each actual Clang AST. It
-never replaces values, conditions, arithmetic, stores, or expected output. It
-reads live initialized carriers and original addresses; after return, only
-counters are read. Unsupported AST shapes fail closed as machinery failures.
+preserves all original expression, arithmetic, branch and store bytes. Inline
+comparisons are surrounded by an identity recorder: the original comparison
+executes once, its actual Bool is recorded and returned unchanged, and extra
+operand observations read only side-effect-free live scalar atoms. Source Bool
+truth is kept distinct from a possibly negated C branch condition. It reads live
+initialized carriers and original addresses; after return, only counters are
+read. Unsupported AST shapes fail closed as machinery failures.
 
 Every command and its return code/stdout/stderr, the original and instrumented
 C, AST, observer map, inputs, frozen oracle, and per-lane receipts enter a
@@ -36,11 +40,22 @@ decode, and verify the declared SHA-256 before extracting. Both successful and
 failed runs archive evidence. The first failed outcome is never overwritten.
 
 The only root CMake change includes `register.cmake`. It adds this independent
-CTest and relocates exactly two historical hash-checker launch paths, p965 and
-p982, to a complete byte/mode-verified fixed-P tree. Those scripts, their
+CTest and relocates exactly twelve historical hash-checker launch paths to a
+complete byte/mode-verified fixed-P tree. The first two are p965 and p982. The
+initial normal cohort identified ten further paths ending at the unchanged
+`CMakeLists.txt` freeze digest; C disposition 6645682942 authorizes their same
+transport. The exact names are enumerated in `register.cmake` and the snapshot
+receipt. Only arguments beginning with the source `tests/` directory move;
+the actual R compiler, CC, sanitizer and profile arguments remain. Those scripts, their
 assertions, expected hashes, imported history, production sources, and other
 CTest commands are unchanged. The snapshot does not contain a new expectation.
 It is verified against all 5,992 Git blobs from the immutable P tree.
+
+FIRST outcomes are retained. M2 addresses the actual R C/AST inline-condition,
+macro-token endpoint and anonymous-record assumptions together with the ten
+omitted history launch paths. It changes no guest source, oracle, production
+file, old assertion or expected hash. Incidental old-P formatter and inherited
+test output exposure occurred only after the independent pre-execution freezes.
 
 No local compiler, CMake configure, formatter, CTest, or native execution is
 part of this work. Pure text syntax/hash/mock checks do not count as R evidence.
