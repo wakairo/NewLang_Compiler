@@ -1,0 +1,9 @@
+{
+  "authority": "C245",
+  "files": {
+    "run.py": "32ba1bbbe93ed91632c38d6af08f63153abdd726a839bba3935f9df32a23d6f1",
+    "check.py": "ba0371d46544420512ade767f5b9c3c306fd79d0f102d00eaacb4ea168673825"
+  },
+  "oracle": "original oracle.json unchanged",
+  "native": "6 sources, strict GCC/Clang O0/O2 raw+passive =48; each sanitizer compiler24. Passive verifies helper actual argument/result once per continuing edge, original address/old/current/sibling/carry/Break; no call/store in zero/Break; observer preserves return value and emits no program store. CLI check/emit/named20 profiles; no-clobber; two old C17 byte controls."
+}
