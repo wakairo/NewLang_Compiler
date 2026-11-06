@@ -20,7 +20,8 @@ from compare import InterfaceUnresolved, ObservationMismatch
 from compare import compare, parse_trace, require_actual_binding
 
 
-MANIFEST = "ea4c4ad9d855bfcc6f98f41885dfc7c722c7c4b4e759896304b4c0623bd9a005"
+MANIFEST_V1 = "ea4c4ad9d855bfcc6f98f41885dfc7c722c7c4b4e759896304b4c0623bd9a005"
+MANIFEST_V2 = "8e909eb25314f091199b50cd3f704749b6cbd1955cd1f35085a9dd51e864fc87"
 STRICT = ["-std=c17", "-pedantic-errors", "-Wall", "-Wextra", "-Werror"]
 
 
@@ -158,7 +159,7 @@ def cohort(run, args, oracle, gcc, clang):
     roles = json.loads((apparatus / "role_bindings.pending.json").read_text())
     # Source checks and all invalid-source acceptance gates precede any guest.
     for name, case in oracle["cases"].items():
-        source = args.cohort_root / "V1" / case["source"]
+        source = args.cohort_root / "V2" / case["source"]
         folder = run.root / "cases" / name
         folder.mkdir(parents=True)
         (folder / "source.nl").write_bytes(source.read_bytes())
@@ -273,14 +274,16 @@ def main():
     run = Run(first, binding.get("execution_phase"))
     status, detail, result = "NOT_COMPLETED", None, 1
     try:
-        manifest = (args.cohort_root / "V1" / "SHA256SUMS").read_bytes()
-        if digest(manifest) != MANIFEST:
-            raise Stop("V1 manifest changed")
-        for line in manifest.decode().splitlines():
-            expected, path = line.split("  ", 1)
-            if digest((args.cohort_root / "V1" / path).read_bytes()) != expected:
-                raise Stop("frozen bytes changed: " + path)
-        shutil.copytree(args.cohort_root / "V1", first / "V1")
+        # Verify and archive both immutable V1 and independently frozen V2.
+        for version, expected_manifest in (("V1", MANIFEST_V1), ("V2", MANIFEST_V2)):
+            manifest = (args.cohort_root / version / "SHA256SUMS").read_bytes()
+            if digest(manifest) != expected_manifest:
+                raise Stop(version + " manifest changed")
+            for line in manifest.decode().splitlines():
+                expected, path = line.split("  ", 1)
+                if digest((args.cohort_root / version / path).read_bytes()) != expected:
+                    raise Stop("frozen " + version + " bytes changed: " + path)
+            shutil.copytree(args.cohort_root / version, first / version)
         shutil.copytree(args.cohort_root / "apparatus", first / "apparatus")
         identity(run, args, binding)
         gcc = shutil.which("gcc-13") or shutil.which("gcc")
@@ -290,7 +293,7 @@ def main():
             raise Stop("required GCC/Clang tool missing")
         for name, cc in (("gcc", gcc), ("clang", clang), ("newlangc", args.compiler_cli)):
             run.successful(name + "_version", [cc, "--version"])
-        oracle = json.loads((args.cohort_root / "V1" / "oracle.json").read_text())
+        oracle = json.loads((args.cohort_root / "V2" / "oracle.json").read_text())
         cohort(run, args, oracle, gcc, clang)
         status, result = "FINITE_REQUIRED_OBSERVATIONS_MATCH", 0
     except InterfaceUnresolved as exc:
