@@ -116,7 +116,8 @@ def identity(run, args, binding):
             or pr["head"]["ref"] != binding["r_head_ref"]
             or pr["head"]["repo"]["full_name"] != "wakairo/NewLang_Compiler"):
         raise Stop("PR identity/draft mismatch")
-    run.successful("exact_merge_history", ["git", "fetch", "--no-tags", "--depth=3",
+    # Covers the whole maximum-six-push R chain, merge parents and fixed base.
+    run.successful("exact_merge_history", ["git", "fetch", "--no-tags", "--depth=16",
                                            "origin", os.environ["GITHUB_SHA"]])
     raw, _ = run.successful("checkout", ["git", "rev-parse", "HEAD", "HEAD^1", "HEAD^2"])
     expected = [os.environ["GITHUB_SHA"], binding["compiler_commit"], pr["head"]["sha"]]
