@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "before_execution": true,
+  "expected": {
+    "current_boundary95": "CHECK/C17/owned/current success; original refusal source/oracle/raw immutable",
+    "OOM": "exact OOM with rollback/no publication/retry; named no-clobber; 936 selected trials per measured configuration"
+  },
+  "files": {
+    "tests/p1208/oom.py": "852afef21e4674e349d7aed38efcc9d0260d474f5072fbe8b83a88ddc3114c5e",
+    "tests/p1208/select_oom.py": "30492722a082d6aa2a238b272760c4fc10aa6d8a58ee6e9a3bf6ff28648270d1",
+    "tests/p1208/oom.c": "740fc7536b2cc87a95dbab480550a363fd9a568507235e0777fe4ca6a51585b4",
+    "tests/p1208/source-freeze-v2.json": "e9b395aa4b79a29d21ef73a1e78ed9873c8f48724b5dfccd195dfee05299efc4",
+    "tests/p1208/sources/03-left-final-return.nl": "46ce1c5f373a7f5431e420457ef55a382b927e9e5d46e4287ef0a222268dcafb",
+    "tests/p1208/sources/05-left-discard-normal.nl": "23f0d93fafdcee6b00712c5dc3164b3b54189753109b0e9b14cad7996c432f82"
+  }
+}

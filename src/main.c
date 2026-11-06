@@ -3496,9 +3496,45 @@ static bool predicate_emit_return(FILE *stream, const NLCheckedFragment *f,
     return fputs(");\n", stream) >= 0;
 }
 
+/* Only CHECK's sole normal arm initializes this carrier. The other arm
+ * really leaves the callee; it never reaches the binding/Copy continuation.
+ * Reuse the same borrowed plan as the current/RETURN proof consumer. */
+static bool predicate_emit_binding(FILE *stream, const NLCheckedFragment *f,
+                                   const NLCheckedNodeView *binding,
+                                   const NLPureU8Plan *plan)
+{
+    const NLCheckedNodeView *choice = nl_checked_node_view(f, plan->selection);
+    const NLCheckedNodeView *condition =
+        choice ? nl_checked_node_view(f, choice->initializer) : NULL;
+    if (plan->normal_arm > 1 || binding->initializer != plan->selection ||
+        !condition || !emit_less_operands(stream, f, condition, 1) ||
+        fprintf(stream, "    uint8_t nl_local_%zu;\n    if (",
+                binding->symbol) < 0 ||
+        !emit_quantity_bool(stream, f, condition) || fputs(") {\n", stream) < 0)
+        return false;
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedFragment *arm = nl_checked_if_arm(f, plan->selection, a);
+        if ((a == plan->normal_arm
+                 ? fprintf(stream, "        nl_local_%zu = ", binding->symbol)
+                 : fputs("        return ", stream)) < 0 ||
+            !v1_emit_scalar(stream, predicate_arm_value(arm)) ||
+            fputs(";\n", stream) < 0 ||
+            (a == 0 && fputs("    } else {\n", stream) < 0))
+            return false;
+    }
+    return fprintf(stream, "    }\n    (void)nl_local_%zu;\n",
+                   binding->symbol) >= 0;
+}
+
 static bool v1_emit_body(FILE *stream, const V0Function *fn)
 {
     const NLCheckedFragment *f = fn->body;
+    NLPureU8Plan pure = {0};
+    if (fn->quantity_parameter &&
+        !nl_pure_u8_body(f, fn->parameter,
+                         nl_semantic_unit_type(nl_checked_context(f)),
+                         fn->result, &pure))
+        return false;
     const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
     if (fputs("{\n", stream) < 0 ||
         (fn->parameter != 0 &&
@@ -3534,6 +3570,13 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
         } else {
             const NLCheckedNodeView *init =
                 nl_checked_node_view(f, v->initializer);
+            if (fn->quantity_parameter && v->kind == NL_CHECKED_BINDING &&
+                v->initializer == pure.selection && pure.normal_arm < 2) {
+                if (!predicate_emit_binding(stream, f, v, &pure))
+                    return false;
+                i = v->next_item;
+                continue;
+            }
             if (fn->quantity_parameter && v->kind == NL_CHECKED_BINDING &&
                 init && init->kind == NL_CHECKED_IF &&
                 !emit_less_operands(

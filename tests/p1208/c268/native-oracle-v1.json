@@ -1,0 +1,30 @@
+{
+  "profiles": {
+    "01-bound-discard-final": {
+      "kind": "new-mixed-continuation",
+      "baseline_check": 3,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "classification": "positive",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": [
+        47,
+        47,
+        211,
+        211
+      ],
+      "phase_after_continue": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "loop_result": 4,
+      "return_records": 3,
+      "preserve_C17_bytes": false
+    }
+  }
+}

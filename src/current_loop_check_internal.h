@@ -689,16 +689,15 @@ static bool current_return_refs(const NLCurrentLoopProof *s,
         refs[(*count)++] = (CurrentReturnRef){body, arm, body->exits, joined++,
                                               block->first_item};
     }
-    if (choice->normal_arms == 2 && root->terminates) {
-        NLCheckedNodeId id = root->first_item;
-        while (id && nl_checked_node_view(body, id)->kind != NL_CHECKED_RETURN)
-            id = nl_checked_node_view(body, id)->next_item;
-        if (!id)
+    if (pure->plan.final_return) {
+        if (!choice->normal_arms || !root->terminates || *count == 4)
             return false;
-        refs[(*count)++] = (CurrentReturnRef){body, body, body->exits, 0, id};
-        joined = 1;
+        refs[(*count)++] = (CurrentReturnRef){body, body, body->exits, joined,
+                                              pure->plan.final_return};
+        ++joined;
     }
-    if (nl_control_exits_count(body->exits) != joined || *count > 4)
+    if (nl_control_exits_count(body->exits) != joined ||
+        pure->plan.body_returns != joined || *count > 4)
         return false;
     for (size_t i = 0; i < *count; ++i)
         if (!current_return_ref(s, &refs[i], body->function_target))

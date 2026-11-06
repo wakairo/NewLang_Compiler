@@ -1,0 +1,31 @@
+{
+  "authority": "Issue1212 C268",
+  "actual_start_comment": 6684956914,
+  "original_head": "b5c017141e173d5a2891d43cb5aeb26eb888e209",
+  "saved_index_tree": "d3b45dd766f3a8571650875626301d43ab432ef8",
+  "commit_push_CI": 0,
+  "branch_historical_actual_jobs": 12,
+  "C268_jobs_used": 0,
+  "new_guest_native": {
+    "gcc": 4,
+    "clang_asan": 0
+  },
+  "new_target_OOM_injections": 0,
+  "Gate0": "F exact and P opposite statement: CHECK0/emit0/strict GCC+Clang reject bare return; native0; bound positive strict0; invalidtype3",
+  "candidate": "GCC F/opposite/wrongtype reject3 before output/no-clobber; new bound positive CHECK/owned/current/strictC17 +4 O0/O2 raw/passive guests PASS; preserved15 C17/owned/current controls and8 refusals PASS; v56 basic history PASS",
+  "first_new_RED": {
+    "ASan": "p1208_oom.unit FileExistsError /tmp/p1208-c266-asan/p1208-oom before census/injection",
+    "GCC": "p1208_combined_source.unit FileExistsError /tmp/p1208-c266-gcc/p1208-combined-source; first test failed and concurrent p633_local_cli passed; run2 outcomes, not completed39"
+  },
+  "stop": "C268 any-new-RED STOP->Coordination; no further build/test/native/OOM/production edit/commit/push/CI",
+  "unverified": [
+    "new candidate ASan/LSan/UBSan execution",
+    "targeted OOM/rollback on corrected code",
+    "remaining focused regression",
+    "current v56 adversarial history protocol",
+    "full configured regression/new-head CI",
+    "independent F re-review on corrective Production HEAD"
+  ],
+  "minimum_next": "C-authorized apparatus-only recovery into fresh C268 build/output directories, keeping old C266 directories/evidence intact; code guard already local; freeze inputs unchanged unless additional source edits. No further Production repair indicated by these FileExistsError failures.",
+  "patch_sha256": "f7a220bde735cf33aaff012d2b7cd6102cc8bebf6ff7bbbee34630b1ce12cdfd"
+}

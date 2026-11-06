@@ -1,0 +1,8 @@
+{
+  "before_execution": true,
+  "source_freeze_sha256": "f127c0f97680ac44a5f1e26c39fa708ca24ebf88fe117f2f8c263138d8c16b51",
+  "oracle_sha256": "9e082adc52e259a5ce0f3ac6ca4a53ff8973e4b3b461b125a0829702af3e14aa",
+  "files": {
+    "gate.py": "d4f2581d5bc2a47ccfec4d436c6e101a2209ed889720b923128b55acde6f38d9"
+  }
+}

@@ -1,0 +1,340 @@
+{
+  "version": 2,
+  "authority": "7a9be8ba1968f880551d1307136806da92c431a7",
+  "canonical": "Draft17.34",
+  "native_cap": 48,
+  "native_profiles": [
+    "01-left-normal",
+    "02-right-normal",
+    "03-left-final-return",
+    "04-right-final-return",
+    "05-left-discard-normal",
+    "82-both-return-control"
+  ],
+  "native_matrix": "GCC/Clang x O0/O2 x raw/passive, each selected profile once = 48",
+  "invariants": [
+    "condition evaluated once",
+    "return arm exits actual callee without continuation",
+    "sole normal result is actual CHECK replay result",
+    "same original T root/field/child/current/sibling and loan",
+    "caller Break returns phase only",
+    "out and named output unchanged on rejection/OOM",
+    "rollback and same-context retry, zero tracked ownership at destruction"
+  ],
+  "profiles": {
+    "01-left-normal": {
+      "kind": "new-mixed-continuation",
+      "baseline_check": 3,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "classification": "positive",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": [
+        47,
+        47,
+        173,
+        173
+      ],
+      "phase_after_continue": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "loop_result": 4,
+      "return_records": 2,
+      "preserve_C17_bytes": false
+    },
+    "02-right-normal": {
+      "kind": "new-mixed-continuation",
+      "baseline_check": 3,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "classification": "positive",
+      "selected_field": "kept",
+      "sibling_field": "guarded",
+      "initial_field": 219,
+      "sibling": 73,
+      "values": [
+        211,
+        211,
+        89,
+        211
+      ],
+      "phase_after_continue": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "loop_result": 4,
+      "return_records": 2,
+      "preserve_C17_bytes": false
+    },
+    "03-left-final-return": {
+      "kind": "new-mixed-continuation",
+      "baseline_check": 3,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "classification": "positive",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": [
+        37,
+        37,
+        37,
+        199
+      ],
+      "phase_after_continue": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "loop_result": 4,
+      "return_records": 3,
+      "preserve_C17_bytes": false
+    },
+    "04-right-final-return": {
+      "kind": "new-mixed-continuation",
+      "baseline_check": 3,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "classification": "positive",
+      "selected_field": "kept",
+      "sibling_field": "guarded",
+      "initial_field": 219,
+      "sibling": 73,
+      "values": [
+        23,
+        151,
+        23,
+        23
+      ],
+      "phase_after_continue": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "loop_result": 4,
+      "return_records": 3,
+      "preserve_C17_bytes": false
+    },
+    "80-normal-control": {
+      "kind": "preserved-control",
+      "baseline_check": 0,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "classification": "positive",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": [
+        47,
+        47,
+        173,
+        173
+      ],
+      "phase_after_continue": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "loop_result": 4,
+      "return_records": 0,
+      "preserve_C17_bytes": true
+    },
+    "81-mixed-tail-control": {
+      "kind": "preserved-control",
+      "baseline_check": 0,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "classification": "positive",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": [
+        47,
+        47,
+        173,
+        173
+      ],
+      "phase_after_continue": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "loop_result": 4,
+      "return_records": 2,
+      "preserve_C17_bytes": true
+    },
+    "82-both-return-control": {
+      "kind": "preserved-control",
+      "baseline_check": 0,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "classification": "positive",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": [
+        211,
+        211,
+        89,
+        211
+      ],
+      "phase_after_continue": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "loop_result": 4,
+      "return_records": 4,
+      "preserve_C17_bytes": true
+    },
+    "83-normal-final-return-control": {
+      "kind": "preserved-control",
+      "baseline_check": 0,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "classification": "positive",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": [
+        47,
+        47,
+        173,
+        173
+      ],
+      "phase_after_continue": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "loop_result": 4,
+      "return_records": 1,
+      "preserve_C17_bytes": true
+    },
+    "90-wrong-return-type": {
+      "kind": "refusal",
+      "baseline_check": 3,
+      "candidate_check": "nonzero",
+      "candidate_C17": "nonzero/no-output",
+      "classification": "invalid source",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": null,
+      "phase_after_continue": null,
+      "loop_result": null,
+      "return_records": null,
+      "preserve_C17_bytes": false
+    },
+    "91-helper-break": {
+      "kind": "refusal",
+      "baseline_check": 3,
+      "candidate_check": "nonzero",
+      "candidate_C17": "nonzero/no-output",
+      "classification": "invalid source",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": null,
+      "phase_after_continue": null,
+      "loop_result": null,
+      "return_records": null,
+      "preserve_C17_bytes": false
+    },
+    "92-helper-continue": {
+      "kind": "refusal",
+      "baseline_check": 3,
+      "candidate_check": "nonzero",
+      "candidate_C17": "nonzero/no-output",
+      "classification": "invalid source",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": null,
+      "phase_after_continue": null,
+      "loop_result": null,
+      "return_records": null,
+      "preserve_C17_bytes": false
+    },
+    "93-both-return-continuation": {
+      "kind": "refusal",
+      "baseline_check": 3,
+      "candidate_check": "nonzero",
+      "candidate_C17": "nonzero/no-output",
+      "classification": "outside finite profile",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": null,
+      "phase_after_continue": null,
+      "loop_result": null,
+      "return_records": null,
+      "preserve_C17_bytes": false
+    },
+    "94-nonliteral-normal-arm": {
+      "kind": "refusal",
+      "baseline_check": 3,
+      "candidate_check": "nonzero",
+      "candidate_C17": "nonzero/no-output",
+      "classification": "outside finite profile",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": null,
+      "phase_after_continue": null,
+      "loop_result": null,
+      "return_records": null,
+      "preserve_C17_bytes": false
+    },
+    "05-left-discard-normal": {
+      "kind": "new-mixed-continuation",
+      "baseline_check": 3,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "classification": "positive",
+      "selected_field": "guarded",
+      "sibling_field": "kept",
+      "initial_field": 73,
+      "sibling": 219,
+      "values": [
+        47,
+        47,
+        173,
+        173
+      ],
+      "phase_after_continue": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "loop_result": 4,
+      "return_records": 2,
+      "preserve_C17_bytes": false
+    }
+  }
+}
