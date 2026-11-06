@@ -1,0 +1,15 @@
+{
+  "schema": "C257_C_ROOT_DATA_RESTORE_CHECK_V1",
+  "zip_crc_ok": true,
+  "exact_member_set": true,
+  "all_payload_sizes_sha256_verified": true,
+  "manifest_sha256": "172ed7833c96327c56735e792946be5ca9c7c29d6da72c7c5d88e77ec85eab38",
+  "packet_sha256": "fef63e29018229f1765a74a8527ca5a52608222dc87dd4b3b4017ee1f79d6da6",
+  "packet_bytes": 575920,
+  "payload_count": 35,
+  "zip_member_count": 36,
+  "chunks_reconstruct_exact_packet": true,
+  "archived_code_execution": 0,
+  "compiler_native_ast_observer_decoder_execution": 0,
+  "note": "C independently checked data custody only; no rerun of archived programs or tests."
+}

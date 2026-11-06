@@ -1,0 +1,53 @@
+{
+  "schema": "C257_PR1199_CI_FINAL_RECEIPT_V1",
+  "status": "COMPLETE_ORIGINAL_SIX_CI_PASS_REVIEW_HOLD",
+  "generated_utc": "2026-11-06T04:32:07.653503+00:00",
+  "identity": {
+    "P": "24339b077ed0e0a3e847f23aed170c67d2b3d20a",
+    "P_parent": "9ea08f360e53848f57009ec3e52139773aaceff6",
+    "tree": "f18f59a6f10ee5d9564047a33a93f8915d7ba40f",
+    "main": "53c125b8cd66523651a21e803827eff6d2a06428",
+    "testmerge": "8fdf26ae564ea4b07049350a5eaf1f648c8678ed",
+    "testmerge_parents": [
+      "53c125b8cd66523651a21e803827eff6d2a06428",
+      "24339b077ed0e0a3e847f23aed170c67d2b3d20a"
+    ]
+  },
+  "summary": {
+    "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/summary-final.json",
+    "bytes": 13408,
+    "sha256": "09bea02d323db4d661ec788a953224660c54e2c7ea64288bc033e3cd0e2b0f1d"
+  },
+  "audit": {
+    "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/audit-final.json",
+    "bytes": 1427361,
+    "sha256": "64b407f26a781534f147b57d2a18afc2499d36f403fc7a1fceb3951e1f5bf2b9"
+  },
+  "manifest": {
+    "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/manifest.json",
+    "bytes": 13674,
+    "sha256": "172ed7833c96327c56735e792946be5ca9c7c29d6da72c7c5d88e77ec85eab38"
+  },
+  "packet": {
+    "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/ci-audit-packet.zip",
+    "bytes": 575920,
+    "sha256": "fef63e29018229f1765a74a8527ca5a52608222dc87dd4b3b4017ee1f79d6da6"
+  },
+  "packet_payload_file_count": 35,
+  "whole_job_logs_included": 6,
+  "whole_log_total_bytes": 1527434,
+  "job_log_downloads": 6,
+  "each_downloaded_once": true,
+  "actual_CTest_PASS": 4655,
+  "publication_budget_used": 6,
+  "publication_budget_max": 12,
+  "original_candidate_review_status": "F-1198-01 UNRESOLVED on original24339; adoption HOLD / CHANGES REQUIRED",
+  "adoption_status": "HOLD_NO_C_PASS",
+  "C_PASS": false,
+  "observed_branch_actual_jobs": 6,
+  "first_final_green_STOP": true,
+  "original_manual_rerun_dispatch": 0,
+  "remote_mutations": 0,
+  "additional_runs_tests": 0,
+  "local_compiler_build_native_AST_observer_decoder_runs": 0
+}

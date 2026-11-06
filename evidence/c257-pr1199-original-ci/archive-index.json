@@ -1,0 +1,117 @@
+{
+  "schema": "C257_ORIGINAL_PR1199_CI_GIT_CUSTODY_V1",
+  "source_candidate": "24339b077ed0e0a3e847f23aed170c67d2b3d20a",
+  "source_tree": "f18f59a6f10ee5d9564047a33a93f8915d7ba40f",
+  "archive_branch": "evidence/c257-pr1199-original-ci",
+  "repo_path": "evidence/c257-pr1199-original-ci",
+  "nevermerge": true,
+  "packet": {
+    "path": "ci-audit-packet.zip",
+    "bytes": 575920,
+    "sha256": "fef63e29018229f1765a74a8527ca5a52608222dc87dd4b3b4017ee1f79d6da6"
+  },
+  "chunks": [
+    {
+      "path": "chunks/packet-001.b64",
+      "bytes": 48632,
+      "sha256": "57a5f466ebdc2d3e15bffa32f21985960dcf684d9267a14ff4ac564d6f2e4ed4",
+      "git_blob": "b00a339e114ec32787056fa4119b788b7e4e4a81"
+    },
+    {
+      "path": "chunks/packet-002.b64",
+      "bytes": 48632,
+      "sha256": "967e22cd8e9e436460d919dc279576ee589ace406b768619c009c43b35442437",
+      "git_blob": "cb02c91618d7415472eac92907c379961130bc23"
+    },
+    {
+      "path": "chunks/packet-003.b64",
+      "bytes": 48632,
+      "sha256": "13de4172d2a1d63a2733c3edb546721f4e1f9e6b5297e62201b307d53f7da46c",
+      "git_blob": "6b90d4264eef78b7d866b4d5dbfc0c808c586dc5"
+    },
+    {
+      "path": "chunks/packet-004.b64",
+      "bytes": 48632,
+      "sha256": "b229a34efdc6956082c813ea2e2fd4cfe3bb660f7c47a868ca22dad6f2e72cf2",
+      "git_blob": "251cdf643749c38bff7438ceffe3d18a33ea60a0"
+    },
+    {
+      "path": "chunks/packet-005.b64",
+      "bytes": 48632,
+      "sha256": "d233bccd54f76dc32c21819122ac26fa56afe9a8c91b73933797039c33ed7294",
+      "git_blob": "7264e49ea91d9f895f89f58e7e19f7feeccc6389"
+    },
+    {
+      "path": "chunks/packet-006.b64",
+      "bytes": 48632,
+      "sha256": "d7fa330d0736481e1a918f2b46b65d1451d055fa9cb963d0698ae6af4473a3dd",
+      "git_blob": "c0d0be321613332e9d40195155107e72ff9eb1b9"
+    },
+    {
+      "path": "chunks/packet-007.b64",
+      "bytes": 48632,
+      "sha256": "e084acf3f4e5318bb985f26191e0c24a88274836d0b01b2a4696926609ce63c4",
+      "git_blob": "9570c34db822aa316e897819bbe15ad6cb6f4f1a"
+    },
+    {
+      "path": "chunks/packet-008.b64",
+      "bytes": 48632,
+      "sha256": "9ca9fbfc05612d867ec38a094d0c5bdd918b87729d90a4ab6450e52233ba56cd",
+      "git_blob": "2f1d75fcbb51f7a31f478f38b0ad5399db88918b"
+    },
+    {
+      "path": "chunks/packet-009.b64",
+      "bytes": 48632,
+      "sha256": "7b0e8f23efd31d2ab4e2699714f6914ae16b3908eab4cf7b4c5555a24a0336ce",
+      "git_blob": "80421bf6e9f9d7a8be174853fb078d9894f7d596"
+    },
+    {
+      "path": "chunks/packet-010.b64",
+      "bytes": 48632,
+      "sha256": "3bc24736e804a6f1ff8d0b23c41fc2ed93fd4c4c9ec01c4d536b2f21a9f3d569",
+      "git_blob": "ad33db45cc4650bbb52e784544c727609203c691"
+    },
+    {
+      "path": "chunks/packet-011.b64",
+      "bytes": 48632,
+      "sha256": "d717d54a2ffb506326bc106d95cd6125c1787b6f79d63d323db656399cb2be88",
+      "git_blob": "ff4f2faf7149c3a2d326e5352c64992226dc5ef6"
+    },
+    {
+      "path": "chunks/packet-012.b64",
+      "bytes": 48632,
+      "sha256": "463cbefc295a0fba302b142a18d8ad9e54ffb22fec9cac18fe52acee101a857d",
+      "git_blob": "82b9b3b8527837503cae58619f554cafab6fc907"
+    },
+    {
+      "path": "chunks/packet-013.b64",
+      "bytes": 48632,
+      "sha256": "92b9d7ca06ce181668248d69cdd226c9b140ad0f649b3ee774d1038a0c49e3f7",
+      "git_blob": "31984ce2287e94168d69e50eda83273598691d04"
+    },
+    {
+      "path": "chunks/packet-014.b64",
+      "bytes": 48632,
+      "sha256": "6c45961b1bc643e6da86e8a3e3a20090116c7ee4923505e67dc756c673a97820",
+      "git_blob": "ff75308577d231b97ed9308fe6c1e1f01c624bc6"
+    },
+    {
+      "path": "chunks/packet-015.b64",
+      "bytes": 48632,
+      "sha256": "63640efc7c7dcc070690d196b451d5d6909f672eca9f90ad87e55c5359beecb3",
+      "git_blob": "66d41dd3be85aecf3c1ce6d625ca03e07675ede1"
+    },
+    {
+      "path": "chunks/packet-016.b64",
+      "bytes": 48527,
+      "sha256": "a7fee2005173114868d15e568eea3093383b74dc8b24ce057910b3d9db31819c",
+      "git_blob": "c10c7203d956a839992f8ae7a2681b0df7327d16"
+    }
+  ],
+  "payload_count": 35,
+  "zip_member_count": 36,
+  "whole_logs": 6,
+  "actual_ctests_pass": 4655,
+  "review": "F-1198-01 unresolved at original24339; no C PASS/adoption; repair is separate",
+  "mutations": "evidence-only Git custody; no Production/workflow edits, no PR/CI/rerun"
+}
