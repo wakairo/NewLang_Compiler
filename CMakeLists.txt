@@ -1423,6 +1423,19 @@ if(BUILD_TESTING)
         -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
     target_link_libraries(p1193_oom PRIVATE
         newlang_semantic newlang_parser newlang_checked_c_node)
+    add_executable(p1193_signature_auth
+        tests/p1193/signature-auth/challenges.c)
+    target_include_directories(p1193_signature_auth PRIVATE src)
+    target_compile_options(p1193_signature_auth PRIVATE -UNDEBUG)
+    target_link_libraries(p1193_signature_auth PRIVATE
+        newlang_semantic newlang_parser newlang_checked_c_node)
+    add_executable(p1193_signature_oom tests/p1193/signature-auth/oom.c)
+    target_include_directories(p1193_signature_oom PRIVATE src)
+    target_compile_options(p1193_signature_oom PRIVATE -UNDEBUG -fno-pie)
+    target_link_options(p1193_signature_oom PRIVATE -no-pie
+        -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    target_link_libraries(p1193_signature_oom PRIVATE
+        newlang_semantic newlang_parser newlang_checked_c_node)
     foreach(profile 01-return-left 02-return-right 03-both-return 04-return-if 80-normal-control)
         add_test(NAME p1193_${profile}_current.unit COMMAND p1193_roles
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/c256/sources/${profile}.nl")
@@ -1441,6 +1454,15 @@ if(BUILD_TESTING)
     endforeach()
     add_test(NAME p1193_return_auth.unit COMMAND p1193_challenges
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/c256/sources")
+    add_test(NAME p1193_signature_return_auth.unit COMMAND p1193_signature_auth
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/signature-auth/return.nl")
+    add_test(NAME p1193_signature_normal_auth.unit COMMAND p1193_signature_auth
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/signature-auth/normal.nl")
+    add_test(NAME p1193_signature_census.unit COMMAND p1193_census
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/signature-auth/return.nl")
+    add_test(NAME p1193_signature_oom.unit COMMAND p1193_signature_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/signature-auth/return.nl")
+    set_tests_properties(p1193_signature_oom.unit PROPERTIES RUN_SERIAL TRUE)
     add_test(NAME p1193_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/production/run.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1193_roles>"
