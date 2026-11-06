@@ -141,6 +141,22 @@ static bool current_copy_origin(const NLCheckedFragment *f,
     }
     return false;
 }
+/* At most two source RETURN leaves and their two existing body-union
+ * records. These borrow core-owned states; only the authentication snapshots
+ * below are owned here. No public RETURN issuer or graph is introduced. */
+typedef struct {
+    const NLCheckedFragment *owner, *source;
+    const NLControlExits *set;
+    size_t ordinal;
+    NLCheckedNodeId node;
+} CurrentReturnRef;
+typedef struct {
+    CurrentReturnRef ref;
+    NLControlExitView view;
+    size_t set_count;
+    StutterWorld world;
+} CurrentReturnSeal;
+
 typedef struct NLCurrentLoopProof {
     NLControlState *entry, *header;
     NLCheckedFragment *graph;
@@ -160,7 +176,11 @@ typedef struct NLCurrentLoopProof {
     const NLSource *helper_source;
     const char *helper_parameter_name;
     NLSourceSpan helper_name;
-    NLTypeId *helper_parameters[12]; /* six graphs, caller/post, four exits */
+    NLTypeId *helper_parameters[16]; /* six graphs, caller/post, four loop
+                                      exits and at most four helper exits */
+    const NLControlTarget *helper_target;
+    CurrentReturnSeal *returns;
+    size_t return_count;
     const NLFunctionEntry *helper_post_functions;
     size_t helper_post_function_count;
     StutterWorld exits[4];
@@ -181,6 +201,11 @@ static void destroy_current_cycle(NLCurrentLoopProof *s)
         nl_copy_state_destroy(&s->exits[i].anchor);
         nl_semantic_destroy(s->exits[i].copy);
     }
+    for (size_t i = 0; i < s->return_count; ++i) {
+        nl_copy_state_destroy(&s->returns[i].world.anchor);
+        nl_semantic_destroy(s->returns[i].world.copy);
+    }
+    free(s->returns);
     nl_control_state_destroy(s->entry);
     nl_control_state_destroy(s->header);
     if (!s->graph_owned)
@@ -572,6 +597,78 @@ static bool current_pure_prefix(const NLCurrentLoopProof *s,
     return true;
 }
 
+/* Source RETURN nodes are already owned by CHECK, while generic return
+ * records deliberately have no public source issuer. Bind the finite leaf /
+ * body-union order to those actual nodes privately, and validate each result
+ * only in its own captured world. Equal branch-local numeric IDs do not
+ * identify a value in another branch. */
+static bool current_return_ref(const NLCurrentLoopProof *s,
+                               const CurrentReturnRef *r,
+                               const NLControlTarget *target)
+{
+    const NLControlExitView *x = nl_control_exit_view(r->set, r->ordinal);
+    const NLCheckedNodeView *ret = nl_checked_node_view(r->source, r->node),
+                            *value = ret ? nl_checked_node_view(
+                                               r->source, ret->initializer)
+                                         : NULL;
+    const NLSemanticContext *world =
+        x ? nl_control_state_context((NLControlState *)x->state) : NULL;
+    NLSemanticValueView actual, original;
+    return r->owner->exits == r->set && r->owner->function_target == target &&
+           r->source->function_target == target && ret && value &&
+           ret->kind == NL_CHECKED_RETURN && ret->terminates && x &&
+           x->kind == NL_EXIT_RETURN && x->target == target && x->count == 1 &&
+           !x->source_owner && !x->source_node && !x->source_target &&
+           x->values[0].type == ret->returned.type &&
+           x->values[0].value == ret->returned.value &&
+           predicate_value(r->source, value, &original) &&
+           nl_semantic_value_view(world, x->values[0].value, &actual) &&
+           copy_if_plain(actual, value->type) &&
+           actual.scalar_known == original.scalar_known &&
+           actual.scalar_value == original.scalar_value &&
+           current_pure_prefix(s, world);
+}
+
+static bool current_return_refs(const NLCurrentLoopProof *s,
+                                const NLPureU8Call *pure,
+                                CurrentReturnRef refs[4], size_t *count)
+{
+    const NLCheckedFragment *body = pure->body;
+    const NLCheckedNodeView *choice =
+                                nl_checked_node_view(body, pure->selection),
+                            *root = nl_checked_node_view(body, body->root);
+    *count = 0;
+    size_t joined = 0;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *arm =
+            nl_checked_if_arm(body, pure->selection, i);
+        const NLCheckedNodeView *ar = nl_checked_node_view(arm, arm->root);
+        if (!ar->terminates)
+            continue;
+        const NLCheckedNodeView *block =
+            nl_checked_node_view(arm, ar->initializer);
+        refs[(*count)++] =
+            (CurrentReturnRef){arm, arm, arm->exits, 0, block->first_item};
+        refs[(*count)++] = (CurrentReturnRef){body, arm, body->exits, joined++,
+                                              block->first_item};
+    }
+    if (choice->normal_arms == 2 && root->terminates) {
+        NLCheckedNodeId id = root->first_item;
+        while (id && nl_checked_node_view(body, id)->kind != NL_CHECKED_RETURN)
+            id = nl_checked_node_view(body, id)->next_item;
+        if (!id)
+            return false;
+        refs[(*count)++] = (CurrentReturnRef){body, body, body->exits, 0, id};
+        joined = 1;
+    }
+    if (nl_control_exits_count(body->exits) != joined || *count > 4)
+        return false;
+    for (size_t i = 0; i < *count; ++i)
+        if (!current_return_ref(s, &refs[i], body->function_target))
+            return false;
+    return true;
+}
+
 /* Authenticate the actual normal scalar join and both complete, effect-free
  * arm graphs. Equal numeric IDs in different worlds are never an identity
  * proof: each result is checked only in its own owned world. */
@@ -700,8 +797,8 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
     if (!s->helper || !source || source->kind != NL_SYNTAX_EXPR_CALL ||
         r->scalar || r->changed || !v || !stutter_span(v->span, source->span) ||
         !stutter_span(v->name, source->data.call.callee) ||
-        !(s->sealed ? nl_pure_u8_call(r->arm, id, &pure)
-                    : nl_pure_u8_contents(r->arm, id, &pure)))
+        (s->sealed && !nl_h_custody_result_valid(r->arm, id)) ||
+        !nl_pure_u8_contents(r->arm, id, &pure))
         return false;
     const NLCheckedNodeView *arg = current_take(r, v->first_argument);
     const NLSyntaxView *actual =
@@ -724,8 +821,8 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
                              s->phase, false, 2, NULL) ||
         !stutter_free_quantity(r->arm->context, arg->results[0].value,
                                quantity) ||
-        !root || root->terminates || pure.body->body_count ||
-        pure.body->arm_count != 2 || !choice || !test || !left || !right ||
+        !root || pure.body->body_count || pure.body->arm_count != 2 ||
+        !choice || !test || !left || !right ||
         (test->kind != NL_CHECKED_USIZE_LESS_THAN &&
          test->kind != NL_CHECKED_USIZE_EQUALITY) ||
         !current_copy_origin(pure.body, pure.body->context,
@@ -741,6 +838,10 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
             !current_pure_prefix(s, arm->context))
             return false;
     }
+    CurrentReturnRef refs[4];
+    size_t count;
+    if (!current_return_refs(s, &pure, refs, &count))
+        return false;
     r->scalar = id;
     return true;
 }
@@ -1131,8 +1232,8 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
                 return bad;
             if (s->helper) {
                 NLPureU8Call pure;
-                if (!(s->sealed ? nl_pure_u8_call(arm, scalar, &pure)
-                                : nl_pure_u8_contents(arm, scalar, &pure)) ||
+                if ((s->sealed && !nl_h_custody_result_valid(arm, scalar)) ||
+                    !nl_pure_u8_contents(arm, scalar, &pure) ||
                     (s->sealed && s->helper_choice != pure.selection))
                     return bad;
                 if (!s->sealed) {
@@ -1231,6 +1332,35 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
         NLPureU8Call pure;
         if (!nl_pure_u8_contents(iteration, s->scalar, &pure))
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        CurrentReturnRef refs[4];
+        size_t count;
+        if (!current_return_refs(s, &pure, refs, &count))
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        s->helper_target = pure.body->function_target;
+        if (count) {
+            s->returns = calloc(count, sizeof(*s->returns));
+            if (!s->returns)
+                return NL_CHECK_OUT_OF_MEMORY;
+            s->return_count = count;
+            for (size_t i = 0; i < count; ++i) {
+                CurrentReturnSeal *r = &s->returns[i];
+                r->ref = refs[i];
+                r->set_count = nl_control_exits_count(r->ref.set);
+                const NLControlExitView *x =
+                    nl_control_exit_view(r->ref.set, r->ref.ordinal);
+                memcpy(&r->view, x, sizeof(*x));
+                NLCheckStatus status = stutter_anchor_world(
+                    &r->world,
+                    nl_control_state_context((NLControlState *)x->state));
+                if (status != NL_CHECK_OK)
+                    return status;
+                const NLFunctionEntry *fn =
+                    current_helper_function(s, r->world.world);
+                if (!fn || !fn->parameters)
+                    return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+                s->helper_parameters[12 + i] = fn->parameters;
+            }
+        }
         s->helper_plan = pure.body->body_owner;
         s->helper_syntax = s->helper_plan->syntax;
         s->helper_source = s->helper_plan->source;
@@ -1348,6 +1478,44 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
             !linear_world_matches(s->exits[i].world, &s->exits[i].storage,
                                   s->exits[i].copy, &s->exits[i].anchor))
             return bad;
+    }
+    if (s->helper) {
+        const NLCheckedFragment *helper = current_graph_at(s, 3);
+        if (!helper || helper->function_target != s->helper_target)
+            return bad;
+        for (size_t i = 0; i < s->return_count; ++i) {
+            const CurrentReturnSeal *r = &s->returns[i];
+            if (r->ref.owner->exits != r->ref.set ||
+                r->ref.owner->function_target != s->helper_target ||
+                nl_control_exits_count(r->ref.set) != r->set_count)
+                return bad;
+            const NLControlExitView *x =
+                nl_control_exit_view(r->ref.set, r->ref.ordinal);
+            if (!x || memcmp(x, &r->view, sizeof(*x)) ||
+                nl_control_state_context((NLControlState *)x->state) !=
+                    r->world.world ||
+                !current_helper_signature_origin(
+                    s, r->world.world, r->world.storage.functions,
+                    r->world.storage.function_count, 12 + i) ||
+                !linear_world_matches(r->world.world, &r->world.storage,
+                                      r->world.copy, &r->world.anchor) ||
+                !current_helper_entry(s, r->world.world, 12 + i))
+                return bad;
+        }
+        NLPureU8Call pure;
+        CurrentReturnRef refs[4];
+        size_t count;
+        if (!nl_pure_u8_contents(s->graphs[1].fragment, s->scalar, &pure) ||
+            !current_return_refs(s, &pure, refs, &count) ||
+            count != s->return_count)
+            return bad;
+        for (size_t i = 0; i < count; ++i)
+            if (refs[i].owner != s->returns[i].ref.owner ||
+                refs[i].source != s->returns[i].ref.source ||
+                refs[i].set != s->returns[i].ref.set ||
+                refs[i].ordinal != s->returns[i].ref.ordinal ||
+                refs[i].node != s->returns[i].ref.node)
+                return bad;
     }
     const NLCheckedNodeView *n = nl_checked_node_view(f, p->loop),
                             *call = nl_checked_node_view(p->root, p->call);

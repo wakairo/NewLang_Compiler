@@ -2357,7 +2357,11 @@ static bool current_helper_selection(const NLLinearBreakView *v, V0Program *p)
 {
     if (v->incoming_call) {
         NLPureU8Call pure;
-        if (!nl_pure_u8_call(v->iteration, v->incoming_call, &pure))
+        /* v is the immediately preceding successful loop validation. Its
+         * private records authenticate all helper return worlds; standalone
+         * predicate admission deliberately remains normal-arm-only. */
+        if (!nl_h_custody_result_valid(v->iteration, v->incoming_call) ||
+            !nl_pure_u8_contents(v->iteration, v->incoming_call, &pure))
             return false;
         V0Function *prior = v0_find_function(p, pure.function);
         if (prior) {
@@ -3478,11 +3482,7 @@ static bool predicate_emit_return(FILE *stream, const NLCheckedFragment *f,
     for (size_t a = 0; a < 2; ++a) {
         const NLCheckedNodeId id = (NLCheckedNodeId)(value - f->nodes) + 1;
         const NLCheckedFragment *arm = nl_checked_if_arm(f, id, a);
-        const NLCheckedNodeView *root =
-            nl_checked_node_view(arm, nl_checked_root(arm));
-        const NLCheckedNodeView *block =
-            nl_checked_node_view(arm, root->initializer);
-        if (!v1_emit_scalar(stream, nl_checked_node_view(arm, block->tail)) ||
+        if (!v1_emit_scalar(stream, predicate_arm_value(arm)) ||
             (a == 0 && fputs(" : ", stream) < 0))
             return false;
     }

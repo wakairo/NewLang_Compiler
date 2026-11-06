@@ -1,0 +1,11 @@
+{
+  "authority": "C256 pre-Production read-only structure observation of the same source cohort, no new source/native",
+  "files": {
+    "tests/p1193/c256/shape-probe.c": "b485a486a8dc61bf8d2deaf0508eefb91ce37036f4bd0aef37d1339483d39a63"
+  },
+  "plan": [
+    "01-return-left",
+    "03-both-return"
+  ],
+  "same_actuals": true
+}

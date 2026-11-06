@@ -1,0 +1,6 @@
+{
+  "authority": "C256 same-source read-only follow-up: identify core cleanup nodes, no new profiles/native",
+  "files": {
+    "tests/p1193/c256/shape-probe-v2.c": "f456fd952a7560fb58da3cbbb5dbcd972103ec6ccea5023662461e620a0e9b0e"
+  }
+}
