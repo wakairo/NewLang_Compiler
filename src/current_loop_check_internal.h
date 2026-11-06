@@ -614,12 +614,14 @@ static bool current_return_ref(const NLCurrentLoopProof *s,
     const NLSemanticContext *world =
         x ? nl_control_state_context((NLControlState *)x->state) : NULL;
     NLSemanticValueView actual, original;
-    return r->owner->exits == r->set && r->owner->function_target == target &&
-           r->source->function_target == target && ret && value &&
-           ret->kind == NL_CHECKED_RETURN && ret->terminates && x &&
-           x->kind == NL_EXIT_RETURN && x->target == target && x->count == 1 &&
-           !x->source_owner && !x->source_node && !x->source_target &&
-           x->values[0].type == ret->returned.type &&
+    return r->owner->exits == r->set &&
+           r->owner->function_target == (r->owner->if_parent ? NULL : target) &&
+           r->source->function_target ==
+               (r->source->if_parent ? NULL : target) &&
+           ret && value && ret->kind == NL_CHECKED_RETURN && ret->terminates &&
+           x && x->kind == NL_EXIT_RETURN && x->target == target &&
+           x->count == 1 && !x->source_owner && !x->source_node &&
+           !x->source_target && x->values[0].type == ret->returned.type &&
            x->values[0].value == ret->returned.value &&
            predicate_value(r->source, value, &original) &&
            nl_semantic_value_view(world, x->values[0].value, &actual) &&
@@ -1486,7 +1488,8 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         for (size_t i = 0; i < s->return_count; ++i) {
             const CurrentReturnSeal *r = &s->returns[i];
             if (r->ref.owner->exits != r->ref.set ||
-                r->ref.owner->function_target != s->helper_target ||
+                r->ref.owner->function_target !=
+                    (r->ref.owner == helper ? s->helper_target : NULL) ||
                 nl_control_exits_count(r->ref.set) != r->set_count)
                 return bad;
             const NLControlExitView *x =

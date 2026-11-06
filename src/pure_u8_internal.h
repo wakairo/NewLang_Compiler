@@ -72,7 +72,8 @@ predicate_arm_value(const NLCheckedFragment *arm)
 }
 
 static bool predicate_return(const NLCheckedFragment *owner,
-                             const NLCheckedNodeView *ret, size_t ordinal)
+                             const NLCheckedNodeView *ret, size_t ordinal,
+                             const NLControlTarget *target)
 {
     const NLControlExitView *x = nl_control_exit_view(owner->exits, ordinal);
     const NLCheckedNodeView *value =
@@ -81,9 +82,9 @@ static bool predicate_return(const NLCheckedFragment *owner,
            !ret->result_count && !ret->next_item &&
            ret->returned.type == value->type &&
            ret->returned.value == value->results[0].value && x &&
-           x->kind == NL_EXIT_RETURN && x->target == owner->function_target &&
-           x->count == 1 && !x->source_owner && !x->source_node &&
-           !x->source_target && x->values[0].type == ret->returned.type &&
+           x->kind == NL_EXIT_RETURN && x->target == target && x->count == 1 &&
+           !x->source_owner && !x->source_node && !x->source_target &&
+           x->values[0].type == ret->returned.type &&
            x->values[0].value == ret->returned.value &&
            copy_if_gap(owner->source, ret->span.start_byte,
                        value->span.start_byte, "return");
@@ -93,7 +94,7 @@ static bool predicate_arm(PredicateWalk *w, NLCheckedNodeId id, size_t index)
 {
     const NLCheckedFragment *arm = nl_checked_if_arm(w->body, id, index);
     if (!arm || !copy_if_arm_origin(w->body, id, index, arm) ||
-        arm->function_target != w->body->function_target)
+        arm->function_target != NULL)
         return false;
     const NLCheckedNodeView *root =
         nl_checked_node_view(arm, nl_checked_root(arm));
@@ -116,7 +117,7 @@ static bool predicate_arm(PredicateWalk *w, NLCheckedNodeId id, size_t index)
                root->returned.value == ret->returned.value &&
                block->returned.value == ret->returned.value &&
                nl_control_exits_count(arm->exits) == 1 &&
-               predicate_return(arm, ret, 0) &&
+               predicate_return(arm, ret, 0, w->body->function_target) &&
                copy_if_gap(arm->source, block->span.start_byte,
                            ret->span.start_byte, "{") &&
                ret->span.end_byte == tail->span.end_byte &&
@@ -383,7 +384,8 @@ static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
         if (!value || !root->terminates || root->tail ||
             root->returned.type != u8 ||
             root->returned.value != value->results[0].value ||
-            nl_control_exits_count(exits) != 1 || !predicate_return(f, ret, 0))
+            nl_control_exits_count(exits) != 1 ||
+            !predicate_return(f, ret, 0, f->function_target))
             return false;
     } else {
         const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
