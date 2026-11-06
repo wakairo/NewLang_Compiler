@@ -1,0 +1,43 @@
+{
+  "schema": "C256_R1190_RECOVERY_CI_AUDIT_RECEIPT_V1",
+  "status": "COMPLETE_RECOVERY_SIX_CAPTURED_LOG_DATA_AUDIT_PASS",
+  "generated_utc": "2026-11-06T02:54:04.263257+00:00",
+  "summary": {
+    "path": "/workspace/scratch/e415f00ca312/c256-r1190-recovery-ci-audit/summary-final.json",
+    "bytes": 11373,
+    "sha256": "c5b059bb334ca04c0e2ed86695b0f4b1585d76b55fd51ee1f1d4f4a296ebfe15"
+  },
+  "audit": {
+    "path": "/workspace/scratch/e415f00ca312/c256-r1190-recovery-ci-audit/audit-final.json",
+    "bytes": 1645334,
+    "sha256": "a64baee9dbab69ac01364586e25af1ffd613390415964728108c8674f2843854"
+  },
+  "manifest": {
+    "path": "/workspace/scratch/e415f00ca312/c256-r1190-recovery-ci-audit/manifest.json",
+    "bytes": 26521,
+    "sha256": "2d191da48bcb39b80986760a33bc4344d4b5c518c594160a9b9e0a33a142aa38"
+  },
+  "packet": {
+    "path": "/workspace/scratch/e415f00ca312/c256-r1190-recovery-ci-audit/ci-audit-packet.zip",
+    "bytes": 367738,
+    "sha256": "df2565f42ad57db5c0c8e77a4c0f926ccbfab02bf83b51065f1c936c5bc90f36"
+  },
+  "referenced_input_count": 102,
+  "audit_file_count": 13,
+  "raw_runs_root": "/workspace/scratch/e415f00ca312/r1190_c255_successor/runs",
+  "fixed_FIRST": "/workspace/scratch/e415f00ca312/r1190_c255_successor/recovery-c256/tests/r1190/FIRST",
+  "initial_C_audit_unchanged": {
+    "path": "/workspace/scratch/e415f00ca312/c256-r1190-ci-audit/audit-final.json",
+    "bytes": 1164099,
+    "sha256": "33a119d84e7341f9924fe4fb13ed49912355e72df38caf11f55ac8aa72a70e83"
+  },
+  "initial_C_receipt_unchanged": {
+    "path": "/workspace/scratch/e415f00ca312/c256-r1190-ci-audit/FINAL-RECEIPT.json",
+    "bytes": 1382,
+    "sha256": "af5d97038563f607789b686d44ab70ec13d7e32d3d5331faca49d0ae17dda899"
+  },
+  "remaining_normal_jobs": 0,
+  "remote_mutations": 0,
+  "job_log_downloads": 0,
+  "local_compiler_build_native_AST_observer_decoder_runs": 0
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "R1190_C256_RECOVERY6_LOSSLESS_PACKAGING_RECEIPT",
+  "created_utc": "2026-11-06T02:59:59.564788+00:00",
+  "xz": {
+    "path": "/workspace/scratch/e415f00ca312/r1190_c255_successor/r1190_C256_RECOVERY6_COMPLETE.tar.xz",
+    "bytes": 14116724,
+    "sha256": "fc7d3551635a3ce844d4d591dc3746cdfff1d2f4e69c445360c58f4374eb88ae"
+  },
+  "tar": {
+    "path": "/workspace/scratch/e415f00ca312/r1190_c255_successor/r1190_C256_RECOVERY6_COMPLETE.tar",
+    "bytes": 109056000,
+    "sha256": "1b76060e106cd7f88005e84ebe8c60a6d87d337a3b50fec36ea8282d926009bc"
+  },
+  "manifest": {
+    "path": "/workspace/scratch/e415f00ca312/r1190_c255_successor/r1190_C256_RECOVERY6_PACKET_MANIFEST.json",
+    "bytes": 1608801,
+    "sha256": "ee55f9245e9e54e2052392a0c7948c1291d5b44143a9939c0e8f61072d00f8a9"
+  },
+  "payload_files": 7661,
+  "payload_bytes": 98044971,
+  "tar_members": 7663,
+  "all_payload_sizes_and_SHA256_verified": true,
+  "xz_decompress_equals_original_tar_byte_for_byte": true,
+  "xz_dictionary_bytes": 67108864,
+  "elapsed_seconds": 23.959,
+  "raw_or_original_files_stripped": 0,
+  "execution": 0,
+  "remote_writes": 0,
+  "final_issue": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6675624858"
+}
