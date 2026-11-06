@@ -1,0 +1,8 @@
+{
+  "authority": "C256 phase1 fresh matched census before long OOM/matrix",
+  "oracle": "baseline f164 normal-control vs candidate same control; four RETURN positives candidate; true CHECK/current0, all tracked bytes/blocks/contexts zero after destruction; report core vs proof and reached allocation ordinals, not fault coverage",
+  "files": {
+    "tests/p1193/c256/census-v3.c": "b1c57afff883f025f66b7e312d7dd604d00af873d359c21466a8f8a3b551ed9b"
+  },
+  "repair": "v2 counter incorrectly removed an empty slot for realloc(NULL,n); identical baseline/candidate false cleanup assertion preserved; actual live bytes and contexts already zero"
+}

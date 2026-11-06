@@ -1,0 +1,8 @@
+{
+  "authority": "C256 phase1 fresh matched census before long OOM/matrix",
+  "oracle": "baseline f164 normal-control vs candidate same control; four RETURN positives candidate; true CHECK/current0, all tracked bytes/blocks/contexts zero after destruction; report core vs proof and reached allocation ordinals, not fault coverage",
+  "files": {
+    "tests/p1193/c256/census-v2.c": "cd0977a11f0b67f4495ca94cc6452453be685e35cb3a754792757f7afd70db4b"
+  },
+  "repair": "v1 compile name collision with included CHECK static add; original preserved"
+}
