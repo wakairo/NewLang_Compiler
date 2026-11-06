@@ -1,0 +1,15 @@
+{
+  "authority": "C256 conditional phase2 comment6675394686 after phase1 checkpoint6675441487",
+  "HEAD": "e0df155f4697a3ec9144796afd0540fd9b53b6c0",
+  "oracle": "Reuse unchanged existing P allocator harness: every fresh reached registration/invocation/named ordinal must produce OOM, atomic same-context rollback, output no-clobber/temporary cleanup, successful retry and validated current, with canonical cleanup. Four RETURN programs; no guest native in OOM. Preserve first failure before repairs.",
+  "files": {
+    "tests/p1184/safety.c": "5438ba777840bc18fcf7845ea645b1c573e66d4cdc0bf6791fe1d9398ebf91f8",
+    "src/main.c": "bd7f2fb9c8a989d874bf95aa74931eca669247d5fa27c64f74835ae8ab46ef03",
+    "src/current_loop_check_internal.h": "dc8b803638e61dd560845876932ec9bcf791ce141233263bb7bf3ce33aac9540",
+    "src/pure_u8_internal.h": "354555b0e6185c869ea07f6721a77313ef12b7f0ce385093147fd229ca061512",
+    "tests/p1193/c256/sources/01-return-left.nl": "673bba32075013c9c8b519072ac05117e7361e9e4a426832e9473cce38bf5329",
+    "tests/p1193/c256/sources/02-return-right.nl": "644eb49d6c001af1f4db998cdd98cbf72a3cda41d9709ef5b23b40cc3bec074b",
+    "tests/p1193/c256/sources/03-both-return.nl": "91077c12dddd0c3afabc97ef8195ea19e1e36da6c511d60baf1a407abd8b8623",
+    "tests/p1193/c256/sources/04-return-if.nl": "c72b95c578f9e54030fb8b8decb18e9260e158b4750f48869527c3ad9fa8a223"
+  }
+}
