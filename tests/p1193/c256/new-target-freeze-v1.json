@@ -1,0 +1,20 @@
+{
+  "authority": "C256 new exact f164 target; same seven original P sources, old oracle false numeric predictions retained. Target expected CHECK/C173 for four positives/two invalid; old control0. No generated guest at baseline.",
+  "base": "f1648a1382ae058e5ab5b9ccdea1e3200879f2af",
+  "tree": "1a4fcf50e76b0d2def314fdf7720f88d52a6581c",
+  "baseline_ELF_sha256": "7438c496ad81762440edbde4777dad81d8e30732ea928aae40155d6b62b0eec1",
+  "files": {
+    "tests/p1193/c256/80-normal-control.c17": "97a2009034ff9776406b39aee11c959d03db69f7f3beac1cd417dcefae28324a",
+    "tests/p1193/c256/gate0-probe.c": "561e9abe08e56379587d75cc246d76e97fa9161c0ab3b28c63eace8da92b35d3",
+    "tests/p1193/c256/gate0.py": "7f675fc07e331561a32636d84469846be6f3b0d27ed2601b8eb2148e8e71312f",
+    "tests/p1193/c256/old-freeze-v2.json": "ab09889b698d23e90afb2141dfb22fac117b1b0840d6dc9989ee3332c16c3e0e",
+    "tests/p1193/c256/old-oracle-v1.json": "06340a2421dbc88c414e71ddda0206d3a79a180867bfa50b2e9c8a76cdc76c78",
+    "tests/p1193/c256/sources/01-return-left.nl": "673bba32075013c9c8b519072ac05117e7361e9e4a426832e9473cce38bf5329",
+    "tests/p1193/c256/sources/02-return-right.nl": "644eb49d6c001af1f4db998cdd98cbf72a3cda41d9709ef5b23b40cc3bec074b",
+    "tests/p1193/c256/sources/03-both-return.nl": "91077c12dddd0c3afabc97ef8195ea19e1e36da6c511d60baf1a407abd8b8623",
+    "tests/p1193/c256/sources/04-return-if.nl": "c72b95c578f9e54030fb8b8decb18e9260e158b4750f48869527c3ad9fa8a223",
+    "tests/p1193/c256/sources/80-normal-control.nl": "113b453e8207cec661a803f2173a3ad785d5e1d6d67f75737c03ac7ac15036d7",
+    "tests/p1193/c256/sources/90-wrong-return-type.nl": "54acc94397d5c1c56df084f78e4a9535f50b4ebba2f78c82e6d5b4da300ca7d8",
+    "tests/p1193/c256/sources/91-helper-break.nl": "f786f0b966064285628fea68e51fb33586d3e0872d39e1db7fb7c8f33c9d0a46"
+  }
+}
