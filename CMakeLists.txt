@@ -1390,6 +1390,65 @@ if(BUILD_TESTING)
     add_test(NAME p1188_c254_evidence.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c254/evidence_test.py")
 
+    # Finite ordinary callee RETURNs feed the already authenticated loop
+    # writer. Historical phase1 apparatus is immutable evidence; these are
+    # its formatted live successors. No public issuer is added.
+    foreach(target p1193_roles p1193_challenges p1193_census p1193_observe)
+        if(target STREQUAL "p1193_roles")
+            set(p1193_source tests/p1193/production/roles.c)
+        elseif(target STREQUAL "p1193_challenges")
+            set(p1193_source tests/p1193/production/challenges.c)
+        elseif(target STREQUAL "p1193_census")
+            set(p1193_source tests/p1193/production/census.c)
+        else()
+            set(p1193_source tests/p1193/production/observe.c)
+        endif()
+        add_executable(${target} ${p1193_source})
+        target_include_directories(${target} PRIVATE src)
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+        target_link_libraries(${target} PRIVATE
+            newlang_semantic newlang_parser newlang_checked_c_node)
+    endforeach()
+    target_compile_definitions(p1193_census PRIVATE C256_CANDIDATE)
+    target_compile_options(p1193_census PRIVATE -fno-pie)
+    target_link_options(p1193_census PRIVATE -no-pie
+        -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc -Wl,--wrap=free
+        -Wl,--wrap=nl_semantic_create -Wl,--wrap=nl_sem_clone
+        -Wl,--wrap=nl_semantic_destroy -Wl,--wrap=nl_sem_commit)
+    add_executable(p1193_oom tests/p1184/safety.c)
+    target_compile_definitions(p1193_oom PRIVATE P1184_OOM)
+    target_include_directories(p1193_oom PRIVATE src)
+    target_compile_options(p1193_oom PRIVATE -UNDEBUG -fno-pie)
+    target_link_options(p1193_oom PRIVATE -no-pie
+        -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    target_link_libraries(p1193_oom PRIVATE
+        newlang_semantic newlang_parser newlang_checked_c_node)
+    foreach(profile 01-return-left 02-return-right 03-both-return 04-return-if 80-normal-control)
+        add_test(NAME p1193_${profile}_current.unit COMMAND p1193_roles
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/c256/sources/${profile}.nl")
+        add_test(NAME p1193_${profile}_census.unit COMMAND p1193_census
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/c256/sources/${profile}.nl")
+    endforeach()
+    foreach(profile 01-return-left 02-return-right 03-both-return 04-return-if)
+        add_test(NAME p1193_${profile}_oom.unit COMMAND p1193_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/c256/sources/${profile}.nl")
+        set_tests_properties(p1193_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE)
+    endforeach()
+    foreach(profile 90-wrong-return-type 91-helper-break 95-mixed-result-binding)
+        add_test(NAME p1193_${profile}_boundary.unit COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/production/boundary.py"
+            "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1193_observe>" "${profile}")
+    endforeach()
+    add_test(NAME p1193_return_auth.unit COMMAND p1193_challenges
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/c256/sources")
+    add_test(NAME p1193_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/production/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1193_roles>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1193-native")
+    add_test(NAME p1193_evidence.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/production/evidence_test.py")
+
     add_test(NAME p1169_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1169/evidence_test.py")
     add_executable(p1169_safety tests/p1169/safety.c)
@@ -2225,5 +2284,8 @@ if(BUILD_TESTING)
     # the global 90-second default (measured ASan source01: 81.8 seconds).
     foreach(profile 01-field-before-after 02-field-deep-quantity)
         set_tests_properties(p1188_c254_${profile}_oom.unit PROPERTIES TIMEOUT 300)
+    endforeach()
+    foreach(profile 01-return-left 02-return-right 03-both-return 04-return-if)
+        set_tests_properties(p1193_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
 endif()

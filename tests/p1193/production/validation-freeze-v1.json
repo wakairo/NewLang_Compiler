@@ -1,0 +1,23 @@
+{
+  "authority": "C256 finite local phase2; original seven source/oracle bytes preserved, new live equipment is a formatted successor; native per invocation20 counted separately",
+  "files": {
+    "tests/p1193/production/95-mixed-result-binding.nl": "f3b329eefb5e989815dcf8b79eb019df60328577653c9d6797c8803f07da3c57",
+    "tests/p1193/production/boundaries.json": "1c9aadd319cd5705fb49c630de181bdc44533821b0920172ea4ad432bf20b882",
+    "tests/p1193/production/boundary.py": "2768f2e913f1dc5badbd384f19ed0d037da8873537f0d5118eb59c1a8aeed540",
+    "tests/p1193/production/census.c": "ba422437b03f3bed12f95f2ea3b7a39ab656daef917f23e389f2a39b753b25cc",
+    "tests/p1193/production/challenges.c": "b187600c546be645504cee03670b07422a68c5eac0fa63b15342cfdc5a5d86db",
+    "tests/p1193/production/mapping.py": "9b94a74bd5989dec3eaa446d8a459f48fb37a6b8c7d186f5a64765b4622010d3",
+    "tests/p1193/production/native_observer.py": "125d08090eaeeecc973875033695323ae373075dbd112c88c3c27204350040bd",
+    "tests/p1193/production/observe.c": "982363d1332726209d01edc514aad746c5973f543d762cb7a1b5320a8dc1377e",
+    "tests/p1193/production/roles.c": "d47787e3cf76628c257fee8f33eaf74b6486ad3996d1ee4472d0e95db3bd38f3",
+    "tests/p1193/production/run.py": "4be2ade27841446b48917323a6f36d6371e6125bb8f49fd726560bf8a6f78bc3",
+    "tests/p1193/c256/sources/01-return-left.nl": "673bba32075013c9c8b519072ac05117e7361e9e4a426832e9473cce38bf5329",
+    "tests/p1193/c256/sources/02-return-right.nl": "644eb49d6c001af1f4db998cdd98cbf72a3cda41d9709ef5b23b40cc3bec074b",
+    "tests/p1193/c256/sources/03-both-return.nl": "91077c12dddd0c3afabc97ef8195ea19e1e36da6c511d60baf1a407abd8b8623",
+    "tests/p1193/c256/sources/04-return-if.nl": "c72b95c578f9e54030fb8b8decb18e9260e158b4750f48869527c3ad9fa8a223",
+    "tests/p1193/c256/sources/80-normal-control.nl": "113b453e8207cec661a803f2173a3ad785d5e1d6d67f75737c03ac7ac15036d7",
+    "tests/p1193/c256/sources/90-wrong-return-type.nl": "54acc94397d5c1c56df084f78e4a9535f50b4ebba2f78c82e6d5b4da300ca7d8",
+    "tests/p1193/c256/sources/91-helper-break.nl": "f786f0b966064285628fea68e51fb33586d3e0872d39e1db7fb7c8f33c9d0a46",
+    "tests/p1193/c256/native-oracle-v1.json": "cb32da449180bda3195cd3b10056b065d40c088b699d878e0a25d554b60a53fb"
+  }
+}
