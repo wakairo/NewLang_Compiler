@@ -50,7 +50,39 @@ def verify():
         v3 = json.loads(z.read('tests/p1208/c266/validation-freeze-v3.json'))
         for name, expected in v3['files'].items():
             assert sha(z.read(name)) == expected, name
-    current = json.loads((HERE / 'c266/validation-freeze-v4.json').read_bytes())
+    first_ci = json.loads((HERE / 'c266/CI-FIRST-RED-v1.json').read_bytes())
+    assert sha((ROOT / first_ci['archive']).read_bytes()) == first_ci['sha256']
+    with zipfile.ZipFile(ROOT / first_ci['archive']) as z:
+        assert set(z.namelist()) == set(first_ci['files'])
+        for name, expected in first_ci['files'].items():
+            assert sha(z.read(name)) == expected, name
+        v4 = json.loads(z.read('tests/p1208/c266/validation-freeze-v4.json'))
+        for name, expected in v4['files'].items():
+            assert sha(z.read(name)) == expected, name
+    first_owned = json.loads((HERE / 'c266/owned-census-v5-FIRST.json').read_bytes())
+    assert sha((ROOT / first_owned['archive']).read_bytes()) == first_owned['sha256']
+    with zipfile.ZipFile(ROOT / first_owned['archive']) as z:
+        assert set(z.namelist()) == set(first_owned['files'])
+        for name, expected in first_owned['files'].items():
+            assert sha(z.read(name)) == expected, name
+        v5 = json.loads(z.read('tests/p1208/c266/validation-freeze-v5.json'))
+        for name, expected in v5['files'].items():
+            assert sha(z.read(name)) == expected, name
+    prior = json.loads((HERE / 'c266/equipment-v6-source-snapshot.json').read_bytes())
+    assert sha((ROOT / prior['archive']).read_bytes()) == prior['sha256']
+    with zipfile.ZipFile(ROOT / prior['archive']) as z:
+        assert set(z.namelist()) == set(prior['files'])
+        for name, expected in prior['files'].items():
+            assert sha(z.read(name)) == expected, name
+        v6 = json.loads(z.read(prior['manifest']))
+        for name, expected in v6['files'].items():
+            if name in prior['files']:
+                data = z.read(name)
+            else:
+                assert name.endswith(tuple(prior['immutable_live_suffixes']))
+                data = (ROOT / name).read_bytes()
+            assert sha(data) == expected, name
+    current = json.loads((HERE / 'c266/validation-freeze-v7.json').read_bytes())
     for name, expected in current['files'].items():
         assert sha((ROOT / name).read_bytes()) == expected, name
     first = json.loads((HERE / 'evidence-receipt-v1.json').read_bytes())
@@ -65,4 +97,4 @@ def verify():
 
 if __name__ == '__main__':
     verify()
-    print('C266 original C263 input/source/oracle/FIRST and current v4 equipment PASS')
+    print('C266 original C263 input/source/oracle/FIRST and current v7 equipment PASS')

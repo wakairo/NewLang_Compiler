@@ -1,5 +1,10 @@
 foreach(target roles safety oom)
-    add_executable(p1208_${target} tests/p1208/${target}.c)
+    if(target STREQUAL "oom")
+        add_executable(p1208_oom tests/p1208/c266/oom_host.c
+            tests/p1208/c266/oom_owned.c)
+    else()
+        add_executable(p1208_${target} tests/p1208/${target}.c)
+    endif()
     target_include_directories(p1208_${target} PRIVATE src)
     target_compile_options(p1208_${target} PRIVATE -UNDEBUG)
     target_link_libraries(p1208_${target} PRIVATE
