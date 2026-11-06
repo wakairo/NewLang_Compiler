@@ -1,0 +1,21 @@
+{
+  "authority": "C254 apparatus correction: keep the previously genuine loop locator when challenging a graph; public GET correctly stopped authenticating the changed graph before the validator was called. Preserve v2 abort, keep every challenge and oracle unchanged.",
+  "oracle": {
+    "restored_per_source": 14,
+    "foreign_per_source": 1,
+    "output_unchanged": true,
+    "revalidate_after_restore": true,
+    "unrestored_A_destroy_B_survive": true,
+    "sources": [
+      "01-field-before-after",
+      "02-field-deep-quantity",
+      "03-literal-shadow"
+    ]
+  },
+  "files": {
+    "tests/p1188/c254/safety-v3.c": "700731379b77c8533ee887a0b8615e9d3472aa00fddd91a40bdcf58a8811be14",
+    "tests/p1188/c254/safety-v2.c": "481bdb133233a3a8f493b597f25dc6bd688e8de3e3e250f7f983f19a4f272dea",
+    "tests/p1188/c254/safety-freeze-v2.json": "da3362848421f365f64aca4086c40e573182e5885775a80dbda2aabcc2238712",
+    "tests/p1188/c254/evidence/safety-v2-FIRST.zip": "fd303a6bd158028ea6b2bb70cac41d70283e7fed6d2f119eb0653b7520854610"
+  }
+}
