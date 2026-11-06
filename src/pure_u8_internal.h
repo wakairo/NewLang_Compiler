@@ -361,9 +361,12 @@ static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
         } else if (n->kind == NL_CHECKED_STATEMENT) {
             const NLCheckedNodeView *value =
                 nl_checked_node_view(f, n->initializer);
-            if (!value || value->type != u8 || n->type != unit ||
-                n->result_count || n->terminates ||
-                n->span.start_byte != value->span.start_byte ||
+            /* Generic statement lowering has unit RETURNs. A discarded IF
+             * with typed exits needs binding/tail lowering, not that path. */
+            if (!value ||
+                (value->kind == NL_CHECKED_IF && value->normal_arms != 2) ||
+                value->type != u8 || n->type != unit || n->result_count ||
+                n->terminates || n->span.start_byte != value->span.start_byte ||
                 !copy_if_gap(f->source, value->span.end_byte, n->span.end_byte,
                              ";") ||
                 !predicate_scalar(&w, n->initializer))

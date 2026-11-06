@@ -1,0 +1,68 @@
+{
+  "authority": "Issue1212 C268; fixed b5c017141e173d5a2891d43cb5aeb26eb888e209; Draft17.34",
+  "before_execution": true,
+  "policy": "Fail closed for unsupported statement mixed IF before output; preserve binding/Copy/discard/tail/final RETURN promise. Never run invalid generated C.",
+  "cases": {
+    "00-F1211-statement-left": {
+      "author": "F1211 exact source, not R",
+      "baseline_check": 0,
+      "baseline_emit": 0,
+      "baseline_strict_compile": "nonzero: bare return in nonvoid helper",
+      "candidate_check": 3,
+      "candidate_emit": 3,
+      "values_if_supported": [
+        37,
+        37,
+        37,
+        37,
+        211,
+        211
+      ],
+      "final": 211,
+      "sibling": 233,
+      "result": 6
+    },
+    "01-bound-discard-final": {
+      "author": "P independently authored neighboring binding/Copy/discard control",
+      "baseline_check": 0,
+      "baseline_emit": 0,
+      "baseline_strict_compile": 0,
+      "candidate_check": 0,
+      "candidate_emit": 0,
+      "values": [
+        47,
+        47,
+        211,
+        211
+      ],
+      "final": 211,
+      "initial": 73,
+      "sibling": 219,
+      "result": 4
+    },
+    "90-statement-right-tail": {
+      "author": "P neighboring opposite RETURN and tail control",
+      "baseline_check": 0,
+      "baseline_emit": 0,
+      "baseline_strict_compile": "nonzero: bare return in nonvoid helper",
+      "candidate_check": 3,
+      "candidate_emit": 3,
+      "values_if_supported": [
+        23,
+        109,
+        23,
+        23
+      ],
+      "final": 23,
+      "sibling": 219,
+      "result": 4
+    },
+    "91-wrong-normal-type": {
+      "author": "P illegal result-type control",
+      "baseline_check": 3,
+      "baseline_emit": 3,
+      "candidate_check": 3,
+      "candidate_emit": 3
+    }
+  }
+}

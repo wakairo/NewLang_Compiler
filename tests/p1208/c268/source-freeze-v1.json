@@ -1,0 +1,15 @@
+{
+  "fixed_head": "b5c017141e173d5a2891d43cb5aeb26eb888e209",
+  "fixed_tree": "598e38ad2e3727af7e25084e736f512f99b14bc3",
+  "binary": "/tmp/p1208-c266-gcc/newlangc",
+  "binary_sha256": "b7434610a8b5fb25431213f5040e15055e0cf1c49573406c25637824f99f2070",
+  "binary_provenance": "exact prior tested GCC compiler hash from immutable local-gates-v2, all Production source identical ed85/b5; no rebuild or production edit",
+  "before_execution": true,
+  "files": {
+    "sources/91-wrong-normal-type.nl": "947852c350cf143fedd8a13f95b5a55aa34b52b4ccb23d79073589c5698065d1",
+    "sources/90-statement-right-tail.nl": "5a659fa86851fe7d3806af4114222aa1cae89f83430554406c2bb1245a0ed94a",
+    "sources/01-bound-discard-final.nl": "fd4c1df827d738b7468ec9bf899bdbb35c1533a0943feeff8e786fb4f77d1f0c",
+    "sources/00-F1211-statement-left.nl": "4be815ed4f531141f5f96acecd52b4965eed1eac2c5de35e0d700cf8ee187639",
+    "oracle-v1.json": "9e082adc52e259a5ce0f3ac6ca4a53ff8973e4b3b461b125a0829702af3e14aa"
+  }
+}
