@@ -1,0 +1,303 @@
+{
+  "schema": "C256_PR1191_POSTMERGE_CI_ARCHIVE_RESTORATION_MANIFEST_V1",
+  "role": "C postmerge integration CI custody; no new execution or independent semantic adjudication",
+  "repository": "wakairo/NewLang_Compiler",
+  "destination": "evidence/c256-pr1191-postmerge-ci/",
+  "sole_parent": "53c125b8cd66523651a21e803827eff6d2a06428",
+  "base_tree": "1a4fcf50e76b0d2def314fdf7720f88d52a6581c",
+  "packet": {
+    "name": "ci-audit-packet.zip",
+    "bytes": 559942,
+    "sha256": "4624fa1d688190f8ddb05417da94977f0d3234f93f73cce576f5c40d50bdbd67",
+    "git_blob_sha1_identity": "428a13dbe04199baaf871461cacd4c6570391c02",
+    "original_zip_unchanged": true,
+    "unique_members": 26,
+    "payload_files": 25
+  },
+  "inner_manifest": {
+    "zip_member": "manifest.json",
+    "bytes": 8864,
+    "sha256": "9f532a56d2ac2fb9d68d0d870a11a3d11a5f94b1bc44cf8e495460dbe29c5b2b"
+  },
+  "source_FINAL_receipt": {
+    "path": "FINAL-RECEIPT.json",
+    "bytes": 1645,
+    "sha256": "4c9610575e72fd50372caa578cea80d53fde526f968b5cdab51bf07e2c7ca685",
+    "inside_source_zip": false
+  },
+  "source_summary": {
+    "zip_member": "summary-final.json",
+    "bytes": 7800,
+    "sha256": "435d88997d3f5df10b90699f99c6bd35fdd7ebc64c6e94c853e6d0e94a6d7817"
+  },
+  "representation": "Two standard-base64 ASCII parts without whitespace or trailing newline. Decode separately in listed order and concatenate decoded bytes.",
+  "parts": [
+    {
+      "index": 1,
+      "path": "chunks/part-0001.base64",
+      "binary_offset": 0,
+      "binary_bytes": 393216,
+      "binary_sha256": "4f6726ba790f26435e847d64f872b8307e070edd6e41609c2f849878dab9e468",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "bee61987bd125244e402ae745e51e02c065e32ba4ce3a5aa47032d0724887d8a",
+      "git_blob_sha1": "8c62eabc7db6322915fb6ef7c9cb0e2f906b498b"
+    },
+    {
+      "index": 2,
+      "path": "chunks/part-0002.base64",
+      "binary_offset": 393216,
+      "binary_bytes": 166726,
+      "binary_sha256": "0bdbdc52f6d09d3b5299e330d45d974867490cc77bd4593be7df69d9b7a5bc87",
+      "ascii_bytes": 222304,
+      "ascii_sha256": "81e74ced039393eecd46ef21ccf482534db48ca683a4fddd29f9dac52c56e664",
+      "git_blob_sha1": "ec5d309dbf67fbd407cb80049d460f5273762aa3"
+    }
+  ],
+  "completed_checkpoint": {
+    "actual_main": "53c125b8cd66523651a21e803827eff6d2a06428",
+    "tree": "1a4fcf50e76b0d2def314fdf7720f88d52a6581c",
+    "ordered_parents": [
+      "70059189c2030f927ad3daa0044c8898848b4548",
+      "f1648a1382ae058e5ab5b9ccdea1e3200879f2af"
+    ],
+    "FULL_job_count": 5,
+    "FULL_each_CTest_PASS": 756,
+    "PARTIAL_job_count": 1,
+    "PARTIAL_CTest_PASS": 755,
+    "six_job_CTest_execution_aggregate": 4535,
+    "sum_expression": "5 * 756 + 755 = 4535",
+    "aggregate_is_not_a_per_job_count": true,
+    "R_recovery_4541_is_a_separate_checkpoint": true,
+    "run_provenance": [
+      {
+        "id": 42153925727,
+        "name": "Compiler validation",
+        "head_branch": "main",
+        "head_sha": "53c125b8cd66523651a21e803827eff6d2a06428",
+        "event": "push",
+        "run_attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-11-06T03:01:11Z",
+        "updated_at": "2026-11-06T03:19:19Z"
+      },
+      {
+        "id": 42153925551,
+        "name": "Compiler frontend/C17 reference (NO LLVM; PARTIAL)",
+        "head_branch": "main",
+        "head_sha": "53c125b8cd66523651a21e803827eff6d2a06428",
+        "event": "push",
+        "run_attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-11-06T03:01:11Z",
+        "updated_at": "2026-11-06T03:07:48Z"
+      }
+    ],
+    "jobs": [
+      {
+        "job_id": 127683436802,
+        "name": "GCC Release",
+        "run_id": 42153925727,
+        "actual_rows": 756,
+        "passed": 756,
+        "log_zip_member": "logs/job-127683436802.log",
+        "log_bytes": 239711,
+        "log_sha256": "802c7ca5761b7add9c1d86f86556d8d530a325c525c0fbfe9c1e574e6ebdb776"
+      },
+      {
+        "job_id": 127683436446,
+        "name": "ASan",
+        "run_id": 42153925727,
+        "actual_rows": 756,
+        "passed": 756,
+        "log_zip_member": "logs/job-127683436446.log",
+        "log_bytes": 240859,
+        "log_sha256": "3d5e5f341eacbebf58f8fbfc21c54711a91cec8a1f24809d1e39ddf27b33e791"
+      },
+      {
+        "job_id": 127683436985,
+        "name": "UBSan",
+        "run_id": 42153925727,
+        "actual_rows": 756,
+        "passed": 756,
+        "log_zip_member": "logs/job-127683436985.log",
+        "log_bytes": 239961,
+        "log_sha256": "a17cba27212430958ded4610b81c7b7e8590deadae3f8be722b1f8f112513140"
+      },
+      {
+        "job_id": 127683436879,
+        "name": "GCC",
+        "run_id": 42153925727,
+        "actual_rows": 756,
+        "passed": 756,
+        "log_zip_member": "logs/job-127683436879.log",
+        "log_bytes": 239772,
+        "log_sha256": "91b27cc320290d682fc43e5bfc6ac0ed5f956555595486951d780a9800b720d0"
+      },
+      {
+        "job_id": 127683436799,
+        "name": "Clang",
+        "run_id": 42153925727,
+        "actual_rows": 756,
+        "passed": 756,
+        "log_zip_member": "logs/job-127683436799.log",
+        "log_bytes": 241691,
+        "log_sha256": "72266228329bea0713bc35feeffc8969e5c12aac43a7781fe20f73d7097e6a12"
+      },
+      {
+        "job_id": 127683435619,
+        "name": "PARTIAL",
+        "run_id": 42153925551,
+        "actual_rows": 755,
+        "passed": 755,
+        "log_zip_member": "logs/job-127683435619.log",
+        "log_bytes": 286296,
+        "log_sha256": "897293455e8ba7152f5ad87847b81cd4ccbc66b6db8bebbbd4b055cb4a40ecac"
+      }
+    ],
+    "whole_logs": 6,
+    "whole_log_bytes": 1488290,
+    "required12_all_six_PASS": true,
+    "C254_new10_all_six_PASS": true,
+    "PARTIAL_real_CLI": "actual exit0, zero stdout/stderr; successful post-CTest workflow step",
+    "budget": {
+      "explicit_C_integration_limit": 6,
+      "actual_jobs": 6,
+      "actual_workflow_runs": 2,
+      "manual_rerun_dispatch_observed": 0,
+      "all_attempts": 1,
+      "remaining_jobs": 0,
+      "scope_of_inventory": "Exact adopted main SHA, all statuses/events; every job/attempt from both observed runs. This is not a full repository-wide Actions inventory.",
+      "prior_budget_boundary": "Old P branch24 and R normal18 allowances are not reset or consumed by this separately authorized C integration stage."
+    }
+  },
+  "baseline_reference_only": {
+    "count": 7,
+    "archive_commit": "6e3868f58e036f3ff744da8b32b7a854b5cb112b",
+    "archive_path": "evidence/c255-pr1191-ci/",
+    "original_packet_sha256": "38297aa4f13ca6d0d12ba9bcc83bc50b09812c29d393ac9281d0b4d1d5b1d4f0",
+    "payloads_reincluded": false,
+    "downloads_or_new_log_fetches": 0,
+    "files": [
+      {
+        "path": "/workspace/scratch/e415f00ca312/c255-p1188-ci-audit/audit-final.json",
+        "bytes": 132782,
+        "sha256": "c66d8773737d53e754b9a982ca5a280a27a6cb1aef84ef5af67c8e63144a6f2d",
+        "archive_commit": "6e3868f58e036f3ff744da8b32b7a854b5cb112b",
+        "archive_path": "evidence/c255-pr1191-ci/",
+        "restored_packet": "ci-audit-packet.zip",
+        "zip_member": "audit-final.json",
+        "role": "C postmerge comparison baseline; not additional execution in this archive"
+      },
+      {
+        "path": "/workspace/scratch/e415f00ca312/c255-p1188-ci-audit/final/logs/job-127640341830.log",
+        "bytes": 240789,
+        "sha256": "5514fce176b3da8cd58cef79d2314b7413db1545bc7d4ea9bc3dabf4bd77273a",
+        "archive_commit": "6e3868f58e036f3ff744da8b32b7a854b5cb112b",
+        "archive_path": "evidence/c255-pr1191-ci/",
+        "restored_packet": "ci-audit-packet.zip",
+        "zip_member": "final/logs/job-127640341830.log",
+        "role": "C postmerge comparison baseline; not additional execution in this archive"
+      },
+      {
+        "path": "/workspace/scratch/e415f00ca312/c255-p1188-ci-audit/final/logs/job-127640341862.log",
+        "bytes": 240944,
+        "sha256": "5f9e4f287b32ac93980570e70f8575f1269a392ac4e2077463d1c77f7bb74116",
+        "archive_commit": "6e3868f58e036f3ff744da8b32b7a854b5cb112b",
+        "archive_path": "evidence/c255-pr1191-ci/",
+        "restored_packet": "ci-audit-packet.zip",
+        "zip_member": "final/logs/job-127640341862.log",
+        "role": "C postmerge comparison baseline; not additional execution in this archive"
+      },
+      {
+        "path": "/workspace/scratch/e415f00ca312/c255-p1188-ci-audit/final/logs/job-127640342021.log",
+        "bytes": 240944,
+        "sha256": "846a9285ae2f070f4bdc4e0f49d18bc5828e69ca7bdba7e7cd8d20ad088802fd",
+        "archive_commit": "6e3868f58e036f3ff744da8b32b7a854b5cb112b",
+        "archive_path": "evidence/c255-pr1191-ci/",
+        "restored_packet": "ci-audit-packet.zip",
+        "zip_member": "final/logs/job-127640342021.log",
+        "role": "C postmerge comparison baseline; not additional execution in this archive"
+      },
+      {
+        "path": "/workspace/scratch/e415f00ca312/c255-p1188-ci-audit/final/logs/job-127640342036.log",
+        "bytes": 240842,
+        "sha256": "4fa52dc4d11668b04268a288cdbb274dff6549727c63ffbf7b3eb9b2174a265c",
+        "archive_commit": "6e3868f58e036f3ff744da8b32b7a854b5cb112b",
+        "archive_path": "evidence/c255-pr1191-ci/",
+        "restored_packet": "ci-audit-packet.zip",
+        "zip_member": "final/logs/job-127640342036.log",
+        "role": "C postmerge comparison baseline; not additional execution in this archive"
+      },
+      {
+        "path": "/workspace/scratch/e415f00ca312/c255-p1188-ci-audit/final/logs/job-127640341878.log",
+        "bytes": 242937,
+        "sha256": "3b7d9da5db1c59b174a74c90a97541bea97fd6fdc58c7f92a95cba84c016f19e",
+        "archive_commit": "6e3868f58e036f3ff744da8b32b7a854b5cb112b",
+        "archive_path": "evidence/c255-pr1191-ci/",
+        "restored_packet": "ci-audit-packet.zip",
+        "zip_member": "final/logs/job-127640341878.log",
+        "role": "C postmerge comparison baseline; not additional execution in this archive"
+      },
+      {
+        "path": "/workspace/scratch/e415f00ca312/c255-p1188-ci-audit/final/logs/job-127640341076.log",
+        "bytes": 287364,
+        "sha256": "a7d490292a488d3303adb7f599c0e02a52e6a0cfddd5545df9b59032a264daa6",
+        "archive_commit": "6e3868f58e036f3ff744da8b32b7a854b5cb112b",
+        "archive_path": "evidence/c255-pr1191-ci/",
+        "restored_packet": "ci-audit-packet.zip",
+        "zip_member": "final/logs/job-127640341076.log",
+        "role": "C postmerge comparison baseline; not additional execution in this archive"
+      }
+    ]
+  },
+  "workflow_checks": [
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "git_blob_sha": "23655288e60f0d3d08a12c9a542346bf31829a08",
+      "events": {
+        "pull_request": "",
+        "push": {
+          "branches": [
+            "main"
+          ]
+        }
+      },
+      "archive_push_matches": false
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "git_blob_sha": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5",
+      "events": {
+        "pull_request": "",
+        "push": {
+          "branches": [
+            "main"
+          ]
+        }
+      },
+      "archive_push_matches": false
+    },
+    {
+      "path": ".github/workflows/r-preflight.yml",
+      "git_blob_sha": "9fea1afeeef948127c73e9ca86c476091036116e",
+      "events": {
+        "push": {
+          "branches": [
+            "r-fast/**"
+          ]
+        }
+      },
+      "archive_push_matches": false
+    }
+  ],
+  "limitations": [
+    "This audits already executed CI text and metadata; no local compiler/build/native/AST/observer/decoder was run.",
+    "The exact adopted commit Git API authenticates tree and ordered parents; a shallow job checkout only emits its actual commit SHA.",
+    "Captured whole logs are the connector-decoded UTF-8 bytes. Original GitHub binary log-ZIP byte identity is not asserted.",
+    "This report does not adjudicate R PR auto-retarget/deleted-branch metadata; root handles that separate preservation task."
+  ],
+  "restoration_proof_method": "Full remote UTF-8 blob strings compared to exact pinned local ASCII/metadata. Reconstruct from those verified-equal local parts; verify global ZIP identity, CRC, exact member set, all25 payload hashes and original bytes, inner manifest, and original external FINAL receipt. No duplicate on-disk remote responses claimed.",
+  "raw_sources_R_archives_and_prior_receipts_modified": false
+}

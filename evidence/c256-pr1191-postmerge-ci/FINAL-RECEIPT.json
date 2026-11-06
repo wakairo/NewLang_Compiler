@@ -1,0 +1,42 @@
+{
+  "schema": "C256_PR1191_POSTMERGE_CI_RECEIPT_V1",
+  "status": "COMPLETE_POSTMERGE_MAIN_SIX_CI_AUDIT_PASS",
+  "generated_utc": "2026-11-06T03:23:10.249135+00:00",
+  "actual_main": "53c125b8cd66523651a21e803827eff6d2a06428",
+  "tree": "1a4fcf50e76b0d2def314fdf7720f88d52a6581c",
+  "ordered_parents": [
+    "70059189c2030f927ad3daa0044c8898848b4548",
+    "f1648a1382ae058e5ab5b9ccdea1e3200879f2af"
+  ],
+  "summary": {
+    "path": "/workspace/scratch/e415f00ca312/c256-pr1191-postmerge-ci-audit/summary-final.json",
+    "bytes": 7800,
+    "sha256": "435d88997d3f5df10b90699f99c6bd35fdd7ebc64c6e94c853e6d0e94a6d7817"
+  },
+  "audit": {
+    "path": "/workspace/scratch/e415f00ca312/c256-pr1191-postmerge-ci-audit/audit-final.json",
+    "bytes": 1332390,
+    "sha256": "b300ba74346048590e14fa659adedee3c2049555d678a7becff4f4656bba3e9b"
+  },
+  "manifest": {
+    "path": "/workspace/scratch/e415f00ca312/c256-pr1191-postmerge-ci-audit/manifest.json",
+    "bytes": 8864,
+    "sha256": "9f532a56d2ac2fb9d68d0d870a11a3d11a5f94b1bc44cf8e495460dbe29c5b2b"
+  },
+  "packet": {
+    "path": "/workspace/scratch/e415f00ca312/c256-pr1191-postmerge-ci-audit/ci-audit-packet.zip",
+    "bytes": 559942,
+    "sha256": "4624fa1d688190f8ddb05417da94977f0d3234f93f73cce576f5c40d50bdbd67"
+  },
+  "packet_payload_file_count": 25,
+  "whole_job_logs_included": 6,
+  "whole_log_total_bytes": 1488290,
+  "job_log_downloads": 6,
+  "each_downloaded_once": true,
+  "actual_CTest_PASS": 4535,
+  "integration_budget_used": 6,
+  "integration_budget_remaining": 0,
+  "remote_mutations": 0,
+  "additional_runs_tests": 0,
+  "local_compiler_build_native_AST_observer_decoder_runs": 0
+}
