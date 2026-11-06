@@ -392,14 +392,22 @@ static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
         const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
         if (!tail || !predicate_scalar(&w, root->tail))
             return false;
-        const size_t returns = 2 - tail->normal_arms;
+        const NLCheckedNodeView *choice = nl_checked_node_view(f, w.selection);
+        if (!choice || choice->normal_arms > 2)
+            return false;
+        const size_t returns = 2 - choice->normal_arms;
+        /* Existing normal-IF result bindings/Copy tails remain ordinary pure
+         * syntax. The new mixed/both-RETURN slice ends in the actual IF;
+         * extending later result bindings needs its own emitter composition. */
+        if (returns && root->tail != w.selection)
+            return false;
         if (nl_control_exits_count(exits) != returns ||
             (returns &&
              !nl_control_exits_only_return(exits, f->function_target)))
             return false;
         if (!returns) {
-            if (root->terminates || root->result_count != 1 ||
-                root->results[0].type != u8 ||
+            if (root->terminates || tail->type != u8 ||
+                root->result_count != 1 || root->results[0].type != u8 ||
                 root->results[0].value != tail->results[0].value)
                 return false;
         } else {
