@@ -1,0 +1,40 @@
+{
+  "authority": "C254 measured local completion before publication; full GCC at final Production code; later metadata-only correction applies the already intended300-second budget after global90, no assertion or fault site removed",
+  "code_head": "defa6558575a9cd0ae76395e5d5394d2bd34623e",
+  "code_tree": "7aad2ed97b30ab8f54bb5197350cb2be60a82c2d",
+  "Production_header_sha256": "28cc9071eb0d0aac4d8197aa4b30766b4d2ce518d844b15a7e9ea57fe7e24ea1",
+  "gcc_full_frontend": {
+    "passed": 753,
+    "total": 753,
+    "seconds": 363.15
+  },
+  "asan_focused": {
+    "passed": 10,
+    "total": 10,
+    "new_native_runs": 24
+  },
+  "ubsan_focused": {
+    "passed": 10,
+    "total": 10,
+    "new_native_runs": 24
+  },
+  "asan_representative_oom": {
+    "passed": 1,
+    "total": 1,
+    "seconds": 81.8,
+    "fault_locations": 5164
+  },
+  "clean_checkout": {
+    "passed": 8,
+    "total": 8,
+    "new_native_runs": 24,
+    "status_bytes": 0
+  },
+  "original_C0_disclosed_only": {
+    "post_finding_CHECK": 0,
+    "independent_R_retest": false,
+    "production_fixture_copy": false
+  },
+  "archive": "tests/p1188/c254/evidence/local-completion-v2.zip",
+  "archive_sha256": "29477ba761d663a7a69d5d9ae6f1e6bd7a4df2d48c8bb981aa2d650edb1b9391"
+}

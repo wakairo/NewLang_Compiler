@@ -2221,4 +2221,9 @@ if(BUILD_TESTING)
     foreach(profile 04-all-one 05-all-two)
         set_tests_properties(p1188_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
+    # Likewise preserve the C254 cohorts' declared finite OOM budget after
+    # the global 90-second default (measured ASan source01: 81.8 seconds).
+    foreach(profile 01-field-before-after 02-field-deep-quantity)
+        set_tests_properties(p1188_c254_${profile}_oom.unit PROPERTIES TIMEOUT 300)
+    endforeach()
 endif()
