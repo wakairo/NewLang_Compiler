@@ -1,0 +1,18 @@
+{
+  "authority": "C256 native ceiling40, all proof+structural gates before guest",
+  "files": {
+    "tests/p1193/c256/mapping.py": "9b94a74bd5989dec3eaa446d8a459f48fb37a6b8c7d186f5a64765b4622010d3",
+    "tests/p1193/c256/native_observer.py": "125d08090eaeeecc973875033695323ae373075dbd112c88c3c27204350040bd",
+    "tests/p1193/c256/native-oracle-v1.json": "cb32da449180bda3195cd3b10056b065d40c088b699d878e0a25d554b60a53fb",
+    "tests/p1193/c256/sources/01-return-left.nl": "673bba32075013c9c8b519072ac05117e7361e9e4a426832e9473cce38bf5329",
+    "tests/p1193/c256/sources/02-return-right.nl": "644eb49d6c001af1f4db998cdd98cbf72a3cda41d9709ef5b23b40cc3bec074b",
+    "tests/p1193/c256/sources/03-both-return.nl": "91077c12dddd0c3afabc97ef8195ea19e1e36da6c511d60baf1a407abd8b8623",
+    "tests/p1193/c256/sources/04-return-if.nl": "c72b95c578f9e54030fb8b8decb18e9260e158b4750f48869527c3ad9fa8a223",
+    "tests/p1193/c256/sources/80-normal-control.nl": "113b453e8207cec661a803f2173a3ad785d5e1d6d67f75737c03ac7ac15036d7",
+    "tests/p1193/c256/sources/90-wrong-return-type.nl": "54acc94397d5c1c56df084f78e4a9535f50b4ebba2f78c82e6d5b4da300ca7d8",
+    "tests/p1193/c256/sources/91-helper-break.nl": "f786f0b966064285628fea68e51fb33586d3e0872d39e1db7fb7c8f33c9d0a46",
+    "tests/p1193/c256/roles-v3.c": "5907f685cada32e91df5aadfb67c30c45826db21f70bd94476445b006a7e7969",
+    "tests/p1193/c256/native-v3.py": "badffb886e63bd3e912387fdf824f931159930707e70acf8af867673297567e6"
+  },
+  "repair": "v2 structural check assumed LT temporary names use comparison-node IDs; actual established emitter uses the first operand node. v3 explicitly observes that owned operand ID. Native remains0; source/oracle and prior raw unchanged."
+}
