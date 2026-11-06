@@ -163,10 +163,6 @@ static bool predicate_selection(PredicateWalk *w, NLCheckedNodeId id,
         y->span.end_byte != n->span.end_byte)
         return false;
     if (normal) {
-        if (n && n->kind == NL_CHECKED_IF) {
-            valid = predicate_selection(w, id, n);
-            goto done;
-        }
         if (!predicate_value(w->body, n, &value) || n->type != w->u8)
             return false;
         if (normal == 2) {
@@ -218,6 +214,10 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
     const NLCheckedNodeView *n = predicate_take(w, id);
     NLSemanticValueView value;
     bool valid = false;
+    if (n && n->kind == NL_CHECKED_IF) {
+        valid = predicate_selection(w, id, n);
+        goto done;
+    }
     if (!predicate_value(w->body, n, &value) ||
         (n->type != w->quantity && n->type != w->boolean && n->type != w->u8))
         goto done;
@@ -487,8 +487,8 @@ static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
 /* Published consumers require the original finished-result receipt. The
  * contents walk is also used by CHECK on its own unpublished definition
  * prefix, where source_call deliberately has not issued that receipt. */
-static bool nl_pure_u8_call(const NLCheckedFragment *f, NLCheckedNodeId id,
-                            NLPureU8Call *out)
+static inline bool nl_pure_u8_call(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id, NLPureU8Call *out)
 {
     if (!nl_h_custody_result_valid(f, id) || !nl_pure_u8_contents(f, id, out))
         return false;
