@@ -228,8 +228,8 @@ int main(int argc, char **argv)
         nl_check_diagnostic_render(stdout, source, &unit_diagnostic.diagnostic);
         goto done;
     }
-    if (nl_source_create(entry, strlen(entry), "r1197-entry.nl", &entry_source) !=
-        NL_SOURCE_OK)
+    if (nl_source_create(entry, strlen(entry), "r1197-entry.nl",
+                         &entry_source) != NL_SOURCE_OK)
         goto done;
     parse = nl_parser_create(entry_source, &entry_parser);
     if (parse == NL_PARSE_OK)
@@ -240,7 +240,7 @@ int main(int argc, char **argv)
         goto done;
     }
     status = nl_semantic_check_source_fragment(context, entry_tree, &checked,
-                                                &check_diagnostic);
+                                               &check_diagnostic);
     printf("{\"record\":\"source_issued_main_call\",\"status\":%u}\n",
            (unsigned)status);
     if (status != NL_CHECK_OK) {
