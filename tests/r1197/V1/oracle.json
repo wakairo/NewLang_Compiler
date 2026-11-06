@@ -1,0 +1,257 @@
+{
+  "schema": "r1197-independent-oracle-v1",
+  "created_utc": "2026-11-06T04:09:59.465233+00:00",
+  "authority": {
+    "canonical_commit": "53c125b8cd66523651a21e803827eff6d2a06428",
+    "draft": "Draft17.34",
+    "task_issue": 1197,
+    "candidate": "24339b077ed0e0a3e847f23aed170c67d2b3d20a",
+    "candidate_parent": "9ea08f360e53848f57009ec3e52139773aaceff6",
+    "candidate_tree": "f18f59a6f10ee5d9564047a33a93f8915d7ba40f",
+    "stable_pr_base": "evidence/p1193-c257-r-base"
+  },
+  "independence_label": "independent first-pass preparation with the canonical historical aside explicitly disclosed",
+  "derivation": "Normative Draft §§4.2,5.2,6,7,13.7-13.8,16.2,17.1/17.33,17.4,18.1-18.5,18.8,19.1,27.1-27.9. No candidate query or execution preceded these predictions.",
+  "common": {
+    "main_result_type": "unit",
+    "original_type": "Gauge",
+    "original_binding": "original",
+    "selected_field": {
+      "name": "sample",
+      "declared_index": 0,
+      "type": "u8"
+    },
+    "sibling_field": {
+      "name": "guard",
+      "declared_index": 1,
+      "type": "u8"
+    },
+    "construction_source_order": [
+      "guard",
+      "sample"
+    ],
+    "construction_values": {
+      "sample": 7,
+      "guard": 211
+    },
+    "loop_header_phases": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "loop_guard_results": [
+      true,
+      true,
+      true,
+      false
+    ],
+    "helper_calls": 3,
+    "actual_continue_edges": 3,
+    "actual_break_edges": 1,
+    "post_loop": {
+      "loop_result": 173,
+      "final_sample": 173,
+      "final_guard": 211,
+      "old_snapshot": 7,
+      "snapshot_after": 7,
+      "sibling_snapshot": 211
+    },
+    "physical_identity": "All three writes target the same original live Gauge/sample subobject; root and both child incarnations survive; guard remains the same sibling. Copy payloads and equal addresses are not issuer/currentness authority.",
+    "currentness": "Each actual replace must account for Change(sample) and ancestor current facts without changing root/child lifetime identity. The second LT write is value-equal (41 to 41); equality alone cannot waive currentness/issuer obligations. No numeric ID freshness convention is assumed without the public interface contract.",
+    "scope": "Each loan capability ends before caller continuation; phase+1 is performed only for phase 0,1,2 and yields 1,2,3. No callee RETURN targets main or its loop."
+  },
+  "profiles": {
+    "LT": {
+      "helper_condition_results": [
+        true,
+        true,
+        false
+      ],
+      "delivered": [
+        41,
+        41,
+        173
+      ],
+      "replaced": [
+        7,
+        41,
+        41
+      ],
+      "current": [
+        41,
+        41,
+        173
+      ],
+      "sibling": [
+        211,
+        211,
+        211
+      ]
+    },
+    "EQ": {
+      "helper_condition_results": [
+        false,
+        true,
+        false
+      ],
+      "delivered": [
+        173,
+        41,
+        173
+      ],
+      "replaced": [
+        7,
+        173,
+        41
+      ],
+      "current": [
+        173,
+        41,
+        173
+      ],
+      "sibling": [
+        211,
+        211,
+        211
+      ]
+    }
+  },
+  "cases": {
+    "N01_wrong_return_type": {
+      "source": "sources/N01_wrong_return_type.nl",
+      "sha256": "fb3ad827940728a9a8ee08a44e58c134af7e2675551e5fefc1a8bffdbbd51370",
+      "role": "invalid_negative",
+      "profile": null,
+      "question": "u8 function attempts RETURN of usize",
+      "native_permitted_after_gates": false
+    },
+    "N02_callee_break": {
+      "source": "sources/N02_callee_break.nl",
+      "sha256": "a908fb928fe4c737edeab4a34d5f6f5b354d44b5811821ddc0b7d5de9f88253e",
+      "role": "invalid_negative",
+      "profile": null,
+      "question": "callee has no lexical loop; caller loop is not its target",
+      "native_permitted_after_gates": false
+    },
+    "N03_callee_continue": {
+      "source": "sources/N03_callee_continue.nl",
+      "sha256": "7966b11e06baca84c085e8ea8063e3bf7889065f65f6d36c6b2598204ade8fc2",
+      "role": "invalid_negative",
+      "profile": null,
+      "question": "callee has no lexical loop; caller loop cannot supply one",
+      "native_permitted_after_gates": false
+    },
+    "N04_caller_fallthrough": {
+      "source": "sources/N04_caller_fallthrough.nl",
+      "sha256": "36c488181b363135aba7f6152543f55f6edbe8a12af13026229ec7ac651ee33f",
+      "role": "invalid_negative",
+      "profile": null,
+      "question": "callee RETURN leaves caller alive; true caller-loop path illegally falls through",
+      "native_permitted_after_gates": false
+    },
+    "N05_continue_wrong_type": {
+      "source": "sources/N05_continue_wrong_type.nl",
+      "sha256": "9b78566c9d5889fd64f981c155ef0cc5cbeb118333078a93ce6a2a697e61a19b",
+      "role": "invalid_negative",
+      "profile": null,
+      "question": "u8 Continue argument mismatches usize loop parameter",
+      "native_permitted_after_gates": false
+    },
+    "N06_mixed_if_binding_boundary": {
+      "source": "sources/N06_mixed_if_binding_boundary.nl",
+      "sha256": "52e648d0b1ff0eb8244124a3a9cf7c13fab95d42137ea4a6cb9bf805bfe91d3b",
+      "role": "legal_boundary",
+      "profile": "LT",
+      "question": "mixed-return IF bound to chosen with later normal continuation; outside Issue admission family",
+      "native_permitted_after_gates": false
+    },
+    "P01_tail_if_control": {
+      "source": "sources/P01_tail_if_control.nl",
+      "sha256": "62fd199b1825b52cb880062ccc178bb1d924c8498f25d0d7bdafca8b7d604197",
+      "role": "positive_control",
+      "profile": "LT",
+      "question": "normal IF result in both arms; no explicit callee return",
+      "native_permitted_after_gates": true,
+      "callee_exit_counts": {
+        "explicit_return": 0,
+        "normal_function_result": 3
+      }
+    },
+    "P02_then_return": {
+      "source": "sources/P02_then_return.nl",
+      "sha256": "bc09af92af811eb854934e612a54d35c90df65711c5015359be85c5988d56635",
+      "role": "positive",
+      "profile": "LT",
+      "question": "explicit RETURN in LT true arm; normal false arm",
+      "native_permitted_after_gates": true,
+      "callee_exit_counts": {
+        "explicit_return": 2,
+        "normal_function_result": 1
+      }
+    },
+    "P03_else_return": {
+      "source": "sources/P03_else_return.nl",
+      "sha256": "f6b0bcf44ff2475e8f2ab71ee5cc49ab68e723a008dd3a62ee16827f4d9663c0",
+      "role": "positive",
+      "profile": "LT",
+      "question": "normal LT true arm; explicit RETURN in false arm",
+      "native_permitted_after_gates": true,
+      "callee_exit_counts": {
+        "explicit_return": 1,
+        "normal_function_result": 2
+      }
+    },
+    "P04_both_return": {
+      "source": "sources/P04_both_return.nl",
+      "sha256": "6b2a5dde35cd05b43af578ddadb6bea8a0335dcd55f4808dbf44e9c930dfc326",
+      "role": "positive",
+      "profile": "LT",
+      "question": "both LT arms explicitly RETURN; no normal IF result",
+      "native_permitted_after_gates": true,
+      "callee_exit_counts": {
+        "explicit_return": 3,
+        "normal_function_result": 0
+      }
+    },
+    "P05_final_return_normal_if": {
+      "source": "sources/P05_final_return_normal_if.nl",
+      "sha256": "03cb3eb8d0a08980e0a9555c07b4278ea60d2dfbcff31115c531320417c3b653",
+      "role": "positive",
+      "profile": "LT",
+      "question": "normal IF result bound to chosen, then explicitly returned",
+      "native_permitted_after_gates": true,
+      "callee_exit_counts": {
+        "explicit_return": 3,
+        "normal_function_result": 0
+      }
+    },
+    "P06_eq_copy_both_return": {
+      "source": "sources/P06_eq_copy_both_return.nl",
+      "sha256": "cc821b76972286cd499b35ebd906bfe42c13d59ab12c20678187975db5532bb1",
+      "role": "positive",
+      "profile": "EQ",
+      "question": "one Copy phase binding, EQ condition, both arms RETURN",
+      "native_permitted_after_gates": true,
+      "callee_exit_counts": {
+        "explicit_return": 3,
+        "normal_function_result": 0
+      }
+    }
+  },
+  "layer_rules": {
+    "positive": "Canonical legal source. Expected selected family candidate applicability; unsupported/precision safe refusal is recorded separately, not invalid-source rejection or native PASS. An unexplained semantic diagnostic, invalid proof, wrong exit/state, unsafe C or native/sanitizer discrepancy triggers STOP.",
+    "invalid_negative": "Reject no later than semantic source CHECK and never issue valid owned proof or emitted C. Early syntax/unsupported refusal is safe but does not validate the targeted semantic check. Unexpected acceptance triggers STOP, with no guest execution.",
+    "legal_boundary": "Canonical legal. Ordinary CHECK acceptance is permitted. The Issue excludes later mixed-IF-result binding continuation from the declared admission family: expect safe owned/emitter refusal if unsupported. Unexpected proof/emission beyond that family is preserved and returned to C before native; do not call this language-invalid merely because unsupported.",
+    "observability": "The vectors are source-semantic predictions, not a claim that every public/native layer exposes them. Record actual internal/proof observations separately from caller-result and guest observations; missing public whole-loop validation remains missing."
+  },
+  "guest_authorization": {
+    "positive_cases_only": true,
+    "max_per_normal_job_planned": 60,
+    "issue_ceiling_per_job": 72,
+    "maximum_12_job_planned": 720,
+    "issue_ceiling_12_jobs": 864,
+    "negative_boundary_guests": 0,
+    "manual_rerun_dispatch": 0
+  }
+}

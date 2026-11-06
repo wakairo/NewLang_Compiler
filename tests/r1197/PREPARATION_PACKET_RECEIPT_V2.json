@@ -1,0 +1,12 @@
+{
+  "archive": "r1197_preparation_complete_v2.tar.gz",
+  "archive_bytes": 497250,
+  "archive_sha256": "ce99a17a7d33bf7af66f42e78df13b337e0571b7cea8bfe28fb11bb6196c903a",
+  "manifest": "PREPARATION_PACKET_MANIFEST_V2.json",
+  "manifest_bytes": 10924,
+  "manifest_sha256": "e9ccd47b2e30d54fd72cb2ff973788605cfda515adb50a30d671935f388e5488",
+  "payload_files": 63,
+  "archived_files": 64,
+  "payload_uncompressed_bytes": 1322514,
+  "scope": "Complete byte-preserving preparation custody, data/text only; HOLD remains, no execution or Git permission."
+}

@@ -1,0 +1,24 @@
+{
+  "status": "PRE_EXECUTION_C258_CAPTURE_ONLY",
+  "target": "0fd24ad3ed08c51845819aab48506c9d43fdccf6",
+  "first_parent": "0fd24ad3ed08c51845819aab48506c9d43fdccf6",
+  "phase": "CAPTURE_ONLY",
+  "native_budget_this_phase": 0,
+  "normal_budget": {
+    "capture": 6,
+    "conditional_completion": 6,
+    "total": 12
+  },
+  "fast_limit": 6,
+  "manual_dispatch_rerun": 0,
+  "known_pending_interface": "unique source-issued role to actual emitted C/AST/event correspondence; no roles bound",
+  "pre_execution_changes": [
+    "separate target release binding; held apparatus archive kept",
+    "R CTest working directory source root",
+    "logged Actions-only depth3 exact merge SHA fetch",
+    "signal/sanitizer fail closed classification with raw logs retained",
+    "public node graph edge and source text export",
+    "CTest -N restricted R inventory build target; no test executed"
+  ],
+  "execution_status": "No local formatter/compiler/build/AST/observer/decoder/guest. First actual remote FAST pending."
+}

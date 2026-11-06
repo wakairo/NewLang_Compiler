@@ -1,0 +1,21 @@
+{
+  "permission_comment": "https://github.com/wakairo/NewLang_Compiler/issues/1197#issuecomment-6676926667",
+  "prior_commit": "52dbe24af4fb660930457c741f17bdd87052622b",
+  "read_scope": "Exactly the two listed full file contents; no siblings, old issue/PR/driver/decoder/cases/oracle/results.",
+  "files": [
+    {
+      "path": "tests/r1190/observe.py",
+      "local_original": "allowlisted_neutral/observe.py",
+      "verbatim_reuse": "apparatus/neutral/observe.py",
+      "sha256": "4903e4648264e9e947c863652a63744774d84271535054f4f4a6517cc72cc1f5"
+    },
+    {
+      "path": "tests/r1190/link_actual_ast.py",
+      "local_original": "allowlisted_neutral/link_actual_ast.py",
+      "verbatim_reuse": "apparatus/neutral/link_actual_ast.py",
+      "sha256": "2741d5bb870886b42bdbb90db62804afb6afa6ec207b58ea0d6c28e7ee71fc6f"
+    }
+  ],
+  "r1197_changes": "Original files remain byte-for-byte. A separate R1197 guard wraps observation; an independent comparison/runner/role-binding interface is authored without old decoder or oracle.",
+  "execution": "None; static read and file/hash copying only."
+}

@@ -1,0 +1,24 @@
+{
+  "task": "R1197 C257 independent preparation",
+  "status": "STOP_PENDING_COORDINATION_INFORMATION_BOUNDARY",
+  "canonical_commit": "53c125b8cd66523651a21e803827eff6d2a06428",
+  "canonical_path": "docs/reference/NewLang_v0_spec_Draft17_34.md",
+  "canonical_sha256": "6f982106dbf03cf21a623e37e6d84d17dab8b9c3743a6a7033ba27c129db4a3d",
+  "exposure": [
+    {
+      "line": 7288,
+      "text": "- このsource categoryは**宣言を登録した同一semantic unitのordinary registered-function bodyと、そこから適法に作るsource fragmentの双方**で一貫して有効とする。function-unitだけの特別なPair名whitelistやfragmentだけの隠れた別規則を設けない。checkerの保持するroot/child/index/ValueFact/Change事実と、後続owned検査やC17 emitterの適格性は別のgateであり、**後者が検証できないsource形はC17前にfail closed**とする。語義上はindex 0/1の両fieldへwrite可能だが、P #671単独の有限native実測はindex 0のwrite一回・後続両field Copy readだけだった。独立R #675は別sourceのindex 1 writeをstrict C17/nativeで確認したが、複数nominal/rootsの一般C17実行や広いbackend証明は成立していない。"
+    }
+  ],
+  "exposure_context": "The expressly permitted canonical Draft section 17.33 on two-u8 fields includes historical producer and other-R native outcome statements. No linked reports were opened.",
+  "sources_frozen": false,
+  "candidate_queried": false,
+  "publication_identity_received": false,
+  "branch_ref_or_pr_created": false,
+  "local_semantic_execution": 0,
+  "FAST_runs": 0,
+  "normal_jobs": 0,
+  "manual_runs": 0,
+  "native_invocations": 0,
+  "first_pass_disposition": "Not reached; no compiler correctness or capability disposition."
+}

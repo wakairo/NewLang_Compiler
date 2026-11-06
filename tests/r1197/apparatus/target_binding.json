@@ -1,0 +1,15 @@
+{
+  "schema": "R1197_TARGET_BINDING_V1",
+  "status": "RELEASED",
+  "execution_released": true,
+  "original_compiler_anchor": "24339b077ed0e0a3e847f23aed170c67d2b3d20a",
+  "compiler_commit": "0fd24ad3ed08c51845819aab48506c9d43fdccf6",
+  "compiler_parent": "24339b077ed0e0a3e847f23aed170c67d2b3d20a",
+  "compiler_tree": "121ca6c13b81768c9c1b854a5d72d76841f6df10",
+  "canonical_commit": "53c125b8cd66523651a21e803827eff6d2a06428",
+  "pr_base_ref": "evidence/p1193-c258-r-base",
+  "r_head_ref": "r-fast/r1197-c258-return-caller-loop",
+  "coordination_release_url": "https://github.com/wakairo/NewLang_Compiler/issues/1197#issuecomment-6677939062",
+  "scope": "GitHub Actions only. Phase A capture, native0; one conditional same-scope Phase B within total normal12. No local semantic execution.",
+  "execution_phase": "CAPTURE_ONLY"
+}
