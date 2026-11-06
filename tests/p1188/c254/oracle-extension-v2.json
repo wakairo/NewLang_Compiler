@@ -1,0 +1,18 @@
+{
+  "authority": "C254 prospective CLI-protocol correction; original source/oracle/FIRST unchanged",
+  "predecessor": {
+    "path": "tests/p1188/c254/oracle-v1.json",
+    "sha256": "1183b2b07d2f0f50fb77fcb016cc1c08a808cfe895075df637728b08d98c32da"
+  },
+  "reason": "Initial numeric exit1 prediction for semantic negatives93/94 was false: actual existing CLI uses rc3 for semantic diagnostics too. Expected P8-EXIT-DEPENDENCY and P3-UNKNOWN-BINDING did occur. Keep those diagnostics and all reject/no-clobber requirements; do not rewrite old oracle.",
+  "target_negative_status": 3,
+  "target_negative_codes": {
+    "90-third-prefix-copy": "P14-LOOP-PRECISION",
+    "91-call-root": "P14-LOOP-PRECISION",
+    "92-outer-quantity": "P14-LOOP-PRECISION",
+    "93-ending-loan": "P8-EXIT-DEPENDENCY",
+    "94-source-order": "P3-UNKNOWN-BINDING",
+    "95-shadow-quantity": "P14-LOOP-PRECISION"
+  },
+  "original_first_archive_sha256": "678626f3cb75fff991dce0d7e9319328b05f91b938a1f7db7b6d4637f46a6ce6"
+}

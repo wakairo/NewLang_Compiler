@@ -749,6 +749,122 @@ static bool current_intrinsic(NLSemanticValueView a, NLSemanticValueView b)
     return a.type == b.type && a.scalar_known == b.scalar_known &&
            (!a.scalar_known || a.scalar_value == b.scalar_value);
 }
+
+/* A captured scalar keeps its original entry package. It is not the selected
+ * child's newer current value, and gives no access/owner authority. The full
+ * frame/exit relation still checks every other prefix member independently. */
+static bool current_capture_binding(const NLSemanticContext *entry,
+                                    const NLSemanticContext *world,
+                                    NLSymbolId symbol, NLTypeId type)
+{
+    if (!entry || !world || !symbol || symbol > NL_SEMANTIC_MAX_ENTRIES ||
+        symbol > entry->binding_count || symbol > world->binding_count)
+        return false;
+    const NLBindingEntry a = entry->bindings[symbol - 1],
+                         b = world->bindings[symbol - 1];
+    const NLValueId value = a.view.value;
+    return a.name && b.name && !a.hidden && !b.hidden &&
+           !strcmp(a.name, b.name) && a.view.type == type &&
+           b.view.type == type && a.view.availability == NL_AVAILABLE &&
+           b.view.availability == NL_AVAILABLE && value &&
+           b.view.value == value && b.view.place == a.view.place &&
+           value <= entry->value_count && value <= world->value_count &&
+           entry->values[value - 1].carrier != NL_CARRIER_ENDED &&
+           copy_if_plain(entry->values[value - 1], type) &&
+           copy_if_plain(world->values[value - 1], type) &&
+           nl_node_value_same(entry->values[value - 1],
+                              world->values[value - 1]);
+}
+
+/* Follow actual declarations in the owning enclosing prefix, bounded by the
+ * already-issued caller initializer node. Reuse the Copy declaration/source
+ * checks; never seed the arm's local binding table from a live world. */
+static bool current_capture_origin(const NLCurrentLoopProof *s,
+                                   NLSymbolId symbol, NLTypeId type)
+{
+    const NLCheckedFragment *parent = s->parent;
+    const NLSemanticContext *entry = nl_control_state_context(s->entry);
+    NLCheckedNodeId use = s->initial_node;
+    size_t copies = 0;
+    while (parent && entry && use && use <= nl_checked_node_count(parent)) {
+        const NLCheckedNodeView *init = NULL;
+        if (!current_capture_binding(entry, entry, symbol, type) ||
+            !current_copy_binding(parent, entry, use, symbol, &init))
+            return false;
+        NLSemanticValueView value;
+        if (!current_copy_value(entry, init, type, &value))
+            return false;
+        if (init->kind == NL_CHECKED_U8_LITERAL)
+            return init->has_scalar_result && value.scalar_known &&
+                   value.scalar_value <= 255;
+        if (init->kind == NL_CHECKED_FIELD_READ) {
+            const NLCheckedField f = init->field;
+            if (!s->root || s->root > entry->place_count || !f.present ||
+                f.base != s->base || init->symbol != s->base ||
+                f.parent != s->root || f.index >= 2 || f.type != type ||
+                f.access != NL_ACCESS_READ ||
+                init->value_use != NL_VALUE_COPIED)
+                return false;
+            const NLSemanticPlaceView root = entry->places[s->root - 1];
+            if (!f.child || f.child > entry->place_count ||
+                f.child != root.fixed_fields[f.index] ||
+                f.nominal != root.type ||
+                f.parent_incarnation != root.incarnation ||
+                f.parent_fact != root.current_fact)
+                return false;
+            const NLSemanticPlaceView child = entry->places[f.child - 1];
+            return f.child_incarnation == child.incarnation &&
+                   f.child_fact == child.current_fact &&
+                   f.old_value == child.current_value && f.old_value &&
+                   f.old_value <= entry->value_count && !f.new_value &&
+                   !f.parent_post_fact && !f.child_post_fact &&
+                   current_intrinsic(entry->values[f.old_value - 1], value);
+        }
+        if (init->kind != NL_CHECKED_IDENTIFIER || ++copies > 2 ||
+            init->value_use != NL_VALUE_COPIED ||
+            init->span.start_byte != init->name.start_byte ||
+            init->span.end_byte != init->name.end_byte || !init->symbol ||
+            init->symbol > entry->binding_count ||
+            !current_copy_name(parent, init->name,
+                               entry->bindings[init->symbol - 1].name) ||
+            !current_capture_binding(entry, entry, init->symbol, type) ||
+            !current_intrinsic(
+                entry->values[entry->bindings[init->symbol - 1].view.value - 1],
+                value))
+            return false;
+        use = (NLCheckedNodeId)(init - parent->nodes) + 1;
+        symbol = init->symbol;
+    }
+    return false;
+}
+
+static bool current_inherited_scalar(CurrentWalk *r,
+                                     const NLCheckedNodeView *value)
+{
+    const NLCurrentLoopProof *s = r->proof;
+    const NLSemanticContext *entry = nl_control_state_context(s->entry),
+                            *world = r->arm->context;
+    const NLTypeId type = nl_semantic_core_type(world, NL_TYPE_U8);
+    if (!s->helper || !s->parent ||
+        nl_checked_source(s->parent) != nl_checked_source(r->arm) ||
+        nl_checked_source(s->parent) != nl_checked_source(s->graph) || !value ||
+        value->kind != NL_CHECKED_IDENTIFIER ||
+        value->value_use != NL_VALUE_COPIED ||
+        value->span.start_byte != value->name.start_byte ||
+        value->span.end_byte != value->name.end_byte ||
+        !current_capture_binding(entry, r->header, value->symbol, type) ||
+        !current_capture_binding(entry, world, value->symbol, type) ||
+        !current_copy_name(r->arm, value->name,
+                           entry->bindings[value->symbol - 1].name) ||
+        !current_capture_origin(s, value->symbol, type))
+        return false;
+    NLSemanticValueView copy;
+    return current_copy_value(world, value, type, &copy) &&
+           current_intrinsic(
+               entry->values[entry->bindings[value->symbol - 1].view.value - 1],
+               copy);
+}
+
 static const NLCheckedNodeView *current_take(CurrentWalk *r, NLCheckedNodeId id)
 {
     if (!id || id > r->arm->count || id > NL_SEMANTIC_MAX_ENTRIES ||
@@ -772,6 +888,8 @@ static bool current_scalar(CurrentWalk *r, const NLCheckedNodeView *v)
         return v->has_scalar_result && v->scalar_result.known &&
                v->scalar_result.value <= 255;
     if (v->kind == NL_CHECKED_IDENTIFIER) {
+        if (current_inherited_scalar(r, v))
+            return true;
         return v->symbol && v->symbol <= NL_SEMANTIC_MAX_ENTRIES &&
                v->symbol <= r->arm->context->binding_count &&
                r->bound[v->symbol - 1] && v->value_use == NL_VALUE_COPIED &&
@@ -1180,7 +1298,7 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
     const NLCheckStatus bad = NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     NLCurrentLoopProof *s = p->current_cycle;
     if (!p->sealed || !s->sealed || !s->graph_owned || p->owner != f ||
-        f->context != p->world || f->source != p->source ||
+        s->parent != f || f->context != p->world || f->source != p->source ||
         f->body_owner != p->plan || !nl_h_custody_validate(p->root) ||
         !linear_graph_matches(p->root, p->root_origin, p->root_nodes,
                               p->root_count, p->root_root) ||
