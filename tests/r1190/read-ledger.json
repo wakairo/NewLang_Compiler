@@ -435,5 +435,39 @@
     "old_finding_unchanged": true,
     "old_E1_E2_and_raw_preserved": true,
     "new_execution": 0
+  },
+  "C256_incident_and_repair": {
+    "authority": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674885398",
+    "classification": "Incident-disclosed calibrated mechanical recovery of post-finding retarget; original independently frozen inputs unchanged",
+    "exposure": "An agent-inventory response automatically displayed the entire completed docs_tooling_checkpoint P CI archive payload, including aggregate original RED6/final PASS6 and archive metadata. The other3 displayed entries were running statuses. No F completion payload was displayed.",
+    "full_exposure_record": {
+      "bytes": 5059,
+      "sha256": "0ac2ecdb2741737cf4372925afd6c35f3837ff6859dc84ee47d339c29b8531f5",
+      "git_blob_sha1": "eb4e1a7df4b18539041676e021a0f12e1ff118d7"
+    },
+    "record_path": "metadata/independence-incident-c256.json in R custody packet",
+    "separate_C_notice": "Coordinator supplied only F1195 completed/accepted status, explicitly no contents",
+    "additional_producer_reads": 0,
+    "source_oracle_changes": 0,
+    "original_observations": "PARTIAL all72 guest native invocations and FIRST raw had completed before the registry exposure; later calibration never relabels the initial incomplete comparisons or old C253 refusal",
+    "static_helper": "fork_turns=none; R equipment and captured R raw only; no FIRST/oracle/producer material, edits, remote actions or semantic execution",
+    "local_static_proof": {
+      "bytes": 15952,
+      "sha256": "85276de7411c435022bc60748fd7a5ef6a2209410c21b8ef696a91270a506cd3",
+      "git_blob_sha1": "da657c0eb156e6e228ab26be0e4586959af581ff"
+    },
+    "initial6_checkpoint": {
+      "bytes": 87632,
+      "sha256": "37026b1b8dba8fdd3844c8a2f920032b1041aba0a6bec74e8e7cd43d535184db",
+      "git_blob_sha1": "9dc68077a9587f46c161e68b9d7c2e7ea37d6f4b"
+    },
+    "runtime_delta": {
+      "bytes": 5691,
+      "sha256": "87a9f8b76797676e44bfc86565af0f18331c5372e92ec57e86db217cbeb31b34",
+      "git_blob_sha1": "774246ec7e4597f810059ff579a02355dcaeedac"
+    },
+    "guard": "Collision-only argument proof with exact actual AST identity, ordinary nonmacro bare range, initialized numeric normal local, completed single declaration and call ordered in same direct CompoundStmt; reject live prior same-name candidates. Keep snapshot veto and decoder count assertions.",
+    "local_semantic_execution": 0,
+    "new_claim": "No repaired observer/native/decode/comparison result before the authorized natural recovery run"
   }
 }

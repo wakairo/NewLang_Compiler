@@ -150,7 +150,7 @@ class Observer:
                 self.ambiguous_declarations.update(declarations)
                 self.unobservable.append({"kind": "declaration_spelling_collision",
                     "declarations": declarations,
-                    "reason": "same-spelling declarations omitted from snapshots/argument lookahead; only their own initialized direct declaration boundary may read them"})
+                    "reason": "same-spelling declarations omitted from snapshots; their own initialized declaration boundary or a separately proved direct-call insertion scope may read them"})
 
     def _records(self, node):
         if node.get("kind") == "RecordDecl" and node.get("completeDefinition"):
@@ -303,24 +303,75 @@ class Observer:
         return "".join(self.log_variable(event, decl)
                        for decl in self.active(position, function, records_only))
 
-    def safe_direct_argument(self, node, position, function):
+    def safe_direct_argument(self, node, position, function, statement):
+        argument = node
         node = unwrapped(node)
         if node.get("kind") in ("IntegerLiteral", "CharacterLiteral"):
             return True
         if node.get("kind") != "DeclRefExpr":
             return False
         decl = self.decl_ids.get(node.get("referencedDecl", {}).get("id"))
-        if not decl or decl in self.ambiguous_declarations:
+        if not decl:
             return False
         info = self.variables[decl]
         declaration = self.declarations[decl]
         scope = self._scope(declaration)
         region = bounds(scope) if scope else None
         declared = bounds(declaration)
-        return (info["function"] == function and info["initialized"]
+        initialized_read = (info["function"] == function and info["initialized"]
                 and scalar_kind(info["type"]) == "number"
                 and declared is not None and declared[1] < position
                 and region is not None and region[0] < position < region[1])
+        if not initialized_read:
+            return False
+        if decl not in self.ambiguous_declarations:
+            return True
+        # A later same-spelling declaration cannot affect this earlier read.
+        # For collisions, prove the exact argument declaration and call are
+        # ordered siblings in one block; retain the broader snapshot veto.
+        declaration_statement = self.parent.get(id(declaration))
+        block = self.parent.get(id(declaration_statement))
+        call_region = bounds(statement)
+        argument_points = [value.get("range", {}).get(edge, {})
+                           for value in (argument, node) for edge in ("begin", "end")]
+        if any("offset" not in point or "expansionLoc" in point or "spellingLoc" in point
+               for point in argument_points):
+            return False
+        if (declaration.get("kind") != "VarDecl"
+                or declaration.get("storageClass")
+                or declaration.get("id") != node.get("referencedDecl", {}).get("id")
+                or declaration.get("id") != info["ast_id"]
+                or self.node_ids.get(id(declaration)) != info["node"]
+                or self.text(argument).strip() != info["name"]
+                or not declaration_statement
+                or declaration_statement.get("kind") != "DeclStmt"
+                or len(declaration_statement.get("inner", [])) != 1
+                or declaration_statement["inner"][0] is not declaration
+                or not block or block.get("kind") != "CompoundStmt"
+                or scope is not block or info["scope"] != self.node_ids.get(id(block))
+                or statement.get("kind") != "DeclStmt"
+                or self.parent.get(id(statement)) is not block
+                or not call_region or call_region[0] != position):
+            return False
+        siblings = {id(child): index for index, child in enumerate(block.get("inner", []))}
+        if (id(declaration_statement) not in siblings or id(statement) not in siblings
+                or siblings[id(declaration_statement)] >= siblings[id(statement)]
+                or self.after_statement(declaration_statement) >= position):
+            return False
+        for other, candidate in self.variables.items():
+            if (other == decl or candidate["function"] != function
+                    or candidate["name"] != info["name"]):
+                continue
+            other_node = self.declarations[other]
+            other_scope = self._scope(other_node)
+            other_region = bounds(other_scope) if other_scope else None
+            other_declared = bounds(other_node)
+            if not other_region or not other_declared:
+                return False
+            if (other_region[0] < position < other_region[1]
+                    and other_declared[0] < position):
+                return False
+        return True
 
     def add(self, position, text):
         if text:
@@ -388,7 +439,7 @@ class Observer:
                     known_direct = (callee.get("kind") == "DeclRefExpr"
                                     and callee.get("referencedDecl", {}).get("kind") == "FunctionDecl")
                     safe = known_direct and all(scalar_kind(ctype(arg)) == "number"
-                               and self.safe_direct_argument(arg, position, self.function[id(node)])
+                               and self.safe_direct_argument(arg, position, self.function[id(node)], node)
                                for arg in arguments)
                     if not safe:
                         self.unobservable.append({"node": self.node_ids[id(direct)],

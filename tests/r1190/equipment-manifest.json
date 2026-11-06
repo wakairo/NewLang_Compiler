@@ -1,8 +1,7 @@
 {
-  "schema": "R1190_C255_EXECUTION_RELEASE_FREEZE",
-  "frozen_utc": "2026-11-06T01:42:55.708522+00:00",
-  "status": "C255_EXECUTION_RELEASED_FIXED_F1648A1",
-  "compiler_parent_for_eventual_R_commit": "f1648a1382ae058e5ab5b9ccdea1e3200879f2af",
+  "schema": "R1190_C256_OBSERVER_RECOVERY_FREEZE",
+  "frozen_utc": "2026-11-06T02:29:52.589433+00:00",
+  "status": "C256_INCIDENT_DISCLOSED_CALIBRATED_OBSERVER_RECOVERY",
   "fixed_tree": "1a4fcf50e76b0d2def314fdf7720f88d52a6581c",
   "fixed_target_parent": "349a2a3d08bb1cf10c817a3ef289554de1638168",
   "preparation_release": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674156082",
@@ -19,8 +18,8 @@
     "sha256": "0f5b69224fdcff31750672e7020a7e3b1e80a3ac5f59b449cd10ce0651a17148",
     "git_blob_sha1": "ea128770eea03bc447d74bd99de45b1071ca0c4d"
   },
-  "classification": "post-finding retarget of independently frozen inputs",
-  "scope": "Release/status/resume/budget metadata and manifest/README/RESTART only from accepted HOLD; original FIRST and runtime unchanged",
+  "classification": "Incident-disclosed calibrated mechanical recovery of post-finding retarget; original independently frozen inputs unchanged",
+  "scope": "One collision-only observer argument proof plus associated release/custody metadata; decoder assertions and snapshots unchanged",
   "checks": "text/hash/package/host Python ast.parse only; no equipment import or invocation",
   "files": [
     {
@@ -187,15 +186,15 @@
     },
     {
       "path": "tests/r1190/README.md",
-      "bytes": 6150,
-      "sha256": "17fe66a4b626f7855d1b722ce54756b2fbcd91eb573f762d966f720a8d46c004",
-      "git_blob_sha1": "9e0658ab2a5815814354e90b95cb7f573564f461"
+      "bytes": 7943,
+      "sha256": "a2bc2f2fd69effb3f81e5da9e4b64a14dac15988738eb9498f29bd6529eed815",
+      "git_blob_sha1": "6c244b648c5714dc4a0566fef86add21c3353b05"
     },
     {
       "path": "tests/r1190/RESTART.md",
-      "bytes": 2345,
-      "sha256": "fe77055cd5f3d2931d179903f51fd60605224841a1df78f4ef4b014a266cb42c",
-      "git_blob_sha1": "df4af4d8bf439ad7a0964d5cbabae02306a23ec6"
+      "bytes": 1855,
+      "sha256": "a7750da975091cce6f5d21172e5fcbfeedda3eef643df5c142574ddfbd395fb7",
+      "git_blob_sha1": "e69b56bd9b12826bce95c03b96fa6146a46fcba2"
     },
     {
       "path": "tests/r1190/compare.py",
@@ -253,9 +252,9 @@
     },
     {
       "path": "tests/r1190/observe.py",
-      "bytes": 27515,
-      "sha256": "d83faecd78635184645413ac6bc83c4ac526bc0b823eafe104860dd3e492e162",
-      "git_blob_sha1": "a7923409090507677bad7a61059af944eaab0d4a"
+      "bytes": 30420,
+      "sha256": "4903e4648264e9e947c863652a63744774d84271535054f4f4a6517cc72cc1f5",
+      "git_blob_sha1": "a75bfdb83f47b64702a90c42fd313ef14d02fdf7"
     },
     {
       "path": "tests/r1190/public_probe.c",
@@ -265,9 +264,9 @@
     },
     {
       "path": "tests/r1190/read-ledger.json",
-      "bytes": 17179,
-      "sha256": "d04979d68735ce8ed1b4247b794614c0c04d37839729a8ba575f64b6186a7023",
-      "git_blob_sha1": "95f59a777a3e62dcbf0f9d24d9934d59acfe6752"
+      "bytes": 19676,
+      "sha256": "181c9fc70e2202677f09d1d56ad4a3084974f266fc90450d6905e77c92c7a488",
+      "git_blob_sha1": "b5a48c3413b392735cef3f8b68fab70e787386fc"
     },
     {
       "path": "tests/r1190/register.cmake",
@@ -283,276 +282,21 @@
     },
     {
       "path": "tests/r1190/target.json",
-      "bytes": 3419,
-      "sha256": "63a3caba4689a28437ce686178a25e9c994d5da0a123d7b7e4e0921cfe872e56",
-      "git_blob_sha1": "b1e6becbcf97992d18976a1da9617dbb869e3320"
-    }
-  ],
-  "delta_from_C252_released_excluding_self": [
-    {
-      "path": "CMakeLists.txt",
-      "old": {
-        "bytes": 148899,
-        "sha256": "200674ead9a677f10b4e8ac8f38cdaa93c0f3b9c3be69581a0447a1788b89100",
-        "git_blob_sha1": "e37e1189b7d4e83c7791456fc3537f66a15a0ae9"
-      },
-      "new": {
-        "bytes": 151309,
-        "sha256": "e9cf31c543f0b64f60bb03f90aecdc94a82fc0e27427333b370fded11406fa9d",
-        "git_blob_sha1": "44eb9eda1dcb2462d42e4abc18b076207cd706b3"
-      }
-    },
-    {
-      "path": "tests/r1190/README.md",
-      "old": {
-        "bytes": 4775,
-        "sha256": "288b745a05bb7bb12f7def364d086b2f7c23e12a82ae01b49817fecf500a8cb3",
-        "git_blob_sha1": "9c00eadd86069511eb620b7095343e3e6847e2db"
-      },
-      "new": {
-        "bytes": 6150,
-        "sha256": "17fe66a4b626f7855d1b722ce54756b2fbcd91eb573f762d966f720a8d46c004",
-        "git_blob_sha1": "9e0658ab2a5815814354e90b95cb7f573564f461"
-      }
-    },
-    {
-      "path": "tests/r1190/RESTART.md",
-      "old": {
-        "bytes": 1426,
-        "sha256": "fb0a3521aaf45ec77e42d661019c63e72c0e97fcfea92ca0ea5415ee099b3e54",
-        "git_blob_sha1": "8fa7b2d8742e3a465c827baff3ebe50e44ae8767"
-      },
-      "new": {
-        "bytes": 2345,
-        "sha256": "fe77055cd5f3d2931d179903f51fd60605224841a1df78f4ef4b014a266cb42c",
-        "git_blob_sha1": "df4af4d8bf439ad7a0964d5cbabae02306a23ec6"
-      }
-    },
-    {
-      "path": "tests/r1190/fixed-CMakeLists.txt",
-      "old": {
-        "bytes": 148841,
-        "sha256": "8fa24fd6470ef43ca863b9c87af0dc35f5e13d4dcb2d42efec8ea65a7916816b",
-        "git_blob_sha1": "5f4fdf55f3e9fc7f64a0c3397971aa874ccf22e7"
-      },
-      "new": {
-        "bytes": 151251,
-        "sha256": "769c320cd64c66e3ebf040dd6fcf896fed92a0d1be58d9948053dc0c16ba9614",
-        "git_blob_sha1": "177654d758e0a419ba49496f313310dff7f6d1dc"
-      }
-    },
-    {
-      "path": "tests/r1190/fixed-commit.raw",
-      "old": {
-        "bytes": 293,
-        "sha256": "301092aca7dab65088c466401955f3fca53f5051b0bd676d42d869e89ada199a",
-        "git_blob_sha1": "eb21d81e1c420a6abbb3bc92e3150215009e6d4f"
-      },
-      "new": {
-        "bytes": 360,
-        "sha256": "10e4682e438683e504132051b87f29923e8e972a83db06c5d7b6fbba0e53682f",
-        "git_blob_sha1": "bdf1beb5ea407af891080ccb674ea2c30950afa7"
-      }
-    },
-    {
-      "path": "tests/r1190/fixed-tree.json.gz.b64",
-      "old": {
-        "bytes": 294541,
-        "sha256": "3f15dff9d7b075c721958061c888016e757136a8abc751a00046c16ebd174c80",
-        "git_blob_sha1": "c9b5299b82fdd06ed09ded4214562bcb7c3b2ed5"
-      },
-      "new": {
-        "bytes": 294381,
-        "sha256": "1596432dba70f4cacbb0c7fbcc72eec9ec3efc5102ccce82af4ddf4675ade371",
-        "git_blob_sha1": "f1c0474490987fecc7032116cdb5c2e73e942710"
-      }
-    },
-    {
-      "path": "tests/r1190/read-ledger.json",
-      "old": {
-        "bytes": 9502,
-        "sha256": "eda0f47f5ad97e93a6d1b17dadecc3ea24165a2185d43e6047e30348b190ac42",
-        "git_blob_sha1": "7c9c468c86690df19208a57dfdd5dc0dc2437897"
-      },
-      "new": {
-        "bytes": 17179,
-        "sha256": "d04979d68735ce8ed1b4247b794614c0c04d37839729a8ba575f64b6186a7023",
-        "git_blob_sha1": "95f59a777a3e62dcbf0f9d24d9934d59acfe6752"
-      }
-    },
-    {
-      "path": "tests/r1190/target.json",
-      "old": {
-        "bytes": 1831,
-        "sha256": "857d6e9f2a0ca48eee7e0f0072789b0c33523c683922ab042f4dc8737e946ad8",
-        "git_blob_sha1": "6ca2c479d6e8c65f48239fa85b91d3a97c17e87a"
-      },
-      "new": {
-        "bytes": 3419,
-        "sha256": "63a3caba4689a28437ce686178a25e9c994d5da0a123d7b7e4e0921cfe872e56",
-        "git_blob_sha1": "b1e6becbcf97992d18976a1da9617dbb869e3320"
-      }
+      "bytes": 4547,
+      "sha256": "08e11bd639e03d6b03a5994f19e04c2b9e10f1de8f56dd792dd8836bc9d9425a",
+      "git_blob_sha1": "0940ba22c2521fcff91926f5339260c35a98d990"
     }
   ],
   "FIRST26_unchanged": true,
   "original13_sources_unchanged": true,
   "oracle_expectations_identity_unchanged": true,
-  "runtime10_unchanged_from_E2_and_C252": true,
   "original_C253_finding_unchanged": true,
   "source_oracle_changes": 0,
-  "runtime_changes": 0,
-  "new_execution_counters": {
-    "compiler": 0,
-    "build_configure": 0,
-    "native": 0,
-    "guest_AST": 0,
-    "observer_semantic_decoder": 0,
-    "remote_commit_ref_push_PR": 0,
-    "Actions_CI_manual": 0
-  },
-  "all_history_budget": {
-    "captured_utc": "2026-11-06T01:31:34.857Z",
-    "scope": "R1190 all-history branches, all heads/statuses/attempts; complete API pages",
-    "FAST_used": 1,
-    "normal_actual_jobs_used": 6,
-    "manual_used": 0,
-    "new_target_FAST_used": 0,
-    "new_target_normal_used": 0,
-    "new_target_manual_used": 0,
-    "new_target_execution_budget": "C255 release: new FAST5 / normal12, cumulative FAST6 / normal18, manual0; native72/job",
-    "runs": [
-      {
-        "run_id": 42058011336,
-        "workflow": ".github/workflows/compiler-frontend-ci.yml",
-        "event": "pull_request",
-        "head": "fe18e136197b25bad77214bc5a9aa000daee3113",
-        "attempt": 1,
-        "conclusion": "failure",
-        "actual_jobs": [
-          {
-            "id": 127351609197,
-            "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
-            "attempt": 1,
-            "conclusion": "failure"
-          }
-        ]
-      },
-      {
-        "run_id": 42058011677,
-        "workflow": ".github/workflows/compiler-ci.yml",
-        "event": "pull_request",
-        "head": "fe18e136197b25bad77214bc5a9aa000daee3113",
-        "attempt": 1,
-        "conclusion": "failure",
-        "actual_jobs": [
-          {
-            "id": 127351610277,
-            "name": "UBSan",
-            "attempt": 1,
-            "conclusion": "failure"
-          },
-          {
-            "id": 127351610851,
-            "name": "ASan",
-            "attempt": 1,
-            "conclusion": "failure"
-          },
-          {
-            "id": 127351610870,
-            "name": "Clang",
-            "attempt": 1,
-            "conclusion": "failure"
-          },
-          {
-            "id": 127351610928,
-            "name": "GCC Release",
-            "attempt": 1,
-            "conclusion": "failure"
-          },
-          {
-            "id": 127351611057,
-            "name": "GCC",
-            "attempt": 1,
-            "conclusion": "failure"
-          }
-        ]
-      },
-      {
-        "run_id": 42057614186,
-        "workflow": ".github/workflows/r-preflight.yml",
-        "event": "push",
-        "head": "fe18e136197b25bad77214bc5a9aa000daee3113",
-        "attempt": 1,
-        "conclusion": "success",
-        "actual_jobs": [
-          {
-            "id": 127350198837,
-            "name": "R-FAST pinned format + GCC build + CTest registration only",
-            "attempt": 1,
-            "conclusion": "success"
-          }
-        ]
-      }
-    ],
-    "new_branch_absent": true,
-    "new_PR_absent": true,
-    "new_run_absent": true,
-    "old_ref_unchanged": "fe18e136197b25bad77214bc5a9aa000daee3113",
-    "old_PR": {
-      "number": 1194,
-      "state": "open",
-      "draft": true,
-      "head": "fe18e136197b25bad77214bc5a9aa000daee3113",
-      "reported_PR_base_sha": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7"
-    },
-    "archive_ref": "refs/heads/evidence/r1190-c253-first",
-    "archive_sha": "e7ab5e9d8c10a6929d2e309a993faa5c3f5f4116"
-  },
+  "runtime_changes": 1,
   "execution_release": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674503949",
   "actual_execution_resume": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674538589",
   "accepted_HOLD_manifest_sha256": "c3b60af72e1db617d671ce71b5ad31eefdca2476cc677b98dceb4bbea9eff64a",
   "accepted_HOLD_bundle_sha256": "5df6bcdbc2606e83028496580b9b960f18500010088e2cee7326f89c83a5e537",
-  "delta_from_accepted_HOLD_excluding_self": [
-    {
-      "path": "tests/r1190/README.md",
-      "old": {
-        "bytes": 5658,
-        "sha256": "7fb9750e49377961b4c5ce55688e606f930788eab19581edd43ea5c440b90cd1",
-        "git_blob_sha1": "1b3100860d653e03f2aa6b90d56c27f4f3ee38e9"
-      },
-      "new": {
-        "bytes": 6150,
-        "sha256": "17fe66a4b626f7855d1b722ce54756b2fbcd91eb573f762d966f720a8d46c004",
-        "git_blob_sha1": "9e0658ab2a5815814354e90b95cb7f573564f461"
-      }
-    },
-    {
-      "path": "tests/r1190/RESTART.md",
-      "old": {
-        "bytes": 1910,
-        "sha256": "74997cf33c9ea5fae5c4b0b50ee58575f7f4ecab1187eb1645b4463fe7bdc748",
-        "git_blob_sha1": "749258120b6b073c21a28e0ba136f6798f52b036"
-      },
-      "new": {
-        "bytes": 2345,
-        "sha256": "fe77055cd5f3d2931d179903f51fd60605224841a1df78f4ef4b014a266cb42c",
-        "git_blob_sha1": "df4af4d8bf439ad7a0964d5cbabae02306a23ec6"
-      }
-    },
-    {
-      "path": "tests/r1190/target.json",
-      "old": {
-        "bytes": 2909,
-        "sha256": "197470e9699b6a40b1d49a46be9af070b89d77407300911c9ca875144f84b652",
-        "git_blob_sha1": "082d27b4fbf6c839ab46398e7ecfba9ca3ae36bd"
-      },
-      "new": {
-        "bytes": 3419,
-        "sha256": "63a3caba4689a28437ce686178a25e9c994d5da0a123d7b7e4e0921cfe872e56",
-        "git_blob_sha1": "b1e6becbcf97992d18976a1da9617dbb869e3320"
-      }
-    }
-  ],
   "C255_execution_budget": {
     "FAST_actual_runs": 5,
     "normal_actual_jobs": 12,
@@ -570,5 +314,807 @@
     "bytes": 50846,
     "sha256": "6c5c436393e97a92188d203b0af2df8c11b8a94bce5183f2a3d745f152b16589",
     "git_blob_sha1": "13961d3613f5f045c8bfb48743ed615f5cadfaa4"
+  },
+  "recovery_authority": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674885398",
+  "R_commit_sole_parent": "1aec4fa49dfb8b2aba83daf503254dd37e687b5d",
+  "fixed_compiler": "f1648a1382ae058e5ab5b9ccdea1e3200879f2af",
+  "initial_C255_manifest": {
+    "bytes": 21214,
+    "sha256": "eefc20df5ead1586ffcd724d414d7f5d140eae51a462a2118d716d1bd42906d2",
+    "git_blob_sha1": "fcd48ec2c09247db07c3f6e2bbf8e0f82ac9c559"
+  },
+  "initial_C255_checkpoint": {
+    "bytes": 87632,
+    "sha256": "37026b1b8dba8fdd3844c8a2f920032b1041aba0a6bec74e8e7cd43d535184db",
+    "git_blob_sha1": "9dc68077a9587f46c161e68b9d7c2e7ea37d6f4b"
+  },
+  "independence_incident_record": {
+    "bytes": 5059,
+    "sha256": "0ac2ecdb2741737cf4372925afd6c35f3837ff6859dc84ee47d339c29b8531f5",
+    "git_blob_sha1": "eb4e1a7df4b18539041676e021a0f12e1ff118d7"
+  },
+  "initial_C255_runtime10_equal_E2": true,
+  "current_runtime_changes": [
+    "tests/r1190/observe.py"
+  ],
+  "current_other_runtime9_unchanged": true,
+  "delta_from_initial_C255_excluding_self": [
+    {
+      "path": "tests/r1190/README.md",
+      "old": {
+        "bytes": 6150,
+        "sha256": "17fe66a4b626f7855d1b722ce54756b2fbcd91eb573f762d966f720a8d46c004",
+        "git_blob_sha1": "9e0658ab2a5815814354e90b95cb7f573564f461"
+      },
+      "new": {
+        "bytes": 7943,
+        "sha256": "a2bc2f2fd69effb3f81e5da9e4b64a14dac15988738eb9498f29bd6529eed815",
+        "git_blob_sha1": "6c244b648c5714dc4a0566fef86add21c3353b05"
+      }
+    },
+    {
+      "path": "tests/r1190/RESTART.md",
+      "old": {
+        "bytes": 2345,
+        "sha256": "fe77055cd5f3d2931d179903f51fd60605224841a1df78f4ef4b014a266cb42c",
+        "git_blob_sha1": "df4af4d8bf439ad7a0964d5cbabae02306a23ec6"
+      },
+      "new": {
+        "bytes": 1855,
+        "sha256": "a7750da975091cce6f5d21172e5fcbfeedda3eef643df5c142574ddfbd395fb7",
+        "git_blob_sha1": "e69b56bd9b12826bce95c03b96fa6146a46fcba2"
+      }
+    },
+    {
+      "path": "tests/r1190/observe.py",
+      "old": {
+        "bytes": 27515,
+        "sha256": "d83faecd78635184645413ac6bc83c4ac526bc0b823eafe104860dd3e492e162",
+        "git_blob_sha1": "a7923409090507677bad7a61059af944eaab0d4a"
+      },
+      "new": {
+        "bytes": 30420,
+        "sha256": "4903e4648264e9e947c863652a63744774d84271535054f4f4a6517cc72cc1f5",
+        "git_blob_sha1": "a75bfdb83f47b64702a90c42fd313ef14d02fdf7"
+      }
+    },
+    {
+      "path": "tests/r1190/read-ledger.json",
+      "old": {
+        "bytes": 17179,
+        "sha256": "d04979d68735ce8ed1b4247b794614c0c04d37839729a8ba575f64b6186a7023",
+        "git_blob_sha1": "95f59a777a3e62dcbf0f9d24d9934d59acfe6752"
+      },
+      "new": {
+        "bytes": 19676,
+        "sha256": "181c9fc70e2202677f09d1d56ad4a3084974f266fc90450d6905e77c92c7a488",
+        "git_blob_sha1": "b5a48c3413b392735cef3f8b68fab70e787386fc"
+      }
+    },
+    {
+      "path": "tests/r1190/target.json",
+      "old": {
+        "bytes": 3419,
+        "sha256": "63a3caba4689a28437ce686178a25e9c994d5da0a123d7b7e4e0921cfe872e56",
+        "git_blob_sha1": "b1e6becbcf97992d18976a1da9617dbb869e3320"
+      },
+      "new": {
+        "bytes": 4547,
+        "sha256": "08e11bd639e03d6b03a5994f19e04c2b9e10f1de8f56dd792dd8836bc9d9425a",
+        "git_blob_sha1": "0940ba22c2521fcff91926f5339260c35a98d990"
+      }
+    }
+  ],
+  "static_mechanical_proof": {
+    "schema": "R1190_C256_STATIC_OBSERVER_CAUSE",
+    "inspection": "Captured actual C/AST/map/raw and frozen R equipment only; no observer/decoder/compiler/guest execution",
+    "mechanical_repair": "Collision-only direct-call argument proof: exact identity, initialized numeric normal local, ordinary bare range, completed single declaration and call ordered in same direct CompoundStmt, no live prior same-spelling competitor. Retain snapshot veto and decoder guards.",
+    "source_oracle_changes": 0,
+    "case_evidence": [
+      {
+        "case": "P3",
+        "origin_run": 42146445476,
+        "origin_job": 127658958369,
+        "original_c": {
+          "bytes": 4558,
+          "sha256": "4d055468d66964e15154a89dc346d516b7b7e46df08b46d2e69399d52fd5ae83"
+        },
+        "actual_ast": {
+          "bytes": 551455,
+          "sha256": "c85a86e8cb2c0773032f90680ee528af730aebdc1fc9d7494dc2865085a6a846"
+        },
+        "linked_map": {
+          "bytes": 126690,
+          "sha256": "8aa962de752d65ec943eaefa61a20a5a3d5d44312fb5e46d1c0a8ecbb03abb53"
+        },
+        "call_node": {
+          "id": "n93",
+          "kind": "CallExpr",
+          "parent": "n92",
+          "function": "f1",
+          "range": [
+            2427,
+            2447
+          ],
+          "children": [
+            "n94",
+            "n96"
+          ],
+          "type": "unsigned char",
+          "decl": null,
+          "actual_ast_id": "0x55c2d23e1a08"
+        },
+        "argument_node": {
+          "id": "n97",
+          "kind": "DeclRefExpr",
+          "parent": "n96",
+          "function": "f1",
+          "range": [
+            2436,
+            2446
+          ],
+          "children": [],
+          "type": "const unsigned long",
+          "ref_decl": "d9",
+          "ref_name": "nl_local_7",
+          "decl": null,
+          "actual_ast_id": "0x55c2d23e1968"
+        },
+        "wrapper_node": {
+          "id": "n96",
+          "kind": "ImplicitCastExpr",
+          "parent": "n93",
+          "function": "f1",
+          "range": [
+            2436,
+            2446
+          ],
+          "children": [
+            "n97"
+          ],
+          "type": "unsigned long",
+          "decl": null,
+          "actual_ast_id": "0x55c2d23e1a30"
+        },
+        "exact_decl": {
+          "id": "d9",
+          "ast_id": "0x55c2d23e1730",
+          "name": "nl_local_7",
+          "type": "const unsigned long",
+          "node": "n82",
+          "scope": "n59",
+          "initialized": true,
+          "parameter": false,
+          "function": "f1"
+        },
+        "declaration_node": {
+          "id": "n82",
+          "kind": "VarDecl",
+          "parent": "n81",
+          "function": "f1",
+          "range": [
+            2275,
+            2311
+          ],
+          "children": [
+            "n83"
+          ],
+          "type": "const unsigned long",
+          "name": "nl_local_7",
+          "init": "c",
+          "decl": "d9",
+          "actual_ast_id": "0x55c2d23e1730"
+        },
+        "declaration_statement": {
+          "id": "n81",
+          "kind": "DeclStmt",
+          "parent": "n59",
+          "function": "f1",
+          "range": [
+            2275,
+            2312
+          ],
+          "children": [
+            "n82"
+          ],
+          "type": "",
+          "decl": null,
+          "actual_ast_id": "0x55c2d23e17d0"
+        },
+        "call_statement": {
+          "id": "n91",
+          "kind": "DeclStmt",
+          "parent": "n59",
+          "function": "f1",
+          "range": [
+            2400,
+            2448
+          ],
+          "children": [
+            "n92"
+          ],
+          "type": "",
+          "decl": null,
+          "actual_ast_id": "0x55c2d23e1a48"
+        },
+        "direct_scope": {
+          "id": "n59",
+          "kind": "CompoundStmt",
+          "parent": "n53",
+          "function": "f1",
+          "range": [
+            2001,
+            3780
+          ],
+          "children": [
+            "n60",
+            "n65",
+            "n68",
+            "n71",
+            "n75",
+            "n78",
+            "n81",
+            "n85",
+            "n88",
+            "n91",
+            "n98",
+            "n101",
+            "n104",
+            "n108",
+            "n111",
+            "n114",
+            "n116",
+            "n141",
+            "n144",
+            "n148",
+            "n151",
+            "n154",
+            "n158",
+            "n161",
+            "n164",
+            "n169",
+            "n172",
+            "n175",
+            "n180",
+            "n183",
+            "n186",
+            "n190",
+            "n193",
+            "n196",
+            "n203"
+          ],
+          "type": "",
+          "decl": null,
+          "actual_ast_id": "0x55c2d23e3280"
+        },
+        "sibling_indices": [
+          6,
+          9
+        ],
+        "argument_text": "nl_local_7",
+        "ordinary_argument_ranges": {
+          "n96": {
+            "begin": {
+              "offset": 2436,
+              "col": 49,
+              "tokLen": 10
+            },
+            "end": {
+              "offset": 2436,
+              "col": 49,
+              "tokLen": 10
+            }
+          },
+          "n97": {
+            "begin": {
+              "offset": 2436,
+              "col": 49,
+              "tokLen": 10
+            },
+            "end": {
+              "offset": 2436,
+              "col": 49,
+              "tokLen": 10
+            }
+          }
+        },
+        "excluded_later_same_name": {
+          "declaration": {
+            "id": "d22",
+            "ast_id": "0x55c2d23e38d0",
+            "name": "nl_local_7",
+            "type": "const unsigned char",
+            "node": "n234",
+            "scope": "n2",
+            "initialized": true,
+            "parameter": false,
+            "function": "f1"
+          },
+          "node": {
+            "id": "n234",
+            "kind": "VarDecl",
+            "parent": "n233",
+            "function": "f1",
+            "range": [
+              4084,
+              4124
+            ],
+            "children": [
+              "n235"
+            ],
+            "type": "const unsigned char",
+            "name": "nl_local_7",
+            "init": "c",
+            "decl": "d22",
+            "actual_ast_id": "0x55c2d23e38d0"
+          },
+          "scope": {
+            "id": "n2",
+            "kind": "CompoundStmt",
+            "parent": "n1",
+            "function": "f1",
+            "range": [
+              1416,
+              4273
+            ],
+            "children": [
+              "n3",
+              "n10",
+              "n13",
+              "n16",
+              "n21",
+              "n24",
+              "n27",
+              "n31",
+              "n34",
+              "n36",
+              "n40",
+              "n212",
+              "n215",
+              "n219",
+              "n222",
+              "n227",
+              "n230",
+              "n233",
+              "n238",
+              "n241",
+              "n244",
+              "n248",
+              "n251"
+            ],
+            "type": "",
+            "decl": null,
+            "actual_ast_id": "0x55c2d23e4050"
+          }
+        },
+        "actual_missing_counts": [
+          {
+            "mode": "gcc-O0",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          },
+          {
+            "mode": "gcc-O2",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          },
+          {
+            "mode": "clang-O0",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          },
+          {
+            "mode": "clang-O2",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          },
+          {
+            "mode": "guest-ASan",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          },
+          {
+            "mode": "guest-UBSan",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          }
+        ],
+        "classification": "Observer function-wide spelling collision veto omitted call boundary; decoder count guard correctly failed closed; values may not be backfilled from declaration events or oracle"
+      },
+      {
+        "case": "P5",
+        "origin_run": 42146445476,
+        "origin_job": 127658958369,
+        "original_c": {
+          "bytes": 4497,
+          "sha256": "0f331fc66775804e87c77c8b386afc431a8c70456abb7bbb1d1fcfb8659050dd"
+        },
+        "actual_ast": {
+          "bytes": 542577,
+          "sha256": "317345dd94d0e41861f5766c1e2b3acf686ba0d6cb0f7d24464e2ac5204c39c6"
+        },
+        "linked_map": {
+          "bytes": 125102,
+          "sha256": "0e40d85cacc5e3ac22eb94e7f405a31087df60b9a853881edd92961dc0fec6bb"
+        },
+        "call_node": {
+          "id": "n83",
+          "kind": "CallExpr",
+          "parent": "n82",
+          "function": "f1",
+          "range": [
+            2301,
+            2321
+          ],
+          "children": [
+            "n84",
+            "n86"
+          ],
+          "type": "unsigned char",
+          "decl": null,
+          "actual_ast_id": "0x55e139a3a818"
+        },
+        "argument_node": {
+          "id": "n87",
+          "kind": "DeclRefExpr",
+          "parent": "n86",
+          "function": "f1",
+          "range": [
+            2310,
+            2320
+          ],
+          "children": [],
+          "type": "const unsigned long",
+          "ref_decl": "d8",
+          "ref_name": "nl_local_6",
+          "decl": null,
+          "actual_ast_id": "0x55e139a3a778"
+        },
+        "wrapper_node": {
+          "id": "n86",
+          "kind": "ImplicitCastExpr",
+          "parent": "n83",
+          "function": "f1",
+          "range": [
+            2310,
+            2320
+          ],
+          "children": [
+            "n87"
+          ],
+          "type": "unsigned long",
+          "decl": null,
+          "actual_ast_id": "0x55e139a3a840"
+        },
+        "exact_decl": {
+          "id": "d8",
+          "ast_id": "0x55e139a3a540",
+          "name": "nl_local_6",
+          "type": "const unsigned long",
+          "node": "n72",
+          "scope": "n59",
+          "initialized": true,
+          "parameter": false,
+          "function": "f1"
+        },
+        "declaration_node": {
+          "id": "n72",
+          "kind": "VarDecl",
+          "parent": "n71",
+          "function": "f1",
+          "range": [
+            2143,
+            2185
+          ],
+          "children": [
+            "n73"
+          ],
+          "type": "const unsigned long",
+          "name": "nl_local_6",
+          "init": "c",
+          "decl": "d8",
+          "actual_ast_id": "0x55e139a3a540"
+        },
+        "declaration_statement": {
+          "id": "n71",
+          "kind": "DeclStmt",
+          "parent": "n59",
+          "function": "f1",
+          "range": [
+            2143,
+            2186
+          ],
+          "children": [
+            "n72"
+          ],
+          "type": "",
+          "decl": null,
+          "actual_ast_id": "0x55e139a3a5e0"
+        },
+        "call_statement": {
+          "id": "n81",
+          "kind": "DeclStmt",
+          "parent": "n59",
+          "function": "f1",
+          "range": [
+            2274,
+            2322
+          ],
+          "children": [
+            "n82"
+          ],
+          "type": "",
+          "decl": null,
+          "actual_ast_id": "0x55e139a3a858"
+        },
+        "direct_scope": {
+          "id": "n59",
+          "kind": "CompoundStmt",
+          "parent": "n53",
+          "function": "f1",
+          "range": [
+            2000,
+            3654
+          ],
+          "children": [
+            "n60",
+            "n65",
+            "n68",
+            "n71",
+            "n75",
+            "n78",
+            "n81",
+            "n88",
+            "n91",
+            "n94",
+            "n98",
+            "n101",
+            "n104",
+            "n106",
+            "n131",
+            "n134",
+            "n138",
+            "n141",
+            "n144",
+            "n148",
+            "n151",
+            "n154",
+            "n159",
+            "n162",
+            "n165",
+            "n170",
+            "n173",
+            "n176",
+            "n180",
+            "n183",
+            "n186",
+            "n193"
+          ],
+          "type": "",
+          "decl": null,
+          "actual_ast_id": "0x55e139a3c040"
+        },
+        "sibling_indices": [
+          3,
+          6
+        ],
+        "argument_text": "nl_local_6",
+        "ordinary_argument_ranges": {
+          "n86": {
+            "begin": {
+              "offset": 2310,
+              "col": 49,
+              "tokLen": 10
+            },
+            "end": {
+              "offset": 2310,
+              "col": 49,
+              "tokLen": 10
+            }
+          },
+          "n87": {
+            "begin": {
+              "offset": 2310,
+              "col": 49,
+              "tokLen": 10
+            },
+            "end": {
+              "offset": 2310,
+              "col": 49,
+              "tokLen": 10
+            }
+          }
+        },
+        "excluded_later_same_name": {
+          "declaration": {
+            "id": "d20",
+            "ast_id": "0x55e139a3c498",
+            "name": "nl_local_6",
+            "type": "const unsigned char",
+            "node": "n213",
+            "scope": "n2",
+            "initialized": true,
+            "parameter": false,
+            "function": "f1"
+          },
+          "node": {
+            "id": "n213",
+            "kind": "VarDecl",
+            "parent": "n212",
+            "function": "f1",
+            "range": [
+              3844,
+              3884
+            ],
+            "children": [
+              "n214"
+            ],
+            "type": "const unsigned char",
+            "name": "nl_local_6",
+            "init": "c",
+            "decl": "d20",
+            "actual_ast_id": "0x55e139a3c498"
+          },
+          "scope": {
+            "id": "n2",
+            "kind": "CompoundStmt",
+            "parent": "n1",
+            "function": "f1",
+            "range": [
+              1416,
+              4147
+            ],
+            "children": [
+              "n3",
+              "n10",
+              "n13",
+              "n16",
+              "n21",
+              "n24",
+              "n27",
+              "n31",
+              "n34",
+              "n36",
+              "n40",
+              "n202",
+              "n205",
+              "n209",
+              "n212",
+              "n217",
+              "n220",
+              "n223",
+              "n228",
+              "n231",
+              "n234",
+              "n238",
+              "n241"
+            ],
+            "type": "",
+            "decl": null,
+            "actual_ast_id": "0x55e139a3d210"
+          }
+        },
+        "actual_missing_counts": [
+          {
+            "mode": "gcc-O0",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          },
+          {
+            "mode": "gcc-O2",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          },
+          {
+            "mode": "clang-O0",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          },
+          {
+            "mode": "clang-O2",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          },
+          {
+            "mode": "guest-ASan",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          },
+          {
+            "mode": "guest-UBSan",
+            "call_entry_return_result": [
+              0,
+              3,
+              3,
+              3
+            ],
+            "CALL_ARGUMENT_records": 0
+          }
+        ],
+        "classification": "Observer function-wide spelling collision veto omitted call boundary; decoder count guard correctly failed closed; values may not be backfilled from declaration events or oracle"
+      }
+    ],
+    "old_observer": {
+      "bytes": 27515,
+      "sha256": "d83faecd78635184645413ac6bc83c4ac526bc0b823eafe104860dd3e492e162"
+    },
+    "proposed_observer": {
+      "bytes": 30420,
+      "sha256": "4903e4648264e9e947c863652a63744774d84271535054f4f4a6517cc72cc1f5"
+    },
+    "proposed_delta": {
+      "bytes": 5691,
+      "sha256": "87a9f8b76797676e44bfc86565af0f18331c5372e92ec57e86db217cbeb31b34"
+    },
+    "new_observer_execution": "NOT_RUN"
+  },
+  "historical_usage": {
+    "new_FAST": 1,
+    "new_normal_jobs": 6,
+    "cumulative_FAST": 2,
+    "cumulative_normal_jobs": 12,
+    "manual": 0
+  },
+  "recovery_execution_counters_at_freeze": {
+    "additional_FAST": 0,
+    "additional_normal_jobs": 0,
+    "additional_native": 0,
+    "local_semantic_execution": 0,
+    "remote_forward_commit_ref_update": 0
   }
 }

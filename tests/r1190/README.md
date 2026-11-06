@@ -1,20 +1,33 @@
-# R1190 C255 post-finding retarget — released / DRAFT NEVERMERGE
+# R1190 C256 observer-only recovery — DRAFT / NEVERMERGE
 
-Same disclosed C252 successor, inheriting original independent FIRST13 inputs / FIRST26 files and unchanged E2 runtime equipment. This is a post-finding retarget of independently frozen inputs, not a newly authored blind cohort. Original prefreeze authorship and exposure history remain in FIRST and read-ledger.json. Original C253 failures/raw are unchanged and are not retrospectively relabelled by any future result.
+Same disclosed R1190 successor, not the original prefreeze author. This is **incident-disclosed calibrated mechanical recovery of a post-finding retarget**. Original independent13 sources/FIRST26, numerical oracle and identity obligations remain byte-identical. The original E1/E2, C252/C253 refusal/raw, accepted C255 HOLD, initial C255 release and all initial6 raw outcomes remain preserved. Later success cannot retrospectively relabel either initial failure.
 
-Target: fixed P `f1648a1382ae058e5ab5b9ccdea1e3200879f2af`, tree `1a4fcf50e76b0d2def314fdf7720f88d52a6581c`, sole parent `349a2a3d08bb1cf10c817a3ef289554de1638168`. Base `p-c247-phase-usize-copy`. Intended new branch `r-fast/r1190-c255-inherited-copy`. The existing branch at `fe18e136197b25bad77214bc5a9aa000daee3113` and PR1194 remain preserved. This evidence branch must never be merged or marked ready.
+Fixed compiler `f1648a1382ae058e5ab5b9ccdea1e3200879f2af`, tree `1a4fcf50e76b0d2def314fdf7720f88d52a6581c`; canonical main `70059189c2030f927ad3daa0044c8898848b4548`, CURRENT_SPEC→Draft17.34. Compass → Process §§4.1.2/7 and Value Strategy §1.1. Same branch `r-fast/r1190-c255-inherited-copy` and Draft/NEVERMERGE PR1196, base `p-c247-phase-usize-copy`. The single forward correction has initial R `1aec4fa49dfb8b2aba83daf503254dd37e687b5d` as sole parent; no old ref/PR rewrite.
 
-## Authority and custody
+## Cause, exact correction and first evidence
 
-Compass → Process §§4.1.2/7 and Value Strategy §1.1 → CURRENT_SPEC → canonical Draft17.34 on main `70059189c2030f927ad3daa0044c8898848b4548`. [C255 preparation release](https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674156082); [actual preparation RESUME](https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674239950). Execution is released only by [C255 execution release](https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674503949); [actual execution RESUME](https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674538589). The separately preserved preparation HOLD remains unchanged. The original FIRST includes all source, numerical oracle, exposure log and manifest. No original input, expected value or identity obligation changes.
+[C255 execution release](https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674503949) and [C256 incident/repair adjudication](https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674885398) authorize this one bounded observer correction. The initial6 all captured72 guest native invocations per job. C0/P1/P2/P4 completed24 comparisons/job; P3/P5 completed no oracle comparison because the actual decoder correctly rejected missing call-boundary records. The native exits alone are not the missing value/identity proof.
 
-C253 original complete packet is immutable at archive commit `e7ab5e9d8c10a6929d2e309a993faa5c3f5f4116` / `evidence/r1190-c253-first`. Original FIRST bundle SHA256 `eb06080e3c5e94109870ddc794c4fc2de6edf87ae2b913d105f1fdeb723a2acd`; oracle SHA256 `15b50df7981dc98f076fb164d36114878356520fae88cc53580583e126cca7b4`. The old target's six original C0 CHECK rc3 precision refusals and all NOT_RUN boundaries remain the old finding.
+Initial observer used a function-wide spelling-collision veto. In P3/P5, the argument's actual DeclRefExpr points to an initialized local, while another same-spelling declaration occurs later outside that argument block. Existing traces have call/entry/normal-return/caller-result counts `(0,3,3,3)` and no CALL_ARGUMENT records. The missing records are not backfilled from declarations or the oracle.
 
-## Authorized environment and budgets
+| Original case | Actual reference → declaration | Completed declaration statement | Call insertion / common block | Excluded later declaration |
+| --- | --- | --- | --- | --- |
+| P3 | n97 → d9 / n82 (`nl_local_7`) | n81 `[2275,2312]` | n91 at2400 / n59; siblings6<9 | d22 at4084, scope n2 |
+| P5 | n87 → d8 / n72 (`nl_local_6`) | n71 `[2143,2186]` | n81 at2274 / n59; siblings3<6 | d20 at3844, scope n2 |
 
-**GitHub dedicated branch + Actions only; P-equivalent local execution forbidden.** Local work permits pure text/hash/metadata/package, host-equipment syntax parsing and captured raw processing only. Compiler/build/configure/new guest C/AST/native/observer semantic execution occurs only in the released Actions. C255 permits at most5 new natural FAST push runs and12 new normal actual jobs (initial6 plus at most one mechanical recovery set6), manual rerun/dispatch0, generated guest native≤72 per normal job. Retain old FAST1/normal6/manual0: cumulative limits are FAST6 and normal18. Notify after new FAST4 before5. Stop at the first trustworthy complete checkpoint or material discrepancy; unused budget is not a target.
+These IDs are qualified by the captured PARTIAL actual C/AST/map in the manifest's static proof; no IDs/values/positions are hardcoded into the observer. Both argument wrapper/leaf ranges are ordinary offsets without macro expansion/spelling locations.
 
-The C255 released sequence is a complete R commit with `f1648a1382ae058e5ab5b9ccdea1e3200879f2af` as sole parent, first ref directly to that complete commit, same-head actual successful FAST, then one new Draft/NEVERMERGE evidence PR. Existing workflow bytes and every inherited P command/assertion remain. This release does not permit modifying the old R ref/PR, Ready or merge.
+Only runtime `observe.py` changes. A collision is permitted only for an exact actual initialized numeric normal-local declaration, ordinary nonmacro bare argument spelling, and a completed single-declarator statement earlier than the call in the identical direct CompoundStmt. Unknown identity/range/scope, parameters/global/for-initializer scope, self-initialization, or another already-declared same-spelling variable active at insertion remain rejected. All existing snapshot collision protections, decoder/compare guards and9 other runtime files are unchanged. Logger changes only insert the missing passive read/marker at the original call boundary; no guest state/control is created.
+
+Initial6 checkpoint SHA256 `37026b1b8dba8fdd3844c8a2f920032b1041aba0a6bec74e8e7cd43d535184db`; static proof `85276de7411c435022bc60748fd7a5ef6a2209410c21b8ef696a91270a506cd3`. Original FIRST bundle `eb06080e3c5e94109870ddc794c4fc2de6edf87ae2b913d105f1fdeb723a2acd`; original oracle `15b50df7981dc98f076fb164d36114878356520fae88cc53580583e126cca7b4`.
+
+## Independence, environment and finite budget
+
+An agent-inventory response after the PARTIAL execution displayed P CI archive completion metadata/aggregate outcomes. The entire displayed payload and the3 other running-status entries are recorded in the custody ledger; no F completion payload appeared, and no linked producer material was followed. C256 explicitly permits the disclosed calibrated continuation with fixed original inputs. Fresh BLIND is not claimed.
+
+**GitHub dedicated branch + Actions ONLY; P-equivalent local semantic execution forbidden.** Local work is text/hash/archive/static inspection and host Python syntax parsing; no local observer/decoder/compiler/guest execution. P/F implementation/fixture/oracle/rationale/report/new result endpoints remain prohibited.
+
+C255 limits remain new FAST≤5, normal≤12 actual jobs; cumulative including old history FAST≤6, normal≤18; manual0; generated guest native≤72/job. Before this recovery, use is new FAST1/normal6 and cumulative FAST2/normal12. This single forward push uses one natural FAST and the one remaining natural FULL5+PARTIAL1 recovery set. C256 permits same-HEAD FAST and normal runs together on the existing Draft. Check actual same-head FAST and all6 normal outcomes; no duplicate PR/manual run. Stop at the first trustworthy complete checkpoint or any material semantic/authority/native discrepancy.
 
 ## Measurement separation
 

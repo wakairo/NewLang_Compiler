@@ -30,10 +30,10 @@
   ],
   "historical_execution_release": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6662186349",
   "preparation_release": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674156082",
-  "worker_succession": "Same disclosed C252 successor of the original independent R1190 prefreeze author; not the original author; original independently frozen inputs retained",
-  "status": "C255_EXECUTION_RELEASED_FIXED_F1648A1",
+  "worker_succession": "Same disclosed C252/C255 successor, not the original prefreeze author; incident-disclosed calibrated mechanical repair with fixed independent original inputs",
+  "status": "C256_INCIDENT_DISCLOSED_CALIBRATED_OBSERVER_RECOVERY",
   "preparation_resume": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674239950",
-  "classification": "post-finding retarget of independently frozen inputs",
+  "classification": "Incident-disclosed calibrated mechanical recovery of post-finding retarget; original independently frozen inputs unchanged",
   "budget_status": "Explicit C255 allocation; historical C252 use retained, no reset",
   "historical_C252": {
     "compiler": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
@@ -70,5 +70,31 @@
     "manual_rerun_or_dispatch": 0
   },
   "accepted_preparation_manifest_sha256": "c3b60af72e1db617d671ce71b5ad31eefdca2476cc677b98dceb4bbea9eff64a",
-  "accepted_preparation_bundle_sha256": "5df6bcdbc2606e83028496580b9b960f18500010088e2cee7326f89c83a5e537"
+  "accepted_preparation_bundle_sha256": "5df6bcdbc2606e83028496580b9b960f18500010088e2cee7326f89c83a5e537",
+  "equipment_recovery_authority": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674885398",
+  "recovery_attempt": 1,
+  "recovery_parent_R_head": "1aec4fa49dfb8b2aba83daf503254dd37e687b5d",
+  "initial_C255_release_manifest_sha256": "eefc20df5ead1586ffcd724d414d7f5d140eae51a462a2118d716d1bd42906d2",
+  "initial_C255_checkpoint_sha256": "37026b1b8dba8fdd3844c8a2f920032b1041aba0a6bec74e8e7cd43d535184db",
+  "independence_incident_sha256": "0ac2ecdb2741737cf4372925afd6c35f3837ff6859dc84ee47d339c29b8531f5",
+  "initial_C255_used": {
+    "FAST_actual_runs": 1,
+    "normal_actual_jobs": 6,
+    "manual": 0
+  },
+  "cumulative_used_before_recovery": {
+    "FAST_actual_runs": 2,
+    "normal_actual_jobs": 12,
+    "manual": 0
+  },
+  "recovery_scope": {
+    "runtime_changes": [
+      "tests/r1190/observe.py"
+    ],
+    "other_runtime_unchanged": 9,
+    "original13_FIRST26_oracle_identity_unchanged": true,
+    "expected_additional_natural_FAST": 1,
+    "maximum_remaining_natural_normal_jobs": 6,
+    "manual": 0
+  }
 }
