@@ -1,0 +1,31 @@
+{
+  "schema": "C257_R1197_PREPARATION_DATA_CUSTODY_V1",
+  "archive_sha256": "ce99a17a7d33bf7af66f42e78df13b337e0571b7cea8bfe28fb11bb6196c903a",
+  "archive_bytes": 497250,
+  "archive_prefix": "r1197_c257/",
+  "gzip_crc_ok": true,
+  "unique_members": 64,
+  "payloads": 63,
+  "all_payload_sizes_sha256_verified": true,
+  "exact_manifest_bytes": true,
+  "frozen_v1_and_stop": [
+    {
+      "path": "PREPARATION_STOP.json",
+      "sha256": "b830c04d5b71a4b6aaa639f774313a423b891343b90548683d930f0e8002e093"
+    },
+    {
+      "path": "V1/SHA256SUMS",
+      "sha256": "ea4c4ad9d855bfcc6f98f41885dfc7c722c7c4b4e759896304b4c0623bd9a005"
+    },
+    {
+      "path": "V1/oracle.json",
+      "sha256": "d5c72f3d4f39a8a10de58e9f4d22dc0047d374b8f2ad0974c4f919da6b842079"
+    }
+  ],
+  "chunks_reconstruct_exact_archive": true,
+  "archived_code_execution": 0,
+  "r_execution_release": false,
+  "status": "HOLD_TARGET / TEXT ONLY; actual output role binding NOT VERIFIED",
+  "apparatus_FIRST": "C-ARCHIVE-FIRST.json preserves initial incorrect root-path assumption; exact observed r1197_c257/ prefix was then applied to every manifest entry; archive/manifest unchanged",
+  "note": "C preserves complete R preparation bytes; no semantic or apparatus execution or validation PASS."
+}

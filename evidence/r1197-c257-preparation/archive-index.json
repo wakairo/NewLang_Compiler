@@ -1,0 +1,102 @@
+{
+  "schema": "C257_R1197_PREPARATION_GIT_INDEX_V1",
+  "archive_branch": "evidence/r1197-c257-preparation",
+  "repo_path": "evidence/r1197-c257-preparation",
+  "custody_parent_main": "53c125b8cd66523651a21e803827eff6d2a06428",
+  "held_compiler_target": "24339b077ed0e0a3e847f23aed170c67d2b3d20a",
+  "nevermerge": true,
+  "archive_filename": "r1197_preparation_complete_v2.tar.gz",
+  "archive_prefix": "r1197_c257/",
+  "archive_sha256": "ce99a17a7d33bf7af66f42e78df13b337e0571b7cea8bfe28fb11bb6196c903a",
+  "archive_bytes": 497250,
+  "chunks": [
+    {
+      "path": "chunks/packet-001.b64",
+      "bytes": 48632,
+      "sha256": "b76ab355aa9327705767a2ba8f271d9cd6f234058ae4345f1d12433c5078fcbd",
+      "git_blob": "383d66fc0eac14d05c35cc494362b5984b0ee43e"
+    },
+    {
+      "path": "chunks/packet-002.b64",
+      "bytes": 48632,
+      "sha256": "b810678d07c6fb15d92feac249a70500449072f20ea913ad3405fce0b4968fb3",
+      "git_blob": "b0620f704a8e8e9a642035195bc291639fff5073"
+    },
+    {
+      "path": "chunks/packet-003.b64",
+      "bytes": 48632,
+      "sha256": "88483309c0198ae7eb2be8eb2639752ac2b096585ba599e5fb9d749e48df0d80",
+      "git_blob": "855fb9f47b753b5246bdaf308fa3321e2d0f404b"
+    },
+    {
+      "path": "chunks/packet-004.b64",
+      "bytes": 48632,
+      "sha256": "9e823c5ca74ea3e1032f21c93f1b3c1f1f2b9db23a896a3e7f2b123af1d09ea1",
+      "git_blob": "e8fdae40b93d5be874913c9d0b7cbb3badc13f5f"
+    },
+    {
+      "path": "chunks/packet-005.b64",
+      "bytes": 48632,
+      "sha256": "aafb078658796aff9d636bf8f77f983938e8f09779cdc1168d8487c81dfbb591",
+      "git_blob": "aad52e5a508f40f5d2d4d2e9fa73d77615ed5a01"
+    },
+    {
+      "path": "chunks/packet-006.b64",
+      "bytes": 48632,
+      "sha256": "e0dab4f585ba86671bf858310afc3483cf480f1cb3e7853981f7a567b0b761f5",
+      "git_blob": "128ed0965c9df02a88a0db3bed083ba39d983bd0"
+    },
+    {
+      "path": "chunks/packet-007.b64",
+      "bytes": 48632,
+      "sha256": "fada6fd4f38b3b28e8f5f0e355689e037ddbd3d9957560a6a73ed4d8f4fa1ed5",
+      "git_blob": "464a617093856d718bd689ca2642fe8abdb6b31e"
+    },
+    {
+      "path": "chunks/packet-008.b64",
+      "bytes": 48632,
+      "sha256": "ac3b31afef7f2b7ec9181c5d53d678b8de1cd3d5edff2030d7e7c9f28e9440fe",
+      "git_blob": "378b89728730c472760dbefb9303f429f8c1d747"
+    },
+    {
+      "path": "chunks/packet-009.b64",
+      "bytes": 48632,
+      "sha256": "3840ba288029732048e14931564c00a35cb68d9e76613dc93e622bcd275e5359",
+      "git_blob": "75638ff40e69b86e340a2add3a00cb03f10eb319"
+    },
+    {
+      "path": "chunks/packet-010.b64",
+      "bytes": 48632,
+      "sha256": "651b02e37309dd0aa66951d5f279b3071fafd899c4dab93d9a8c9c715672bcd6",
+      "git_blob": "7e5ed52f03d482c9e84b9b25d5708499e9ff7225"
+    },
+    {
+      "path": "chunks/packet-011.b64",
+      "bytes": 48632,
+      "sha256": "ba519ffdad4800ae198b72ecb7c8505cc60f51d12201c025fdca2d27635ba925",
+      "git_blob": "92290a993b85deeb0dd4cb203d11444c4a54103c"
+    },
+    {
+      "path": "chunks/packet-012.b64",
+      "bytes": 48632,
+      "sha256": "c509349dffe203097cd6cddbfe0bb81147b3bbb35eeafac5e79d9eb33eb29da9",
+      "git_blob": "7fbedc55d0f9f3ccf4e8b082abc76e7f73437bd7"
+    },
+    {
+      "path": "chunks/packet-013.b64",
+      "bytes": 48632,
+      "sha256": "6075805d8939fa8f70ccbf95f37f5dae559daa890e6c77304c8922fe9c664734",
+      "git_blob": "404081d89c1beaf2497031a20726e0af998cd896"
+    },
+    {
+      "path": "chunks/packet-014.b64",
+      "bytes": 39514,
+      "sha256": "bdece3b629bf1ee42ebee76519d90ed06ff3efaf87ed696049d6de7611d114de",
+      "git_blob": "99c6b44cdc4fc6965e5c55c9e71b2819d26360b7"
+    }
+  ],
+  "payloads": 63,
+  "members": 64,
+  "execution_release": false,
+  "budgets": "R FAST0/6, normal0/12, native0, manual0; C evidence custody alone creates a normal evidence ref, no Actions or PR"
+}

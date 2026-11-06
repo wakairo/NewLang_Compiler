@@ -1,0 +1,321 @@
+{
+  "schema": "R1197_COMPLETE_PREPARATION_PACKET_V2",
+  "scope": "All current private task files, including original V1, original STOP, canonical snapshots, interface snapshots, allowlist/provenance, held apparatus text, earlier custody archives and checkpoints; excludes this manifest, final receipt and enclosing archive to avoid self-reference.",
+  "entries": [
+    {
+      "path": "APPARATUS_PREPARATION_CHECKPOINT.md",
+      "bytes": 1812,
+      "sha256": "247bce0bd3f5281a6b8e1169a2356ea2242c5779e6e00b95864f518782f627e2"
+    },
+    {
+      "path": "CURRENT_SPEC.md",
+      "bytes": 14326,
+      "sha256": "8b1a51b340c88a5ef79bfe12c51f8d9c759773c9d44091dc60dff7ab7dd92849"
+    },
+    {
+      "path": "C_NEUTRAL_APPARATUS_ALLOWLIST.json",
+      "bytes": 6370,
+      "sha256": "2bdd2997954226ac6cf96b6961525de84a3db2e5dbb6706a34b8bfb6618c2431"
+    },
+    {
+      "path": "C_PUBLICATION_CONFIRMATION.json",
+      "bytes": 5425,
+      "sha256": "096a386af9011df96e66e91c9a5606ae04fcb24690ddd639bff2545274b2ba9b"
+    },
+    {
+      "path": "C_RESUME_RULING.json",
+      "bytes": 5702,
+      "sha256": "06f9bfc5325b5d32870d3107802e56d6cdab3a487d92b42ebb00c8ce2359740c"
+    },
+    {
+      "path": "NEUTRAL_INTERFACE_READS.json",
+      "bytes": 4074,
+      "sha256": "f1583d5e4ad7b5497f49890184c02182889c661dce2295d4571629c77132bfa0"
+    },
+    {
+      "path": "NewLang_Product_Value_Strategy.md",
+      "bytes": 51375,
+      "sha256": "f1afe4845487654d2e11a9f159bd0128149d93caf5c1cd5f9fad2ed29cc0d7ca"
+    },
+    {
+      "path": "NewLang_Project_Compass.md",
+      "bytes": 9043,
+      "sha256": "402a124c6fa7b7867891ac8290bc4e358efccfcedd9e1c0df95e2359c76e756c"
+    },
+    {
+      "path": "NewLang_Project_Development_Process.md",
+      "bytes": 66244,
+      "sha256": "a4695c09f486e46d5e1a479391f4fda3855407c725b660d9f76f9dab0694dc9b"
+    },
+    {
+      "path": "NewLang_v0_spec_Draft17_34.md",
+      "bytes": 587493,
+      "sha256": "6f982106dbf03cf21a623e37e6d84d17dab8b9c3743a6a7033ba27c129db4a3d"
+    },
+    {
+      "path": "PREPARATION_STOP.json",
+      "bytes": 1784,
+      "sha256": "b830c04d5b71a4b6aaa639f774313a423b891343b90548683d930f0e8002e093"
+    },
+    {
+      "path": "TARGET_HOLD_CHECKPOINT.json",
+      "bytes": 3924,
+      "sha256": "fb923f230c9e96c0d80cfc4ee06a3591a8fb4517e0850945a19fa22feacf11c0"
+    },
+    {
+      "path": "TEXT_PREPARATION_CHECKPOINT_V2.md",
+      "bytes": 5785,
+      "sha256": "92c42ec163e0add7b64c00105f6f57274203d6beccac7575bf3a455ca38c4511"
+    },
+    {
+      "path": "TEXT_PREPARATION_RECEIPT_V2.json",
+      "bytes": 2165,
+      "sha256": "8adc6145bd242510d6e6e1615fd5609c71f9054e1b0d0975ed1fb4deae8c8aa8"
+    },
+    {
+      "path": "V1/FREEZE_RECEIPT.json",
+      "bytes": 2288,
+      "sha256": "3184512f12a20316729029e54365a377d165b992fab6ad0b4b91d07dbade7ae4"
+    },
+    {
+      "path": "V1/KNOWLEDGE_BOUNDARY.md",
+      "bytes": 2566,
+      "sha256": "e473b3b97ac71c5b31c1130c967c962920406bc618dd3c81a65177de0311ddb9"
+    },
+    {
+      "path": "V1/OBSERVATION_PLAN.md",
+      "bytes": 6046,
+      "sha256": "5a4f30ba8aa90419dad63c3bb527e01665192c87fe940922e14b7ffddc557a69"
+    },
+    {
+      "path": "V1/SHA256SUMS",
+      "bytes": 1513,
+      "sha256": "ea4c4ad9d855bfcc6f98f41885dfc7c722c7c4b4e759896304b4c0623bd9a005"
+    },
+    {
+      "path": "V1/SOURCE_ROLES.md",
+      "bytes": 3615,
+      "sha256": "fbdba8103e922bbb289901ca5284044ed2734ae93262246e38d1baac0f2b0c7b"
+    },
+    {
+      "path": "V1/oracle.json",
+      "bytes": 9557,
+      "sha256": "d5c72f3d4f39a8a10de58e9f4d22dc0047d374b8f2ad0974c4f919da6b842079"
+    },
+    {
+      "path": "V1/sources/N01_wrong_return_type.nl",
+      "bytes": 909,
+      "sha256": "fb3ad827940728a9a8ee08a44e58c134af7e2675551e5fefc1a8bffdbbd51370"
+    },
+    {
+      "path": "V1/sources/N02_callee_break.nl",
+      "bytes": 905,
+      "sha256": "a908fb928fe4c737edeab4a34d5f6f5b354d44b5811821ddc0b7d5de9f88253e"
+    },
+    {
+      "path": "V1/sources/N03_callee_continue.nl",
+      "bytes": 908,
+      "sha256": "7966b11e06baca84c085e8ea8063e3bf7889065f65f6d36c6b2598204ade8fc2"
+    },
+    {
+      "path": "V1/sources/N04_caller_fallthrough.nl",
+      "bytes": 891,
+      "sha256": "36c488181b363135aba7f6152543f55f6edbe8a12af13026229ec7ac651ee33f"
+    },
+    {
+      "path": "V1/sources/N05_continue_wrong_type.nl",
+      "bytes": 903,
+      "sha256": "9b78566c9d5889fd64f981c155ef0cc5cbeb118333078a93ce6a2a697e61a19b"
+    },
+    {
+      "path": "V1/sources/N06_mixed_if_binding_boundary.nl",
+      "bytes": 931,
+      "sha256": "52e648d0b1ff0eb8244124a3a9cf7c13fab95d42137ea4a6cb9bf805bfe91d3b"
+    },
+    {
+      "path": "V1/sources/P01_tail_if_control.nl",
+      "bytes": 898,
+      "sha256": "62fd199b1825b52cb880062ccc178bb1d924c8498f25d0d7bdafca8b7d604197"
+    },
+    {
+      "path": "V1/sources/P02_then_return.nl",
+      "bytes": 906,
+      "sha256": "bc09af92af811eb854934e612a54d35c90df65711c5015359be85c5988d56635"
+    },
+    {
+      "path": "V1/sources/P03_else_return.nl",
+      "bytes": 906,
+      "sha256": "f6b0bcf44ff2475e8f2ab71ee5cc49ab68e723a008dd3a62ee16827f4d9663c0"
+    },
+    {
+      "path": "V1/sources/P04_both_return.nl",
+      "bytes": 914,
+      "sha256": "6b2a5dde35cd05b43af578ddadb6bea8a0335dcd55f4808dbf44e9c930dfc326"
+    },
+    {
+      "path": "V1/sources/P05_final_return_normal_if.nl",
+      "bytes": 931,
+      "sha256": "03cb3eb8d0a08980e0a9555c07b4278ea60d2dfbcff31115c531320417c3b653"
+    },
+    {
+      "path": "V1/sources/P06_eq_copy_both_return.nl",
+      "bytes": 952,
+      "sha256": "cc821b76972286cd499b35ebd906bfe42c13d59ab12c20678187975db5532bb1"
+    },
+    {
+      "path": "allowlisted_neutral/link_actual_ast.py",
+      "bytes": 5442,
+      "sha256": "2741d5bb870886b42bdbb90db62804afb6afa6ec207b58ea0d6c28e7ee71fc6f"
+    },
+    {
+      "path": "allowlisted_neutral/observe.py",
+      "bytes": 30420,
+      "sha256": "4903e4648264e9e947c863652a63744774d84271535054f4f4a6517cc72cc1f5"
+    },
+    {
+      "path": "apparatus/CMakeLists.append.cmake",
+      "bytes": 930,
+      "sha256": "fd39c10e759861030581fa1c3aecf24732341bf04454689a593487849276cd64"
+    },
+    {
+      "path": "apparatus/NEUTRAL_REUSE_PROVENANCE.json",
+      "bytes": 1102,
+      "sha256": "59a9885a77c2a50d44ae8c3fe0f2bea45bd5301f13e8b2747b25726d4b0f3568"
+    },
+    {
+      "path": "apparatus/SHA256SUMS",
+      "bytes": 1037,
+      "sha256": "fb9835b59ba7f4206f26ae5f1babdc107ce12aa5fb70e6cdf69f415daf566fcf"
+    },
+    {
+      "path": "apparatus/compare.py",
+      "bytes": 9404,
+      "sha256": "c0637393eafe0ea5c2bf3b640240787c825521ef7d3ba51358cebc8b36df9197"
+    },
+    {
+      "path": "apparatus/compiler-ci.append.yml",
+      "bytes": 384,
+      "sha256": "c4a40c91dfa67bad9b1dfaa486a6ff5d13e17b007b49b3e02a69c24d66e8ab57"
+    },
+    {
+      "path": "apparatus/compiler-frontend-ci.append.yml",
+      "bytes": 370,
+      "sha256": "72c6970230b4812542daa3bc70b68092c2de2c9fd250421069613f790e08576d"
+    },
+    {
+      "path": "apparatus/neutral/link_actual_ast.py",
+      "bytes": 5442,
+      "sha256": "2741d5bb870886b42bdbb90db62804afb6afa6ec207b58ea0d6c28e7ee71fc6f"
+    },
+    {
+      "path": "apparatus/neutral/observe.py",
+      "bytes": 30420,
+      "sha256": "4903e4648264e9e947c863652a63744774d84271535054f4f4a6517cc72cc1f5"
+    },
+    {
+      "path": "apparatus/observe_r1197.py",
+      "bytes": 8895,
+      "sha256": "96e9fbf0230e95c00733a8e5f6f7401d5004d35b849ec4ae87f81d151c47acb0"
+    },
+    {
+      "path": "apparatus/probe.c",
+      "bytes": 10071,
+      "sha256": "1e38a649d38951c24716465f1d0b7a0adf346efd379dd9cca84bedd9516df915"
+    },
+    {
+      "path": "apparatus/role_bindings.pending.json",
+      "bytes": 1132,
+      "sha256": "aa6f412538399d191f9d1146eff24ec77c40882077774e75b9e5ef989d935d57"
+    },
+    {
+      "path": "apparatus/run.py",
+      "bytes": 15602,
+      "sha256": "230988962e4b400e91569c670b3d3ea0cbb1613e7aaec0c375aa022a1908fa9c"
+    },
+    {
+      "path": "apparatus/target_binding.json",
+      "bytes": 679,
+      "sha256": "d4dfdac1da1145c9db79ed45b12075c082ba5f54345746ab19f6caba516439d4"
+    },
+    {
+      "path": "neutral_interfaces/.clang-format",
+      "bytes": 555,
+      "sha256": "173e338d5266ad0a079f100b0df66c2f94e1f41c969c48d37adad0ceaf8d47d1"
+    },
+    {
+      "path": "neutral_interfaces/.github/workflows/compiler-ci.yml",
+      "bytes": 6976,
+      "sha256": "811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742"
+    },
+    {
+      "path": "neutral_interfaces/.github/workflows/compiler-frontend-ci.yml",
+      "bytes": 6418,
+      "sha256": "33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74"
+    },
+    {
+      "path": "neutral_interfaces/.github/workflows/r-preflight.yml",
+      "bytes": 6749,
+      "sha256": "4e905e3abe62fffaf936824f53c4078d20dae1375b4f8f2b4d199c8da9048df9"
+    },
+    {
+      "path": "neutral_interfaces/CLI_HELP.txt",
+      "bytes": 1064,
+      "sha256": "64ab11f4dc96ed037434810328e9652b4f6b7c104331daae5b5f77203a9a3afd"
+    },
+    {
+      "path": "neutral_interfaces/CMakeLists.txt",
+      "bytes": 154960,
+      "sha256": "add5f1081997fdd46a56ff2ea621aaafd5c6780537ada0f2507c98c300ec2985"
+    },
+    {
+      "path": "neutral_interfaces/cmake/independent-r-tests-hook.cmake",
+      "bytes": 4180,
+      "sha256": "ecd14067f30cac138607b606916e84464b2391b61703ebe2e530940e27ec64af"
+    },
+    {
+      "path": "neutral_interfaces/include/newlang/checked.h",
+      "bytes": 15396,
+      "sha256": "04c8f62df29b46dda02e7d7cc3e565db2688373b462a80757bb1958ae3e13f42"
+    },
+    {
+      "path": "neutral_interfaces/include/newlang/copy_body.h",
+      "bytes": 3883,
+      "sha256": "d6c694c7f0884f989c892e4d80e576b9a4e028f781cc93db5439878a2958ccd9"
+    },
+    {
+      "path": "neutral_interfaces/include/newlang/if_field.h",
+      "bytes": 3000,
+      "sha256": "0e09aef8b208d932a571f6d07d794bdd97b1c1fe5b33e43aabfbd2c0866b4914"
+    },
+    {
+      "path": "neutral_interfaces/include/newlang/parser.h",
+      "bytes": 4478,
+      "sha256": "6f22979df969ffe033a8c9a26b9bcb15e1a2cefad4d55a1e556e5a42ee29f126"
+    },
+    {
+      "path": "neutral_interfaces/include/newlang/semantic.h",
+      "bytes": 22089,
+      "sha256": "928f892877c99cedbb5bf919efb28e09e7b1f98ef3f4d245aa1557e44a1a27c6"
+    },
+    {
+      "path": "neutral_interfaces/include/newlang/source.h",
+      "bytes": 2813,
+      "sha256": "511238c5f041551906dc2a0d98429f2056acbc977b803e1dfc05e08c56a71524"
+    },
+    {
+      "path": "neutral_interfaces/include/newlang/syntax.h",
+      "bytes": 7034,
+      "sha256": "6d85f3851126fba5283113ab7446a1903735f1c48a293473f8dd9540c8eb9364"
+    },
+    {
+      "path": "r1197_preparation_v1.tar.gz",
+      "bytes": 63417,
+      "sha256": "51ce997a0def0acda3158e358bafe4079f20e94340461d9a3bebfda433a57e07"
+    },
+    {
+      "path": "r1197_text_preparation_v2.tar.gz",
+      "bytes": 96111,
+      "sha256": "e0b5dc7e3b539f4da41ef8b0b3240f941b4c76699d1fcc1862b03d23ee466b25"
+    }
+  ]
+}
