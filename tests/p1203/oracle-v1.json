@@ -1,0 +1,203 @@
+{
+  "track": "P",
+  "issue": 1203,
+  "authority": "C260",
+  "canonical": "Draft17.34",
+  "base": "0fd24ad3ed08c51845819aab48506c9d43fdccf6",
+  "cases": {
+    "01-many": {
+      "trace": [
+        3,
+        5,
+        7,
+        9,
+        11
+      ],
+      "incoming": [
+        117,
+        117,
+        211,
+        211
+      ],
+      "old": [
+        31,
+        117,
+        117,
+        211
+      ],
+      "exit": 29,
+      "index": 0,
+      "initial": 31,
+      "peer": 199,
+      "locals": {
+        "incoming": "incoming",
+        "old": "old",
+        "saved": "old",
+        "during": "incoming",
+        "sibling": "peer"
+      }
+    },
+    "02-zero": {
+      "trace": [
+        10
+      ],
+      "incoming": [],
+      "old": [],
+      "exit": 0,
+      "index": 0,
+      "initial": 31,
+      "peer": 199,
+      "locals": {
+        "incoming": "incoming",
+        "old": "old",
+        "saved": "old",
+        "during": "incoming",
+        "sibling": "peer"
+      }
+    },
+    "03-one": {
+      "trace": [
+        9,
+        11
+      ],
+      "incoming": [
+        211
+      ],
+      "old": [
+        31
+      ],
+      "exit": 73,
+      "index": 0,
+      "initial": 31,
+      "peer": 199,
+      "locals": {
+        "incoming": "incoming",
+        "old": "old",
+        "saved": "old",
+        "during": "incoming",
+        "sibling": "peer"
+      }
+    },
+    "04-second-field": {
+      "trace": [
+        3,
+        5,
+        7,
+        9,
+        11
+      ],
+      "incoming": [
+        211,
+        117,
+        211,
+        211
+      ],
+      "old": [
+        199,
+        211,
+        117,
+        211
+      ],
+      "exit": "18446744073709551615",
+      "index": 1,
+      "initial": 199,
+      "peer": 31,
+      "locals": {
+        "incoming": "incoming",
+        "old": "old",
+        "saved": "old",
+        "during": "incoming",
+        "sibling": "peer"
+      }
+    },
+    "05-return-helper": {
+      "trace": [
+        3,
+        5,
+        7,
+        9,
+        11
+      ],
+      "incoming": [
+        117,
+        117,
+        211,
+        211
+      ],
+      "old": [
+        31,
+        117,
+        117,
+        211
+      ],
+      "exit": 41,
+      "index": 0,
+      "initial": 31,
+      "peer": 199,
+      "locals": {
+        "incoming": "incoming",
+        "old": "old",
+        "saved": "old",
+        "during": "incoming",
+        "sibling": "peer"
+      }
+    },
+    "80-phase-control": {
+      "trace": [
+        3,
+        5,
+        7,
+        9,
+        11
+      ],
+      "incoming": [
+        117,
+        117,
+        211,
+        211
+      ],
+      "old": [
+        31,
+        117,
+        117,
+        211
+      ],
+      "exit": 11,
+      "index": 0,
+      "initial": 31,
+      "peer": 199,
+      "locals": {
+        "incoming": "incoming",
+        "old": "old",
+        "saved": "old",
+        "during": "incoming",
+        "sibling": "peer"
+      }
+    }
+  },
+  "expectation": {
+    "positive": "CHECK0 -> canonical owned loop/current + genuine helper result -> actual literal Break leaf/union -> C17; existing phase control C17 byte-identical",
+    "negative": "CHECK3 before publication/emission; named output inode/mtime/bytes unchanged; all-H overflow is rejected even if concrete entry immediately Breaks",
+    "mutations": [
+      "Break target/type/source/result/world/cardinality",
+      "stale original child/current or wrong root/loan",
+      "foreign arm ownership and A destroy/B survival",
+      "short/foreign signature allocation preflight",
+      "Break borrow descriptor tamper not used before revalidation"
+    ],
+    "failure": "fresh reached allocation OOM status/rollback/no-clobber/partial cleanup/retry; existing P-owned census/OOM machinery",
+    "native": "strict GCC/Clang O0/O2 raw+passive; source roles and real proof before guest; no structurally suspect guest"
+  },
+  "negative_cases": [
+    "90-wrong-result-type",
+    "91-all-H-overflow",
+    "92-insufficient-guard"
+  ],
+  "budget": {
+    "initial_P_days": 1,
+    "planned_native": 48,
+    "remote_push_pr_ci": 0,
+    "R_access": 0
+  },
+  "P1202_originals": "unchanged; source01 identical to independently frozen P1202 target; control80 identical to P1202 positive; no old rerun required"
+}

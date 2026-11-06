@@ -1390,6 +1390,8 @@ if(BUILD_TESTING)
     add_test(NAME p1188_c254_evidence.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c254/evidence_test.py")
 
+    include(tests/p1203/CMakeLists.txt)
+
     # Finite ordinary callee RETURNs feed the already authenticated loop
     # writer. Historical phase1 apparatus is immutable evidence; these are
     # its formatted live successors. No public issuer is added.

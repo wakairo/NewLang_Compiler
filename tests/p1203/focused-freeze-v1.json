@@ -1,0 +1,11 @@
+{
+  "phase": "before focused harness execution",
+  "files": {
+    "tests/p1203/safety.c": "0800b238503c4d01aa6cc857929d91ba5d9718a4bb10ac9474d9081a86680dc3",
+    "tests/p1193/production/challenges.c": "b187600c546be645504cee03670b07422a68c5eac0fa63b15342cfdc5a5d86db",
+    "tests/p1193/production/roles.c": "d47787e3cf76628c257fee8f33eaf74b6486ad3996d1ee4472d0e95db3bd38f3",
+    "tests/p1193/production/census.c": "ba422437b03f3bed12f95f2ea3b7a39ab656daef917f23e389f2a39b753b25cc",
+    "tests/p1184/safety.c": "5438ba777840bc18fcf7845ea645b1c573e66d4cdc0bf6791fe1d9398ebf91f8"
+  },
+  "oracle": "12 mutations reject with unchanged out; restore/retry then A destroy and independent B survives; canonical child substitution left unrestored only in display arrays"
+}

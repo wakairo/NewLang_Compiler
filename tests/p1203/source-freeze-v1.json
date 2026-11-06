@@ -1,0 +1,15 @@
+{
+  "phase": "before first execution",
+  "files": {
+    "oracle-v1.json": "7029b6b3d6be93e2e1ab58d93beffd3294548842873e7e132009664556c16f6b",
+    "sources/01-many.nl": "b22868c3f907d3e7c028a7237c8236b1615a6a158c4a6e0c6fd562470e8f2b78",
+    "sources/02-zero.nl": "e482adeab2af2f3772d0d6327d18d27ef30b48948da9566df0d26a6ed91dc661",
+    "sources/03-one.nl": "b356d2e5f0898ff92b08a1baf908371a6e75bd5b7faaeae05869a0597d88824f",
+    "sources/04-second-field.nl": "405f7f230f3aa920f442baf69ba3c1fc1c764e86ddc61caf137da894584682ca",
+    "sources/05-return-helper.nl": "3d9488259fd0432a6aeacfd8bd5cce96f0a580ec906090d2acd16f3c238d1ba0",
+    "sources/80-phase-control.nl": "608bfbf920ebb3a7d7981d25cd46347025e5d49a3b9ac18211f74e5ce60d705c",
+    "sources/90-wrong-result-type.nl": "d71e376b2fa32649d3108ba4f0bad941351269b0d6d3648185cf4b2b925145bf",
+    "sources/91-all-H-overflow.nl": "9ff7fc929a549815cd5ee889c5047bf54bc6f670ccef109aed44c32df7ef6ee0",
+    "sources/92-insufficient-guard.nl": "060afe142accb1ac6c8276cff1880b176f603f3a911ad1809cee3bc5ddff7649"
+  }
+}

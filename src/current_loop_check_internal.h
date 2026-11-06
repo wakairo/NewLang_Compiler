@@ -265,6 +265,29 @@ static bool current_scalar_source(Check *c, const NLSyntaxNode *node,
     return true;
 }
 
+/* The terminal result is independent of the Continue transfer. Keep stutter's
+ * exhaustive source family unchanged; this alternative belongs only to the
+ * changing-current relation and is checked again in each actual exit world. */
+static bool current_break_source(Check *c, const NLSyntaxNode *node,
+                                 NLSourceSpan phase)
+{
+    if (stutter_scalar_source(c, node, phase))
+        return true;
+    const NLSyntaxView *block = nl_syntax_node_view(node);
+    const NLSyntaxView *terminal =
+        block && block->kind == NL_SYNTAX_BLOCK
+            ? nl_syntax_node_view(block->data.block.items)
+            : NULL;
+    const NLSyntaxView *value =
+        terminal && terminal->kind == NL_SYNTAX_BREAK
+            ? nl_syntax_node_view(terminal->data.statement.expression)
+            : NULL;
+    return block && !block->data.block.tail &&
+           block->data.block.item_count == 1 && terminal &&
+           !nl_syntax_next_argument(block->data.block.items) && value &&
+           value->kind == NL_SYNTAX_USIZE_LITERAL;
+}
+
 static bool current_source_shape(Check *c, const NLSyntaxView *s,
                                  CurrentSource *out)
 {
@@ -302,8 +325,8 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
         lhs->kind != NL_SYNTAX_EXPR_NAME ||
         !stutter_name(c, lhs->data.name, p->data.binding.name) ||
         rhs->kind != NL_SYNTAX_USIZE_LITERAL ||
-        !stutter_scalar_source(c, v->data.conditional.else_block,
-                               p->data.binding.name))
+        !current_break_source(c, v->data.conditional.else_block,
+                              p->data.binding.name))
         return false;
     const NLSyntaxView *arm =
         nl_syntax_node_view(v->data.conditional.then_block);
@@ -1078,6 +1101,31 @@ static bool current_loan(CurrentWalk *r, const NLCheckedNodeView *loan)
     return true;
 }
 
+/* A source literal remains Known in its own leaf/union worlds. The phase is
+ * Unknown. Neither package grants memory authority, and the caller summary
+ * may conservatively forget the literal bits. Do not relax Continue's free
+ * Unknown quantity check to admit this separate terminal result. */
+static bool current_break_value(const NLCurrentLoopProof *s,
+                                const NLSemanticContext *world,
+                                const NLCheckedNodeView *source,
+                                NLCheckedResult result)
+{
+    const NLTypeId type = nl_semantic_core_type(world, NL_TYPE_USIZE);
+    if (!source || source->result_count != 1 || source->type != type ||
+        result.type != type || source->results[0].type != type ||
+        source->results[0].value != result.value)
+        return false;
+    if (source->kind == NL_CHECKED_IDENTIFIER)
+        return source->symbol == s->phase &&
+               source->value_use == NL_VALUE_COPIED &&
+               stutter_free_quantity(world, result.value, type);
+    NLSemanticValueView value;
+    return stutter_literal(source, type, source->scalar_result.value) &&
+           nl_semantic_value_view(world, result.value, &value) &&
+           copy_if_plain(value, type) && value.scalar_known &&
+           value.scalar_value == source->scalar_result.value;
+}
+
 static bool current_arm(const NLCurrentLoopProof *s,
                         const NLCheckedFragment *arm, bool continuing,
                         NLCheckedField *field, NLCheckedNodeId *scalar)
@@ -1121,11 +1169,7 @@ static bool current_arm(const NLCurrentLoopProof *s,
                     !r.changed)
                     return false;
             } else if (block->item_count != 1 ||
-                       x->kind != NL_CHECKED_IDENTIFIER ||
-                       x->symbol != s->phase ||
-                       x->value_use != NL_VALUE_COPIED ||
-                       !stutter_free_quantity(arm->context, x->results[0].value,
-                                              x->type))
+                       !current_break_value(s, arm->context, x, x->results[0]))
                 return false;
         } else if (continuing && (v->kind == NL_CHECKED_BINDING ||
                                   v->kind == NL_CHECKED_STATEMENT)) {
@@ -1224,12 +1268,12 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
             joined->source_node != leaf->source_node ||
             joined->values[0].type != leaf->values[0].type ||
             joined->values[0].value != leaf->values[0].value ||
-            !current_frame(s, h, a) || !current_frame(s, h, b) ||
-            !stutter_free_quantity(a, leaf->values[0].value, type) ||
-            !stutter_free_quantity(b, joined->values[0].value, type))
+            !current_frame(s, h, a) || !current_frame(s, h, b))
             return bad;
         if (i == 0) {
-            if (!linear_break_frame(h, arm->context, &change) ||
+            if (!stutter_free_quantity(a, leaf->values[0].value, type) ||
+                !stutter_free_quantity(b, joined->values[0].value, type) ||
+                !linear_break_frame(h, arm->context, &change) ||
                 !linear_break_frame(h, a, &change) ||
                 !linear_break_frame(h, b, &change))
                 return bad;
@@ -1261,8 +1305,17 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
                 s->incoming = s->scalar_source ? 0 : incoming.scalar_value;
                 s->terminal = leaf->source_node;
             }
-        } else if (!stutter_frame(h, a, 1) || !stutter_frame(h, b, 1))
-            return bad;
+        } else {
+            const NLCheckedNodeView *terminal =
+                nl_checked_node_view(arm, leaf->source_node);
+            const NLCheckedNodeView *value =
+                terminal ? nl_checked_node_view(arm, terminal->initializer)
+                         : NULL;
+            if (!current_break_value(s, a, value, leaf->values[0]) ||
+                !current_break_value(s, b, value, joined->values[0]) ||
+                !stutter_frame(h, a, 1) || !stutter_frame(h, b, 1))
+                return bad;
+        }
     }
     return NL_CHECK_OK;
 }
@@ -1591,6 +1644,10 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         return bad;
     const NLSemanticPlaceView r = h->places[s->root - 1],
                               c = h->places[s->child - 1];
+    const NLCheckedFragment *breaking = s->graphs[2].fragment;
+    const NLControlExitView *exit = nl_control_exit_view(breaking->exits, 0);
+    const NLCheckedNodeView *terminal =
+        nl_checked_node_view(breaking, exit->source_node);
     *out = (NLLinearBreakView){.base = s->base,
                                .nominal = r.type,
                                .root = s->root,
@@ -1605,6 +1662,8 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                                .incoming_call = s->helper ? s->scalar : 0,
                                .scalar_loop = true,
                                .iteration = s->graphs[1].fragment,
+                               .breaking = breaking,
+                               .break_value = terminal->initializer,
                                .continue_node = s->terminal,
                                .phase_symbol = s->phase,
                                .initial_node = s->initial_node,
