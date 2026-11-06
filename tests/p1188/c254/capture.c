@@ -42,10 +42,10 @@ int main(int argc, char **argv)
 #define REJECT(change, restore)                                                \
     do {                                                                       \
         change;                                                                \
-        NLLinearBreakView output, before;                                     \
+        NLLinearBreakView output, before;                                      \
         memset(&output, 0xB3, sizeof output);                                  \
         memcpy(&before, &output, sizeof before);                               \
-        assert(nl_linear_break_validate(caller, a.retained_loop, &output) !=        \
+        assert(nl_linear_break_validate(caller, a.retained_loop, &output) !=   \
                NL_CHECK_OK);                                                   \
         assert(!memcmp(&before, &output, sizeof before));                      \
         restore;                                                               \
@@ -98,12 +98,15 @@ int main(int argc, char **argv)
     NLLinearBreakView output, before;
     memset(&output, 0xB3, sizeof output);
     memcpy(&before, &output, sizeof before);
-    assert(nl_linear_break_validate(caller, a.retained_loop, &output) != NL_CHECK_OK);
+    assert(nl_linear_break_validate(caller, a.retained_loop, &output) !=
+           NL_CHECK_OK);
     assert(!memcmp(&before, &output, sizeof before));
-    dispose(&a); /* Unrestored A dies according to its canonical child ledger. */
+    dispose(
+        &a); /* Unrestored A dies according to its canonical child ledger. */
     assert(valid(&b, &other));
     dispose(&b);
     printf("C254 capture categories=6 restored=%zu foreign=1 "
-           "out-no-clobber/B-survive/cleanup=PASS\n", trials);
+           "out-no-clobber/B-survive/cleanup=PASS\n",
+           trials);
     return p1188_previous_safety_main(argc, argv);
 }

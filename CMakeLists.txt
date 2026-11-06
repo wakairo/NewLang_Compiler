@@ -1355,6 +1355,41 @@ if(BUILD_TESTING)
     add_test(NAME p1188_c250a_evidence.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c250a/evidence_test.py")
 
+    # C254 authenticates inherited old Copy values through the existing
+    # entry/header/source custody; the original T/current consumer is reused.
+    foreach(target p1188_c254_probe p1188_c254_capture)
+        if(target STREQUAL "p1188_c254_probe")
+            set(c254_source tests/p1188/c254/probe.c)
+        else()
+            set(c254_source tests/p1188/c254/capture.c)
+        endif()
+        add_executable(${target} ${c254_source})
+        target_include_directories(${target} PRIVATE src "${CMAKE_CURRENT_BINARY_DIR}")
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+        target_link_libraries(${target} PRIVATE
+            newlang_semantic newlang_parser newlang_checked_c_node)
+    endforeach()
+    foreach(profile 01-field-before-after 02-field-deep-quantity 03-literal-shadow)
+        add_test(NAME p1188_c254_${profile}_capture.unit COMMAND p1188_c254_capture
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c254/sources/${profile}.nl")
+    endforeach()
+    foreach(profile 01-field-before-after 02-field-deep-quantity)
+        add_test(NAME p1188_c254_${profile}_oom.unit COMMAND p1188_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c254/sources/${profile}.nl")
+        set_tests_properties(p1188_c254_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 300)
+    endforeach()
+    foreach(profile 01-field-before-after 02-field-deep-quantity 06-prefix-retention-control)
+        add_test(NAME p1188_c254_${profile}_census.unit COMMAND p1188_census
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c254/sources/${profile}.nl")
+    endforeach()
+    add_test(NAME p1188_c254_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c254/native-v2.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1188_c254_probe>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1188-c254-native")
+    add_test(NAME p1188_c254_evidence.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c254/evidence_test.py")
+
     add_test(NAME p1169_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1169/evidence_test.py")
     add_executable(p1169_safety tests/p1169/safety.c)
