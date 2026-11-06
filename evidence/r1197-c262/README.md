@@ -1,0 +1,1 @@
+C262 R1197 immutable custody. See receipt.json for original 12 artifact ZIPs, 12 complete job-log response byte streams, SHA256/size/CRC/manifests/checkout identity. V1 and calibrated V2 remain failed CHECK STOP; no semantic/native PASS. Original sources and workflows unchanged. Zero execution; Coordination alone accepts/closes.
