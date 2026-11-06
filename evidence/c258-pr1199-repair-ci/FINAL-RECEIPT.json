@@ -1,0 +1,73 @@
+{
+  "schema": "C257_PR1199_REPAIR_CI_FINAL_RECEIPT_V1",
+  "status": "COMPLETE_REPAIRED_SIX_CI_DATA_PASS_ADOPTION_HOLD",
+  "generated_utc": "2026-11-06T05:29:25.693956+00:00",
+  "identity": {
+    "P": "0fd24ad3ed08c51845819aab48506c9d43fdccf6",
+    "P_parent": "24339b077ed0e0a3e847f23aed170c67d2b3d20a",
+    "tree": "121ca6c13b81768c9c1b854a5d72d76841f6df10",
+    "main": "53c125b8cd66523651a21e803827eff6d2a06428",
+    "testmerge": "84278f92b8949349b8d47dae8a677ddf60c49a89",
+    "testmerge_parents": [
+      "53c125b8cd66523651a21e803827eff6d2a06428",
+      "0fd24ad3ed08c51845819aab48506c9d43fdccf6"
+    ]
+  },
+  "summary": {
+    "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/summary-final.json",
+    "bytes": 17361,
+    "sha256": "4136216537ee49724cce2311ef8c797eadb576d57f50fbff06012074d17078c1"
+  },
+  "audit": {
+    "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/audit-final.json",
+    "bytes": 1443916,
+    "sha256": "cb70c42fd09e8c01ccb6c2a20837a7ea9442500f972dd9348e9d7cfd867daec6"
+  },
+  "manifest": {
+    "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/manifest.json",
+    "bytes": 15441,
+    "sha256": "7d50e85ebf75e79319c0edf0b369502a61a9164dba902f3e8b3e117b73ae0ede"
+  },
+  "readme": {
+    "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/README.md",
+    "bytes": 5157,
+    "sha256": "38449fc129c9c6a757f78a503d9a4d2094a3f1f288858a0ce8f8fb3c33fb9861"
+  },
+  "packet": {
+    "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/ci-audit-packet.zip",
+    "bytes": 670078,
+    "sha256": "d8da955d515a9a64641be4765bd245fb057a550cf6affae08af9b26e453b6b15"
+  },
+  "packet_payload_file_count": 40,
+  "packet_member_count": 41,
+  "whole_job_logs_included": 6,
+  "whole_log_total_bytes": 1536214,
+  "job_log_downloads": 6,
+  "each_downloaded_once": true,
+  "old_log_downloads": 0,
+  "actual_CTest_PASS": 4679,
+  "FULL_each": 780,
+  "PARTIAL": 779,
+  "publication_budget_used": 12,
+  "publication_budget_max": 12,
+  "original_actual_jobs": 6,
+  "repair_actual_jobs": 6,
+  "remaining_jobs": 0,
+  "manual_dispatch_rerun0": true,
+  "review_disposition": {
+    "candidate": "0fd24ad3ed08c51845819aab48506c9d43fdccf6",
+    "adoption": "HOLD / NO C ADOPTION PASS IN THIS PACKET",
+    "independent_F": "Focused fixed-head re-review released under comment6677472782; its disposition is not asserted by this CI audit.",
+    "original_finding": "Original24339 retains F-1198-01 CHANGES REQUIRED; this packet cannot retrospectively clear it.",
+    "R": "No R source/oracle/report consumed or delivered by this C audit.",
+    "C_PASS": false,
+    "repair_authority": "https://github.com/wakairo/NewLang_Compiler/issues/1193#issuecomment-6676808814",
+    "F_re_review_release": "https://github.com/wakairo/NewLang_Compiler/issues/1198#issuecomment-6677472782"
+  },
+  "adoption_status": "HOLD_NO_C_ADOPTION_PASS",
+  "C_PASS": false,
+  "first_final_green_STOP": true,
+  "remote_mutations": 0,
+  "additional_CI_or_experiments": 0,
+  "local_compiler_build_native_AST_observer_semantic_decoder_runs": 0
+}

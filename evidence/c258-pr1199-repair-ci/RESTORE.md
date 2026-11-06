@@ -1,0 +1,9 @@
+# Restore repaired PR1199 CI evidence
+
+This is evidence-only custody of the fixed repaired candidate `0fd24ad3ed08c51845819aab48506c9d43fdccf6`, **NEVERMERGE**. The sole storage parent is that fixed candidate. Custody publication is not adoption; the exact frozen README and receipt preserve the disposition at the CI audit checkpoint. Independent F/R and later adoption decisions remain separate.
+
+Use `archive-index.json` for the ordered 19 chunks and their lengths, SHA256 values and Git blob SHAs. Concatenate `chunks/packet-*.b64` in lexical order, remove ASCII whitespace, and Base64-decode to `ci-audit-packet.zip`. Verify **670078 bytes** and SHA256 **d8da955d515a9a64641be4765bd245fb057a550cf6affae08af9b26e453b6b15**. Check ZIP CRC, the exact 41-member set, and every one of the 40 payload lengths and SHA256 values against `manifest.json`. The ZIP member `manifest.json` must equal the directly archived manifest. `FINAL-RECEIPT.json` remains outside the ZIP to avoid circular hashing.
+
+`C-RESTORE-CHECK.json` records the required data-only verification before publication. No compiler, generated guest, AST tool, observer, semantic decoder or archived audit script needs execution to restore or inspect these bytes. All six repaired whole job logs, actual checkout and job metadata, and the finite CI audit are preserved. These are connector-decoded UTF-8 log bytes, not a claim about GitHub's original binary log-ZIP representation.
+
+Only this evidence directory is added relative to fixed `0fd24ad3ed08c51845819aab48506c9d43fdccf6`. No PR is opened, no workflow is changed, and no Actions run is requested. P's publication budget remains original 6 + repaired 6 = 12 actual jobs, with manual dispatch and rerun 0; this archive does not reset it. The original candidate archive at `66e222e275e7bac9c478eaba8b50262803badb46` is untouched.

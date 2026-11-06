@@ -1,0 +1,317 @@
+{
+  "schema": "C257_PR1199_REPAIR_CI_PACKET_MANIFEST_V1",
+  "generated_utc": "2026-11-06T05:29:25.693956+00:00",
+  "payload_files": [
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/C-REPAIR-RELEASE.json",
+      "bytes": 10222,
+      "sha256": "db3cf8b9d16e378ae56809b304d8fdb44696fd46be2efa8b53f80ff721c4c7d5",
+      "archive_path": "C-REPAIR-RELEASE.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/CMake-original-to-repair.diff",
+      "bytes": 2393,
+      "sha256": "59d0084801a2cbb1e1fea00fd41531c74e64822501e8ebd501d9b3079898d7ec",
+      "archive_path": "CMake-original-to-repair.diff"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/CMakeLists.txt",
+      "bytes": 156432,
+      "sha256": "89355851ca3a8d34f630773f51e50ba6efe202a455277810ee7afb4b373de809",
+      "archive_path": "CMakeLists.txt"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/F-RE-REVIEW-RELEASE.json",
+      "bytes": 6893,
+      "sha256": "120b1c0530896368ff2ea10e84d84d85f3986a7e59b9fbf3113b87bf308d8865",
+      "archive_path": "F-RE-REVIEW-RELEASE.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/FIRST-PRESERVATION.json",
+      "bytes": 1934,
+      "sha256": "25876ad32db092da9955998e8fc1c9a1b1d7c3d57a49a568cf4f87a30a428687",
+      "archive_path": "FIRST-PRESERVATION.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/README.md",
+      "bytes": 5157,
+      "sha256": "38449fc129c9c6a757f78a503d9a4d2094a3f1f288858a0ce8f8fb3c33fb9861",
+      "archive_path": "README.md"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/audit-final.json",
+      "bytes": 1443916,
+      "sha256": "cb70c42fd09e8c01ccb6c2a20837a7ea9442500f972dd9348e9d7cfd867daec6",
+      "archive_path": "audit-final.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/audit_logs.py",
+      "bytes": 11314,
+      "sha256": "5bb667f300529c95d29c0b6403afd42aaae220f8e3d8d285de9b14bf8df1f970",
+      "archive_path": "audit_logs.py"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/baseline-archive-locator.json",
+      "bytes": 1206,
+      "sha256": "aa574d1c55a84a8bef93e273f18535a11375dddf697a38c5b7a7f709ec1d523d",
+      "archive_path": "baseline-archive-locator.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/baseline-published-FINAL-RECEIPT.json",
+      "bytes": 2079,
+      "sha256": "cacfa1be184f6fd9172fdd2b9c4e9ded8a2e5265c9815f3b1359748fd096acff",
+      "archive_path": "baseline-published-FINAL-RECEIPT.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/candidate-github-tree.json",
+      "bytes": 1678,
+      "sha256": "3feece790e82ea06fa8e042d3711d2cb8ecf6116ec0e47b2e5dc316417fd4ea3",
+      "archive_path": "candidate-github-tree.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/candidate-root-tree.json",
+      "bytes": 4246,
+      "sha256": "fd7e7c39bd3032d7fdf0b4f2b8e20d8cbd55c8c3039ccff3412b8ad60b3a86ab",
+      "archive_path": "candidate-root-tree.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/compiler-ci.yml",
+      "bytes": 6976,
+      "sha256": "811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742",
+      "archive_path": "compiler-ci.yml"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/compiler-frontend-ci.yml",
+      "bytes": 6418,
+      "sha256": "33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74",
+      "archive_path": "compiler-frontend-ci.yml"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/final-api-context.json",
+      "bytes": 632134,
+      "sha256": "6025b2c8436ef161e306e938c6b64610ae2b126ce68deb984ff27d3ea8d90bfb",
+      "archive_path": "final-api-context.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/finalize.py",
+      "bytes": 15406,
+      "sha256": "07f6e7393b58c470d80619440c65346694aaad58553e6709ae87a9a7d798c6b2",
+      "archive_path": "finalize.py"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/initial-api-context.json",
+      "bytes": 630488,
+      "sha256": "d4e756da3f7a2daba03678b4feae3d9b9dd19ef8019bbd9c6b5f3f7fd7cd8b1c",
+      "archive_path": "initial-api-context.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/jobs-progress-0515.json",
+      "bytes": 25632,
+      "sha256": "7b2e9d56740525ddcbd97ee13d2fe18dcbbbbfe477d1ebeda80f57368479210d",
+      "archive_path": "jobs-progress-0515.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/jobs-progress-0517.json",
+      "bytes": 26020,
+      "sha256": "2a39f7cf981e35670ce36fb9a8032886cd0d8931c8dde945223b24012f9f468e",
+      "archive_path": "jobs-progress-0517.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/jobs-progress-0518.json",
+      "bytes": 26020,
+      "sha256": "2a39f7cf981e35670ce36fb9a8032886cd0d8931c8dde945223b24012f9f468e",
+      "archive_path": "jobs-progress-0518.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/jobs-progress-0520.json",
+      "bytes": 26020,
+      "sha256": "2a39f7cf981e35670ce36fb9a8032886cd0d8931c8dde945223b24012f9f468e",
+      "archive_path": "jobs-progress-0520.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/jobs-progress-0522.json",
+      "bytes": 26020,
+      "sha256": "2a39f7cf981e35670ce36fb9a8032886cd0d8931c8dde945223b24012f9f468e",
+      "archive_path": "jobs-progress-0522.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/jobs-progress-0524.json",
+      "bytes": 26020,
+      "sha256": "2a39f7cf981e35670ce36fb9a8032886cd0d8931c8dde945223b24012f9f468e",
+      "archive_path": "jobs-progress-0524.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/jobs-progress-0527.json",
+      "bytes": 26020,
+      "sha256": "2a39f7cf981e35670ce36fb9a8032886cd0d8931c8dde945223b24012f9f468e",
+      "archive_path": "jobs-progress-0527.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/jobs-progress-final.json",
+      "bytes": 26408,
+      "sha256": "953928432afc85f146e9c0baa971d1d0d121fe26c715608e199be608c4678c93",
+      "archive_path": "jobs-progress-final.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/jobs-progress-initial-raw.json",
+      "bytes": 25632,
+      "sha256": "7b2e9d56740525ddcbd97ee13d2fe18dcbbbbfe477d1ebeda80f57368479210d",
+      "archive_path": "jobs-progress-initial-raw.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721762812.capture.json",
+      "bytes": 465,
+      "sha256": "7fc05f80c93daa7b24e127a6a3b746047cdec605ac04958d9e5c66eb77a279c2",
+      "archive_path": "logs/job-127721762812.capture.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721762812.log",
+      "bytes": 247491,
+      "sha256": "d58c2691a08405891db9b28f2e8362d32c652a68086a2b28fbd2eb0c42ff27cc",
+      "archive_path": "logs/job-127721762812.log"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721763018.capture.json",
+      "bytes": 465,
+      "sha256": "75dc501ae1e3143d6567e12cbc05ad8c39444ca4308d794e055d116d4d6dd666",
+      "archive_path": "logs/job-127721763018.capture.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721763018.log",
+      "bytes": 247730,
+      "sha256": "7838d20946a373aac21e006dc35b843021c298b68a1128b71860af43261e53b1",
+      "archive_path": "logs/job-127721763018.log"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721763037.capture.json",
+      "bytes": 465,
+      "sha256": "e03d91a87f3f6320596763f08083ea8eb82f282d8d470e43be3d1ce9f1a33849",
+      "archive_path": "logs/job-127721763037.capture.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721763037.log",
+      "bytes": 295842,
+      "sha256": "cf1ded39f43aa46f40d2b40f65ca98b24a712808bc368acf1fb573cc5c3c3bd7",
+      "archive_path": "logs/job-127721763037.log"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721763162.capture.json",
+      "bytes": 465,
+      "sha256": "7adc9159cc6738cc468ce7cef4cb0c96e79a96661f49f493c7c08a9508d7d823",
+      "archive_path": "logs/job-127721763162.capture.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721763162.log",
+      "bytes": 247619,
+      "sha256": "9ccd6dd1b52fee7cd8d68a0dc5bb1b4b518b4d02b5c0ce9ffd6c598647284a68",
+      "archive_path": "logs/job-127721763162.log"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721763267.capture.json",
+      "bytes": 465,
+      "sha256": "d42e19065b2951800221a08c685d6fe34f3d1ab468e3cec4af4086f78d2fd8e4",
+      "archive_path": "logs/job-127721763267.capture.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721763267.log",
+      "bytes": 247737,
+      "sha256": "5e430aa4a50aaa62eb740485e307e9df441c9e3d62f3c59de404f85a46ced3be",
+      "archive_path": "logs/job-127721763267.log"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721763311.capture.json",
+      "bytes": 465,
+      "sha256": "7c3bb5cb240d28589aad80416d898053a072a218da994f0a80bca7d6797be8dc",
+      "archive_path": "logs/job-127721763311.capture.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/logs/job-127721763311.log",
+      "bytes": 249795,
+      "sha256": "70b802a9a7c53734d2e43a479e1d7cabbb3b512fdea217c6ecff022a324d8c39",
+      "archive_path": "logs/job-127721763311.log"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/source-custody.json",
+      "bytes": 1083,
+      "sha256": "c10e1f1070c889a47296e6ba0cd8ee05926a97aa1a4b8888ec79206c5cca3251",
+      "archive_path": "source-custody.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-repair-ci-audit/summary-final.json",
+      "bytes": 17361,
+      "sha256": "4136216537ee49724cce2311ef8c797eadb576d57f50fbff06012074d17078c1",
+      "archive_path": "summary-final.json"
+    }
+  ],
+  "referenced_baseline_files": [
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/FINAL-RECEIPT.json",
+      "bytes": 2079,
+      "sha256": "cacfa1be184f6fd9172fdd2b9c4e9ded8a2e5265c9815f3b1359748fd096acff",
+      "archive_commit": "66e222e275e7bac9c478eaba8b50262803badb46",
+      "archive_manifest_url": "https://github.com/wakairo/NewLang_Compiler/blob/66e222e275e7bac9c478eaba8b50262803badb46/evidence/c257-pr1199-original-ci/manifest.json",
+      "direct_url": "https://github.com/wakairo/NewLang_Compiler/blob/66e222e275e7bac9c478eaba8b50262803badb46/evidence/c257-pr1199-original-ci/FINAL-RECEIPT.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/audit-final.json",
+      "bytes": 1427361,
+      "sha256": "64b407f26a781534f147b57d2a18afc2499d36f403fc7a1fceb3951e1f5bf2b9",
+      "archive_commit": "66e222e275e7bac9c478eaba8b50262803badb46",
+      "archive_manifest_url": "https://github.com/wakairo/NewLang_Compiler/blob/66e222e275e7bac9c478eaba8b50262803badb46/evidence/c257-pr1199-original-ci/manifest.json",
+      "restored_original_zip_member": "audit-final.json"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/logs/job-127704137981.log",
+      "bytes": 246210,
+      "sha256": "d898471e0de27c7d3353e489f73d29596c6c3294313f079b277ca12775894331",
+      "archive_commit": "66e222e275e7bac9c478eaba8b50262803badb46",
+      "archive_manifest_url": "https://github.com/wakairo/NewLang_Compiler/blob/66e222e275e7bac9c478eaba8b50262803badb46/evidence/c257-pr1199-original-ci/manifest.json",
+      "restored_original_zip_member": "logs/job-127704137981.log"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/logs/job-127704137920.log",
+      "bytes": 246366,
+      "sha256": "e187c75c899b072f3573fdce35fbe741b04508a76111e93e0f19a6be6d7ac457",
+      "archive_commit": "66e222e275e7bac9c478eaba8b50262803badb46",
+      "archive_manifest_url": "https://github.com/wakairo/NewLang_Compiler/blob/66e222e275e7bac9c478eaba8b50262803badb46/evidence/c257-pr1199-original-ci/manifest.json",
+      "restored_original_zip_member": "logs/job-127704137920.log"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/logs/job-127704137895.log",
+      "bytes": 246290,
+      "sha256": "0e09c143a8954db2ab0169af0ca515cace88b7b22af5d6871ada53b457191712",
+      "archive_commit": "66e222e275e7bac9c478eaba8b50262803badb46",
+      "archive_manifest_url": "https://github.com/wakairo/NewLang_Compiler/blob/66e222e275e7bac9c478eaba8b50262803badb46/evidence/c257-pr1199-original-ci/manifest.json",
+      "restored_original_zip_member": "logs/job-127704137895.log"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/logs/job-127704137968.log",
+      "bytes": 246185,
+      "sha256": "58f9697830d160af61dc4b341ffdf506d1e0488282e8417528b6c1c3fcdae1c6",
+      "archive_commit": "66e222e275e7bac9c478eaba8b50262803badb46",
+      "archive_manifest_url": "https://github.com/wakairo/NewLang_Compiler/blob/66e222e275e7bac9c478eaba8b50262803badb46/evidence/c257-pr1199-original-ci/manifest.json",
+      "restored_original_zip_member": "logs/job-127704137968.log"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/logs/job-127704137727.log",
+      "bytes": 248189,
+      "sha256": "5886db6c56cd7997bd7ea73a10d818b3a99bca688639e2d77e4155c2280f7cbf",
+      "archive_commit": "66e222e275e7bac9c478eaba8b50262803badb46",
+      "archive_manifest_url": "https://github.com/wakairo/NewLang_Compiler/blob/66e222e275e7bac9c478eaba8b50262803badb46/evidence/c257-pr1199-original-ci/manifest.json",
+      "restored_original_zip_member": "logs/job-127704137727.log"
+    },
+    {
+      "path": "/workspace/scratch/e415f00ca312/c257-pr1199-ci-audit/logs/job-127704137670.log",
+      "bytes": 294194,
+      "sha256": "0c2cb66bdcd4102c28f3fd4978616572e3e02317f588ac8009e0db3e7ff32035",
+      "archive_commit": "66e222e275e7bac9c478eaba8b50262803badb46",
+      "archive_manifest_url": "https://github.com/wakairo/NewLang_Compiler/blob/66e222e275e7bac9c478eaba8b50262803badb46/evidence/c257-pr1199-original-ci/manifest.json",
+      "restored_original_zip_member": "logs/job-127704137670.log"
+    }
+  ],
+  "original_packet": {
+    "bytes": 575920,
+    "sha256": "fef63e29018229f1765a74a8527ca5a52608222dc87dd4b3b4017ee1f79d6da6"
+  },
+  "excluded_derivable_transport": "Only local *.transfer.json segments; exact whole logs included."
+}

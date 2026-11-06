@@ -1,0 +1,144 @@
+{
+  "schema": "C258_REPAIRED_PR1199_CI_GIT_CUSTODY_V1",
+  "source_candidate": "0fd24ad3ed08c51845819aab48506c9d43fdccf6",
+  "source_tree": "121ca6c13b81768c9c1b854a5d72d76841f6df10",
+  "archive_branch": "evidence/c258-pr1199-repair-ci",
+  "repo_path": "evidence/c258-pr1199-repair-ci",
+  "sole_storage_parent": "0fd24ad3ed08c51845819aab48506c9d43fdccf6",
+  "nevermerge": true,
+  "packet": {
+    "path": "ci-audit-packet.zip",
+    "bytes": 670078,
+    "sha256": "d8da955d515a9a64641be4765bd245fb057a550cf6affae08af9b26e453b6b15"
+  },
+  "chunks": [
+    {
+      "path": "chunks/packet-001.b64",
+      "bytes": 48632,
+      "sha256": "dc3ca6daa61a8010094d9278e0c534d496ad272f6932ed1837e449d194e098a2",
+      "git_blob": "8be84ce39086ea07e574d39b108ece7b3980e842"
+    },
+    {
+      "path": "chunks/packet-002.b64",
+      "bytes": 48632,
+      "sha256": "2cc822ca0c7dfdec5904bc7423acee5aaecbfda9a4be006ceb130066062ac374",
+      "git_blob": "76261a639e78206eacbea6dd5552eac0b456eea4"
+    },
+    {
+      "path": "chunks/packet-003.b64",
+      "bytes": 48632,
+      "sha256": "d285ead7e54821d19206fedbc3fb8ec4634869891cecef49f79ea4a19efd9c03",
+      "git_blob": "6ddc8ec46ca705ecb02af2f8f9293b56a1ba10f6"
+    },
+    {
+      "path": "chunks/packet-004.b64",
+      "bytes": 48632,
+      "sha256": "c289fc985e2923b686290f8a3e19d8595b49040d4f035e6a4867c1b66c0bbb2e",
+      "git_blob": "6abe3a18fdc13e4fe1b97dc8779f1921732acb12"
+    },
+    {
+      "path": "chunks/packet-005.b64",
+      "bytes": 48632,
+      "sha256": "d367ac5153cbb3c7b86b48a7a1b2db2fafc7c87172ed5415edeb06d8ba8c4f0d",
+      "git_blob": "7827f231977b4344a047f288e70fb8ed21a51044"
+    },
+    {
+      "path": "chunks/packet-006.b64",
+      "bytes": 48632,
+      "sha256": "693c1e73f6d7a615daffdce06b408ee935fd8fd9d42e590515472a3d7c4cebef",
+      "git_blob": "01a96cf54cc632ffd9315e3fd194154ce3d1faa1"
+    },
+    {
+      "path": "chunks/packet-007.b64",
+      "bytes": 48632,
+      "sha256": "9aa115728a4bd2486e49523c14d4422178db44ea5964bffd652890fc92235a18",
+      "git_blob": "2a0d3c4acc6553d736999e51c5b590a7bfe076f4"
+    },
+    {
+      "path": "chunks/packet-008.b64",
+      "bytes": 48632,
+      "sha256": "04d9a11299458a82b5b92e67831cc5546308829c5d383e453c40623101c56415",
+      "git_blob": "f629c324ac9f45768ba0084c10967303a13ee9da"
+    },
+    {
+      "path": "chunks/packet-009.b64",
+      "bytes": 48632,
+      "sha256": "10705fe3b680031fa7365986a75e01469309b4db67a3bce33915c04409862a22",
+      "git_blob": "e2cfe38493b81b675d501683d29acbf5f9292d27"
+    },
+    {
+      "path": "chunks/packet-010.b64",
+      "bytes": 48632,
+      "sha256": "ed09ea079aaa5665e7905ca75594d6da5d66e472256c6bf9e5efc6f5cfd59eb0",
+      "git_blob": "7350887ebd26517cdf7912a383138daf3801cc1b"
+    },
+    {
+      "path": "chunks/packet-011.b64",
+      "bytes": 48632,
+      "sha256": "e06c0cbec13d9a66c56c697fb806509f0d93d0ce95a5a71e215b845f660fb719",
+      "git_blob": "78e58056a6974bf61f0bf504006dbec5462aa832"
+    },
+    {
+      "path": "chunks/packet-012.b64",
+      "bytes": 48632,
+      "sha256": "38ca13423f87682e0b3e9edf298c31ef15cf59ff0a81b2a2ed4703f0c5707070",
+      "git_blob": "a3341f806b22cd7d629d4b9daf904171c50fc016"
+    },
+    {
+      "path": "chunks/packet-013.b64",
+      "bytes": 48632,
+      "sha256": "c4509b2e46d9cb458916e7a643ffdce8c928e6f6c56f252ba3141f000a60250d",
+      "git_blob": "f78bb99d36bef743947ff1cf6889d705ba8afa67"
+    },
+    {
+      "path": "chunks/packet-014.b64",
+      "bytes": 48632,
+      "sha256": "b0918ad7671ed8cea832ebe3ddb859070d1bafe0bd10e796274a9664870c0162",
+      "git_blob": "242c6925a324412669df8adc32aa2456836faf58"
+    },
+    {
+      "path": "chunks/packet-015.b64",
+      "bytes": 48632,
+      "sha256": "018e217f0fd28b9dd9227a741c48db8c3aa2c04595fc27b598153425d95322bf",
+      "git_blob": "6669eb7c87aae8215838183772ce234caa6a7051"
+    },
+    {
+      "path": "chunks/packet-016.b64",
+      "bytes": 48632,
+      "sha256": "52912dfb27c14ed5410e6e99385fb507394020e182dd7b049621f8f20bb2dfe4",
+      "git_blob": "6d0730a5bfcd1fc317469d1db8e06acfe3d8695e"
+    },
+    {
+      "path": "chunks/packet-017.b64",
+      "bytes": 48632,
+      "sha256": "74124312bc2562cb11432dea95d5c6a0d150757e615e1b6ddab5c4c0780b6dcd",
+      "git_blob": "04220bea4174ae9ae8ced5fe6ab1c6ad54116d5d"
+    },
+    {
+      "path": "chunks/packet-018.b64",
+      "bytes": 48632,
+      "sha256": "b6589f403940068cfc3d4c0c4ff2d1ec3a864085decf25837cf8031c84680bd6",
+      "git_blob": "09a3839429817a35c5114c7866dbc494730eac05"
+    },
+    {
+      "path": "chunks/packet-019.b64",
+      "bytes": 29828,
+      "sha256": "85f3d390c70ea74c84de55e6322d6ded051e0dc74b8a35ace350936788706013",
+      "git_blob": "6bfeecb690962d22cd150a2825bad26f4fbdca78"
+    }
+  ],
+  "payload_count": 40,
+  "zip_member_count": 41,
+  "whole_logs": 6,
+  "actual_CTests_PASS": 4679,
+  "FULL_each": 780,
+  "PARTIAL": 779,
+  "original_archive_commit": "66e222e275e7bac9c478eaba8b50262803badb46",
+  "review": "Custody publication only. The frozen packet remains no C adoption PASS. Independent F/R and substantive adoption are outside this storage action.",
+  "P_branch_actual_jobs": 12,
+  "P_branch_limit": 12,
+  "manual_dispatch_rerun": 0,
+  "mutations": "Only this new evidence directory; no Production/workflow edits, PR, CI, rerun or comments.",
+  "publication_apparatus_FIRST": "APPARATUS-FIRST.json",
+  "publication_file_count": 26
+}

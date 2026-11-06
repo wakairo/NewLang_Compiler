@@ -1,0 +1,21 @@
+{
+  "schema": "C258_C_DATA_RESTORE_CHECK_V1",
+  "generated_utc": "2026-11-06T05:40:42.391420+00:00",
+  "scope": "Data custody of frozen repaired P1199 CI packet; no adoption decision",
+  "zip_crc_ok": true,
+  "exact_member_set": true,
+  "all_payload_sizes_sha256_verified": true,
+  "manifest_sha256": "7d50e85ebf75e79319c0edf0b369502a61a9164dba902f3e8b3e117b73ae0ede",
+  "packet_sha256": "d8da955d515a9a64641be4765bd245fb057a550cf6affae08af9b26e453b6b15",
+  "packet_bytes": 670078,
+  "payload_count": 40,
+  "zip_member_count": 41,
+  "chunks_reconstruct_exact_packet": true,
+  "chunk_count": 19,
+  "frozen_final_receipt_sha256": "6963d241da5200ce15f792b4d5a83a564193acfb3d23bb38eca2a77d81d73a5a",
+  "frozen_readme_sha256": "38449fc129c9c6a757f78a503d9a4d2094a3f1f288858a0ce8f8fb3c33fb9861",
+  "source_files_modified": 0,
+  "old_logs_refetched": 0,
+  "archived_code_execution": 0,
+  "compiler_native_AST_observer_semantic_decoder_execution": 0
+}

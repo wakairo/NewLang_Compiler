@@ -1,0 +1,19 @@
+{
+  "schema": "C258_PUBLICATION_APPARATUS_FIRST_V1",
+  "observed_utc": "2026-11-06 05:44:08 UTC",
+  "phase": "Remote blob readback adapter before commit/ref",
+  "classification": "C data apparatus; not a compiler/test or Git-content failure",
+  "failure": "The generic GitHub fetch connector returned already-decoded blob text. The initial adapter incorrectly JSON-parsed it as a Git blob REST envelope. All 25 readback checks rejected before saving readback files; blob/tree creation receipts had already matched the expected SHAs and sizes.",
+  "examples": [
+    "README.md: Unexpected token '#' in JSON",
+    "chunks/packet-001.b64: Unexpected token 'U' in JSON",
+    "JSON documents parsed but had no REST sha/size/encoding envelope"
+  ],
+  "remote_blobs_created": 25,
+  "remote_trees_created": 1,
+  "commit_or_ref_created": 0,
+  "production_workflow_changes": 0,
+  "CI_or_experiments": 0,
+  "old_log_refetch": 0,
+  "correction": "Use connector-decoded UTF-8 text; bind remote SHA/size through the verified Git tree, then independently recompute byte lengths, Git blob SHA and SHA256 before restoring ZIP. Preserve this FIRST."
+}
