@@ -1,0 +1,22 @@
+{
+  "authority": "C256 phase1 rebind after scope-preserving repair; original12 challenge set repeated; no new challenge case; no additional native; C256 local phase2 conditional follow-up6675394686 read",
+  "candidate": "05e12f92fbbd9425745e7fa62e79a4a5bcb08241",
+  "files": {
+    "tests/p1193/c256/post-repair.py": "2a1692f881f6c190c1583dcd18e728c46af9826f798d695a68e224173260d7cd",
+    "tests/p1193/c256/challenges.c": "11fadb543f05ae0d3870a476b0758eb0d0ff7e14a6ff640280c3ac1fc21d4a42",
+    "tests/p1193/c256/roles-v3.c": "5907f685cada32e91df5aadfb67c30c45826db21f70bd94476445b006a7e7969",
+    "tests/p1193/c256/census-v4.c": "5fd6066fecb6e0c505a9a5f234c180215b0ce445c1b7fd201ea515eb1a39197c",
+    "src/main.c": "bd7f2fb9c8a989d874bf95aa74931eca669247d5fa27c64f74835ae8ab46ef03",
+    "src/current_loop_check_internal.h": "dc8b803638e61dd560845876932ec9bcf791ce141233263bb7bf3ce33aac9540",
+    "src/pure_u8_internal.h": "354555b0e6185c869ea07f6721a77313ef12b7f0ce385093147fd229ca061512",
+    "tests/p1188/sources/05-all-two.nl": "5e53b56c8d3c6c9abe55c5ef698b78a040fd2a8f8af7fbcc036d8774eadc768b",
+    "tests/p1188/sources/06-eq-two.nl": "472e6ca477042c44d87e63749f4e9ab18d9d16d0a0dcf4b9f991d804dd82402e",
+    "tests/p1193/c256/sources/01-return-left.nl": "673bba32075013c9c8b519072ac05117e7361e9e4a426832e9473cce38bf5329",
+    "tests/p1193/c256/sources/02-return-right.nl": "644eb49d6c001af1f4db998cdd98cbf72a3cda41d9709ef5b23b40cc3bec074b",
+    "tests/p1193/c256/sources/03-both-return.nl": "91077c12dddd0c3afabc97ef8195ea19e1e36da6c511d60baf1a407abd8b8623",
+    "tests/p1193/c256/sources/04-return-if.nl": "c72b95c578f9e54030fb8b8decb18e9260e158b4750f48869527c3ad9fa8a223",
+    "tests/p1193/c256/sources/80-normal-control.nl": "113b453e8207cec661a803f2173a3ad785d5e1d6d67f75737c03ac7ac15036d7",
+    "tests/p1193/c256/sources/90-wrong-return-type.nl": "54acc94397d5c1c56df084f78e4a9535f50b4ebba2f78c82e6d5b4da300ca7d8",
+    "tests/p1193/c256/sources/91-helper-break.nl": "f786f0b966064285628fea68e51fb33586d3e0872d39e1db7fb7c8f33c9d0a46"
+  }
+}
