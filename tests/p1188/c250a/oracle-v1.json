@@ -1,0 +1,117 @@
+{
+  "authority": "Issue1188 C250a / F1192-1 fixed8585 / Draft17.34",
+  "baseline_head": "8585d9199d2075b18109438dc096dbe0619d1bfe",
+  "baseline_native": "PROHIBITED for all newly targeted old C; inspect CHECK/C17/roles only",
+  "prediction": "direct phase discarded statement reads caller result local before Break assignment; alias discards use their existing local; helper/inline/literal share current-loop dispatcher",
+  "repair": "reuse emit_current_quantity for all admitted usize statements; no initializer injection/guard/issuer change",
+  "cases": {
+    "01-direct-helper": {
+      "category": "targeted",
+      "check": 0,
+      "emit": 0,
+      "baseline_bad_phase_reads": 1,
+      "target_bad_phase_reads": 0,
+      "index": 0,
+      "initial": 12,
+      "sibling": 240,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "incoming": [
+        33,
+        33,
+        177,
+        177
+      ],
+      "expected_discard_statements": 1
+    },
+    "02-one-alias": {
+      "category": "targeted",
+      "check": 0,
+      "emit": 0,
+      "baseline_bad_phase_reads": 0,
+      "target_bad_phase_reads": 0,
+      "index": 0,
+      "initial": 12,
+      "sibling": 240,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "incoming": [
+        33,
+        33,
+        177,
+        177
+      ],
+      "expected_discard_statements": 2
+    },
+    "03-two-alias": {
+      "category": "targeted",
+      "check": 0,
+      "emit": 0,
+      "baseline_bad_phase_reads": 0,
+      "target_bad_phase_reads": 0,
+      "index": 1,
+      "initial": 19,
+      "sibling": 144,
+      "headers": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "incoming": [
+        74,
+        74,
+        205
+      ],
+      "expected_discard_statements": 4
+    },
+    "04-literal-discard": {
+      "category": "targeted",
+      "check": 0,
+      "emit": 0,
+      "baseline_bad_phase_reads": 1,
+      "target_bad_phase_reads": 0,
+      "index": 0,
+      "initial": 112,
+      "sibling": 39,
+      "headers": [
+        1,
+        5,
+        9,
+        13
+      ],
+      "incoming": [
+        203,
+        203,
+        203
+      ],
+      "expected_discard_statements": 1
+    },
+    "80-inline-control": {
+      "category": "control",
+      "check": 0,
+      "emit": 0,
+      "baseline_bad_phase_reads": 0,
+      "target_bad_phase_reads": 0,
+      "expected_discard_statements": 0
+    },
+    "81-helper-control": {
+      "category": "control",
+      "check": 0,
+      "emit": 0,
+      "baseline_bad_phase_reads": 0,
+      "target_bad_phase_reads": 0,
+      "expected_discard_statements": 0
+    }
+  }
+}

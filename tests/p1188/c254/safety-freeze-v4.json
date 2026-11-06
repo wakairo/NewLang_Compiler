@@ -1,0 +1,22 @@
+{
+  "authority": "C254 formatting-only active successor; original three capture harness sources archived byte-for-byte at their complete original paths and retained in forward Git history. All original oracle/FIRST and mutation/rejection assertions unchanged.",
+  "oracle": {
+    "restored_per_source": 14,
+    "foreign_per_source": 1,
+    "output_unchanged": true,
+    "revalidate_after_restore": true,
+    "unrestored_A_destroy_B_survive": true,
+    "sources": [
+      "01-field-before-after",
+      "02-field-deep-quantity",
+      "03-literal-shadow"
+    ]
+  },
+  "files": {
+    "tests/p1188/c254/capture.c": "42a819378779e226438c87d32522ece1ad71c98e030f30e861b7a8fa9208159e",
+    "tests/p1188/c254/evidence/capture-equipment-originals.zip": "09fd8ceb1e64548a92a56012e0c08e749e88f53ef1e2af03fc2f2b7c60b472a8",
+    "tests/p1188/c254/safety-freeze-v1.json": "209e7294e684ef4d46bb7f31e8199763a6aa76bac39cd930e928b77b941cb1a3",
+    "tests/p1188/c254/safety-freeze-v2.json": "da3362848421f365f64aca4086c40e573182e5885775a80dbda2aabcc2238712",
+    "tests/p1188/c254/safety-freeze-v3.json": "d172ad1649c3807fadfde07fe89e9fc0fafd74fdd419f60f8f4b9c9402de55b9"
+  }
+}

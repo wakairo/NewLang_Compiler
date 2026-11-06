@@ -1,0 +1,35 @@
+{
+  "authority": "C254 separately frozen apparatus correction; original source/oracles/equipment and FIRST remain unchanged; no guest compiled before v1 stopped",
+  "files": {
+    "tests/p1188/c254/evidence/80-helper-control.c17": "97a2009034ff9776406b39aee11c959d03db69f7f3beac1cd417dcefae28324a",
+    "tests/p1188/c254/evidence/81-inline-control.c17": "c61b72bdbb136e2a29465498cea658a31893103e2ae8cbf97ff6664461425cae",
+    "tests/p1188/c254/mapping.py": "9b94a74bd5989dec3eaa446d8a459f48fb37a6b8c7d186f5a64765b4622010d3",
+    "tests/p1188/c254/native.py": "b32494b41b4af3a03ac14c3995d7b79e338fc4765d72484a049afa42955212b2",
+    "tests/p1188/c254/oracle-extension-v2.json": "efa2ec62bfe94c525d4ddbd313d45242461cec16607d7f814f34af2cdd84d4c4",
+    "tests/p1188/c254/oracle-v1.json": "1183b2b07d2f0f50fb77fcb016cc1c08a808cfe895075df637728b08d98c32da",
+    "tests/p1188/c254/probe.c": "0b88b0318c000d5748b7d4e0149151a8b71457f91c6e9b2c2a4b64d0b93e0d0e",
+    "tests/p1188/c254/source-freeze-v1.json": "ce8a3bf39d11e53f8af3ea98ac277574adb3cb8526bec6e8f8d5d55ff0be656f",
+    "tests/p1188/c254/sources/01-field-before-after.nl": "9f72f9bc72e683ae07d339991ff519d9976d5ae03d82957cdf6caad16e14d757",
+    "tests/p1188/c254/sources/02-field-deep-quantity.nl": "db7157f2e292075140c23b1fa07f2ea52f06cfbdd33300843eff676d90cd8ed3",
+    "tests/p1188/c254/sources/03-literal-shadow.nl": "0ea37b4357ed58a0d4aa85e0acb5a45456f8f70ec1134e8fb8dcf088c4577a76",
+    "tests/p1188/c254/sources/04-zero-edge.nl": "890f18afcb4b6110b2d5f2f28109e93114bc4640d4b08e0984195e8fef1d1901",
+    "tests/p1188/c254/sources/05-one-edge.nl": "a4ebbe54425279329fb5f8495cd5c6a39148558ee303e22146329dd1bebae437",
+    "tests/p1188/c254/sources/06-prefix-retention-control.nl": "80907fbf60d8ddb5058cd7a2854dd479b9cbb7f8f011fc64256064c33d20f2e1",
+    "tests/p1188/c254/sources/80-helper-control.nl": "113b453e8207cec661a803f2173a3ad785d5e1d6d67f75737c03ac7ac15036d7",
+    "tests/p1188/c254/sources/81-inline-control.nl": "b44db6b770275cc386e3f8a788b28936c5e21285c002635f1bddd9125398d279",
+    "tests/p1188/c254/sources/90-third-prefix-copy.nl": "b91386f6837a43b4de6cda35fb904a735470aef6161216bba99cd57105c912fe",
+    "tests/p1188/c254/sources/91-call-root.nl": "292694649dadf43a658ad4b4f41c2bb1f563bc7e81d9c643ff3957fce7800908",
+    "tests/p1188/c254/sources/92-outer-quantity.nl": "322c4f3aa800922d9f3970ef1cf131b5d10c51d888bfa6688d151090c068b3bd",
+    "tests/p1188/c254/sources/93-ending-loan.nl": "93273b1e9204027aaf2beb1b4ce3b519caf971970d17a2a83303c5ecdab1d585",
+    "tests/p1188/c254/sources/94-source-order.nl": "98da700872458804f5422e30d8bfd9866e692c6beeceb49fa8195ca8b1b7294a",
+    "tests/p1188/c254/sources/95-shadow-quantity.nl": "6878fda92e601e3c125144d71033b6c81472094cb55f1385c1884397cee6e91d",
+    "tests/p1188/c254/native-v2.py": "989363d5a382d82a34b60c66ee6d4a207c010e3084ef583a6e32f29c2144285b",
+    "tests/p1188/c254/oracle-extension-v3.json": "016776bde49fb13479afdcaea513a1a684e19f2ae2588174e01c57f53c524cbb",
+    "tests/p1188/c254/equipment-freeze-v1.json": "5ad1d2fb525dd61f6a8c40ff60e93ba7d5f377286b065a4a43fe1a5fc0e5c78d",
+    "tests/p1188/c254/evidence/equipment-v1-FIRST.zip": "ffc4ee09e6442b7c9f37e85075eea1fd438b4542e4c28232cb89cb01270344c3"
+  },
+  "previous": {
+    "path": "tests/p1188/c254/equipment-freeze-v1.json",
+    "sha256": "5ad1d2fb525dd61f6a8c40ff60e93ba7d5f377286b065a4a43fe1a5fc0e5c78d"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "authority": "C254 mechanical harness include repair; v1 compilation failed before any new host challenge or guest execution; original frozen source, oracle, diagnostics retained",
+  "oracle": {
+    "restored_per_source": 14,
+    "foreign_per_source": 1,
+    "output_unchanged": true,
+    "revalidate_after_restore": true,
+    "unrestored_A_destroy_B_survive": true,
+    "sources": [
+      "01-field-before-after",
+      "02-field-deep-quantity",
+      "03-literal-shadow"
+    ]
+  },
+  "files": {
+    "tests/p1188/c254/safety-v2.c": "481bdb133233a3a8f493b597f25dc6bd688e8de3e3e250f7f983f19a4f272dea",
+    "tests/p1188/c254/safety.c": "4de5af6a0200cf47b9a90294ebe01daa490cef7951283f1699fad7c9389dfa81",
+    "tests/p1188/c254/safety-freeze-v1.json": "209e7294e684ef4d46bb7f31e8199763a6aa76bac39cd930e928b77b941cb1a3",
+    "tests/p1188/c254/evidence/safety-v1-build-FIRST.zip": "6d7b16c688fa9310e9a4295aa387acb7947d5a4e3273e403fd12da791ae2a8f1",
+    "tests/p1188/equipment.py": "d3bb77b558fc7a6f3d38ad0cd87300d0d32cb518cf0ada90231c6e46ff6116cd",
+    "tests/p1184/safety.c": "5438ba777840bc18fcf7845ea645b1c573e66d4cdc0bf6791fe1d9398ebf91f8"
+  }
+}

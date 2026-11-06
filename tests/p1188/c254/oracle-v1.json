@@ -1,0 +1,383 @@
+{
+  "authority": "Issue1188 C254 / fixed7b7095 / Draft17.34; independent P-owned complete sources before execution; no R source copied into fixture",
+  "base_HEAD": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+  "base_tree": "f0aebb423a1c38908fde83f219886cf387b3705e",
+  "family": "Available dependency-free flat-u8 prefix binding/discard uses. Root exactly u8 literal or direct selected/sibling field-read snapshot of the same original T current at loop entry, then at most2 pre-loop identifier-to-identifier Copy bindings. The loop use is not another prefix link. No pre-loop intervening Change/root replacement, computed/ref/ptr/closure/dependent roots, helper RETURN, new issuer/general capture. Iteration-local path and existing <=2 usize boundaries unchanged.",
+  "first_barrier": "Five target positives expected old definition-time CHECK P14-LOOP-PRECISION; matched prefix retention and two old controls already accepted. Negative early rejections are recorded honestly; do not infer a masked deeper check.",
+  "native": "Only after source-owned/private current validation and structural before-loop carrier initialization/no result-before-Break checks. Raw and passive use genuine guest computations. Old captured value must stay fixed while selected current changes, including same-bits/zero/one/multiple edges.",
+  "capture_challenges": [
+    "same-bits foreign prefix symbol substitution",
+    "wrong Copy value-use",
+    "source/decl ordering mutation",
+    "prefix availability mutation",
+    "prefix value/dependency mutation",
+    "unrestored foreign display child with B survival via canonical custody machinery"
+  ],
+  "census": "Matched01 and06 share exact pre-loop prefix; compare existing baseline06 against repaired01/06 before any long fault injection. Target no new retained context/graph/seal mechanism; report all real allocation counts, do not reuse old9579.",
+  "cases": {
+    "01-field-before-after": {
+      "class": "target-positive",
+      "baseline_CHECK": 3,
+      "baseline_first": "definition CHECK / P14-LOOP-PRECISION",
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "index": 0,
+      "initial": 72,
+      "peer": 198,
+      "captured": 72,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "incoming": [
+        43,
+        43,
+        186,
+        186
+      ],
+      "old": [
+        72,
+        43,
+        43,
+        186
+      ],
+      "final": 186,
+      "locals": {
+        "old": "old",
+        "old_copy": "old",
+        "incoming": "incoming",
+        "during": "incoming",
+        "beside": "peer",
+        "capture_before": "capture",
+        "capture_after": "capture",
+        "peer_before": "peer",
+        "peer_after": "peer"
+      },
+      "prefix_field_reads": 2,
+      "new_capture_use": true,
+      "source_config": {
+        "index": 0,
+        "initial": 72,
+        "peer": 198,
+        "start": 0,
+        "limit": 4,
+        "step": 1,
+        "test": 2,
+        "low": 43,
+        "high": 186,
+        "kind": "field",
+        "peer_capture": true
+      }
+    },
+    "02-field-deep-quantity": {
+      "class": "target-positive",
+      "baseline_CHECK": 3,
+      "baseline_first": "definition CHECK / P14-LOOP-PRECISION",
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "index": 1,
+      "initial": 11,
+      "peer": 227,
+      "captured": 11,
+      "headers": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "incoming": [
+        11,
+        97,
+        11
+      ],
+      "old": [
+        11,
+        11,
+        97
+      ],
+      "final": 11,
+      "locals": {
+        "old": "old",
+        "old_copy": "old",
+        "incoming": "incoming",
+        "during": "incoming",
+        "beside": "peer",
+        "capture_before": "capture",
+        "capture_after": "capture",
+        "actual_one": "phase",
+        "actual_two": "phase"
+      },
+      "prefix_field_reads": 1,
+      "new_capture_use": true,
+      "source_config": {
+        "index": 1,
+        "initial": 11,
+        "peer": 227,
+        "start": 1,
+        "limit": 6,
+        "step": 2,
+        "test": 3,
+        "low": 97,
+        "high": 11,
+        "kind": "deep",
+        "eq": true,
+        "quantities": true
+      }
+    },
+    "03-literal-shadow": {
+      "class": "target-positive",
+      "baseline_CHECK": 3,
+      "baseline_first": "definition CHECK / P14-LOOP-PRECISION",
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "index": 0,
+      "initial": 163,
+      "peer": 244,
+      "captured": 163,
+      "headers": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "incoming": [
+        163,
+        29,
+        29
+      ],
+      "old": [
+        163,
+        163,
+        29
+      ],
+      "final": 29,
+      "locals": {
+        "old": "old",
+        "old_copy": "old",
+        "incoming": "incoming",
+        "during": "incoming",
+        "beside": "peer",
+        "capture_before": "capture",
+        "capture_after": "capture",
+        "memo": 197,
+        "local_shadow": 197,
+        "after_shadow": 197
+      },
+      "prefix_field_reads": 0,
+      "new_capture_use": true,
+      "source_config": {
+        "index": 0,
+        "initial": 163,
+        "peer": 244,
+        "start": 0,
+        "limit": 3,
+        "step": 1,
+        "test": 1,
+        "low": 163,
+        "high": 29,
+        "kind": "literal",
+        "shadow": true
+      }
+    },
+    "04-zero-edge": {
+      "class": "target-positive",
+      "baseline_CHECK": 3,
+      "baseline_first": "definition CHECK / P14-LOOP-PRECISION",
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "index": 1,
+      "initial": 58,
+      "peer": 218,
+      "captured": 58,
+      "headers": [
+        4
+      ],
+      "incoming": [],
+      "old": [],
+      "final": 58,
+      "locals": {
+        "old": "old",
+        "old_copy": "old",
+        "incoming": "incoming",
+        "during": "incoming",
+        "beside": "peer",
+        "capture_before": "capture",
+        "capture_after": "capture"
+      },
+      "prefix_field_reads": 1,
+      "new_capture_use": true,
+      "source_config": {
+        "index": 1,
+        "initial": 58,
+        "peer": 218,
+        "start": 4,
+        "limit": 4,
+        "step": 1,
+        "test": 2,
+        "low": 37,
+        "high": 204,
+        "kind": "field"
+      }
+    },
+    "05-one-edge": {
+      "class": "target-positive",
+      "baseline_CHECK": 3,
+      "baseline_first": "definition CHECK / P14-LOOP-PRECISION",
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "index": 1,
+      "initial": 84,
+      "peer": 212,
+      "captured": 84,
+      "headers": [
+        2,
+        5
+      ],
+      "incoming": [
+        151
+      ],
+      "old": [
+        84
+      ],
+      "final": 151,
+      "locals": {
+        "old": "old",
+        "old_copy": "old",
+        "incoming": "incoming",
+        "during": "incoming",
+        "beside": "peer",
+        "capture_before": "capture",
+        "capture_after": "capture"
+      },
+      "prefix_field_reads": 1,
+      "new_capture_use": true,
+      "source_config": {
+        "index": 1,
+        "initial": 84,
+        "peer": 212,
+        "start": 2,
+        "limit": 3,
+        "step": 3,
+        "test": 2,
+        "low": 38,
+        "high": 151,
+        "kind": "direct"
+      }
+    },
+    "06-prefix-retention-control": {
+      "class": "matched-prefix-control",
+      "baseline_CHECK": 0,
+      "baseline_first": "accepted",
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "index": 0,
+      "initial": 72,
+      "peer": 198,
+      "captured": 72,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "incoming": [
+        43,
+        43,
+        186,
+        186
+      ],
+      "old": [
+        72,
+        43,
+        43,
+        186
+      ],
+      "final": 186,
+      "locals": {
+        "old": "old",
+        "old_copy": "old",
+        "incoming": "incoming",
+        "during": "incoming",
+        "beside": "peer"
+      },
+      "prefix_field_reads": 2,
+      "new_capture_use": false,
+      "source_config": {
+        "index": 0,
+        "initial": 72,
+        "peer": 198,
+        "start": 0,
+        "limit": 4,
+        "step": 1,
+        "test": 2,
+        "low": 43,
+        "high": 186,
+        "kind": "field",
+        "peer_capture": true,
+        "matched": true
+      }
+    },
+    "90-third-prefix-copy": {
+      "class": "negative-boundary",
+      "baseline_CHECK": 3,
+      "target_CHECK": 3,
+      "target_C17": "reject",
+      "reason": "legal beyond selected two prefix identifier-to-identifier Copy links"
+    },
+    "91-call-root": {
+      "class": "negative-boundary",
+      "baseline_CHECK": 3,
+      "target_CHECK": 3,
+      "target_C17": "reject",
+      "reason": "legal pre-loop computed call root; finite inherited roots are literal/entry-current original-field snapshots"
+    },
+    "92-outer-quantity": {
+      "class": "negative-boundary",
+      "baseline_CHECK": 3,
+      "target_CHECK": 3,
+      "target_C17": "reject",
+      "reason": "legal outer usize is not iteration phase provenance; new path is flat-u8 only"
+    },
+    "93-ending-loan": {
+      "class": "negative-boundary",
+      "baseline_CHECK": 1,
+      "target_CHECK": 1,
+      "target_C17": "reject",
+      "reason": "invalid ending loan escapes before loop; require existing scope rejection"
+    },
+    "94-source-order": {
+      "class": "negative-boundary",
+      "baseline_CHECK": 1,
+      "target_CHECK": 1,
+      "target_C17": "reject",
+      "reason": "invalid use before enclosing declaration"
+    },
+    "95-shadow-quantity": {
+      "class": "negative-boundary",
+      "baseline_CHECK": 3,
+      "target_CHECK": 3,
+      "target_C17": "reject",
+      "reason": "same spelling binds a fresh wrong-origin usize; do not resolve captured u8 by name alone"
+    },
+    "80-helper-control": {
+      "class": "existing-byte-control",
+      "baseline_CHECK": 0,
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "original_source": "tests/p1188/sources/80-direct-control.nl",
+      "golden_sha256": "97a2009034ff9776406b39aee11c959d03db69f7f3beac1cd417dcefae28324a"
+    },
+    "81-inline-control": {
+      "class": "existing-byte-control",
+      "baseline_CHECK": 0,
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "original_source": "tests/p1188/c250a/sources/80-inline-control.nl",
+      "golden_sha256": "c61b72bdbb136e2a29465498cea658a31893103e2ae8cbf97ff6664461425cae"
+    }
+  }
+}

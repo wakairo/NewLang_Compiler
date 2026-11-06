@@ -1,0 +1,18 @@
+{
+  "authority": "C254 pre-execution capture challenge freeze, six categories (plus six original negative source profiles = twelve bounded negative/challenge categories)",
+  "oracle": {
+    "restored_per_source": 14,
+    "foreign_per_source": 1,
+    "output_unchanged": true,
+    "revalidate_after_restore": true,
+    "unrestored_A_destroy_B_survive": true,
+    "sources": [
+      "01-field-before-after",
+      "02-field-deep-quantity",
+      "03-literal-shadow"
+    ]
+  },
+  "files": {
+    "tests/p1188/c254/safety.c": "4de5af6a0200cf47b9a90294ebe01daa490cef7951283f1699fad7c9389dfa81"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "authority": "C250a post-repair structure-gated native equipment frozen before execution; original baseline equipment retained",
+  "previous": {
+    "path": "tests/p1188/c250a/equipment-freeze-v1.json",
+    "sha256": "a759c5fee44e0a3597e328627067b2c058da4a8abaff6f7ecd711b03c3119247"
+  },
+  "files": {
+    "tests/p1188/c250a/probe.c": "4ec47c3246e9d7a38e4b9b68da3175d31cd0bc2a82102dada476f0a1439d2782",
+    "tests/p1188/c250a/mapping.py": "1e361a4ed3b1a6e421f4bdbf3662878e391c03bfe10335209c7e1dd7320b73f0",
+    "tests/p1188/c250a/baseline.py": "f2f57a1e4143e4485a4f565809a33d67f43a85333d8b8cbd1b963b0c519a22e1",
+    "tests/p1188/c250a/run.py": "04d3193aa9b9249de46494326deaeed4bd99a47d1775edb66f2e6dc156075254",
+    "tests/p1188/c250a/source-freeze-v1.json": "0307be2349d9ce583b2948fed39fdfc76114a9f33ccc4d465f66b7b18d964902",
+    "tests/p1188/c250a/oracle-v1.json": "4882bce90d65c3e02ec2e3bc7f239f18ed848deb9669aa4f371fe43585aa3689",
+    "tests/p1188/c250a/equipment-freeze-v1.json": "a759c5fee44e0a3597e328627067b2c058da4a8abaff6f7ecd711b03c3119247",
+    "tests/p1188/c250a/sources/01-direct-helper.nl": "6413052c2c41b16ec28853ac4404f86774c11efd1c28824d3bb4bbf34b67c9ce",
+    "tests/p1188/c250a/sources/02-one-alias.nl": "97113c41286b78bc92cabb2e68dee9007c00fafb85034117ce896d292e93b826",
+    "tests/p1188/c250a/sources/03-two-alias.nl": "1654f04b70b900dc387c495a270f953f6e8184087be996653c9e34fef244d4d5",
+    "tests/p1188/c250a/sources/04-literal-discard.nl": "e9d9b961a770c9db16090fe1049aea2ee43dd6c806cea84cbb7da8c8640264a5",
+    "tests/p1188/c250a/sources/80-inline-control.nl": "b44db6b770275cc386e3f8a788b28936c5e21285c002635f1bddd9125398d279",
+    "tests/p1188/c250a/sources/81-helper-control.nl": "113b453e8207cec661a803f2173a3ad785d5e1d6d67f75737c03ac7ac15036d7",
+    "tests/p1188/c250a/evidence/80-inline-control.c17": "c61b72bdbb136e2a29465498cea658a31893103e2ae8cbf97ff6664461425cae",
+    "tests/p1188/c250a/evidence/81-helper-control.c17": "97a2009034ff9776406b39aee11c959d03db69f7f3beac1cd417dcefae28324a"
+  }
+}

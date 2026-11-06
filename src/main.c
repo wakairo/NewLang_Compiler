@@ -2957,22 +2957,57 @@ static bool emit_current_selection(FILE *stream, const NLLinearBreakView *p,
            fprintf(stream, "(void)nl_local_%zu;\n", binding) >= 0;
 }
 
+static bool emit_current_quantity(FILE *stream, const NLLinearBreakView *p,
+                                  NLCheckedNodeId loop,
+                                  const NLCheckedNodeView *value)
+{
+    return value && value->kind == NL_CHECKED_IDENTIFIER &&
+                   value->symbol == p->phase_symbol
+               ? fprintf(stream, "nl_loop_phase_%zu", loop) >= 0
+               : value && v1_emit_scalar(stream, value);
+}
+
+static bool emit_current_copy(FILE *stream, const NLLinearBreakView *p,
+                              NLCheckedNodeId loop,
+                              const NLCheckedNodeView *binding, size_t depth)
+{
+    const NLCheckedNodeView *init =
+        nl_checked_node_view(p->iteration, binding->initializer);
+    return v0_indent(stream, depth) &&
+           fprintf(stream, "const size_t nl_local_%zu = ", binding->symbol) >=
+               0 &&
+           emit_current_quantity(stream, p, loop, init) &&
+           fputs(";\n", stream) >= 0 && v0_indent(stream, depth) &&
+           fprintf(stream, "(void)nl_local_%zu;\n", binding->symbol) >= 0;
+}
+
+static bool emit_current_discard(FILE *stream, const NLLinearBreakView *p,
+                                 NLCheckedNodeId loop,
+                                 const NLCheckedNodeView *value, size_t depth)
+{
+    return v0_indent(stream, depth) && fputs("(void)", stream) >= 0 &&
+           emit_current_quantity(stream, p, loop, value) &&
+           fputs(";\n", stream) >= 0;
+}
+
 static bool emit_current_helper(FILE *stream, const NLLinearBreakView *p,
                                 NLCheckedNodeId loop, NLSymbolId binding,
                                 size_t depth)
 {
     const NLCheckedNodeView *call =
         nl_checked_node_view(p->iteration, p->incoming_call);
-    return call && v0_indent(stream, depth) &&
-           fprintf(
-               stream,
-               "const uint8_t nl_local_%zu = nl_fn_%zu(nl_loop_phase_%zu);\n",
-               binding, call->function, loop) >= 0 &&
-           v0_indent(stream, depth) &&
+    const NLCheckedNodeView *actual =
+        call ? nl_checked_node_view(p->iteration, call->first_argument) : NULL;
+    return call && actual && v0_indent(stream, depth) &&
+           fprintf(stream, "const uint8_t nl_local_%zu = nl_fn_%zu(", binding,
+                   call->function) >= 0 &&
+           emit_current_quantity(stream, p, loop, actual) &&
+           fputs(");\n", stream) >= 0 && v0_indent(stream, depth) &&
            fprintf(stream, "(void)nl_local_%zu;\n", binding) >= 0;
 }
 
 static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
+                              const NLCheckedFragment *caller,
                               NLCheckedNodeId id, NLSymbolId result,
                               size_t depth)
 {
@@ -2981,13 +3016,18 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
         nl_checked_node_view(arm, nl_checked_root(arm));
     const NLCheckedNodeView *block =
         wrapper ? nl_checked_node_view(arm, wrapper->initializer) : NULL;
-    if (!block || !v0_indent(stream, depth) ||
+    const NLCheckedNodeView *initial =
+        nl_checked_node_view(caller, p->initial_node);
+    if (!block || !initial || !v0_indent(stream, depth) ||
         fprintf(stream, "size_t nl_local_%zu;\n", result) < 0 ||
         !v0_indent(stream, depth) ||
-        fprintf(stream, "size_t nl_loop_carry_%zu = (size_t)UINTMAX_C(%zu);\n",
-                id, p->initial_phase) < 0 ||
-        !v0_indent(stream, depth) || fputs("for (;;) {\n", stream) < 0 ||
-        !v0_indent(stream, depth + 1) ||
+        fprintf(stream, "size_t nl_loop_carry_%zu = ", id) < 0 ||
+        !(initial->kind == NL_CHECKED_USIZE_LITERAL
+              ? fprintf(stream, "(size_t)UINTMAX_C(%zu)",
+                        initial->scalar_result.value) >= 0
+              : v1_emit_scalar(stream, initial)) ||
+        fputs(";\n", stream) < 0 || !v0_indent(stream, depth) ||
+        fputs("for (;;) {\n", stream) < 0 || !v0_indent(stream, depth + 1) ||
         fprintf(stream, "const size_t nl_loop_phase_%zu = nl_loop_carry_%zu;\n",
                 id, id) < 0 ||
         !v0_indent(stream, depth + 1) ||
@@ -3002,8 +3042,22 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
     NLCheckedNodeId item = block->first_item;
     while (item && item != p->continue_node) {
         const NLCheckedNodeView *n = nl_checked_node_view(arm, item);
+        const NLCheckedNodeView *receiver =
+            n && n->kind == NL_CHECKED_BINDING
+                ? nl_checked_node_view(arm, n->first_argument)
+                : NULL;
+        const NLCheckedNodeView *discard =
+            n && n->kind == NL_CHECKED_STATEMENT
+                ? nl_checked_node_view(arm, n->initializer)
+                : NULL;
         if (!n ||
-            !(p->incoming_if && n->kind == NL_CHECKED_BINDING &&
+            !(discard && discard->type ==
+                             nl_semantic_core_type(arm->context, NL_TYPE_USIZE)
+                  ? emit_current_discard(stream, p, id, discard, depth + 2)
+              : receiver && receiver->type == nl_semantic_core_type(
+                                                  arm->context, NL_TYPE_USIZE)
+                  ? emit_current_copy(stream, p, id, n, depth + 2)
+              : p->incoming_if && n->kind == NL_CHECKED_BINDING &&
                       n->initializer == p->incoming_if
                   ? emit_current_selection(stream, p, id, n->symbol, depth + 2)
               : p->incoming_call && n->kind == NL_CHECKED_BINDING &&
@@ -3177,8 +3231,9 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                 NL_CHECK_OK)
                 return false;
             if (proof.changing_current)
-                return emit_current_loop(stream, &proof, view->initializer,
-                                         view->symbol, depth);
+                return emit_current_loop(stream, &proof, fragment,
+                                         view->initializer, view->symbol,
+                                         depth);
             if (proof.scalar_loop)
                 return emit_scalar_loop(stream, &proof, view->initializer,
                                         view->symbol, depth);

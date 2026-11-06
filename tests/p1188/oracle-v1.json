@@ -1,0 +1,172 @@
+{
+  "authority": "Issue1188 C247 / unadopted faad092b5b0deb608a048ff60bee0056082f9a59 / Draft17.34",
+  "prediction": {
+    "initializer": "current_source_shape requires direct usize literal and current_relation requires a literal initial node",
+    "actual": "current_scalar_source/current_pure_call require the call actual to be the direct phase identifier",
+    "formal": "current_pure_call requires the comparison left operand to be the fresh formal directly",
+    "expected_first_public_boundary": "normal CLI --check/backend admission returns status 3 for new positives; direct controls stay accepted"
+  },
+  "finite_support": "one or two ordinary usize Copy bindings at each of initializer, helper actual, and helper formal-left boundary",
+  "cases": {
+    "01-init-one": {
+      "category": "positive",
+      "boundary": "initializer",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 0,
+      "target_emit": 0
+    },
+    "02-actual-one": {
+      "category": "positive",
+      "boundary": "actual",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 0,
+      "target_emit": 0
+    },
+    "03-formal-one": {
+      "category": "positive",
+      "boundary": "formal",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 0,
+      "target_emit": 0
+    },
+    "04-all-one": {
+      "category": "positive",
+      "boundary": "combined",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 0,
+      "target_emit": 0
+    },
+    "05-all-two": {
+      "category": "positive",
+      "boundary": "combined",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 0,
+      "target_emit": 0
+    },
+    "06-eq-two": {
+      "category": "positive",
+      "boundary": "combined",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 0,
+      "target_emit": 0
+    },
+    "80-direct-control": {
+      "category": "control",
+      "boundary": "combined",
+      "fixed_candidate_check": 0,
+      "fixed_candidate_emit": 0,
+      "target_check": 0,
+      "target_emit": 0
+    },
+    "81-result-control": {
+      "category": "control",
+      "boundary": "combined",
+      "fixed_candidate_check": 0,
+      "fixed_candidate_emit": 0,
+      "target_check": 0,
+      "target_emit": 0
+    },
+    "90-foreign-actual-literal": {
+      "category": "negative",
+      "boundary": "actual",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    },
+    "91-foreign-actual-outer": {
+      "category": "negative",
+      "boundary": "actual",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    },
+    "92-foreign-formal-literal": {
+      "category": "negative",
+      "boundary": "formal",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    },
+    "93-actual-arithmetic": {
+      "category": "negative",
+      "boundary": "actual",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    },
+    "94-formal-arithmetic": {
+      "category": "negative",
+      "boundary": "formal",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    },
+    "95-init-arithmetic": {
+      "category": "negative",
+      "boundary": "initializer",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    },
+    "96-init-chain-three": {
+      "category": "negative",
+      "boundary": "initializer",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    },
+    "97-actual-chain-three": {
+      "category": "negative",
+      "boundary": "actual",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    },
+    "98-formal-chain-three": {
+      "category": "negative",
+      "boundary": "formal",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    },
+    "99-wrong-actual-type": {
+      "category": "negative",
+      "boundary": "actual",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    },
+    "100-wrong-formal-type": {
+      "category": "negative",
+      "boundary": "formal",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    },
+    "101-rhs-alias": {
+      "category": "negative",
+      "boundary": "formal",
+      "fixed_candidate_check": 3,
+      "fixed_candidate_emit": 3,
+      "target_check": 3,
+      "target_emit": 3
+    }
+  }
+}

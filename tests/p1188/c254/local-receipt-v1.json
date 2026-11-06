@@ -1,0 +1,39 @@
+{
+  "authority": "C254 fresh measurements; original source/oracle/equipment FIRST retained",
+  "production_head": "77df30b00768bf7f814f2de58210b36eaae3cde4",
+  "native": {
+    "strict_gcc_clang_O0_O2_raw_passive": 48,
+    "positive_sources": 6,
+    "negative_sources": 6,
+    "old_byte_controls": 2
+  },
+  "reached_oom": {
+    "01": {
+      "registration": 1183,
+      "actual": 1314,
+      "named": 2667
+    },
+    "02": {
+      "registration": 1282,
+      "actual": 1426,
+      "named": 2884
+    },
+    "total": 10756
+  },
+  "retention": {
+    "additional_contexts": 30,
+    "peak": 32,
+    "graphs": 7,
+    "cleanup_live": 0,
+    "untracked": 0,
+    "matched_baseline_delta": 0
+  },
+  "capture": {
+    "sources": 3,
+    "restored_per_source": 14,
+    "foreign_per_source": 1,
+    "categories": 6
+  },
+  "archive": "tests/p1188/c254/evidence/local-finite-v1.zip",
+  "archive_sha256": "9daeb75ca5d889d8c6763eb2ecbe5f51517bdeaf8a39027fdf619bed3e449cc6"
+}
