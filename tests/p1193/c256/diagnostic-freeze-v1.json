@@ -1,0 +1,7 @@
+{
+  "candidate": "8acb0db",
+  "purpose": "isolate remaining first CHECK RED, observe exact helper source graph and private contents, no guest",
+  "files": {
+    "tests/p1193/c256/diagnostic-v1.c": "79aaa0ad747c62ac45a21a6cdcec39b66571979214090e2e3f16943ba54e6f0c"
+  }
+}

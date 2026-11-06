@@ -120,9 +120,10 @@ static bool predicate_arm(PredicateWalk *w, NLCheckedNodeId id, size_t index)
                predicate_return(arm, ret, 0, w->body->function_target) &&
                copy_if_gap(arm->source, block->span.start_byte,
                            ret->span.start_byte, "{") &&
-               ret->span.end_byte == tail->span.end_byte &&
-               copy_if_gap(arm->source, tail->span.end_byte,
-                           block->span.end_byte, ";}");
+               copy_if_gap(arm->source, tail->span.end_byte, ret->span.end_byte,
+                           ";") &&
+               copy_if_gap(arm->source, ret->span.end_byte,
+                           block->span.end_byte, "}");
     }
     return nl_checked_node_count(arm) == 3 && !block->terminates &&
            !block->first_item && !block->item_count && root->type == w->u8 &&
