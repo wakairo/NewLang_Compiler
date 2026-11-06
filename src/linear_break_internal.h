@@ -20,6 +20,10 @@ typedef struct {
     bool scalar_loop; /* free usize normal result, no field authority */
     bool changing_current;
     const NLCheckedFragment *iteration;
+    /* Borrowed only after complete current/exit validation. The actual Break
+     * operand is distinct from the runtime phase and the caller summary. */
+    const NLCheckedFragment *breaking;
+    NLCheckedNodeId break_value;
     NLCheckedNodeId continue_node;
     NLCheckedNodeId initial_node; /* caller-owned authenticated Copy source */
     NLCheckedNodeId incoming_if; /* authenticated iteration-local scalar join */
