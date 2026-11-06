@@ -1,0 +1,1328 @@
+{
+  "format": "R1190-C248-PREFREEZE-FIRST-1",
+  "status": "NOT_RUN",
+  "derivation": "Manually authored numerical predictions from canonical Draft17.34. No guest interpreter, compiler, AST construction, build, native process, or observed outputs used.",
+  "columns": [
+    "iteration",
+    "phase",
+    "outer_guard",
+    "actual_copy_values",
+    "helper_actual",
+    "fresh_formal",
+    "formal_copy_values",
+    "helper_condition",
+    "helper_normal",
+    "selected_before",
+    "old_result",
+    "old_copy",
+    "selected_after",
+    "sibling",
+    "entry_copy",
+    "continue_out",
+    "break_normal"
+  ],
+  "meanings": {
+    "actual_copy_values": "one element per additional ordinary identifier Copy link after the actual iteration binding; excludes the ordinary argument-to-fresh-formal receive",
+    "formal_copy_values": "one element per additional ordinary identifier Copy link after this call's fresh formal",
+    "helper_normal": "also the expected values of caller from_call and replacement",
+    "selected_before": "semantic state at this iteration; on Break row the before_selected source binding is not evaluated",
+    "selected_after": "semantic state after this iteration's selected branch; on Break row retained state, not an executed current binding",
+    "null": "operation is not executed on that row",
+    "break_normal": "actual iteration phase returned by break; excludes helper normal u8 result",
+    "entry_copy": "u8 snapshot made before loop, retained across Changes",
+    "fresh_formal": "same numeric actual but a distinct fresh parameter binding for every executed call",
+    "legality_vs_coverage": "X cases are canonical legal but outside the released <=2-link increment; numeric traces are conditional semantic predictions, not a demand for acceptance"
+  },
+  "canonical_authority": {
+    "commit": "63658cd546be8b99599baf19476486a475adb320",
+    "tree": "a376e3c6e111f7283daa8be82d766dc0282c16b2",
+    "draft": "17.34"
+  },
+  "cases": [
+    {
+      "id": "C0",
+      "kind": "control",
+      "source": "sources/C0.nl",
+      "title": "ordinary direct path",
+      "links_initializer_actual_formal": [
+        0,
+        0,
+        0
+      ],
+      "record": "Datum",
+      "selected_field": "ripple",
+      "selected_index": 1,
+      "sibling_field": "anchor",
+      "initial_record": {
+        "anchor": 157,
+        "ripple": 33
+      },
+      "declaration_order": "helper-first",
+      "canonical_refs": [
+        "4.2",
+        "4.4",
+        "4.7",
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 two-u8",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "Source and semantic type/flow eligibility should succeed for the declared finite profile. First delta-sensitive gate is semantic usize fact/Copy propagation at the selected boundary. Candidate acceptance and public-owned applicability are unobserved; no native prediction is an execution claim.",
+      "seed": {
+        "origin": 2,
+        "copies": []
+      },
+      "trace": [
+        [
+          0,
+          2,
+          true,
+          [],
+          2,
+          2,
+          [],
+          true,
+          21,
+          33,
+          33,
+          33,
+          21,
+          157,
+          33,
+          5,
+          null
+        ],
+        [
+          1,
+          5,
+          true,
+          [],
+          5,
+          5,
+          [],
+          false,
+          46,
+          21,
+          21,
+          21,
+          46,
+          157,
+          33,
+          8,
+          null
+        ],
+        [
+          2,
+          8,
+          false,
+          [],
+          null,
+          null,
+          [],
+          null,
+          null,
+          46,
+          null,
+          null,
+          46,
+          157,
+          33,
+          null,
+          8
+        ]
+      ],
+      "terminal": {
+        "break_value": 8,
+        "break_copy": 8,
+        "post_selected": 46,
+        "post_sibling": 157,
+        "entry_after": 33
+      },
+      "invalid_detail": null
+    },
+    {
+      "id": "P1",
+      "kind": "positive",
+      "source": "sources/P1.nl",
+      "title": "seed one link zero-trip",
+      "links_initializer_actual_formal": [
+        1,
+        0,
+        0
+      ],
+      "record": "Slate",
+      "selected_field": "glyph",
+      "selected_index": 0,
+      "sibling_field": "bead",
+      "initial_record": {
+        "glyph": 59,
+        "bead": 181
+      },
+      "declaration_order": "main-first",
+      "canonical_refs": [
+        "4.2",
+        "4.4",
+        "4.7",
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 two-u8",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "Source and semantic type/flow eligibility should succeed for the declared finite profile. First delta-sensitive gate is semantic usize fact/Copy propagation at the selected boundary. Candidate acceptance and public-owned applicability are unobserved; no native prediction is an execution claim.",
+      "seed": {
+        "origin": 42,
+        "copies": [
+          42
+        ]
+      },
+      "trace": [
+        [
+          0,
+          42,
+          false,
+          [],
+          null,
+          null,
+          [],
+          null,
+          null,
+          59,
+          null,
+          null,
+          59,
+          181,
+          59,
+          null,
+          42
+        ]
+      ],
+      "terminal": {
+        "break_value": 42,
+        "break_copy": 42,
+        "post_selected": 59,
+        "post_sibling": 181,
+        "entry_after": 59
+      },
+      "invalid_detail": null
+    },
+    {
+      "id": "P2",
+      "kind": "positive",
+      "source": "sources/P2.nl",
+      "title": "seed two links with outer name shadow",
+      "links_initializer_actual_formal": [
+        2,
+        0,
+        0
+      ],
+      "record": "Beacon",
+      "selected_field": "crest",
+      "selected_index": 0,
+      "sibling_field": "knot",
+      "initial_record": {
+        "crest": 41,
+        "knot": 193
+      },
+      "declaration_order": "main-first",
+      "canonical_refs": [
+        "4.2",
+        "4.4",
+        "4.7",
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 two-u8",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "Source and semantic type/flow eligibility should succeed for the declared finite profile. First delta-sensitive gate is semantic usize fact/Copy propagation at the selected boundary. Candidate acceptance and public-owned applicability are unobserved; no native prediction is an execution claim.",
+      "seed": {
+        "origin": 9,
+        "copies": [
+          9,
+          9
+        ]
+      },
+      "trace": [
+        [
+          0,
+          9,
+          true,
+          [],
+          9,
+          9,
+          [],
+          true,
+          73,
+          41,
+          41,
+          41,
+          73,
+          193,
+          41,
+          12,
+          null
+        ],
+        [
+          1,
+          12,
+          false,
+          [],
+          null,
+          null,
+          [],
+          null,
+          null,
+          73,
+          null,
+          null,
+          73,
+          193,
+          41,
+          null,
+          12
+        ]
+      ],
+      "terminal": {
+        "break_value": 12,
+        "break_copy": 12,
+        "post_selected": 73,
+        "post_sibling": 193,
+        "entry_after": 41,
+        "seed_after": 9
+      },
+      "invalid_detail": null
+    },
+    {
+      "id": "P3",
+      "kind": "positive",
+      "source": "sources/P3.nl",
+      "title": "actual phase two links across backedges",
+      "links_initializer_actual_formal": [
+        0,
+        2,
+        0
+      ],
+      "record": "Cairn",
+      "selected_field": "flare",
+      "selected_index": 1,
+      "sibling_field": "peg",
+      "initial_record": {
+        "peg": 163,
+        "flare": 25
+      },
+      "declaration_order": "helper-first",
+      "canonical_refs": [
+        "4.2",
+        "4.4",
+        "4.7",
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 two-u8",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "Source and semantic type/flow eligibility should succeed for the declared finite profile. First delta-sensitive gate is semantic usize fact/Copy propagation at the selected boundary. Candidate acceptance and public-owned applicability are unobserved; no native prediction is an execution claim.",
+      "seed": {
+        "origin": 4,
+        "copies": []
+      },
+      "trace": [
+        [
+          0,
+          4,
+          true,
+          [
+            4,
+            4
+          ],
+          4,
+          4,
+          [],
+          true,
+          61,
+          25,
+          25,
+          25,
+          61,
+          163,
+          25,
+          7,
+          null
+        ],
+        [
+          1,
+          7,
+          true,
+          [
+            7,
+            7
+          ],
+          7,
+          7,
+          [],
+          false,
+          89,
+          61,
+          61,
+          61,
+          89,
+          163,
+          25,
+          10,
+          null
+        ],
+        [
+          2,
+          10,
+          true,
+          [
+            10,
+            10
+          ],
+          10,
+          10,
+          [],
+          false,
+          89,
+          89,
+          89,
+          89,
+          89,
+          163,
+          25,
+          13,
+          null
+        ],
+        [
+          3,
+          13,
+          false,
+          [],
+          null,
+          null,
+          [],
+          null,
+          null,
+          89,
+          null,
+          null,
+          89,
+          163,
+          25,
+          null,
+          13
+        ]
+      ],
+      "terminal": {
+        "break_value": 13,
+        "break_copy": 13,
+        "post_selected": 89,
+        "post_sibling": 163,
+        "entry_after": 25
+      },
+      "invalid_detail": null
+    },
+    {
+      "id": "P4",
+      "kind": "positive",
+      "source": "sources/P4.nl",
+      "title": "fresh formal two links with interior EQ hit",
+      "links_initializer_actual_formal": [
+        0,
+        0,
+        2
+      ],
+      "record": "Ribbon",
+      "selected_field": "tone",
+      "selected_index": 0,
+      "sibling_field": "seal",
+      "initial_record": {
+        "tone": 39,
+        "seal": 179
+      },
+      "declaration_order": "main-first",
+      "canonical_refs": [
+        "4.2",
+        "4.4",
+        "4.7",
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 two-u8",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "Source and semantic type/flow eligibility should succeed for the declared finite profile. First delta-sensitive gate is semantic usize fact/Copy propagation at the selected boundary. Candidate acceptance and public-owned applicability are unobserved; no native prediction is an execution claim.",
+      "seed": {
+        "origin": 6,
+        "copies": []
+      },
+      "trace": [
+        [
+          0,
+          6,
+          true,
+          [],
+          6,
+          6,
+          [
+            6,
+            6
+          ],
+          false,
+          82,
+          39,
+          39,
+          39,
+          82,
+          179,
+          39,
+          8,
+          null
+        ],
+        [
+          1,
+          8,
+          true,
+          [],
+          8,
+          8,
+          [
+            8,
+            8
+          ],
+          false,
+          82,
+          82,
+          82,
+          82,
+          82,
+          179,
+          39,
+          10,
+          null
+        ],
+        [
+          2,
+          10,
+          true,
+          [],
+          10,
+          10,
+          [
+            10,
+            10
+          ],
+          true,
+          117,
+          82,
+          82,
+          82,
+          117,
+          179,
+          39,
+          12,
+          null
+        ],
+        [
+          3,
+          12,
+          true,
+          [],
+          12,
+          12,
+          [
+            12,
+            12
+          ],
+          false,
+          82,
+          117,
+          117,
+          117,
+          82,
+          179,
+          39,
+          14,
+          null
+        ],
+        [
+          4,
+          14,
+          false,
+          [],
+          null,
+          null,
+          [],
+          null,
+          null,
+          82,
+          null,
+          null,
+          82,
+          179,
+          39,
+          null,
+          14
+        ]
+      ],
+      "terminal": {
+        "break_value": 14,
+        "break_copy": 14,
+        "post_selected": 82,
+        "post_sibling": 179,
+        "entry_after": 39
+      },
+      "invalid_detail": null
+    },
+    {
+      "id": "P5",
+      "kind": "positive",
+      "source": "sources/P5.nl",
+      "title": "one actual link plus one fresh formal link",
+      "links_initializer_actual_formal": [
+        0,
+        1,
+        1
+      ],
+      "record": "Mosaic",
+      "selected_field": "ink",
+      "selected_index": 1,
+      "sibling_field": "frame",
+      "initial_record": {
+        "frame": 199,
+        "ink": 57
+      },
+      "declaration_order": "helper-first",
+      "canonical_refs": [
+        "4.2",
+        "4.4",
+        "4.7",
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 two-u8",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "Source and semantic type/flow eligibility should succeed for the declared finite profile. First delta-sensitive gate is semantic usize fact/Copy propagation at the selected boundary. Candidate acceptance and public-owned applicability are unobserved; no native prediction is an execution claim.",
+      "seed": {
+        "origin": 1,
+        "copies": []
+      },
+      "trace": [
+        [
+          0,
+          1,
+          true,
+          [
+            1
+          ],
+          1,
+          1,
+          [
+            1
+          ],
+          true,
+          94,
+          57,
+          57,
+          57,
+          94,
+          199,
+          57,
+          3,
+          null
+        ],
+        [
+          1,
+          3,
+          true,
+          [
+            3
+          ],
+          3,
+          3,
+          [
+            3
+          ],
+          true,
+          94,
+          94,
+          94,
+          94,
+          94,
+          199,
+          57,
+          5,
+          null
+        ],
+        [
+          2,
+          5,
+          true,
+          [
+            5
+          ],
+          5,
+          5,
+          [
+            5
+          ],
+          false,
+          132,
+          94,
+          94,
+          94,
+          132,
+          199,
+          57,
+          7,
+          null
+        ],
+        [
+          3,
+          7,
+          false,
+          [],
+          null,
+          null,
+          [],
+          null,
+          null,
+          132,
+          null,
+          null,
+          132,
+          199,
+          57,
+          null,
+          7
+        ]
+      ],
+      "terminal": {
+        "break_value": 7,
+        "break_copy": 7,
+        "post_selected": 132,
+        "post_sibling": 199,
+        "entry_after": 57
+      },
+      "invalid_detail": null
+    },
+    {
+      "id": "X1",
+      "kind": "legal_out_of_scope",
+      "source": "sources/X1.nl",
+      "title": "third seed link",
+      "links_initializer_actual_formal": [
+        3,
+        0,
+        0
+      ],
+      "record": "Keel",
+      "selected_field": "star",
+      "selected_index": 1,
+      "sibling_field": "port",
+      "initial_record": {
+        "port": 167,
+        "star": 47
+      },
+      "declaration_order": "helper-first",
+      "canonical_refs": [
+        "4.2",
+        "4.4",
+        "4.7",
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 two-u8",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "Source and static scalar typing are canonically eligible. Predict conservative refusal at the first bounded alias-analysis / owned-profile eligibility gate if the candidate retains the <=2-link envelope; exact diagnostic/stage unknown. Early refusal does not establish later-layer reach.",
+      "seed": {
+        "origin": 3,
+        "copies": [
+          3,
+          3,
+          3
+        ]
+      },
+      "trace": [
+        [
+          0,
+          3,
+          true,
+          [],
+          3,
+          3,
+          [],
+          true,
+          62,
+          47,
+          47,
+          47,
+          62,
+          167,
+          47,
+          5,
+          null
+        ],
+        [
+          1,
+          5,
+          true,
+          [],
+          5,
+          5,
+          [],
+          false,
+          91,
+          62,
+          62,
+          62,
+          91,
+          167,
+          47,
+          7,
+          null
+        ],
+        [
+          2,
+          7,
+          false,
+          [],
+          null,
+          null,
+          [],
+          null,
+          null,
+          91,
+          null,
+          null,
+          91,
+          167,
+          47,
+          null,
+          7
+        ]
+      ],
+      "terminal": {
+        "break_value": 7,
+        "break_copy": 7,
+        "post_selected": 91,
+        "post_sibling": 167,
+        "entry_after": 47
+      },
+      "invalid_detail": null
+    },
+    {
+      "id": "X2",
+      "kind": "legal_out_of_scope",
+      "source": "sources/X2.nl",
+      "title": "third actual phase link",
+      "links_initializer_actual_formal": [
+        0,
+        3,
+        0
+      ],
+      "record": "Quartz",
+      "selected_field": "flash",
+      "selected_index": 0,
+      "sibling_field": "dot",
+      "initial_record": {
+        "flash": 52,
+        "dot": 173
+      },
+      "declaration_order": "main-first",
+      "canonical_refs": [
+        "4.2",
+        "4.4",
+        "4.7",
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 two-u8",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "Source and static scalar typing are canonically eligible. Predict conservative refusal at the first bounded alias-analysis / owned-profile eligibility gate if the candidate retains the <=2-link envelope; exact diagnostic/stage unknown. Early refusal does not establish later-layer reach.",
+      "seed": {
+        "origin": 2,
+        "copies": []
+      },
+      "trace": [
+        [
+          0,
+          2,
+          true,
+          [
+            2,
+            2,
+            2
+          ],
+          2,
+          2,
+          [],
+          false,
+          76,
+          52,
+          52,
+          52,
+          76,
+          173,
+          52,
+          5,
+          null
+        ],
+        [
+          1,
+          5,
+          true,
+          [
+            5,
+            5,
+            5
+          ],
+          5,
+          5,
+          [],
+          true,
+          124,
+          76,
+          76,
+          76,
+          124,
+          173,
+          52,
+          8,
+          null
+        ],
+        [
+          2,
+          8,
+          false,
+          [],
+          null,
+          null,
+          [],
+          null,
+          null,
+          124,
+          null,
+          null,
+          124,
+          173,
+          52,
+          null,
+          8
+        ]
+      ],
+      "terminal": {
+        "break_value": 8,
+        "break_copy": 8,
+        "post_selected": 124,
+        "post_sibling": 173,
+        "entry_after": 52
+      },
+      "invalid_detail": null
+    },
+    {
+      "id": "X3",
+      "kind": "legal_out_of_scope",
+      "source": "sources/X3.nl",
+      "title": "third formal link",
+      "links_initializer_actual_formal": [
+        0,
+        0,
+        3
+      ],
+      "record": "Vela",
+      "selected_field": "glow",
+      "selected_index": 1,
+      "sibling_field": "rim",
+      "initial_record": {
+        "rim": 187,
+        "glow": 45
+      },
+      "declaration_order": "helper-first",
+      "canonical_refs": [
+        "4.2",
+        "4.4",
+        "4.7",
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 two-u8",
+        "17.4",
+        "18.1",
+        "18.2",
+        "18.5",
+        "19.1",
+        "27.1",
+        "27.4",
+        "27.5",
+        "27.6",
+        "27.7",
+        "27.8"
+      ],
+      "predicted_first_layer": "Source and static scalar typing are canonically eligible. Predict conservative refusal at the first bounded alias-analysis / owned-profile eligibility gate if the candidate retains the <=2-link envelope; exact diagnostic/stage unknown. Early refusal does not establish later-layer reach.",
+      "seed": {
+        "origin": 1,
+        "copies": []
+      },
+      "trace": [
+        [
+          0,
+          1,
+          true,
+          [],
+          1,
+          1,
+          [
+            1,
+            1,
+            1
+          ],
+          true,
+          98,
+          45,
+          45,
+          45,
+          98,
+          187,
+          45,
+          3,
+          null
+        ],
+        [
+          1,
+          3,
+          true,
+          [],
+          3,
+          3,
+          [
+            3,
+            3,
+            3
+          ],
+          true,
+          98,
+          98,
+          98,
+          98,
+          98,
+          187,
+          45,
+          5,
+          null
+        ],
+        [
+          2,
+          5,
+          true,
+          [],
+          5,
+          5,
+          [
+            5,
+            5,
+            5
+          ],
+          false,
+          136,
+          98,
+          98,
+          98,
+          136,
+          187,
+          45,
+          7,
+          null
+        ],
+        [
+          3,
+          7,
+          false,
+          [],
+          null,
+          null,
+          [],
+          null,
+          null,
+          136,
+          null,
+          null,
+          136,
+          187,
+          45,
+          null,
+          7
+        ]
+      ],
+      "terminal": {
+        "break_value": 7,
+        "break_copy": 7,
+        "post_selected": 136,
+        "post_sibling": 187,
+        "entry_after": 45
+      },
+      "invalid_detail": null
+    },
+    {
+      "id": "N1",
+      "kind": "invalid",
+      "source": "sources/N1.nl",
+      "title": "u8 actual cannot become usize formal by Copy",
+      "links_initializer_actual_formal": [
+        0,
+        "u8-not-phase",
+        0
+      ],
+      "record": "Spindle",
+      "selected_field": "tip",
+      "selected_index": 1,
+      "sibling_field": "hub",
+      "initial_record": {
+        "hub": 151,
+        "tip": 31
+      },
+      "declaration_order": "helper-first",
+      "canonical_refs": [
+        "4.2",
+        "4.7",
+        "5.6",
+        "18.1",
+        "18.2"
+      ],
+      "predicted_first_layer": "semantic call argument/static-type compatibility, before successful caller semantic CHECK or any owned/backend gate",
+      "seed": null,
+      "trace": null,
+      "terminal": null,
+      "invalid_detail": {
+        "canonical_refs": [
+          "4.2",
+          "4.7",
+          "5.6",
+          "18.1",
+          "18.2"
+        ],
+        "reason": "argument_two has static type u8 after an ordinary Copy; meter requires usize. There is no explicit usize(argument_two) conversion.",
+        "predicted_first_rejection": "semantic call argument/static-type compatibility, before successful caller semantic CHECK or any owned/backend gate",
+        "runtime_trace": "NONE: invalid source has no normative execution trace; no reached alias/provenance/loan/native claim"
+      }
+    },
+    {
+      "id": "N2",
+      "kind": "invalid",
+      "source": "sources/N2.nl",
+      "title": "usize Copy cannot supply bool condition",
+      "links_initializer_actual_formal": [
+        0,
+        0,
+        2
+      ],
+      "record": "Petal",
+      "selected_field": "shade",
+      "selected_index": 0,
+      "sibling_field": "stem",
+      "initial_record": {
+        "shade": 43,
+        "stem": 159
+      },
+      "declaration_order": "helper-first",
+      "canonical_refs": [
+        "4.2",
+        "4.7",
+        "18.1",
+        "27.4"
+      ],
+      "predicted_first_layer": "helper definition-time IF condition typing, before any call-site or loan proof",
+      "seed": null,
+      "trace": null,
+      "terminal": null,
+      "invalid_detail": {
+        "canonical_refs": [
+          "4.2",
+          "4.7",
+          "18.1",
+          "27.4"
+        ],
+        "reason": "condition_two remains usize; IF requires bool. Copy is not comparison or numeric-to-bool conversion.",
+        "predicted_first_rejection": "helper definition-time IF condition typing, before any call-site or loan proof",
+        "runtime_trace": "NONE: invalid source has no normative execution trace"
+      }
+    },
+    {
+      "id": "N3",
+      "kind": "invalid",
+      "source": "sources/N3.nl",
+      "title": "Continue u8 must not enter usize header",
+      "links_initializer_actual_formal": [
+        0,
+        0,
+        0
+      ],
+      "record": "Tidal",
+      "selected_field": "crest",
+      "selected_index": 1,
+      "sibling_field": "wake",
+      "initial_record": {
+        "wake": 191,
+        "crest": 53
+      },
+      "declaration_order": "helper-first",
+      "canonical_refs": [
+        "27.5",
+        "27.6"
+      ],
+      "predicted_first_layer": "semantic loop Continue edge type compatibility, before successful whole-program semantic CHECK/owned eligibility",
+      "seed": null,
+      "trace": null,
+      "terminal": null,
+      "invalid_detail": {
+        "canonical_refs": [
+          "27.5",
+          "27.6"
+        ],
+        "reason": "loop phase is usize from usize(4), but continue carries u8(6). Corresponding static types must be exactly equal.",
+        "predicted_first_rejection": "semantic loop Continue edge type compatibility, before successful whole-program semantic CHECK/owned eligibility",
+        "runtime_trace": "NONE: a hypothetical local prefix is not evidence of normative execution or later checks"
+      }
+    },
+    {
+      "id": "N4",
+      "kind": "invalid",
+      "source": "sources/N4.nl",
+      "title": "IF normal arm types differ",
+      "links_initializer_actual_formal": [
+        0,
+        0,
+        0
+      ],
+      "record": "Orbit",
+      "selected_field": "ray",
+      "selected_index": 0,
+      "sibling_field": "arc",
+      "initial_record": {
+        "ray": 49,
+        "arc": 183
+      },
+      "declaration_order": "helper-first",
+      "canonical_refs": [
+        "18.5",
+        "27.4"
+      ],
+      "predicted_first_layer": "helper definition-time normal IF arm type join; declared u8 result does not repair the join",
+      "seed": null,
+      "trace": null,
+      "terminal": null,
+      "invalid_detail": {
+        "canonical_refs": [
+          "18.5",
+          "27.4"
+        ],
+        "reason": "normal IF arms return u8(79) and usize(122). Normal arm result types must be exactly equal; no implicit numeric conversion at the join.",
+        "predicted_first_rejection": "helper definition-time normal IF arm type join; declared u8 result does not repair the join",
+        "runtime_trace": "NONE: invalid source has no normative execution trace"
+      }
+    }
+  ]
+}

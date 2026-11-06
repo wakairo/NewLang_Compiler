@@ -1,0 +1,155 @@
+{
+  "format": "R1190-C248-PREFREEZE-FIRST-1",
+  "status": "NOT_RUN",
+  "frozen_at_utc": "2026-11-05T13:24:19.059584+00:00",
+  "canonical_main": "63658cd546be8b99599baf19476486a475adb320",
+  "canonical_tree": "a376e3c6e111f7283daa8be82d766dc0282c16b2",
+  "canonical_draft": "17.34",
+  "budget_used": {
+    "positive": 5,
+    "direct_control": 1,
+    "legal_scope_out": 3,
+    "invalid": 4
+  },
+  "execution_counters": {
+    "compiler": 0,
+    "build": 0,
+    "native": 0,
+    "new_ast": 0,
+    "guest_semantic_execution": 0,
+    "observer": 0,
+    "branch_ref": 0,
+    "push": 0,
+    "pr": 0,
+    "actions": 0,
+    "ci": 0
+  },
+  "future_environment": "GitHub dedicated branch + Actions; P-equivalent local execution prohibited",
+  "original_version_policy": "FIRST source/oracle retained; no post-execution oracle construction; substantive changes require affected STOP to C",
+  "manifest_excludes": [
+    "manifest.json",
+    "SHA256SUMS"
+  ],
+  "entries": [
+    {
+      "path": "COVERAGE.md",
+      "bytes": 2285,
+      "sha256": "8ba5563f9191b022bc58acfa5b3738db5e86188b907877817e97015ea15c67fe"
+    },
+    {
+      "path": "FUTURE_OBSERVATION.md",
+      "bytes": 3367,
+      "sha256": "f7763066b71320111204151a1be9560ffd252c7842450f02fecf3665b7777af9"
+    },
+    {
+      "path": "README.md",
+      "bytes": 10814,
+      "sha256": "986e10348a4d962741cbaf24aac362d980d11612fe2f36a9241a3d77cfb8f377"
+    },
+    {
+      "path": "RESTART_PROMPT.md",
+      "bytes": 1423,
+      "sha256": "264347a0c64e21a254a030c6c4bb2495c8997564c9824d932354f0f56e403001"
+    },
+    {
+      "path": "RESTORE.md",
+      "bytes": 1402,
+      "sha256": "6cc8c55c2b07f11e07f6ebec15ec6b9a768ac9a81fa225020c35ae57d4051cc3"
+    },
+    {
+      "path": "authority/SOURCES.json",
+      "bytes": 4438,
+      "sha256": "5c4a32bbab693e6b85090fefd5f3423333e3cadf5813c5fed9430e6546f41de7"
+    },
+    {
+      "path": "authority/canonical-excerpts.md",
+      "bytes": 61503,
+      "sha256": "30cd08aaca13683adbe05fa91ff69f9e698381970fee3e9b4c31968568445c4f"
+    },
+    {
+      "path": "authority/reasoning-ledger.md",
+      "bytes": 2932,
+      "sha256": "e469d1f1f4943878eaefc69ec5ee1fddab8315cf1b8a01b57e09b0a69b3f3319"
+    },
+    {
+      "path": "oracle.json",
+      "bytes": 28504,
+      "sha256": "15b50df7981dc98f076fb164d36114878356520fae88cc53580583e126cca7b4"
+    },
+    {
+      "path": "records/issue1190-release.md",
+      "bytes": 7405,
+      "sha256": "e86f09be3d716c515dc0a0c26cd9ad56e20fd3226608d16b05ca36e2966b8afa"
+    },
+    {
+      "path": "records/read-log.md",
+      "bytes": 2782,
+      "sha256": "f53d5ef1fe848fd8542edb3118416e1a63cd35014aa3f404047b12356cf3b3b1"
+    },
+    {
+      "path": "sources/C0.nl",
+      "bytes": 1034,
+      "sha256": "fab5c0cbcf75f34100382c8014acb4323891f78c8ec05d72a3b47cd398bd96c4"
+    },
+    {
+      "path": "sources/N1.nl",
+      "bytes": 1100,
+      "sha256": "1defc36ef0b7f33516489da7d798839fcb49c2c35eefec7587c9de10b78b1e54"
+    },
+    {
+      "path": "sources/N2.nl",
+      "bytes": 1091,
+      "sha256": "b74faa701624c27b577c3274cf200572b814fdc316a3c91bf01e1ff452d5c2e6"
+    },
+    {
+      "path": "sources/N3.nl",
+      "bytes": 1014,
+      "sha256": "37cfb4a374476a6b1466089a2839e5a41cd6bdecfa1793bf1fc68491bc0bf8e0"
+    },
+    {
+      "path": "sources/N4.nl",
+      "bytes": 1010,
+      "sha256": "6f827ef25686cfeff8d6e6f22316565f4879e11bcb1eef6778b7a137213f24c2"
+    },
+    {
+      "path": "sources/P1.nl",
+      "bytes": 1086,
+      "sha256": "8e0d00e255f166f2edd34f929bc29ba2d9640bf0dff2dfc3d53cea3df428fb18"
+    },
+    {
+      "path": "sources/P2.nl",
+      "bytes": 1147,
+      "sha256": "0ffbdf85b4a848b6146ae6d3d5493664e5c4bbe1e4c16a7eabaa35327b7ac3de"
+    },
+    {
+      "path": "sources/P3.nl",
+      "bytes": 1106,
+      "sha256": "0bdf3c4dbde48be460446d8c843fe91f73f3811be14dcce4ec070e1f7cf6203b"
+    },
+    {
+      "path": "sources/P4.nl",
+      "bytes": 1088,
+      "sha256": "dc25c7b602eb279a61006e124dc7765a3955339e2fa4f73c732f818c09c43895"
+    },
+    {
+      "path": "sources/P5.nl",
+      "bytes": 1088,
+      "sha256": "2b2edca5e99107fb18b7a7e4c216aae1fee23633f601e8e4d3d46b04b3f89fcd"
+    },
+    {
+      "path": "sources/X1.nl",
+      "bytes": 1130,
+      "sha256": "d45edd0bd055698a0b366f93391e1d7632d5822fedba23dd33a05443c80b305c"
+    },
+    {
+      "path": "sources/X2.nl",
+      "bytes": 1150,
+      "sha256": "da6a68c791ab7d133010ab49becfe846a8bf0f5a9a70ba3f90b367eb6f2d1c43"
+    },
+    {
+      "path": "sources/X3.nl",
+      "bytes": 1114,
+      "sha256": "c8ee9293a704c2bc3413776e5ff3a1db75097aa31728e37c53afae840e06a703"
+    }
+  ]
+}

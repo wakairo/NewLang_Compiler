@@ -1,0 +1,6 @@
+tree 1a4fcf50e76b0d2def314fdf7720f88d52a6581c
+parent 349a2a3d08bb1cf10c817a3ef289554de1638168
+author NewLang Track P <newlang-track-p@users.noreply.github.com> 1793925956 +0000
+committer NewLang Track P <newlang-track-p@users.noreply.github.com> 1793925956 +0000
+
+Keep failed v48 exact and render its prospective v49 successor with the canonical Git-only tool

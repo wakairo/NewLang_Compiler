@@ -1,0 +1,74 @@
+{
+  "execution_released": true,
+  "compiler_sha": "f1648a1382ae058e5ab5b9ccdea1e3200879f2af",
+  "tree_sha": "1a4fcf50e76b0d2def314fdf7720f88d52a6581c",
+  "parents": [
+    "349a2a3d08bb1cf10c817a3ef289554de1638168"
+  ],
+  "adopted_main": "70059189c2030f927ad3daa0044c8898848b4548",
+  "base_branch": "p-c247-phase-usize-copy",
+  "branch": "r-fast/r1190-c255-inherited-copy",
+  "release": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674503949",
+  "resume": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674538589",
+  "FIRST_bundle_sha256": "eb06080e3c5e94109870ddc794c4fc2de6edf87ae2b913d105f1fdeb723a2acd",
+  "FIRST_manifest_sha256": "bc0ad8a62f57860805ae8671ce680e92a00ce156a1e77fd60ed64b379db513a9",
+  "FIRST_oracle_sha256": "15b50df7981dc98f076fb164d36114878356520fae88cc53580583e126cca7b4",
+  "environment": "GitHub dedicated branch + Actions only; P-equivalent local execution forbidden",
+  "budgets": {
+    "FAST_actual_runs": 5,
+    "normal_actual_jobs": 12,
+    "initial_normal_jobs": 6,
+    "recovery_sets": 1,
+    "manual_rerun_or_dispatch": 0,
+    "native_invocations_per_job": 72
+  },
+  "status_limits": [
+    "audit locality UNMEASURED",
+    "GO624 PAUSED",
+    "H1 HOLD",
+    "P1036–PR1050 STOP"
+  ],
+  "historical_execution_release": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6662186349",
+  "preparation_release": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674156082",
+  "worker_succession": "Same disclosed C252 successor of the original independent R1190 prefreeze author; not the original author; original independently frozen inputs retained",
+  "status": "C255_EXECUTION_RELEASED_FIXED_F1648A1",
+  "preparation_resume": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6674239950",
+  "classification": "post-finding retarget of independently frozen inputs",
+  "budget_status": "Explicit C255 allocation; historical C252 use retained, no reset",
+  "historical_C252": {
+    "compiler": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+    "R_head": "fe18e136197b25bad77214bc5a9aa000daee3113",
+    "branch": "r-fast/r1190-phase-usize-copy",
+    "PR": 1194,
+    "release": "https://github.com/wakairo/NewLang_Compiler/issues/1190#issuecomment-6662186349",
+    "original_budgets": {
+      "FAST_actual_runs": 6,
+      "normal_actual_jobs": 12,
+      "initial_normal_jobs": 6,
+      "recovery_sets": 1,
+      "manual_rerun_or_dispatch": 0,
+      "native_invocations_per_job": 72
+    },
+    "used_FAST_runs": 1,
+    "used_normal_jobs": 6,
+    "used_manual": 0,
+    "finding": "C0 CHECK rc3 precision refusal on all six original jobs; later R layers and remaining 12 CHECKs NOT_RUN; unchanged"
+  },
+  "C253_archive": {
+    "commit": "e7ab5e9d8c10a6929d2e309a993faa5c3f5f4116",
+    "ref": "refs/heads/evidence/r1190-c253-first",
+    "packet_xz_sha256": "14c6c01ae8c39ced70631c5095592432af17f3ef96e5c5910f7fcb45af82d385"
+  },
+  "cumulative_budgets": {
+    "FAST_actual_runs": 6,
+    "normal_actual_jobs": 18,
+    "manual_rerun_or_dispatch": 0
+  },
+  "historical_used": {
+    "FAST_actual_runs": 1,
+    "normal_actual_jobs": 6,
+    "manual_rerun_or_dispatch": 0
+  },
+  "accepted_preparation_manifest_sha256": "c3b60af72e1db617d671ce71b5ad31eefdca2476cc677b98dceb4bbea9eff64a",
+  "accepted_preparation_bundle_sha256": "5df6bcdbc2606e83028496580b9b960f18500010088e2cee7326f89c83a5e537"
+}
