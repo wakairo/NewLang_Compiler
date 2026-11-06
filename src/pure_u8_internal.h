@@ -9,6 +9,11 @@
  * both IF arms; this walk admits only pure scalar syntax in the actual owned
  * callable. It imports no arm value/current/owner into the caller. */
 typedef struct {
+    NLCheckedNodeId selection, final_return;
+    size_t normal_arm, body_returns;
+} NLPureU8Plan; /* transient owned-graph borrow; no allocation or issuer */
+
+typedef struct {
     const NLCheckedFragment *body;
     NLSymbolId formal;
     NLTypeId quantity, boolean, u8;
@@ -310,8 +315,7 @@ done:
 }
 
 static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
-                            NLTypeId unit, NLTypeId u8,
-                            NLCheckedNodeId *selection)
+                            NLTypeId unit, NLTypeId u8, NLPureU8Plan *plan)
 {
     const NLSemanticContext *c = nl_checked_context(f);
     PredicateWalk w = {.body = f,
@@ -324,7 +328,7 @@ static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
         nl_checked_node_count(f) > NL_PARSER_MAX_NODES)
         return false;
     size_t items = 0;
-    NLCheckedNodeId returned = 0;
+    NLCheckedNodeId returned = 0, final_return = 0;
     for (NLCheckedNodeId id = root->first_item; id;) {
         const NLCheckedNodeView *n = predicate_take(&w, id);
         if (!n || ++items > nl_checked_node_count(f))
@@ -334,7 +338,8 @@ static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
                 predicate_take(&w, n->first_argument);
             const NLCheckedNodeView *init =
                 nl_checked_node_view(f, n->initializer);
-            if (!receiver || !init || receiver->kind != NL_CHECKED_RECEIVER ||
+            if (!receiver || !init || init->result_count != 1 ||
+                receiver->kind != NL_CHECKED_RECEIVER ||
                 receiver->next_argument || n->argument_count != 1 ||
                 !n->symbol || n->symbol > c->binding_count ||
                 n->symbol > NL_SEMANTIC_MAX_ENTRIES || n->symbol == formal ||
@@ -353,6 +358,16 @@ static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
                 !predicate_scalar(&w, n->initializer))
                 return false;
             w.bindings[n->symbol - 1] = id;
+        } else if (n->kind == NL_CHECKED_STATEMENT) {
+            const NLCheckedNodeView *value =
+                nl_checked_node_view(f, n->initializer);
+            if (!value || value->type != u8 || n->type != unit ||
+                n->result_count || n->terminates ||
+                n->span.start_byte != value->span.start_byte ||
+                !copy_if_gap(f->source, value->span.end_byte, n->span.end_byte,
+                             ";") ||
+                !predicate_scalar(&w, n->initializer))
+                return false;
         } else if (n->kind == NL_CHECKED_RETURN) {
             const NLCheckedNodeView *value =
                 nl_checked_node_view(f, n->initializer);
@@ -364,71 +379,73 @@ static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
                 !predicate_scalar(&w, n->initializer))
                 return false;
             returned = n->initializer;
+            final_return = id;
         } else
             return false;
         id = n->next_item;
     }
     if (items != root->item_count)
         return false;
-    const NLControlExits *exits = nl_checked_control_exits(f);
-    if (returned) {
-        const NLCheckedNodeView *value = nl_checked_node_view(f, returned);
-        const NLCheckedNodeView *ret = NULL;
-        for (NLCheckedNodeId id = root->first_item; id;) {
-            const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-            if (!n)
-                return false;
-            if (n->kind == NL_CHECKED_RETURN)
-                ret = n;
-            id = n->next_item;
-        }
-        if (!value || !root->terminates || root->tail ||
-            root->returned.type != u8 ||
-            root->returned.value != value->results[0].value ||
-            nl_control_exits_count(exits) != 1 ||
-            !predicate_return(f, ret, 0, f->function_target))
-            return false;
-    } else {
-        const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
+    const NLCheckedNodeView *tail = NULL;
+    if (!returned) {
+        tail = nl_checked_node_view(f, root->tail);
         if (!tail || !predicate_scalar(&w, root->tail))
             return false;
-        const NLCheckedNodeView *choice = nl_checked_node_view(f, w.selection);
-        if (!choice || choice->normal_arms > 2)
+    }
+    const NLCheckedNodeView *choice = nl_checked_node_view(f, w.selection);
+    if (!choice || w.selections != 1 || choice->normal_arms > 2)
+        return false;
+    const size_t early = 2 - choice->normal_arms;
+    const size_t returns = early + (size_t)(final_return != 0);
+    const NLControlExits *exits = nl_checked_control_exits(f);
+    if (nl_control_exits_count(exits) != returns ||
+        (returns && !nl_control_exits_only_return(exits, f->function_target)))
+        return false;
+    if (returned) {
+        const NLCheckedNodeView *value = nl_checked_node_view(f, returned);
+        const NLCheckedNodeView *ret = nl_checked_node_view(f, final_return);
+        if (!choice->normal_arms || !value || !root->terminates || root->tail ||
+            root->returned.type != u8 ||
+            (!early && root->returned.value != value->results[0].value) ||
+            !predicate_return(f, ret, early, f->function_target))
             return false;
-        const size_t returns = 2 - choice->normal_arms;
-        /* Existing normal-IF result bindings/Copy tails remain ordinary pure
-         * syntax. The new mixed/both-RETURN slice ends in the actual IF;
-         * extending later result bindings needs its own emitter composition. */
-        if (returns && root->tail != w.selection)
+    } else {
+        /* A zero-normal IF cannot supply a binding/continuation. One normal
+         * arm already has CHECK's source-matched replay, so its pure result
+         * may flow through ordinary bindings/Copy/discard nodes above. */
+        if (!choice->normal_arms && root->tail != w.selection)
             return false;
-        if (nl_control_exits_count(exits) != returns ||
-            (returns &&
-             !nl_control_exits_only_return(exits, f->function_target)))
-            return false;
-        if (!returns) {
+        if (!early) {
             if (root->terminates || tail->type != u8 ||
                 root->result_count != 1 || root->results[0].type != u8 ||
                 root->results[0].value != tail->results[0].value)
                 return false;
-        } else {
-            const NLCheckedResult summary =
-                root->terminates ? root->returned : root->results[0];
-            NLSemanticValueView v;
-            if (root->terminates != tail->terminates ||
-                root->result_count != (size_t)!root->terminates ||
-                summary.type != u8 ||
-                !nl_semantic_value_view(c, summary.value, &v) ||
-                !copy_if_plain(v, u8) || v.scalar_known || v.scalar_value)
-                return false;
-        }
+        } else if (root->terminates != tail->terminates ||
+                   root->result_count != (size_t)!root->terminates)
+            return false;
     }
-    if (w.selections != 1)
-        return false;
+    if (early) {
+        /* Core joins all real function exits into a fresh Unknown summary.
+         * It is distinct from the sole-normal operand and from each RETURN
+         * package, which the current consumer checks in its own exit world. */
+        const NLCheckedResult summary =
+            root->terminates ? root->returned : root->results[0];
+        NLSemanticValueView v;
+        if (summary.type != u8 ||
+            !nl_semantic_value_view(c, summary.value, &v) ||
+            !copy_if_plain(v, u8) || v.scalar_known || v.scalar_value)
+            return false;
+    }
     for (size_t i = 0; i < nl_checked_node_count(f); ++i)
         if (!w.seen[i])
             return false;
-    if (selection)
-        *selection = w.selection;
+    if (plan) {
+        const NLCheckedFragment *arm = nl_checked_if_arm(f, w.selection, 0);
+        const NLCheckedNodeView *a = nl_checked_node_view(arm, arm->root);
+        *plan = (NLPureU8Plan){
+            w.selection, final_return,
+            choice->normal_arms == 1 ? (size_t)a->terminates : 2, returns};
+    }
     return true;
 }
 
@@ -437,6 +454,7 @@ typedef struct {
     NLSymbolId formal;
     NLCheckedNodeId selection;
     size_t function;
+    NLPureU8Plan plan;
 } NLPureU8Call;
 
 /* An actual CHECK-owned synchronous call, not a host-supplied summary.
@@ -481,9 +499,9 @@ static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
             formal = i + 1;
         }
     }
-    NLCheckedNodeId selection = 0;
-    if (!formal || !nl_pure_u8_body(body, formal, nl_semantic_unit_type(c), u8,
-                                    &selection))
+    NLPureU8Plan plan;
+    if (!formal ||
+        !nl_pure_u8_body(body, formal, nl_semantic_unit_type(c), u8, &plan))
         return false;
     const NLCheckedNodeView *root = nl_checked_node_view(body, body->root);
     const NLCheckedResult result =
@@ -491,7 +509,7 @@ static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
     if (result.type != call->results[0].type ||
         result.value != call->results[0].value)
         return false;
-    *out = (NLPureU8Call){body, formal, selection, call->function};
+    *out = (NLPureU8Call){body, formal, plan.selection, call->function, plan};
     return true;
 }
 

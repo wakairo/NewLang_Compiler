@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "scope": "P1208 C263, prospective before any new probe execution",
+  "source_basis": "P authored, canonical and own P1200 scout; no independent R/F input",
+  "files": {
+    "sources/01-left-normal.nl": "e1bd9b55cbd1723f5cc662d9d055bc34a379b7a1f12ec78fbcffb5e07fe21e6a",
+    "sources/02-right-normal.nl": "8d42bfe71399f93ffe316710c5c093aa4faaf782a021427b1b60259fc7c25e1f",
+    "sources/03-left-final-return.nl": "46ce1c5f373a7f5431e420457ef55a382b927e9e5d46e4287ef0a222268dcafb",
+    "sources/04-right-final-return.nl": "8e717c76fe6d8eeb90758b4399066192ee284ac4279a56f3afa4c0f95784b603",
+    "sources/80-normal-control.nl": "043979e5a710725d61e0c91d3207ec091143804d377a90306137e1c068c2351f",
+    "sources/81-mixed-tail-control.nl": "b2d5c983747e515d7aeca61497d026377245d3992c513e2dd5360b33df9384dc",
+    "sources/82-both-return-control.nl": "3333cd021c2f3f2cc64de317e2684604ec157a6e5bf761172b25f8cf87814dde",
+    "sources/83-normal-final-return-control.nl": "d64b44c4b739a900793d16a65a0e1295eb821b8756b65ca01b1e07c2fc6fad39",
+    "sources/90-wrong-return-type.nl": "5d4319e8a6dd8ed5e0ee60b4eb32217c1c35d1c45287de904f4985b080e1bbfe",
+    "sources/91-helper-break.nl": "5177cfbf8c1d2d6e4ca7c8a57c19d7965ab995969683fb4ca1fb0c4b4433e546",
+    "sources/92-helper-continue.nl": "2e8264fc2a82d24306805a4ea8093e55d5fda01f37b92483cf965c446f73b3d2",
+    "sources/93-both-return-continuation.nl": "4d01501665cc36576ee331d0deababa903689b4f26691ef29ba94321d61f8017",
+    "sources/94-nonliteral-normal-arm.nl": "4f287aaea456f250e2b2a4890c1d94e7395a81880719842b90868b86e347b2fe",
+    "oracle-v1.json": "6599de4f55d8c743e4e6f0495b734ab70613338d53dbb062ee3ce7a15f98c883"
+  }
+}

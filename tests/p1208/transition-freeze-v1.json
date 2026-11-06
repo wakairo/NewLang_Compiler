@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "before_execution": true,
+  "expected": {
+    "current_boundary95": "CHECK/C17/owned/current success; original refusal source/oracle/raw immutable",
+    "OOM": "exact OOM with rollback/no publication/retry; named no-clobber; 936 selected trials per measured configuration"
+  },
+  "files": {
+    "tests/p1208/boundary95_transition.py": "7575a846f11d75b178afff559178d6f2528e16a19394c99e15ae7e14f0e02b22",
+    "tests/p1208/evidence_test.py": "fc008325e4ff98800a80ea48b8a2d569e59e57c61ee60e9f918aa6fbb7d0056c",
+    "tests/p1208/evidence-receipt-v1.json": "bba6d606d0649972854bbcb799f3ec37a2216778e79b65ea541548ce809a5ffe",
+    "tests/p1208/evidence/gate0-and-prior95-v1.zip": "f2774d200e44961e85885ea33e17a035aee27959d5a015ebb975d61a9b406827",
+    "tests/p1193/production/95-mixed-result-binding.nl": "f3b329eefb5e989815dcf8b79eb019df60328577653c9d6797c8803f07da3c57",
+    "tests/p1193/production/boundary.py": "2768f2e913f1dc5badbd384f19ed0d037da8873537f0d5118eb59c1a8aeed540",
+    "tests/p1193/production/boundaries.json": "1c9aadd319cd5705fb49c630de181bdc44533821b0920172ea4ad432bf20b882"
+  }
+}

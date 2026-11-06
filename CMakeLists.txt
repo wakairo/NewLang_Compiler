@@ -108,6 +108,7 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    include(tests/p1208/CMakeLists.txt)
     # P930 diagnostic-only wrappers: production libraries/CLI remain unchanged.
     add_executable(p930_observe tests/p930/observe.c)
     add_executable(p930_oom tests/p930/observe.c)
@@ -1450,8 +1451,12 @@ if(BUILD_TESTING)
         set_tests_properties(p1193_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE)
     endforeach()
     foreach(profile 90-wrong-return-type 91-helper-break 95-mixed-result-binding)
+        set(p1193_boundary "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/production/boundary.py")
+        if(profile STREQUAL "95-mixed-result-binding")
+            set(p1193_boundary "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1208/boundary95_transition.py")
+        endif()
         add_test(NAME p1193_${profile}_boundary.unit COMMAND "${Python3_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/production/boundary.py"
+            "${p1193_boundary}"
             "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1193_observe>" "${profile}")
     endforeach()
     add_test(NAME p1193_return_auth.unit COMMAND p1193_challenges

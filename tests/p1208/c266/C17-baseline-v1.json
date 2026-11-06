@@ -1,0 +1,22 @@
+{
+  "archive": "tests/p1208/evidence/C17-baseline-v1.zip",
+  "sha256": "1f0c559fd6a1707d19e25de5b3e61decba7462b672a4e896a75613d43c2022a7",
+  "scope": "P1208 C263 and P1203 C260 unchanged generated C, not native rerun evidence",
+  "files": {
+    "p1203/01-many.c": "32d1f2711f4800119180ecb49258b796a97770b410e5041c05f1daa3ad01d99b",
+    "p1203/02-zero.c": "261621b23d22d5cdea3602a068e0f6684c5b6f4a45a76a352e738eb5318473e5",
+    "p1203/03-one.c": "832a5bfcf9e784cbdb69b6429f9f3a941806504843c236b0fb776f7c8f04ccde",
+    "p1203/04-second-field.c": "cb7011bd39481cfcec1b526f9c98a555366254c3190a9dd6f54f04ec6af3a96e",
+    "p1203/05-return-helper.c": "b96b2cc863c7dcf8183b683b0535f955b406cc7420ead873772cbec7af9877c2",
+    "p1203/80-phase-control.c": "92d1d6ddc1025f90adfffaef340e200ec4ea23373f9232461fba0a5e7892c6fb",
+    "p1208/01-left-normal.c": "b3e4615722760a578c71ac8cff6e17fb497e55a69e096c2b76ad96a9f109889f",
+    "p1208/02-right-normal.c": "77b6b0fef2a0dcc0f04ef456d373e8b7c3c5508828e81f9e182f75d012eb5ea0",
+    "p1208/03-left-final-return.c": "f1e7264b00b57b52f327458e13840714d835cc2a4496de5c6730006a4c5507fa",
+    "p1208/04-right-final-return.c": "05cec87f2b43433e2e8c13ab75cf8b6c98c7b2343f0626d181c8ab2375611b29",
+    "p1208/05-left-discard-normal.c": "94c0bec99ddf159e1a881e7c6173139ad27e6a4cb2c41d09a0671ae7894af5b1",
+    "p1208/80-normal-control.c": "4a998f4db6d02281285d8d3bbecbf844d760880a00f2e04d51f20914292a8604",
+    "p1208/81-mixed-tail-control.c": "4a998f4db6d02281285d8d3bbecbf844d760880a00f2e04d51f20914292a8604",
+    "p1208/82-both-return-control.c": "230d96268dfbe8bc9ff8946dc22e4347264c2c535eef42e01ad8910711088e23",
+    "p1208/83-normal-final-return-control.c": "4f8337bb8138778618d59121ac8f720f3a22bfd16fa18c00c876ae06a07bf57a"
+  }
+}

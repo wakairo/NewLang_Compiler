@@ -1,0 +1,17 @@
+{
+  "archive": "tests/p1208/evidence/P1203-adopted-inputs-v3.zip",
+  "sha256": "e153f2f99d46f7cadf3c1916fae238892628b128500605b4cba6939593acb261",
+  "manifest_sha256": "c0c4fbef92159e5493b9f9a7453314da5a1e92d29171b9391fbbaafc56510133",
+  "manifest_git_blob": "cfc96b5a9f8a6d798379c2580e7cc03490c1b865",
+  "files": {
+    "src/current_loop_check_internal.h": "81a3c32b9cd3fd249cf21a0e0820b6b9c5f045a7ced07aba7223d61d976891bc",
+    "src/linear_break_internal.h": "c2ce6520761350694e11dd7ae5e18267bf22f231db3de98c77a9263066753d62",
+    "src/main.c": "39bdb72da477d3eae3c24bdd6c7311e071d1cdbed9c18c69cde57b584322fffc",
+    "tests/p1203/CMakeLists.txt": "0496f36728fe337b002a8faa422251672f8376f79b311e3f25c15d76baea1a6f",
+    "tests/p1203/evidence_test.py": "77afd1222d3bf94f25c0308159c04772aab655dd47adb75491523a60b1f04dda",
+    "tests/p1203/focused-freeze-v3.json": "c0c4fbef92159e5493b9f9a7453314da5a1e92d29171b9391fbbaafc56510133",
+    "tests/p1203/native.py": "7bfdc67423c2b7284476e41374d0c767d7e43d8e99fe98cc544837cbdc2da865",
+    "tests/p1203/negative.py": "8b258e920525279f6e8babcc9ccfc49b68aeeb0b5f378476577a69b64aefd5b4",
+    "tests/p1203/safety.c": "0d7b321ba49f5960ac36d26a3a9f4917ab35ea7005f6592fc0f2c9647d4652f4"
+  }
+}
