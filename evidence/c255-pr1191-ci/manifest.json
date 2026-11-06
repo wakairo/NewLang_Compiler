@@ -1,0 +1,228 @@
+{
+  "schema": "newlang-c255-pr1191-ci-restoration-v1",
+  "repository": "wakairo/NewLang_Compiler",
+  "destination": "evidence/c255-pr1191-ci/",
+  "acceptance": "https://github.com/wakairo/NewLang_Compiler/issues/1188#issuecomment-6674429573",
+  "sole_parent": "f1648a1382ae058e5ab5b9ccdea1e3200879f2af",
+  "base_tree": "1a4fcf50e76b0d2def314fdf7720f88d52a6581c",
+  "packet": {
+    "name": "ci-audit-packet.zip",
+    "bytes": 742136,
+    "sha256": "38297aa4f13ca6d0d12ba9bcc83bc50b09812c29d393ac9281d0b4d1d5b1d4f0",
+    "git_blob_sha1_identity": "f71b5d483a3e7bffccd99b808347c97d04386c88",
+    "original_bytes_unchanged": true,
+    "unique_entries": 29
+  },
+  "encoding": "Standard base64 ASCII, no whitespace or trailing newline in each part. Decode parts in index order and concatenate decoded bytes.",
+  "chunks": [
+    {
+      "index": 1,
+      "path": "chunks/part-0001.base64",
+      "binary_offset": 0,
+      "binary_bytes": 393216,
+      "binary_sha256": "0ce84ea6d4c5fcfda882b2ec31373d5bf480b04ea7f55148ff6cd74f39ce5502",
+      "ascii_bytes": 524288,
+      "ascii_sha256": "7ba8e7d45b74edc9e3cce31124578171f77e6f1f078145eee927eff115e6aab0",
+      "git_blob_sha1": "3c419be8ad3987895471773ef95db85068b95a45"
+    },
+    {
+      "index": 2,
+      "path": "chunks/part-0002.base64",
+      "binary_offset": 393216,
+      "binary_bytes": 348920,
+      "binary_sha256": "686de2712d7e54ea6fdc6ce3f8c98c0509db336f4194c8b2c9d2b2838f2f71b7",
+      "ascii_bytes": 465228,
+      "ascii_sha256": "0f0839c0f04cd9620c8164b69ee284a2cfa9dfa468e58df2a061a56e90f40d8b",
+      "git_blob_sha1": "527cafdc05762f5a257855246fa9f46a3a45e1a2"
+    }
+  ],
+  "zip_entries": [
+    {
+      "path": "README.md",
+      "bytes": 1738,
+      "sha256": "ced750fb0c96e43d2c60cf5248e319ff9b7bb3fe00d209578bd0cf3c0a59fbaf",
+      "crc32": "d4032eca"
+    },
+    {
+      "path": "api-context.json",
+      "bytes": 389949,
+      "sha256": "fa82e0ff41cd2609086999b179f33e36bf606c2dd97d80c6e6654db1513bac9e",
+      "crc32": "f8f593f8"
+    },
+    {
+      "path": "audit-final.json",
+      "bytes": 132782,
+      "sha256": "c66d8773737d53e754b9a982ca5a280a27a6cb1aef84ef5af67c8e63144a6f2d",
+      "crc32": "2465b065"
+    },
+    {
+      "path": "authority/CURRENT_SPEC.md",
+      "bytes": 14326,
+      "sha256": "8b1a51b340c88a5ef79bfe12c51f8d9c759773c9d44091dc60dff7ab7dd92849",
+      "crc32": "41eb47ae"
+    },
+    {
+      "path": "authority/NewLang_Product_Value_Strategy.md",
+      "bytes": 51375,
+      "sha256": "f1afe4845487654d2e11a9f159bd0128149d93caf5c1cd5f9fad2ed29cc0d7ca",
+      "crc32": "fabfb190"
+    },
+    {
+      "path": "authority/NewLang_Project_Compass.md",
+      "bytes": 9043,
+      "sha256": "402a124c6fa7b7867891ac8290bc4e358efccfcedd9e1c0df95e2359c76e756c",
+      "crc32": "8a1a0b3b"
+    },
+    {
+      "path": "authority/NewLang_Project_Development_Process.md",
+      "bytes": 66244,
+      "sha256": "a4695c09f486e46d5e1a479391f4fda3855407c725b660d9f76f9dab0694dc9b",
+      "crc32": "6e04bf69"
+    },
+    {
+      "path": "final/logs/job-127640341076.log",
+      "bytes": 287364,
+      "sha256": "a7d490292a488d3303adb7f599c0e02a52e6a0cfddd5545df9b59032a264daa6",
+      "crc32": "7dcf3e89"
+    },
+    {
+      "path": "final/logs/job-127640341830.log",
+      "bytes": 240789,
+      "sha256": "5514fce176b3da8cd58cef79d2314b7413db1545bc7d4ea9bc3dabf4bd77273a",
+      "crc32": "d9ca6481"
+    },
+    {
+      "path": "final/logs/job-127640341862.log",
+      "bytes": 240944,
+      "sha256": "5f9e4f287b32ac93980570e70f8575f1269a392ac4e2077463d1c77f7bb74116",
+      "crc32": "41549a1f"
+    },
+    {
+      "path": "final/logs/job-127640341878.log",
+      "bytes": 242937,
+      "sha256": "3b7d9da5db1c59b174a74c90a97541bea97fd6fdc58c7f92a95cba84c016f19e",
+      "crc32": "85915c22"
+    },
+    {
+      "path": "final/logs/job-127640342021.log",
+      "bytes": 240944,
+      "sha256": "846a9285ae2f070f4bdc4e0f49d18bc5828e69ca7bdba7e7cd8d20ad088802fd",
+      "crc32": "750af2f5"
+    },
+    {
+      "path": "final/logs/job-127640342036.log",
+      "bytes": 240842,
+      "sha256": "4fa52dc4d11668b04268a288cdbb274dff6549727c63ffbf7b3eb9b2174a265c",
+      "crc32": "6f2ca1e4"
+    },
+    {
+      "path": "finalize_packet.py",
+      "bytes": 11248,
+      "sha256": "5bf5a174eccbf96ebbef4f97ce2b741128510d7a79abda4c525b7f6312457431",
+      "crc32": "c651dbe2"
+    },
+    {
+      "path": "first-red/logs/job-127630038229.log",
+      "bytes": 327257,
+      "sha256": "06a056fcb745f9d5a0f46c14279ffec2582339e54e353be21f53a0f0424da912",
+      "crc32": "301a0641"
+    },
+    {
+      "path": "first-red/logs/job-127630038436.log",
+      "bytes": 372770,
+      "sha256": "7437bcf25194188ee165dc903baf2810bccadf2be18e82b10eb3aea8835f9bb9",
+      "crc32": "d7f8a57f"
+    },
+    {
+      "path": "first-red/logs/job-127630038450.log",
+      "bytes": 328039,
+      "sha256": "82a3e0b5e0527eb73dce386c68728e05ea52c6bbe0b6afa549aee8cea0f67786",
+      "crc32": "21f51dd3"
+    },
+    {
+      "path": "first-red/logs/job-127630038640.log",
+      "bytes": 327231,
+      "sha256": "2975eb558af5464388c4949b4b57a26cf910b20c07dcacac7af929b0e7cc1f70",
+      "crc32": "f9ae1bcb"
+    },
+    {
+      "path": "first-red/logs/job-127630038651.log",
+      "bytes": 328027,
+      "sha256": "cfe6a9a3842cf0d5259ba0257061004f96aa1dab5c9e4adb15070c268bd09057",
+      "crc32": "2fb42e38"
+    },
+    {
+      "path": "first-red/logs/job-127630038723.log",
+      "bytes": 330115,
+      "sha256": "aab051aec9312958fc89eda667c0c8d877883816a7b162dffa3eac066f0c20c8",
+      "crc32": "7c7e77ab"
+    },
+    {
+      "path": "initial-log-audit.json",
+      "bytes": 17121,
+      "sha256": "9fadad07150e34caf8a0bbfc68be15d79ba94b0248078332b0e73f8f382f7eb4",
+      "crc32": "54e396a4"
+    },
+    {
+      "path": "log-custody.json",
+      "bytes": 4503,
+      "sha256": "a9287fd340a9553fe161637b2ddba4a19273def330267fcc1192908f2748ab36",
+      "crc32": "6f11293f"
+    },
+    {
+      "path": "log-transport-records.json",
+      "bytes": 2931,
+      "sha256": "978dd36923a4b33926e03a81c55194cbf74312536c8bad052378b905deab1d71",
+      "crc32": "bc575202"
+    },
+    {
+      "path": "predecessor/audit-final-7b7095fc.json",
+      "bytes": 221099,
+      "sha256": "6ead4500bb28acae79552c50092fc13de9b91480c42dfe685ef0c3d999a01d93",
+      "crc32": "3d46cb38"
+    },
+    {
+      "path": "source/CANONICAL-RECOVERY.md",
+      "bytes": 1666,
+      "sha256": "20541d9133868dbf1dd24f9657eb1e35621d6dd5570649649986d6ac087e1500",
+      "crc32": "d377bd7a"
+    },
+    {
+      "path": "source/CMakeLists.txt",
+      "bytes": 151251,
+      "sha256": "769c320cd64c66e3ebf040dd6fcf896fed92a0d1be58d9948053dc0c16ba9614",
+      "crc32": "f7abdcb8"
+    },
+    {
+      "path": "source/LOCAL-COMPLETION.md",
+      "bytes": 5368,
+      "sha256": "7d986c8f4e0beca599f9b00c1087c898db8ad802ef36a37fc9f2e93c634c1572",
+      "crc32": "d736537c"
+    },
+    {
+      "path": "source/README-scope.md",
+      "bytes": 3336,
+      "sha256": "1d4f3fc07f039199f7868e55bb0cd094c1069f78d04c9a0df3a99a0643245b3f",
+      "crc32": "91852e9a"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 4690,
+      "sha256": "c0e7e7fc25b4c5e5027f56d7bf7d1f5ba9cc766c0c45b731f44f074815cb848d",
+      "crc32": "beccf4be"
+    }
+  ],
+  "inner_manifest": {
+    "path": "manifest.json",
+    "bytes": 4690,
+    "sha256": "c0e7e7fc25b4c5e5027f56d7bf7d1f5ba9cc766c0c45b731f44f074815cb848d",
+    "listed_files": 28
+  },
+  "audit_final": {
+    "path": "audit-final.json",
+    "bytes": 132782,
+    "sha256": "c66d8773737d53e754b9a982ca5a280a27a6cb1aef84ef5af67c8e63144a6f2d"
+  },
+  "scope": "C accepted 12 decoded whole-job logs: original6 RED and final6 PASS preserved. No reclassification, code/oracle change, new execution or adoption claim.",
+  "readback_method": "Compare complete supported remote UTF-8 blob text with each pinned local file, then reconstruct and verify ZIP/global/member hashes from the verified-equal local parts. Duplicate on-disk remote copies are not required or claimed."
+}
