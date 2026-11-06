@@ -1,0 +1,13 @@
+{
+  "archive": "tests/p1193/evidence/phase2-GCC-FIRST-v1.zip",
+  "sha256": "8c8afa94c4d6c9fb2e52669f21a0cd6bdff0db205bbbab53374f744e1ff662c8",
+  "files": {
+    "Testing/Temporary/CTestCostData.txt": "b572a660c397652f4a18a0e6adbe69796638bb2a497ddd5a267f1d8276407919",
+    "Testing/Temporary/LastTest.log": "d7c77c34696d75a2a4a892949eb5faedb568549596ffcee4ad8155d46a16f93d",
+    "Testing/Temporary/LastTestsFailed.log": "c4607d2f7b91679751df31209bf873abfd60577f843fbf65993971166994e9f5",
+    "ctest-console.log": "28b822ebb4e43f015fa1efc20c2b46ff958b9708e2fce6ade623272f03bb20eb",
+    "p1117-current/p504_current.c": "10feb4c89c164b87247d6937451eec52b7b9025a4c86d716e958c03315158ff5",
+    "p1117-current/p603_current.c": "c07656695ff730af8d176d79d2f0d1eb3efc20ee8f6b0806638d92ad9b638d97",
+    "receipt.json": "524ab1839f596147fc534dfdeb89ec25effe45db4f4a3dec0c86e2e80ac4580d"
+  }
+}
