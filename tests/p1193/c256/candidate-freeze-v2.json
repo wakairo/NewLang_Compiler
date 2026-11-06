@@ -1,0 +1,21 @@
+{
+  "authority": "C256 phase1",
+  "candidate": "5a71804d8dacd48bee1784eea51d4bd0651f4c27",
+  "oracle": "four RETURN positives + normal control: CHECK0/genuine owned current0/C17 success; two invalid:3, no-clobber; all raw preserved; native0 in this equipment",
+  "files": {
+    "tests/p1193/c256/sources/01-return-left.nl": "673bba32075013c9c8b519072ac05117e7361e9e4a426832e9473cce38bf5329",
+    "tests/p1193/c256/sources/02-return-right.nl": "644eb49d6c001af1f4db998cdd98cbf72a3cda41d9709ef5b23b40cc3bec074b",
+    "tests/p1193/c256/sources/03-both-return.nl": "91077c12dddd0c3afabc97ef8195ea19e1e36da6c511d60baf1a407abd8b8623",
+    "tests/p1193/c256/sources/04-return-if.nl": "c72b95c578f9e54030fb8b8decb18e9260e158b4750f48869527c3ad9fa8a223",
+    "tests/p1193/c256/sources/80-normal-control.nl": "113b453e8207cec661a803f2173a3ad785d5e1d6d67f75737c03ac7ac15036d7",
+    "tests/p1193/c256/sources/90-wrong-return-type.nl": "54acc94397d5c1c56df084f78e4a9535f50b4ebba2f78c82e6d5b4da300ca7d8",
+    "tests/p1193/c256/sources/91-helper-break.nl": "f786f0b966064285628fea68e51fb33586d3e0872d39e1db7fb7c8f33c9d0a46",
+    "tests/p1193/c256/old-oracle-v1.json": "06340a2421dbc88c414e71ddda0206d3a79a180867bfa50b2e9c8a76cdc76c78",
+    "tests/p1193/c256/gate0-probe.c": "561e9abe08e56379587d75cc246d76e97fa9161c0ab3b28c63eace8da92b35d3",
+    "tests/p1193/c256/80-normal-control.c17": "97a2009034ff9776406b39aee11c959d03db69f7f3beac1cd417dcefae28324a",
+    "src/main.c": "bd7f2fb9c8a989d874bf95aa74931eca669247d5fa27c64f74835ae8ab46ef03",
+    "src/pure_u8_internal.h": "d364847b355e72f0c7e835bfe9c0f35109e18966ecc3a89755375344eec5738a",
+    "src/current_loop_check_internal.h": "dc8b803638e61dd560845876932ec9bcf791ce141233263bb7bf3ce33aac9540",
+    "tests/p1193/c256/candidate-v2.py": "3bc6298756c1e5c38297147627c5fa3cf6ebea9fb5bed1377da76ec7b39ac1fb"
+  }
+}

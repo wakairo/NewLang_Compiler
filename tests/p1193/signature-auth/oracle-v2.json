@@ -1,0 +1,31 @@
+{
+  "authority": "C priority repair 6676808814; successor after repair-v2 test overclaimed post-clone content consumption; all earlier freeze/oracle/FIRST retained",
+  "fixed_old_head": "24339b077ed0e0a3e847f23aed170c67d2b3d20a",
+  "positive_sources": [
+    "return.nl",
+    "normal.nl"
+  ],
+  "excluded_observation": "inline.nl is retained from v1 but its unused RETURN helper source envelope is not admitted; it is not used as a positive",
+  "read_set": "All current-loop worlds passed to linear_world_matches: final, graph, exit, RETURN. The post clone has allocation/extent preflight for its selected callable consumers, but no unrelated all-function content comparison; skip only family9 there.",
+  "repair_oracle": "For each present world, all allocation/table/extent changes reject with output no-clobber; every all-function-comparison world also rejects content change. Restore then retry succeeds, A destroys, B remains valid and destroys.",
+  "families": [
+    "live short helper signature alias",
+    "one-byte foreign allocation",
+    "NULL signature",
+    "short count",
+    "SIZE_MAX count",
+    "same-extent genuine B signature",
+    "NULL function table",
+    "genuine B function table",
+    "signature content changed where comparator consumes it",
+    "short function_count",
+    "SIZE_MAX function_count"
+  ],
+  "limits": {
+    "old_reproducer_invocations": 6,
+    "focused_families": 12,
+    "native": 48,
+    "full_GCC": 1,
+    "necessary_repaired_repetition": 1
+  }
+}

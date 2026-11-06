@@ -1,0 +1,215 @@
+{
+  "authority": "Issue1193 C252 at7b7095; Draft17.34 \u00a7\u00a718.1/18.2/18.5/18.8/19.1/27.4-27.7/27.9",
+  "base_HEAD": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+  "base_tree": "f0aebb423a1c38908fde83f219886cf387b3705e",
+  "scope": "Gate0 only; Production/push/PR/CI0; positive4/invalid2/control1; guest native planned0 ceiling20; baseline builds planned0 ceiling1",
+  "prediction": "full unit registration checks every function, then current_relation -> current_arm -> current_pure_call conservatively refuses RETURN profiles; main() and current proof should not be fabricated after refusal",
+  "isolated_helper_contract": "Probe reparses exact unchanged helper declaration bytes in a separate fresh public registry to observe existing definition/call exits; this does not accept the rejected full unit or substitute a proof for the loop. No Return is rewritten or erased.",
+  "unsafe_stop": "Any invalid source admitted or any Known isolated-call result inconsistent with its actual input -> preserve FIRST and affected STOP; no guest native. Unknown scalar is allowed.",
+  "cases": {
+    "01-return-left": {
+      "classification": "canonical-positive",
+      "target_field_index": 0,
+      "expected_CLI_check": 1,
+      "expected_first_layer": "definition-time CHECK in atomic function-unit registration",
+      "predicted_code": "P14-LOOP-PRECISION",
+      "incoming_by_phase": [
+        61,
+        61,
+        193,
+        193
+      ],
+      "expected_phase": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "expected_old": [
+        85,
+        61,
+        61,
+        193
+      ],
+      "sibling": 221,
+      "expected_Break": 4,
+      "helper_declaration_sha256": "155b6a1c9b2f2f76e5e5fb4ccd30792f78379b2db547742c235b87b8923b451d",
+      "isolated_helper_expected_register": 0,
+      "isolated_helper_actuals": {
+        "0": 61,
+        "3": 193
+      },
+      "native": "not planned; never force a refused composition"
+    },
+    "02-return-right": {
+      "classification": "canonical-positive",
+      "target_field_index": 1,
+      "expected_CLI_check": 1,
+      "expected_first_layer": "definition-time CHECK in atomic function-unit registration",
+      "predicted_code": "P14-LOOP-PRECISION",
+      "incoming_by_phase": [
+        61,
+        61,
+        193,
+        193
+      ],
+      "expected_phase": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "expected_old": [
+        85,
+        61,
+        61,
+        193
+      ],
+      "sibling": 221,
+      "expected_Break": 4,
+      "helper_declaration_sha256": "5092624049ce07ec2a3030dce0284812be1fdc8e008319a4a756bfddb99d5ce9",
+      "isolated_helper_expected_register": 0,
+      "isolated_helper_actuals": {
+        "0": 61,
+        "3": 193
+      },
+      "native": "not planned; never force a refused composition"
+    },
+    "03-both-return": {
+      "classification": "canonical-positive",
+      "target_field_index": 1,
+      "expected_CLI_check": 1,
+      "expected_first_layer": "definition-time CHECK in atomic function-unit registration",
+      "predicted_code": "P14-LOOP-PRECISION",
+      "incoming_by_phase": [
+        193,
+        61,
+        193,
+        193
+      ],
+      "expected_phase": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "expected_old": [
+        85,
+        193,
+        61,
+        193
+      ],
+      "sibling": 221,
+      "expected_Break": 4,
+      "helper_declaration_sha256": "b80c1476e48214cad741477bb13726ba78dea938a2063549d4f78804acae29c3",
+      "isolated_helper_expected_register": 0,
+      "isolated_helper_actuals": {
+        "0": 193,
+        "1": 61
+      },
+      "native": "not planned; never force a refused composition"
+    },
+    "04-return-if": {
+      "classification": "canonical-positive",
+      "target_field_index": 0,
+      "expected_CLI_check": 1,
+      "expected_first_layer": "definition-time CHECK in atomic function-unit registration",
+      "predicted_code": "P14-LOOP-PRECISION",
+      "incoming_by_phase": [
+        61,
+        61,
+        193,
+        193
+      ],
+      "expected_phase": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "expected_old": [
+        85,
+        61,
+        61,
+        193
+      ],
+      "sibling": 221,
+      "expected_Break": 4,
+      "helper_declaration_sha256": "be1a0a45a99ae5f6c31089edcfdb3df51418a3eec6dc71a0a948decab199922d",
+      "isolated_helper_expected_register": 0,
+      "isolated_helper_actuals": {
+        "0": 61,
+        "3": 193
+      },
+      "native": "not planned; never force a refused composition"
+    },
+    "90-wrong-return-type": {
+      "classification": "invalid",
+      "target_field_index": 0,
+      "expected_CLI_check": 1,
+      "expected_first_layer": "definition-time CHECK in atomic function-unit registration",
+      "predicted_code": "P9-RETURN-TYPE",
+      "incoming_by_phase": null,
+      "expected_phase": null,
+      "expected_old": null,
+      "sibling": 221,
+      "expected_Break": null,
+      "helper_declaration_sha256": "f8e6de5d788dc6133b528c1a345d6a2464f78bf4160ab219c536eba03132ce19",
+      "isolated_helper_expected_register": "reject",
+      "isolated_helper_actuals": {},
+      "native": "not planned; never force a refused composition"
+    },
+    "91-helper-break": {
+      "classification": "invalid",
+      "target_field_index": 0,
+      "expected_CLI_check": 1,
+      "expected_first_layer": "definition-time CHECK in atomic function-unit registration",
+      "predicted_code": "loop-control/context rejection",
+      "incoming_by_phase": null,
+      "expected_phase": null,
+      "expected_old": null,
+      "sibling": 221,
+      "expected_Break": null,
+      "helper_declaration_sha256": "a78a778c70944957c0422f9315f609cf916936a46c0d303b676936bf1fe0acb4",
+      "isolated_helper_expected_register": "reject",
+      "isolated_helper_actuals": {},
+      "native": "not planned; never force a refused composition"
+    },
+    "80-normal-control": {
+      "classification": "existing-control",
+      "original_source": "tests/p1188/sources/80-direct-control.nl",
+      "expected_CLI_check": 0,
+      "expected_first_layer": "source-issued current and C17 success",
+      "predicted_code": null,
+      "incoming_by_phase": [
+        41,
+        142,
+        142
+      ],
+      "expected_phase": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "expected_Break": 3,
+      "expected_old": [
+        8,
+        41,
+        142
+      ],
+      "sibling": 233,
+      "isolated_helper_expected_register": 0,
+      "isolated_helper_actuals": {
+        "0": 41,
+        "3": 142
+      },
+      "native": "reuse original measured control; no new guest invocation",
+      "helper_declaration_sha256": "91a31b1c5e609432389622a657062c9aac5784e3abe0f42b16836ee8614f10b0"
+    }
+  }
+}

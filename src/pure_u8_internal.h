@@ -53,33 +53,160 @@ static bool predicate_name(const NLCheckedFragment *f, NLSourceSpan span,
 
 static bool predicate_scalar(PredicateWalk *, NLCheckedNodeId);
 
+/* This only reads an already checked arm. Its exit world must additionally
+ * be authenticated by the enclosing current-loop consumer before publication
+ * consumers use a returning arm. */
+static const NLCheckedNodeView *
+predicate_arm_value(const NLCheckedFragment *arm)
+{
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(arm, nl_checked_root(arm));
+    const NLCheckedNodeView *block =
+        root ? nl_checked_node_view(arm, root->initializer) : NULL;
+    const NLCheckedNodeView *ret =
+        block ? nl_checked_node_view(arm, block->first_item) : NULL;
+    return block ? nl_checked_node_view(arm, root->terminates && ret
+                                                 ? ret->initializer
+                                                 : block->tail)
+                 : NULL;
+}
+
+static bool predicate_return(const NLCheckedFragment *owner,
+                             const NLCheckedNodeView *ret, size_t ordinal,
+                             const NLControlTarget *target)
+{
+    const NLControlExitView *x = nl_control_exit_view(owner->exits, ordinal);
+    const NLCheckedNodeView *value =
+        ret ? nl_checked_node_view(owner, ret->initializer) : NULL;
+    return ret && value && ret->kind == NL_CHECKED_RETURN && ret->terminates &&
+           !ret->result_count && !ret->next_item &&
+           ret->returned.type == value->type &&
+           ret->returned.value == value->results[0].value && x &&
+           x->kind == NL_EXIT_RETURN && x->target == target && x->count == 1 &&
+           !x->source_owner && !x->source_node && !x->source_target &&
+           x->values[0].type == ret->returned.type &&
+           x->values[0].value == ret->returned.value &&
+           copy_if_gap(owner->source, ret->span.start_byte,
+                       value->span.start_byte, "return");
+}
+
 static bool predicate_arm(PredicateWalk *w, NLCheckedNodeId id, size_t index)
 {
     const NLCheckedFragment *arm = nl_checked_if_arm(w->body, id, index);
     if (!arm || !copy_if_arm_origin(w->body, id, index, arm) ||
-        nl_checked_node_count(arm) != 3)
+        arm->function_target != NULL)
         return false;
     const NLCheckedNodeView *root =
         nl_checked_node_view(arm, nl_checked_root(arm));
     const NLCheckedNodeView *block =
         root ? nl_checked_node_view(arm, root->initializer) : NULL;
-    const NLCheckedNodeView *tail =
-        block ? nl_checked_node_view(arm, block->tail) : NULL;
-    return root && block && tail && root != block && root != tail &&
-           block != tail && root->kind == NL_CHECKED_IF_ARM &&
-           block->kind == NL_CHECKED_BLOCK && !root->terminates &&
-           !block->terminates && !block->first_item && !block->item_count &&
-           root->type == w->u8 && block->type == w->u8 &&
-           root->result_count == 1 && block->result_count == 1 &&
-           root->results[0].type == w->u8 && block->results[0].type == w->u8 &&
+    const NLCheckedNodeView *tail = predicate_arm_value(arm);
+    if (!root || !block || !tail || root == block || root == tail ||
+        block == tail || root->kind != NL_CHECKED_IF_ARM ||
+        block->kind != NL_CHECKED_BLOCK || tail->type != w->u8 ||
+        !copy_if_literal(arm, tail))
+        return false;
+    if (root->terminates) {
+        const NLCheckedNodeView *ret =
+            nl_checked_node_view(arm, block->first_item);
+        return nl_checked_node_count(arm) == 4 && block->terminates &&
+               !root->result_count && !block->result_count && !block->tail &&
+               block->item_count == 1 && ret && ret != root && ret != block &&
+               ret != tail && root->returned.type == w->u8 &&
+               block->returned.type == w->u8 &&
+               root->returned.value == ret->returned.value &&
+               block->returned.value == ret->returned.value &&
+               nl_control_exits_count(arm->exits) == 1 &&
+               predicate_return(arm, ret, 0, w->body->function_target) &&
+               copy_if_gap(arm->source, block->span.start_byte,
+                           ret->span.start_byte, "{") &&
+               copy_if_gap(arm->source, tail->span.end_byte, ret->span.end_byte,
+                           ";") &&
+               copy_if_gap(arm->source, ret->span.end_byte,
+                           block->span.end_byte, "}");
+    }
+    return nl_checked_node_count(arm) == 3 && !block->terminates &&
+           !block->first_item && !block->item_count && root->type == w->u8 &&
+           block->type == w->u8 && root->result_count == 1 &&
+           block->result_count == 1 && root->results[0].type == w->u8 &&
+           block->results[0].type == w->u8 &&
            root->results[0].value == tail->results[0].value &&
            block->results[0].value == tail->results[0].value &&
-           tail->type == w->u8 && copy_if_literal(arm, tail) &&
-           !nl_control_exits_count(nl_checked_control_exits(arm)) &&
-           copy_if_gap(nl_checked_source(arm), block->span.start_byte,
+           !nl_control_exits_count(arm->exits) &&
+           copy_if_gap(arm->source, block->span.start_byte,
                        tail->span.start_byte, "{") &&
-           copy_if_gap(nl_checked_source(arm), tail->span.end_byte,
-                       block->span.end_byte, "}");
+           copy_if_gap(arm->source, tail->span.end_byte, block->span.end_byte,
+                       "}");
+}
+
+static bool predicate_selection(PredicateWalk *w, NLCheckedNodeId id,
+                                const NLCheckedNodeView *n)
+{
+    const NLCheckedNodeView *cond =
+        nl_checked_node_view(w->body, n->initializer);
+    if (++w->selections != 1 || n->item_count != 2 || n->has_scalar_result ||
+        !cond || cond->type != w->boolean ||
+        !predicate_scalar(w, n->initializer) || !predicate_arm(w, id, 0) ||
+        !predicate_arm(w, id, 1))
+        return false;
+    const NLCheckedFragment *a = nl_checked_if_arm(w->body, id, 0),
+                            *b = nl_checked_if_arm(w->body, id, 1);
+    const NLCheckedNodeView *x = nl_checked_node_view(a, a->root),
+                            *y = nl_checked_node_view(b, b->root);
+    const size_t normal = (size_t)!x->terminates + (size_t)!y->terminates;
+    NLSemanticValueView value;
+    if (n->normal_arms != normal || n->terminates != (normal == 0) ||
+        !copy_if_gap(w->body->source, n->span.start_byte, cond->span.start_byte,
+                     "if(") ||
+        !copy_if_gap(w->body->source, cond->span.end_byte, x->span.start_byte,
+                     ")") ||
+        !copy_if_gap(w->body->source, x->span.end_byte, y->span.start_byte,
+                     "else") ||
+        y->span.end_byte != n->span.end_byte)
+        return false;
+    if (normal) {
+        if (!predicate_value(w->body, n, &value) || n->type != w->u8)
+            return false;
+        if (normal == 2) {
+            if (value.scalar_known || value.scalar_value || n->tail)
+                return false;
+        } else {
+            /* CHECK reapplies the sole normal block in the parent world.
+             * Consume every replay node and match its source and literal to
+             * that genuine arm; it is not a second possible normal arm. */
+            const NLCheckedFragment *arm = x->terminates ? b : a;
+            const NLCheckedNodeView *ar = nl_checked_node_view(arm, arm->root),
+                                    *ab = nl_checked_node_view(arm,
+                                                               ar->initializer),
+                                    *av = predicate_arm_value(arm);
+            const NLCheckedNodeView *block = predicate_take(w, n->tail),
+                                    *tail = block
+                                                ? predicate_take(w, block->tail)
+                                                : NULL;
+            if (!block || !tail || block->kind != NL_CHECKED_BLOCK ||
+                block->terminates || block->first_item || block->item_count ||
+                block->type != w->u8 || block->result_count != 1 ||
+                block->results[0].type != w->u8 ||
+                block->results[0].value != tail->results[0].value ||
+                n->results[0].value != tail->results[0].value ||
+                block->span.start_byte != ab->span.start_byte ||
+                block->span.end_byte != ab->span.end_byte ||
+                tail->span.start_byte != av->span.start_byte ||
+                tail->span.end_byte != av->span.end_byte ||
+                !copy_if_literal(w->body, tail) ||
+                tail->scalar_result.value != av->scalar_result.value)
+                return false;
+        }
+    } else {
+        if (n->result_count || n->tail || n->returned.type != w->u8 ||
+            !nl_semantic_value_view(w->body->context, n->returned.value,
+                                    &value) ||
+            !copy_if_plain(value, w->u8) || value.scalar_known ||
+            value.scalar_value)
+            return false;
+    }
+    w->selection = id;
+    return true;
 }
 
 static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
@@ -89,6 +216,10 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
     const NLCheckedNodeView *n = predicate_take(w, id);
     NLSemanticValueView value;
     bool valid = false;
+    if (n && n->kind == NL_CHECKED_IF) {
+        valid = predicate_selection(w, id, n);
+        goto done;
+    }
     if (!predicate_value(w->body, n, &value) ||
         (n->type != w->quantity && n->type != w->boolean && n->type != w->u8))
         goto done;
@@ -170,33 +301,6 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
                            : 0);
         break;
     }
-    case NL_CHECKED_IF: {
-        const NLCheckedNodeView *cond =
-            nl_checked_node_view(w->body, n->initializer);
-        valid = ++w->selections == 1 && n->type == w->u8 &&
-                n->normal_arms == 2 && n->item_count == 2 &&
-                !value.scalar_known && !value.scalar_value &&
-                !n->has_scalar_result && cond && cond->type == w->boolean &&
-                predicate_scalar(w, n->initializer) &&
-                predicate_arm(w, id, 0) && predicate_arm(w, id, 1);
-        if (valid) {
-            w->selection = id;
-            const NLCheckedFragment *a = nl_checked_if_arm(w->body, id, 0);
-            const NLCheckedFragment *b = nl_checked_if_arm(w->body, id, 1);
-            const NLCheckedNodeView *x =
-                nl_checked_node_view(a, nl_checked_root(a));
-            const NLCheckedNodeView *y =
-                nl_checked_node_view(b, nl_checked_root(b));
-            valid = copy_if_gap(nl_checked_source(w->body), n->span.start_byte,
-                                cond->span.start_byte, "if(") &&
-                    copy_if_gap(nl_checked_source(w->body), cond->span.end_byte,
-                                x->span.start_byte, ")") &&
-                    copy_if_gap(nl_checked_source(w->body), x->span.end_byte,
-                                y->span.start_byte, "else") &&
-                    y->span.end_byte == n->span.end_byte;
-        }
-        break;
-    }
     default:
         break;
     }
@@ -269,19 +373,54 @@ static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
     const NLControlExits *exits = nl_checked_control_exits(f);
     if (returned) {
         const NLCheckedNodeView *value = nl_checked_node_view(f, returned);
+        const NLCheckedNodeView *ret = NULL;
+        for (NLCheckedNodeId id = root->first_item; id;) {
+            const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+            if (!n)
+                return false;
+            if (n->kind == NL_CHECKED_RETURN)
+                ret = n;
+            id = n->next_item;
+        }
         if (!value || !root->terminates || root->tail ||
             root->returned.type != u8 ||
             root->returned.value != value->results[0].value ||
             nl_control_exits_count(exits) != 1 ||
-            !nl_control_exits_only_return(exits, f->function_target))
+            !predicate_return(f, ret, 0, f->function_target))
             return false;
     } else {
         const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
-        if (root->terminates || !tail || tail->type != u8 ||
-            root->result_count != 1 || root->results[0].type != u8 ||
-            root->results[0].value != tail->results[0].value ||
-            nl_control_exits_count(exits) || !predicate_scalar(&w, root->tail))
+        if (!tail || !predicate_scalar(&w, root->tail))
             return false;
+        const NLCheckedNodeView *choice = nl_checked_node_view(f, w.selection);
+        if (!choice || choice->normal_arms > 2)
+            return false;
+        const size_t returns = 2 - choice->normal_arms;
+        /* Existing normal-IF result bindings/Copy tails remain ordinary pure
+         * syntax. The new mixed/both-RETURN slice ends in the actual IF;
+         * extending later result bindings needs its own emitter composition. */
+        if (returns && root->tail != w.selection)
+            return false;
+        if (nl_control_exits_count(exits) != returns ||
+            (returns &&
+             !nl_control_exits_only_return(exits, f->function_target)))
+            return false;
+        if (!returns) {
+            if (root->terminates || tail->type != u8 ||
+                root->result_count != 1 || root->results[0].type != u8 ||
+                root->results[0].value != tail->results[0].value)
+                return false;
+        } else {
+            const NLCheckedResult summary =
+                root->terminates ? root->returned : root->results[0];
+            NLSemanticValueView v;
+            if (root->terminates != tail->terminates ||
+                root->result_count != (size_t)!root->terminates ||
+                summary.type != u8 ||
+                !nl_semantic_value_view(c, summary.value, &v) ||
+                !copy_if_plain(v, u8) || v.scalar_known || v.scalar_value)
+                return false;
+        }
     }
     if (w.selections != 1)
         return false;
@@ -359,10 +498,14 @@ static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
 /* Published consumers require the original finished-result receipt. The
  * contents walk is also used by CHECK on its own unpublished definition
  * prefix, where source_call deliberately has not issued that receipt. */
-static bool nl_pure_u8_call(const NLCheckedFragment *f, NLCheckedNodeId id,
-                            NLPureU8Call *out)
+static inline bool nl_pure_u8_call(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id, NLPureU8Call *out)
 {
-    return nl_h_custody_result_valid(f, id) && nl_pure_u8_contents(f, id, out);
+    if (!nl_h_custody_result_valid(f, id) || !nl_pure_u8_contents(f, id, out))
+        return false;
+    const NLCheckedNodeView *choice =
+        nl_checked_node_view(out->body, out->selection);
+    return choice && choice->normal_arms == 2;
 }
 
 #endif

@@ -141,6 +141,31 @@ static bool current_copy_origin(const NLCheckedFragment *f,
     }
     return false;
 }
+/* At most two source RETURN leaves and their two existing body-union
+ * records. These borrow core-owned states; only the authentication snapshots
+ * below are owned here. No public RETURN issuer or graph is introduced. */
+typedef struct {
+    const NLCheckedFragment *owner, *source;
+    const NLControlExits *set;
+    size_t ordinal;
+    NLCheckedNodeId node;
+} CurrentReturnRef;
+typedef struct {
+    CurrentReturnRef ref;
+    NLControlExitView view;
+    size_t set_count;
+    StutterWorld world;
+} CurrentReturnSeal;
+typedef struct {
+    const NLTypeId *parameters;
+    size_t count;
+} CurrentSignatureOrigin;
+typedef struct {
+    const NLFunctionEntry *functions;
+    size_t count;
+    const CurrentSignatureOrigin *entries;
+} CurrentSignatureSet;
+
 typedef struct NLCurrentLoopProof {
     NLControlState *entry, *header;
     NLCheckedFragment *graph;
@@ -160,9 +185,15 @@ typedef struct NLCurrentLoopProof {
     const NLSource *helper_source;
     const char *helper_parameter_name;
     NLSourceSpan helper_name;
-    NLTypeId *helper_parameters[12]; /* six graphs, caller/post, four exits */
-    const NLFunctionEntry *helper_post_functions;
-    size_t helper_post_function_count;
+    /* Six graphs, caller/post, four loop exits and at most four helper
+     * exits. One private allocation contains every signature pointer/count
+     * that the all-function comparator may consume. */
+    CurrentSignatureSet signatures[16];
+    CurrentSignatureOrigin *signature_entries;
+    size_t signature_entry_count;
+    const NLControlTarget *helper_target;
+    CurrentReturnSeal *returns;
+    size_t return_count;
     StutterWorld exits[4];
     NLControlExitView exit_views[4];
     bool graph_owned, sealed;
@@ -181,6 +212,12 @@ static void destroy_current_cycle(NLCurrentLoopProof *s)
         nl_copy_state_destroy(&s->exits[i].anchor);
         nl_semantic_destroy(s->exits[i].copy);
     }
+    for (size_t i = 0; i < s->return_count; ++i) {
+        nl_copy_state_destroy(&s->returns[i].world.anchor);
+        nl_semantic_destroy(s->returns[i].world.copy);
+    }
+    free(s->signature_entries);
+    free(s->returns);
     nl_control_state_destroy(s->entry);
     nl_control_state_destroy(s->header);
     if (!s->graph_owned)
@@ -572,6 +609,80 @@ static bool current_pure_prefix(const NLCurrentLoopProof *s,
     return true;
 }
 
+/* Source RETURN nodes are already owned by CHECK, while generic return
+ * records deliberately have no public source issuer. Bind the finite leaf /
+ * body-union order to those actual nodes privately, and validate each result
+ * only in its own captured world. Equal branch-local numeric IDs do not
+ * identify a value in another branch. */
+static bool current_return_ref(const NLCurrentLoopProof *s,
+                               const CurrentReturnRef *r,
+                               const NLControlTarget *target)
+{
+    const NLControlExitView *x = nl_control_exit_view(r->set, r->ordinal);
+    const NLCheckedNodeView *ret = nl_checked_node_view(r->source, r->node),
+                            *value = ret ? nl_checked_node_view(
+                                               r->source, ret->initializer)
+                                         : NULL;
+    const NLSemanticContext *world =
+        x ? nl_control_state_context((NLControlState *)x->state) : NULL;
+    NLSemanticValueView actual, original;
+    return r->owner->exits == r->set &&
+           r->owner->function_target == (r->owner->if_parent ? NULL : target) &&
+           r->source->function_target ==
+               (r->source->if_parent ? NULL : target) &&
+           ret && value && ret->kind == NL_CHECKED_RETURN && ret->terminates &&
+           x && x->kind == NL_EXIT_RETURN && x->target == target &&
+           x->count == 1 && !x->source_owner && !x->source_node &&
+           !x->source_target && x->values[0].type == ret->returned.type &&
+           x->values[0].value == ret->returned.value &&
+           predicate_value(r->source, value, &original) &&
+           nl_semantic_value_view(world, x->values[0].value, &actual) &&
+           copy_if_plain(actual, value->type) &&
+           actual.scalar_known == original.scalar_known &&
+           actual.scalar_value == original.scalar_value &&
+           current_pure_prefix(s, world);
+}
+
+static bool current_return_refs(const NLCurrentLoopProof *s,
+                                const NLPureU8Call *pure,
+                                CurrentReturnRef refs[4], size_t *count)
+{
+    const NLCheckedFragment *body = pure->body;
+    const NLCheckedNodeView *choice =
+                                nl_checked_node_view(body, pure->selection),
+                            *root = nl_checked_node_view(body, body->root);
+    *count = 0;
+    size_t joined = 0;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *arm =
+            nl_checked_if_arm(body, pure->selection, i);
+        const NLCheckedNodeView *ar = nl_checked_node_view(arm, arm->root);
+        if (!ar->terminates)
+            continue;
+        const NLCheckedNodeView *block =
+            nl_checked_node_view(arm, ar->initializer);
+        refs[(*count)++] =
+            (CurrentReturnRef){arm, arm, arm->exits, 0, block->first_item};
+        refs[(*count)++] = (CurrentReturnRef){body, arm, body->exits, joined++,
+                                              block->first_item};
+    }
+    if (choice->normal_arms == 2 && root->terminates) {
+        NLCheckedNodeId id = root->first_item;
+        while (id && nl_checked_node_view(body, id)->kind != NL_CHECKED_RETURN)
+            id = nl_checked_node_view(body, id)->next_item;
+        if (!id)
+            return false;
+        refs[(*count)++] = (CurrentReturnRef){body, body, body->exits, 0, id};
+        joined = 1;
+    }
+    if (nl_control_exits_count(body->exits) != joined || *count > 4)
+        return false;
+    for (size_t i = 0; i < *count; ++i)
+        if (!current_return_ref(s, &refs[i], body->function_target))
+            return false;
+    return true;
+}
+
 /* Authenticate the actual normal scalar join and both complete, effect-free
  * arm graphs. Equal numeric IDs in different worlds are never an identity
  * proof: each result is checked only in its own owned world. */
@@ -700,8 +811,8 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
     if (!s->helper || !source || source->kind != NL_SYNTAX_EXPR_CALL ||
         r->scalar || r->changed || !v || !stutter_span(v->span, source->span) ||
         !stutter_span(v->name, source->data.call.callee) ||
-        !(s->sealed ? nl_pure_u8_call(r->arm, id, &pure)
-                    : nl_pure_u8_contents(r->arm, id, &pure)))
+        (s->sealed && !nl_h_custody_result_valid(r->arm, id)) ||
+        !nl_pure_u8_contents(r->arm, id, &pure))
         return false;
     const NLCheckedNodeView *arg = current_take(r, v->first_argument);
     const NLSyntaxView *actual =
@@ -724,8 +835,8 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
                              s->phase, false, 2, NULL) ||
         !stutter_free_quantity(r->arm->context, arg->results[0].value,
                                quantity) ||
-        !root || root->terminates || pure.body->body_count ||
-        pure.body->arm_count != 2 || !choice || !test || !left || !right ||
+        !root || pure.body->body_count || pure.body->arm_count != 2 ||
+        !choice || !test || !left || !right ||
         (test->kind != NL_CHECKED_USIZE_LESS_THAN &&
          test->kind != NL_CHECKED_USIZE_EQUALITY) ||
         !current_copy_origin(pure.body, pure.body->context,
@@ -741,6 +852,10 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
             !current_pure_prefix(s, arm->context))
             return false;
     }
+    CurrentReturnRef refs[4];
+    size_t count;
+    if (!current_return_refs(s, &pure, refs, &count))
+        return false;
     r->scalar = id;
     return true;
 }
@@ -1131,8 +1246,8 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
                 return bad;
             if (s->helper) {
                 NLPureU8Call pure;
-                if (!(s->sealed ? nl_pure_u8_call(arm, scalar, &pure)
-                                : nl_pure_u8_contents(arm, scalar, &pure)) ||
+                if ((s->sealed && !nl_h_custody_result_valid(arm, scalar)) ||
+                    !nl_pure_u8_contents(arm, scalar, &pure) ||
                     (s->sealed && s->helper_choice != pure.selection))
                     return bad;
                 if (!s->sealed) {
@@ -1180,21 +1295,83 @@ current_helper_function(const NLCurrentLoopProof *s, const NLSemanticContext *c)
                : NULL;
 }
 
-/* No signature contents are read here. First authenticate the enclosing table
- * allocation/count, then the helper's retained signature allocation. This must
- * precede world comparison, which compares signature contents as well. */
-static bool current_helper_signature_origin(const NLCurrentLoopProof *s,
-                                            const NLSemanticContext *c,
-                                            const NLFunctionEntry *functions,
-                                            size_t count, size_t slot)
+static const NLSemanticContext *
+current_signature_world(const NLCurrentLoopProof *s,
+                        const NLLinearBreakProof *p, size_t slot)
 {
-    if (!c || c->functions != functions || c->function_count != count ||
-        !functions || !s->helper_function || s->helper_function > count ||
-        slot >= sizeof(s->helper_parameters) / sizeof(*s->helper_parameters))
+    if (slot < (s->helper ? 6u : s->scalar ? 5u : 3u))
+        return s->graphs[slot].world.world;
+    if (slot == 6)
+        return &p->final_storage;
+    if (slot == 7)
+        return p->post;
+    if (slot >= 8 && slot < 12)
+        return s->exits[slot - 8].world;
+    if (slot >= 12 && slot - 12 < s->return_count)
+        return s->returns[slot - 12].world.world;
+    return NULL;
+}
+
+/* Retain the complete dependency set of the all-function signature-content
+ * comparison. The ledger borrows the CHECK-owned allocations; it never owns
+ * or extends their lifetime. One allocation keeps OOM rollback local. */
+static NLCheckStatus current_signature_seal(NLCurrentLoopProof *s,
+                                            const NLLinearBreakProof *p)
+{
+    size_t total = 0;
+    for (size_t slot = 0; slot < 16; ++slot) {
+        const NLSemanticContext *c = current_signature_world(s, p, slot);
+        if (!c)
+            continue;
+        if (c->function_count > NL_SEMANTIC_MAX_ENTRIES ||
+            (c->function_count && !c->functions) ||
+            c->function_count > SIZE_MAX - total)
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        total += c->function_count;
+    }
+    if (total > SIZE_MAX / sizeof(*s->signature_entries))
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    if (total) {
+        s->signature_entries = calloc(total, sizeof(*s->signature_entries));
+        if (!s->signature_entries)
+            return NL_CHECK_OUT_OF_MEMORY;
+    }
+    s->signature_entry_count = total;
+    size_t offset = 0;
+    for (size_t slot = 0; slot < 16; ++slot) {
+        const NLSemanticContext *c = current_signature_world(s, p, slot);
+        if (!c)
+            continue;
+        CurrentSignatureSet *set = &s->signatures[slot];
+        set->functions = c->functions;
+        set->count = c->function_count;
+        set->entries = c->function_count ? s->signature_entries + offset : NULL;
+        for (size_t i = 0; i < c->function_count; ++i) {
+            s->signature_entries[offset + i] = (CurrentSignatureOrigin){
+                .parameters = c->functions[i].parameters,
+                .count = c->functions[i].count};
+        }
+        offset += c->function_count;
+    }
+    return NL_CHECK_OK;
+}
+
+/* Authenticate every signature allocation and extent before the comparator
+ * can read any signature contents. No parameter element is read here. */
+static bool current_signature_origin(const NLCurrentLoopProof *s,
+                                     const NLSemanticContext *c, size_t slot)
+{
+    if (!c || slot >= 16)
         return false;
-    const NLFunctionEntry *fn = &functions[s->helper_function - 1];
-    return fn->count == 1 && fn->parameters &&
-           fn->parameters == s->helper_parameters[slot];
+    const CurrentSignatureSet *set = &s->signatures[slot];
+    if (c->functions != set->functions || c->function_count != set->count ||
+        (set->count && (!set->functions || !set->entries)))
+        return false;
+    for (size_t i = 0; i < set->count; ++i)
+        if (set->functions[i].parameters != set->entries[i].parameters ||
+            set->functions[i].count != set->entries[i].count)
+            return false;
+    return true;
 }
 
 /* Current helper admission authenticates the actual retained plan and
@@ -1203,12 +1380,18 @@ static bool current_helper_signature_origin(const NLCurrentLoopProof *s,
 static bool current_helper_entry(const NLCurrentLoopProof *s,
                                  const NLSemanticContext *c, size_t slot)
 {
+    if (!current_signature_origin(s, c, slot) ||
+        s->helper_function > s->signatures[slot].count)
+        return false;
     const NLFunctionEntry *fn = current_helper_function(s, c);
     if (!fn)
         return false;
+    const CurrentSignatureOrigin *origin =
+        &s->signatures[slot].entries[s->helper_function - 1];
     return fn->kind == NL_CHECKED_REGISTERED_CALL &&
            fn->body == s->helper_plan && fn->count == 1 &&
-           fn->parameters == s->helper_parameters[slot] && fn->parameters &&
+           fn->parameters == origin->parameters && origin->count == 1 &&
+           fn->parameters &&
            fn->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
            fn->result == nl_semantic_core_type(c, NL_TYPE_U8) &&
            !fn->caller_effects && !fn->hidden_dependencies &&
@@ -1231,6 +1414,30 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
         NLPureU8Call pure;
         if (!nl_pure_u8_contents(iteration, s->scalar, &pure))
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        CurrentReturnRef refs[4];
+        size_t count;
+        if (!current_return_refs(s, &pure, refs, &count))
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        s->helper_target = pure.body->function_target;
+        if (count) {
+            s->returns = calloc(count, sizeof(*s->returns));
+            if (!s->returns)
+                return NL_CHECK_OUT_OF_MEMORY;
+            s->return_count = count;
+            for (size_t i = 0; i < count; ++i) {
+                CurrentReturnSeal *r = &s->returns[i];
+                r->ref = refs[i];
+                r->set_count = nl_control_exits_count(r->ref.set);
+                const NLControlExitView *x =
+                    nl_control_exit_view(r->ref.set, r->ref.ordinal);
+                memcpy(&r->view, x, sizeof(*x));
+                NLCheckStatus status = stutter_anchor_world(
+                    &r->world,
+                    nl_control_state_context((NLControlState *)x->state));
+                if (status != NL_CHECK_OK)
+                    return status;
+            }
+        }
         s->helper_plan = pure.body->body_owner;
         s->helper_syntax = s->helper_plan->syntax;
         s->helper_source = s->helper_plan->source;
@@ -1241,10 +1448,6 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
                               *post = current_helper_function(s, p->post);
         if (!actual || !post || !actual->parameters || !post->parameters)
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
-        s->helper_parameters[6] = actual->parameters;
-        s->helper_parameters[7] = post->parameters;
-        s->helper_post_functions = p->post->functions;
-        s->helper_post_function_count = p->post->function_count;
     }
     for (size_t i = 0; i < (s->helper ? 6u : s->scalar ? 5u : 3u); ++i) {
         StutterGraph *a = &s->graphs[i];
@@ -1255,13 +1458,6 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
         a->count = a->fragment->count;
         a->root = a->fragment->root;
         a->source = a->fragment->source;
-        if (s->helper) {
-            const NLFunctionEntry *fn =
-                current_helper_function(s, a->fragment->context);
-            if (!fn || !fn->parameters)
-                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
-            s->helper_parameters[i] = fn->parameters;
-        }
         NLCheckStatus status = linear_seal_graph(a->fragment, &a->nodes);
         if (status == NL_CHECK_OK)
             status = stutter_anchor_world(&a->world, a->fragment->context);
@@ -1279,14 +1475,10 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
             &s->exits[i], nl_control_state_context((NLControlState *)x->state));
         if (status != NL_CHECK_OK)
             return status;
-        if (s->helper) {
-            const NLFunctionEntry *fn =
-                current_helper_function(s, s->exits[i].world);
-            if (!fn || !fn->parameters)
-                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
-            s->helper_parameters[8 + i] = fn->parameters;
-        }
     }
+    NLCheckStatus signature_status = current_signature_seal(s, p);
+    if (signature_status != NL_CHECK_OK)
+        return signature_status;
     s->sealed = true;
     return NL_CHECK_OK;
 }
@@ -1304,12 +1496,8 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                               p->root_count, p->root_root) ||
         !linear_graph_matches(f, p->parent_origin, p->parent_nodes,
                               p->parent_count, p->parent_root) ||
-        (s->helper && (!current_helper_signature_origin(
-                           s, f->context, p->final_storage.functions,
-                           p->final_storage.function_count, 6) ||
-                       !current_helper_signature_origin(
-                           s, p->post, s->helper_post_functions,
-                           s->helper_post_function_count, 7))) ||
+        !current_signature_origin(s, f->context, 6) ||
+        !current_signature_origin(s, p->post, 7) ||
         !linear_world_matches(f->context, &p->final_storage, p->final,
                               &p->final_anchor) ||
         !linear_callable(p, f->context) || !linear_callable(p, p->post) ||
@@ -1323,9 +1511,7 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                                   a->root) ||
             a->fragment->source != a->source ||
             a->fragment->context != a->world.world ||
-            (s->helper && !current_helper_signature_origin(
-                              s, a->world.world, a->world.storage.functions,
-                              a->world.storage.function_count, i)) ||
+            !current_signature_origin(s, a->world.world, i) ||
             !linear_world_matches(a->world.world, &a->world.storage,
                                   a->world.copy, &a->world.anchor) ||
             (s->helper && !current_helper_entry(s, a->world.world, i)))
@@ -1341,13 +1527,47 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         if (!x || memcmp(x, &s->exit_views[i], sizeof(*x)) ||
             nl_control_state_context((NLControlState *)x->state) !=
                 s->exits[i].world ||
-            (s->helper &&
-             !current_helper_signature_origin(
-                 s, s->exits[i].world, s->exits[i].storage.functions,
-                 s->exits[i].storage.function_count, 8 + i)) ||
+            !current_signature_origin(s, s->exits[i].world, 8 + i) ||
             !linear_world_matches(s->exits[i].world, &s->exits[i].storage,
                                   s->exits[i].copy, &s->exits[i].anchor))
             return bad;
+    }
+    if (s->helper) {
+        const NLCheckedFragment *helper = current_graph_at(s, 3);
+        if (!helper || helper->function_target != s->helper_target)
+            return bad;
+        for (size_t i = 0; i < s->return_count; ++i) {
+            const CurrentReturnSeal *r = &s->returns[i];
+            if (r->ref.owner->exits != r->ref.set ||
+                r->ref.owner->function_target !=
+                    (r->ref.owner == helper ? s->helper_target : NULL) ||
+                nl_control_exits_count(r->ref.set) != r->set_count)
+                return bad;
+            const NLControlExitView *x =
+                nl_control_exit_view(r->ref.set, r->ref.ordinal);
+            if (!x || memcmp(x, &r->view, sizeof(*x)) ||
+                nl_control_state_context((NLControlState *)x->state) !=
+                    r->world.world ||
+                !current_signature_origin(s, r->world.world, 12 + i) ||
+                !linear_world_matches(r->world.world, &r->world.storage,
+                                      r->world.copy, &r->world.anchor) ||
+                !current_helper_entry(s, r->world.world, 12 + i))
+                return bad;
+        }
+        NLPureU8Call pure;
+        CurrentReturnRef refs[4];
+        size_t count;
+        if (!nl_pure_u8_contents(s->graphs[1].fragment, s->scalar, &pure) ||
+            !current_return_refs(s, &pure, refs, &count) ||
+            count != s->return_count)
+            return bad;
+        for (size_t i = 0; i < count; ++i)
+            if (refs[i].owner != s->returns[i].ref.owner ||
+                refs[i].source != s->returns[i].ref.source ||
+                refs[i].set != s->returns[i].ref.set ||
+                refs[i].ordinal != s->returns[i].ref.ordinal ||
+                refs[i].node != s->returns[i].ref.node)
+                return bad;
     }
     const NLCheckedNodeView *n = nl_checked_node_view(f, p->loop),
                             *call = nl_checked_node_view(p->root, p->call);

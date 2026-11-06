@@ -1,0 +1,8 @@
+{
+  "cases": {
+    "90-wrong-return-type": "P9-RETURN-TYPE",
+    "91-helper-break": "P14-CONTROL-CONTEXT",
+    "95-mixed-result-binding": "P14-LOOP-PRECISION"
+  },
+  "scope": "first two invalid; third canonical-valid unsupported mixed-result binding composition, helper still genuinely checked/call-normal, never force guest"
+}

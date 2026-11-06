@@ -1,0 +1,28 @@
+{
+  "authority": "C priority repair 6676808814; no guest on corrupted proof",
+  "fixed_old_head": "24339b077ed0e0a3e847f23aed170c67d2b3d20a",
+  "source_expectation": "All three genuine function units register and main CHECK/current validate. audit_unused has independent two-usize allocation; selected helper has one.",
+  "old_observation": "At most 6 old-candidate invocations; first execute RETURN slot12 family1. Expected ASan read overflow in linear_world_matches; ordinary source-only UB is not claimed. Preserve FIRST; no corrupted guest.",
+  "repair_oracle": "All present worlds (six or five graphs, caller/post, four loop exits, up to four RETURN) reject eleven signature/table/count mutations with output no-clobber, restore then validate, destroy A then B still validates and destroys. Inline profile omits helper-only family1. Original C256 ownership challenges stay unchanged.",
+  "families": [
+    "live short helper signature alias",
+    "one-byte foreign allocation",
+    "NULL signature",
+    "short count",
+    "SIZE_MAX count",
+    "same-extent genuine B signature",
+    "NULL function table",
+    "genuine B function table",
+    "signature content changed",
+    "short function_count",
+    "SIZE_MAX function_count"
+  ],
+  "limits": {
+    "old_reproducer_invocations": 6,
+    "focused_families": 12,
+    "native": 48,
+    "full_GCC": 1,
+    "necessary_repaired_repetition": 1
+  },
+  "allocation_contract": "Original CHECK-issued table pointer/count and each original signature pointer/element count must match before any all-function parameter-content comparison. Snapshot metadata owns no borrowed table/signature."
+}

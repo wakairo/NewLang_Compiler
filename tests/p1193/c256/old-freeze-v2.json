@@ -1,0 +1,29 @@
+{
+  "authority": "C252 autonomous equipment correction only: correct public source-fragment parser/checker for usize actual; v1 source/oracle/equipment/FIRST retained; same profiles repeated for failed apparatus recovery, not a new source cohort",
+  "base_HEAD": "7b7095fc5bc187a40ee557b768ae5475c81cdfe7",
+  "base_tree": "f0aebb423a1c38908fde83f219886cf387b3705e",
+  "baseline_binary": "/tmp/p1188-c250a-clean-build/newlangc",
+  "baseline_binary_sha256": "31d9d81338e3e3964021f6b6beadf4cad5199432782f5b9766be21aa4f720dc4",
+  "binary_binding": "Clean tracked-source compiler at a45b956; a45b956..fixed7b7095 changes only tests/p1188/c250a/LOCAL-COMPLETION.md; every Production/input digest in v46 is identical. No new baseline build needed.",
+  "files": {
+    "tests/p1193/evidence/80-normal-control.c17": "97a2009034ff9776406b39aee11c959d03db69f7f3beac1cd417dcefae28324a",
+    "tests/p1193/oracle-v1.json": "06340a2421dbc88c414e71ddda0206d3a79a180867bfa50b2e9c8a76cdc76c78",
+    "tests/p1193/probe.c": "868e3e9b1c98fafc57a639c842fe64922c2a935099e04d44d658ee64e9bd7932",
+    "tests/p1193/run.py": "186f5775360789e8028c02c272eba613a0434f0f763fbdc06682bd41fff7741b",
+    "tests/p1193/sources/01-return-left.nl": "673bba32075013c9c8b519072ac05117e7361e9e4a426832e9473cce38bf5329",
+    "tests/p1193/sources/02-return-right.nl": "644eb49d6c001af1f4db998cdd98cbf72a3cda41d9709ef5b23b40cc3bec074b",
+    "tests/p1193/sources/03-both-return.nl": "91077c12dddd0c3afabc97ef8195ea19e1e36da6c511d60baf1a407abd8b8623",
+    "tests/p1193/sources/04-return-if.nl": "c72b95c578f9e54030fb8b8decb18e9260e158b4750f48869527c3ad9fa8a223",
+    "tests/p1193/sources/80-normal-control.nl": "113b453e8207cec661a803f2173a3ad785d5e1d6d67f75737c03ac7ac15036d7",
+    "tests/p1193/sources/90-wrong-return-type.nl": "54acc94397d5c1c56df084f78e4a9535f50b4ebba2f78c82e6d5b4da300ca7d8",
+    "tests/p1193/sources/91-helper-break.nl": "f786f0b966064285628fea68e51fb33586d3e0872d39e1db7fb7c8f33c9d0a46",
+    "tests/p1193/probe-v2.c": "9bc8737ef93e707c998fdacf4b0f95ff4a83875721bb288faaac90e698a78ca6",
+    "tests/p1193/run-v2.py": "1533b5dcf311a8f2ca41ec453a1a8a337cd3b4158cee2dbf359cf45d1de3d1d5",
+    "tests/p1193/freeze-v1.json": "76daea2cd3986c58a506c069aabf5bed06078ca697cd64802fc493adbe91dddd",
+    "tests/p1193/evidence/FIRST-v1.zip": "117b5ebbafb2667b47f047c9d57a8e7c906df0287566a2bafd593655a7af46a2"
+  },
+  "previous": {
+    "path": "tests/p1193/freeze-v1.json",
+    "sha256": "76daea2cd3986c58a506c069aabf5bed06078ca697cd64802fc493adbe91dddd"
+  }
+}

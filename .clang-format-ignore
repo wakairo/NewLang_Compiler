@@ -2,3 +2,7 @@
 # The compiled and format-checked successor is tests/p1117/lineage_v2.c.
 # No live executable test or Production source is excluded.
 tests/p1117/lineage.c
+
+# Immutable C256 phase1 pre-execution inputs, including FIRST apparatus.
+# Active formatted successors are enrolled from tests/p1193/production/.
+tests/p1193/c256/*.c

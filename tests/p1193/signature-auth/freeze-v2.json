@@ -1,0 +1,10 @@
+{
+  "phase": "BEFORE any observation; v1 preflight corrected non-helper positive validation and formatting, old v1 freeze retained",
+  "files": {
+    "tests/p1193/signature-auth/challenges.c": "6fd1a6d01410264accf2bc18bd450454ff291082ba9678bc77c5525533089e36",
+    "tests/p1193/signature-auth/inline.nl": "9898904e081c36fcec841262e76058f6c637c9c8e27bfb1a96a36b234138d057",
+    "tests/p1193/signature-auth/normal.nl": "91aaa95559a067d30573c410c9999d7c9189021004f7493422248f0c3002df05",
+    "tests/p1193/signature-auth/oracle-v1.json": "fcfb5141d072f0ee51b5427197e6efb37796f831c8c391344f7aadfbc5c11fde",
+    "tests/p1193/signature-auth/return.nl": "46af38cf2ce69dc00bc779083616c7992b1aa73b95fbd447294674aacdff874b"
+  }
+}

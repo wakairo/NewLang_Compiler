@@ -1,0 +1,8 @@
+{
+  "authority": "C256 phase1 fresh matched census before long OOM/matrix",
+  "oracle": "baseline f164 normal-control vs candidate same control; four RETURN positives candidate; true CHECK/current0, all tracked bytes/blocks/contexts zero after destruction; report core vs proof and reached allocation ordinals, not fault coverage",
+  "files": {
+    "tests/p1193/c256/census-v4.c": "5fd6066fecb6e0c505a9a5f234c180215b0ce445c1b7fd201ea515eb1a39197c"
+  },
+  "repair": "v3 passed cleanup; v4 additionally attributes all retained heap arrays to each exact nl_sem_clone, rather than reporting only 168-byte top allocations, plus retained new allocation ordinals"
+}

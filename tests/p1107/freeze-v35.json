@@ -1,0 +1,28 @@
+{
+  "previous": "freeze-v34.json",
+  "reason": "C257 F-1198-01 prospective CMake enrollment for finite all-signature allocation/extent authentication; original v1-v34/source/oracle/FIRST unchanged",
+  "files": {
+    "CMakeLists.txt": "89355851ca3a8d34f630773f51e50ba6efe202a455277810ee7afb4b373de809",
+    "tests/p1107/evidence_test.py": "e778afc9fd22da945f00eed50dc93bde3b86c1d34bb743c03d641b204e58831d",
+    "tests/p1107/generate_sources_v1.py": "2936a0497477ed4a773974a0d413e91e9b69e336c148d052bbf06bbc7d5ceeeb",
+    "tests/p1107/history_v21.py": "dba618e6a0b950709aa9410a4bdc5712d34b860dcd7cdcbbece619c8c4195636",
+    "tests/p1107/observer.h": "a73be1a5e901012d5077188a0d032a779c58516320d6914e0bc108861650cb7b",
+    "tests/p1107/oracle-extension-v2.json": "879fecc779dda8e409f48d0aa8b70e6fef4628afc67bf1e6faf2c6de254aa5c8",
+    "tests/p1107/oracle-v1.json": "b327ee2fb651772bf73a4ae40a776fb7e51eefe54d765bfc0d5077ddcda64eff",
+    "tests/p1107/p1098_forward.py": "d3c35040190226f9d1341d3db801748af5deff2f7d1667d6b40aba92bbba174e",
+    "tests/p1107/probe.c": "229cd4dc8922f23d336c89178354d8449d747bb0a009b8d794436497edde3943",
+    "tests/p1107/run.py": "cc1625779a784f8c65c21cd97d416b3b1dbd89fae20e9e09a0a1bc3d7e17e1d8",
+    "tests/p1107/sources/01-bound.nl": "cccdc1b51e7fddb230f2a1ee268f69750559cdf7310074b0a63b49ea7f637fa1",
+    "tests/p1107/sources/02-inline.nl": "22cefa7da820369189d6caa42b6c3aea3bc9d634d83451e9fc05174319a77a7e",
+    "tests/p1107/sources/03-no-caller-write.nl": "5357496b348356b5bfe9a66497d27922b8231f2c5017cec8f2f98a1b273b0ecd",
+    "tests/p1107/sources/04-two-originals.nl": "4a325cf682b4b18a0f485aa9b639147d865c80f0c213a6c720db317dd3a3a412",
+    "tests/p1107/sources/05-equal-bits-old.nl": "c7249631f1918cc3c7ab3b4f45e576df7062d5099d870aaa7c6503eee7f59d41",
+    "tests/p1107/sources/06-outside-control.nl": "9f0625b2712f630bf7eb1ec51d7bd406c415c56fc2a34d9d6387c592f69c6e5c",
+    "tests/p1107/sources/07-primitive-control.nl": "21845f0e5e7d99729054d3109bf7deadc7e6f19094327a701659bc997f2e9a47",
+    "tests/p1107/sources/08-equal-bits-wrong-return.nl": "1099d5cd5ae589f52d571f683390bd83b32c27a1723c0225555b429231e3208c",
+    "tests/p1107/sources/09-read-loan-write.nl": "494d6472a9d16e71162b41b4d2e298991bf18c2f1da784c94c5add93aec6ef53",
+    "tests/p1107/sources/10-multiple-changes.nl": "2e648ed4b70fe8bb1efcb6354710c229585392125ed686d09271fdd626f418e0",
+    "tests/p1107/sources/11-read-formal-write.nl": "9bde20c813613cb1984010166cf4f8f793036cbbcd8ea724d3064a9ee46c2415"
+  },
+  "archive_sha256": "57b350e99347c843442d3c048360e02c9130af596b7f16b179b81cf315f1cf52"
+}
