@@ -1,0 +1,216 @@
+{
+  "authority": "C256 first vertical cohort: 5 sources x GCC/Clang O0/O2 x raw/passive = native40 max; Clang guest ASan/LSan/UBSan; source/check/current/C17 role+initialization gates before first guest",
+  "cases": {
+    "01-return-left": {
+      "index": 0,
+      "initial": 85,
+      "peer": 221,
+      "incoming": [
+        61,
+        61,
+        193,
+        193
+      ],
+      "old": [
+        85,
+        61,
+        61,
+        193
+      ],
+      "final": 193,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "locals": {
+        "actual": "phase",
+        "incoming": "incoming",
+        "old": "old",
+        "old_copy": "old",
+        "during": "incoming",
+        "beside": "peer"
+      },
+      "new_capture_use": false,
+      "prefix_field_reads": 0,
+      "guard": "<",
+      "guard_literal": 2,
+      "arms": [
+        61,
+        193
+      ],
+      "normal_arms": 1,
+      "return_edges": 1
+    },
+    "02-return-right": {
+      "index": 1,
+      "initial": 85,
+      "peer": 221,
+      "incoming": [
+        61,
+        61,
+        193,
+        193
+      ],
+      "old": [
+        85,
+        61,
+        61,
+        193
+      ],
+      "final": 193,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "locals": {
+        "actual": "phase",
+        "incoming": "incoming",
+        "old": "old",
+        "old_copy": "old",
+        "during": "incoming",
+        "beside": "peer"
+      },
+      "new_capture_use": false,
+      "prefix_field_reads": 0,
+      "guard": "<",
+      "guard_literal": 2,
+      "arms": [
+        61,
+        193
+      ],
+      "normal_arms": 1,
+      "return_edges": 1
+    },
+    "03-both-return": {
+      "index": 1,
+      "initial": 85,
+      "peer": 221,
+      "incoming": [
+        193,
+        61,
+        193,
+        193
+      ],
+      "old": [
+        85,
+        193,
+        61,
+        193
+      ],
+      "final": 193,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "locals": {
+        "actual": "phase",
+        "incoming": "incoming",
+        "old": "old",
+        "old_copy": "old",
+        "during": "incoming",
+        "beside": "peer"
+      },
+      "new_capture_use": false,
+      "prefix_field_reads": 0,
+      "guard": "==",
+      "guard_literal": 1,
+      "arms": [
+        61,
+        193
+      ],
+      "normal_arms": 0,
+      "return_edges": 2
+    },
+    "04-return-if": {
+      "index": 0,
+      "initial": 85,
+      "peer": 221,
+      "incoming": [
+        61,
+        61,
+        193,
+        193
+      ],
+      "old": [
+        85,
+        61,
+        61,
+        193
+      ],
+      "final": 193,
+      "headers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "locals": {
+        "actual": "phase",
+        "incoming": "incoming",
+        "old": "old",
+        "old_copy": "old",
+        "during": "incoming",
+        "beside": "peer"
+      },
+      "new_capture_use": false,
+      "prefix_field_reads": 0,
+      "guard": "<",
+      "guard_literal": 2,
+      "arms": [
+        61,
+        193
+      ],
+      "normal_arms": 2,
+      "return_edges": 1
+    },
+    "80-normal-control": {
+      "index": 0,
+      "initial": 8,
+      "peer": 233,
+      "incoming": [
+        41,
+        142,
+        142
+      ],
+      "old": [
+        8,
+        41,
+        142
+      ],
+      "final": 142,
+      "headers": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "locals": {
+        "incoming": "incoming",
+        "old": "old",
+        "old_copy": "old",
+        "during": "incoming",
+        "beside": "peer"
+      },
+      "new_capture_use": false,
+      "prefix_field_reads": 0,
+      "guard": "<",
+      "guard_literal": 1,
+      "arms": [
+        41,
+        142
+      ],
+      "normal_arms": 2,
+      "return_edges": 0
+    }
+  }
+}

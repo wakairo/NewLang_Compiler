@@ -1,0 +1,7 @@
+{
+  "authority": "C256 phase1 host challenges maximum12",
+  "oracle": "12 individual trials: foreign callee target, foreign state, union cardinality, union result, Return-kind, helper target, captured field-current, short signature allocation before read, NULL functions, actual/formal symbol, unrestored foreign IF arm destruction, unrestored foreign state destruction; reject status3/out unchanged, restore valid where applicable, A destroy and B valid/destroy; no guest execution",
+  "files": {
+    "tests/p1193/c256/challenges.c": "11fadb543f05ae0d3870a476b0758eb0d0ff7e14a6ff640280c3ac1fc21d4a42"
+  }
+}
