@@ -138,3 +138,12 @@ jobs:
           test ! -s "$RUNNER_TEMP/newlang-check-stdout"
           test ! -s "$RUNNER_TEMP/newlang-check-stderr"
           echo "NO LLVM / PARTIAL: Production source/checker exit 0, zero stdout/stderr"
+
+      - name: R1197 preserve FIRST evidence (NEVERMERGE)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r1197-partial-${{ github.sha }}-attempt${{ github.run_attempt }}
+          path: build-frontend/r1197-evidence
+          if-no-files-found: error
+          retention-days: 14

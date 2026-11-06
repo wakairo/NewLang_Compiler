@@ -1,0 +1,95 @@
+{
+  "schema": "R1197_C259_POST_FIRST_V2_FREEZE_RECEIPT_V1",
+  "status": "PRE_EXECUTION_FROZEN_BEFORE_GIT_REF_OR_FAST",
+  "knowledge_boundary": "Canonical and Issue1197 R/C records, immutable original V1 and permitted R apparatus only. No P/F/producer or adjacent R results.",
+  "calibration": "Post-V1 FIRST precision refusal, NOT fresh BLIND",
+  "base_r_head": "a22824b9541666983b32be044f29015ff3a47a47",
+  "fixed_compiler": "0fd24ad3ed08c51845819aab48506c9d43fdccf6",
+  "unchanged_v1": {
+    "manifest": "ea4c4ad9d855bfcc6f98f41885dfc7c722c7c4b4e759896304b4c0623bd9a005",
+    "oracle": "d5c72f3d4f39a8a10de58e9f4d22dc0047d374b8f2ad0974c4f919da6b842079",
+    "first": "six initial positive P01 CHECK precision refusals; native0"
+  },
+  "v2": {
+    "manifest_sha256": "8e909eb25314f091199b50cd3f704749b6cbd1955cd1f35085a9dd51e864fc87",
+    "oracle_sha256": "ee4f79802f3f78079216a088ec00ddff26e1470d2ac12ee335fb5eec1cd9d8ec",
+    "source_roles_sha256": "d4f341b0f851f937488af4cde4a49e908f63a4f2b7c8a64ad9e44561d084c444",
+    "expectations_sha256": "85fe0d7ce11c4257ffc514b83a70af530cef8d0c1fd03d5d810fc204b8dbeb30",
+    "cases": {
+      "P01_tail_if_control": {
+        "sha256": "d22931065c83f324e15e6bc5d3ed738bd7331b5b5500e60e75edcba388a03958",
+        "modified": true
+      },
+      "P02_then_return": {
+        "sha256": "0d04aa839d0207689af136dcf5b61a003561fed78efc428c298461e71a528882",
+        "modified": true
+      },
+      "P03_else_return": {
+        "sha256": "02badf6c60f84e8b21b84d20e4d0ada02d0aa676c671856799a54763999956b3",
+        "modified": true
+      },
+      "P04_both_return": {
+        "sha256": "dff0222a7bf9799bc3f6be7c58f74d3a7a24ec057ed8c628449769c1c157ad76",
+        "modified": true
+      },
+      "P05_final_return_normal_if": {
+        "sha256": "ef4730345d4b4b616f641b17156a9a86650ff5f99a5b1e4a68b75ead5b651ef4",
+        "modified": true
+      },
+      "P06_eq_copy_both_return": {
+        "sha256": "2f8f4fdf66aa4de99ff3b8855e6f5d7e14368b60f7d394f3594cd813a687e353",
+        "modified": true
+      },
+      "N01_wrong_return_type": {
+        "sha256": "fb3ad827940728a9a8ee08a44e58c134af7e2675551e5fefc1a8bffdbbd51370",
+        "modified": false
+      },
+      "N02_callee_break": {
+        "sha256": "a908fb928fe4c737edeab4a34d5f6f5b354d44b5811821ddc0b7d5de9f88253e",
+        "modified": false
+      },
+      "N03_callee_continue": {
+        "sha256": "7966b11e06baca84c085e8ea8063e3bf7889065f65f6d36c6b2598204ade8fc2",
+        "modified": false
+      },
+      "N04_caller_fallthrough": {
+        "sha256": "36c488181b363135aba7f6152543f55f6edbe8a12af13026229ec7ac651ee33f",
+        "modified": false
+      },
+      "N05_continue_wrong_type": {
+        "sha256": "9b78566c9d5889fd64f981c155ef0cc5cbeb118333078a93ce6a2a697e61a19b",
+        "modified": false
+      },
+      "N06_mixed_if_binding_boundary": {
+        "sha256": "19b80c94e090a06e7a8ed2d8ee1121900c96f923911b2e80b9e9cbc480896e79",
+        "modified": true
+      }
+    },
+    "phases": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "next_phases": [
+      1,
+      2,
+      3
+    ],
+    "LT": [
+      41,
+      41,
+      173
+    ],
+    "EQ": [
+      173,
+      41,
+      173
+    ],
+    "loop_result": 173,
+    "guard": 211,
+    "old_copy": 7
+  },
+  "sequence": "one unreferenced descendant -> temporary preflight FAST4; only on real success PR1201 SAME SHA fast-forward FAST5 and last normal6; manual0",
+  "stop": "Any expected-vs-actual semantic/proof/native conflict, identity mismatch, unbound role, or new budget exhaustion; no native unless genuine source-issued and safe bound roles"
+}

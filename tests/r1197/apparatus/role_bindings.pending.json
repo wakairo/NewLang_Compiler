@@ -1,0 +1,31 @@
+{
+  "schema": "R1197_ACTUAL_ROLE_BINDINGS_V1",
+  "status": "UNBOUND_ACTUAL_OUTPUT",
+  "reason": "No current candidate C/AST/proof output has been produced or inspected. Semantic source-to-C role assignment must use genuine actual output and exact source-issued ownership; expected numeric values may not select roles.",
+  "cases": {},
+  "required_per_case_hashes": [
+    "source_sha256",
+    "public_receipt_sha256",
+    "raw_c_sha256",
+    "actual_ast_sha256",
+    "linked_map_sha256"
+  ],
+  "required_roles": [
+    "caller_function",
+    "original_declaration",
+    "selected_field",
+    "sibling_field",
+    "phase",
+    "delivered",
+    "replaced",
+    "current",
+    "sibling",
+    "old_snapshot",
+    "loop_result",
+    "final_sample",
+    "final_guard",
+    "snapshot_after"
+  ],
+  "role_value_contract": "Every role identifies an actual normalized AST declaration/field and an existing observed event or exact sequence of events. No expected constants or replayed guest state may appear in this file.",
+  "blocking": "No guest may execute while roles remain unbound or observation scopes/byte-restoration are unverified."
+}
