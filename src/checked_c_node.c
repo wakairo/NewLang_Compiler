@@ -8,7 +8,7 @@
 #include "newlang/node_join.h"
 #include "newlang/node_links.h"
 #include "newlang/raw_storage.h"
-#include "semantic_internal.h"
+#include "producer_status_internal.h"
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
