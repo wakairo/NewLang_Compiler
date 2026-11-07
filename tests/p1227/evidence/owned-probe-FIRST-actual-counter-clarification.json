@@ -1,0 +1,19 @@
+{
+  "actual_failed_observer_executions": 1,
+  "actual_additional_source_units_checked": 1,
+  "actual_total_source_observations": 13,
+  "actual_native_observer_executions": 1,
+  "planned_source_slots_in_FIRST_json": [
+    13,
+    14,
+    15,
+    16
+  ],
+  "not_reached_sources": [
+    "A-preH",
+    "B-postH",
+    "A-postH"
+  ],
+  "failure": "First B-preH inspect assertion on legacy nl_checked_loop_break_provenance_valid; prior nl_linear_break_validate current status0 was reached/passed by code order. Stdout fully buffered and lost on SIGABRT; original stderr/ELF/source preserved. No later planned source calls executed.",
+  "phase1_started": false
+}

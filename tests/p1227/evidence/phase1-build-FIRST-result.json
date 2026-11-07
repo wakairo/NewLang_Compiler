@@ -1,0 +1,6 @@
+{
+  "stage": "compile only; candidate source not executed",
+  "status": "RED",
+  "reason": "same static copy_if_literal name in imported pure_u8 and C17 copy-IF header; no runtime execution",
+  "raw_sha256": "5129bab9e43dd4c07ff3849a6001c5d31f0a6efa0961ee1cf609b78f6340c65e"
+}
