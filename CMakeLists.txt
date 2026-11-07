@@ -2320,4 +2320,9 @@ if(BUILD_TESTING)
     foreach(profile 01-return-left 02-return-right 03-both-return 04-return-if)
         set_tests_properties(p1193_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
+    # T1230: target only two measured near-90s CTests.
+    set_tests_properties(
+        p1055_old_origin_0.integration
+        p990_new_native.integration
+        PROPERTIES TIMEOUT 180)
 endif()
