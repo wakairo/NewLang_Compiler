@@ -52,3 +52,24 @@ source/oracles/FIRST and old accepted ZIP contents are unchanged.
 These are finite compiler capability and resource-safety observations. General
 soundness, arbitrary legal-source support, and author/caller UB-prevention
 audit locality against well-factored C remain unproved; Product GO is unchanged.
+
+C275 retains the later P738 historical failure too. Read-only diagnosis on the
+unchanged GCC/ASan executables measured at=19, calls=19, staging=19, validation=0:
+all three staging and sixteen raw scratch failures now truthfully report OOM.
+The old requirement of exactly three OOM results plus some UNSUPPORTED results
+encodes the previous bool-loss classification. These numbers are observations
+of the saved binaries, not a new allocator law.
+
+Three current executions explicitly select versioned C275 targets. The original
+unit/P733 source, targets, assertions and RED remain intact and hash/Git anchored.
+The CURRENT source preserves the original 22 non-OOM controls byte-for-byte,
+requires exact OOM at every reached injected failure, captures the root and five
+caller/entry/return/body worlds (headers, public state and private Copy anchors),
+and checks unchanged loans/state, retry and canonical destruction. The P733
+successor retains its foreign issuer/source/seal controls and strengthens its
+own emitter resource assertion. Exhaustion is bounded; no staging count is a
+universal contract. Normal ASan/LSan runs are separate from ptrace diagnostics.
+
+Original evidence assertions also select forward P1107 v39 and P1203 v5 inputs;
+all prior snapshots and first failures remain exact. C275 adds no Production
+behavior and does not replace independent fixed-head review or Product GO.

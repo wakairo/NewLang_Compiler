@@ -110,6 +110,7 @@ if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
     include(tests/p1208/CMakeLists.txt)
     include(tests/p1217/CMakeLists.txt)
+    include(tests/p1217/c275/CMakeLists.txt)
     # P930 diagnostic-only wrappers: production libraries/CLI remain unchanged.
     add_executable(p930_observe tests/p930/observe.c)
     add_executable(p930_oom tests/p930/observe.c)
@@ -1890,7 +1891,7 @@ if(BUILD_TESTING)
     target_link_options(p738_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
     add_test(NAME p738_no_read_flow.unit COMMAND p738_gate_test
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/sprout.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/ticket.nl")
-    add_test(NAME p738_local_return_existing_controls.unit COMMAND p733_gate_test
+    add_test(NAME p738_local_return_existing_controls.unit COMMAND p1217_c275_p733_current
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/sprout.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/ticket.nl")
     foreach(case sprout ticket)
         add_test(NAME p738_${case}_history_oom.unit COMMAND p733_history_test oom
@@ -1918,7 +1919,7 @@ if(BUILD_TESTING)
     add_executable(p733_gate_test tests/p733/gate_test.c)
     target_link_libraries(p733_gate_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
     target_link_options(p733_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
-    add_test(NAME p733_local_owner_proof.unit COMMAND p733_gate_test
+    add_test(NAME p733_local_owner_proof.unit COMMAND p1217_c275_p733_current
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/pending.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/cargo.nl")
     add_executable(p733_history_test tests/p733/history_test.c)
     target_link_libraries(p733_history_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
@@ -1952,7 +1953,7 @@ if(BUILD_TESTING)
     add_executable(live_return_backend_test tests/unit/live_return_backend_test.c)
     target_link_libraries(live_return_backend_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
     target_link_options(live_return_backend_test PRIVATE -Wl,--wrap=malloc)
-    add_test(NAME live_tail_return_backend.unit COMMAND live_return_backend_test "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/live_tail_return.nl")
+    add_test(NAME live_tail_return_backend.unit COMMAND p1217_c275_live_return_backend_current "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/live_tail_return.nl")
     add_test(NAME live_tail_return_native.integration
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/live_return_native_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:handoff_checked_probe>" "${CMAKE_C_COMPILER}"

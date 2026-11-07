@@ -6,7 +6,7 @@
   "new_native_cap_per_config": 4,
   "oracle": "F/P statement forms reject3 before output; bound normal carrier/discard173 then211 and early47; actual old/current/physical original/sibling; wrong-type reject; prior expected source/oracles unchanged",
   "files": {
-    "CMakeLists.txt": "2155c595131a92f71629fc391017a10b2baeac19f9b29b9d571a3827d2d76ac1",
+    "CMakeLists.txt": "c61dfe45dd6099a51da91079d4f8cdcd4812c425bc045433187c3ad88969fe07",
     "src/checked_c_current_emit_internal.h": "2092627ecad9cd428430f1b87ced9976bd3167bf51e44e3e04a86f27eb6270e4",
     "src/checked_c_current_internal.h": "932487812b0ed35be31695cb23d55a573c358a94cfb7a6dc656e0512ac551069",
     "src/current_loop_check_internal.h": "0902a03e3fb278c234cf5afc464463fe0df06cba927d0874add45bacc8e3a471",
