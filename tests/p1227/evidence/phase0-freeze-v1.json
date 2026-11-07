@@ -1,0 +1,18 @@
+{
+  "utc": "2026-11-07T09:07:08.955291+00:00",
+  "before_any_C280_source_native_trial": true,
+  "CLI": 0,
+  "native": 0,
+  "files": {
+    "inputs/A-postH.nl": "001f91ca5e420f217765808e0f9ac0cf52ce96a8c1a49a486b937454261e8889",
+    "inputs/A-preH.nl": "7856858f129d00df1908a5c31726c3ea6b1240f544536ef4c488eb70f8a14005",
+    "inputs/B-postH.nl": "d39ad6687f873eef559d80e8f23f0f4711468ceb9bcebe6267cb0e83f5fb7412",
+    "inputs/B-preH.nl": "0bb94f36ea32c7da1b473229e78576e7be0d0177a79175eb19e2c5be4fe909aa",
+    "inputs/N-foreign-owner.nl": "53d128ef46409230d0ad00e524c068b9af02b703531c6c4ea21b77c8884fe484",
+    "inputs/N-loan-escape.nl": "1f1d1408fe09b0da4e906247e8238687cfd4b7904d898cffa9363c490ccfb82e",
+    "inputs/N-return-type.nl": "11198e7024c2abb1cb70237fbd055078be3301378a0cc217ce5ee24a84e3b1da",
+    "author_phase0.py": "01a9b13344c533034e864e6a2a3ae7a51a37122323cb74048ac2c993533edf07",
+    "oracle-v1.json": "01ea385c0d855b17182c42675ac413952b796948b7b2230d1c9af922f61a7509",
+    "actual-START-v1.json": "c9ac6412aa42a40c9838187b71490ec02bdc40ce385e58ed32809044ca1213cf"
+  }
+}

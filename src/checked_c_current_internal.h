@@ -140,11 +140,16 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
         nl_checked_node_view(p.helper.body, p.helper.selection);
     const NLCheckedNodeView *callee =
         nl_checked_node_view(p.helper.body, nl_checked_root(p.helper.body));
-    if (!choice || choice->normal_arms != 2 || !callee || callee->terminates ||
-        callee->tail != p.helper.selection)
-        return NL_CHECK_ANALYSIS_PRECISION_LIMIT; /* typed helper RETURN
-                                                     composition is a later lane
-                                                   */
+    if (!choice || !callee || callee->terminates ||
+        !((choice->normal_arms == 2 && callee->tail == p.helper.selection) ||
+          (choice->normal_arms == 1 &&
+           nl_control_exits_count(p.helper.body->exits) == 1)))
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    /* The current-cycle validator sealed every actual RETURN target, ordinal
+     * and exit world, including the pure call walk proving the sole-normal
+     * binding/Copy chain reaches this call's result. Both paths yield a u8 at
+     * the function-call boundary; the source IF still has only one normal arm.
+     */
     p.quantity = nl_semantic_core_type(p.loop_view.entry_world, NL_TYPE_USIZE);
     const NLCheckedNodeView *root =
         nl_checked_node_view(body, nl_checked_root(body));

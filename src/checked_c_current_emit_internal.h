@@ -77,12 +77,19 @@ static bool physical_current_helper(Emit *e, Env *env, Value *out, size_t depth)
     for (size_t arm = 0; arm < 2; ++arm) {
         const NLCheckedFragment *a =
             nl_checked_if_arm(p->helper.body, p->helper.selection, arm);
+        /* Read the literal from the already authenticated RETURN operand or
+         * normal tail. No arm is reclassified or joined as source-normal. */
         const NLCheckedNodeView *root =
             nl_checked_node_view(a, nl_checked_root(a));
         const NLCheckedNodeView *block =
             root ? nl_checked_node_view(a, root->initializer) : NULL;
+        const NLCheckedNodeView *ret =
+            block ? nl_checked_node_view(a, block->first_item) : NULL;
         const NLCheckedNodeView *literal =
-            block ? nl_checked_node_view(a, block->tail) : NULL;
+            block ? nl_checked_node_view(a, root->terminates && ret
+                                                ? ret->initializer
+                                                : block->tail)
+                  : NULL;
         if (!literal || !physical_current_literal(a, literal) ||
             !put(e, "%zu%s", literal->scalar_result.value,
                  arm ? ");\n" : " : "))

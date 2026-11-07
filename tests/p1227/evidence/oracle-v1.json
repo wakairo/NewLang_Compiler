@@ -1,0 +1,95 @@
+{
+  "phase": "C280 Phase0, mainaa8dce8935f44d7b0732d24695f1c0f7c305efb1 Draft17.34",
+  "canonical": "5.2 infix <,+;16.3.8 oneH+oneT;17.1/17.4 source-owned fixed fields/scoped Change;18.5/19.1/27.3/27.9 true RETURN excluded from normal join;27.5/27.6/27.7 literal-initialized phase with adopted scalar BREAK only;26 exact failure/cleanup",
+  "independence": "New source authored for C280, not old P1226v2 replay; P calibrated by canonical and own adopted controls, no independent R material",
+  "predictions": {
+    "B-preH.nl": {
+      "CHECK": 0,
+      "C17": 0
+    },
+    "A-preH.nl": {
+      "CHECK": 0,
+      "C17": 4,
+      "reason": "localized private helper normal_arms2/direct-if-tail guard only, not inferred until owned evidence measured"
+    },
+    "B-postH.nl": {
+      "CHECK": 0,
+      "C17": 0
+    },
+    "A-postH.nl": {
+      "CHECK": 0,
+      "C17": 4
+    },
+    "negative": "source CHECK/C17 semantic3 and named output preserved; reject wrong typed RETURN, loan escape, foreign allocation owner"
+  },
+  "expected": {
+    "H0": {
+      "attempts": 1,
+      "allocations": 0,
+      "finalizes": 0,
+      "destroys": 0,
+      "frees": 0
+    },
+    "H1": {
+      "attempts": 2,
+      "allocations": 1,
+      "finalizes": 1,
+      "destroys": 1,
+      "frees": 1,
+      "tag": 41
+    },
+    "H2": {
+      "attempts": 2,
+      "allocations": 2,
+      "finalizes": 2,
+      "destroys": 2,
+      "frees": 2,
+      "tags": [
+        41,
+        167
+      ],
+      "same_returned_tail_R_A_D": true,
+      "head_link_None_before_destroy": true
+    },
+    "T": {
+      "source_originals": 1,
+      "same_record_and_field_addresses": true,
+      "index": 0,
+      "initial": 31,
+      "incoming": [
+        53,
+        149,
+        149
+      ],
+      "old": [
+        31,
+        53,
+        149
+      ],
+      "current": [
+        53,
+        149,
+        149
+      ],
+      "sibling": 203,
+      "loop_result": 3,
+      "final_current": 149,
+      "real_backedges": 3,
+      "loan_ends_before_each_edge": true,
+      "all_T_operations_after_H_closed": true,
+      "preH_original_exists_during_heap": true,
+      "postH_original_begins_after_heap": true
+    }
+  },
+  "equivalence": "A/B differ only pure helper body; one comparison, no effects/allocations/dependencies; all usize inputs result53 below1 else149. Normal continuation Copy is effect-free. Same main, all failure worlds and physical contract; no same-layout replacement or semantic return-edge normalization. No exact CPU-cycle equality claim.",
+  "initial_order": "First B-preH emit-C17-to (also actual CHECK), then A-preH same; STOP batch on first unexpected parser/CHECK/status and preserve raw before any more source execution. No version repetition.",
+  "budget": {
+    "phase0_source_max": 18,
+    "phase0_native_observer_processes_max": 3,
+    "source_accounting": "4 CLI emissions +2 explicit primary CHECKs +4 genuine-source owned/API checks +3 negative CHECK/C17 pairs =16; reserve2, all API source checks counted.",
+    "native_accounting": "At most1 owned observer process checking4 sources (4 source observations) plus2 strict GCC/Clang native harness process executions; each native harness explicitly exercises both B placements/H0,H1,H2 entry calls with independent observer reset. Exactly3 process executions;12 guest-entry invocations disclosed, not12 hidden processes. All only after actual B C17.",
+    "no_baseline_rerun": true
+  },
+  "phase1": "No Production edit unless all conditional facts posted: genuine A/B CHECK+owned/current, B physical/native H0/H1/H2 strictC17, A-only localized private refusal. If both emit work, stop no code. Public issuer/source/world/ABI/generalCFG forbidden.",
+  "value": "Capability-only selected-v0 composition. B is cheaper source alternative if actual physical/cleanup equivalence measured. No Product audit-locality or general soundness claim."
+}
