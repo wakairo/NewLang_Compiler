@@ -1,0 +1,38 @@
+{
+  "schema": "P1217-C274-pre-execution-freeze-v1",
+  "files": {
+    "status_probe.c": "aa6a4bd4aa2bcca7bf4076c6d3cc01aa2af743a7d2391190fb9639be613ec3bf",
+    "oracle-v1.json": "4f43db6631db3bcd2a9a3029c6977bc6724b7bb2154b0cec267c5759148cd955",
+    "90-wrong-domain-h-only.nl": "f3b47b74c0f88470b93b7b6dfa619c6acb9fb79f50cdc9eed84881c25ab190aa",
+    "01-independent-h-only.nl": "6bf43fccba367795b9ba2845335196a17064f79c14817c43e960b53825bffa54"
+  },
+  "targets": {
+    "adopted-main": {
+      "head_tree": "491f54adfa64ae7308344923ed14a9fcad08a8e9 603a72c443f0795bc58852d52ea8b0fe8771012a",
+      "libraries": {
+        "libnewlang_checked_c_node.a": "eef3f5b6a3fefb8725d529ed215b1ccc8d66b605e44dff65f6822d12e8dee910",
+        "libnewlang_semantic.a": "7fcadab07d21db9bce52eec8fbbf7f024c53c8fb4a67f92abb8bf11b8fbabf24",
+        "libnewlang_parser.a": "01b58c56000cf675c6c51684f9b321b493372de55d3526985695835cd5c1f7c0",
+        "libnewlang_checked.a": "23ff638900b196cc65632cbf23f2623842e5a17fa94234a5e85d91089a0b34f2",
+        "libnewlang_syntax.a": "e3b2dcf3e563ac0c4e7c8f69e2bcdf24bb064f586cec412374356a8924366229",
+        "libnewlang_lexer.a": "0e7b621d125135dceab5b5d9b71f75715e26f9c01d426fe584ed381956d1ffcc",
+        "libnewlang_source.a": "80af4ba72c7ab3e6132d4fa9a64b7ebb91296613df5bbba2777a1f0f34c415f6",
+        "libnewlang_diagnostic.a": "3abb2914ac860746d546bf30a6010c1e4fd0f46823f63c50c13626cc32a889e9"
+      }
+    },
+    "stopped-wip": {
+      "head_tree": "0ebe4bc0d25aa89dacfe8463b60207377a041fd6 e488be65fbbbb862ad394feffa32c7b0313640ef 491f54adfa64ae7308344923ed14a9fcad08a8e9",
+      "libraries": {
+        "libnewlang_checked_c_node.a": "e61d6020d01639631cf68b4d39b91f1b71fb3701fc6ff77f6e96270cf941deb7",
+        "libnewlang_semantic.a": "d6efa357efb6722e3bbbf5bb39df7e07fcdc60403e0a460011cab6470eb5dc00",
+        "libnewlang_parser_p534.a": "693bbc5e3cedca4e7c738de1c1a515926611e31c2198ed26dc23ab6a5bf088fd",
+        "libnewlang_parser.a": "abdbb62e457a7fa22a8f1fcdabecbf29e8cb4d744eafdd2a06385c898fd614fd",
+        "libnewlang_checked.a": "97fb4ed1c6d531847d06c78325ed38093c440a171630ffedf869bf0261a7d45a",
+        "libnewlang_syntax.a": "eff909592b21df3d9f149c2ce6636dbc3ac3537d414a8ecdd2e9f384f14f8a9b",
+        "libnewlang_lexer.a": "5a6106f3f31e7d739d49a3d41a362ec3d63cd4c825c7acc68306f6a3b4bb54c8",
+        "libnewlang_source.a": "7efdcd21c968b4e498ba87ab1d68a7613b1bedd7ad8d0fd1995fd64c95e2cd2f",
+        "libnewlang_diagnostic.a": "7f180cf880356a3c7e521be91a802fa89603b5a44a737bd3cd6aa65789ea82a4"
+      }
+    }
+  }
+}

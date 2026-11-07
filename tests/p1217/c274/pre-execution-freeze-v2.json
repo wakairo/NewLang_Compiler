@@ -1,0 +1,11 @@
+{
+  "schema": "P1217-C274-apparatus-v2",
+  "reason": "strict GCC sign-compare in probe assertion; cast expected enum only; original compile RED retained; no test execution or Production edit",
+  "files": {
+    "status_probe.c": "aa6a4bd4aa2bcca7bf4076c6d3cc01aa2af743a7d2391190fb9639be613ec3bf",
+    "status_probe_v2.c": "39cb7bf376d72b9e2a8951653c6ca008e8c9eaa0d798fa365b23a8f805388f57",
+    "oracle-v1.json": "4f43db6631db3bcd2a9a3029c6977bc6724b7bb2154b0cec267c5759148cd955",
+    "pre-execution-freeze-v1.json": "1c52e89a6dcc0e66e839937aa39db10bbca1f96f488fe7d99f94e0380eae40b0",
+    "build-main.stderr": "573030dc73f8b8ecd9d653816ed65f9dbfa09145fe328ead4744f4e86c8a2124"
+  }
+}

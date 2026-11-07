@@ -33,3 +33,23 @@ print('P1217 original P1214 / new source / every FIRST / forward equipment PASS'
 more = json.loads((here / 'execution-freeze-v4.json').read_bytes())
 for name, expected in more['files'].items():
     assert sha((here / name).read_bytes()) == expected, name
+successor = json.loads((here / 'execution-freeze-v5.json').read_bytes())
+for name, expected in successor['files'].items():
+    assert sha((here / name).read_bytes()) == expected, name
+with zipfile.ZipFile(here / 'evidence/c274-gate0-and-first-v1.zip') as packet:
+    first = json.loads(packet.read('gate0/pre-execution-freeze-v1.json'))
+    for name, expected in first['files'].items():
+        assert sha(packet.read('gate0/' + name)) == expected, name
+    repaired = packet.read('records/focused-v1.stdout')
+    assert b'C274 ACTUAL status=2 out=(nil) length=98765' in repaired
+    assert b'P1217 REACHED stage=emit ordinal=2 exact-OOM/rollback/no-publication/retry PASS' in repaired
+with zipfile.ZipFile(here / 'evidence/c272-first-oom-status-v1.zip') as packet:
+    assert json.loads(packet.read('oom-gcc-v2/completed.json'))['completed'] == 107
+    assert len(json.loads(packet.read('oom-gcc-v2/selected-before-injection.json'))) == 258
+    assert b'status == NL_NODE_C_OUT_OF_MEMORY' in packet.read(
+        'oom-gcc-v2/03-postheap-current-loop/emit-2.stderr')
+with zipfile.ZipFile(here / 'evidence/P1217-C273-same-bin-ordinal2-diagnostic-v1.zip') as packet:
+    original = packet.read('records/replay-1.stdout')
+    assert b'C273 ACTUAL status=1 out=(nil) length=98765' in original
+    assert b'same_root=1' in original and b'SIGABRT' in original
+print('C274 strict original FIRST/RED, resource repair, prospective apparatus PASS')

@@ -1,7 +1,7 @@
 {
   "version": 9,
   "before_execution": true,
-  "scope": "C272 prospective current source selector; immutable adopted v8 source/algorithm/bytes archived and authenticated by P1217 history. New source-issued physical H/T current consumer; source/oracles/FIRST unchanged.",
+  "scope": "C274 prospective current v9; exact adopted v8 original source/algorithm and every125 original snapshot member retained via authenticated compact mutable archive + immutable live data; full original ZIP/SHA/Git blob retained in ordinary WIP ancestor and STOP bundle. No old source/oracle/FIRST rewritten.",
   "fixed_b5": "b5c017141e173d5a2891d43cb5aeb26eb888e209",
   "new_native_cap_per_config": 4,
   "oracle": "F/P statement forms reject3 before output; bound normal carrier/discard173 then211 and early47; actual old/current/physical original/sibling; wrong-type reject; prior expected source/oracles unchanged",
@@ -131,6 +131,6 @@
     "tests/p1208/sources/94-nonliteral-normal-arm.nl": "4f287aaea456f250e2b2a4890c1d94e7395a81880719842b90868b86e347b2fe",
     "tests/p1208/transition-freeze-v1.json": "67015cef5f477c381eb438ba6897d93ab94f0bae64583a9d7ca50e5c645aff47",
     "tests/p1208/validation-freeze-v1.json": "e44f3c2beece5b117593b7ef57bf08d5075fafe452261383ea8d53356a2c6d73",
-    "tests/p982/freeze_test.py": "ef87b3178e8daea1055fba2da7634a63668634719ce17ae1a2c5cafe65bdd86c"
+    "tests/p982/freeze_test.py": "e5fc9b3a7535b2be6851e2059b12bd998764be608e45f51552b67ff169c67b93"
   }
 }

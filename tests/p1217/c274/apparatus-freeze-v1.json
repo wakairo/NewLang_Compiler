@@ -1,0 +1,18 @@
+{
+  "schema": "P1217-C274-active-apparatus-v1",
+  "before_execution": true,
+  "public_bool_false_oom_contract": "unchanged",
+  "strict_oom_oracle": "original tests/p1217/oom.c unchanged",
+  "h_only_max_selected": 48,
+  "native_per_compiler": "GCC/Clang O0/O2 guest0/1/2; sanitizer O2 guest0/1/2",
+  "original_gate0_freeze": "pre-execution-freeze-v1.json",
+  "original_compile_red": "../evidence/c274-gate0-and-first-v1.zip",
+  "files": {
+    "resource_status.c": "ba6d44071921821ce289cf138f30d441efe399df3c7a3eef255a0312cee5165c",
+    "heap_observer.h": "038cd58b5120494568f5d3df46f86e3ebe896843b15f69ef1fdddb81121ab0bb",
+    "resource_gate.py": "cf8b528b3c7d36593fa866e4d1c1d07330e3ece68fd5234b080a814f508170c5",
+    "01-independent-h-only.nl": "6bf43fccba367795b9ba2845335196a17064f79c14817c43e960b53825bffa54",
+    "90-wrong-domain-h-only.nl": "f3b47b74c0f88470b93b7b6dfa619c6acb9fb79f50cdc9eed84881c25ab190aa",
+    "oracle-v1.json": "4f43db6631db3bcd2a9a3029c6977bc6724b7bb2154b0cec267c5759148cd955"
+  }
+}
