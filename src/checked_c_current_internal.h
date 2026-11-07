@@ -38,6 +38,48 @@ static bool physical_current_literal(const NLCheckedFragment *f,
            v.scalar_known && v.scalar_value == n->scalar_result.value;
 }
 
+/* Called only on the helper borrowed from full current-cycle validation.
+ * That validation authenticates each identifier's source binding/Copy. This
+ * additional walk proves the ACTUAL normal-final value ends at the selected
+ * IF, rather than a different scalar postlude with coincidentally equal bits.
+ * Every edge remains in this one owned body and strictly precedes its use. */
+static bool physical_current_normal_result(const NLPhysicalHelper *helper,
+                                           const NLCheckedNodeView *body)
+{
+    const NLTypeId u8 =
+        nl_semantic_core_type(nl_checked_context(helper->body), NL_TYPE_U8);
+    NLCheckedNodeId value = body->tail;
+    for (size_t step = 0; step < nl_checked_node_count(helper->body); ++step) {
+        if (value == helper->selection)
+            return true;
+        const NLCheckedNodeView *use =
+            nl_checked_node_view(helper->body, value);
+        if (!use || use->kind != NL_CHECKED_IDENTIFIER || use->terminates ||
+            use->type != u8 || use->result_count != 1 ||
+            use->results[0].type != u8 || use->value_use != NL_VALUE_COPIED)
+            return false;
+        NLCheckedNodeId initializer = 0;
+        for (NLCheckedNodeId id = 1; id < value; ++id) {
+            const NLCheckedNodeView *binding =
+                nl_checked_node_view(helper->body, id);
+            if (!binding)
+                return false;
+            if (binding->kind == NL_CHECKED_BINDING &&
+                binding->symbol == use->symbol) {
+                if (initializer || binding->terminates ||
+                    !binding->initializer || binding->initializer >= value ||
+                    binding->span.end_byte > use->span.start_byte)
+                    return false;
+                initializer = binding->initializer;
+            }
+        }
+        if (!initializer)
+            return false;
+        value = initializer;
+    }
+    return false;
+}
+
 static bool physical_current_world(const NLSemanticContext *world,
                                    const NLLinearBreakView *p)
 {
@@ -143,12 +185,15 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
     if (!choice || !callee || callee->terminates ||
         !((choice->normal_arms == 2 && callee->tail == p.helper.selection) ||
           (choice->normal_arms == 1 &&
-           nl_control_exits_count(p.helper.body->exits) == 1)))
+           nl_control_exits_count(p.helper.body->exits) == 1 &&
+           physical_current_normal_result(&p.helper, callee))))
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     /* The current-cycle validator sealed every actual RETURN target, ordinal
-     * and exit world, including the pure call walk proving the sole-normal
-     * binding/Copy chain reaches this call's result. Both paths yield a u8 at
-     * the function-call boundary; the source IF still has only one normal arm.
+     * and exit world. The separate normal-result walk above additionally
+     * proves that the actual normal-final binding/Copy path ends at this IF.
+     * The pure walk alone permits other postludes and does not prove that
+     * identity. Both paths yield a u8 at the genuine function-call boundary;
+     * the source IF still has only one normal arm.
      */
     p.quantity = nl_semantic_core_type(p.loop_view.entry_world, NL_TYPE_USIZE);
     const NLCheckedNodeView *root =

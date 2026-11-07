@@ -1,0 +1,76 @@
+{
+  "authority": "https://github.com/wakairo/NewLang_Compiler/issues/1227#issuecomment-6705688721",
+  "HEAD_tree_parent": [
+    "c2bbb2dc5047677ed38d80968ed9a2bacce9b374",
+    "e1ce870645ba3ba37d2927221a1d31223ed45742",
+    "aa8dce8935f44d7b0732d24695f1c0f7c305efb1"
+  ],
+  "main": "aa8dce8935f44d7b0732d24695f1c0f7c305efb1",
+  "PR": "https://github.com/wakairo/NewLang_Compiler/pull/1231",
+  "draft": true,
+  "source_oracle_sha256": "cf2526f4ce18259ec8ff363b3620a141e2554a9545794bd217b8d878ab06c71b",
+  "old_pins": {
+    "tests/p990/current-freeze-v60.json": {
+      "sha256": "6e254a1b74a004e1b6c010da0e990420595c86efa8b68a0479107805aea8039c",
+      "blob_oid": "49ad206ac8fc6c51ae6ef922d00baa019f3c5574"
+    },
+    "tests/p1217/execution-freeze-v7.json": {
+      "sha256": "5fb1e5e4dd20bfeb4f398ab18e271a29672bc64fea139614f61bffc17ea0f0f0",
+      "blob_oid": "d7cdffe707093c96ee352c67b70359397f2190a6"
+    },
+    "tests/p1217/evidence_current_v7.py": {
+      "sha256": "f807a224e98741d4ccd252c07d2575039643960e2418493d3f19371754db2bd6",
+      "blob_oid": "52d71ebdb5676c023b6a553928f87b6b666bc75d"
+    },
+    "tests/p1227/evidence_negative.py": {
+      "sha256": "21f1a4168d65c0dc05e4d48fdc3dbf62f73070d498fec331c7790314770c4c3a",
+      "blob_oid": "d368ed6cd59294e50fbcf9ebfc67b277ae9721f1"
+    }
+  },
+  "jobs": [
+    {
+      "run": 42362784109,
+      "id": 128374465160,
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "run": 42362784160,
+      "id": 128374465147,
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "run": 42362784160,
+      "id": 128374465256,
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "run": 42362784160,
+      "id": 128374465310,
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "run": 42362784160,
+      "id": 128374465320,
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "run": 42362784160,
+      "id": 128374465326,
+      "status": "completed",
+      "conclusion": "cancelled"
+    }
+  ],
+  "spent": 6,
+  "remaining": 6,
+  "manual": 0,
+  "Production_edits": 0,
+  "source_evaluations": 0,
+  "R_inputs": "unread",
+  "T1230": "untouched",
+  "value_risk": "Prior false admission is compiler correctness, not coverage debt; value audit locality unmeasured."
+}

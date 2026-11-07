@@ -77,8 +77,10 @@ static bool physical_current_helper(Emit *e, Env *env, Value *out, size_t depth)
     for (size_t arm = 0; arm < 2; ++arm) {
         const NLCheckedFragment *a =
             nl_checked_if_arm(p->helper.body, p->helper.selection, arm);
-        /* Read the literal from the already authenticated RETURN operand or
-         * normal tail. No arm is reclassified or joined as source-normal. */
+        /* The RETURN operand is sealed by full current validation. prepare
+         * separately proved the actual normal-final Copy path ends at this
+         * selection, so its normal arm literal is the emitted normal result.
+         * No returning source arm is reclassified as normal. */
         const NLCheckedNodeView *root =
             nl_checked_node_view(a, nl_checked_root(a));
         const NLCheckedNodeView *block =
