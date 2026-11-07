@@ -32,6 +32,13 @@ typedef struct {
     /* Tagged payload: literal successor normally; arithmetic step when
      * computed_carry is true. A computed successor is never known here. */
     size_t initial_phase, next_phase, limit;
+    /* Borrowed only after the complete current-cycle validator succeeds.
+     * These are the already sealed CHECK entry and normal-Break summary;
+     * no world, graph or authority is constructed for a backend consumer. */
+    const NLSemanticContext *entry_world, *post_world;
+    const NLCheckedFragment *helper_body;
+    NLSymbolId helper_formal;
+    NLCheckedNodeId helper_selection;
 } NLLinearBreakView;
 NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *,
                                        NLCheckedNodeId, NLLinearBreakView *);

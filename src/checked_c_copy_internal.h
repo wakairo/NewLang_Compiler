@@ -623,7 +623,8 @@ static bool copy_post_world(Emit *e, const Env *env)
         snapshot.raw_intervals || !copy_post_h(e, head, e->copy_anchor) ||
         !copy_post_h(e, env, e->copy_anchor) ||
         !nl_h_origin_validate(e->origin_root) || !producer || !terminal ||
-        !nl_checked_producer_valid(env->artifact, e->producer_node) ||
+        !producer_status(
+            e, nl_producer_validate(env->artifact, e->producer_node, true)) ||
         !producer->producer.return_proved ||
         producer->span.end_byte >= terminal->span.start_byte ||
         !terminal->owner_call.entry_proved ||

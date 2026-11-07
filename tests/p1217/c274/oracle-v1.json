@@ -1,0 +1,21 @@
+{
+  "schema": "P1217-C274-gate0-v1",
+  "authority": "491f54adfa64ae7308344923ed14a9fcad08a8e9",
+  "wip": "0ebe4bc0d25aa89dacfe8463b60207377a041fd6",
+  "new_source": "01-independent-h-only.nl",
+  "negative": "90-wrong-domain-h-only.nl",
+  "positive_check": 0,
+  "positive_uninjected_emit": "NL_NODE_C_OK",
+  "negative_check": "nonzero; no named output publication",
+  "public_bool_injected_malloc_1": false,
+  "before_repair_emit_malloc_2": "NL_NODE_C_UNSUPPORTED=1 (known defect, not strict OOM PASS)",
+  "after_repair_emit_malloc_2": "NL_NODE_C_OUT_OF_MEMORY=2",
+  "all_failed_emit": {
+    "out": null,
+    "length": 98765,
+    "root": "same genuine CHECK pointer",
+    "world": "copy_state_matches before"
+  },
+  "logical_invalid_producer": "public false; emitter UNSUPPORTED; no output",
+  "retry": "bool valid and emission success after disabling fault; canonical teardown"
+}

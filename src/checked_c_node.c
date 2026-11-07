@@ -1,4 +1,5 @@
 #include "newlang/checked_c_node.h"
+#include "checked_c_current_internal.h"
 #include "checked_c_five.h"
 #include "checked_c_target.h"
 #include "h_origin_internal.h"
@@ -7,6 +8,7 @@
 #include "newlang/node_join.h"
 #include "newlang/node_links.h"
 #include "newlang/raw_storage.h"
+#include "producer_status_internal.h"
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -88,6 +90,8 @@ typedef struct {
     size_t copy_function, copy_second_function;
     size_t copy_calls, copy_expected_calls, copy_roots, copy_expected_roots;
     const NLCheckedFragment *origin_root;
+    const NLPhysicalCurrent *current; /* authenticated, synchronous borrow */
+    bool current_h_closed, current_emitted;
     const NLCheckedFragment *copy_issuer;
     const NLSemanticContext *copy_anchor;
     /* One main MATCH scheduled by source order; completed only after both
@@ -136,6 +140,20 @@ static bool reject(Emit *e)
 {
     if (e->status == NL_NODE_C_OK)
         e->status = NL_NODE_C_UNSUPPORTED;
+    return false;
+}
+
+/* Preserve only a status from the same genuine producer validation. Public
+ * bool validators still return false for both invalid proof and scratch OOM. */
+static bool producer_status(Emit *e, NLCheckStatus status)
+{
+    if (status == NL_CHECK_OK)
+        return true;
+    if (e->status == NL_NODE_C_OK)
+        e->status = status == NL_CHECK_OUT_OF_MEMORY ? NL_NODE_C_OUT_OF_MEMORY
+                    : status == NL_CHECK_RESOURCE_LIMIT
+                        ? NL_NODE_C_RESOURCE_LIMIT
+                        : NL_NODE_C_UNSUPPORTED;
     return false;
 }
 
@@ -385,6 +403,7 @@ static bool final_unit_return(const NLCheckedFragment *body, NLCheckedNodeId id,
 #include "checked_c_copy_internal.h"
 /* Uses the Copy carrier helpers above. */
 #include "checked_c_copy_field_if_internal.h"
+#include "checked_c_current_emit_internal.h"
 static bool producer_call(Emit *, Env *, NLCheckedNodeId,
                           const NLCheckedNodeView *, Value *);
 static bool live_destructure(Emit *, Env *, const NLCheckedNodeView *, Value *);
@@ -413,7 +432,7 @@ static bool terminal_role_lane(const Emit *e)
 
 /* The same source-issued producer original licenses the optional caller read
  * and its later terminal. No count supplies a missing owner relationship. */
-static bool terminal_sequence(const Emit *e, const Env *env,
+static bool terminal_sequence(Emit *e, const Env *env,
                               const NLCheckedNodeView *call)
 {
     const NLCheckedFragment *f = env->artifact;
@@ -423,7 +442,7 @@ static bool terminal_sequence(const Emit *e, const Env *env,
         e->producer_calls != 1 || e->pending_live || e->owner_calls ||
         e->active_owner_call || e->active_owner_body ||
         e->receiver_tail_reads || e->caller_tail_reads > 1 || !producer ||
-        !nl_checked_producer_valid(f, e->producer_node) ||
+        !producer_status(e, nl_producer_validate(f, e->producer_node, true)) ||
         !producer->producer.return_proved ||
         producer->span.end_byte > call->span.start_byte ||
         producer->producer.root != call->owner_call.root ||
@@ -952,6 +971,11 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
     if (v == NULL || v->terminates || v->result_count > 1)
         return reject(e);
     *out = (Value){.type = v->type};
+    if (e->current && env->artifact == e->current->body && !env->parent &&
+        (v->kind == NL_CHECKED_BINDING ||
+         (v->kind == NL_CHECKED_STATEMENT && get(env, v->initializer) &&
+          get(env, v->initializer)->kind != NL_CHECKED_MATCH)))
+        return physical_current_main(e, env, id, out);
     if (e->copy_type && v->kind == NL_CHECKED_IF) {
         NLIfFieldView field;
         if (nl_checked_if_field_view(env->artifact, id, &field))
@@ -1568,10 +1592,14 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
         return reject(e);
     const size_t site = e->allocations++;
     HeapLifecycle incoming[2] = {e->lifecycle[0], e->lifecycle[1]};
-    const bool closing = e->copy_after_match == id &&
-                         env->artifact == e->copy_issuer && !env->parent;
-    if (closing && (site || e->copy_h_closed || env->backing ||
-                    env->heap_place || env->heap_domain))
+    const bool current_closing = e->current && !env->parent &&
+                                 env->artifact == e->current->body &&
+                                 e->current->heap_match == id;
+    const bool closing =
+        current_closing || (e->copy_after_match == id &&
+                            env->artifact == e->copy_issuer && !env->parent);
+    if (closing && (site || e->copy_h_closed || e->current_h_closed ||
+                    env->backing || env->heap_place || env->heap_domain))
         return reject(e);
     if (e->two_heap &&
         ((site == 0 && incoming[0].stage != 0) ||
@@ -1683,7 +1711,10 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
         if (!seen[0] || !seen[1] || e->allocations != 2 ||
             e->producer_calls != 1 || e->owner_calls != 1)
             return reject(e);
-        e->copy_h_closed = true;
+        if (current_closing)
+            e->current_h_closed = true;
+        else
+            e->copy_h_closed = true;
     }
     out->type = e->unit;
     return true;
@@ -1712,11 +1743,12 @@ static bool no_read_entry(Emit *e, Env *env, const NLCheckedNodeView *ref)
             continue;
         NLProducerLocalReturnView local_return;
         if (found ||
-            (e->copy_after_match ? !nl_checked_producer_valid(f, i)
-                                 : (!nl_checked_producer_local_return_view(
-                                        f, i, &local_return) ||
-                                    !nl_checked_producer_local_return_valid(
-                                        f, i, &local_return))))
+            (e->copy_after_match
+                 ? !producer_status(e, nl_producer_validate(f, i, true))
+                 : (!nl_checked_producer_local_return_view(f, i,
+                                                           &local_return) ||
+                    !producer_status(e, nl_producer_local_return_validate(
+                                            f, i, &local_return)))))
             return false;
         const NLCheckedNodeView *projection = get(env, call->first_argument),
                                 *base =
@@ -2249,7 +2281,7 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
     const Env *tail = region(env, v->producer.range.region);
     if (!e->two_heap || e->live_tail == 0 || v->type != e->live_tail ||
         e->producer_calls != 0 || e->owner_calls != 0 ||
-        !nl_checked_producer_valid(env->artifact, id) ||
+        !producer_status(e, nl_producer_validate(env->artifact, id, true)) ||
         !v->producer.head.dependency_compatible || tail == NULL ||
         tail->region_slot != 1 || e->lifecycle[1].stage != 4 ||
         tail->heap_place != v->producer.root ||
@@ -2271,10 +2303,11 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
         ((!e->copy_after_match && !local_result) ||
          e->no_read_issuer != env->artifact || e->no_read_call != id))
         return reject(e);
-    if (local_result && (!nl_checked_producer_local_return_view(
-                             env->artifact, id, &local_return) ||
-                         !nl_checked_producer_local_return_valid(
-                             env->artifact, id, &local_return)))
+    if (local_result &&
+        (!nl_checked_producer_local_return_view(env->artifact, id,
+                                                &local_return) ||
+         !producer_status(e, nl_producer_local_return_validate(
+                                 env->artifact, id, &local_return))))
         return reject(e);
     const NLCheckedNodeView *ret =
         local_result      ? nl_checked_node_view(f, local_return.return_node)
@@ -2520,7 +2553,7 @@ static bool live_binding(Emit *e, Env *env, const NLCheckedNodeView *v,
         !body || body->kind != NL_CHECKED_BLOCK ||
         body->tail != e->producer_node || !call ||
         !call->producer.entry_proved ||
-        !nl_checked_producer_valid(f, e->producer_node) ||
+        !producer_status(e, nl_producer_validate(f, e->producer_node, true)) ||
         loan->results[0].value != call->producer.result ||
         !nl_semantic_binding_view(c, v->symbol, &binding) ||
         binding.availability != NL_CONSUMED || binding.type != e->live_tail ||
@@ -3256,7 +3289,8 @@ static bool return_profile(Emit *e, const NLCheckedFragment *f, size_t depth)
                 return reject(e);
         }
         if (v->producer.entry_proved) {
-            if (e->live_tail != 0 || !nl_checked_producer_valid(f, i))
+            if (e->live_tail != 0 ||
+                !producer_status(e, nl_producer_validate(f, i, true)))
                 return reject(e);
             e->live_tail = v->type;
         }
@@ -3327,6 +3361,23 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     if (!copy_prepare(&e, body)) {
         free(e.text);
         return e.status;
+    }
+    NLPhysicalCurrent current = {0};
+    for (NLCheckedNodeId id = 1; id <= nl_checked_node_count(body); ++id) {
+        const NLCheckedNodeView *op = nl_checked_node_view(body, id);
+        if (op->kind != NL_CHECKED_LOOP)
+            continue;
+        const NLCheckStatus status = physical_current_prepare(body, &current);
+        if (status != NL_CHECK_OK || e.copy_type || !e.allocated ||
+            !e.two_heap || !e.live_tail || e.custody) {
+            free(e.text);
+            return status == NL_CHECK_OUT_OF_MEMORY ? NL_NODE_C_OUT_OF_MEMORY
+                   : status == NL_CHECK_RESOURCE_LIMIT
+                       ? NL_NODE_C_RESOURCE_LIMIT
+                       : NL_NODE_C_UNSUPPORTED;
+        }
+        e.current = &current;
+        break;
     }
     if (e.copy_after_match)
         env.unit_function_body = get(&env, nl_checked_root(body));
@@ -3449,10 +3500,33 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         free(e.text);
         return e.status;
     }
+    if (e.current && !put(&e,
+                          "typedef struct {uint8_t f0,f1;} nl_current_record;\n"
+                          "_Static_assert(SIZE_MAX==UINTMAX_C(%zu),\"NewLang "
+                          "usize target\");\n"
+                          "#ifdef NEWLANG_CURRENT_LOOP_OBSERVER\n"
+                          "#include NEWLANG_CURRENT_LOOP_OBSERVER\n#endif\n"
+                          "#ifndef NL_CURRENT_PHASE\n#define "
+                          "NL_CURRENT_PHASE(...) ((void)0)\n#endif\n"
+                          "#ifndef NL_CURRENT_LOCAL\n#define "
+                          "NL_CURRENT_LOCAL(...) ((void)0)\n#endif\n"
+                          "#ifndef NL_CURRENT_RESULT\n#define "
+                          "NL_CURRENT_RESULT(...) ((void)0)\n#endif\n"
+                          "#ifndef NL_MIXED_COPY_BIND\n#define "
+                          "NL_MIXED_COPY_BIND(...) ((void)0)\n#endif\n"
+                          "#ifndef NL_MIXED_COPY_STORE\n#define "
+                          "NL_MIXED_COPY_STORE(...) ((void)0)\n#endif\n"
+                          "#ifndef NL_LOOP_READ\n#define NL_LOOP_READ(...) "
+                          "((void)0)\n#endif\n",
+                          SIZE_MAX)) {
+        free(e.text);
+        return e.status;
+    }
     const size_t main_offset = e.used;
     (void)put(&e, "int main(void) {\n");
     Value result = {0};
     if (!block(&e, &env, nl_checked_root(body), &result) || e.pending_live ||
+        (e.current && (!e.current_h_closed || !e.current_emitted)) ||
         e.roots != (e.three_lexical_links ? 3u : 2u) || result.type != e.unit ||
         (e.copy_type && (!e.copy_roots || e.copy_roots > 2 ||
                          e.copy_calls != e.copy_expected_calls)) ||

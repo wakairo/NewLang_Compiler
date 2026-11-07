@@ -1,0 +1,17 @@
+{
+  "version": 6,
+  "before_execution": true,
+  "authority": "491f54adfa64ae7308344923ed14a9fcad08a8e9",
+  "fixed_head": "1588176f8378c2377651b344f7c3f0075ee005db",
+  "historical_head": "c99264155b2a0546e578dc6c743457599d05869b",
+  "scope": "Genuine old v5 tree + independent CURRENT registration, no original replacement or Production changes",
+  "files": {
+    "tests/p1217/CMakeLists.txt": "0a0cfbdaf50f81b109fe9109af02133ff0fa76916714c9075fe97cf98c23a95e",
+    "tests/p1217/evidence_current_v6.py": "f73fa13e7a825346fa8ea3e64f1693c4428c6a19c88ae7fd740fb195522e4d7d",
+    "tests/p1217/c277/git-snapshots-v1.json": "fc57cbdb1f99228fd35550236d8fb1ef9089415769ba7e4f1147fd43644f1ee1",
+    "tests/p1217/c277/negative_test.py": "296a175af4a80d0fb5775181b80ba9cf6ea6098481652d0ab233648d9fb121a0",
+    "tests/p1217/c277/oracle-v1.json": "5c79e3813ca26fed566687da44d69ce0120b9b647032de4f3225f34db2784738",
+    "tests/p1217/c277/preflight-inventory-v1.json": "3aede0fddee40576e3e1ddc4e2d1e4b1da4cd76e45d7469613932e1b8393d50b"
+  },
+  "oracle": "tests/p1217/c277/oracle-v1.json"
+}

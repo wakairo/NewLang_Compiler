@@ -1,0 +1,10 @@
+{
+  "before_execution": true,
+  "version": 2,
+  "original_v1_sha256": "1db25d1dce142ea02a81426e92119a951a37feb9eda438f4a9f3d30556f4dbb2",
+  "files": {
+    "oracle-v2.json": "8600cbd9d640ad6fabfeff4ada2cde80ed257255122e941ca9195d8bf8f569c9",
+    "sources/07-no-write-scalar-control.nl": "1659e03c8b4a2a12e93f8c05bf9680299ed54495b15de0fc8be38a0c8714a9b3"
+  },
+  "reason": "Preserve failed proposed control06 exactly; add separate scalar-only no-write control07 under already adopted contract. Do not claim original06 passed."
+}

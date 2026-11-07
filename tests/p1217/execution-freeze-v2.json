@@ -1,0 +1,16 @@
+{
+  "before_execution": true,
+  "version": 2,
+  "native_total_cap": 48,
+  "original_failed_attempts": 2,
+  "new_matrix_max": 40,
+  "source_values_oracle": "oracle-v3.json",
+  "reason": "H existing generated C uses runtime None0/Some1; equipment v1 confused semantic variants1/2 with that private runtime tag. Original source/values and Production unchanged. Preserve first quota0 pass and quota1 assertion failure, never regrade v1.",
+  "files": {
+    "native-v2.h": "3a93d4f7aef7e0d7b0e64de72045a569c021b2dc2a462a44b410e22e21bcc77d",
+    "native_v2.py": "3888bedf6cad74ee51128a00482e5f953e9f7e700c178332ba7dff4f4712a562",
+    "oracle-v3.json": "ad54704a39b578823c8418ed6c7221fc68370061e165d55157836972bdcea191",
+    "observe.c": "3333c5e38e93802e841592676dc4b9cd9d7e9b86f16d6a3cdbaabab1de9c066d",
+    "evidence/first-native-v1.zip": "a7fe9614a41dc690b65345cbb218d3c50f60bc5cc9663d2e48a85ee7c4f5cade"
+  }
+}

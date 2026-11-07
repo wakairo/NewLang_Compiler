@@ -1,6 +1,6 @@
 #include "producer_local_internal.h"
+#include "producer_status_internal.h"
 #include <stdlib.h>
-
 #include <string.h>
 
 /* A finite conditional type/ownership transfer, not a hypothetical semantic
@@ -509,7 +509,8 @@ NLCheckStatus nl_owner_relations(const NLSemanticContext *c,
 /* Read-only consumer contract: the live-return certificate belongs to exactly
  * its owned caller entry/return worlds and synchronous checked producer body.
  * A cloned world's coincidental numeric IDs are not this evidence. */
-bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
+NLCheckStatus nl_producer_validate(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id, bool raw)
 {
     const NLCheckedNodeView *v = nl_checked_node_view(f, id);
     const NLSemanticContext *a = nl_checked_producer_entry(f, id),
@@ -534,18 +535,22 @@ bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
         body->body_owner != a->functions[v->function - 1].body ||
         v->result_count != 1 || v->results[0].value != v->producer.result ||
         v->results[0].type != a->functions[v->function - 1].result)
-        return false;
-    if (nl_sem_validate(a) != NL_CHECK_OK ||
-        nl_sem_validate(b) != NL_CHECK_OK ||
-        (raw && (nl_raw_validate(a) != NL_CHECK_OK ||
-                 nl_raw_validate(b) != NL_CHECK_OK)))
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    NLCheckStatus status = nl_sem_validate(a);
+    if (status == NL_CHECK_OK)
+        status = nl_sem_validate(b);
+    if (status == NL_CHECK_OK && raw)
+        status = nl_raw_validate(a);
+    if (status == NL_CHECK_OK && raw)
+        status = nl_raw_validate(b);
+    if (status != NL_CHECK_OK)
+        return status;
     const NLTypedOwnerDefinition def =
         a->functions[v->function - 1].body->owner_definition;
     if (def.target != v->producer.definition.target || !def.live_return ||
         !def.head_link_required || !def.definition_checked ||
         def.step_count != 0 || def.requirements != NL_OWNER_ALL_REQUIREMENTS)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     for (size_t i = 0; i < 4; ++i)
         if (v->producer.inputs[i] == 0 ||
             v->producer.inputs[i] > a->value_count ||
@@ -556,10 +561,11 @@ bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
                 v->producer.inputs[i] ||
             b->bindings[v->producer.parameters[i] - 1].view.place ==
                 v->producer.root)
-            return false;
-    if (nl_owner_relations(a, v->producer.inputs + 1, &def, v->span, NULL) !=
-            NL_CHECK_OK ||
-        v->producer.root == 0 || v->producer.root > a->place_count ||
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    status = nl_owner_relations(a, v->producer.inputs + 1, &def, v->span, NULL);
+    if (status != NL_CHECK_OK)
+        return status;
+    if (v->producer.root == 0 || v->producer.root > a->place_count ||
         v->producer.root > b->place_count || v->producer.head.parent == 0 ||
         v->producer.head.parent > a->place_count ||
         v->producer.head.parent > b->place_count ||
@@ -570,7 +576,7 @@ bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
         v->producer.range.region > b->region_count || v->producer.domain == 0 ||
         v->producer.domain > b->domain_count || v->producer.result == 0 ||
         v->producer.result > b->value_count)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLSemanticPlaceView t = a->places[v->producer.root - 1],
                               rt = b->places[v->producer.root - 1],
                               h = a->places[v->producer.head.parent - 1],
@@ -629,14 +635,14 @@ bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
         package.type != v->results[0].type || package.field_count != 3 ||
         package.dependencies != NL_DEPENDENCY_FREE ||
         package.value_dependency_count != 0)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLSemanticBackingView
         ar = a->regions[v->producer.range.region - 1].view,
         br = b->regions[v->producer.range.region - 1].view;
     if (ar.size != br.size || ar.alignment != br.alignment ||
         ar.ordinary_read != br.ordinary_read ||
         ar.ordinary_write != br.ordinary_write)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLSemanticTypeView ht = a->types[href.type - 1].view;
     if (ht.kind != NL_TYPE_REF || ht.is_exclusive ||
         ht.access != NL_ACCESS_WRITE || ht.target != l.type ||
@@ -657,7 +663,7 @@ bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
         !a->regions[h.placement.region - 1].view.ordinary_write ||
         !b->regions[h.placement.region - 1].view.ordinary_read ||
         !b->regions[h.placement.region - 1].view.ordinary_write)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     bool stable_origin = false;
     for (size_t i = 0; i < a->value_count; ++i) {
         const NLSemanticValueView stable = a->values[i];
@@ -678,12 +684,12 @@ bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
         }
     }
     if (!stable_origin)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLValueId payload = a->values[l.current_value - 1].sum_payload;
     if (payload == 0 || payload > a->value_count ||
         a->values[payload - 1].reference.place != v->producer.root ||
         a->values[payload - 1].reference.incarnation != v->producer.incarnation)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLSemanticValueView payload_value = a->values[payload - 1];
     if (payload_value.type != p.type || payload_value.reference_count != 0 ||
         payload_value.reference.provenance != NL_PROVENANCE_VALID ||
@@ -694,17 +700,17 @@ bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
         payload_value.reference.writable != p.reference.writable ||
         payload_value.reference.occurrence_dependency !=
             p.reference.occurrence_dependency)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     for (size_t i = 0; i < 3; ++i) {
         const NLValueId field = package.fields[i];
         if (field == 0 || field > b->value_count)
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         const NLSemanticValueView m = b->values[field - 1];
         if (m.carrier != NL_CARRIER_AGGREGATE ||
             m.aggregate_owner != v->producer.result ||
             m.dependencies != NL_DEPENDENCY_FREE ||
             m.value_dependency_count != 0)
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         if (i == 0) {
             if (m.reference.place != v->producer.root ||
                 m.reference.incarnation != v->producer.incarnation ||
@@ -715,7 +721,7 @@ bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
                     p.reference.occurrence_dependency ||
                 m.reference.readable != p.reference.readable ||
                 m.reference.writable != p.reference.writable)
-                return false;
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         } else {
             const NLSymbolId donor = v->producer.donor[i + 1],
                              parameter = v->producer.parameters[i + 1];
@@ -725,14 +731,19 @@ bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
                 a->bindings[donor - 1].view.availability != NL_CONSUMED ||
                 b->bindings[donor - 1].view.availability != NL_CONSUMED ||
                 b->bindings[parameter - 1].view.availability != NL_CONSUMED)
-                return false;
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
             if (i == 1 && m.allocation_region != v->producer.range.region)
-                return false;
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
             if (i == 2 && m.domain != v->producer.domain)
-                return false;
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         }
     }
-    return true;
+    return NL_CHECK_OK;
+}
+
+bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
+{
+    return nl_producer_validate(f, id, raw) == NL_CHECK_OK;
 }
 
 bool nl_checked_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id)
@@ -846,14 +857,17 @@ local_mark(const NLCheckedFragment *body, NLCheckedNodeId id,
     seen[id - 1] = true;
     return n;
 }
-bool nl_checked_producer_local_return_valid(
-    const NLCheckedFragment *f, NLCheckedNodeId id,
-    const NLProducerLocalReturnView *candidate)
+NLCheckStatus
+nl_producer_local_return_validate(const NLCheckedFragment *f,
+                                  NLCheckedNodeId id,
+                                  const NLProducerLocalReturnView *candidate)
 {
     NLProducerLocalReturnView v;
-    if (!nl_checked_producer_local_return_view(f, id, &v) ||
-        !nl_checked_producer_valid(f, id))
-        return false;
+    if (!nl_checked_producer_local_return_view(f, id, &v))
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    NLCheckStatus status = nl_producer_validate(f, id, true);
+    if (status != NL_CHECK_OK)
+        return status;
     if (candidate &&
         (candidate->body != v.body || candidate->entry != v.entry ||
          candidate->returned != v.returned ||
@@ -864,7 +878,7 @@ bool nl_checked_producer_local_return_valid(
          candidate->local != v.local ||
          candidate->result.type != v.result.type ||
          candidate->result.value != v.result.value))
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLCheckedFragment *body = v.body;
     const NLProducerLocalProof *seal = body->producer_local;
@@ -885,14 +899,14 @@ bool nl_checked_producer_local_return_valid(
         seal->issued.return_node != v.return_node ||
         seal->issued.result.type != v.result.type ||
         seal->issued.result.value != v.result.value)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLFunctionBody *plan = body->body_owner;
     const NLSemanticContext *b = v.returned;
     if (!plan || body->source != plan->source || !plan->syntax ||
         nl_syntax_tree_source(plan->syntax) != plan->source ||
         body->count != 17 || body->arm_count || body->body_count || !v.local ||
         v.local > b->binding_count)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLControlExitView *edge = nl_control_exit_view(body->exits, 0);
     const NLSemanticContext *exit =
         edge ? nl_control_state_context((NLControlState *)edge->state) : NULL;
@@ -905,7 +919,7 @@ bool nl_checked_producer_local_return_valid(
         call->function > exit->function_count ||
         exit->functions[call->function - 1].body != plan ||
         nl_sem_validate(exit) != NL_CHECK_OK)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     NLSemanticSnapshot expected, actual;
     if (!nl_semantic_snapshot(b, &expected) ||
         !nl_semantic_snapshot(exit, &actual) ||
@@ -915,24 +929,24 @@ bool nl_checked_producer_local_return_valid(
         memcmp(b->domains, exit->domains,
                b->domain_count * sizeof(*b->domains)) ||
         memcmp(b->scopes, exit->scopes, b->scope_count * sizeof(*b->scopes)))
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     for (size_t i = 0; i < b->binding_count; ++i)
         if (memcmp(&b->bindings[i].view, &exit->bindings[i].view,
                    sizeof(b->bindings[i].view)) ||
             b->bindings[i].hidden != exit->bindings[i].hidden ||
             strcmp(b->bindings[i].name, exit->bindings[i].name))
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     if (b->occurrence_count &&
         memcmp(b->occurrences, exit->occurrences,
                b->occurrence_count * sizeof(*b->occurrences)))
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     for (size_t i = 0; i < b->region_count; ++i) {
         const NLRawRegionEntry *x = &b->regions[i], *y = &exit->regions[i];
         if (memcmp(&x->view, &y->view, sizeof(x->view)) ||
             x->count != y->count ||
             (x->count && memcmp(x->intervals, y->intervals,
                                 x->count * sizeof(*x->intervals))))
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     }
     for (size_t i = 0; i < body->count; ++i) {
         const NLCheckedNodeView *n = &body->nodes[i];
@@ -950,13 +964,13 @@ bool nl_checked_producer_local_return_valid(
             (!binding_node && n->next_item) ||
             (n->kind != NL_CHECKED_BLOCK && (n->first_item || n->item_count)) ||
             n->tail)
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     }
     const NLSyntaxNode *tree = nl_syntax_tree_root(plan->syntax);
     const NLSyntaxView *block = nl_syntax_node_view(tree);
     if (!block || block->kind != NL_SYNTAX_BLOCK ||
         block->data.block.item_count != 3 || block->data.block.tail)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLSyntaxNode *s0 = block->data.block.items,
                        *s1 = nl_syntax_next_argument(s0),
                        *s2 = nl_syntax_next_argument(s1);
@@ -966,7 +980,7 @@ bool nl_checked_producer_local_return_valid(
     if (!a0 || a0->kind != NL_SYNTAX_BINDING || !a1 ||
         a1->kind != NL_SYNTAX_BINDING || !a2 || a2->kind != NL_SYNTAX_RETURN ||
         nl_syntax_next_argument(s2))
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     bool seen[17] = {false};
     const NLCheckedNodeView *root =
         local_mark(body, body->root, NL_CHECKED_BLOCK, tree, seen);
@@ -990,7 +1004,7 @@ bool nl_checked_producer_local_return_valid(
         decl->symbol != v.local || decl->initializer != v.construction ||
         ret->initializer != v.consumer ||
         v.result.value != call->producer.result || v.result.type != call->type)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLSyntaxNode *initializers[2] = {a0->data.binding.initializer,
                                            a1->data.binding.initializer};
     const NLCheckedNodeView *declarations[2] = {old, decl};
@@ -1001,14 +1015,14 @@ bool nl_checked_producer_local_return_valid(
             nl_checked_node_view(body, d->first_argument);
         if (!r || !r->symbol || r->symbol > b->binding_count ||
             r->symbol != d->symbol)
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         if (!r || r->kind != NL_CHECKED_RECEIVER || r->next_argument ||
             r->result_count || r->value_use != NL_VALUE_RECEIVED ||
             !local_span(r->span, ast->data.binding.name) ||
             !local_text(plan->source, ast->data.binding.name,
                         b->bindings[r->symbol - 1].name) ||
             d->first_argument > 17 || seen[d->first_argument - 1])
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         seen[d->first_argument - 1] = true;
     }
     const NLCheckedNodeView *aggregate = local_mark(
@@ -1036,7 +1050,7 @@ bool nl_checked_producer_local_return_valid(
         binding->view.place == call->producer.root ||
         b->places[binding->view.place - 1].live ||
         b->places[binding->view.place - 1].current_value)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLSemanticValueView package = b->values[v.result.value - 1];
     bool fields[3] = {false};
     NLCheckedNodeId field = aggregate->first_argument;
@@ -1049,7 +1063,7 @@ bool nl_checked_producer_local_return_valid(
             sf->kind != NL_SYNTAX_FIELD ||
             !local_text(plan->source, sf->data.binding.name,
                         b->types[call->type - 1].field_names[n->field_index]))
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         size_t k = n->field_index;
         fields[k] = true;
         const NLCheckedNodeView *arg =
@@ -1060,12 +1074,12 @@ bool nl_checked_producer_local_return_valid(
             arg->results[0].value != package.fields[k] ||
             arg->type != n->type ||
             arg->value_use != (k ? NL_VALUE_CONSUMED : NL_VALUE_COPIED))
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         field = n->next_argument;
         source_field = nl_syntax_next_argument(source_field);
     }
     if (field || source_field)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLCheckedNodeView *replace = local_mark(
         body, old->initializer, NL_CHECKED_REPLACE, initializers[0], seen);
     const NLSyntaxView *rs = nl_syntax_node_view(initializers[0]);
@@ -1078,7 +1092,7 @@ bool nl_checked_producer_local_return_valid(
         replace->field.old_value != call->producer.head_before ||
         replace->field.new_value != call->producer.head_after ||
         replace->results[0].value != call->producer.head_before)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLSyntaxNode *ra = rs->data.call.arguments;
     const NLCheckedNodeView *ref = local_mark(body, replace->first_argument,
                                               NL_CHECKED_IDENTIFIER, ra, seen);
@@ -1094,9 +1108,16 @@ bool nl_checked_producer_local_return_valid(
         nl_checked_node_view(body, old->first_argument)->type !=
             replace->type ||
         nl_checked_node_view(body, decl->first_argument)->type != call->type)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     for (size_t i = 0; i < 17; ++i)
         if (!seen[i])
-            return false;
-    return true;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    return NL_CHECK_OK;
+}
+
+bool nl_checked_producer_local_return_valid(
+    const NLCheckedFragment *f, NLCheckedNodeId id,
+    const NLProducerLocalReturnView *candidate)
+{
+    return nl_producer_local_return_validate(f, id, candidate) == NL_CHECK_OK;
 }

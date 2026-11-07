@@ -1,0 +1,15 @@
+{
+  "schema": "P1217-C276-forward-apparatus-correction-v1",
+  "authority": "491f54adfa64ae7308344923ed14a9fcad08a8e9",
+  "preserved_first_head": "c99264155b2a0546e578dc6c743457599d05869b",
+  "diagnosed": "Release at2 fails in wrapped calloc; actual status2/outNULL/length37/root-world-loan checks unchanged, but old telemetry records malloc only",
+  "CURRENT": "Unchanged C275 controls and exact OOM predicate; every interposed malloc/calloc/realloc failure supplies actual failure flag and caller PC, no forged status",
+  "original_controls": "Original22 non-OOM cases and all P733 local/foreign/source/seal controls execute through the unchanged frozen C275 source",
+  "OOM_selection": "Original first static kind/PC per registration and CHECK, every emit allocation, corresponding named emission plus endpoints; no selected trial dropped",
+  "OOM_budget": "New forward apparatus at most512, measured optimized Release378 and Debug258; original v2/320 and original failed CI retained unchanged",
+  "OOM_oracle": "Original oom.c bytes, exactOOM/no-output/rollback/retry/cleanup/named-output no-clobber unchanged",
+  "historical": "C274 old count RED and C275 Release RED remain RED; all C275 v1/v2, old source/oracle/strict OOM and Git/SHA anchors remain immutable",
+  "production": "No Production, public API, issuer, world, semantics, source profile or generated C changes",
+  "cost": "One small wrapper adapter and finite test ceiling; no new retained compiler memory or runtime state; measure local time before the single corrective push",
+  "STOP": "Any actual unexpected non-OOM status, false acceptance, clobber, ownership/loan/cleanup/sanitizer defect, history loss or budget expansion beyond one correction cohort returns to C"
+}

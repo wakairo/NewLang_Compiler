@@ -1,0 +1,10 @@
+{
+  "all_original_non_OOM_controls": "still UNSUPPORTED, out NULL, length37",
+  "every_reached_injected_emitter_malloc": "exact OUT_OF_MEMORY only; actual failure flag and return PC recorded",
+  "success": "no fault reached; exact baseline C and output length; bounded exhaustion64, no universal count requirement",
+  "rollback": "exact root pointer; five caller/entry/return/body worlds, complete context header + public state + private Copy anchor including scopes, places, values, bindings",
+  "retry": "public producer revalidation and identical emission after every injected failure",
+  "cleanup": "free anchors/snapshots/output, canonical original destructor; full non-ptrace ASan/LSan required",
+  "P733": "original local/consume/foreign issuer/caller/source/control-seal tests retained; own emission OOM now strict resource status",
+  "historical": "old source/oracle/assertions/RED remain exact; evidence checker authenticates archived original and GDB actual old counters without executing old failure as current PASS"
+}

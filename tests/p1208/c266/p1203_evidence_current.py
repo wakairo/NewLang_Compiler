@@ -32,7 +32,19 @@ for name, expected in old['files'].items():
 before = "'focused-freeze-v3.json'"
 source = raw.decode()
 assert source.count(before) == 1
-source = source.replace(before, "'../p1208/c266/p1203-freeze-v4.json'", 1)
+# C274: preserve accepted v4 bytes and its full input set before selecting v5.
+accepted_bytes = (current / 'p1203-freeze-v4.json').read_bytes()
+next_current = json.loads((root / 'tests/p1217/c274/p1203-freeze-v5.json').read_bytes())
+assert next_current['previous_sha256'] == sha(accepted_bytes)
+assert next_current['files'].keys() == new['files'].keys()
+assert sha((root / next_current['archive']).read_bytes()) == next_current['archive_sha256']
+with zipfile.ZipFile(root / next_current['archive']) as z:
+    assert len(z.namelist()) == len(set(z.namelist())) and set(z.namelist()) == set(new['files'])
+    for name, expected in new['files'].items():
+        assert sha(z.read(name)) == expected, name
+        if name not in {'src/current_loop_check_internal.h', 'src/linear_break_internal.h'}:
+            assert next_current['files'][name] == expected, name
+source = source.replace(before, "'../p1217/c274/p1203-freeze-v5.json'", 1)
 exec(compile(source, str(original) + ':C266-current', 'exec'),
      {'__file__': str(original), '__name__': '__main__'})
 print('C266 adopted P1203 v3 archived/authenticated; unchanged assertions + current v4 PASS')

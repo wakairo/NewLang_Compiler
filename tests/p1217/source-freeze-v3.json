@@ -1,0 +1,11 @@
+{
+  "before_execution": true,
+  "version": 3,
+  "prior_v1_sha256": "1db25d1dce142ea02a81426e92119a951a37feb9eda438f4a9f3d30556f4dbb2",
+  "prior_v2_sha256": "d39d0de22fa7937a71bc91c989e873ac5a6a372096a8da6e412afc4f32cfcc2b",
+  "files": {
+    "oracle-v3.json": "ad54704a39b578823c8418ed6c7221fc68370061e165d55157836972bdcea191",
+    "sources/08-no-write-literal-entry-control.nl": "892a14827ffa59cba7506badab4d0d0ecccb2510523880056f2b5dc19d3dcfd8"
+  },
+  "reason": "Preserve06/07 and failures. Existing stutter_source_shape explicitly requires NL_SYNTAX_USIZE_LITERAL entry; control08 independently satisfies that contract. No checker/source rule change."
+}

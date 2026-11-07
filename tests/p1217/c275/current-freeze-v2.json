@@ -1,0 +1,40 @@
+{
+  "schema": "P1217-C275-CURRENT-v2-pre-execution",
+  "authority": "491f54adfa64ae7308344923ed14a9fcad08a8e9",
+  "historical_head": "84001f089534847c16f17c7fe60102c2723eeaa4",
+  "old_inputs": {
+    "tests/unit/live_return_backend_test.c": "d87cf2a04938687c4774db5484a12f5c540fcd1096f3e3f32c99802a0a0427b6",
+    "tests/p733/gate_test.c": "89a74a19a907acb29629adf7bf63013c7c027d4eb2d3a467b4ac893435382eea",
+    "tests/p738/gate_test.c": "3dcbbff223bbe1d20728926c3162d0430d35de25657a8e5659a49c7e35cc37cf",
+    "tests/p738/sprout.nl": "a9e24ba9ba0436f417118fbee3bd1706ab8f20faa29ef195f690c87b3ea2ca5e",
+    "tests/p738/ticket.nl": "752c120c7b17fb12a9c94d2853d85d758fd7d159754170ca0259df51e1aa2ac9"
+  },
+  "old_git_blobs": {
+    "tests/unit/live_return_backend_test.c": "1e75111852c4e28bfb75818d891870bb1822445f",
+    "tests/p733/gate_test.c": "2607f6bee4178dc22def50518c25c26737d45232",
+    "tests/p738/gate_test.c": "8214c14a1c0855919deef9139f79b5f65c5d73cd",
+    "tests/p738/sprout.nl": "1328f5b7dd67512837181125fe4d93916f61f409",
+    "tests/p738/ticket.nl": "32d03b2f2bcf3d4f4429c5bc358a9abf6139d616"
+  },
+  "archive": "tests/p1217/evidence/c275-original-contract-and-diagnostics-v1.zip",
+  "archive_sha256": "6dd34578674772b64bf39c91969f273ea6b3106180af483a0be12dd911af059c",
+  "current_files": {
+    "tests/p1217/c275/live_return_backend_current_v1.c": "3f9025bcc7c74cfe168931628e6a0543705a82240f32058236e72a33ed0a9593",
+    "tests/p1217/c275/p733_current_v1.c": "536283a5c235fe3643b7ea5580c276a3dca94eed6fe490a373cd10cf1c5e0e1f",
+    "tests/p1217/c275/CMakeLists.txt": "a562ca14efb5978088e279fcff8913af9a27910a6d257f4ec57abfea32fea0d5",
+    "tests/p1217/c275/history_test.py": "872880ccdb2b72034d467971d9d9c6113b06cc980857fcb14a9cc8550b1799fa",
+    "tests/p1217/c275/oracle-v1.json": "2872847fa2d36908149ad4b719d7b8b8cd2a3b4607fbb2538f5e983290220824"
+  },
+  "oracle": {
+    "all_original_non_OOM_controls": "still UNSUPPORTED, out NULL, length37",
+    "every_reached_injected_emitter_malloc": "exact OUT_OF_MEMORY only; actual failure flag and return PC recorded",
+    "success": "no fault reached; exact baseline C and output length; bounded exhaustion64, no universal count requirement",
+    "rollback": "exact root pointer; five caller/entry/return/body worlds, complete context header + public state + private Copy anchor including scopes, places, values, bindings",
+    "retry": "public producer revalidation and identical emission after every injected failure",
+    "cleanup": "free anchors/snapshots/output, canonical original destructor; full non-ptrace ASan/LSan required",
+    "P733": "original local/consume/foreign issuer/caller/source/control-seal tests retained; own emission OOM now strict resource status",
+    "historical": "old source/oracle/assertions/RED remain exact; evidence checker authenticates archived original and GDB actual old counters without executing old failure as current PASS"
+  },
+  "reason": "Before first execution, pin original fixed-main source SHA/Git OIDs literally in standalone history checker as well as CMake; proposed v1/full source kept exact in archive; no oracle/Production change",
+  "prior_proposal_sha256": "1118f337453207a89ceeeef6d6ec45f271461900ab8054153d12491701e0f11c"
+}

@@ -1,0 +1,13 @@
+{
+  "before_injection": true,
+  "version": 4,
+  "selected_OOM_cap_per_configuration": 320,
+  "observed_GCC_planned_trials": 258,
+  "faults_injected_in_v1": 0,
+  "reason": "Fresh census found258 selected static-site trials vs provisional256. Keep all reached sites and old pre-injection apparatus RED, raise finite local per-config ceiling320; do not remove tests. Same live GCC binary/census reused after exact nm comparison, ASan will fresh-census. No OOM oracle/status/rollback invariant weakened.",
+  "files": {
+    "oom_v2.py": "1f8c048b27bf2d85df6a1c07a152b3797557a9caef5c8c61610560d8c21de264",
+    "oom.c": "8cf5653d7b8fca5e249967e69c5f0f6d32f0e73265c40a94f484aafe0d621273",
+    "evidence/first-OOM-census-v1.zip": "5d70adae2a1211fda3aeb28178ab8075a10e484ea28de9e39a05589f657055ce"
+  }
+}
