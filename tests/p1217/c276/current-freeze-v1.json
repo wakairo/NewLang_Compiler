@@ -1,0 +1,19 @@
+{
+  "schema": "P1217-C276-before-first-corrected-execution-v1",
+  "jst": "2026-11-07T14:49:55.829966+09:00",
+  "authority": "491f54adfa64ae7308344923ed14a9fcad08a8e9",
+  "original_head": "c99264155b2a0546e578dc6c743457599d05869b",
+  "prior_current_freeze_sha256": "728a26b9461a6de690d575ad95bb1fb151e555d9ce046f4eecd770b3fd0a8a39",
+  "current_files": {
+    "tests/p1217/c276/p733_current_v2.c": "d06774640a8f29dd8aaf18046e98705084c5db5a1554b2ef4e342d0653e59833",
+    "tests/p1217/c276/CMakeLists.txt": "8a0cfa0b57251bec35d20653364b0df597326ce52340a63418c15807184c37af",
+    "tests/p1217/c276/history_test.py": "5044faf68c920ea0a6a6a57a7470f08dae157518e8c53a317d9a7ecd40d6037c",
+    "tests/p1217/c276/oracle-v1.json": "e60978f995a7161898ddefbd2d066c7b047d9de75970cee9e748e325428db9df",
+    "tests/p1217/oom_v3.py": "89aecba983ba69e90e29b3bf4d31b57eec578446f59b3427ab2337d38bf6d809"
+  },
+  "oracle": "tests/p1217/c276/oracle-v1.json",
+  "old_source_oracle_bytes_unchanged": true,
+  "diagnostic_archive_sha256": "f8bf8eda7b114e65e78c25cd1652e5a984fa90f2260a4827ad35fb4b4897c4ea",
+  "finite_target": "Release378 source-selected injections; target matrices only, no unrelated full local rerun",
+  "remote_correction_push_before_local_pass": 0
+}

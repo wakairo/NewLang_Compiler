@@ -23,7 +23,7 @@ add_test(NAME p1217_native.integration COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
     "${CMAKE_CURRENT_BINARY_DIR}/p1217-native")
 add_test(NAME p1217_oom.unit COMMAND "${Python3_EXECUTABLE}"
-    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1217/oom_v2.py" "$<TARGET_FILE:p1217_oom>"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1217/oom_v3.py" "$<TARGET_FILE:p1217_oom>"
     "${CMAKE_CURRENT_BINARY_DIR}/p1217-oom")
 set_tests_properties(p1217_oom.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 300)
 add_test(NAME p1217_evidence.unit COMMAND "${Python3_EXECUTABLE}"

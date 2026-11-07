@@ -73,3 +73,13 @@ universal contract. Normal ASan/LSan runs are separate from ptrace diagnostics.
 Original evidence assertions also select forward P1107 v39 and P1203 v5 inputs;
 all prior snapshots and first failures remain exact. C275 adds no Production
 behavior and does not replace independent fixed-head review or Product GO.
+The first public C275 candidate remains historical GCC Release RED: calloc
+lowering reached a real OOM without setting malloc-only fault telemetry, and
+the optimized first-site census selected378 above its original320 apparatus
+ceiling. C276 supplies a small adapter for both other interposed allocators;
+the entire frozen C275 controls and exact OOM predicate remain unchanged. The
+forward `oom_v3.py` keeps every selection and strict original `oom.c` assertion,
+with finite ceiling512 (measured Release378). Original v2/320 and FIRST are
+retained. C276 history anchors the diagnostic, unexecuted first adapter
+proposal/compiler error, and original v57 inputs; prospective v58/v10/v40 keep
+their predecessors unchanged. This adds test maintenance, no Production state.
