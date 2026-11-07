@@ -1541,6 +1541,7 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
 {
     const NLCheckStatus bad = NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     NLCurrentLoopProof *s = p->current_cycle;
+    NLPureU8Call pure = {0};
     if (!p->sealed || !s->sealed || !s->graph_owned || p->owner != f ||
         s->parent != f || f->context != p->world || f->source != p->source ||
         f->body_owner != p->plan || !nl_h_custody_validate(p->root) ||
@@ -1606,7 +1607,6 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                 !current_helper_entry(s, r->world.world, 12 + i))
                 return bad;
         }
-        NLPureU8Call pure;
         CurrentReturnRef refs[4];
         size_t count;
         if (!nl_pure_u8_contents(s->graphs[1].fragment, s->scalar, &pure) ||
@@ -1668,7 +1668,12 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                                .initial_node = s->initial_node,
                                .initial_phase = s->initial,
                                .limit = s->limit,
-                               .next_phase = s->step};
+                               .next_phase = s->step,
+                               .entry_world = e,
+                               .post_world = p->post,
+                               .helper_body = pure.body,
+                               .helper_formal = pure.formal,
+                               .helper_selection = pure.selection};
     return NL_CHECK_OK;
 }
 

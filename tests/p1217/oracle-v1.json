@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "before_execution": true,
+  "parent_main": "491f54adfa64ae7308344923ed14a9fcad08a8e9",
+  "original_P1214_unchanged": "B03/B04 original CHECK0/backend4 remain FIRST, not new native PASS",
+  "positive": {
+    "03-postheap-current-loop.nl": {
+      "source": "eligible selected H cleanup completes in every allocation world before constructing T and running finite current loop",
+      "prediction": "conservative CHECK/issuer precision refusal or C17 dual-carrier unsupported; true first layer UNKNOWN",
+      "heap_worlds": [
+        0,
+        1,
+        2
+      ],
+      "heap_releases": [
+        0,
+        1,
+        2
+      ],
+      "incoming": [
+        67,
+        67,
+        191,
+        191
+      ],
+      "old": [
+        43,
+        67,
+        67,
+        191
+      ],
+      "final": 191,
+      "sibling": 229,
+      "loop_result": 4,
+      "candidate_prediction": "CHECK0/authentic owned-current/C17/native success for H failure budgets0/1/2; same T addresses in every iteration, all original H freed exactly once"
+    },
+    "04-preheap-original-current-loop.nl": {
+      "source": "eligible same lexical T exists before H allocation and survives all cleanup worlds; update its other field after H completion",
+      "prediction": "conservative CHECK/issuer precision refusal or C17 dual-carrier unsupported; true first layer UNKNOWN",
+      "heap_worlds": [
+        0,
+        1,
+        2
+      ],
+      "heap_releases": [
+        0,
+        1,
+        2
+      ],
+      "incoming": [
+        173,
+        83,
+        173,
+        173
+      ],
+      "old": [
+        229,
+        173,
+        83,
+        173
+      ],
+      "final": 173,
+      "sibling": 43,
+      "loop_result": 4,
+      "candidate_prediction": "CHECK0/authentic owned-current/C17/native success for H failure budgets0/1/2; same T addresses in every iteration, all original H freed exactly once"
+    },
+    "05-zero-heap-control.nl": {
+      "source": "eligible; same runtime behavior as 01 via binding and explicit discard",
+      "prediction": "CHECK success, owned/current valid, C17 success",
+      "incoming": [
+        29,
+        29,
+        29,
+        101,
+        101
+      ],
+      "old": [
+        52,
+        29,
+        29,
+        29,
+        101
+      ],
+      "final": 101,
+      "sibling": 197,
+      "loop_result": 5
+    },
+    "06-no-write-control.nl": {
+      "source": "eligible nonchanging original T, finite stutter loop",
+      "candidate_prediction": "CHECK0/C17/native; no store; unchanged original addresses/fields",
+      "loop_result": 3,
+      "final": 38,
+      "sibling": 227
+    }
+  },
+  "negative": {
+    "90-wrong-return-type.nl": "invalid u8 helper RETURN type; CHECK reject, no output",
+    "91-wrong-continue-type.nl": "invalid loop-carried static type; CHECK reject, no output",
+    "92-escaped-write-ref.nl": "invalid escape of scoped writer; CHECK reject, no output",
+    "93-missing-failure-cleanup.nl": "invalid undischarged original head Allocation on second-allocation failure; CHECK reject, no output",
+    "94-unknown-field.nl": "CHECK refuse unknown field; named output unchanged",
+    "95-wrong-domain.nl": "CHECK refuse tail/head Domain mismatch; named output unchanged"
+  },
+  "host_negative_prediction": "altered source/world/constructor/current/incarnation/loan or foreign signature allocation must be rejected before emission; output args and named file unchanged; restore original view before separate foreign allocation free; canonical destruction unchanged",
+  "limits": {
+    "new_source_native_executions": 40,
+    "initial_selected_OOM_trials": 256,
+    "new_CI_actual_jobs": 12,
+    "manual": 0
+  },
+  "unreleased": "statement mixed typed RETURN, general CFG/issuer/world/API/ABI, multiple T/H nominals, H resources live across loop"
+}

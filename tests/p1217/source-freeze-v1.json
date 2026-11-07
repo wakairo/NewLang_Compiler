@@ -1,0 +1,18 @@
+{
+  "before_execution": true,
+  "main": "491f54adfa64ae7308344923ed14a9fcad08a8e9",
+  "files": {
+    "evidence/P1214-Gate0-source-oracle-FIRST-raw-v1.zip": "4db34028375317e70ab49bce76339ca30f656bb49c5a49b7ef30ab5e9aad3eb5",
+    "oracle-v1.json": "95b284918097075248dddfc0ea588bf299389cc045a95fbfdaed6c7fbd131bb2",
+    "sources/03-postheap-current-loop.nl": "54d51835b512b2762d39751d55248952cf0a66f6a7941f70687d866f6ea04034",
+    "sources/04-preheap-original-current-loop.nl": "716a7443bcda583052ec51e676658038cb4f4a12a379d8fccffef162e51a4f6d",
+    "sources/05-zero-heap-control.nl": "45bc10e23675ecebc02e5fdb462f8992fd20c9411c24e8b0497ca306b2226c97",
+    "sources/06-no-write-control.nl": "1ab8c6b5c07836d65103fe959e56bc18b70d36bb78c35b28d020412592b8f619",
+    "sources/90-wrong-return-type.nl": "68d5466de872a805339f38df6c7578241b1ea9a47e6a1c9bdf3e292fac638a08",
+    "sources/91-wrong-continue-type.nl": "fbe0efe10556d20c637de74dabdc749cb5720efa82c60890109b10f7a55f03aa",
+    "sources/92-escaped-write-ref.nl": "3f83995073133594b8a9432c036c6c8267da48be8202c6ead68a663beda502ff",
+    "sources/93-missing-failure-cleanup.nl": "8d6a712493ff2fb8f19967ce50bbea6e547b581f88bdef1cd21c738b04d2c021",
+    "sources/94-unknown-field.nl": "d08ec035b752484a316a6fcaa0cd279ac0b8d6f1912b634bed332328d05adca5",
+    "sources/95-wrong-domain.nl": "690e2b855583a981d39fa8f77f75d3cede3b4d8ec8ed38711aa20286edd42183"
+  }
+}
