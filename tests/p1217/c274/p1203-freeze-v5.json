@@ -1,0 +1,17 @@
+{
+  "phase": "C274 prospective P1203 same original assertions, changed synchronous private borrow-view inputs only",
+  "previous": "tests/p1208/c266/p1203-freeze-v4.json",
+  "previous_sha256": "34b69d11f01a60d8762dbe57835de38a9c0667e376e958d4e713224988eb532c",
+  "archive": "tests/p1217/evidence/p1203-adopted-v4-inputs.zip",
+  "archive_sha256": "1c3a452068ef122c50f12f2c1c6fc40a33ad738f7b752c1c18c131f33b4b8ac4",
+  "files": {
+    "tests/p1203/safety.c": "0d7b321ba49f5960ac36d26a3a9f4917ab35ea7005f6592fc0f2c9647d4652f4",
+    "tests/p1203/native.py": "7bfdc67423c2b7284476e41374d0c767d7e43d8e99fe98cc544837cbdc2da865",
+    "tests/p1203/negative.py": "8b258e920525279f6e8babcc9ccfc49b68aeeb0b5f378476577a69b64aefd5b4",
+    "tests/p1203/CMakeLists.txt": "fbaafa9d0e565a6867feddd2394ee8f09596a87382f66a4346f93fa37184b12e",
+    "src/current_loop_check_internal.h": "0902a03e3fb278c234cf5afc464463fe0df06cba927d0874add45bacc8e3a471",
+    "src/linear_break_internal.h": "74143d45051ede00759619eab0b7909a4fcc7f564a6f8e8b918785c08cf2186d",
+    "src/main.c": "dcbaf4b4ecc49529a5d2f8e065909f6184a48072a2db5c6339262f7a588027bd",
+    "tests/p1203/evidence_test.py": "77afd1222d3bf94f25c0308159c04772aab655dd47adb75491523a60b1f04dda"
+  }
+}
