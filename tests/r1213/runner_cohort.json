@@ -1,0 +1,106 @@
+{
+  "cohort": "R1213 C268 immutable BLIND V1; C272 execution",
+  "original_issue": "https://github.com/wakairo/NewLang_Compiler/issues/1213#issuecomment-6685125763",
+  "original_manifest_sha256_declared": "b524a8374b1069273fae494478dc030790c95736b177dfe7a20b7084903a3097",
+  "original_zip_sha256_declared": "2ad64dd02f648ea354f6169a412dd985978a6dd6e4296e6a8cbd78f1354b822d",
+  "original_manifest_bytes_not_recreated": true,
+  "fixed_compiler_parent": "491f54adfa64ae7308344923ed14a9fcad08a8e9",
+  "canonical": "Draft17.34",
+  "execution": "GitHub Actions ONLY; no P-equivalent local executor",
+  "cases": [
+    {
+      "id": "p01",
+      "name": "positive/p01_early_then_normal.nl",
+      "class": "positive",
+      "predicted": {
+        "first_old": 149,
+        "last_old": 37,
+        "live_after": 83,
+        "sentinel_before": 211,
+        "sentinel_after": 211,
+        "iteration_count": 2
+      },
+      "size": 877,
+      "sha256": "8e685e36d621dbb9d2372348bbb637f318d9e9bb9fc404a5cbd18be32c00e6c5"
+    },
+    {
+      "id": "p02",
+      "name": "positive/p02_normal_then_early_index1.nl",
+      "class": "positive",
+      "predicted": {
+        "old0": 96,
+        "second_old": 46,
+        "offset_after": 172,
+        "marker_before": 6,
+        "marker_after": 6,
+        "iteration_count": 2
+      },
+      "size": 858,
+      "sha256": "1634afd747cebde9cb11a3391104444da6f494e0a26a0298ea4fdf3829eb00b4"
+    },
+    {
+      "id": "p03",
+      "name": "positive/p03_old_copy_to_sibling.nl",
+      "class": "positive",
+      "predicted": {
+        "old0": 241,
+        "displaced": 67,
+        "count_after": 173,
+        "log_before": 18,
+        "old_log": 18,
+        "log_after": 67,
+        "iteration_count": 2
+      },
+      "size": 902,
+      "sha256": "ab4a0bfe68ea61ae9d7adbcbd356dcd2b0996645e6d55dc21c943a4d81164c32"
+    },
+    {
+      "id": "n01",
+      "name": "negative/n01_early_return_wrong_type.nl",
+      "class": "negative",
+      "intent": "return u8 expected; source returns usize(37)",
+      "size": 880,
+      "sha256": "b11409e584c8f914edaf327014d945e41eafa576880b97366f0fa7e758c7d61c"
+    },
+    {
+      "id": "n02",
+      "name": "negative/n02_normal_arm_wrong_type.nl",
+      "class": "negative",
+      "intent": "normal arm tail u8 expected; source supplies usize(83)",
+      "size": 870,
+      "sha256": "0887e335b6d4be00b15c5f2ac071953b43d6e0a4f8b5cda119209bbdf61e22e8"
+    },
+    {
+      "id": "n03",
+      "name": "negative/n03_callee_break_escapes.nl",
+      "class": "negative",
+      "intent": "callee break has no callee-owned lexical loop target",
+      "size": 802,
+      "sha256": "a6ba3ee7e9786c5751ffb72786d250e471622a295141a0884ec5544a8f3cd185"
+    },
+    {
+      "id": "n04",
+      "name": "negative/n04_callee_continue_escapes.nl",
+      "class": "negative",
+      "intent": "callee continue has no callee-owned lexical loop target",
+      "size": 808,
+      "sha256": "4cda2965b6eac7e1aa77568a9b0f5a54c394077aeaee163b554495c3c1c7c100"
+    },
+    {
+      "id": "n05",
+      "name": "negative/n05_loan_ref_escape.nl",
+      "class": "negative",
+      "intent": "loan_write scoped ref attempts escape",
+      "size": 845,
+      "sha256": "d56dd1f14b2bfb746b40fcf88deac9d822a7a76eb19471fdcdf19c7c9909ac80"
+    },
+    {
+      "id": "n06",
+      "name": "negative/n06_unissued_field.nl",
+      "class": "negative",
+      "intent": "unknown field projection cannot create source-issued authority",
+      "size": 881,
+      "sha256": "31f66d37325b48296b0cc51323291e6421d42981d9aa55e31f0428050e2ddf21"
+    }
+  ]
+}

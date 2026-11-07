@@ -109,6 +109,7 @@ include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
     include(tests/p1208/CMakeLists.txt)
+    include(tests/r1213/CMakeLists.txt)
     # P930 diagnostic-only wrappers: production libraries/CLI remain unchanged.
     add_executable(p930_observe tests/p930/observe.c)
     add_executable(p930_oom tests/p930/observe.c)
