@@ -8,6 +8,7 @@
 #include "newlang/node_join.h"
 #include "newlang/node_links.h"
 #include "newlang/raw_storage.h"
+#include "semantic_internal.h"
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -139,6 +140,20 @@ static bool reject(Emit *e)
 {
     if (e->status == NL_NODE_C_OK)
         e->status = NL_NODE_C_UNSUPPORTED;
+    return false;
+}
+
+/* Preserve only a status from the same genuine producer validation. Public
+ * bool validators still return false for both invalid proof and scratch OOM. */
+static bool producer_status(Emit *e, NLCheckStatus status)
+{
+    if (status == NL_CHECK_OK)
+        return true;
+    if (e->status == NL_NODE_C_OK)
+        e->status = status == NL_CHECK_OUT_OF_MEMORY ? NL_NODE_C_OUT_OF_MEMORY
+                    : status == NL_CHECK_RESOURCE_LIMIT
+                        ? NL_NODE_C_RESOURCE_LIMIT
+                        : NL_NODE_C_UNSUPPORTED;
     return false;
 }
 
@@ -417,7 +432,7 @@ static bool terminal_role_lane(const Emit *e)
 
 /* The same source-issued producer original licenses the optional caller read
  * and its later terminal. No count supplies a missing owner relationship. */
-static bool terminal_sequence(const Emit *e, const Env *env,
+static bool terminal_sequence(Emit *e, const Env *env,
                               const NLCheckedNodeView *call)
 {
     const NLCheckedFragment *f = env->artifact;
@@ -427,7 +442,7 @@ static bool terminal_sequence(const Emit *e, const Env *env,
         e->producer_calls != 1 || e->pending_live || e->owner_calls ||
         e->active_owner_call || e->active_owner_body ||
         e->receiver_tail_reads || e->caller_tail_reads > 1 || !producer ||
-        !nl_checked_producer_valid(f, e->producer_node) ||
+        !producer_status(e, nl_producer_validate(f, e->producer_node, true)) ||
         !producer->producer.return_proved ||
         producer->span.end_byte > call->span.start_byte ||
         producer->producer.root != call->owner_call.root ||
@@ -1728,11 +1743,12 @@ static bool no_read_entry(Emit *e, Env *env, const NLCheckedNodeView *ref)
             continue;
         NLProducerLocalReturnView local_return;
         if (found ||
-            (e->copy_after_match ? !nl_checked_producer_valid(f, i)
-                                 : (!nl_checked_producer_local_return_view(
-                                        f, i, &local_return) ||
-                                    !nl_checked_producer_local_return_valid(
-                                        f, i, &local_return))))
+            (e->copy_after_match
+                 ? !producer_status(e, nl_producer_validate(f, i, true))
+                 : (!nl_checked_producer_local_return_view(f, i,
+                                                           &local_return) ||
+                    !producer_status(e, nl_producer_local_return_validate(
+                                            f, i, &local_return)))))
             return false;
         const NLCheckedNodeView *projection = get(env, call->first_argument),
                                 *base =
@@ -2265,7 +2281,7 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
     const Env *tail = region(env, v->producer.range.region);
     if (!e->two_heap || e->live_tail == 0 || v->type != e->live_tail ||
         e->producer_calls != 0 || e->owner_calls != 0 ||
-        !nl_checked_producer_valid(env->artifact, id) ||
+        !producer_status(e, nl_producer_validate(env->artifact, id, true)) ||
         !v->producer.head.dependency_compatible || tail == NULL ||
         tail->region_slot != 1 || e->lifecycle[1].stage != 4 ||
         tail->heap_place != v->producer.root ||
@@ -2287,10 +2303,11 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
         ((!e->copy_after_match && !local_result) ||
          e->no_read_issuer != env->artifact || e->no_read_call != id))
         return reject(e);
-    if (local_result && (!nl_checked_producer_local_return_view(
-                             env->artifact, id, &local_return) ||
-                         !nl_checked_producer_local_return_valid(
-                             env->artifact, id, &local_return)))
+    if (local_result &&
+        (!nl_checked_producer_local_return_view(env->artifact, id,
+                                                &local_return) ||
+         !producer_status(e, nl_producer_local_return_validate(
+                                 env->artifact, id, &local_return))))
         return reject(e);
     const NLCheckedNodeView *ret =
         local_result      ? nl_checked_node_view(f, local_return.return_node)
@@ -2536,7 +2553,7 @@ static bool live_binding(Emit *e, Env *env, const NLCheckedNodeView *v,
         !body || body->kind != NL_CHECKED_BLOCK ||
         body->tail != e->producer_node || !call ||
         !call->producer.entry_proved ||
-        !nl_checked_producer_valid(f, e->producer_node) ||
+        !producer_status(e, nl_producer_validate(f, e->producer_node, true)) ||
         loan->results[0].value != call->producer.result ||
         !nl_semantic_binding_view(c, v->symbol, &binding) ||
         binding.availability != NL_CONSUMED || binding.type != e->live_tail ||
@@ -3272,7 +3289,8 @@ static bool return_profile(Emit *e, const NLCheckedFragment *f, size_t depth)
                 return reject(e);
         }
         if (v->producer.entry_proved) {
-            if (e->live_tail != 0 || !nl_checked_producer_valid(f, i))
+            if (e->live_tail != 0 ||
+                !producer_status(e, nl_producer_validate(f, i, true)))
                 return reject(e);
             e->live_tail = v->type;
         }

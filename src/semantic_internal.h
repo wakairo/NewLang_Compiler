@@ -389,6 +389,15 @@ NLCheckStatus nl_allocated_closed_prefix(const NLSemanticContext *,
 /* Internal proof comparisons allocate nothing. Raw integrity is separately
  * status-checked at construction and fail-closed in public validation. */
 bool nl_producer_valid(const NLCheckedFragment *, NLCheckedNodeId, bool raw);
+/* Same read-only predicates and scratch evaluations as the public bool
+ * consumers. The emitter needs the original failure cause, never a second
+ * evaluation or an inference of OOM from false. No evidence is issued. */
+NLCheckStatus nl_producer_validate(const NLCheckedFragment *, NLCheckedNodeId,
+                                   bool raw);
+NLCheckStatus
+nl_producer_local_return_validate(const NLCheckedFragment *, NLCheckedNodeId,
+                                  const NLProducerLocalReturnView *);
+
 bool nl_packet_same_entry(const NLSemanticContext *, const NLSemanticContext *);
 /* Reuse the existing exact package comparison without changing its callers. */
 bool nl_node_value_same(NLSemanticValueView, NLSemanticValueView);
