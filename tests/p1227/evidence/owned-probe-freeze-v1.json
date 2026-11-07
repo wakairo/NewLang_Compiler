@@ -1,0 +1,25 @@
+{
+  "utc": "2026-11-07T09:11:08.951315+00:00",
+  "before_build_execution": true,
+  "source_sha256": "ef9e7f59d37d247bf111d9b691fe2e6a0c2d1247f965fab3cfe4d8341145dbe4",
+  "build_sha256": "e483d64812e924e6346676d195cac67a43b70dad6a7f1b863d5a6802870a712d",
+  "library_sha256": {
+    "/tmp/p1217/c277/build-gcc-release/libnewlang_checked_c_node.a": "98ef6dbb6ceef74a9efa825e35fe402871d803259091468463ed6c6b4f6204c2",
+    "/tmp/p1217/c277/build-gcc-release/libnewlang_semantic.a": "ae1c1d1baa388c8b3f4ed7dbfc159539a62a80cf17729d376e2df02ba77790c4",
+    "/tmp/p1217/c277/build-gcc-release/libnewlang_checked.a": "3a6b7cca6f37ed8b664e8ecfac348ea48448ca056c1bd659a265add24444d14f",
+    "/tmp/p1217/c277/build-gcc-release/libnewlang_parser.a": "9f149f5b1175fc9efeb8c45e264bcb3b4981762581d836fb0b14cffd8f931c9b",
+    "/tmp/p1217/c277/build-gcc-release/libnewlang_diagnostic.a": "8bf2e1a46493d0cef60a62f2e4ad239d23e1da06b1293645010d258e77eb8e01",
+    "/tmp/p1217/c277/build-gcc-release/libnewlang_syntax.a": "912cc58e7e4dfdf9447c85660da348538283d5d97ec5289cadbbdb1838a71a07",
+    "/tmp/p1217/c277/build-gcc-release/libnewlang_lexer.a": "dca2fbee75e8fe36cc7e48ab1ca32345e7975e75a41f88a90519a9615e1f624b",
+    "/tmp/p1217/c277/build-gcc-release/libnewlang_source.a": "e25141a159973701f1cc83fbc4f5bfd76a4fb351e5acdb7e2e3a6f128c82a3c7"
+  },
+  "oracle": "Four actual source units Bpre,Apre,Bpost,Apost must register/check and own genuine source/heap custody/current/linear BREAK; pure helper issued lineage/contents valid. A normal arms1/body RETURN present/private2arm guardfalse, B arms2/no RETURN/direct-tail guardtrue. Original/child/roles identities measured, not minted. Unissued shallow owner and genuine other-context descriptor must reject; all pointers live, no underlying world mutation/destroy on shallow views.",
+  "counters_before": {
+    "source": 12,
+    "native_observer": 0
+  },
+  "counters_after": {
+    "source": 16,
+    "native_observer": 1
+  }
+}

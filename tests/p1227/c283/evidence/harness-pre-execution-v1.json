@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "before_execution": true,
+  "source_oracle_sha256": "cf2526f4ce18259ec8ff363b3620a141e2554a9545794bd217b8d878ab06c71b",
+  "files": {
+    "tests/p1227/c283/CMakeLists.txt": "20fb282e55cfe28cb49b892e2327dfdd28655f08798ed4cea34ef5cd160cf76f",
+    "tests/p1227/c283/observe.c": "4cbd1ab8ae27d679005659c6d244d4b937d6c4cd0e64f2c89e5cbcb57b74b5a9",
+    "tests/p1227/c283/return_safety.c": "5188e8ed4c9e1fcb67617671d0dc4e9529382e5f57087cb8ab5bba9b0b1a7980",
+    "tests/p1227/c283/source-oracle-freeze-v2.json": "cf2526f4ce18259ec8ff363b3620a141e2554a9545794bd217b8d878ab06c71b",
+    "tests/p1227/c283/source_native.py": "eebd027412c01c64ad73f9e3b00fb6d617ff546f604c1f512d091d41d6ff2236",
+    "tests/p1227/c283/sources/A-alias-postH.nl": "0cbfa08a09c00ba4e640896b03982667063d1b2a231a0b0bb88f89a16fd42306",
+    "tests/p1227/c283/sources/A-alias-preH.nl": "554a500e867234259861375c1ba270829e46867b7b1451804579c7438870c19b",
+    "tests/p1227/c283/sources/A-different-tail-postH.nl": "c3dbf9a98cb31159bb3b62b463ebba9bf458ae21b33a7c2809bbc96c24b2fd55",
+    "tests/p1227/c283/sources/A-different-tail-preH.nl": "c35b5eb420b6d27ef00bc5f06c9648c8280796b9083e7c0e1312d8c742ac7d54",
+    "tests/p1227/c283/sources/A-equal-bits-tail-postH.nl": "01a63b6aad6ac7fd268e7b6861a499ce856809c9e31ed75f97dc976231692ba3",
+    "tests/p1227/c283/sources/A-equal-bits-tail-preH.nl": "0cddd83ddacae539bc45ca943a9de0529e6e516026cfb913b62dd3ab235e1dc6",
+    "tests/p1227/c283/sources/A-explicit-final-postH.nl": "18e34311a67ebcd8b986c7c2c75276a6c67e05788ffe0222f4d84d9d8c8da43d",
+    "tests/p1227/c283/sources/A-explicit-final-preH.nl": "32481288a5024d06dbe73c6f8f9d7c3258a22ebb953d0c44c5e40afa53eb3dda",
+    "tests/p1227/c283/sources/A-old-material-preH.nl": "3fe6782c8fd5391bc80eeffc387f1bea91f8155754eaafd9f56a1d18b4c0fa09",
+    "tests/p1227/c283/sources/A-unrelated-alias-postH.nl": "28fd00e0f9b1f58d4bfe18223c14128a222df4a5d8f55054d32cbc00bd105be9",
+    "tests/p1227/c283/sources/A-unrelated-alias-preH.nl": "c731c0b76c367d8e6cdcc80cf0f180aed3b55aebc0accb32af7789d41ee1937e"
+  },
+  "RETURN_safety_oracle": "unchanged P1227 13 negatives, then six genuine foreign/same-ID return-world/target/node/whole-arm refusals, A unrestored destruction/B survival; no guest execution of forged graph"
+}

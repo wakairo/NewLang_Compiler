@@ -1,0 +1,18 @@
+{
+  "utc": "2026-11-07T09:15:41.651240+00:00",
+  "before_v2_build_execution": true,
+  "original_FIRST_source_ELF_oracle_unchanged": true,
+  "source_sha256": "780f13f13e57ddef76300f004245974f2fc5ddc059058c6a9002457676f61189",
+  "build_sha256": "120ff7d12f658dfd3f33b8488e0e08a28c34ca904637fe0e367462d65f9cc430",
+  "oracle": "Do not require the C178 no-Continue direct-BREAK bool for a one-parameter one-Continue cyclic loop. checked.h326 explicitly excludes current/result authority, control.c542 rejects any continue/argument_count. Record/assert legacyfalse alongside real source custody/H origin and nl_linear_break_validate full current0, genuine typed helper lineage/contents and existing foreign owner/world rejection. This corrects an invalid apparatus assertion, not Production or validator weakening.",
+  "precedent": "Same fixed-tree C277 adopted B03/B04 raw has public_break_source0/private_current_status0/changing1/scalar1. No new baseline execution.",
+  "counters_before": {
+    "source": 13,
+    "native_observer": 1
+  },
+  "counters_after_max": {
+    "source": 17,
+    "native_observer": 2
+  },
+  "remaining_native_plan": "One strict native harness process for both B placements and H0/1/2, using separately GCC/Clang compiled TUs, 6 disclosed guest-entry calls, actual total3 processes. No hidden source checks, at most1 further CLI remaining."
+}

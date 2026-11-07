@@ -1,0 +1,11 @@
+{
+  "utc": "2026-11-07T09:33:03.023521+00:00",
+  "before_candidate_compilation": true,
+  "base": "aa8dce8935f44d7b0732d24695f1c0f7c305efb1",
+  "production_files": {
+    "src/checked_c_current_internal.h": "b5984ca5c4868f8aa8353634428fe1d030f8aafd465806414d32885670144b39",
+    "src/checked_c_current_emit_internal.h": "bdab040eff0bd03d95a6614b4368caab2e57f4d67e81d7db7a07fc212e1747fc"
+  },
+  "behavior_oracle": "C280 frozen A/B equal results/real current/native contract retained; additionally authenticate genuine pure call result plan before accepting exactly1 typed RETURN plus1 normal Copy fallback. Preserve old2-normal direct IF and byte-identical C17. Returning literal extracted only after current RETURN world/ordinal/target sealing and pure full-body source walk. No source/issuer/public/semantic/CHECK changes.",
+  "expected_tests": "New candidate A both placements emits0; B C17 bytes identical. No candidate source trials until detailed Phase1 source/negative/driver freeze. Existing old fixtures/history/failures remain exact."
+}

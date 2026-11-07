@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "before_execution": true,
+  "reason": "CLI apparatus correction --check-v1 was invalid; original driver, oracle and actual RED retained; no semantic/C17 run at failure",
+  "files": {
+    "tests/p1227/source_native_v2.py": "cad9d14a29bad15b628635f8b4a390ce667569e45bc4f6389687dc6f39bed0de",
+    "tests/p1227/CMakeLists.txt": "fa28d7d4f2595bca931a0c6c054c73982c8f29b1e089f14d7542bac29fc95692",
+    "tests/p1227/oracle-v1.json": "16f1e2f5739de4cd0b389fc81e8542365fec2b4ececd2a519f0906c8d29b9ad8"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "utc": "2026-11-07T09:19:08.427806+00:00",
+  "before_native_build_execution": true,
+  "files": {
+    "native_observer.h": "36fd2de2c9085c31eed1f500ccd8f008fc7783889eee5c16cea7c2eb59a9d1cc",
+    "native_driver.c": "bd924beeb5322a658bb1b95fa1c6fe6bf8619b1a727ee7b46cd049621a310020",
+    "native-B-preH.c": "ca1cee1320adc97fd08d12563253cf723bb7ef8a3991a3c1aa557adfe71f15da",
+    "native-B-postH.c": "7eefe7c44db60616c5ff0aaf89595ef80439e93148b7349fbd28fec2a2ed37e7",
+    "native-build-v1.json": "45538148213c57e8a53b7fcd2741dbea3ec2d8f7fffc3e5f61a5d4ca56bd07b1",
+    "FIRST/B-preH.c": "2c40174924cbe32248f651518d2d07e822b662e96b6132cfcf58091e86b2709b",
+    "FIRST/B-postH.c": "21cd5fd6bead2264efe76845f752a3781229cee46ea52234f88cf297ab1af362",
+    "owned-probe-v2-FIRST.json": "6af2d288c119ccd28beb9aac57fd7464c8424c650019cfe933a9af204439153b"
+  },
+  "oracle": "Strict C17/O2 GCC preH TU and Clang postH TU, one linked diagnostic process with six disclosed generated-main entry invocations. Independently reset measurement each entry; actual H0/H1/H2 allocation/quota/refund/destroy/domain/frees, exact tail allocation identity and head unlink; one original T address captured at its binding, all stores/reads same two field addresses; old31/53/149, incoming/current53/149/149, sibling203, three computed backedges, scalar result3. All T pointer dereferences occur inside NL_HEAP_FINISH before generated main returns; no atexit or after-lifetime field access. Driver checks only scalar completion flag after return.",
+  "counter_before": {
+    "source_observations": 17,
+    "native_observer_executions": 2
+  },
+  "counter_after": {
+    "source_observations": 17,
+    "native_observer_executions": 3,
+    "guest_entry_invocations": 6
+  },
+  "limits": "GCC-before/Clang-after only, not both compilers at both placements or O0/sanitizer. A has no C17 and is not run. No Production edit yet."
+}

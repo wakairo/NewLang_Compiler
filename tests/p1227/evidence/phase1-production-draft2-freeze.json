@@ -1,0 +1,9 @@
+{
+  "parent": "aa8dce8935f44d7b0732d24695f1c0f7c305efb1",
+  "draft": 2,
+  "authority": "https://github.com/wakairo/NewLang_Compiler/issues/1227#issuecomment-6705024070",
+  "files": {
+    "src/checked_c_current_internal.h": "e192f93e5f61ab205b211ce5431186ae38f7276d8293cb291e860385a3a54cfa",
+    "src/checked_c_current_emit_internal.h": "977b9ff5ad2b06b95f4a043318e39b3deaf18e42a55f63268c61e328c12a148c"
+  }
+}

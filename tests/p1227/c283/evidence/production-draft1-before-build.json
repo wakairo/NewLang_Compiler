@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "before_execution": true,
+  "base": "c2bbb2dc5047677ed38d80968ed9a2bacce9b374",
+  "START": "https://github.com/wakairo/NewLang_Compiler/issues/1227#issuecomment-6705804067",
+  "files": {
+    "src/checked_c_current_internal.h": "61ee95d0c351c25be35b2dac04d943464fb5a3024b88cb8802b5d8accb969847",
+    "src/checked_c_current_emit_internal.h": "4d8434b9a9d7626953e55f3d89d23c4b28838393a3d255f9959f1d675c576957"
+  }
+}

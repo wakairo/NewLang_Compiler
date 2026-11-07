@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "before_execution": true,
+  "authority": "C280 conditional Phase1; Phase0 CLOSED 17 source observations/3 observer-native processes; no replay of Phase0",
+  "base": "aa8dce8935f44d7b0732d24695f1c0f7c305efb1",
+  "positive": [
+    "B-preH.nl",
+    "B-postH.nl",
+    "A-preH.nl",
+    "A-postH.nl",
+    "A-inverse-preH.nl",
+    "A-inverse-postH.nl"
+  ],
+  "negative": {
+    "N-return-type.nl": "P9-RETURN-TYPE",
+    "N-loan-escape.nl": "P8-EXIT-DEPENDENCY",
+    "N-foreign-owner.nl": "P193-CALL-BACKING"
+  },
+  "positive_expected": {
+    "registration": 0,
+    "CHECK": 0,
+    "issued_owned": true,
+    "H_origin": true,
+    "source_custody": true,
+    "current_validate": 0,
+    "C17": 0,
+    "native_result": 3,
+    "field_before": 31,
+    "field_after": 149,
+    "sibling": 203,
+    "real_backedges": 3,
+    "next": [
+      53,
+      149,
+      149
+    ],
+    "old": [
+      31,
+      53,
+      149
+    ],
+    "H_quotas": [
+      0,
+      1,
+      2
+    ],
+    "T_lifetime": "all address/value observations inside generated main while original is live"
+  },
+  "phase1_finite_inventory": {
+    "sources": 6,
+    "source_negative": 3,
+    "native_per_build": "two executables O0/O2, 6 source entrypoints times H0/1/2 each; 36 generated entry calls",
+    "local_builds": [
+      "GCC Release",
+      "Clang",
+      "ASan/LSan",
+      "UBSan"
+    ],
+    "OOM": "fresh exact all-four-stage census; first allocation per (kind,PC) registration/actual, every emit allocation, every emit suffix plus named endpoints; both A placements, <=512 selected/build; GCC and ASan required",
+    "safety": "unchanged P1217 strict 13-negative oracle applied to all four early-RETURN sources"
+  },
+  "old_B_C17": {
+    "B-preH.nl": "2c40174924cbe32248f651518d2d07e822b662e96b6132cfcf58091e86b2709b",
+    "B-postH.nl": "21cd5fd6bead2264efe76845f752a3781229cee46ea52234f88cf297ab1af362"
+  },
+  "sources": {
+    "A-inverse-postH.nl": "6b414bb382808881cee6c78ee98086430804da2b700d1773bdce07c9eeb5372d",
+    "A-inverse-preH.nl": "1598669f2fb5410c2c8c3baae1568ff362bb614cf9da6f3f02e25c6ea6989aba",
+    "A-postH.nl": "001f91ca5e420f217765808e0f9ac0cf52ce96a8c1a49a486b937454261e8889",
+    "A-preH.nl": "7856858f129d00df1908a5c31726c3ea6b1240f544536ef4c488eb70f8a14005",
+    "B-postH.nl": "d39ad6687f873eef559d80e8f23f0f4711468ceb9bcebe6267cb0e83f5fb7412",
+    "B-preH.nl": "0bb94f36ea32c7da1b473229e78576e7be0d0177a79175eb19e2c5be4fe909aa",
+    "N-foreign-owner.nl": "53d128ef46409230d0ad00e524c068b9af02b703531c6c4ea21b77c8884fe484",
+    "N-loan-escape.nl": "1f1d1408fe09b0da4e906247e8238687cfd4b7904d898cffa9363c490ccfb82e",
+    "N-return-type.nl": "11198e7024c2abb1cb70237fbd055078be3301378a0cc217ce5ee24a84e3b1da"
+  }
+}

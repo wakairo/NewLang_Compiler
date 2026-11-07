@@ -1,0 +1,173 @@
+{
+  "version": 2,
+  "before_execution": true,
+  "authority": "https://github.com/wakairo/NewLang_Compiler/issues/1227#issuecomment-6705688721",
+  "base_main": "aa8dce8935f44d7b0732d24695f1c0f7c305efb1",
+  "stopped_head": "c2bbb2dc5047677ed38d80968ed9a2bacce9b374",
+  "stopped_tree": "e1ce870645ba3ba37d2927221a1d31223ed45742",
+  "known_wrong_C_never_native": true,
+  "positive": {
+    "A-alias-preH.nl": {
+      "sha256": "554a500e867234259861375c1ba270829e46867b7b1451804579c7438870c19b",
+      "CHECK": 0,
+      "owned_current": "genuine required before emit/refusal",
+      "C17": 0,
+      "native": {
+        "incoming": [
+          53,
+          149,
+          149
+        ],
+        "old": [
+          31,
+          53,
+          149
+        ],
+        "final": 149,
+        "sibling": 203,
+        "break": 3,
+        "H": [
+          0,
+          1,
+          2
+        ]
+      },
+      "relation": "complete actual normal-tail -> binding/Copy -> exact same-body IF selection"
+    },
+    "A-alias-postH.nl": {
+      "sha256": "0cbfa08a09c00ba4e640896b03982667063d1b2a231a0b0bb88f89a16fd42306",
+      "CHECK": 0,
+      "owned_current": "genuine required before emit/refusal",
+      "C17": 0,
+      "native": {
+        "incoming": [
+          53,
+          149,
+          149
+        ],
+        "old": [
+          31,
+          53,
+          149
+        ],
+        "final": 149,
+        "sibling": 203,
+        "break": 3,
+        "H": [
+          0,
+          1,
+          2
+        ]
+      },
+      "relation": "complete actual normal-tail -> binding/Copy -> exact same-body IF selection"
+    }
+  },
+  "negative_semantic_eligible": {
+    "A-different-tail-preH.nl": {
+      "sha256": "c35b5eb420b6d27ef00bc5f06c9648c8280796b9083e7c0e1312d8c742ac7d54",
+      "CHECK": 0,
+      "owned_current": "genuine required before emit/refusal",
+      "C17": 4,
+      "native": "NOT_RUN; unsupported output remains unchanged",
+      "relation": "not derivable; fail closed even equal numeric bits"
+    },
+    "A-unrelated-alias-preH.nl": {
+      "sha256": "c731c0b76c367d8e6cdcc80cf0f180aed3b55aebc0accb32af7789d41ee1937e",
+      "CHECK": 0,
+      "owned_current": "genuine required before emit/refusal",
+      "C17": 4,
+      "native": "NOT_RUN; unsupported output remains unchanged",
+      "relation": "not derivable; fail closed even equal numeric bits"
+    },
+    "A-equal-bits-tail-preH.nl": {
+      "sha256": "0cddd83ddacae539bc45ca943a9de0529e6e516026cfb913b62dd3ab235e1dc6",
+      "CHECK": 0,
+      "owned_current": "genuine required before emit/refusal",
+      "C17": 4,
+      "native": "NOT_RUN; unsupported output remains unchanged",
+      "relation": "not derivable; fail closed even equal numeric bits"
+    },
+    "A-different-tail-postH.nl": {
+      "sha256": "c3dbf9a98cb31159bb3b62b463ebba9bf458ae21b33a7c2809bbc96c24b2fd55",
+      "CHECK": 0,
+      "owned_current": "genuine required before emit/refusal",
+      "C17": 4,
+      "native": "NOT_RUN; unsupported output remains unchanged",
+      "relation": "not derivable; fail closed even equal numeric bits"
+    },
+    "A-unrelated-alias-postH.nl": {
+      "sha256": "28fd00e0f9b1f58d4bfe18223c14128a222df4a5d8f55054d32cbc00bd105be9",
+      "CHECK": 0,
+      "owned_current": "genuine required before emit/refusal",
+      "C17": 4,
+      "native": "NOT_RUN; unsupported output remains unchanged",
+      "relation": "not derivable; fail closed even equal numeric bits"
+    },
+    "A-equal-bits-tail-postH.nl": {
+      "sha256": "01a63b6aad6ac7fd268e7b6861a499ce856809c9e31ed75f97dc976231692ba3",
+      "CHECK": 0,
+      "owned_current": "genuine required before emit/refusal",
+      "C17": 4,
+      "native": "NOT_RUN; unsupported output remains unchanged",
+      "relation": "not derivable; fail closed even equal numeric bits"
+    },
+    "A-old-material-preH.nl": {
+      "sha256": "3fe6782c8fd5391bc80eeffc387f1bea91f8155754eaafd9f56a1d18b4c0fa09",
+      "CHECK": 0,
+      "owned_current": "genuine required",
+      "C17": 4,
+      "native": "NOT_RUN",
+      "historical_status": "c2bbb CHECK0/C170 wrong149 unchanged old oracle/raw; this is separately targeted corrected-current rejection"
+    },
+    "A-explicit-final-preH.nl": {
+      "sha256": "32481288a5024d06dbe73c6f8f9d7c3258a22ebb953d0c44c5e40afa53eb3dda",
+      "CHECK": 0,
+      "owned_current": "genuine required",
+      "C17": 4,
+      "native": "NOT_RUN",
+      "historical_status": "c2bbb already rejected4; exact source bytes unchanged"
+    },
+    "A-explicit-final-postH.nl": {
+      "sha256": "18e34311a67ebcd8b986c7c2c75276a6c67e05788ffe0222f4d84d9d8c8da43d",
+      "CHECK": 0,
+      "owned_current": "genuine required",
+      "C17": 4,
+      "native": "NOT_RUN",
+      "historical_status": "c2bbb already rejected4; exact source bytes unchanged"
+    }
+  },
+  "old_pins": {
+    "tests/p990/current-freeze-v60.json": {
+      "sha256": "6e254a1b74a004e1b6c010da0e990420595c86efa8b68a0479107805aea8039c",
+      "blob_oid": "49ad206ac8fc6c51ae6ef922d00baa019f3c5574"
+    },
+    "tests/p1217/execution-freeze-v7.json": {
+      "sha256": "5fb1e5e4dd20bfeb4f398ab18e271a29672bc64fea139614f61bffc17ea0f0f0",
+      "blob_oid": "d7cdffe707093c96ee352c67b70359397f2190a6"
+    },
+    "tests/p1217/evidence_current_v7.py": {
+      "sha256": "f807a224e98741d4ccd252c07d2575039643960e2418493d3f19371754db2bd6",
+      "blob_oid": "52d71ebdb5676c023b6a553928f87b6b666bc75d"
+    },
+    "tests/p1227/evidence_negative.py": {
+      "sha256": "21f1a4168d65c0dc05e4d48fdc3dbf62f73070d498fec331c7790314770c4c3a",
+      "blob_oid": "d368ed6cd59294e50fbcf9ebfc67b277ae9721f1"
+    }
+  },
+  "limits": {
+    "new_sources": 8,
+    "old_exact_sources": 3,
+    "new_owned_cases_per_config": 11,
+    "new_source_CLI_per_config": 22,
+    "new_native_per_config": "2 executables O0/O2 \u00d72 positive sources \u00d7H0/1/2=12 disclosed entry calls; old six36 separately rerun on changed Production",
+    "configs": [
+      "GCC Release",
+      "Clang",
+      "ASan/LSan",
+      "UBSan"
+    ],
+    "new_OOM": "fresh selected static PC census on old positive A pair using strict unchanged oracle, <=512/config; no ordinal dropping",
+    "CI": "old cancelled6 preserved; at most one consolidated forward push and natural additional6, lifetime12/manual0"
+  },
+  "scope": "Fail closed for unproved normal-final relation. No public issuer/world/API/ABI/source/CFG or T1230/root CMake/workflow change."
+}

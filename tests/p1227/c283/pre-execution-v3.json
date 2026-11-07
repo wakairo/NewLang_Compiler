@@ -1,0 +1,41 @@
+{
+  "version": 3,
+  "before_execution": true,
+  "scope": "Final current helper relation/owned/negative/native plus forward history and alias OOM supplement; original source-oracle-v2/harness-v1-v2 and material FIRST unchanged",
+  "files": {
+    "tests/p1227/c283/CMakeLists.txt": "18d8caad9e76612650308cad13cc12091caca6498495246754966c31f805b43b",
+    "tests/p1227/c283/README.md": "7904c32e17cdc16c21d1102a71f16411d77916a7042d215b2d1a904dc508781a",
+    "tests/p1227/c283/alias_oom.py": "3f62c74b491085b1264753339db65e437ce18eb959fa905dc2ee62c333384572",
+    "tests/p1227/c283/evidence/ACTUAL-START-v1.json": "f1874210d7427a42fd57096c42adaf1c96f7088e337415648ea59512f33b48d2",
+    "tests/p1227/c283/evidence/fixed-c2bbb-capsule-v1.json": "d3beb2d826954f49f4c9ded4e798ef6c92360e164f8e8152a21dcf35f9f3a268",
+    "tests/p1227/c283/evidence/harness-pre-execution-v1.json": "81f23a8d1324e98d5c0926202ee5a83e778688f5124a91e9d77e54bf95c79afb",
+    "tests/p1227/c283/evidence/harness-pre-execution-v2.json": "f9952ed15ec633c77487790114fa07d29a437e0365558a39452a2b931af03ee4",
+    "tests/p1227/c283/evidence/history-predecessors-v1.zip": "27eef1912eb8a900add35b6b162b8590f00f2ff4c34d7f7c41b7650a8cc97ef9",
+    "tests/p1227/c283/evidence/material-FIRST-c2bbb-v1.zip": "3e19d629a827db6eb0e2ffa14878f71b939a87f854839f85d99d26d7f982b89f",
+    "tests/p1227/c283/evidence/production-draft1-before-build.json": "7606be7a9dd02dcfc2832685538d14ba5756811fcba741c48e4dda593d56a5fe",
+    "tests/p1227/c283/evidence/production-draft2-before-build.json": "4326947ecbc86dff6e7f97120d711f18bef49e01d1edd980faa38e70dff40dae",
+    "tests/p1227/c283/evidence_negative.py": "00447647d6003958694017081a0247ebe84eda2206a47f55163e3360835a5a8b",
+    "tests/p1227/c283/history_negative.py": "1fd3131057c869aa6279a15cf8e643a92560a36238e736f4212da83bf95fd4de",
+    "tests/p1227/c283/history_v61.py": "caef39e841329a05b83fbc2263982e22e2feb7b9e2f1b1ed243618ec9b39347f",
+    "tests/p1227/c283/observe.c": "4cbd1ab8ae27d679005659c6d244d4b937d6c4cd0e64f2c89e5cbcb57b74b5a9",
+    "tests/p1227/c283/return_safety.c": "14a80e0dd4d1e48177c851e170a256a967cf70d804e811a8e61b4d616de208d3",
+    "tests/p1227/c283/source-oracle-freeze-v2.json": "cf2526f4ce18259ec8ff363b3620a141e2554a9545794bd217b8d878ab06c71b",
+    "tests/p1227/c283/source_native.py": "eebd027412c01c64ad73f9e3b00fb6d617ff546f604c1f512d091d41d6ff2236",
+    "tests/p1227/c283/sources/A-alias-postH.nl": "0cbfa08a09c00ba4e640896b03982667063d1b2a231a0b0bb88f89a16fd42306",
+    "tests/p1227/c283/sources/A-alias-preH.nl": "554a500e867234259861375c1ba270829e46867b7b1451804579c7438870c19b",
+    "tests/p1227/c283/sources/A-different-tail-postH.nl": "c3dbf9a98cb31159bb3b62b463ebba9bf458ae21b33a7c2809bbc96c24b2fd55",
+    "tests/p1227/c283/sources/A-different-tail-preH.nl": "c35b5eb420b6d27ef00bc5f06c9648c8280796b9083e7c0e1312d8c742ac7d54",
+    "tests/p1227/c283/sources/A-equal-bits-tail-postH.nl": "01a63b6aad6ac7fd268e7b6861a499ce856809c9e31ed75f97dc976231692ba3",
+    "tests/p1227/c283/sources/A-equal-bits-tail-preH.nl": "0cddd83ddacae539bc45ca943a9de0529e6e516026cfb913b62dd3ab235e1dc6",
+    "tests/p1227/c283/sources/A-explicit-final-postH.nl": "18e34311a67ebcd8b986c7c2c75276a6c67e05788ffe0222f4d84d9d8c8da43d",
+    "tests/p1227/c283/sources/A-explicit-final-preH.nl": "32481288a5024d06dbe73c6f8f9d7c3258a22ebb953d0c44c5e40afa53eb3dda",
+    "tests/p1227/c283/sources/A-old-material-preH.nl": "3fe6782c8fd5391bc80eeffc387f1bea91f8155754eaafd9f56a1d18b4c0fa09",
+    "tests/p1227/c283/sources/A-unrelated-alias-postH.nl": "28fd00e0f9b1f58d4bfe18223c14128a222df4a5d8f55054d32cbc00bd105be9",
+    "tests/p1227/c283/sources/A-unrelated-alias-preH.nl": "c731c0b76c367d8e6cdcc80cf0f180aed3b55aebc0accb32af7789d41ee1937e"
+  },
+  "production": {
+    "src/checked_c_current_internal.h": "7281627d3f044d8fe6d3c02135596f38a8b299934e5f2fd4509e01ac26bc8cc8",
+    "src/checked_c_current_emit_internal.h": "4d8434b9a9d7626953e55f3d89d23c4b28838393a3d255f9959f1d675c576957"
+  },
+  "OOM_supplement": "Use same freshly built p1227_oom strict C oracle. New alias pair every emit/named suffix and any new registration/actual static PCs; require old-P1227 pair plus supplement <=512 selected/config, freeze census before injection."
+}
