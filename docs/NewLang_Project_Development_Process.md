@@ -304,6 +304,20 @@ Coordinationは**境界を設定し、証拠を評価し、track間を裁定す�
 `STOP REQUESTED`／`STOP ACK`、§4.2／§4.3のgate、§7のR独立性、
 既存Charter・Issueの明示的な権限境界を維持する。
 
+#### 4.1.3 v0 compiler-first の Git-native 証拠管理と安全性中心の CI（C293 / 2026-11-08）
+
+**適用範囲：** v0 の探索的 compiler 実装では、開発のクリティカルパスを普通の source→semantic CHECK→真正な source-issued owned/current→C17/native・異常系の実測に置く。過去の source/test/差分の保全は、原則として Git の commit・parent・tree・tracked file とレビュー済み PR、Issue・Actions の元ログを用いる。Git は**何を記録したか**の同一性を与えるが、意味論、安全性、テスト期待値、独立性、commit 著者の正当性をそれだけで保証するものではない。
+
+**通常 PR / main で必須の実証：** 固定 HEAD に対する適切な build/format、約束した合法 source と偽の権限を拒否する負例、CHECK/owned/current/loan/provenance、該当する GCC/Clang の C17/native、sanitizer、failure/teardown、OOM・rollback・no-clobber、関連する機能的回帰検査を維持する。独立 F/R は重要な ownership/issuer/UB 境界でリスクに応じて行い、あらゆる CMake・テスト登録変更の一律必須 gate にしない。安全性違反や想定外の誤受理、wrong-code は STOP し、CI 緑やコストを理由に免除しない。
+
+**通常 CI から分離できるもの：** 過去の全 tracked file の SHA を幾世代にもわたり重複列挙する独自 manifest、世代ごとの全履歴・旧 verifier 再実行、未来の架空世代まで合格させる protocol selftest、Git が保全する旧 blob の機械的再証明は、原則として**任意の historical audit / 調査用**とする。過去の元 source/oracle/FIRST/RED・負例・CI job/raw は Git/Issue/Actions 上で区別して保存し、新しい実行成功で過去の RED を遡及変更しない。独自 manifest の generation 上限を維持するためだけに通常の PR を停滞させない。
+
+**重要な分離規律：** 既存の一つのテストが、実際の source/negative/native/owner/OOM 検証と純粋な過去 SHA 再検証を混在させている場合、通常 CI から外してよいのは後者だけである。元の安全性テストの意味、期待値、実行経路、観測された拒否・失敗を維持し、どの検査を mandatory から optional にしたかを PR で明示する。テストの無効化、`WILL_FAIL` による成功偽装、未実行を PASS とすること、旧 raw の削除は認めない。C が変更対象の検査の役割と fixed HEAD の実結果をレビューし、必要な安全性 CI が真に通った場合だけ採用する。
+
+外部 toolchain/download の署名・SHA、cache の信頼境界、R の独立 source/oracle/実行方式と FIRST、source-issued authority の検査は、上記の「過去ファイルの Git 履歴管理」とは別である。これらを Git の存在だけで免除しない。証拠機構自体の更新が安全性を損ねる疑いがあれば限定レビューで確認する。
+
+本節は [Coordination C293 / Git-native v0 のユーザー承認裁定](https://github.com/wakairo/NewLang_Compiler/issues/1245)を運用文書に正本化するものであり、Product Strategy §1.1 の author＋ordinary-safe caller の UB 監査局所性評価や Product GO / H1 HOLD、CURRENT_SPEC の意味論を変更しない。
+
 ### 4.2 Historical design-intent gate（設計判断の必須照合）
 
 **必須手順:** [NewLang_Design_Decision_Procedure.md](NewLang_Design_Decision_Procedure.md)

@@ -30,6 +30,14 @@ Tは仕様Draft、Design-Intent Ledger、製品投資方針、compilerの公開�
 - Actionsを追加するときはpinされたcommit SHA、PR/forkの信頼境界、cache read/write、権限、保存容量、消去・復旧、保守費用をIssue/PRに明記する。未review mirror、hash緩和、TLS無効化、権限拡大、秘密情報やアカウント設定の変更はこのCharterでは許可しない。
 - 最初の外部URL404、失敗ジョブのみのrerun、全構成の初回success、コード不正、テスト異常、環境ブロッカーを区別し、実際のrun/attempt/HEADを添えて報告する。最終runの緑だけで初回の失敗を消さない。
 
+### 3.1 v0 の Git-native CI と検証負担（C293）
+
+v0 compiler-first では **実際の source/CHECK/owned/C17/native、安全な拒否、sanitizer、OOM/rollback を守り、独自の旧 SHA 世代管理だけを通常 CI の必須条件にしない**。通常の tracked file 履歴・差分は Git の commit/parent/tree で追跡する（[Process §4.1.3](NewLang_Project_Development_Process.md)）。純粋な provenance/history selftest は必要に応じ任意の診断へ分離し、旧 FIRST/RED は GitHub の元結果として保存する。
+
+T が CTest 登録、CI の検査選択、history verifier を整理するときは、変更前の全検査を「実際の安全性検証」「純粋な過去 SHA 再証明」「両者の混合」に分け、**「純粋な過去 SHA 再証明」に分類された検査のみ**を opt-in へ移す。**混合したテストは純粋な旧 SHA 再照合部分だけを分離でき、source/native/OOM/負例等の実検証は通常 CI の必須条件に残す。** 未実行・skip・旧失敗を緑として扱わない。T は P の稼働中の検査内容と合格条件を競合変更せず、C の裁定に従う。
+
+依存 download/cache の SHA/TLS/署名、R の独立 source/oracle と BLIND、GitHub Actions の権限・pin、コンパイラの source-issued 権限検証は**歴史的 SHA 世代管理とは別**であり緩和しない。テスト件数・hash 世代数ではなく、失敗原因の把握と安全性を失わない実行時間・保守費用の改善を成果とする。
+
 ## 4. 起動・レビュー・停止
 
 1. **Issue-first**：目的と実測された問題、現在のmainと固定authority、変更可能path、代替案、予想と実測の区別、完了条件・上限・STOPを事前登録。作業開始時に[Compass](NewLang_Project_Compass.md)から関連正本を確認する。
