@@ -379,6 +379,7 @@ static void terminal_adversarial(const char *path)
     rejected(&a);
     dispose(&a); /* Deliberately unrestored foreign B pure IF arm. */
     accepted(&b); dispose(&b);
+    a = (Input){0}; b = (Input){0};
     load(&a, path); load(&b, path);
     arm = (NLCheckedFragment *)a.view.breaking;
     bool found = false;
