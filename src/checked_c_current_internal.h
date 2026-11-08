@@ -18,7 +18,7 @@ typedef struct {
     const NLCheckedFragment *body;
     NLCheckedNodeId loop, constructor, binding, heap_match;
     NLLinearBreakView loop_view;
-    NLPhysicalHelper helper, terminal_helper;
+    NLPhysicalHelper helper, terminal_helper, preloop_helper;
     NLTypeId quantity;
     NLSymbolId result;
     bool original_before_heap;
@@ -179,6 +179,17 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
     p.helper =
         (NLPhysicalHelper){p.loop_view.helper_body, p.loop_view.helper_formal,
                            p.loop_view.helper_selection};
+    if (p.loop_view.preloop_call) {
+        p.preloop_helper = (NLPhysicalHelper){
+            p.loop_view.preloop_helper_body, p.loop_view.preloop_helper_formal,
+            p.loop_view.preloop_helper_selection};
+        const NLCheckedNodeView *root = nl_checked_node_view(
+            p.preloop_helper.body, nl_checked_root(p.preloop_helper.body));
+        if (!p.loop_view.terminal_old || !p.preloop_helper.body ||
+            !p.preloop_helper.formal || !p.preloop_helper.selection || !root ||
+            root->terminates || root->tail != p.preloop_helper.selection)
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    }
     if (p.loop_view.terminal_call) {
         p.terminal_helper =
             (NLPhysicalHelper){p.loop_view.terminal_helper_body,
@@ -268,6 +279,9 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
                        (init->kind != NL_CHECKED_USIZE_LITERAL &&
                         init->kind != NL_CHECKED_U8_LITERAL &&
                         init->kind != NL_CHECKED_IDENTIFIER &&
+                        (n->initializer != p.loop_view.preloop_call ||
+                         p.binding ||
+                         init->kind != NL_CHECKED_REGISTERED_CALL) &&
                         (init->kind != NL_CHECKED_FIELD_READ || !p.binding)))
                 return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         } else if (n->kind != NL_CHECKED_STATEMENT ||

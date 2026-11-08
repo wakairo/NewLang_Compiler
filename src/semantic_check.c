@@ -5871,12 +5871,10 @@ static bool linear_graph_matches(const NLCheckedFragment *f,
 
 /* Addresses/counts are anchors of live owner allocations, never authority
  * from numerical IDs. Reject a changed array BEFORE comparing its contents. */
-static bool linear_world_matches(const NLSemanticContext *c,
-                                 const NLSemanticContext *storage,
-                                 const NLSemanticContext *reference,
-                                 const NLCopyCallAnchor *anchor)
+static bool linear_world_origin(const NLSemanticContext *c,
+                                const NLSemanticContext *storage)
 {
-    if (!c || !reference)
+    if (!c || !storage)
         return false;
 #define SAME(member)                                                           \
     if (c->member != storage->member)                                          \
@@ -5903,6 +5901,16 @@ static bool linear_world_matches(const NLSemanticContext *c,
     SAME(region_count);
     SAME(raw_interval_count);
 #undef SAME
+    return true;
+}
+
+static bool linear_world_matches(const NLSemanticContext *c,
+                                 const NLSemanticContext *storage,
+                                 const NLSemanticContext *reference,
+                                 const NLCopyCallAnchor *anchor)
+{
+    if (!reference || !linear_world_origin(c, storage))
+        return false;
     if (!nl_copy_state_matches(c, anchor) || !nl_copy_same_types(c, reference))
         return false;
     for (size_t i = 0; i < c->type_count; ++i) {

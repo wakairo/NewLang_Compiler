@@ -186,7 +186,11 @@ static bool physical_current_scalar(Emit *e, Env *env, NLCheckedNodeId id,
     if (n->kind == NL_CHECKED_LOAN_HEADER)
         return physical_current_loan(e, env, n, out, depth);
     if (n->kind == NL_CHECKED_REGISTERED_CALL)
-        return env->artifact == e->current->loop_view.iteration &&
+        return env->artifact == e->current->body && !e->current_emitted &&
+                       id == e->current->loop_view.preloop_call
+                   ? physical_current_helper(
+                         e, env, id, &e->current->preloop_helper, out, depth)
+               : env->artifact == e->current->loop_view.iteration &&
                        id == e->current->loop_view.incoming_call
                    ? physical_current_helper(e, env, id, &e->current->helper,
                                              out, depth)

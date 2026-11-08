@@ -174,8 +174,25 @@ enum {
     CURRENT_POST_SLOT = 10,
     CURRENT_EXIT_SLOT = 11,
     CURRENT_RETURN_SLOT = 15,
-    CURRENT_SIGNATURE_LIMIT = 19
+    CURRENT_CAPTURE_SLOT = 19,
+    CURRENT_SIGNATURE_LIMIT = 21
 };
+
+/* One existing prefix call. These are borrowed custody members and allocation
+ * origins, not graph/world clones or a second issuer. The two arm signature
+ * origins use the same private table as all other current-cycle signatures. */
+typedef struct {
+    NLCheckedNodeId call;
+    NLPureU8Call pure;
+    const NLCheckedFragment *fragments[3];
+    const NLSemanticContext *worlds[3];
+    NLSemanticContext storage[3];
+    const NLControlTarget *target;
+    NLFunctionBody *plan;
+    const NLSyntaxTree *syntax;
+    const NLSource *source;
+    const char *parameter_name;
+} CurrentCapturedCall;
 
 typedef struct NLCurrentLoopProof {
     NLControlState *entry, *header;
@@ -212,6 +229,7 @@ typedef struct NLCurrentLoopProof {
     NLCheckedNodeId terminal_loan;
     NLCheckedNodeId terminal_call, terminal_choice;
     NLCheckedField terminal_change;
+    CurrentCapturedCall capture;
 } NLCurrentLoopProof;
 
 static size_t current_graph_count(const NLCurrentLoopProof *s)
@@ -1015,6 +1033,62 @@ static bool current_capture_binding(const NLSemanticContext *entry,
 /* Follow actual declarations in the owning enclosing prefix, bounded by the
  * already-issued caller initializer node. Reuse the Copy declaration/source
  * checks; never seed the arm's local binding table from a live world. */
+static bool current_prefix_contents(const NLCurrentLoopProof *s,
+                                    NLCheckedNodeId id, NLPureU8Call *out)
+{
+    const NLCheckedFragment *parent = s->parent;
+    const NLSemanticContext *entry = nl_control_state_context(s->entry);
+    const NLCheckedNodeView *call = nl_checked_node_view(parent, id);
+    NLPureU8Call pure;
+    size_t seed = 0;
+    if (!entry || !id || id >= s->initial_node || !call ||
+        (s->sealed && !nl_h_custody_result_valid(parent, id)) ||
+        !nl_pure_u8_contents_at(parent, id,
+                                s->sealed ? nl_checked_context(parent) : entry,
+                                &pure) ||
+        !current_copy_origin(parent, entry, call->first_argument, 0, true, 2,
+                             &seed))
+        return false;
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(pure.body, pure.body->root);
+    const NLCheckedNodeView *choice =
+        nl_checked_node_view(pure.body, pure.selection);
+    if (!root || !choice || root->terminates || root->tail != pure.selection ||
+        choice->normal_arms != 2 || nl_control_exits_count(pure.body->exits))
+        return false;
+    *out = pure;
+    return true;
+}
+
+/* The real declaration must precede the loop and remain in its entry frame.
+ * One independent ordinary call suffices for this family. Unrelated or more
+ * general prefixes keep their old CHECK behavior and can still decline C17. */
+static void current_collect_capture(NLCurrentLoopProof *s)
+{
+    if (!s->helper || !s->terminal_old)
+        return;
+    const NLSemanticContext *entry = nl_control_state_context(s->entry);
+    const NLTypeId u8 = nl_semantic_core_type(entry, NL_TYPE_U8);
+    for (NLCheckedNodeId id = 1; id < s->initial_node; ++id) {
+        const NLCheckedNodeView *binding = nl_checked_node_view(s->parent, id);
+        const NLCheckedNodeView *init = NULL;
+        NLPureU8Call pure;
+        if (!binding || binding->kind != NL_CHECKED_BINDING ||
+            !current_capture_binding(entry, entry, binding->symbol, u8) ||
+            current_copy_binding(s->parent, entry, s->initial_node,
+                                 binding->symbol, &init) != binding ||
+            init->kind != NL_CHECKED_REGISTERED_CALL ||
+            !current_prefix_contents(s, binding->initializer, &pure))
+            continue;
+        if (s->capture.call) {
+            s->capture = (CurrentCapturedCall){0};
+            return;
+        }
+        s->capture.call = binding->initializer;
+        s->capture.pure = pure;
+    }
+}
+
 static bool current_capture_origin(const NLCurrentLoopProof *s,
                                    NLSymbolId symbol, NLTypeId type)
 {
@@ -1033,6 +1107,17 @@ static bool current_capture_origin(const NLCurrentLoopProof *s,
         if (init->kind == NL_CHECKED_U8_LITERAL)
             return init->has_scalar_result && value.scalar_known &&
                    value.scalar_value <= 255;
+        if (init->kind == NL_CHECKED_REGISTERED_CALL) {
+            const NLCheckedNodeId id =
+                (NLCheckedNodeId)(init - parent->nodes) + 1;
+            NLPureU8Call pure;
+            return id == s->capture.call &&
+                   current_prefix_contents(s, id, &pure) &&
+                   pure.body == s->capture.pure.body &&
+                   pure.function == s->capture.pure.function &&
+                   pure.formal == s->capture.pure.formal &&
+                   pure.selection == s->capture.pure.selection;
+        }
         if (init->kind == NL_CHECKED_FIELD_READ) {
             const NLCheckedField f = init->field;
             if (!s->root || s->root > entry->place_count || !f.present ||
@@ -1095,10 +1180,36 @@ static bool current_inherited_scalar(CurrentWalk *r,
         !current_capture_origin(s, value->symbol, type))
         return false;
     NLSemanticValueView copy;
-    return current_copy_value(world, value, type, &copy) &&
-           current_intrinsic(
-               entry->values[entry->bindings[value->symbol - 1].view.value - 1],
-               copy);
+    if (!current_copy_value(world, value, type, &copy)) {
+        /* This operand is observed in the checked POST-Change world. Its
+         * fresh Copy package may already be the selected current member.
+         * Authenticate that exact attachment; inspect only a local content
+         * view, without detaching anything or changing the semantic world. */
+        if (!r->terminal || value->type != type || value->result_count != 1 ||
+            value->results[0].type != type || !s->root || !s->child ||
+            s->root > world->place_count || s->child > world->place_count ||
+            !nl_semantic_value_view(world, value->results[0].value, &copy))
+            return false;
+        const NLSemanticPlaceView root = world->places[s->root - 1],
+                                  child = world->places[s->child - 1];
+        if (!root.live || !child.live || root.fixed_field_count != 2 ||
+            s->index >= 2 || root.fixed_fields[s->index] != s->child ||
+            child.parent_aggregate != s->root ||
+            child.parent_field_index != s->index ||
+            child.parent_incarnation != root.incarnation ||
+            child.current_value != value->results[0].value ||
+            !copy.aggregate_owner || copy.aggregate_owner != root.current_value)
+            return false;
+        copy.aggregate_owner = 0;
+        if (!copy_if_plain(copy, type) ||
+            (value->has_scalar_result &&
+             (value->scalar_result.type != type ||
+              value->scalar_result.known != copy.scalar_known ||
+              value->scalar_result.value != copy.scalar_value)))
+            return false;
+    }
+    return current_intrinsic(
+        entry->values[entry->bindings[value->symbol - 1].view.value - 1], copy);
 }
 
 static const NLCheckedNodeView *current_take(CurrentWalk *r, NLCheckedNodeId id)
@@ -1175,6 +1286,7 @@ static bool current_loan(CurrentWalk *r, const NLCheckedNodeView *loan,
         ref->symbol != loan->loan.ref_symbol || !current_scalar(r, value) ||
         (terminal
              ? (value->kind != NL_CHECKED_U8_LITERAL &&
+                !current_inherited_scalar(r, value) &&
                 (!r->scalar || value->kind != NL_CHECKED_IDENTIFIER ||
                  !value->symbol || value->symbol > NL_SEMANTIC_MAX_ENTRIES ||
                  !r->incoming[value->symbol - 1]))
@@ -1641,6 +1753,9 @@ current_signature_world(const NLCurrentLoopProof *s,
     if (slot >= CURRENT_RETURN_SLOT &&
         slot - CURRENT_RETURN_SLOT < s->return_count)
         return s->returns[slot - CURRENT_RETURN_SLOT].world.world;
+    if (slot >= CURRENT_CAPTURE_SLOT && slot < CURRENT_SIGNATURE_LIMIT &&
+        s->capture.call)
+        return s->capture.worlds[slot - CURRENT_CAPTURE_SLOT + 1];
     return NULL;
 }
 
@@ -1740,6 +1855,26 @@ static bool current_helper_entry(const NLCurrentLoopProof *s,
 static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
 {
     NLCurrentLoopProof *s = p->current_cycle;
+    if (s->capture.call) {
+        CurrentCapturedCall *c = &s->capture;
+        if (!current_prefix_contents(s, c->call, &c->pure))
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        c->fragments[0] = c->pure.body;
+        for (size_t i = 0; i < 2; ++i)
+            c->fragments[i + 1] =
+                nl_checked_if_arm(c->pure.body, c->pure.selection, i);
+        for (size_t i = 0; i < 3; ++i) {
+            if (!c->fragments[i] || !c->fragments[i]->context)
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+            c->worlds[i] = c->fragments[i]->context;
+            c->storage[i] = i ? *c->worlds[i] : p->final_storage;
+        }
+        c->target = c->pure.body->function_target;
+        c->plan = p->final_storage.functions[c->pure.function - 1].body;
+        c->syntax = c->plan->syntax;
+        c->source = c->plan->source;
+        c->parameter_name = c->plan->parameter_names[0];
+    }
     if (s->helper) {
         const NLCheckedFragment *iteration =
             nl_checked_if_arm(s->graph, s->conditional, 0);
@@ -1855,6 +1990,51 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
     if (s->terminal_call &&
         s->graphs[6].fragment->function_target != s->terminal_target)
         return bad;
+    if (s->capture.call) {
+        const CurrentCapturedCall *c = &s->capture;
+        if (!nl_h_custody_result_valid(f, c->call) ||
+            nl_checked_call_body(f, c->call) != c->fragments[0] ||
+            c->fragments[0]->function_target != c->target ||
+            c->worlds[0] != f->context)
+            return bad;
+        for (size_t i = 0; i < 3; ++i) {
+            const NLCheckedFragment *fragment =
+                i ? nl_checked_if_arm(c->fragments[0], c->pure.selection, i - 1)
+                  : c->fragments[0];
+            const size_t slot =
+                i ? CURRENT_CAPTURE_SLOT + i - 1 : CURRENT_CALLER_SLOT;
+            if (fragment != c->fragments[i] ||
+                fragment->context != c->worlds[i] ||
+                !linear_world_origin(c->worlds[i], &c->storage[i]) ||
+                !current_signature_origin(s, c->worlds[i], slot) ||
+                (i && fragment->function_target) || !c->pure.function ||
+                c->pure.function > c->worlds[i]->function_count)
+                return bad;
+            const NLFunctionEntry *fn =
+                &c->worlds[i]->functions[c->pure.function - 1];
+            if (fn->kind != NL_CHECKED_REGISTERED_CALL || fn->count != 1 ||
+                !fn->parameters ||
+                fn->parameters[0] !=
+                    nl_semantic_core_type(c->worlds[i], NL_TYPE_USIZE) ||
+                fn->result != nl_semantic_core_type(c->worlds[i], NL_TYPE_U8) ||
+                fn->caller_effects || fn->hidden_dependencies ||
+                fn->owner_receiver || fn->owner_producer ||
+                fn->custody_recipient || fn->body != c->plan ||
+                c->plan->count != 1 || c->plan->syntax != c->syntax ||
+                c->plan->source != c->source ||
+                c->plan->parameter_names[0] != c->parameter_name ||
+                c->plan->owner_definition.definition_checked ||
+                c->plan->custody_definition.definition_checked)
+                return bad;
+        }
+        NLPureU8Call pure_capture;
+        if (!current_prefix_contents(s, c->call, &pure_capture) ||
+            pure_capture.body != c->pure.body ||
+            pure_capture.function != c->pure.function ||
+            pure_capture.formal != c->pure.formal ||
+            pure_capture.selection != c->pure.selection)
+            return bad;
+    }
     if (s->helper &&
         (!current_helper_entry(s, f->context, CURRENT_CALLER_SLOT) ||
          !current_helper_entry(s, p->post, CURRENT_POST_SLOT)))
@@ -1943,41 +2123,45 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
     const NLControlExitView *exit = nl_control_exit_view(breaking->exits, 0);
     const NLCheckedNodeView *terminal =
         nl_checked_node_view(breaking, exit->source_node);
-    *out = (NLLinearBreakView){.base = s->base,
-                               .nominal = r.type,
-                               .root = s->root,
-                               .child = s->child,
-                               .incarnation = r.incarnation,
-                               .child_incarnation = c.incarnation,
-                               .index = s->index,
-                               .incoming = s->incoming,
-                               .result = p->result,
-                               .changing_current = true,
-                               .terminal_old = s->terminal_old,
-                               .terminal_loan = s->terminal_loan,
-                               .terminal_call = s->terminal_call,
-                               .terminal_change = s->terminal_change,
-                               .incoming_if = s->helper ? 0 : s->scalar,
-                               .incoming_call = s->helper ? s->scalar : 0,
-                               .scalar_loop = !s->terminal_old,
-                               .iteration = s->graphs[1].fragment,
-                               .breaking = breaking,
-                               .break_value = terminal->initializer,
-                               .continue_node = s->terminal,
-                               .phase_symbol = s->phase,
-                               .initial_node = s->initial_node,
-                               .initial_phase = s->initial,
-                               .limit = s->limit,
-                               .next_phase = s->step,
-                               .entry_world = e,
-                               .post_world = p->post,
-                               .helper_body = pure.body,
-                               .helper_formal = pure.formal,
-                               .helper_selection = pure.selection,
-                               .terminal_helper_body = terminal_pure.body,
-                               .terminal_helper_formal = terminal_pure.formal,
-                               .terminal_helper_selection =
-                                   terminal_pure.selection};
+    *out = (NLLinearBreakView){
+        .base = s->base,
+        .nominal = r.type,
+        .root = s->root,
+        .child = s->child,
+        .incarnation = r.incarnation,
+        .child_incarnation = c.incarnation,
+        .index = s->index,
+        .incoming = s->incoming,
+        .result = p->result,
+        .changing_current = true,
+        .terminal_old = s->terminal_old,
+        .terminal_loan = s->terminal_loan,
+        .terminal_call = s->terminal_call,
+        .terminal_change = s->terminal_change,
+        .incoming_if = s->helper ? 0 : s->scalar,
+        .incoming_call = s->helper ? s->scalar : 0,
+        .scalar_loop = !s->terminal_old,
+        .iteration = s->graphs[1].fragment,
+        .breaking = breaking,
+        .break_value = terminal->initializer,
+        .continue_node = s->terminal,
+        .phase_symbol = s->phase,
+        .initial_node = s->initial_node,
+        .initial_phase = s->initial,
+        .limit = s->limit,
+        .next_phase = s->step,
+        .entry_world = e,
+        .post_world = p->post,
+        .helper_body = pure.body,
+        .helper_formal = pure.formal,
+        .helper_selection = pure.selection,
+        .terminal_helper_body = terminal_pure.body,
+        .terminal_helper_formal = terminal_pure.formal,
+        .terminal_helper_selection = terminal_pure.selection,
+        .preloop_call = s->capture.call,
+        .preloop_helper_body = s->capture.pure.body,
+        .preloop_helper_formal = s->capture.pure.formal,
+        .preloop_helper_selection = s->capture.pure.selection};
     return NL_CHECK_OK;
 }
 
@@ -2033,6 +2217,7 @@ static NLCheckedNodeId source_current_loop(Check *check,
               syntax->span))
         goto cleanup;
     s->target = target;
+    current_collect_capture(s);
     s->graph = calloc(1, sizeof(*s->graph));
     if (!s->graph) {
         (void)host(check, NL_CHECK_OUT_OF_MEMORY, syntax->span);
