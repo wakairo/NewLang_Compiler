@@ -38,7 +38,7 @@ positive target is unfulfilled, not retrospectively passed. A direct call
 inside the loan, mixed-RETURN helper, a different terminal field/current result
 and general terminal computations are outside this finite consumer. Invalid
 usize-as-u8 and missing H1/H2 cleanup are rejected. The 17 previous host controls
-remain, with 15 new terminal body/signature/count/old-current/foreign-child
+remain, with 16 new terminal target/body/signature/count/old-current/foreign-child
 controls, including one-byte foreign signature allocation and unrestored foreign
 B arm/body survival after A destruction. OOM reuses the unchanged P1236/P1227
 strict status, rollback, retry and named-output oracle with a fresh frozen census.

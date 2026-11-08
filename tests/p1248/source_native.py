@@ -35,7 +35,7 @@ positives = oracle['native_positive_sources']
 proof = run([observer, *(here / 'sources' / n for n in positives)], 'owned-current-negative')
 roles = re.findall(rb'ROLES (\d+) (\d+) (\d+) (\d+) (\d+) CALLER (\d+) (\d+) (\d+) (\d+)', proof.stdout)
 assert len(roles) >= len(positives)
-assert b'NEGATIVE 17 genuine' in proof.stdout and b'terminal NEGATIVE 15 PASS' in proof.stdout
+assert b'NEGATIVE 17 genuine' in proof.stdout and b'terminal NEGATIVE 16 PASS' in proof.stdout
 for name, item in cases.items():
     source = here / 'sources' / name
     wanted = item['target_CHECK']
@@ -92,4 +92,4 @@ for opt in ['O0', 'O2']:
     run(flags + [driver, *objects, '-o', executable], opt + '-link')
     p = run([executable], opt + '-native', env=env)
     assert p.stderr == b'' and p.stdout.count(b'live-original') == 3 * len(positives)
-print('P1248 source/owned/current/runtime new/old BREAK/native/H0-1-2, 32 host controls, source refusal/no-clobber and adopted C17 equality PASS; 2 native processes/30 entries')
+print('P1248 source/owned/current/runtime new/old BREAK/native/H0-1-2, 33 host controls, source refusal/no-clobber and adopted C17 equality PASS; 2 native processes/30 entries')

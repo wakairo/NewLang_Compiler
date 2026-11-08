@@ -171,7 +171,7 @@ static void accepted(Input *t)
         q = n->next_item;
     }
     const char *names[] = {"answer", "saved_answer", "post_value",
-                           "post_marker"};
+                           "post_witness"};
     const NLCheckedNodeView *main_body =
         nl_checked_node_view(t->owner, nl_checked_root(t->owner));
     for (NLCheckedNodeId q = main_body->first_item; q;) {
@@ -347,6 +347,10 @@ static void terminal_adversarial(const char *path)
     root->tail = 0; rejected(&a); *root = saved_root;
     const NLSource *source = body->source;
     body->source = other->source; rejected(&a); body->source = source;
+    NLControlTarget *target = body->function_target;
+    assert(target && other->function_target && target != other->function_target);
+    body->function_target = other->function_target;
+    rejected(&a); body->function_target = target;
     size_t count = body->arm_count;
     body->arm_count = 0; rejected(&a); body->arm_count = count;
     body->arm_count = count + 1; rejected(&a); body->arm_count = count;
@@ -387,7 +391,7 @@ static void terminal_adversarial(const char *path)
     assert(found); rejected(&a);
     dispose(&a); /* Canonical ownership must keep B's entire body alive. */
     accepted(&b); dispose(&b);
-    puts("P1248 terminal NEGATIVE 15 PASS: short foreign signature, callable/source/current/graph and A destroyed/B alive");
+    puts("P1248 terminal NEGATIVE 16 PASS: short foreign signature, callable/source/current/graph and A destroyed/B alive");
 }
 
 int main(int argc, char **argv)

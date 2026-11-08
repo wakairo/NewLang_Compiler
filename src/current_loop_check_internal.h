@@ -202,7 +202,7 @@ typedef struct NLCurrentLoopProof {
     CurrentSignatureSet signatures[CURRENT_SIGNATURE_LIMIT];
     CurrentSignatureOrigin *signature_entries;
     size_t signature_entry_count;
-    const NLControlTarget *helper_target;
+    const NLControlTarget *helper_target, *terminal_target;
     CurrentReturnSeal *returns;
     size_t return_count;
     StutterWorld exits[4];
@@ -1799,6 +1799,8 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
         if (status != NL_CHECK_OK)
             return status;
     }
+    if (s->terminal_call)
+        s->terminal_target = s->graphs[6].fragment->function_target;
     for (size_t i = 0; i < 4; ++i) {
         const NLControlExitView *x =
             i < 2 ? nl_control_exit_view(s->graphs[i + 1].fragment->exits, 0)
@@ -1853,6 +1855,9 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
             (s->helper && !current_helper_entry(s, a->world.world, i)))
             return bad;
     }
+    if (s->terminal_call &&
+        s->graphs[6].fragment->function_target != s->terminal_target)
+        return bad;
     if (s->helper &&
         (!current_helper_entry(s, f->context, CURRENT_CALLER_SLOT) ||
          !current_helper_entry(s, p->post, CURRENT_POST_SLOT)))
