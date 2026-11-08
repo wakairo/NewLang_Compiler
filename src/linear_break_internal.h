@@ -47,6 +47,10 @@ typedef struct {
     const NLCheckedFragment *terminal_helper_body;
     NLSymbolId terminal_helper_formal;
     NLCheckedNodeId terminal_helper_selection;
+    NLCheckedNodeId preloop_call;
+    const NLCheckedFragment *preloop_helper_body;
+    NLSymbolId preloop_helper_formal;
+    NLCheckedNodeId preloop_helper_selection;
 } NLLinearBreakView;
 NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *,
                                        NLCheckedNodeId, NLLinearBreakView *);
