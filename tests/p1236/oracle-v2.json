@@ -1,0 +1,181 @@
+{
+  "authority": "C288 #1236 main2931ba92a72b08a9fdf247cb2f7700078c131b6d tree07c423b373e09680093c3423296c66d251a722f1 Draft17.34",
+  "original_P1235_immutable_packet": "dfe0d41c9a99d4c3cf1225483d8672663467ac8c36a7dbea16068356f8a04d9a",
+  "cases": {
+    "A-bound-old-u8.nl": {
+      "sha256": "e5baddecaf8b2ffc57674ae84aae77a91eeec43816cffce58421c9f6446dd0ba",
+      "bytes": 5050,
+      "CHECK_expected": 0,
+      "class": "canonical supported target",
+      "source_owned_expected": "real owned/current validated u8 terminal old transfer",
+      "C17_expected": "phase B0 conditional real Phase A proof; otherwise NOT_RUN",
+      "native_expected": "H0/H1/H2 same live T, old157/post239/sibling223 (C sibling37)"
+    },
+    "B-direct-break-operand.nl": {
+      "sha256": "71ca8de4bde45a6f93892a0957d8e0fbb5ee997de59f46506ef93e1d270e0f00",
+      "bytes": 4958,
+      "CHECK_expected": 0,
+      "class": "canonical supported target",
+      "source_owned_expected": "real owned/current validated u8 terminal old transfer",
+      "C17_expected": "phase B0 conditional real Phase A proof; otherwise NOT_RUN",
+      "native_expected": "H0/H1/H2 same live T, old157/post239/sibling223 (C sibling37)"
+    },
+    "C-other-index.nl": {
+      "sha256": "2778346d4cb96fe0ef9c3a6951411fa61720bf8088c6d437ef59a75984c4a24b",
+      "bytes": 5050,
+      "CHECK_expected": 0,
+      "class": "canonical supported target",
+      "source_owned_expected": "real owned/current validated u8 terminal old transfer",
+      "C17_expected": "phase B0 conditional real Phase A proof; otherwise NOT_RUN",
+      "native_expected": "H0/H1/H2 same live T, old157/post239/sibling223 (C sibling37)"
+    },
+    "D-post-H.nl": {
+      "sha256": "d3c442cab386a5791875fb9c5c75300d5fb9f4238a56f481e0f1e5199d96b6df",
+      "bytes": 4958,
+      "CHECK_expected": 0,
+      "class": "canonical supported target",
+      "source_owned_expected": "real owned/current validated u8 terminal old transfer",
+      "C17_expected": "phase B0 conditional real Phase A proof; otherwise NOT_RUN",
+      "native_expected": "H0/H1/H2 same live T, old157/post239/sibling223 (C sibling37)"
+    },
+    "N-current-as-old.nl": {
+      "sha256": "6ae1575f5c428087822814ff8cf89265049ed13e0cd094d64746042a0d28087d",
+      "bytes": 5053,
+      "CHECK_expected": 3,
+      "class": "canonical other behavior, must not obtain old-result proof; finite-lane refusal expected",
+      "source_owned_expected": "no forged terminal-old proof",
+      "C17_expected": "no output / refuse before any incorrect old result",
+      "native_expected": "NOT_RUN"
+    },
+    "N-equal-bits-literal.nl": {
+      "sha256": "184e06551b587382ee863146b68b74e9c56950393f76995430f450dd0c63bb4e",
+      "bytes": 5044,
+      "CHECK_expected": 3,
+      "class": "canonical other behavior, must not obtain old-result proof; finite-lane refusal expected",
+      "source_owned_expected": "no forged terminal-old proof",
+      "C17_expected": "no output / refuse before any incorrect old result",
+      "native_expected": "NOT_RUN"
+    },
+    "N-sibling-write.nl": {
+      "sha256": "4c31281b72f560267a6325b4f6c1fd5f8df6f25d0d8d6908d20195d635abc2a1",
+      "bytes": 5050,
+      "CHECK_expected": 3,
+      "class": "canonical other behavior, must not obtain old-result proof; finite-lane refusal expected",
+      "source_owned_expected": "no forged terminal-old proof",
+      "C17_expected": "no output / refuse before any incorrect old result",
+      "native_expected": "NOT_RUN"
+    },
+    "N-foreign-original.nl": {
+      "sha256": "fe73616ff7e6c07fe61754a9ec795330124410e16d28a5b9b5adc445e6cf0bae",
+      "bytes": 5115,
+      "CHECK_expected": 3,
+      "class": "canonical other behavior, must not obtain old-result proof; finite-lane refusal expected",
+      "source_owned_expected": "no forged terminal-old proof",
+      "C17_expected": "no output / refuse before any incorrect old result",
+      "native_expected": "NOT_RUN"
+    },
+    "N-helper-static-type.nl": {
+      "sha256": "b641d07a401f887c31ba0aee4373d968e0c71d7d6701c0c583d9eec0a7c1d147",
+      "bytes": 5053,
+      "CHECK_expected": 3,
+      "class": "semantic-invalid control",
+      "source_owned_expected": "no forged terminal-old proof",
+      "C17_expected": "no output / refuse before any incorrect old result",
+      "native_expected": "NOT_RUN"
+    },
+    "N-H1-cleanup-missing.nl": {
+      "sha256": "26552a1e1e9e8f4cf3d0bb2f4db97cedcde6fa6972924df4432f6a142a0c441d",
+      "bytes": 4990,
+      "CHECK_expected": 3,
+      "class": "semantic-invalid control",
+      "source_owned_expected": "no forged terminal-old proof",
+      "C17_expected": "no output / refuse before any incorrect old result",
+      "native_expected": "NOT_RUN"
+    },
+    "N-H2-cleanup-missing.nl": {
+      "sha256": "7a8ae715c4281251cb4e92663692c5619095605ff061ac4c0c0cc01283b48b6d",
+      "bytes": 4974,
+      "CHECK_expected": 3,
+      "class": "semantic-invalid control",
+      "source_owned_expected": "no forged terminal-old proof",
+      "C17_expected": "no output / refuse before any incorrect old result",
+      "native_expected": "NOT_RUN"
+    },
+    "N-overflow-backedge.nl": {
+      "sha256": "560506c95d5d44b19ab404af719bbc3f04d53a82bd091eb0d19df30655650bfa",
+      "bytes": 5069,
+      "CHECK_expected": 3,
+      "class": "semantic-invalid control",
+      "source_owned_expected": "no forged terminal-old proof",
+      "C17_expected": "no output / refuse before any incorrect old result",
+      "native_expected": "NOT_RUN"
+    },
+    "E-equal-old-current.nl": {
+      "sha256": "96971eaec1276ada9be830fc4eb5477093affd5c95b6daf407f71114abb68861",
+      "bytes": 4958,
+      "CHECK_expected": 0,
+      "class": "genuine old result despite equal runtime old/current bits",
+      "source_owned_expected": "typed old-u8 transfer, post157/sibling223",
+      "C17_expected": 0,
+      "native_expected": "actual old157/current157 distinct source roles, same original"
+    },
+    "N-equal-current-as-old.nl": {
+      "sha256": "9825e5a369236b98a07348d2bf5556317248f6f45b3ccd180f9651200f372def",
+      "bytes": 5053,
+      "CHECK_expected": 3,
+      "class": "current read has equal157 bits but is not old-result source proof",
+      "source_owned_expected": "reject old-result certification",
+      "C17_expected": 3,
+      "native_expected": "NOT_RUN"
+    }
+  },
+  "source_equivalence": "original A/B true old-u8 result on same terminal edge; no scalar BREAK substitute. C index1 same nominal/original with sibling37; D original begins only after H cleanup. Four source cases share finite one-field terminal Change relation.",
+  "intended_trace": {
+    "H0": [
+      1,
+      0,
+      0
+    ],
+    "H1": [
+      2,
+      1,
+      1
+    ],
+    "H2": [
+      2,
+      2,
+      2
+    ],
+    "H_counts": "attempts/successes/frees, no live heap after completion in any outcome",
+    "T_original": "unchanged original address, continuing37(or223)->79->157, terminal239, old-u8 BREAK157; closed loan, unchanged sibling223(or37)"
+  },
+  "host_negative_oracles_before_first_edit": [
+    "genuine same-number B breaking arm/world substituted into A; reject and canonical A destruction does not own B",
+    "source BREAK edge owner/source-node/ordinal/target substitution; reject before borrowing result",
+    "forged loop typed result using actual postcurrent rather than old Copy; equal bits are not provenance",
+    "whole breaking arm/context/source or checked body mutation; reject original sealed graph/current validator",
+    "field/root/incarnation/index changed or sibling used as write target; reject",
+    "loan scope active or escaped ref/dependency survives terminal exit; reject",
+    "synthetic/shallow proof view has no owner issuer; reject",
+    "duplicate/synthetic result/old Copy source chain or changed same-number symbol binding; reject",
+    "Continue guard/quantity/header mutation violates bounded post-fixpoint; reject",
+    "H allocation origin/auth signature/body/owner tamper and missing H1/H2 cleanup; reject",
+    "historical GET does not authorize current caller; current validator rejects modified state",
+    "OOM every reached emit ordinal plus selected fresh CHECK/registration static sites; exact OOM status, rollback, retry, out/length and named inode/mtime unchanged"
+  ],
+  "PhaseA_gate": "A AND B actual CHECK0 plus genuine issued owned/private typed old+postcurrent/closed loan exit relation and negatives; no C17 edit before gate",
+  "planned_private_representation": "preserve H_current/Continue closure; authentic single terminal loan Change and copied binding path to real source BREAK; project the real existing exit world into outer caller atomically. NLLinearBreakView generic borrowed result alone is never source authority; add only compiler-private terminal tag/Change if needed.",
+  "STOP": "new public issuer/source law/world kind/API/ABI/general CFG, unclosed actual root/loan, unproved old/current source edge, wrong C17/native/OOM/history or live fixed-parent drift",
+  "test_finite_plan": {
+    "initial_CHECK": "four positives +eight negatives, one source group; preserve first diagnostic before next stage",
+    "OOM_selected_cap_per_config": 512,
+    "OOM_scope": "every reached emit/named suffix +fresh selected CHECK/registration static PC, stage-specific census frozen before injection; not every CHECK ordinal",
+    "native": "four authentic positives GCC/Clang O0/O2 H0/1/2; actual live pointer/old/current/sibling/H failure cleanup; ASan/UBSan; no refused output native",
+    "regression": "full GCC Release and complete changed dependency focused Clang/ASan/UBSan; existing scalar/stutter/current/old source/P633/P817/P785/P790/owner/H, all affected historical checker/negative/CURRENT chains clean checkout; no repeat completed same-candidate passes without cause",
+    "remote": "only all local safety/history PASS permits one new DRAFT direct-main branch <=12 natural actual jobs/manual0; no READY/merge/Product GO"
+  },
+  "history": "oldv61/currentv8 and earlier v59-v61/v5-v8/FIRST unchanged; forward v62/currentv9/C268 successor if affected, external Git OIDs/SHA and original-checker execution on original bytes",
+  "R_input_access": 0,
+  "T1230_changes": 0,
+  "extension_v2": "Source provenance independent of old/current equal runtime bits; added prospectively before either new observation. Original v1 and all original bytes/oracles/FIRST preserved."
+}

@@ -27,7 +27,7 @@ add_test(NAME p1217_oom.unit COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_BINARY_DIR}/p1217-oom")
 set_tests_properties(p1217_oom.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 300)
 add_test(NAME p1217_evidence.unit COMMAND "${Python3_EXECUTABLE}"
-    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1217/evidence_current_v8.py")
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1217/evidence_current_v9.py")
 add_executable(p1217_resource_status tests/p1217/c274/resource_status.c)
 target_include_directories(p1217_resource_status PRIVATE src)
 target_compile_options(p1217_resource_status PRIVATE -UNDEBUG -fno-pie)
@@ -42,8 +42,10 @@ add_test(NAME p1217_resource_status.unit COMMAND "${Python3_EXECUTABLE}"
 set_tests_properties(p1217_resource_status.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 120)
 
 add_test(NAME p1217_evidence_tamper.unit COMMAND "${Python3_EXECUTABLE}"
-    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1217/../p1227/c283/evidence_negative.py")
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1217/../p1236/evidence_negative.py")
 
 include(tests/p1227/CMakeLists.txt)
 
 include(tests/p1227/c283/CMakeLists.txt)
+
+include(tests/p1236/CMakeLists.txt)

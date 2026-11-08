@@ -167,7 +167,8 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
         nl_linear_break_validate(body, p.loop, &p.loop_view);
     if (validated != NL_CHECK_OK)
         return validated;
-    if (!p.loop_view.changing_current || !p.loop_view.scalar_loop ||
+    if (!p.loop_view.changing_current ||
+        p.loop_view.scalar_loop == p.loop_view.terminal_old ||
         !p.loop_view.incoming_call || !p.loop_view.entry_world ||
         !p.loop_view.post_world ||
         !physical_current_world(p.loop_view.entry_world, &p.loop_view) ||
@@ -234,7 +235,12 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
                 p.original_before_heap = !p.heap_match;
             } else if (n->initializer == p.loop) {
                 if (!p.constructor || !p.heap_match || p.binding ||
-                    init->type != p.quantity)
+                    init->type != p.loop_view.result.type ||
+                    init->type !=
+                        (p.loop_view.terminal_old
+                             ? nl_semantic_core_type(p.loop_view.entry_world,
+                                                     NL_TYPE_U8)
+                             : p.quantity))
                     return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
                 p.binding = id;
                 p.result = n->symbol;
