@@ -48,6 +48,13 @@ static bool predicate_value_at(const NLSemanticContext *c,
              n->scalar_result.value == v->scalar_value));
 }
 
+static inline bool predicate_value(const NLCheckedFragment *f,
+                                   const NLCheckedNodeView *n,
+                                   NLSemanticValueView *v)
+{
+    return predicate_value_at(nl_checked_context(f), n, v);
+}
+
 static bool predicate_name(const NLCheckedFragment *f, NLSourceSpan span,
                            const char *name)
 {
@@ -453,8 +460,9 @@ static bool nl_pure_u8_body_at(const NLCheckedFragment *f, NLSymbolId formal,
     return true;
 }
 
-static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
-                            NLTypeId unit, NLTypeId u8, NLPureU8Plan *plan)
+static inline bool nl_pure_u8_body(const NLCheckedFragment *f,
+                                   NLSymbolId formal, NLTypeId unit,
+                                   NLTypeId u8, NLPureU8Plan *plan)
 {
     return nl_pure_u8_body_at(f, formal, unit, u8, nl_checked_context(f), plan);
 }
