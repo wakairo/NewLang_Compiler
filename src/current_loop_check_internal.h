@@ -1178,10 +1178,36 @@ static bool current_inherited_scalar(CurrentWalk *r,
         !current_capture_origin(s, value->symbol, type))
         return false;
     NLSemanticValueView copy;
-    return current_copy_value(world, value, type, &copy) &&
-           current_intrinsic(
-               entry->values[entry->bindings[value->symbol - 1].view.value - 1],
-               copy);
+    if (!current_copy_value(world, value, type, &copy)) {
+        /* This operand is observed in the checked POST-Change world. Its
+         * fresh Copy package may already be the selected current member.
+         * Authenticate that exact attachment; inspect only a local content
+         * view, without detaching anything or changing the semantic world. */
+        if (!r->terminal || value->type != type || value->result_count != 1 ||
+            value->results[0].type != type || !s->root || !s->child ||
+            s->root > world->place_count || s->child > world->place_count ||
+            !nl_semantic_value_view(world, value->results[0].value, &copy))
+            return false;
+        const NLSemanticPlaceView root = world->places[s->root - 1],
+                                  child = world->places[s->child - 1];
+        if (!root.live || !child.live || root.fixed_field_count != 2 ||
+            s->index >= 2 || root.fixed_fields[s->index] != s->child ||
+            child.parent_aggregate != s->root ||
+            child.parent_field_index != s->index ||
+            child.parent_incarnation != root.incarnation ||
+            child.current_value != value->results[0].value ||
+            !copy.aggregate_owner || copy.aggregate_owner != root.current_value)
+            return false;
+        copy.aggregate_owner = 0;
+        if (!copy_if_plain(copy, type) ||
+            (value->has_scalar_result &&
+             (value->scalar_result.type != type ||
+              value->scalar_result.known != copy.scalar_known ||
+              value->scalar_result.value != copy.scalar_value)))
+            return false;
+    }
+    return current_intrinsic(
+        entry->values[entry->bindings[value->symbol - 1].view.value - 1], copy);
 }
 
 static const NLCheckedNodeView *current_take(CurrentWalk *r, NLCheckedNodeId id)
