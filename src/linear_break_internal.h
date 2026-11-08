@@ -22,6 +22,7 @@ typedef struct {
     /* A genuine one-field terminal Change, not a scalar phase result. */
     bool terminal_old;
     NLCheckedNodeId terminal_loan;
+    NLCheckedNodeId terminal_call; /* optional same-helper runtime u8 new */
     NLCheckedField terminal_change;
     const NLCheckedFragment *iteration;
     /* Borrowed only after complete current/exit validation. The actual Break
@@ -43,6 +44,9 @@ typedef struct {
     const NLCheckedFragment *helper_body;
     NLSymbolId helper_formal;
     NLCheckedNodeId helper_selection;
+    const NLCheckedFragment *terminal_helper_body;
+    NLSymbolId terminal_helper_formal;
+    NLCheckedNodeId terminal_helper_selection;
 } NLLinearBreakView;
 NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *,
                                        NLCheckedNodeId, NLLinearBreakView *);

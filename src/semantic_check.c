@@ -5716,10 +5716,11 @@ static bool linear_callable(const NLLinearBreakProof *p,
            p->plan->count == 0;
 }
 
-static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
+static NLCheckStatus retain_current_break(Check *check, LoopControl *loop,
                                          NLCheckedNodeId id,
                                          const NLCheckedFragment *body,
-                                         struct NLStutterProof *cycle)
+                                         struct NLStutterProof *cycle,
+                                         NLCheckedNodeId current_pure_call)
 {
     /* First native cohort: an actual direct zero-argument unit invocation,
      * ordinary local T storage. Definitions/arms/nested calls and H worlds
@@ -5765,7 +5766,10 @@ static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     for (size_t i = 1; i <= body->count; ++i) {
         const NLCheckedNodeView *call = nl_checked_node_view(body, i);
-        if (call->kind != NL_CHECKED_REGISTERED_CALL)
+        /* Only this actual call has already passed the current relation.
+         * Its complete body/arms/signatures are sealed by that relation;
+         * it is not the older two-argument stateful Copy helper below. */
+        if (call->kind != NL_CHECKED_REGISTERED_CALL || i == current_pure_call)
             continue;
         const NLCheckedFragment *callee = nl_checked_call_body(body, i);
         if (p->callee_plan || !callee || !callee->body_owner ||
@@ -5791,6 +5795,14 @@ static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
         status = nl_copy_state_anchor(p->exit_world, &p->exit_anchor);
     }
     return status;
+}
+
+static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
+                                         NLCheckedNodeId id,
+                                         const NLCheckedFragment *body,
+                                         struct NLStutterProof *cycle)
+{
+    return retain_current_break(check, loop, id, body, cycle, 0);
 }
 
 static NLCheckStatus linear_seal_graph(const NLCheckedFragment *f,

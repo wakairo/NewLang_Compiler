@@ -1,0 +1,7 @@
+{
+  "main": "55c7832f48f95d6071e14225b0defac6ff2f0333",
+  "main_tree": "d728e823e7a43e1168e0c1f123dbc83736a14cea",
+  "source": "L-adopted-literal-control.nl",
+  "generated_C17_SHA256": "bfe5093c1a15bef9fc80f8b1a5ea9b99a48c51361d742a70d06043ea54be808f",
+  "purpose": "Actual adopted generated-C equality calibration; no historical-manifest dependency."
+}

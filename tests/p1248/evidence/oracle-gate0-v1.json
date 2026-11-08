@@ -1,0 +1,249 @@
+{
+  "authority": "C296 Issue1248 main55c7832f48f95d6071e14225b0defac6ff2f0333 tree d728e823e7a43e1168e0c1f123dbc83736a14cea CURRENT_SPEC Draft17.34",
+  "frozen_before_first_execution": true,
+  "created_UTC": "2026-11-08T07:19:07.634251+00:00",
+  "canonical_basis": "Draft17.34 16.3.8; 17.4 Change returns old Copy; 18.1 known pure calls; 27 control exit; KEEP DI006/007/017/018, no new source law",
+  "alternatives": "A helper and D inline IF have same typed runtime input/result and Change/old/closed-loan effects. L replaces computed new by equal literal for phase2 only, so is a calibration not an equivalent general runtime operation. B changes finite phase count and expected old/new, not a new authority.",
+  "cases": {
+    "A-helper-binding.nl": {
+      "sha256": "60a0e20d81273ed705b5d176d1802c967b3480c6c2571273b0cdaead64856dd7",
+      "bytes": 5190,
+      "meaning": "runtime terminal helper result through new-value Copy and old-result Copy",
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "Gate0_prediction": "L should pass; others measured without regrading; targets may precision-reject on unchanged main",
+      "field_index": 0,
+      "phase_limit": 2,
+      "initial": 29,
+      "sibling": 173,
+      "store_new": [
+        83,
+        83,
+        211
+      ],
+      "store_old": [
+        29,
+        83,
+        83
+      ],
+      "BREAK_old": 83,
+      "caller_Copy": 83,
+      "postcurrent": 211,
+      "closed_loan": true,
+      "original_address_stable": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_success_free_finalize": [
+        0,
+        1,
+        2
+      ]
+    },
+    "B-changed-phase-direct.nl": {
+      "sha256": "503fbec42f73904099de95c7076f514335cfa8600c0827cc77b63466a37c205a",
+      "bytes": 5098,
+      "meaning": "changed runtime phase and direct loan BREAK operand",
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "Gate0_prediction": "L should pass; others measured without regrading; targets may precision-reject on unchanged main",
+      "field_index": 0,
+      "phase_limit": 3,
+      "initial": 29,
+      "sibling": 173,
+      "store_new": [
+        83,
+        83,
+        211,
+        83
+      ],
+      "store_old": [
+        29,
+        83,
+        83,
+        211
+      ],
+      "BREAK_old": 211,
+      "caller_Copy": 211,
+      "postcurrent": 83,
+      "closed_loan": true,
+      "original_address_stable": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_success_free_finalize": [
+        0,
+        1,
+        2
+      ]
+    },
+    "C-other-field.nl": {
+      "sha256": "8c031f0ab24e6e7de6b253568e6eede55d5b9da78418274c6626c3a8469eb77e",
+      "bytes": 5192,
+      "meaning": "same operation on declaration field index1",
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "Gate0_prediction": "L should pass; others measured without regrading; targets may precision-reject on unchanged main",
+      "field_index": 1,
+      "phase_limit": 2,
+      "initial": 173,
+      "sibling": 29,
+      "store_new": [
+        83,
+        83,
+        211
+      ],
+      "store_old": [
+        173,
+        83,
+        83
+      ],
+      "BREAK_old": 83,
+      "caller_Copy": 83,
+      "postcurrent": 211,
+      "closed_loan": true,
+      "original_address_stable": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_success_free_finalize": [
+        0,
+        1,
+        2
+      ]
+    },
+    "D-inline-alternative.nl": {
+      "sha256": "dcc77235bd8c1fbae9894d363f65c3bf8b6d93054d4ec76fd10ace2b32afbb62",
+      "bytes": 5220,
+      "meaning": "canonical same operation with inline pure IF; separate precision alternative",
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "Gate0_prediction": "L should pass; others measured without regrading; targets may precision-reject on unchanged main",
+      "field_index": 0,
+      "phase_limit": 2,
+      "initial": 29,
+      "sibling": 173,
+      "store_new": [
+        83,
+        83,
+        211
+      ],
+      "store_old": [
+        29,
+        83,
+        83
+      ],
+      "BREAK_old": 83,
+      "caller_Copy": 83,
+      "postcurrent": 211,
+      "closed_loan": true,
+      "original_address_stable": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_success_free_finalize": [
+        0,
+        1,
+        2
+      ]
+    },
+    "L-adopted-literal-control.nl": {
+      "sha256": "11f14a3702d87b1beff09c1feab11df0704e40dade2e02ce55faa41b46fbdec5",
+      "bytes": 5092,
+      "meaning": "already adopted literal terminal new; faithful value control only",
+      "target_CHECK": 0,
+      "target_C17": 0,
+      "Gate0_prediction": "L should pass; others measured without regrading; targets may precision-reject on unchanged main",
+      "field_index": 0,
+      "phase_limit": 2,
+      "initial": 29,
+      "sibling": 173,
+      "store_new": [
+        83,
+        83,
+        211
+      ],
+      "store_old": [
+        29,
+        83,
+        83
+      ],
+      "BREAK_old": 83,
+      "caller_Copy": 83,
+      "postcurrent": 211,
+      "closed_loan": true,
+      "original_address_stable": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_success_free_finalize": [
+        0,
+        1,
+        2
+      ]
+    },
+    "N-usize-new.nl": {
+      "sha256": "f66190807a6222afed791096aa2664e8fb0ce6dacbae295d5af3941b046c2b2a",
+      "bytes": 5184,
+      "meaning": "language-invalid usize used as new u8",
+      "target_CHECK": 3,
+      "target_C17": 3,
+      "Gate0_prediction": "L should pass; others measured without regrading; targets may precision-reject on unchanged main"
+    },
+    "N-H1-missing-cleanup.nl": {
+      "sha256": "13c46a83645953032c7a82b6479441778ec83d81680be91208c027c1e56789ac",
+      "bytes": 5156,
+      "meaning": "language-invalid leaked H allocation on second allocation failure",
+      "target_CHECK": 3,
+      "target_C17": 3,
+      "Gate0_prediction": "L should pass; others measured without regrading; targets may precision-reject on unchanged main"
+    },
+    "N-current-as-old.nl": {
+      "sha256": "a5f274d82eae4a4569e5e275ce6226bd261d2fd03b4f581f3c492c6f0f780bab",
+      "bytes": 5193,
+      "meaning": "canonical different result; must not authenticate as old-result terminal family",
+      "target_CHECK": 3,
+      "target_C17": 3,
+      "Gate0_prediction": "L should pass; others measured without regrading; targets may precision-reject on unchanged main"
+    }
+  },
+  "scope": "finite existing one-T changing-current loop and existing pure usize-to-u8 selection; no general terminal expressions, no new world/issuer/API/ABI",
+  "native_rule": "Only after CHECK0, authentic owned/current and generated C inspection; never execute rejected or suspect C. H0/H1/H2 failure/cleanup all preserved.",
+  "OOM_rule": "strict resource status/no-clobber/root rollback/retry; no weakening old oracle",
+  "negative_rule": "Never certify current result as old even when bits coincide; no false valid authority for usize or leaked H."
+}

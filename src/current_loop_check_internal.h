@@ -5,7 +5,8 @@
  * establishes closure. Ghost projection never emits a runtime Change.
  */
 typedef struct {
-    const NLSyntaxNode *parameter, *conditional, *field, *carry, *scalar;
+    const NLSyntaxNode *parameter, *conditional, *field, *carry, *scalar,
+        *terminal_scalar;
     bool terminal_old;
 } CurrentSource;
 
@@ -167,17 +168,26 @@ typedef struct {
     const CurrentSignatureOrigin *entries;
 } CurrentSignatureSet;
 
+enum {
+    CURRENT_GRAPH_LIMIT = 9,
+    CURRENT_CALLER_SLOT = 9,
+    CURRENT_POST_SLOT = 10,
+    CURRENT_EXIT_SLOT = 11,
+    CURRENT_RETURN_SLOT = 15,
+    CURRENT_SIGNATURE_LIMIT = 19
+};
+
 typedef struct NLCurrentLoopProof {
     NLControlState *entry, *header;
     NLCheckedFragment *graph;
     const NLCheckedFragment *parent;
     const NLControlTarget *target;
-    const NLSyntaxNode *carry_source, *scalar_source;
+    const NLSyntaxNode *carry_source, *scalar_source, *terminal_source;
     NLSymbolId base, phase;
     NLPlaceId root, child;
     size_t index, initial, limit, step, incoming;
     NLCheckedNodeId initial_node, conditional, quantity, terminal, scalar;
-    StutterGraph graphs[6];
+    StutterGraph graphs[CURRENT_GRAPH_LIMIT];
     bool helper;
     NLCheckedNodeId helper_choice;
     size_t helper_function;
@@ -186,10 +196,10 @@ typedef struct NLCurrentLoopProof {
     const NLSource *helper_source;
     const char *helper_parameter_name;
     NLSourceSpan helper_name;
-    /* Six graphs, caller/post, four loop exits and at most four helper
+    /* Up to nine graphs, caller/post, four loop exits and four helper
      * exits. One private allocation contains every signature pointer/count
      * that the all-function comparator may consume. */
-    CurrentSignatureSet signatures[16];
+    CurrentSignatureSet signatures[CURRENT_SIGNATURE_LIMIT];
     CurrentSignatureOrigin *signature_entries;
     size_t signature_entry_count;
     const NLControlTarget *helper_target;
@@ -200,14 +210,23 @@ typedef struct NLCurrentLoopProof {
     bool graph_owned, sealed;
     bool terminal_old;
     NLCheckedNodeId terminal_loan;
+    NLCheckedNodeId terminal_call, terminal_choice;
     NLCheckedField terminal_change;
 } NLCurrentLoopProof;
+
+static size_t current_graph_count(const NLCurrentLoopProof *s)
+{
+    return s->terminal_call ? CURRENT_GRAPH_LIMIT
+           : s->helper      ? 6u
+           : s->scalar      ? 5u
+                            : 3u;
+}
 
 static void destroy_current_cycle(NLCurrentLoopProof *s)
 {
     if (!s)
         return;
-    for (size_t i = 0; i < 6; ++i) {
+    for (size_t i = 0; i < CURRENT_GRAPH_LIMIT; ++i) {
         free(s->graphs[i].nodes);
         nl_copy_state_destroy(&s->graphs[i].world.anchor);
         nl_semantic_destroy(s->graphs[i].world.copy);
@@ -294,8 +313,10 @@ static bool current_break_source(Check *c, const NLSyntaxNode *node,
 
 /* Selection only: the checked source edge, loan, exact old-result path and
  * complete exit world are independently proved below before publication. */
-static bool current_terminal_source(const NLSyntaxNode *node)
+static bool current_terminal_source(const NLSyntaxNode *node,
+                                     const NLSyntaxNode **scalar)
 {
+    *scalar = NULL;
     const NLSyntaxView *block = nl_syntax_node_view(node);
     if (!block || block->kind != NL_SYNTAX_BLOCK || block->data.block.tail)
         return false;
@@ -330,6 +351,14 @@ static bool current_terminal_source(const NLSyntaxNode *node)
                 call->kind != NL_SYNTAX_EXPR_CALL ||
                 call->data.call.argument_count != 2)
                 return false;
+        } else if (x->kind == NL_SYNTAX_EXPR_CALL) {
+            const NLSyntaxView *arg =
+                nl_syntax_node_view(x->data.call.arguments);
+            if (v->kind != NL_SYNTAX_BINDING || *scalar || loans ||
+                x->data.call.argument_count != 1 || !arg ||
+                arg->kind != NL_SYNTAX_EXPR_NAME)
+                return false;
+            *scalar = v->data.binding.initializer;
         } else if (x->kind != NL_SYNTAX_EXPR_NAME &&
                    x->kind != NL_SYNTAX_FIELD_DESIGNATOR &&
                    x->kind != NL_SYNTAX_U8_LITERAL)
@@ -378,8 +407,10 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
         return false;
     const bool terminal_old = !current_break_source(
         c, v->data.conditional.else_block, p->data.binding.name);
+    const NLSyntaxNode *terminal_scalar = NULL;
     if (terminal_old &&
-        !current_terminal_source(v->data.conditional.else_block))
+        !current_terminal_source(v->data.conditional.else_block,
+                                  &terminal_scalar))
         return false;
     const NLSyntaxView *arm =
         nl_syntax_node_view(v->data.conditional.then_block);
@@ -456,6 +487,7 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
                            field,
                            carry,
                            scalar,
+                           terminal_scalar,
                            terminal_old};
     return true;
 }
@@ -649,7 +681,7 @@ typedef struct {
     bool incoming[NL_SEMANTIC_MAX_ENTRIES];
     NLCheckedNodeId scalar;
     NLCheckedField change;
-    bool changed;
+    bool changed, terminal;
 } CurrentWalk;
 static const NLCheckedNodeView *current_take(CurrentWalk *, NLCheckedNodeId);
 
@@ -885,7 +917,8 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
                               const NLCheckedNodeView *v)
 {
     const NLCurrentLoopProof *s = r->proof;
-    const NLSyntaxView *source = nl_syntax_node_view(s->scalar_source);
+    const NLSyntaxView *source = nl_syntax_node_view(
+        r->terminal ? s->terminal_source : s->scalar_source);
     NLPureU8Call pure;
     if (!s->helper || !source || source->kind != NL_SYNTAX_EXPR_CALL ||
         r->scalar || r->changed || !v || !stutter_span(v->span, source->span) ||
@@ -893,6 +926,19 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
         (s->sealed && !nl_h_custody_result_valid(r->arm, id)) ||
         !nl_pure_u8_contents(r->arm, id, &pure))
         return false;
+    if (r->terminal) {
+        const NLCheckedNodeView *root =
+            nl_checked_node_view(pure.body, pure.body->root);
+        const NLCheckedNodeView *choice =
+            nl_checked_node_view(pure.body, pure.selection);
+        /* One already-selected pure function, at its actual call boundary.
+         * The new terminal family has two normal arms and the IF is the
+         * actual final value; no RETURN/postlude is silently normalized. */
+        if (pure.function != s->helper_function || !root || !choice ||
+            root->terminates || root->tail != pure.selection ||
+            choice->normal_arms != 2 || nl_control_exits_count(pure.body->exits))
+            return false;
+    }
     const NLCheckedNodeView *arg = current_take(r, v->first_argument);
     const NLSyntaxView *actual =
         nl_syntax_node_view(source->data.call.arguments);
@@ -933,7 +979,7 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
     }
     CurrentReturnRef refs[4];
     size_t count;
-    if (!current_return_refs(s, &pure, refs, &count))
+    if (!r->terminal && !current_return_refs(s, &pure, refs, &count))
         return false;
     r->scalar = id;
     return true;
@@ -1131,7 +1177,11 @@ static bool current_loan(CurrentWalk *r, const NLCheckedNodeView *loan,
         op->argument_count != 2 || op->result_count != 1 || !ref || !value ||
         value->next_argument || ref->kind != NL_CHECKED_IDENTIFIER ||
         ref->symbol != loan->loan.ref_symbol || !current_scalar(r, value) ||
-        (terminal ? value->kind != NL_CHECKED_U8_LITERAL
+        (terminal ? (value->kind != NL_CHECKED_U8_LITERAL &&
+                     (!r->scalar || value->kind != NL_CHECKED_IDENTIFIER ||
+                      !value->symbol ||
+                      value->symbol > NL_SEMANTIC_MAX_ENTRIES ||
+                      !r->incoming[value->symbol - 1]))
          : s->scalar_source
              ? (!r->scalar || value->kind != NL_CHECKED_IDENTIFIER ||
                 !value->symbol || value->symbol > NL_SEMANTIC_MAX_ENTRIES ||
@@ -1230,7 +1280,8 @@ static bool current_arm(const NLCurrentLoopProof *s,
                         NLCheckedField *field, NLCheckedNodeId *scalar)
 {
     CurrentWalk r = {
-        .proof = s, .arm = arm, .header = nl_control_state_context(s->header)};
+        .proof = s, .arm = arm, .header = nl_control_state_context(s->header),
+        .terminal = !continuing};
     if (!arm || arm->count > NL_SEMANTIC_MAX_ENTRIES ||
         !nl_control_source_terminal_valid(
             arm, s->target, continuing ? NL_EXIT_CONTINUE : NL_EXIT_BREAK,
@@ -1427,6 +1478,22 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
                          : NULL;
             if (s->terminal_old) {
                 const NLTypeId u8 = nl_semantic_core_type(h, NL_TYPE_U8);
+                if (!!scalar != !!s->terminal_source)
+                    return bad;
+                if (scalar) {
+                    NLPureU8Call terminal_pure;
+                    if (!s->helper ||
+                        !nl_pure_u8_contents(arm, scalar, &terminal_pure) ||
+                        terminal_pure.function != s->helper_function ||
+                        (s->sealed &&
+                         (s->terminal_call != scalar ||
+                          s->terminal_choice != terminal_pure.selection)))
+                        return bad;
+                    if (!s->sealed) {
+                        s->terminal_call = scalar;
+                        s->terminal_choice = terminal_pure.selection;
+                    }
+                }
                 if (!value || leaf->values[0].type != u8 ||
                     !leaf->values[0].value ||
                     leaf->values[0].value > a->value_count ||
@@ -1532,6 +1599,15 @@ static const NLCheckedFragment *current_graph_at(const NLCurrentLoopProof *s,
         return s->graph;
     if (i < 3)
         return nl_checked_if_arm(s->graph, s->conditional, i - 1);
+    if (i >= 6) {
+        const NLCheckedFragment *breaking =
+            nl_checked_if_arm(s->graph, s->conditional, 1);
+        const NLCheckedFragment *body =
+            breaking ? nl_checked_call_body(breaking, s->terminal_call) : NULL;
+        return i == 6 ? body
+               : body ? nl_checked_if_arm(body, s->terminal_choice, i - 7)
+                      : NULL;
+    }
     const NLCheckedFragment *iteration =
         nl_checked_if_arm(s->graph, s->conditional, 0);
     if (s->helper) {
@@ -1557,16 +1633,17 @@ static const NLSemanticContext *
 current_signature_world(const NLCurrentLoopProof *s,
                         const NLLinearBreakProof *p, size_t slot)
 {
-    if (slot < (s->helper ? 6u : s->scalar ? 5u : 3u))
+    if (slot < current_graph_count(s))
         return s->graphs[slot].world.world;
-    if (slot == 6)
+    if (slot == CURRENT_CALLER_SLOT)
         return &p->final_storage;
-    if (slot == 7)
+    if (slot == CURRENT_POST_SLOT)
         return p->post;
-    if (slot >= 8 && slot < 12)
-        return s->exits[slot - 8].world;
-    if (slot >= 12 && slot - 12 < s->return_count)
-        return s->returns[slot - 12].world.world;
+    if (slot >= CURRENT_EXIT_SLOT && slot < CURRENT_RETURN_SLOT)
+        return s->exits[slot - CURRENT_EXIT_SLOT].world;
+    if (slot >= CURRENT_RETURN_SLOT &&
+        slot - CURRENT_RETURN_SLOT < s->return_count)
+        return s->returns[slot - CURRENT_RETURN_SLOT].world.world;
     return NULL;
 }
 
@@ -1577,7 +1654,7 @@ static NLCheckStatus current_signature_seal(NLCurrentLoopProof *s,
                                             const NLLinearBreakProof *p)
 {
     size_t total = 0;
-    for (size_t slot = 0; slot < 16; ++slot) {
+    for (size_t slot = 0; slot < CURRENT_SIGNATURE_LIMIT; ++slot) {
         const NLSemanticContext *c = current_signature_world(s, p, slot);
         if (!c)
             continue;
@@ -1596,7 +1673,7 @@ static NLCheckStatus current_signature_seal(NLCurrentLoopProof *s,
     }
     s->signature_entry_count = total;
     size_t offset = 0;
-    for (size_t slot = 0; slot < 16; ++slot) {
+    for (size_t slot = 0; slot < CURRENT_SIGNATURE_LIMIT; ++slot) {
         const NLSemanticContext *c = current_signature_world(s, p, slot);
         if (!c)
             continue;
@@ -1619,7 +1696,7 @@ static NLCheckStatus current_signature_seal(NLCurrentLoopProof *s,
 static bool current_signature_origin(const NLCurrentLoopProof *s,
                                      const NLSemanticContext *c, size_t slot)
 {
-    if (!c || slot >= 16)
+    if (!c || slot >= CURRENT_SIGNATURE_LIMIT)
         return false;
     const CurrentSignatureSet *set = &s->signatures[slot];
     if (c->functions != set->functions || c->function_count != set->count ||
@@ -1707,7 +1784,7 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
         if (!actual || !post || !actual->parameters || !post->parameters)
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     }
-    for (size_t i = 0; i < (s->helper ? 6u : s->scalar ? 5u : 3u); ++i) {
+    for (size_t i = 0; i < current_graph_count(s); ++i) {
         StutterGraph *a = &s->graphs[i];
         a->fragment = current_graph_at(s, i);
         if (!a->fragment)
@@ -1755,15 +1832,15 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                               p->root_count, p->root_root) ||
         !linear_graph_matches(f, p->parent_origin, p->parent_nodes,
                               p->parent_count, p->parent_root) ||
-        !current_signature_origin(s, f->context, 6) ||
-        !current_signature_origin(s, p->post, 7) ||
+        !current_signature_origin(s, f->context, CURRENT_CALLER_SLOT) ||
+        !current_signature_origin(s, p->post, CURRENT_POST_SLOT) ||
         !linear_world_matches(f->context, &p->final_storage, p->final,
                               &p->final_anchor) ||
         !linear_callable(p, f->context) || !linear_callable(p, p->post) ||
         !nl_copy_state_matches(p->post, &p->post_anchor) ||
         nl_checked_loop_body(f, p->loop) != s->graph)
         return bad;
-    for (size_t i = 0; i < (s->helper ? 6u : s->scalar ? 5u : 3u); ++i) {
+    for (size_t i = 0; i < current_graph_count(s); ++i) {
         const StutterGraph *a = &s->graphs[i];
         if (current_graph_at(s, i) != a->fragment ||
             !linear_graph_matches(a->fragment, a->base, a->nodes, a->count,
@@ -1776,8 +1853,9 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
             (s->helper && !current_helper_entry(s, a->world.world, i)))
             return bad;
     }
-    if (s->helper && (!current_helper_entry(s, f->context, 6) ||
-                      !current_helper_entry(s, p->post, 7)))
+    if (s->helper &&
+        (!current_helper_entry(s, f->context, CURRENT_CALLER_SLOT) ||
+         !current_helper_entry(s, p->post, CURRENT_POST_SLOT)))
         return bad;
     for (size_t i = 0; i < 4; ++i) {
         const NLControlExitView *x =
@@ -1786,7 +1864,8 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         if (!x || memcmp(x, &s->exit_views[i], sizeof(*x)) ||
             nl_control_state_context((NLControlState *)x->state) !=
                 s->exits[i].world ||
-            !current_signature_origin(s, s->exits[i].world, 8 + i) ||
+            !current_signature_origin(s, s->exits[i].world,
+                                       CURRENT_EXIT_SLOT + i) ||
             !linear_world_matches(s->exits[i].world, &s->exits[i].storage,
                                   s->exits[i].copy, &s->exits[i].anchor))
             return bad;
@@ -1807,10 +1886,12 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
             if (!x || memcmp(x, &r->view, sizeof(*x)) ||
                 nl_control_state_context((NLControlState *)x->state) !=
                     r->world.world ||
-                !current_signature_origin(s, r->world.world, 12 + i) ||
+                !current_signature_origin(s, r->world.world,
+                                           CURRENT_RETURN_SLOT + i) ||
                 !linear_world_matches(r->world.world, &r->world.storage,
                                       r->world.copy, &r->world.anchor) ||
-                !current_helper_entry(s, r->world.world, 12 + i))
+                !current_helper_entry(s, r->world.world,
+                                       CURRENT_RETURN_SLOT + i))
                 return bad;
         }
         CurrentReturnRef refs[4];
@@ -1853,6 +1934,10 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
     const NLSemanticPlaceView r = h->places[s->root - 1],
                               c = h->places[s->child - 1];
     const NLCheckedFragment *breaking = s->graphs[2].fragment;
+    NLPureU8Call terminal_pure = {0};
+    if (s->terminal_call &&
+        !nl_pure_u8_contents(breaking, s->terminal_call, &terminal_pure))
+        return bad;
     const NLControlExitView *exit = nl_control_exit_view(breaking->exits, 0);
     const NLCheckedNodeView *terminal =
         nl_checked_node_view(breaking, exit->source_node);
@@ -1868,6 +1953,7 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                                .changing_current = true,
                                .terminal_old = s->terminal_old,
                                .terminal_loan = s->terminal_loan,
+                               .terminal_call = s->terminal_call,
                                .terminal_change = s->terminal_change,
                                .incoming_if = s->helper ? 0 : s->scalar,
                                .incoming_call = s->helper ? s->scalar : 0,
@@ -1885,7 +1971,10 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                                .post_world = p->post,
                                .helper_body = pure.body,
                                .helper_formal = pure.formal,
-                               .helper_selection = pure.selection};
+                               .helper_selection = pure.selection,
+                               .terminal_helper_body = terminal_pure.body,
+                               .terminal_helper_formal = terminal_pure.formal,
+                               .terminal_helper_selection = terminal_pure.selection};
     return NL_CHECK_OK;
 }
 
@@ -1912,6 +2001,7 @@ static NLCheckedNodeId source_current_loop(Check *check,
     s->parent = check->artifact;
     s->carry_source = source->carry;
     s->scalar_source = source->scalar;
+    s->terminal_source = source->terminal_scalar;
     s->terminal_old = source->terminal_old;
     s->helper = source->scalar && nl_syntax_node_view(source->scalar)->kind ==
                                       NL_SYNTAX_EXPR_CALL;
@@ -2048,7 +2138,8 @@ static NLCheckedNodeId source_current_loop(Check *check,
         const NLCheckedFragment *breaking =
             nl_checked_if_arm(s->graph, s->conditional, 1);
         if (!host(check,
-                  retain_linear_break(check, &normal, id, breaking, NULL),
+                  retain_current_break(check, &normal, id, breaking, NULL,
+                                        s->terminal_call),
                   syntax->span))
             id = 0;
         /* Even a later failure belongs to the enclosing transaction. */
