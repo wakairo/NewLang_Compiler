@@ -3322,6 +3322,17 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         v->argument_count != 0 || v->terminates || v->result_count != 0 ||
         body == NULL)
         return NL_NODE_C_UNSUPPORTED;
+    /* A retained loop may have ordinary prefix calls. Authenticate their
+     * current allocation origins before the older profile walkers inspect
+     * any caller/body contents. This borrows the existing CHECK proof. */
+    if (body->linear_breaks) {
+        const NLCheckStatus status = nl_linear_break_owner_validate(body);
+        if (status != NL_CHECK_OK)
+            return status == NL_CHECK_OUT_OF_MEMORY ? NL_NODE_C_OUT_OF_MEMORY
+                   : status == NL_CHECK_RESOURCE_LIMIT
+                       ? NL_NODE_C_RESOURCE_LIMIT
+                       : NL_NODE_C_UNSUPPORTED;
+    }
     const NLSemanticContext *c = nl_checked_context(body);
     for (size_t i = 1; i <= nl_checked_node_count(body); ++i) {
         const NLCheckedNodeView *op = nl_checked_node_view(body, i);

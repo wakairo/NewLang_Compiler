@@ -1,0 +1,402 @@
+{
+  "issue": 1253,
+  "C": "C299",
+  "main": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+  "canonical": "Draft17.34",
+  "created_UTC": "2026-11-08T10:14:51.231711+00:00",
+  "initial_execution_count": 0,
+  "old_P1252_bytes": "A/B/C/L/N unchanged, old FIRST preserved; no prior result regraded",
+  "scope": "one same-original two-u8 changing-current loop; at most one independent pre-loop pure usize->u8 call with two normal IF arms as actual normal final result, literal/Copy usize actual argument and immutable flat-u8 result Copy; terminal uses actual saved value and returns actual loan old. No new graph/world/issuer/ABI. Existing same-helper terminal, scalar and mixedRETURN Continue paths kept.",
+  "cases": {
+    "A-precomputed-independent-byte.nl": {
+      "sha256": "3c5f151a88fe16cb03d3a296a9f742b9700106d1cc2fdf1ec237a72c4839e252",
+      "bytes": 5295,
+      "CHECK_expected": 0,
+      "C17_expected": 0,
+      "source_classification": "canonical-eligible finite family",
+      "field_index": 0,
+      "phase_limit": 2,
+      "store_new": [
+        103,
+        167,
+        43
+      ],
+      "store_old": [
+        67,
+        103,
+        167
+      ],
+      "BREAK_old": 167,
+      "caller_Copy": 167,
+      "postcurrent": 43,
+      "sibling": 181,
+      "same_original": true,
+      "closed_loan": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_frees_domains_finalized": [
+        0,
+        1,
+        2
+      ],
+      "same_bits_different_origin": false
+    },
+    "B-other-field-other-policy-arm.nl": {
+      "sha256": "6069a2cfedd084b75868a83c5c1ae8c738f9f7e7c99173be204b2c451b505f24",
+      "bytes": 5297,
+      "CHECK_expected": 0,
+      "C17_expected": 0,
+      "source_classification": "canonical-eligible finite family",
+      "field_index": 1,
+      "phase_limit": 2,
+      "store_new": [
+        103,
+        167,
+        229
+      ],
+      "store_old": [
+        181,
+        103,
+        167
+      ],
+      "BREAK_old": 167,
+      "caller_Copy": 167,
+      "postcurrent": 229,
+      "sibling": 67,
+      "same_original": true,
+      "closed_loan": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_frees_domains_finalized": [
+        0,
+        1,
+        2
+      ],
+      "same_bits_different_origin": false
+    },
+    "C-same-precomputation-literal-terminal.nl": {
+      "sha256": "58fcca03fef26bd0eb66e0ba3f3eaab6f718342f0ba56e573a20d1e8a2b6f849",
+      "bytes": 5291,
+      "CHECK_expected": 0,
+      "C17_expected": 0,
+      "source_classification": "canonical-eligible finite family",
+      "field_index": 0,
+      "phase_limit": 2,
+      "store_new": [
+        103,
+        167,
+        43
+      ],
+      "store_old": [
+        67,
+        103,
+        167
+      ],
+      "BREAK_old": 167,
+      "caller_Copy": 167,
+      "postcurrent": 43,
+      "sibling": 181,
+      "same_original": true,
+      "closed_loan": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_frees_domains_finalized": [
+        0,
+        1,
+        2
+      ],
+      "same_bits_different_origin": false
+    },
+    "D-zero-Continue.nl": {
+      "sha256": "b9c961b7cf2021a72c869a401af007fd65e49f75675f91645ebb21220d6d1a53",
+      "bytes": 5295,
+      "CHECK_expected": 0,
+      "C17_expected": 0,
+      "source_classification": "canonical-eligible finite family",
+      "field_index": 0,
+      "phase_limit": 0,
+      "store_new": [
+        43
+      ],
+      "store_old": [
+        67
+      ],
+      "BREAK_old": 67,
+      "caller_Copy": 67,
+      "postcurrent": 43,
+      "sibling": 181,
+      "same_original": true,
+      "closed_loan": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_frees_domains_finalized": [
+        0,
+        1,
+        2
+      ],
+      "same_bits_different_origin": false
+    },
+    "E-one-Continue.nl": {
+      "sha256": "4a9f97768fb9f3574c762fd63592f9623c6c24a3b30c0f03f794be0533f015d3",
+      "bytes": 5295,
+      "CHECK_expected": 0,
+      "C17_expected": 0,
+      "source_classification": "canonical-eligible finite family",
+      "field_index": 0,
+      "phase_limit": 1,
+      "store_new": [
+        103,
+        229
+      ],
+      "store_old": [
+        67,
+        103
+      ],
+      "BREAK_old": 103,
+      "caller_Copy": 103,
+      "postcurrent": 229,
+      "sibling": 181,
+      "same_original": true,
+      "closed_loan": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_frees_domains_finalized": [
+        0,
+        1,
+        2
+      ],
+      "same_bits_different_origin": false
+    },
+    "F-equal-bits-distinct-package.nl": {
+      "sha256": "39ceb7c431bbca2d01023c4a591bb87621b82f02175defa27554a8147fd90197",
+      "bytes": 5295,
+      "CHECK_expected": 0,
+      "C17_expected": 0,
+      "source_classification": "canonical-eligible finite family",
+      "field_index": 0,
+      "phase_limit": 2,
+      "store_new": [
+        103,
+        167,
+        167
+      ],
+      "store_old": [
+        67,
+        103,
+        167
+      ],
+      "BREAK_old": 167,
+      "caller_Copy": 167,
+      "postcurrent": 167,
+      "sibling": 181,
+      "same_original": true,
+      "closed_loan": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_frees_domains_finalized": [
+        0,
+        1,
+        2
+      ],
+      "same_bits_different_origin": true
+    },
+    "G-Copy-quantity-argument.nl": {
+      "sha256": "aa55d4e8560be8775e41094556019d0f76c89c38c6be67646eb87a189ae04a61",
+      "bytes": 5367,
+      "CHECK_expected": 0,
+      "C17_expected": 0,
+      "source_classification": "canonical-eligible finite family",
+      "field_index": 1,
+      "phase_limit": 2,
+      "store_new": [
+        103,
+        167,
+        229
+      ],
+      "store_old": [
+        181,
+        103,
+        167
+      ],
+      "BREAK_old": 167,
+      "caller_Copy": 167,
+      "postcurrent": 229,
+      "sibling": 67,
+      "same_original": true,
+      "closed_loan": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_frees_domains_finalized": [
+        0,
+        1,
+        2
+      ],
+      "same_bits_different_origin": false
+    },
+    "L-adopted-literal-calibration.nl": {
+      "sha256": "05a936607f8f0ea846ee4de882b613c1a5401c5901846769f85f43902e1e07db",
+      "bytes": 5089,
+      "CHECK_expected": 0,
+      "C17_expected": 0,
+      "source_classification": "canonical-eligible finite family",
+      "field_index": 0,
+      "phase_limit": 2,
+      "store_new": [
+        103,
+        167,
+        43
+      ],
+      "store_old": [
+        67,
+        103,
+        167
+      ],
+      "BREAK_old": 167,
+      "caller_Copy": 167,
+      "postcurrent": 43,
+      "sibling": 181,
+      "same_original": true,
+      "closed_loan": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_frees_domains_finalized": [
+        0,
+        1,
+        2
+      ],
+      "same_bits_different_origin": false
+    },
+    "N-H1-cleanup-missing.nl": {
+      "sha256": "b5294938186c2d1095eea1b369a33c25bda33b760e2e727cb8101223dcca0a98",
+      "bytes": 5055,
+      "CHECK_expected": 3,
+      "C17_expected": 3,
+      "source_classification": "language-invalid: field type/nonCopy H cleanup"
+    },
+    "N-H2-cleanup-missing.nl": {
+      "sha256": "880b897ec180cb90d2271b9ccfe0e893be5924479cad6bcd0073c613109cc242",
+      "bytes": 5244,
+      "CHECK_expected": 3,
+      "C17_expected": 3,
+      "source_classification": "language-invalid: field type/nonCopy H cleanup"
+    },
+    "N-current-as-old.nl": {
+      "sha256": "491d29ca66a9ff3aa50214c4066c93b934d8889d385a607a6b29aaa397786fcd",
+      "bytes": 5298,
+      "CHECK_expected": 3,
+      "C17_expected": 3,
+      "source_classification": "canonical legal alternative outside same-field/old-result/two-normal-IF-tail family; precision unsupported, not language error"
+    },
+    "N-terminal-foreign-original.nl": {
+      "sha256": "f344378ab007ae686292debf0e93dd4e5463032029b569de28abd08b3298bd32",
+      "bytes": 5359,
+      "CHECK_expected": 3,
+      "C17_expected": 3,
+      "source_classification": "canonical legal alternative outside same-field/old-result/two-normal-IF-tail family; precision unsupported, not language error"
+    },
+    "N-terminal-other-field.nl": {
+      "sha256": "a441802a4b79c44463bedd6b0fcb79524d7769ad8899a50f025f474a61f6c41d",
+      "bytes": 5296,
+      "CHECK_expected": 3,
+      "C17_expected": 3,
+      "source_classification": "canonical legal alternative outside same-field/old-result/two-normal-IF-tail family; precision unsupported, not language error"
+    },
+    "N-usize-as-new.nl": {
+      "sha256": "e98d6326c002e5378a80522cd2a4a344a173fa97450ad2b38fc5be57193649af",
+      "bytes": 5092,
+      "CHECK_expected": 3,
+      "C17_expected": 3,
+      "source_classification": "language-invalid: field type/nonCopy H cleanup"
+    },
+    "U-prefix-IF-postlude.nl": {
+      "sha256": "3acd4203e224499dae2f73608f3e1be7ff01adf0f1440f8103cd4606a2384332",
+      "bytes": 5308,
+      "CHECK_expected": 3,
+      "C17_expected": 3,
+      "source_classification": "canonical legal alternative outside same-field/old-result/two-normal-IF-tail family; precision unsupported, not language error"
+    },
+    "U-prefix-mixed-RETURN.nl": {
+      "sha256": "e51114ff5e1c74614d39fba180ee1c2bd131e6a01bdc292a9150c75ddf4068ff",
+      "bytes": 5303,
+      "CHECK_expected": 3,
+      "C17_expected": 3,
+      "source_classification": "canonical legal alternative outside same-field/old-result/two-normal-IF-tail family; precision unsupported, not language error"
+    }
+  },
+  "before_native": "CHECK actualowned+issuer/current must pass, then generated C inspected, then strict C17 GCC/Clang O0/O2 with H0/1/2. Native original live addresses/store count/old-before-new/current/sibling/closedloan/caller Copy observed. Invalid/unsupported C never executed.",
+  "host_negatives": [
+    "foreign helper body/whole IF arms and A destroyed unrestored while B remains valid",
+    "foreign world/source/callee target/function plan/result/kind/effect/owner/signature",
+    "NULL functions/function_count/index and one-byte foreign signature allocation before read",
+    "same-bits old/new/source field/result substitutions",
+    "changed immutable Copy declarations and actual argument/returned package",
+    "active or escaping loan and hidden dependency on saved u8",
+    "arm/body cardinality shortening/growth with canonical destruction"
+  ],
+  "resource": "fresh actual allocation census, predetermined bounded ordinal selection, unchanged strict OOM status/out/root/rollback/retry/named no-clobber oracle; record actual sites. No broad hidden graph import or new authority.",
+  "validation": "pin final standard Git tree before mandatory full GCC Release + focused Clang/ASan/UBSan; no edits during execution; pinned clang-format before publication; old generated C calibration and P990 indirect safety/native/negative/OOM retain."
+}
