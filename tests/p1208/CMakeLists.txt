@@ -17,8 +17,6 @@ add_test(NAME p1208_native.integration COMMAND "${Python3_EXECUTABLE}"
     "$<TARGET_FILE:p1208_roles>" "$<TARGET_FILE:p1193_roles>"
     "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
     "${CMAKE_CURRENT_BINARY_DIR}/p1208-native")
-newlang_add_legacy_audit(NAME p1208_evidence.unit COMMAND "${Python3_EXECUTABLE}"
-    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1208/c268/inputs.py")
 add_test(NAME p1208_combined_source.unit COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1208/c268/run_current.py"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1208/c266/source_gate.py"

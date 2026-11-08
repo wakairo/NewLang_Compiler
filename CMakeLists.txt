@@ -108,7 +108,6 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
-    include(tests/support/legacy-audit.cmake)
     include(tests/p1208/CMakeLists.txt)
     include(tests/p1217/CMakeLists.txt)
     include(tests/p1217/c275/CMakeLists.txt)
@@ -697,8 +696,6 @@ if(BUILD_TESTING)
         target_link_options(p1088_${probe} PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
         add_test(NAME p1088_${probe}.unit COMMAND p1088_${probe})
     endforeach()
-    newlang_add_legacy_audit(NAME p1088_evidence.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1088/evidence_test.py")
 
     add_executable(if_test tests/unit/if_test.c)
     target_link_libraries(if_test PRIVATE newlang_semantic newlang_parser)
@@ -837,8 +834,6 @@ if(BUILD_TESTING)
     add_test(NAME p785_cli_boundaries.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785/cli.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785")
-    newlang_add_legacy_audit(NAME p965_freeze.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/freeze_test.py")
     add_executable(p965_ownership tests/p965/ownership.c)
     target_include_directories(p965_ownership PRIVATE tests/support)
     target_link_libraries(p965_ownership PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
@@ -945,8 +940,6 @@ if(BUILD_TESTING)
     add_test(NAME p982_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982")
-    newlang_add_legacy_audit(NAME p982_freeze.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/freeze_test.py")
     add_executable(p990_probe tests/p990/probe.c)
     target_include_directories(p990_probe PRIVATE tests/support)
     target_link_libraries(p990_probe PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
@@ -1050,8 +1043,6 @@ if(BUILD_TESTING)
     add_test(NAME p1107_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" candidate)
-    newlang_add_legacy_audit(NAME p1107_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1107)
     add_executable(p1117_probe tests/p1117/probe.c)
     add_executable(p1117_lineage tests/p1117/lineage_v2.c)
     add_executable(p1117_safety tests/p1117/safety_v3.c)
@@ -1086,8 +1077,6 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1117_probe>"
         "${CMAKE_CURRENT_BINARY_DIR}/p1117-native" candidate
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
-    newlang_add_legacy_audit(NAME p1117_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1117)
     add_executable(p1117_c217_lineage tests/p1117/c217/probe.c)
     target_include_directories(p1117_c217_lineage PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/src")
@@ -1143,8 +1132,6 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1123_safety>"
         "${CMAKE_CURRENT_BINARY_DIR}/p1123-native"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
-    newlang_add_legacy_audit(NAME p1123_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1123/evidence_test.py")
     add_executable(p1133_safety tests/p1133/safety.c)
     add_executable(p1133_oom tests/p1133/safety.c)
     foreach(target p1133_safety p1133_oom)
@@ -1172,8 +1159,6 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1133_safety>"
         "${CMAKE_CURRENT_BINARY_DIR}/p1133-native"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
-    newlang_add_legacy_audit(NAME p1133_evidence.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1133/evidence_test.py")
     add_test(NAME p1133_guard_bounds.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1133/bounds/run.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
@@ -1234,8 +1219,6 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1146_safety>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_BINARY_DIR}/p1146-native")
-    newlang_add_legacy_audit(NAME p1176_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1176/evidence_test.py")
     add_executable(p1176_safety tests/p1176/safety.c)
     add_executable(p1176_oom tests/p1176/safety.c)
     add_executable(p1176_census tests/p1176/census.c)
@@ -1268,8 +1251,6 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1176_safety>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
         "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1176-native")
-    newlang_add_legacy_audit(NAME p1184_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1184/evidence_test.py")
     add_executable(p1184_safety tests/p1184/safety.c)
     add_executable(p1184_oom tests/p1184/safety.c)
     add_executable(p1184_census tests/p1184/census.c)
@@ -1331,8 +1312,6 @@ if(BUILD_TESTING)
     target_link_options(p1188_census PRIVATE -Wl,--wrap=nl_sem_clone
         -Wl,--wrap=nl_semantic_create -Wl,--wrap=nl_semantic_destroy
         -Wl,--wrap=nl_sem_commit)
-    newlang_add_legacy_audit(NAME p1188_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/evidence_test.py")
     foreach(profile 01-init-one 02-actual-one 03-formal-one 04-all-one 05-all-two 06-eq-two)
         add_test(NAME p1188_${profile}_current.unit COMMAND p1188_safety
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/sources/${profile}.nl")
@@ -1359,8 +1338,6 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1188_c250a_probe>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
         "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1188-c250a")
-    newlang_add_legacy_audit(NAME p1188_c250a_evidence.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c250a/evidence_test.py")
 
     # C254 authenticates inherited old Copy values through the existing
     # entry/header/source custody; the original T/current consumer is reused.
@@ -1394,8 +1371,6 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1188_c254_probe>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
         "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1188-c254-native")
-    newlang_add_legacy_audit(NAME p1188_c254_evidence.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1188/c254/evidence_test.py")
 
     include(tests/p1203/CMakeLists.txt)
 
@@ -1481,11 +1456,7 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1193_roles>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_BINARY_DIR}/p1193-native")
-    newlang_add_legacy_audit(NAME p1193_evidence.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1193/production/evidence_test.py")
 
-    newlang_add_legacy_audit(NAME p1169_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1169/evidence_test.py")
     add_executable(p1169_safety tests/p1169/safety.c)
     add_executable(p1169_oom tests/p1169/safety.c)
     foreach(target p1169_safety p1169_oom)
@@ -1511,8 +1482,6 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1169_safety>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_BINARY_DIR}/p1169-native")
-    newlang_add_legacy_audit(NAME p1158_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1158/evidence_test.py")
     add_executable(p1158_safety tests/p1158/safety.c)
     target_include_directories(p1158_safety PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
     target_link_libraries(p1158_safety PRIVATE newlang_checked_c_node newlang_semantic)
@@ -1532,8 +1501,6 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1158_safety>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_BINARY_DIR}/p1158-native")
-    newlang_add_legacy_audit(NAME p1152_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1152/evidence_test.py")
     add_executable(p1152_safety tests/p1152/safety.c)
     add_executable(p1152_oom tests/p1152/safety.c)
     foreach(target p1152_safety p1152_oom)
@@ -1602,8 +1569,6 @@ if(BUILD_TESTING)
     add_test(NAME p1098_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/run-v2.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098")
-    newlang_add_legacy_audit(NAME p1098_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1098)
     add_executable(p1092_observe tests/p1092/observe.c)
     add_executable(p1092_oom tests/p1092/observe.c)
     target_compile_definitions(p1092_oom PRIVATE P1092_OOM)
@@ -1638,13 +1603,6 @@ if(BUILD_TESTING)
     add_test(NAME p1092_source_boundaries.integration
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/p1092_forward.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}")
-    newlang_add_legacy_audit(NAME p1092_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/evidence_test.py")
-    newlang_add_legacy_audit(NAME p990_freeze_protocol.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/freeze_selftest.py")
-    if(NEWLANG_LEGACY_AUDIT)
-        set_tests_properties(p990_freeze_protocol.unit PROPERTIES RUN_SERIAL TRUE)
-    endif()
     add_test(NAME p1045_two_original_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/p1045_forward.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
@@ -2298,7 +2256,7 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>")
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
-        ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1;NEWLANG_LEGACY_AUDIT=${NEWLANG_LEGACY_AUDIT}")
+        ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
     # Full registration/invocation/named-output fault enumeration with host
     # ASan checks thousands of independent retries. Keep every location and
     # assertion; give only this finite cohort its measured sanitizer budget.

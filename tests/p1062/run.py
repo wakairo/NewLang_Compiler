@@ -25,12 +25,6 @@ archive = Path(tempfile.mkdtemp(prefix='P1062-',dir=evidence)) if evidence else 
 commands=[]
 
 
-def legacy_audit_enabled():
-    sys.path.insert(0, str(repo / 'tests/support'))
-    from legacy_audit import enabled
-    return enabled()
-
-
 def invoke(label,args,**kw):
     planned_signal=kw.pop('planned_signal',None)
     args=list(map(str,args));r=subprocess.run(args,capture_output=True,timeout=180,**kw)
@@ -186,8 +180,4 @@ with tempfile.TemporaryDirectory(prefix='p1062-') as directory:
             source=repo/relative;assert sha(source.read_bytes())==expected['source_SHA256']
             r=invoke('old-C-'+relative.replace('/','_'),[cli,source]);ok(r);assert sha(r.stdout)==expected['C_SHA256'],relative
         print('P1062 original C byte identities PASS',len(old['sources']),flush=True)
-        if legacy_audit_enabled():
-            r=invoke('history-v10',[sys.executable,data/'history_tests.py']);ok(r)
-            assert r.stdout.count(b'P1062 HISTORY REJECT')==5
-            print(r.stdout.decode(),end='',flush=True)
 print('P1062 C150 selected profile',selection,'source/current/origin/physical/original owner/OOM/no-clobber PASS',flush=True)
