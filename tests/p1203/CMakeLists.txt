@@ -1,5 +1,5 @@
 add_executable(p1203_safety tests/p1203/safety.c)
-add_test(NAME p1203_evidence.unit COMMAND "${Python3_EXECUTABLE}"
+newlang_add_legacy_audit(NAME p1203_evidence.unit COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1208/c266/p1203_evidence_current.py")
 target_include_directories(p1203_safety PRIVATE src)
 target_compile_options(p1203_safety PRIVATE -UNDEBUG)

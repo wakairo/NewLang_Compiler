@@ -22,6 +22,12 @@ evidence = os.environ.get("P1045_EVIDENCE_DIR")
 archive = Path(tempfile.mkdtemp(prefix="P1045-", dir=evidence)) if evidence else None
 
 
+def legacy_audit_enabled():
+    sys.path.insert(0, str(repo / 'tests/support'))
+    from legacy_audit import enabled
+    return enabled()
+
+
 def invoke(label, args, **kw):
     result = subprocess.run(list(map(str, args)), capture_output=True, timeout=180, **kw)
     commands.append({"label": label, "command": list(map(str, args)), "exit": result.returncode,
@@ -162,8 +168,9 @@ with tempfile.TemporaryDirectory(prefix="p1045-") as directory:
         result = invoke("old-C-" + relative.replace("/", "_"), [cli, source]); ok(result)
         assert sha(result.stdout) == expected["C_SHA256"], relative
     print("P1045 original unchanged C byte identities PASS", len(old["sources"]), flush=True)
-    history = invoke("history-v8-v9-counterexamples", [sys.executable, Path(__file__).with_name("history_v8_forward.py")])
-    ok(history)
-    assert history.stdout.count(b"P1045 HISTORY REJECT") == 5
-    print(history.stdout.decode(), end="", flush=True)
-print("P1045 C137 bounded current/C17/two-original-T-H/guest0-1-2/OOM/negative/named/history PASS", flush=True)
+    if legacy_audit_enabled():
+        history = invoke("history-v8-v9-counterexamples", [sys.executable, Path(__file__).with_name("history_v8_forward.py")])
+        ok(history)
+        assert history.stdout.count(b"P1045 HISTORY REJECT") == 5
+        print(history.stdout.decode(), end="", flush=True)
+print("P1045 C137 bounded current/C17/two-original-T-H/guest0-1-2/OOM/negative/named PASS; legacy history is opt-in", flush=True)

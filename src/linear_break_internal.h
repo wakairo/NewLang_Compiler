@@ -19,6 +19,10 @@ typedef struct {
     bool computed_carry, subtract_carry;
     bool scalar_loop; /* free usize normal result, no field authority */
     bool changing_current;
+    /* A genuine one-field terminal Change, not a scalar phase result. */
+    bool terminal_old;
+    NLCheckedNodeId terminal_loan;
+    NLCheckedField terminal_change;
     const NLCheckedFragment *iteration;
     /* Borrowed only after complete current/exit validation. The actual Break
      * operand is distinct from the runtime phase and the caller summary. */

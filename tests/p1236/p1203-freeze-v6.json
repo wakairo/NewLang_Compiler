@@ -1,0 +1,17 @@
+{
+  "phase": "C288 prospective P1203 original assertions; actual terminal result/current private-header inputs only",
+  "previous": "tests/p1217/c274/p1203-freeze-v5.json",
+  "previous_sha256": "503f40e874bde597ee899d74a5ea545e92559bdc1d6420ddd7bd5f95a836a61c",
+  "archive": "tests/p1236/evidence/p1203-adopted-v5-inputs-v1.zip",
+  "archive_sha256": "5be77f91591e01e705fc2a2ee819d8e82b4720fddc7727c42070cbc41678f605",
+  "files": {
+    "tests/p1203/safety.c": "0d7b321ba49f5960ac36d26a3a9f4917ab35ea7005f6592fc0f2c9647d4652f4",
+    "tests/p1203/native.py": "7bfdc67423c2b7284476e41374d0c767d7e43d8e99fe98cc544837cbdc2da865",
+    "tests/p1203/negative.py": "8b258e920525279f6e8babcc9ccfc49b68aeeb0b5f378476577a69b64aefd5b4",
+    "tests/p1203/CMakeLists.txt": "fbaafa9d0e565a6867feddd2394ee8f09596a87382f66a4346f93fa37184b12e",
+    "src/current_loop_check_internal.h": "2aec973f0d313ec6ab3febfda30588902d2b99e5aee079dab198a930a8270fbc",
+    "src/linear_break_internal.h": "ed23fb506367b06e4aa4ae5c710751ceca60744e8c5acdfdde0c95f3d00768b7",
+    "src/main.c": "dcbaf4b4ecc49529a5d2f8e065909f6184a48072a2db5c6339262f7a588027bd",
+    "tests/p1203/evidence_test.py": "77afd1222d3bf94f25c0308159c04772aab655dd47adb75491523a60b1f04dda"
+  }
+}

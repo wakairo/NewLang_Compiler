@@ -144,7 +144,10 @@ static bool physical_current_loan(Emit *e, Env *env, const NLCheckedNodeView *n,
     Value incoming = {0};
     if (!original || original->place != p->root ||
         original->incarnation != p->incarnation ||
-        env->artifact != p->iteration || !body || body->item_count || !change ||
+        (env->artifact != p->iteration &&
+         !(p->terminal_old && env->artifact == p->breaking &&
+           n == nl_checked_node_view(p->breaking, p->terminal_loan))) ||
+        !body || body->item_count || !change ||
         change->kind != NL_CHECKED_REPLACE || !ref ||
         ref->symbol != n->loan.ref_symbol || n->loan.place != p->child ||
         n->loan.source != p->base || !n->loan.body_nonescape_proved ||
@@ -250,16 +253,17 @@ static bool physical_current_loop(Emit *e, Env *env, Value *out)
         !body || !result ||
         !physical_current_scalar(e, env, v->initial_node, &initial, 0))
         return reject(e);
-    out->type = p->quantity;
+    out->type = v->result.type;
     out->temp = ++e->temp;
     if (!put(e,
-             "size_t nl_v_%zu;\n{\nsize_t nl_current_carry=nl_v_%zu;\n"
+             "%s nl_v_%zu;\n{\nsize_t nl_current_carry=nl_v_%zu;\n"
              "for (;;) {\nconst size_t nl_current_phase=nl_current_carry;\n"
              "NL_CURRENT_PHASE(nl_current_phase,&nl_b_%zu_%zu.f0,"
              "&nl_b_%zu_%zu.f1);\n"
              "if (nl_current_phase < (size_t)UINTMAX_C(%zu)) {\n",
-             out->temp, initial.temp, original->frame, original->symbol,
-             original->frame, original->symbol, v->limit))
+             physical_current_type(e, out->type), out->temp, initial.temp,
+             original->frame, original->symbol, original->frame,
+             original->symbol, v->limit))
         return false;
     /* The validated current relation, not raw ID coincidence, licenses this
      * exact persistent prefix in its hypothetical iteration world. */
@@ -280,9 +284,48 @@ static bool physical_current_loop(Emit *e, Env *env, Value *out)
     if (item != v->continue_node || count + 1 != body->item_count ||
         !put(e,
              "nl_current_carry=nl_current_phase+(size_t)UINTMAX_C(%zu);\n"
-             "continue;\n}\nnl_v_%zu=",
-             v->next_phase, out->temp))
+             "continue;\n}\n",
+             v->next_phase))
         return reject(e);
+    if (v->terminal_old) {
+        const NLCheckedNodeView *arm =
+            nl_checked_node_view(v->breaking, nl_checked_root(v->breaking));
+        const NLCheckedNodeView *block =
+            arm ? nl_checked_node_view(v->breaking, arm->initializer) : NULL;
+        if (!block || block->kind != NL_CHECKED_BLOCK || block->tail)
+            return reject(e);
+        Env breaking = {.artifact = v->breaking,
+                        .parent = env,
+                        .prefix = v->entry_world->binding_count,
+                        .frame = ++e->frames,
+                        .depth = env->depth + 1};
+        NLCheckedNodeId terminal = block->first_item;
+        size_t before = 0;
+        while (terminal) {
+            const NLCheckedNodeView *n = get(&breaking, terminal);
+            if (!n || ++before > block->item_count)
+                return reject(e);
+            if (n->kind == NL_CHECKED_BREAK) {
+                Value old = {0};
+                if (n->next_item || before != block->item_count ||
+                    n->initializer != v->break_value || out->type != e->u8 ||
+                    !physical_current_scalar(e, &breaking, v->break_value, &old,
+                                             0) ||
+                    old.type != out->type ||
+                    !put(e, "nl_v_%zu=nl_v_%zu;\n", out->temp, old.temp))
+                    return reject(e);
+                e->current_emitted = true;
+                return put(e, "NL_CURRENT_RESULT(nl_v_%zu);\nbreak;\n}\n}\n",
+                           out->temp);
+            }
+            if (!physical_current_item(e, &breaking, terminal))
+                return false;
+            terminal = n->next_item;
+        }
+        return reject(e);
+    }
+    if (!put(e, "nl_v_%zu=", out->temp))
+        return false;
     if (result->kind == NL_CHECKED_USIZE_LITERAL) {
         if (!result->has_scalar_result || !result->scalar_result.known ||
             !put(e, "(size_t)UINTMAX_C(%zu)", result->scalar_result.value))
@@ -344,5 +387,6 @@ static bool physical_current_main(Emit *e, Env *env, NLCheckedNodeId id,
         return reject(e);
     out->type = e->unit;
     out->temp = 0;
-    return true;
+    return !v->terminal_old || put(e, "NL_CURRENT_LOCAL(%zu,nl_b_%zu_%zu);\n",
+                                   n->symbol, env->frame, n->symbol);
 }

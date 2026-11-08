@@ -6,6 +6,7 @@
  */
 typedef struct {
     const NLSyntaxNode *parameter, *conditional, *field, *carry, *scalar;
+    bool terminal_old;
 } CurrentSource;
 
 /* A bounded, read-only provenance walk for the three ordinary usize Copy
@@ -197,6 +198,9 @@ typedef struct NLCurrentLoopProof {
     StutterWorld exits[4];
     NLControlExitView exit_views[4];
     bool graph_owned, sealed;
+    bool terminal_old;
+    NLCheckedNodeId terminal_loan;
+    NLCheckedField terminal_change;
 } NLCurrentLoopProof;
 
 static void destroy_current_cycle(NLCurrentLoopProof *s)
@@ -288,6 +292,52 @@ static bool current_break_source(Check *c, const NLSyntaxNode *node,
            value->kind == NL_SYNTAX_USIZE_LITERAL;
 }
 
+/* Selection only: the checked source edge, loan, exact old-result path and
+ * complete exit world are independently proved below before publication. */
+static bool current_terminal_source(const NLSyntaxNode *node)
+{
+    const NLSyntaxView *block = nl_syntax_node_view(node);
+    if (!block || block->kind != NL_SYNTAX_BLOCK || block->data.block.tail)
+        return false;
+    size_t count = 0, loans = 0;
+    bool terminal = false;
+    for (const NLSyntaxNode *n = block->data.block.items; n;
+         n = nl_syntax_next_argument(n)) {
+        const NLSyntaxView *v = nl_syntax_node_view(n), *x = NULL;
+        if (!v || ++count > NL_SEMANTIC_MAX_ENTRIES || terminal)
+            return false;
+        if (v->kind == NL_SYNTAX_BREAK) {
+            if (nl_syntax_next_argument(n))
+                return false;
+            terminal = true;
+            x = nl_syntax_node_view(v->data.statement.expression);
+        } else if (v->kind == NL_SYNTAX_BINDING)
+            x = nl_syntax_node_view(v->data.binding.initializer);
+        else
+            return false;
+        if (!x)
+            return false;
+        if (x->kind == NL_SYNTAX_LOCAL_WRITE_LOAN) {
+            const NLSyntaxView *body = nl_syntax_node_view(x->data.loan.body);
+            const NLSyntaxView *call =
+                body && body->kind == NL_SYNTAX_BLOCK
+                    ? nl_syntax_node_view(body->data.block.tail)
+                    : NULL;
+            if (++loans != 1 || x->data.loan.from_ptr ||
+                x->data.loan.is_exclusive ||
+                x->data.loan.access != NL_ACCESS_WRITE || !body ||
+                body->data.block.items || !call ||
+                call->kind != NL_SYNTAX_EXPR_CALL ||
+                call->data.call.argument_count != 2)
+                return false;
+        } else if (x->kind != NL_SYNTAX_EXPR_NAME &&
+                   x->kind != NL_SYNTAX_FIELD_DESIGNATOR &&
+                   x->kind != NL_SYNTAX_U8_LITERAL)
+            return false;
+    }
+    return terminal && loans == 1 && count == block->data.block.item_count;
+}
+
 static bool current_source_shape(Check *c, const NLSyntaxView *s,
                                  CurrentSource *out)
 {
@@ -324,9 +374,12 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
         !guard || guard->kind != NL_SYNTAX_USIZE_LESS_THAN || !lhs || !rhs ||
         lhs->kind != NL_SYNTAX_EXPR_NAME ||
         !stutter_name(c, lhs->data.name, p->data.binding.name) ||
-        rhs->kind != NL_SYNTAX_USIZE_LITERAL ||
-        !current_break_source(c, v->data.conditional.else_block,
-                              p->data.binding.name))
+        rhs->kind != NL_SYNTAX_USIZE_LITERAL)
+        return false;
+    const bool terminal_old = !current_break_source(
+        c, v->data.conditional.else_block, p->data.binding.name);
+    if (terminal_old &&
+        !current_terminal_source(v->data.conditional.else_block))
         return false;
     const NLSyntaxView *arm =
         nl_syntax_node_view(v->data.conditional.then_block);
@@ -398,8 +451,12 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
         !stutter_name(c, lhs->data.name, p->data.binding.name) || !rhs ||
         rhs->kind != NL_SYNTAX_USIZE_LITERAL)
         return false;
-    *out = (CurrentSource){s->data.loop.parameters, b->data.block.tail, field,
-                           carry, scalar};
+    *out = (CurrentSource){s->data.loop.parameters,
+                           b->data.block.tail,
+                           field,
+                           carry,
+                           scalar,
+                           terminal_old};
     return true;
 }
 
@@ -1058,7 +1115,8 @@ static bool current_scalar(CurrentWalk *r, const NLCheckedNodeView *v)
                              r->arm->context->values[f.old_value - 1]);
 }
 
-static bool current_loan(CurrentWalk *r, const NLCheckedNodeView *loan)
+static bool current_loan(CurrentWalk *r, const NLCheckedNodeView *loan,
+                         bool terminal)
 {
     const NLCurrentLoopProof *s = r->proof;
     const NLCheckedNodeView *body = current_take(r, loan->initializer);
@@ -1073,7 +1131,8 @@ static bool current_loan(CurrentWalk *r, const NLCheckedNodeView *loan)
         op->argument_count != 2 || op->result_count != 1 || !ref || !value ||
         value->next_argument || ref->kind != NL_CHECKED_IDENTIFIER ||
         ref->symbol != loan->loan.ref_symbol || !current_scalar(r, value) ||
-        (s->scalar_source
+        (terminal ? value->kind != NL_CHECKED_U8_LITERAL
+         : s->scalar_source
              ? (!r->scalar || value->kind != NL_CHECKED_IDENTIFIER ||
                 !value->symbol || value->symbol > NL_SEMANTIC_MAX_ENTRIES ||
                 !r->incoming[value->symbol - 1])
@@ -1098,6 +1157,47 @@ static bool current_loan(CurrentWalk *r, const NLCheckedNodeView *loan)
     r->changed = true;
     r->change = op->field;
     return true;
+}
+
+/* Follow real checked Copy declarations to this very loan. Equal scalar bits
+ * and a copied numeric ValueId are never a replacement for source origin. */
+static bool current_terminal_old_path(const NLCheckedFragment *f,
+                                      NLCheckedNodeId use, NLCheckedNodeId loan)
+{
+    const NLTypeId u8 = nl_semantic_core_type(f->context, NL_TYPE_U8);
+    size_t steps = 0;
+    while (use && use <= nl_checked_node_count(f) &&
+           ++steps <= nl_checked_node_count(f)) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, use);
+        if (!n ||
+            !current_copy_value(f->context, n, u8, &(NLSemanticValueView){0}))
+            return false;
+        if (use == loan)
+            return n->kind == NL_CHECKED_LOAN_HEADER;
+        if (n->kind != NL_CHECKED_IDENTIFIER || !n->symbol ||
+            n->value_use != NL_VALUE_COPIED)
+            return false;
+        const NLCheckedNodeView *initializer = NULL;
+        const NLCheckedNodeView *binding =
+            current_copy_binding(f, f->context, use, n->symbol, &initializer);
+        if (!binding || !initializer || binding->initializer >= use)
+            return false;
+        use = binding->initializer;
+    }
+    return false;
+}
+
+static bool current_terminal_change_same(NLCheckedField a, NLCheckedField b)
+{
+#define SAME(member) a.member == b.member
+    return SAME(present) && SAME(dependency_compatible) && SAME(base) &&
+           SAME(nominal) && SAME(type) && SAME(index) && SAME(parent) &&
+           SAME(child) && SAME(parent_incarnation) && SAME(child_incarnation) &&
+           SAME(parent_fact) && SAME(child_fact) && SAME(parent_post_fact) &&
+           SAME(child_post_fact) && SAME(access) && SAME(old_value) &&
+           SAME(new_value) && SAME(payload_occurrence) &&
+           SAME(post_payload_occurrence);
+#undef SAME
 }
 
 /* A source literal remains Known in its own leaf/union worlds. The phase is
@@ -1142,6 +1242,7 @@ static bool current_arm(const NLCurrentLoopProof *s,
     if (!block || block->kind != NL_CHECKED_BLOCK || block->tail)
         return false;
     size_t count = 0;
+    NLCheckedNodeId old_loan = 0;
     for (NLCheckedNodeId id = block->first_item; id;) {
         const NLCheckedNodeView *v = current_take(&r, id);
         if (!v || ++count > block->item_count)
@@ -1167,11 +1268,21 @@ static bool current_arm(const NLCurrentLoopProof *s,
                                            x->type) ||
                     !r.changed)
                     return false;
+            } else if (s->terminal_old) {
+                if (x->kind == NL_CHECKED_LOAN_HEADER) {
+                    if (!current_loan(&r, x, true))
+                        return false;
+                    old_loan = v->initializer;
+                }
+                if (!r.changed || !old_loan ||
+                    !current_terminal_old_path(arm, v->initializer, old_loan))
+                    return false;
             } else if (block->item_count != 1 ||
                        !current_break_value(s, arm->context, x, x->results[0]))
                 return false;
-        } else if (continuing && (v->kind == NL_CHECKED_BINDING ||
-                                  v->kind == NL_CHECKED_STATEMENT)) {
+        } else if ((continuing || s->terminal_old) &&
+                   (v->kind == NL_CHECKED_BINDING ||
+                    v->kind == NL_CHECKED_STATEMENT)) {
             const NLCheckedNodeView *x = current_take(&r, v->initializer);
             if (!x)
                 return false;
@@ -1184,7 +1295,8 @@ static bool current_arm(const NLCurrentLoopProof *s,
                     r.bound[v->symbol - 1] || v->symbol == s->phase ||
                     receiver->symbol != v->symbol ||
                     receiver->type != x->type ||
-                    !(x->kind == NL_CHECKED_LOAN_HEADER ? current_loan(&r, x)
+                    !(x->kind == NL_CHECKED_LOAN_HEADER
+                          ? current_loan(&r, x, !continuing)
                       : x->kind == NL_CHECKED_IF
                           ? current_pure_if(&r, v->initializer, x)
                       : x->kind == NL_CHECKED_REGISTERED_CALL
@@ -1194,6 +1306,8 @@ static bool current_arm(const NLCurrentLoopProof *s,
                         x->results[0].value)
                     return false;
                 r.bound[v->symbol - 1] = x->results[0].value;
+                if (!continuing && x->kind == NL_CHECKED_LOAN_HEADER)
+                    old_loan = v->initializer;
                 r.incoming[v->symbol - 1] =
                     (x->kind == NL_CHECKED_IF ||
                      x->kind == NL_CHECKED_REGISTERED_CALL) ||
@@ -1213,7 +1327,8 @@ static bool current_arm(const NLCurrentLoopProof *s,
         *field = r.change;
     if (scalar)
         *scalar = r.scalar;
-    return count == block->item_count && r.changed == continuing &&
+    return count == block->item_count &&
+           r.changed == (continuing || s->terminal_old) &&
            (!continuing || !!r.scalar == !!s->scalar_source);
 }
 
@@ -1310,13 +1425,104 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
             const NLCheckedNodeView *value =
                 terminal ? nl_checked_node_view(arm, terminal->initializer)
                          : NULL;
-            if (!current_break_value(s, a, value, leaf->values[0]) ||
-                !current_break_value(s, b, value, joined->values[0]) ||
-                !stutter_frame(h, a, 1) || !stutter_frame(h, b, 1))
+            if (s->terminal_old) {
+                const NLTypeId u8 = nl_semantic_core_type(h, NL_TYPE_U8);
+                if (!value || leaf->values[0].type != u8 ||
+                    !leaf->values[0].value ||
+                    leaf->values[0].value > a->value_count ||
+                    !joined->values[0].value ||
+                    joined->values[0].value > b->value_count ||
+                    !change.old_value || change.old_value > h->value_count ||
+                    a->values[leaf->values[0].value - 1].carrier !=
+                        NL_CARRIER_LOOSE ||
+                    b->values[joined->values[0].value - 1].carrier !=
+                        NL_CARRIER_LOOSE ||
+                    !copy_if_plain(a->values[leaf->values[0].value - 1], u8) ||
+                    !copy_if_plain(b->values[joined->values[0].value - 1],
+                                   u8) ||
+                    !linear_break_frame(h, arm->context, &change) ||
+                    !linear_break_frame(h, a, &change) ||
+                    !linear_break_frame(h, b, &change) ||
+                    !current_intrinsic(a->values[leaf->values[0].value - 1],
+                                       h->values[change.old_value - 1]) ||
+                    !current_intrinsic(b->values[joined->values[0].value - 1],
+                                       h->values[change.old_value - 1]))
+                    return bad;
+                NLCheckedNodeId loan = 0;
+                for (NLCheckedNodeId q = 1; q <= arm->count; ++q)
+                    if (nl_checked_node_view(arm, q)->kind ==
+                        NL_CHECKED_LOAN_HEADER) {
+                        if (loan)
+                            return bad;
+                        loan = q;
+                    }
+                if (!loan ||
+                    !current_terminal_old_path(arm, terminal->initializer,
+                                               loan) ||
+                    (s->sealed && (s->terminal_loan != loan ||
+                                   !current_terminal_change_same(
+                                       s->terminal_change, change))))
+                    return bad;
+                if (!s->sealed) {
+                    s->terminal_loan = loan;
+                    s->terminal_change = change;
+                }
+            } else if (!current_break_value(s, a, value, leaf->values[0]) ||
+                       !current_break_value(s, b, value, joined->values[0]) ||
+                       !stutter_frame(h, a, 1) || !stutter_frame(h, b, 1))
                 return bad;
         }
     }
     return NL_CHECK_OK;
+}
+
+/* The caller is a clone/projection of the authenticated existing BREAK exit,
+ * not a fresh result typed from an oracle. The source edge proof above must
+ * precede this comparison. No new state-origin or issuer is introduced. */
+static bool current_terminal_post(const NLCurrentLoopProof *s,
+                                  const NLSemanticContext *post,
+                                  NLCheckedResult result)
+{
+    const NLCheckedFragment *arm =
+        nl_checked_if_arm(s->graph, s->conditional, 1);
+    const NLControlExitView *exit =
+        arm ? nl_control_exit_view(arm->exits, 0) : NULL;
+    const NLSemanticContext *a =
+        exit ? nl_control_state_context((NLControlState *)exit->state) : NULL;
+    const NLSemanticContext *h = nl_control_state_context(s->header);
+    if (!exit || !a || !post || result.type != exit->values[0].type ||
+        result.value != exit->values[0].value ||
+        result.type != nl_semantic_core_type(post, NL_TYPE_U8) ||
+        !current_frame(s, h, post) || !nl_copy_same_types(a, post) ||
+        a->binding_count != post->binding_count ||
+        a->place_count != post->place_count ||
+        a->scope_count != post->scope_count ||
+        a->value_count != post->value_count ||
+        a->last_incarnation != post->last_incarnation ||
+        a->last_value_fact != post->last_value_fact)
+        return false;
+    for (size_t i = 0; i < a->value_count; ++i)
+        if (!nl_node_value_same(a->values[i], post->values[i]))
+            return false;
+    for (size_t i = 0; i < a->place_count; ++i)
+        if (!same_place_frame(a->places[i], post->places[i]) ||
+            a->places[i].current_value != post->places[i].current_value ||
+            a->places[i].current_fact != post->places[i].current_fact ||
+            a->places[i].payload_occurrence !=
+                post->places[i].payload_occurrence)
+            return false;
+    for (size_t i = 0; i < a->binding_count; ++i) {
+        const NLBindingEntry x = a->bindings[i], y = post->bindings[i];
+        if (x.hidden != y.hidden || strcmp(x.name, y.name) ||
+            x.view.type != y.view.type || x.view.place != y.view.place ||
+            x.view.value != y.view.value ||
+            x.view.availability != y.view.availability)
+            return false;
+    }
+    for (size_t i = 0; i < a->scope_count; ++i)
+        if (!same_scope(a->scopes[i], post->scopes[i]))
+            return false;
+    return true;
 }
 
 static const NLCheckedFragment *current_graph_at(const NLCurrentLoopProof *s,
@@ -1635,9 +1841,12 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         nl_checked_call_body(p->root, p->call) != f ||
         !current_copy_origin(f, f->context, s->initial_node, 0, true, 2,
                              &initial) ||
-        initial != s->initial || !current_projection(s, e, p->post) ||
-        !stutter_free_quantity(p->post, p->result.value, p->result.type) ||
-        p->result.value != p->post->value_count ||
+        initial != s->initial ||
+        (s->terminal_old ? !current_terminal_post(s, p->post, p->result)
+                         : (!current_projection(s, e, p->post) ||
+                            !stutter_free_quantity(p->post, p->result.value,
+                                                   p->result.type) ||
+                            p->result.value != p->post->value_count)) ||
         !stutter_frame(e, nl_control_state_context(p->entry), 0) ||
         current_relation(s) != NL_CHECK_OK)
         return bad;
@@ -1657,9 +1866,12 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                                .incoming = s->incoming,
                                .result = p->result,
                                .changing_current = true,
+                               .terminal_old = s->terminal_old,
+                               .terminal_loan = s->terminal_loan,
+                               .terminal_change = s->terminal_change,
                                .incoming_if = s->helper ? 0 : s->scalar,
                                .incoming_call = s->helper ? s->scalar : 0,
-                               .scalar_loop = true,
+                               .scalar_loop = !s->terminal_old,
                                .iteration = s->graphs[1].fragment,
                                .breaking = breaking,
                                .break_value = terminal->initializer,
@@ -1700,6 +1912,7 @@ static NLCheckedNodeId source_current_loop(Check *check,
     s->parent = check->artifact;
     s->carry_source = source->carry;
     s->scalar_source = source->scalar;
+    s->terminal_old = source->terminal_old;
     s->helper = source->scalar && nl_syntax_node_view(source->scalar)->kind ==
                                       NL_SYNTAX_EXPR_CALL;
     if (!current_packages(check->context, s->root) ||
@@ -1778,7 +1991,37 @@ static NLCheckedNodeId source_current_loop(Check *check,
     if (!host(check, nl_control_state_fork(s->entry, &normal.entry),
               syntax->span))
         goto cleanup;
-    if (host(check, current_abstract(s, check->context), syntax->span)) {
+    if (s->terminal_old) {
+        const NLCheckedFragment *breaking =
+            nl_checked_if_arm(s->graph, s->conditional, 1);
+        const NLControlExitView *exit =
+            nl_control_exit_view(breaking->exits, 0);
+        const NLSemanticContext *post =
+            nl_control_state_context((NLControlState *)exit->state);
+        NLSemanticContext *completed = NULL;
+        if (!host(check, nl_sem_validate(post), syntax->span) ||
+            !host(check, nl_fixed_dependencies(post), syntax->span) ||
+            !host(check, nl_raw_validate(post), syntax->span) ||
+            !host(check, nl_sem_clone(post, &completed), syntax->span))
+            goto normal_cleanup;
+        normal.normal_result = exit->values[0];
+        if (!current_terminal_post(s, completed, normal.normal_result)) {
+            nl_semantic_destroy(completed);
+            loop_precision(check, syntax->span);
+            goto normal_cleanup;
+        }
+        nl_sem_commit(check->context, completed);
+        id = add(check, (NLCheckedNodeView){.kind = NL_CHECKED_LOOP,
+                                            .span = syntax->span,
+                                            .type = normal.normal_result.type,
+                                            .result_count = 1,
+                                            .results = {normal.normal_result},
+                                            .header_inductive = true,
+                                            .continue_edges = 1,
+                                            .break_edges = 1,
+                                            .argument_count = 1,
+                                            .first_argument = s->initial_node});
+    } else if (host(check, current_abstract(s, check->context), syntax->span)) {
         const NLValueId result = new_value(
             check, (NLSemanticValueView){.type = loop.types[0]}, syntax->span);
         normal.normal_result = (NLCheckedResult){loop.types[0], result};
@@ -1818,6 +2061,7 @@ static NLCheckedNodeId source_current_loop(Check *check,
             }
     } else
         id = 0;
+normal_cleanup:
     nl_control_state_destroy(normal.entry);
     goto cleanup;
 body_failure:

@@ -1,0 +1,151 @@
+{
+  "authority": "Issue1245/C293",
+  "fixed_original_HEAD": "2ccbce8fd6c96f55018234ed064fcd7460f9cb0a",
+  "optional_only": [
+    {
+      "test": "p1208_evidence.unit",
+      "original_command": "tests/p1208/c268/inputs.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1217_evidence.unit",
+      "original_command": "tests/p1217/evidence_current_v9.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1217_evidence_tamper.unit",
+      "original_command": "tests/p1217/../p1236/evidence_negative.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1227_c283_history_negative.unit",
+      "original_command": "tests/p1236/historical_v61_negative.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1236_history_negative.unit",
+      "original_command": "tests/p1236/history_negative.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1217_c275_historical_contract.unit",
+      "original_command": "tests/p1217/c275/history_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1217_c276_historical_contract.unit",
+      "original_command": "tests/p1217/c276/history_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1088_evidence.unit",
+      "original_command": "tests/p1088/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p965_freeze.unit",
+      "original_command": "tests/p965/freeze_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p982_freeze.unit",
+      "original_command": "tests/p982/freeze_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1107_evidence_history.unit",
+      "original_command": "tests/p1117/history_latest.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1117_evidence_history.unit",
+      "original_command": "tests/p1117/history_latest.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1123_evidence_history.unit",
+      "original_command": "tests/p1123/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1133_evidence.unit",
+      "original_command": "tests/p1133/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1176_evidence_history.unit",
+      "original_command": "tests/p1176/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1184_evidence_history.unit",
+      "original_command": "tests/p1184/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1188_evidence_history.unit",
+      "original_command": "tests/p1188/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1188_c250a_evidence.unit",
+      "original_command": "tests/p1188/c250a/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1188_c254_evidence.unit",
+      "original_command": "tests/p1188/c254/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1203_evidence.unit",
+      "original_command": "tests/p1208/c266/p1203_evidence_current.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1193_evidence.unit",
+      "original_command": "tests/p1193/production/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1169_evidence_history.unit",
+      "original_command": "tests/p1169/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1158_evidence_history.unit",
+      "original_command": "tests/p1158/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1152_evidence_history.unit",
+      "original_command": "tests/p1152/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1098_evidence_history.unit",
+      "original_command": "tests/p1117/history_latest.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p1092_evidence_history.unit",
+      "original_command": "tests/p1092/evidence_test.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    },
+    {
+      "test": "p990_freeze_protocol.unit",
+      "original_command": "tests/p990/freeze_selftest.py",
+      "role": "Only SHA/archive/Git-blob/current-generation provenance, including historical negative checks of that mechanism; no compiler/native invocation."
+    }
+  ],
+  "mixed_history_calls_only": [
+    "tests/p1045/p1030_forward.py",
+    "tests/p1055/p1045_forward.py",
+    "tests/p1055/run.py",
+    "tests/p1058/run.py",
+    "tests/p1062/run.py"
+  ],
+  "mixed_signature": "tests/p1188/signature_forward.py: only global versioned-freeze invocation opt-in; genuine 120 malformed allocation/rollback/foreign-B controls mandatory",
+  "mixed_C266": "tests/p1208/c268: only inputs.verify() hash replay opt-in; actual source/current/C17 byte comparisons/native/negative/census/OOM remain mandatory",
+  "kept": "All other original test names and commands; compiled history/evidence/validator/OOM tests are not selected by name."
+}

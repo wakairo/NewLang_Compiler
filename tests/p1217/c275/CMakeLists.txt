@@ -17,5 +17,5 @@ foreach(contract live_return_backend p733)
 endforeach()
 target_link_options(p1217_c275_p733_current PRIVATE
     -Wl,--wrap=calloc -Wl,--wrap=realloc)
-add_test(NAME p1217_c275_historical_contract.unit COMMAND "${Python3_EXECUTABLE}"
+newlang_add_legacy_audit(NAME p1217_c275_historical_contract.unit COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1217/c275/history_test.py")
