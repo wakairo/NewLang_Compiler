@@ -1,0 +1,28 @@
+{
+  "stage": "tests",
+  "status": 8,
+  "seconds": 35.634597641001164,
+  "HEAD": "4f6298d7098b2bdd14eab012af977dcb68414641",
+  "tree_before": "11341ac60971b689a1ac4e68a384ebd4d82ba58f",
+  "tree_after": "11341ac60971b689a1ac4e68a384ebd4d82ba58f",
+  "source_unchanged": true,
+  "args": [
+    "/workspace/p1236-c291/tools/cmake/cmake/data/bin/ctest",
+    "--test-dir",
+    "/tmp/p1248-c296/fixed-gcc-build-v2",
+    "--parallel",
+    "2",
+    "--no-tests=error",
+    "--output-on-failure",
+    "--stop-on-failure",
+    "--output-junit",
+    "/workspace/p1248-c296/fixed-gcc-FIRST-v2/junit.xml"
+  ],
+  "stdout_SHA256": "899c260fe521302b1a1608ba89c667094073bdc0d5fe873f43a601f5e6355b3f",
+  "stderr_SHA256": "18e00877dc1071c85cd4f479d451bebeef8309022e46cf8c63b0bed5151984a4",
+  "actual_cases_at_stop": 331,
+  "failures": 1,
+  "new_native_executions": 0,
+  "new_OOM_trials": 0,
+  "cause": "New terminal adversarial test reused disposed Input a/b without resetting the source out-handle to NULL; nl_source_load requires *out_source == NULL. Five positives, original17 host controls, and terminal controls through foreign-arm A-destroyed/B-survival passed before this apparatus precondition refusal. Whole-body second pair not reached."
+}

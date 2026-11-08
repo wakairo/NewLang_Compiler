@@ -1,0 +1,30 @@
+{
+  "stage": "tests",
+  "status": 8,
+  "seconds": 97.25043306699808,
+  "HEAD": "0d5bcdd73cc89691b41e3a4fde1e163e1b3f0fb3",
+  "tree_before": "f7f8cb6ce413818c4161ebbaacfb69a2b9e62e4c",
+  "tree_after": "f7f8cb6ce413818c4161ebbaacfb69a2b9e62e4c",
+  "source_unchanged": true,
+  "args": [
+    "/workspace/p1236-c291/tools/cmake/cmake/data/bin/ctest",
+    "--test-dir",
+    "/tmp/p1248-c296/fixed-gcc-build-v1",
+    "--parallel",
+    "2",
+    "--no-tests=error",
+    "--output-on-failure",
+    "--stop-on-failure",
+    "--output-junit",
+    "/workspace/p1248-c296/fixed-gcc-FIRST-v1/junit.xml"
+  ],
+  "stdout_SHA256": "4a47e8872ca1447271b89911effbc7176c5c1b3a242b74153b3de726bd5fcbcb",
+  "stderr_SHA256": "18e00877dc1071c85cd4f479d451bebeef8309022e46cf8c63b0bed5151984a4",
+  "actual_cases_at_stop": 779,
+  "failures": 1,
+  "unreached_of_813": 34,
+  "new_P1248_native_executions": 0,
+  "cause": "P-owned observer retained post_marker name, but actual frozen source declaration is post_witness; caller[3] missing. Genuine CHECK/owned/current metadata passed before role collection, no new native or OOM reached.",
+  "owned-current-negative.stdout_SHA256": "b9786a91137add66120764f446e0dcfe6763707e680b2f6a305046c641fa198d",
+  "owned-current-negative.stderr_SHA256": "fb013166fd5a860a921cbd1a68d4875fcb19bd8ea917bc74fa5888d085c1fd8a"
+}

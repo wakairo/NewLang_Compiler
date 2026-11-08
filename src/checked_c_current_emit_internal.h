@@ -43,20 +43,19 @@ static bool physical_current_operand(Emit *e, const NLPhysicalHelper *pure,
     return reject(e);
 }
 
-static bool physical_current_helper(Emit *e, Env *env, Value *out, size_t depth)
+static bool physical_current_helper(Emit *e, Env *env, NLCheckedNodeId id,
+                                    const NLPhysicalHelper *helper, Value *out,
+                                    size_t depth)
 {
-    const NLPhysicalCurrent *p = e->current;
-    const NLCheckedNodeView *call = get(env, p->loop_view.incoming_call);
+    const NLCheckedNodeView *call = get(env, id);
     const NLCheckedNodeView *choice =
-        nl_checked_node_view(p->helper.body, p->helper.selection);
+        nl_checked_node_view(helper->body, helper->selection);
     const NLCheckedNodeView *test =
-        choice ? nl_checked_node_view(p->helper.body, choice->initializer)
-               : NULL;
+        choice ? nl_checked_node_view(helper->body, choice->initializer) : NULL;
     const NLCheckedNodeView *left =
-        test ? nl_checked_node_view(p->helper.body, test->first_argument)
-             : NULL;
+        test ? nl_checked_node_view(helper->body, test->first_argument) : NULL;
     const NLCheckedNodeView *right =
-        left ? nl_checked_node_view(p->helper.body, left->next_argument) : NULL;
+        left ? nl_checked_node_view(helper->body, left->next_argument) : NULL;
     Value actual = {0};
     if (!call || !choice || !test || !left || !right || right->next_argument ||
         (test->kind != NL_CHECKED_USIZE_LESS_THAN &&
@@ -67,16 +66,16 @@ static bool physical_current_helper(Emit *e, Env *env, Value *out, size_t depth)
     out->type = e->u8;
     out->temp = ++e->temp;
     if (!put(e, "uint8_t nl_v_%zu=(", out->temp) ||
-        !physical_current_operand(e, &p->helper, test->first_argument,
+        !physical_current_operand(e, helper, test->first_argument,
                                   actual.temp) ||
         !put(e, test->kind == NL_CHECKED_USIZE_LESS_THAN ? " < " : " == ") ||
-        !physical_current_operand(e, &p->helper, left->next_argument,
+        !physical_current_operand(e, helper, left->next_argument,
                                   actual.temp) ||
         !put(e, " ? "))
         return false;
     for (size_t arm = 0; arm < 2; ++arm) {
         const NLCheckedFragment *a =
-            nl_checked_if_arm(p->helper.body, p->helper.selection, arm);
+            nl_checked_if_arm(helper->body, helper->selection, arm);
         /* The RETURN operand is sealed by full current validation. prepare
          * separately proved the actual normal-final Copy path ends at this
          * selection, so its normal arm literal is the emitted normal result.
@@ -189,7 +188,12 @@ static bool physical_current_scalar(Emit *e, Env *env, NLCheckedNodeId id,
     if (n->kind == NL_CHECKED_REGISTERED_CALL)
         return env->artifact == e->current->loop_view.iteration &&
                        id == e->current->loop_view.incoming_call
-                   ? physical_current_helper(e, env, out, depth)
+                   ? physical_current_helper(e, env, id, &e->current->helper,
+                                             out, depth)
+               : env->artifact == e->current->loop_view.breaking &&
+                       id == e->current->loop_view.terminal_call
+                   ? physical_current_helper(
+                         e, env, id, &e->current->terminal_helper, out, depth)
                    : reject(e);
     out->temp = ++e->temp;
     if (n->kind == NL_CHECKED_U8_LITERAL || n->kind == NL_CHECKED_USIZE_LITERAL)
@@ -201,7 +205,9 @@ static bool physical_current_scalar(Emit *e, Env *env, NLCheckedNodeId id,
                    physical_current_type(e, n->type), value.scalar_value);
     if (n->kind != NL_CHECKED_IDENTIFIER || n->value_use != NL_VALUE_COPIED)
         return reject(e);
-    if (env->artifact == e->current->loop_view.iteration &&
+    if ((env->artifact == e->current->loop_view.iteration ||
+         (env->artifact == e->current->loop_view.breaking &&
+          e->current->loop_view.terminal_call)) &&
         n->symbol == e->current->loop_view.phase_symbol)
         return put(e, "size_t nl_v_%zu=nl_current_phase;\n", out->temp);
     const Local *l = local(env, n->symbol, n->type);

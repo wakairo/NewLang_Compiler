@@ -1,0 +1,193 @@
+[
+  {
+    "source": "A-helper-binding.nl",
+    "stage": "CHECK",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--check",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/A-helper-binding.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/A-helper-binding.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n"
+  },
+  {
+    "source": "A-helper-binding.nl",
+    "stage": "C17",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1248-c296/gate0-main-FIRST/A-helper-binding.c",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/A-helper-binding.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/A-helper-binding.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n",
+    "named_no_clobber": true
+  },
+  {
+    "source": "B-changed-phase-direct.nl",
+    "stage": "CHECK",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--check",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/B-changed-phase-direct.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/B-changed-phase-direct.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n"
+  },
+  {
+    "source": "B-changed-phase-direct.nl",
+    "stage": "C17",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1248-c296/gate0-main-FIRST/B-changed-phase-direct.c",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/B-changed-phase-direct.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/B-changed-phase-direct.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n",
+    "named_no_clobber": true
+  },
+  {
+    "source": "C-other-field.nl",
+    "stage": "CHECK",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--check",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/C-other-field.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/C-other-field.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n"
+  },
+  {
+    "source": "C-other-field.nl",
+    "stage": "C17",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1248-c296/gate0-main-FIRST/C-other-field.c",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/C-other-field.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/C-other-field.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n",
+    "named_no_clobber": true
+  },
+  {
+    "source": "D-inline-alternative.nl",
+    "stage": "CHECK",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--check",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/D-inline-alternative.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/D-inline-alternative.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n"
+  },
+  {
+    "source": "D-inline-alternative.nl",
+    "stage": "C17",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1248-c296/gate0-main-FIRST/D-inline-alternative.c",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/D-inline-alternative.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/D-inline-alternative.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n",
+    "named_no_clobber": true
+  },
+  {
+    "source": "L-adopted-literal-control.nl",
+    "stage": "CHECK",
+    "status": 0,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--check",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/L-adopted-literal-control.nl"
+    ],
+    "stderr": ""
+  },
+  {
+    "source": "L-adopted-literal-control.nl",
+    "stage": "C17",
+    "status": 0,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1248-c296/gate0-main-FIRST/L-adopted-literal-control.c",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/L-adopted-literal-control.nl"
+    ],
+    "stderr": ""
+  },
+  {
+    "source": "N-usize-new.nl",
+    "stage": "CHECK",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--check",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/N-usize-new.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/N-usize-new.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n"
+  },
+  {
+    "source": "N-usize-new.nl",
+    "stage": "C17",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1248-c296/gate0-main-FIRST/N-usize-new.c",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/N-usize-new.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/N-usize-new.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n",
+    "named_no_clobber": true
+  },
+  {
+    "source": "N-H1-missing-cleanup.nl",
+    "stage": "CHECK",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--check",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/N-H1-missing-cleanup.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/N-H1-missing-cleanup.nl:42:25-48:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n"
+  },
+  {
+    "source": "N-H1-missing-cleanup.nl",
+    "stage": "C17",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1248-c296/gate0-main-FIRST/N-H1-missing-cleanup.c",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/N-H1-missing-cleanup.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/N-H1-missing-cleanup.nl:42:25-48:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n",
+    "named_no_clobber": true
+  },
+  {
+    "source": "N-current-as-old.nl",
+    "stage": "CHECK",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--check",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/N-current-as-old.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/N-current-as-old.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n"
+  },
+  {
+    "source": "N-current-as-old.nl",
+    "stage": "C17",
+    "status": 3,
+    "argv": [
+      "/tmp/p1248-c296/gate0-main-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1248-c296/gate0-main-FIRST/N-current-as-old.c",
+      "/workspace/p1248-c296/gate0-freeze-v1/sources/N-current-as-old.nl"
+    ],
+    "stderr": "/workspace/p1248-c296/gate0-freeze-v1/sources/N-current-as-old.nl:102:27-102:28: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile\n",
+    "named_no_clobber": true
+  }
+]
