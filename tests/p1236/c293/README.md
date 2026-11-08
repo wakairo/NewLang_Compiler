@@ -13,7 +13,7 @@ C tests named evidence/history/proof/OOM still run: these exercise real compiler
 ownership, graph authenticity, source/world rejection, teardown and rollback.
 Full/front normal registration is 811/810; opt-in restores all 838/837 names.
 
-The active P1045/P1055/P1058/P1062 runners condition only their final historical
+The active P990→P1045/P1030 and P1045/P1055/P1058/P1062 runners condition only their final historical
 hash-chain subprocesses. Source/CHECK, real public current/owner, raw and passive
 native, physical H/T identity, guest0/1/2 cleanup, calibration, malformed graph,
 foreign-B survival, reached OOM/no-clobber/retry, and old generated-C byte equality
@@ -44,3 +44,12 @@ Git commit/parents/tree/diff plus real fixed-HEAD safety results are the normal
 provenance. Neither Git nor green CI proves general soundness or Product GO.
 Product Value Strategy1.1 author/caller audit-locality benefit vs well-factored C
 remains UNMEASURED; this operational change removes administrative work only.
+
+C294 closes P990's indirect P1045/P1030 call, not just direct CTest scripts.
+P990 still executes its P1013 and P1020 functional helpers and the complete
+P1030 current/native/owner/negative/H/OOM/rollback and29 old-C comparisons.
+Only the latter helper's final five SHA-chain mutations become opt-in. No
+P990 command, semantic check, physical observation or safety oracle changes.
+The earlier local GCC811 run was not bound to its published tree because a
+helper changed mid-run; that error and CI RED remain preserved. C294 results
+are new executions on one sealed Git tree, immutable throughout testing.

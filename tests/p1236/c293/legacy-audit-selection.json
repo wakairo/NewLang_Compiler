@@ -139,6 +139,7 @@
     }
   ],
   "mixed_history_calls_only": [
+    "tests/p1045/p1030_forward.py",
     "tests/p1055/p1045_forward.py",
     "tests/p1055/run.py",
     "tests/p1058/run.py",

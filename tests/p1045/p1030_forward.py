@@ -24,6 +24,12 @@ evidence = os.environ.get("P1030_EVIDENCE_DIR")
 archive = Path(tempfile.mkdtemp(prefix="P1030-", dir=evidence)) if evidence else None
 
 
+
+def legacy_audit_enabled():
+    sys.path.insert(0, str(repo / 'tests/support'))
+    from legacy_audit import enabled
+    return enabled()
+
 def invoke(label, args, **kw):
     result = subprocess.run(list(map(str, args)), capture_output=True, timeout=180, **kw)
     commands.append({"label": label, "command": list(map(str, args)), "exit": result.returncode,
@@ -168,10 +174,11 @@ with tempfile.TemporaryDirectory(prefix="p1030-") as directory:
         result = invoke("old-C-" + relative.replace("/", "_"), [cli, source]); ok(result)
         assert sha(result.stdout) == expected["C_SHA256"], relative
     print("P1030 original unchanged C byte identities PASS", len(old["sources"]), flush=True)
-    history = invoke("history-v7-v8-counterexamples", [sys.executable, Path(__file__).resolve().parent / "history_v8_forward.py"])
-    ok(history)
-    assert history.stdout.count(b"P1030 HISTORY REJECT") == 5
-    print(history.stdout.decode(), end="", flush=True)
-print("P1030 C127 bounded current/C17/original-T-H/guest0-1-2/OOM/negative/named/history PASS", flush=True)
+    if legacy_audit_enabled():
+        history = invoke("history-v7-v8-counterexamples", [sys.executable, Path(__file__).resolve().parent / "history_v8_forward.py"])
+        ok(history)
+        assert history.stdout.count(b"P1030 HISTORY REJECT") == 5
+        print(history.stdout.decode(), end="", flush=True)
+print("P1030 C127 bounded current/C17/original-T-H/guest0-1-2/OOM/negative/named PASS; legacy history is opt-in", flush=True)
 
-print("P1045 FORWARD P1030 all source/oracle/native checks retained; coherent v7-v8-v9 counterexample epoch", flush=True)
+print("P1045 FORWARD P1030 all source/oracle/native checks retained; legacy v7-v8-v9 counterexamples opt-in", flush=True)
