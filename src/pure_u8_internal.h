@@ -15,6 +15,7 @@ typedef struct {
 
 typedef struct {
     const NLCheckedFragment *body;
+    const NLSemanticContext *context;
     NLSymbolId formal;
     NLTypeId quantity, boolean, u8;
     NLCheckedNodeId bindings[NL_SEMANTIC_MAX_ENTRIES];
@@ -33,13 +34,13 @@ static const NLCheckedNodeView *predicate_take(PredicateWalk *w,
     return nl_checked_node_view(w->body, id);
 }
 
-static bool predicate_value(const NLCheckedFragment *f,
-                            const NLCheckedNodeView *n, NLSemanticValueView *v)
+static bool predicate_value_at(const NLSemanticContext *c,
+                               const NLCheckedNodeView *n,
+                               NLSemanticValueView *v)
 {
     return n && !n->terminates && n->result_count == 1 &&
            n->results[0].type == n->type &&
-           nl_semantic_value_view(nl_checked_context(f), n->results[0].value,
-                                  v) &&
+           nl_semantic_value_view(c, n->results[0].value, v) &&
            copy_if_plain(*v, n->type) &&
            (!n->has_scalar_result ||
             (n->scalar_result.type == n->type &&
@@ -170,7 +171,7 @@ static bool predicate_selection(PredicateWalk *w, NLCheckedNodeId id,
         y->span.end_byte != n->span.end_byte)
         return false;
     if (normal) {
-        if (!predicate_value(w->body, n, &value) || n->type != w->u8)
+        if (!predicate_value_at(w->context, n, &value) || n->type != w->u8)
             return false;
         if (normal == 2) {
             if (value.scalar_known || value.scalar_value || n->tail)
@@ -204,8 +205,7 @@ static bool predicate_selection(PredicateWalk *w, NLCheckedNodeId id,
         }
     } else {
         if (n->result_count || n->tail || n->returned.type != w->u8 ||
-            !nl_semantic_value_view(w->body->context, n->returned.value,
-                                    &value) ||
+            !nl_semantic_value_view(w->context, n->returned.value, &value) ||
             !copy_if_plain(value, w->u8) || value.scalar_known ||
             value.scalar_value)
             return false;
@@ -225,7 +225,7 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
         valid = predicate_selection(w, id, n);
         goto done;
     }
-    if (!predicate_value(w->body, n, &value) ||
+    if (!predicate_value_at(w->context, n, &value) ||
         (n->type != w->quantity && n->type != w->boolean && n->type != w->u8))
         goto done;
     switch (n->kind) {
@@ -244,7 +244,7 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
         break;
     }
     case NL_CHECKED_IDENTIFIER: {
-        const NLSemanticContext *c = nl_checked_context(w->body);
+        const NLSemanticContext *c = w->context;
         if (!n->symbol || n->symbol > c->binding_count ||
             n->symbol > NL_SEMANTIC_MAX_ENTRIES ||
             n->value_use != NL_VALUE_COPIED ||
@@ -295,8 +295,8 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
                          n->name.end_byte, less ? "<" : "==") ||
             !predicate_scalar(w, n->first_argument) ||
             !predicate_scalar(w, left->next_argument) ||
-            !predicate_value(w->body, left, &a) ||
-            !predicate_value(w->body, right, &b))
+            !predicate_value_at(w->context, left, &a) ||
+            !predicate_value_at(w->context, right, &b))
             break;
         const bool known = a.scalar_known && b.scalar_known;
         valid = value.scalar_known == known &&
@@ -314,11 +314,12 @@ done:
     return valid;
 }
 
-static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
-                            NLTypeId unit, NLTypeId u8, NLPureU8Plan *plan)
+static bool nl_pure_u8_body_at(const NLCheckedFragment *f, NLSymbolId formal,
+                               NLTypeId unit, NLTypeId u8,
+                               const NLSemanticContext *c, NLPureU8Plan *plan)
 {
-    const NLSemanticContext *c = nl_checked_context(f);
     PredicateWalk w = {.body = f,
+                       .context = c,
                        .formal = formal,
                        .quantity = nl_semantic_core_type(c, NL_TYPE_USIZE),
                        .boolean = nl_semantic_core_type(c, NL_TYPE_BOOL),
@@ -452,6 +453,12 @@ static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
     return true;
 }
 
+static bool nl_pure_u8_body(const NLCheckedFragment *f, NLSymbolId formal,
+                            NLTypeId unit, NLTypeId u8, NLPureU8Plan *plan)
+{
+    return nl_pure_u8_body_at(f, formal, unit, u8, nl_checked_context(f), plan);
+}
+
 typedef struct {
     const NLCheckedFragment *body;
     NLSymbolId formal;
@@ -462,13 +469,18 @@ typedef struct {
 
 /* An actual CHECK-owned synchronous call, not a host-supplied summary.
  * Caller placement/quantity-expression policy belongs to each consumer. */
-static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
-                                NLPureU8Call *out)
+/* CHECK may read the genuine precommit transaction; published consumers use
+ * the wrapper below and the current public caller. This changes no child
+ * context/ownership and never turns a shallow foreign-world view into proof. */
+static bool nl_pure_u8_contents_at(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id,
+                                   const NLSemanticContext *c,
+                                   NLPureU8Call *out)
 {
-    const NLSemanticContext *c = nl_checked_context(f);
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLCheckedFragment *body = nl_checked_call_body(f, id);
-    if (!c || !c->functions || !call || !body || body->context != c ||
+    if (!c || !c->functions || !call || !body ||
+        body->context != nl_checked_context(f) ||
         call->kind != NL_CHECKED_REGISTERED_CALL || !call->function ||
         call->function > c->function_count || call->argument_count != 1 ||
         call->result_count != 1)
@@ -503,8 +515,8 @@ static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
         }
     }
     NLPureU8Plan plan;
-    if (!formal ||
-        !nl_pure_u8_body(body, formal, nl_semantic_unit_type(c), u8, &plan))
+    if (!formal || !nl_pure_u8_body_at(body, formal, nl_semantic_unit_type(c),
+                                       u8, c, &plan))
         return false;
     const NLCheckedNodeView *root = nl_checked_node_view(body, body->root);
     const NLCheckedResult result =
@@ -514,6 +526,12 @@ static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
         return false;
     *out = (NLPureU8Call){body, formal, plan.selection, call->function, plan};
     return true;
+}
+
+static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                NLPureU8Call *out)
+{
+    return nl_pure_u8_contents_at(f, id, nl_checked_context(f), out);
 }
 
 /* Published consumers require the original finished-result receipt. The

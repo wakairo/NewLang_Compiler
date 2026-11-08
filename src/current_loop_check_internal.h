@@ -1043,7 +1043,9 @@ static bool current_prefix_contents(const NLCurrentLoopProof *s,
     size_t seed = 0;
     if (!entry || !id || id >= s->initial_node || !call ||
         (s->sealed && !nl_h_custody_result_valid(parent, id)) ||
-        !nl_pure_u8_contents(parent, id, &pure) ||
+        !nl_pure_u8_contents_at(parent, id,
+                                s->sealed ? nl_checked_context(parent) : entry,
+                                &pure) ||
         !current_copy_origin(parent, entry, call->first_argument, 0, true, 2,
                              &seed))
         return false;
@@ -1865,10 +1867,10 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
             if (!c->fragments[i] || !c->fragments[i]->context)
                 return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
             c->worlds[i] = c->fragments[i]->context;
-            c->storage[i] = *c->worlds[i];
+            c->storage[i] = i ? *c->worlds[i] : p->final_storage;
         }
         c->target = c->pure.body->function_target;
-        c->plan = c->worlds[0]->functions[c->pure.function - 1].body;
+        c->plan = p->final_storage.functions[c->pure.function - 1].body;
         c->syntax = c->plan->syntax;
         c->source = c->plan->source;
         c->parameter_name = c->plan->parameter_names[0];
