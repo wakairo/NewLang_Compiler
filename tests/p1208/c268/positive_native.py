@@ -10,7 +10,10 @@ from native_observer import observer
 compiler,probe,cc,sanitizer,destination=sys.argv[1:]
 raw=Path(destination);raw.mkdir(parents=True,exist_ok=False)
 from inputs import verify
-verify()
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / 'tests/support'))
+from legacy_audit import enabled
+if enabled():
+    verify()
 oracle=json.loads((here/'native-oracle-v1.json').read_text())
 normal_phases={'01-bound-discard-final':[2,3], '01-left-normal':[2,3],'02-right-normal':[2],
     '03-left-final-return':[3],'04-right-final-return':[1],

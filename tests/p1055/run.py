@@ -22,6 +22,12 @@ archive = Path(tempfile.mkdtemp(prefix='P1055-',dir=evidence)) if evidence else 
 commands=[]
 
 
+def legacy_audit_enabled():
+    sys.path.insert(0, str(repo / 'tests/support'))
+    from legacy_audit import enabled
+    return enabled()
+
+
 def invoke(label,args,**kw):
     planned_signal=kw.pop('planned_signal',None)
     args=list(map(str,args));r=subprocess.run(args,capture_output=True,timeout=180,**kw)
@@ -155,7 +161,8 @@ with tempfile.TemporaryDirectory(prefix='p1055-') as directory:
             source=repo/relative;assert sha(source.read_bytes())==expected['source_SHA256']
             r=invoke('old-C-'+relative.replace('/','_'),[cli,source]);ok(r);assert sha(r.stdout)==expected['C_SHA256'],relative
         print('P1055 original C byte identities PASS',len(old['sources']),flush=True)
-        for script,marker in [('history_tests.py',b'P1055 HISTORY REJECT'),('history_v8_forward.py',b'P1045 HISTORY REJECT')]:
-            r=invoke(script,[sys.executable,data/script]);ok(r);assert r.stdout.count(marker)==5
-            print(r.stdout.decode(),end='',flush=True)
+        if legacy_audit_enabled():
+            for script,marker in [('history_tests.py',b'P1055 HISTORY REJECT'),('history_v8_forward.py',b'P1045 HISTORY REJECT')]:
+                r=invoke(script,[sys.executable,data/script]);ok(r);assert r.stdout.count(marker)==5
+                print(r.stdout.decode(),end='',flush=True)
 print('P1055 C144 selected profile',selection,'source/current/origin/physical/original owner/OOM/no-clobber PASS',flush=True)

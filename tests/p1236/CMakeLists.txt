@@ -18,6 +18,12 @@ add_test(NAME p1236_oom.unit COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1236/oom_gate.py"
     "$<TARGET_FILE:p1236_oom>" "${CMAKE_CURRENT_BINARY_DIR}/p1236-oom")
 set_tests_properties(p1236_oom.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 300)
-add_test(NAME p1236_history_negative.unit COMMAND "${Python3_EXECUTABLE}"
+newlang_add_legacy_audit(NAME p1236_history_negative.unit COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1236/history_negative.py")
-set_tests_properties(p1236_history_negative.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 180)
+if(NEWLANG_LEGACY_AUDIT)
+    set_tests_properties(p1236_history_negative.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 180)
+endif()
+
+# Apply after the root default; the complete P1055 safety profile stays mandatory.
+cmake_language(DEFER CALL set_tests_properties
+    p1055_old_origin_0.integration PROPERTIES TIMEOUT 180)

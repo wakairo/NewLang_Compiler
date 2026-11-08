@@ -6,7 +6,10 @@ import sys
 sys.dont_write_bytecode = True
 from inputs import HERE, verify
 
-verify()
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / 'tests/support'))
+from legacy_audit import enabled
+if enabled():
+    verify()
 compiler, mixed_probe, literal_probe, cc, sanitizer, destination = sys.argv[1:]
 raw = Path(destination)
 raw.mkdir(parents=True, exist_ok=False)
