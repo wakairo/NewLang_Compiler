@@ -30,7 +30,7 @@ def verify():
     source = raw.decode()
     before = 'c266/validation-freeze-v7.json'
     assert source.count(before) == 1
-    source = source.replace(before, 'c268/validation-freeze-v13.json', 1)
+    source = source.replace(before, 'c268/validation-freeze-v14.json', 1)
     scope = {'__file__': str(original), '__name__': 'c268_authenticated_v7_current'}
     exec(compile(source, str(original) + ':C268-current', 'exec'), scope)
     scope['verify']()
@@ -40,4 +40,4 @@ def verify():
 
 if __name__ == '__main__':
     verify()
-    print('C268 original v7 source/algorithm + prospective current v8 PASS')
+    print('C268 original v7 source/algorithm + prospective current v14 PASS')

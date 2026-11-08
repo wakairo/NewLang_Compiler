@@ -53,3 +53,10 @@ foreach(profile 03-left-final-return 04-right-final-return 05-left-discard-norma
     add_test(NAME p1208_${profile}_safety.unit COMMAND p1208_safety
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1208/sources/${profile}.nl")
 endforeach()
+
+# T1238/C288: defer exactly two measured CTest ceilings until after root global90.
+# This included file shares the top-level CMake directory; root CMake stays byte-identical.
+cmake_language(DEFER CALL set_tests_properties
+    p1055_old_origin_0.integration
+    p990_new_native.integration
+    PROPERTIES TIMEOUT 180)
