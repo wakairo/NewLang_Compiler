@@ -187,13 +187,13 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
         if (!p.loop_view.terminal_old || !p.terminal_helper.body ||
             !p.terminal_helper.formal || !p.terminal_helper.selection)
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
-        const NLCheckedNodeView *root =
-            nl_checked_node_view(p.terminal_helper.body,
-                                  nl_checked_root(p.terminal_helper.body));
+        const NLCheckedNodeView *root = nl_checked_node_view(
+            p.terminal_helper.body, nl_checked_root(p.terminal_helper.body));
         const NLCheckedNodeView *choice = nl_checked_node_view(
             p.terminal_helper.body, p.terminal_helper.selection);
         if (!root || !choice || root->terminates ||
-            root->tail != p.terminal_helper.selection || choice->normal_arms != 2)
+            root->tail != p.terminal_helper.selection ||
+            choice->normal_arms != 2)
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     }
     const NLCheckedNodeView *choice =

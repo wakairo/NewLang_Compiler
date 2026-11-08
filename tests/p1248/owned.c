@@ -128,14 +128,17 @@ static void accepted(Input *t)
            post->places[v.root - 1].incarnation == v.incarnation &&
            post->places[v.child - 1].incarnation == v.child_incarnation &&
            nl_copy_plain(post, c.new_value, u8) &&
-           (v.terminal_call ? !post->values[c.new_value - 1].scalar_known
-                            : (post->values[c.new_value - 1].scalar_known &&
-                               post->values[c.new_value - 1].scalar_value == 211)));
+           (v.terminal_call
+                ? !post->values[c.new_value - 1].scalar_known
+                : (post->values[c.new_value - 1].scalar_known &&
+                   post->values[c.new_value - 1].scalar_value == 211)));
     if (v.terminal_call) {
-        const NLCheckedNodeView *call = nl_checked_node_view(v.breaking, v.terminal_call);
+        const NLCheckedNodeView *call =
+            nl_checked_node_view(v.breaking, v.terminal_call);
         assert(call && call->kind == NL_CHECKED_REGISTERED_CALL &&
                nl_h_custody_result_valid(v.breaking, v.terminal_call) &&
-               v.terminal_helper_body == nl_checked_call_body(v.breaking, v.terminal_call) &&
+               v.terminal_helper_body ==
+                   nl_checked_call_body(v.breaking, v.terminal_call) &&
                v.terminal_helper_formal && v.terminal_helper_selection);
     }
     const NLPlaceId peer = post->places[v.root - 1].fixed_fields[1 - v.index];
@@ -325,62 +328,94 @@ static void adversarial(const char *path)
 static void terminal_adversarial(const char *path)
 {
     Input a = {0}, b = {0};
-    load(&a, path); load(&b, path);
-    accepted(&a); accepted(&b);
+    load(&a, path);
+    load(&b, path);
+    accepted(&a);
+    accepted(&b);
     assert(a.view.terminal_call && b.view.terminal_call);
     NLCheckedFragment *arm = (NLCheckedFragment *)a.view.breaking;
     NLCheckedFragment *body = (NLCheckedFragment *)a.view.terminal_helper_body;
     NLCheckedFragment *other = (NLCheckedFragment *)b.view.terminal_helper_body;
     NLCheckedNodeView *call = &arm->nodes[a.view.terminal_call - 1];
     NLCheckedNodeView saved_call = *call;
-    call->function = 0; rejected(&a); *call = saved_call;
+    call->function = 0;
+    rejected(&a);
+    *call = saved_call;
     call->results[0].value = a.view.terminal_change.old_value;
-    rejected(&a); *call = saved_call;
+    rejected(&a);
+    *call = saved_call;
     NLCheckedNodeView *arg = &arm->nodes[call->first_argument - 1];
     NLCheckedNodeView saved_arg = *arg;
-    arg->symbol++; rejected(&a); *arg = saved_arg;
-    NLCheckedNodeView *choice = &body->nodes[a.view.terminal_helper_selection - 1];
+    arg->symbol++;
+    rejected(&a);
+    *arg = saved_arg;
+    NLCheckedNodeView *choice =
+        &body->nodes[a.view.terminal_helper_selection - 1];
     NLCheckedNodeView saved_choice = *choice;
-    choice->normal_arms = 1; rejected(&a); *choice = saved_choice;
+    choice->normal_arms = 1;
+    rejected(&a);
+    *choice = saved_choice;
     NLCheckedNodeView *root = &body->nodes[body->root - 1];
     NLCheckedNodeView saved_root = *root;
-    root->tail = 0; rejected(&a); *root = saved_root;
+    root->tail = 0;
+    rejected(&a);
+    *root = saved_root;
     const NLSource *source = body->source;
-    body->source = other->source; rejected(&a); body->source = source;
+    body->source = other->source;
+    rejected(&a);
+    body->source = source;
     NLControlTarget *target = body->function_target;
-    assert(target && other->function_target && target != other->function_target);
+    assert(target && other->function_target &&
+           target != other->function_target);
     body->function_target = other->function_target;
-    rejected(&a); body->function_target = target;
+    rejected(&a);
+    body->function_target = target;
     size_t count = body->arm_count;
-    body->arm_count = 0; rejected(&a); body->arm_count = count;
-    body->arm_count = count + 1; rejected(&a); body->arm_count = count;
+    body->arm_count = 0;
+    rejected(&a);
+    body->arm_count = count;
+    body->arm_count = count + 1;
+    rejected(&a);
+    body->arm_count = count;
     NLSemanticContext *world = (NLSemanticContext *)body->context;
     NLFunctionEntry *functions = world->functions;
-    world->functions = NULL; rejected(&a); world->functions = functions;
+    world->functions = NULL;
+    rejected(&a);
+    world->functions = functions;
     count = world->function_count;
-    world->function_count = count + 1; rejected(&a); world->function_count = count;
+    world->function_count = count + 1;
+    rejected(&a);
+    world->function_count = count;
     NLFunctionEntry *fn = &functions[call->function - 1];
     NLTypeId *parameters = fn->parameters;
     void *short_foreign = malloc(1);
     assert(short_foreign);
     fn->parameters = short_foreign;
-    rejected(&a); fn->parameters = parameters; free(short_foreign);
+    rejected(&a);
+    fn->parameters = parameters;
+    free(short_foreign);
     count = fn->count;
-    fn->count = count + 1; rejected(&a); fn->count = count;
+    fn->count = count + 1;
+    rejected(&a);
+    fn->count = count;
     NLCheckedNodeView *loan = &arm->nodes[a.view.terminal_loan - 1];
     NLCheckedNodeView *block = &arm->nodes[loan->initializer - 1];
     NLCheckedNodeView *change = &arm->nodes[block->tail - 1];
     NLCheckedNodeView saved_change = *change;
     change->field.new_value = change->field.old_value;
-    rejected(&a); *change = saved_change;
+    rejected(&a);
+    *change = saved_change;
     accepted(&a);
     assert(body->arm_count == 2 && other->arm_count == 2);
     body->arms[0].artifact = other->arms[0].artifact;
     rejected(&a);
     dispose(&a); /* Deliberately unrestored foreign B pure IF arm. */
-    accepted(&b); dispose(&b);
-    a = (Input){0}; b = (Input){0};
-    load(&a, path); load(&b, path);
+    accepted(&b);
+    dispose(&b);
+    a = (Input){0};
+    b = (Input){0};
+    load(&a, path);
+    load(&b, path);
     arm = (NLCheckedFragment *)a.view.breaking;
     bool found = false;
     for (size_t i = 0; i < arm->body_count; ++i)
@@ -389,10 +424,13 @@ static void terminal_adversarial(const char *path)
             found = true;
             break;
         }
-    assert(found); rejected(&a);
+    assert(found);
+    rejected(&a);
     dispose(&a); /* Canonical ownership must keep B's entire body alive. */
-    accepted(&b); dispose(&b);
-    puts("P1248 terminal NEGATIVE 16 PASS: short foreign signature, callable/source/current/graph and A destroyed/B alive");
+    accepted(&b);
+    dispose(&b);
+    puts("P1248 terminal NEGATIVE 16 PASS: short foreign signature, "
+         "callable/source/current/graph and A destroyed/B alive");
 }
 
 int main(int argc, char **argv)

@@ -5717,10 +5717,10 @@ static bool linear_callable(const NLLinearBreakProof *p,
 }
 
 static NLCheckStatus retain_current_break(Check *check, LoopControl *loop,
-                                         NLCheckedNodeId id,
-                                         const NLCheckedFragment *body,
-                                         struct NLStutterProof *cycle,
-                                         NLCheckedNodeId current_pure_call)
+                                          NLCheckedNodeId id,
+                                          const NLCheckedFragment *body,
+                                          struct NLStutterProof *cycle,
+                                          NLCheckedNodeId current_pure_call)
 {
     /* First native cohort: an actual direct zero-argument unit invocation,
      * ordinary local T storage. Definitions/arms/nested calls and H worlds

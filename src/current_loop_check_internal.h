@@ -314,7 +314,7 @@ static bool current_break_source(Check *c, const NLSyntaxNode *node,
 /* Selection only: the checked source edge, loan, exact old-result path and
  * complete exit world are independently proved below before publication. */
 static bool current_terminal_source(const NLSyntaxNode *node,
-                                     const NLSyntaxNode **scalar)
+                                    const NLSyntaxNode **scalar)
 {
     *scalar = NULL;
     const NLSyntaxView *block = nl_syntax_node_view(node);
@@ -408,9 +408,8 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
     const bool terminal_old = !current_break_source(
         c, v->data.conditional.else_block, p->data.binding.name);
     const NLSyntaxNode *terminal_scalar = NULL;
-    if (terminal_old &&
-        !current_terminal_source(v->data.conditional.else_block,
-                                  &terminal_scalar))
+    if (terminal_old && !current_terminal_source(v->data.conditional.else_block,
+                                                 &terminal_scalar))
         return false;
     const NLSyntaxView *arm =
         nl_syntax_node_view(v->data.conditional.then_block);
@@ -482,13 +481,9 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
         !stutter_name(c, lhs->data.name, p->data.binding.name) || !rhs ||
         rhs->kind != NL_SYNTAX_USIZE_LITERAL)
         return false;
-    *out = (CurrentSource){s->data.loop.parameters,
-                           b->data.block.tail,
-                           field,
-                           carry,
-                           scalar,
-                           terminal_scalar,
-                           terminal_old};
+    *out = (CurrentSource){
+        s->data.loop.parameters, b->data.block.tail, field, carry, scalar,
+        terminal_scalar,         terminal_old};
     return true;
 }
 
@@ -936,7 +931,8 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
          * actual final value; no RETURN/postlude is silently normalized. */
         if (pure.function != s->helper_function || !root || !choice ||
             root->terminates || root->tail != pure.selection ||
-            choice->normal_arms != 2 || nl_control_exits_count(pure.body->exits))
+            choice->normal_arms != 2 ||
+            nl_control_exits_count(pure.body->exits))
             return false;
     }
     const NLCheckedNodeView *arg = current_take(r, v->first_argument);
@@ -1177,11 +1173,11 @@ static bool current_loan(CurrentWalk *r, const NLCheckedNodeView *loan,
         op->argument_count != 2 || op->result_count != 1 || !ref || !value ||
         value->next_argument || ref->kind != NL_CHECKED_IDENTIFIER ||
         ref->symbol != loan->loan.ref_symbol || !current_scalar(r, value) ||
-        (terminal ? (value->kind != NL_CHECKED_U8_LITERAL &&
-                     (!r->scalar || value->kind != NL_CHECKED_IDENTIFIER ||
-                      !value->symbol ||
-                      value->symbol > NL_SEMANTIC_MAX_ENTRIES ||
-                      !r->incoming[value->symbol - 1]))
+        (terminal
+             ? (value->kind != NL_CHECKED_U8_LITERAL &&
+                (!r->scalar || value->kind != NL_CHECKED_IDENTIFIER ||
+                 !value->symbol || value->symbol > NL_SEMANTIC_MAX_ENTRIES ||
+                 !r->incoming[value->symbol - 1]))
          : s->scalar_source
              ? (!r->scalar || value->kind != NL_CHECKED_IDENTIFIER ||
                 !value->symbol || value->symbol > NL_SEMANTIC_MAX_ENTRIES ||
@@ -1279,9 +1275,10 @@ static bool current_arm(const NLCurrentLoopProof *s,
                         const NLCheckedFragment *arm, bool continuing,
                         NLCheckedField *field, NLCheckedNodeId *scalar)
 {
-    CurrentWalk r = {
-        .proof = s, .arm = arm, .header = nl_control_state_context(s->header),
-        .terminal = !continuing};
+    CurrentWalk r = {.proof = s,
+                     .arm = arm,
+                     .header = nl_control_state_context(s->header),
+                     .terminal = !continuing};
     if (!arm || arm->count > NL_SEMANTIC_MAX_ENTRIES ||
         !nl_control_source_terminal_valid(
             arm, s->target, continuing ? NL_EXIT_CONTINUE : NL_EXIT_BREAK,
@@ -1870,7 +1867,7 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
             nl_control_state_context((NLControlState *)x->state) !=
                 s->exits[i].world ||
             !current_signature_origin(s, s->exits[i].world,
-                                       CURRENT_EXIT_SLOT + i) ||
+                                      CURRENT_EXIT_SLOT + i) ||
             !linear_world_matches(s->exits[i].world, &s->exits[i].storage,
                                   s->exits[i].copy, &s->exits[i].anchor))
             return bad;
@@ -1892,11 +1889,11 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                 nl_control_state_context((NLControlState *)x->state) !=
                     r->world.world ||
                 !current_signature_origin(s, r->world.world,
-                                           CURRENT_RETURN_SLOT + i) ||
+                                          CURRENT_RETURN_SLOT + i) ||
                 !linear_world_matches(r->world.world, &r->world.storage,
                                       r->world.copy, &r->world.anchor) ||
                 !current_helper_entry(s, r->world.world,
-                                       CURRENT_RETURN_SLOT + i))
+                                      CURRENT_RETURN_SLOT + i))
                 return bad;
         }
         CurrentReturnRef refs[4];
@@ -1979,7 +1976,8 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                                .helper_selection = pure.selection,
                                .terminal_helper_body = terminal_pure.body,
                                .terminal_helper_formal = terminal_pure.formal,
-                               .terminal_helper_selection = terminal_pure.selection};
+                               .terminal_helper_selection =
+                                   terminal_pure.selection};
     return NL_CHECK_OK;
 }
 
@@ -2144,7 +2142,7 @@ static NLCheckedNodeId source_current_loop(Check *check,
             nl_checked_if_arm(s->graph, s->conditional, 1);
         if (!host(check,
                   retain_current_break(check, &normal, id, breaking, NULL,
-                                        s->terminal_call),
+                                       s->terminal_call),
                   syntax->span))
             id = 0;
         /* Even a later failure belongs to the enclosing transaction. */

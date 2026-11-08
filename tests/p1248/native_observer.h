@@ -20,7 +20,7 @@ static struct {
     } heap[2];
 } p296;
 static const uint8_t p_old[P296_LIMIT + 1] = P296_OLD_TRACE,
-                     p_next[P296_LIMIT + 1] = P296_NEW_TRACE;
+                                        p_next[P296_LIMIT + 1] = P296_NEW_TRACE;
 static const size_t p_roles[5] = P296_ROLES;
 static const size_t p_caller[4] = P296_CALLER_ROLES;
 #define P296_SIBLING (P296_INDEX ? 29 : 173)
@@ -196,8 +196,8 @@ static inline void p_local(size_t symbol, uintmax_t value)
 }
 static inline void p_result(size_t value)
 {
-    assert(value == P296_OLD && p296.visits == P296_LIMIT + 1 && p296.stores == P296_LIMIT + 1 &&
-           !p296.results);
+    assert(value == P296_OLD && p296.visits == P296_LIMIT + 1 &&
+           p296.stores == P296_LIMIT + 1 && !p296.results);
     ++p296.results;
 }
 static inline void p_read(const uint8_t *field, uint8_t value)
@@ -211,8 +211,8 @@ static inline void p_finish_live(void)
 {
     p_closed();
     assert(!p296.finished && p296.binds == 1 && p296.visits == P296_LIMIT + 1 &&
-           p296.stores == P296_LIMIT + 1 && p296.results == 1 && p296.reads == 2 &&
-           p296.caller_roles == 15);
+           p296.stores == P296_LIMIT + 1 && p296.results == 1 &&
+           p296.reads == 2 && p296.caller_roles == 15);
     assert(*p296.field[P296_INDEX] == P296_TERMINAL &&
            *p296.field[1 - P296_INDEX] == P296_SIBLING);
     printf("P1248 live-original preH=%d index=%d H=%zu attempts=%zu free=%zu "
