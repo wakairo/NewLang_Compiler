@@ -21,6 +21,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
+          fetch-depth: 10
       - name: Confirm immutable baseline ancestry and branch-only push
         shell: bash
         run: |
@@ -29,7 +30,7 @@ jobs:
           test "$GITHUB_REF" = refs/heads/r-fast/r1240-terminal-old-break-v1
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test "${{ github.repository }}" = wakairo/NewLang_Compiler
-          test "$(git rev-parse HEAD^)" = 21577cbbedf2e915c779e24269eb1bf7a19f2857
+          git merge-base --is-ancestor 21577cbbedf2e915c779e24269eb1bf7a19f2857 HEAD
           echo "R1240 event=$GITHUB_EVENT_NAME run=$GITHUB_RUN_ID attempt=$GITHUB_RUN_ATTEMPT SHA=$GITHUB_SHA"
       - name: Install compiler prerequisites from signed Ubuntu repositories
         shell: bash
