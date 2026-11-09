@@ -1,0 +1,57 @@
+{
+  "issue": 1272,
+  "release": "C344/C348",
+  "canonical": "Draft17.35",
+  "base": "f7ddecfab6e545c94acff67ffea4d2b43bfde2a3",
+  "sources": {
+    "N-bare-projection.nl": {
+      "bytes": 4662,
+      "sha256": "e83d89ce50f9a518bbcaa7a1b31ea2182a4e6d14a405f306941a03f81406a3be",
+      "positive": false
+    },
+    "N-ended-original.nl": {
+      "bytes": 4842,
+      "sha256": "8f8612f76ee39ea2f6dcd0b6593749343eaae27db6988d28c84f1bcb4ecb4bc5",
+      "positive": false
+    },
+    "N-escaped-ref.nl": {
+      "bytes": 4724,
+      "sha256": "57b88e25148521c8f1f4228870cc69c3e63c86a8e73dc888a95cf70b81a62a33",
+      "positive": false
+    },
+    "N-no-T.nl": {
+      "bytes": 4615,
+      "sha256": "52042c615c60e12a000573a846e80f2c2a2991da7e37763dfa87efb40affe0b5",
+      "positive": false
+    },
+    "N-write-base.nl": {
+      "bytes": 4669,
+      "sha256": "760346c678d4ed77148b11a53dee37bc08e4a5ef11ec005da06291f0bc97b553",
+      "positive": false
+    },
+    "N-wrong-domain.nl": {
+      "bytes": 4673,
+      "sha256": "82b1d8e1821be985001baa0b6ee66a157cc2421e7387a10ad6ccd9bbe0e1158d",
+      "positive": false
+    },
+    "P-renamed-credit.nl": {
+      "bytes": 4725,
+      "sha256": "f51db46fe05df3dcc1aab8931e87ef9bb85ed7e01e28de13e95022c6f57fc9c6",
+      "positive": true,
+      "byte": 43
+    },
+    "P-template-copy.nl": {
+      "bytes": 4668,
+      "sha256": "cbafd2bc9cb6a3bf7cfeb6be2aa8fa18eeaae74be617f931fb1d583f44701424",
+      "positive": true,
+      "byte": 181
+    }
+  },
+  "positive_flow": "actual template original u8 field load -> sampled_quota -> retained_quota -> pending_quota -> distinct pending original initializer; typed declaration index1, actual own D/read-ref; no T original or link-derived target",
+  "guest": "0/1/2 successes: frees/finalize0/1/2, scalar-read and three Copy bindings only for2, link None->Some(real pending ptr)->None, pending then template release, same original carriers",
+  "negative": "semantic/source rejection, no C bytes, named inode/mtime/size/content untouched; no native for negatives",
+  "owned": "actual normal function-unit registration and main CHECK; canonical owner/origin + existing sealed-result validation; readonly field/current/loan, distinct old/Copy package; cloned same-bits world, short node allocation, modified evidence reject; A un-restored foreign B arm destruction preserves B",
+  "oom": "fresh per-bin allocator census; all emitter ordinals, CHECK first/last64/even128/each first reached allocator site; fired must return actual OOM, context header unchanged on CHECK failure, retry same input succeeds; no claim of exhaustive CHECK ordinal testing",
+  "not_covered": "no one-hop/Some-arm T bridge, writable H scalar, arbitrary heap/CFG/API/ABI, general soundness or Product GO; no serialized proof loader is provided",
+  "prior_evidence": "Stage0 and preparation v2/v3/v4 + original FIRST/RED held outside this tree; these are new Stage1 tests, not retroactive green or new historical SHA generations"
+}

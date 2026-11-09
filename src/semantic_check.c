@@ -48,6 +48,7 @@ typedef struct Check {
     size_t *body_budget;   /* borrowed counter for this synchronous body walk */
     bool in_function_body, definition, terminated, in_source_loan;
     bool capture_copy_body; /* actual supported u8 call, not definition */
+    bool *scalar_h_read;    /* borrowed synchronous enclosing body CHECK */
     NLTypeId function_result;
     size_t function_binding_floor, function_scope_floor, function_place_floor;
     size_t function_value_prefix;
@@ -722,15 +723,15 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
     return parameter_match(check, id, expected);
 }
 
-static bool ref_field_selection(Check *, const NLSyntaxView *, NLCheckedField *,
-                                NLValueId *);
+static bool ref_field_selection(Check *, const NLSyntaxView *, bool,
+                                NLCheckedField *, NLValueId *);
 static NLTypeId write_parameter(Check *check, const NLSyntaxNode *syntax)
 {
     const NLSyntaxView *const node = nl_syntax_node_view(syntax);
     if (check->allocated_slice && node->kind == NL_SYNTAX_FIELD_DESIGNATOR) {
         NLCheckedField field;
         NLValueId parent;
-        if (!ref_field_selection(check, node, &field, &parent))
+        if (!ref_field_selection(check, node, false, &field, &parent))
             return 0;
         return compound(check, NL_TYPE_REF, field.type, NL_ACCESS_WRITE, false,
                         node->span);
@@ -2225,8 +2226,28 @@ static bool fixed_selection(Check *check, const NLSyntaxView *s,
  * a C offset. The current fixed-child place is its incarnation-specific site.
  * A ref base is selected before its field label and remains a separate route
  * from a lexical value read. No ptr, implicit dereference or mode promotion. */
+/* Draft17.35 selects only the already registered one-link H + two-u8 T
+ * unit. This is a source-category check, not a new root or read authority. */
+static bool scalar_h_source(const NLSemanticContext *c, NLTypeId h)
+{
+    if (!nl_recursive_local_type(c, h) || c->types[h - 1].view.field_count != 2)
+        return false;
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    size_t count = 0;
+    for (size_t i = 0; i < c->type_count; ++i) {
+        const NLTypeEntry *t = &c->types[i];
+        if (t->view.kind == NL_TYPE_NOMINAL && !t->incomplete &&
+            !t->recursive_header && t->view.field_count == 2 &&
+            t->view.is_copy && t->view.is_discardable &&
+            t->field_types[0] == u8 && t->field_types[1] == u8)
+            ++count;
+    }
+    return count == 1;
+}
+
 static bool ref_field_selection(Check *check, const NLSyntaxView *s,
-                                NLCheckedField *out, NLValueId *parent)
+                                bool scalar_read, NLCheckedField *out,
+                                NLValueId *parent)
 {
     NLSemanticContext *c = check->context;
     const NLSymbolId symbol = available(check, s->data.field_designator.base);
@@ -2263,6 +2284,13 @@ static bool ref_field_selection(Check *check, const NLSyntaxView *s,
         if (equal_name(check, s->data.field_designator.field,
                        c->types[t.target - 1].field_names[i]))
             index = i;
+    /* The exception is an operand of read only. In particular field_read
+     * must not expose a naked scalar ref, nor weaken ref<write,H> here. */
+    if (index == p.fixed_field_count && scalar_read &&
+        t.access == NL_ACCESS_READ && scalar_h_source(c, t.target) &&
+        equal_name(check, s->data.field_designator.field,
+                   c->types[t.target - 1].field_names[1]))
+        index = 1;
     if (index == p.fixed_field_count) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
              "HEAP-LINK-FIELD-PROFILE",
@@ -2295,12 +2323,13 @@ static bool ref_field_selection(Check *check, const NLSyntaxView *s,
     return true;
 }
 
-static NLCheckedNodeId field_ref(Check *check, const NLSyntaxView *s)
+static NLCheckedNodeId field_ref(Check *check, const NLSyntaxView *s,
+                                 bool scalar_read)
 {
     NLSemanticContext *c = check->context;
     NLCheckedField field;
     NLValueId parent;
-    if (!ref_field_selection(check, s, &field, &parent) ||
+    if (!ref_field_selection(check, s, scalar_read, &field, &parent) ||
         conflicts(check, field.child, false, false, parent, s->span))
         return 0;
     /* Copy exactly the parent's dependency evidence. Fixed projection changes
@@ -2350,7 +2379,7 @@ static NLCheckedNodeId link_read(Check *check, const NLSyntaxView *s)
              "HEAP-LINK-READ-PROFILE", "read requires the bounded ref@link");
         return 0;
     }
-    const NLCheckedNodeId projected = field_ref(check, operand);
+    const NLCheckedNodeId projected = field_ref(check, operand, true);
     if (projected == 0)
         return 0;
     const NLCheckedNodeView ref = *view(check, projected);
@@ -2363,15 +2392,20 @@ static NLCheckedNodeId link_read(Check *check, const NLSyntaxView *s)
     if (!host(check, nl_sem_copy_value(c, ref.field.old_value, &copy), s->span))
         return 0;
     end_temporary(check, ref.results[0].value);
-    return add(check, (NLCheckedNodeView){.kind = NL_CHECKED_LINK_READ,
-                                          .span = s->span,
-                                          .type = ref.field.type,
-                                          .first_argument = projected,
-                                          .argument_count = 1,
-                                          .field = ref.field,
-                                          .value_use = NL_VALUE_COPIED,
-                                          .result_count = 1,
-                                          .results = {{ref.field.type, copy}}});
+    const NLCheckedNodeId id =
+        add(check, (NLCheckedNodeView){.kind = NL_CHECKED_LINK_READ,
+                                       .span = s->span,
+                                       .type = ref.field.type,
+                                       .first_argument = projected,
+                                       .argument_count = 1,
+                                       .field = ref.field,
+                                       .value_use = NL_VALUE_COPIED,
+                                       .result_count = 1,
+                                       .results = {{ref.field.type, copy}}});
+    if (id && ref.field.type == nl_semantic_core_type(c, NL_TYPE_U8) &&
+        check->scalar_h_read)
+        *check->scalar_h_read = true;
+    return id;
 }
 
 static NLCheckedNodeId field_read(Check *check, const NLSyntaxView *s)
@@ -2380,7 +2414,7 @@ static NLCheckedNodeId field_read(Check *check, const NLSyntaxView *s)
     const NLSymbolId base = field_binding(check, s->data.field_designator.base);
     if (check->allocated_slice && base != 0 &&
         c->types[c->bindings[base - 1].view.type - 1].view.kind == NL_TYPE_REF)
-        return field_ref(check, s);
+        return field_ref(check, s, false);
     NLCheckedField evidence;
     if (!fixed_selection(check, s, NL_ACCESS_READ, &evidence))
         return 0;
@@ -3624,7 +3658,9 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     const size_t binding_floor = c->binding_count, scope_floor = c->scope_count,
                  place_floor = c->place_count;
     const NLSourceSpan call_span = view(caller, call_id)->span;
+    bool scalar_h_read = false;
     Check body = {.caller = caller,
+                  .scalar_h_read = &scalar_h_read,
                   .body_budget = caller->body_budget,
                   .branch_budget = caller->branch_budget,
                   .depth = caller->depth,
@@ -3923,10 +3959,11 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         !function->caller_effects && !function->hidden_dependencies &&
         !function->owner_receiver && !function->owner_producer &&
         !function->custody_recipient;
-    if (predicate_result && !host(&body,
-                                  nl_h_custody_seal_result(
-                                      caller->artifact, body.artifact, call_id),
-                                  call_span))
+    if ((predicate_result || scalar_h_read) &&
+        !host(
+            &body,
+            nl_h_custody_seal_result(caller->artifact, body.artifact, call_id),
+            call_span))
         goto failure;
     nl_h_custody_commit(caller->artifact, body.artifact, NL_CUSTODY_BODY,
                         count);
@@ -8654,6 +8691,7 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
         const NLTypeId payload_type =
             c->types[type - 1].variant_types[variant - 1];
         Check branch = {.source = check->source,
+                        .scalar_h_read = check->scalar_h_read,
                         .origin_root = check->origin_root,
                         .origin_invocation = check->origin_invocation,
                         .origin_call = check->origin_call,
@@ -9754,6 +9792,15 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
 failure:
     nl_semantic_destroy(check.context);
     nl_checked_destroy(check.artifact);
+    /* A nested transactional failure can preserve the exact OOM status
+     * without supplying a callee diagnostic. Keep that resource cause visible
+     * to the ordinary CLI instead of falling back to a semantic rejection. */
+    if (check.status == NL_CHECK_OUT_OF_MEMORY &&
+        check.diagnostic.diagnostic.code == NULL)
+        check.diagnostic = (NLCheckDiagnostic){
+            {NL_DIAG_ERROR, "host", "P3-OUT-OF-MEMORY",
+             "host allocation failed during semantic checking", NULL, NULL, 0},
+            root->span};
     if (diagnostic != NULL) {
         *diagnostic = check.diagnostic;
     }

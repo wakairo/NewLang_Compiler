@@ -1,0 +1,11 @@
+{
+  "issue": 1272,
+  "release": "C344/C348",
+  "predecessor": "named-oom-oracle-v2.json is retained; its prediction of mixed emitter CLI5 was falsified at emit ordinal1",
+  "basis": "unchanged main.c::emit_v0_unit mixed H+T resource path uses report_error(NODE-C-RESOURCE, ..., 1); render_check_failure returns3 for CHECK diagnostics",
+  "expected_CHECK": "actual API NL_CHECK_OUT_OF_MEMORY AND ordinary CLI3 AND host OUT-OF-MEMORY diagnostic",
+  "expected_emitter": "actual API NL_NODE_C_OUT_OF_MEMORY AND ordinary CLI1 AND cli NODE-C-RESOURCE diagnostic",
+  "unchanged": "all measured phase ordinals, named sentinel bytes/inode/mtime, no temporary output, successful same-candidate ordinary CLI retry with exact baseline C bytes",
+  "source_and_primary_oracle": "unchanged",
+  "production_change_for_this_successor": false
+}
