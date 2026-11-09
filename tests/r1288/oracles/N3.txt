@@ -1,0 +1,1 @@
+N3 / PREDICTED REJECT at semantic loan scope exit under Draft17.35 inherited 13.8: escaped_ref is generated loan-local ref<write,u8> with blocking scope dependency; cannot forward result beyond loan_write(left@visible){...}. First gate: CHECK loan result nonescape/scope-exit compatibility. No later T current writes accepted, deeper layers NOT_RUN.
