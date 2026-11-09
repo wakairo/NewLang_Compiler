@@ -1,0 +1,105 @@
+// P1289 C411/C414: genuine old-u8 result survives completed H matches and cleanup.
+struct ReportNode { link: Option<ptr<ReportNode>>, sample: u8 }
+struct DisplayState { current: u8, spare: u8 }
+
+fn accept_sample(destination: ref<write,u8>, incoming: u8) -> u8 {
+    let displaced = replace(destination, incoming);
+    displaced
+}
+fn detach_report(edge: ref<write,Option<ptr<ReportNode>>>, back: ptr<ReportNode>,
+                 allocation: Allocation, domain: LifetimeDomain) -> LiveTail {
+    let unlinked = replace(edge, Option<ptr<ReportNode>>::None);
+    return LiveTail { owned_ptr: back, owned_allocation: allocation,
+                      owned_domain: domain };
+}
+fn release_report(back: ptr<ReportNode>, allocation: Allocation,
+                  domain: LifetimeDomain) -> unit {
+    loan_read(domain) { |held|
+        let live = ref_from_ptr(read, back, held);
+        unit
+    };
+    let empty = loan_exclusive_read(domain) { |ending| destroy(back, ending) };
+    let bytes = erase_slot<ReportNode>(empty);
+    finalize_domain(domain);
+    deallocate(allocation, bytes);
+    unit
+}
+fn main() -> unit {
+    let completed = match try_allocate_one<ReportNode>() {
+        None => { u8(11) },
+        Some(front_packet) => {
+            let OneBacking { allocation, raw } = front_packet;
+            let front_allocation = allocation;
+            let front_slot = into_slot<ReportNode>(raw);
+            let front_domain = lifetime_domain();
+            let front_ptr = loan_read(front_domain) { |initializing|
+                initialize(front_slot,
+                    ReportNode { link: Option<ptr<ReportNode>>::None,
+                                 sample: u8(229) }, initializing)
+            };
+            match try_allocate_one<ReportNode>() {
+                None => {
+                    let empty_front = loan_exclusive_read(front_domain) { |ending|
+                        destroy(front_ptr, ending)
+                    };
+                    let bytes = erase_slot<ReportNode>(empty_front);
+                    finalize_domain(front_domain);
+                    deallocate(front_allocation, bytes);
+                    u8(23)
+                },
+                Some(back_packet) => {
+                    let OneBacking { allocation, raw } = back_packet;
+                    let back_allocation = allocation;
+                    let back_slot = into_slot<ReportNode>(raw);
+                    let back_domain = lifetime_domain();
+                    let back_ptr = loan_read(back_domain) { |initializing|
+                        initialize(back_slot,
+                            ReportNode { link: Option<ptr<ReportNode>>::None,
+                                         sample: u8(173) }, initializing)
+                    };
+                    let prior_link = loan_read(front_domain) { |attaching|
+                        let writer = ref_from_ptr(write, front_ptr, attaching);
+                        replace(writer@link, Option<ptr<ReportNode>>::Some(back_ptr))
+                    };
+                    let observed_link = loan_read(front_domain) { |observing|
+                        let front_reader = ref_from_ptr(read, front_ptr, observing);
+                        read(front_reader@link)
+                    };
+                    let arm_copy = match observed_link {
+                        None => { u8(37) },
+                        Some(selected_back) => {
+                            let observed_byte = loan_read(front_domain) { |reading_back|
+                                let payload_reader = ref_from_ptr(read, selected_back, reading_back);
+                                read(payload_reader@sample)
+                            };
+                            let source_copy = observed_byte;
+                            let record = DisplayState { current: u8(53), spare: u8(197) };
+                            let old_selected = loan_write(record@current) { |writing_record|
+                                accept_sample(writing_record, source_copy)
+                            };
+                            let old_copy = old_selected;
+                            let current_byte = record@current;
+                            let sibling_byte = record@spare;
+                            old_copy
+                        }
+                    };
+                    let LiveTail { owned_ptr, owned_allocation, owned_domain } = loan_read(front_domain) { |detaching|
+                        let writer = ref_from_ptr(write, front_ptr, detaching);
+                        detach_report(writer@link, back_ptr, back_allocation, back_domain)
+                    };
+                    release_report(owned_ptr, owned_allocation, owned_domain);
+                    let empty_front = loan_exclusive_read(front_domain) { |ending|
+                        destroy(front_ptr, ending)
+                    };
+                    let bytes = erase_slot<ReportNode>(empty_front);
+                    finalize_domain(front_domain);
+                    deallocate(front_allocation, bytes);
+                    arm_copy
+                }
+            }
+        }
+    };
+    let result_copy = completed;
+    let continuation_copy = result_copy;
+    unit
+}
