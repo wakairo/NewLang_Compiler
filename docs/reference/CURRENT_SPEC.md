@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_34.md
+NewLang_v0_spec_Draft17_35.md
 ```
 
 Repository policy:
