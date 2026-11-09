@@ -1,4 +1,4 @@
-foreach(target owned oom)
+foreach(target owned oom cli_oom)
     add_executable(p1272_${target} tests/p1272/${target}.c)
     target_include_directories(p1272_${target} PRIVATE src)
     target_compile_options(p1272_${target} PRIVATE -UNDEBUG)
@@ -7,6 +7,9 @@ endforeach()
 target_compile_options(p1272_oom PRIVATE -fno-pie)
 target_link_options(p1272_oom PRIVATE -no-pie
     -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+target_link_options(p1272_cli_oom PRIVATE
+    -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc
+    -Wl,--wrap=nl_semantic_check_expression -Wl,--wrap=nl_checked_c_node)
 add_test(NAME p1272_source_native.integration COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1272/source_native.py"
     "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1272_owned>"
@@ -17,5 +20,11 @@ add_test(NAME p1272_oom.unit COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1272/oom_gate.py"
     "$<TARGET_FILE:p1272_oom>" "${CMAKE_CURRENT_BINARY_DIR}/p1272-oom")
 set_tests_properties(p1272_oom.unit PROPERTIES RUN_SERIAL TRUE)
+add_test(NAME p1272_named_oom.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1272/named_oom.py"
+    "$<TARGET_FILE:p1272_cli_oom>" "$<TARGET_FILE:newlangc>"
+    "${CMAKE_CURRENT_BINARY_DIR}/p1272-named-oom")
+set_tests_properties(p1272_named_oom.integration PROPERTIES RUN_SERIAL TRUE)
 cmake_language(DEFER CALL set_tests_properties p1272_source_native.integration PROPERTIES TIMEOUT 180)
 cmake_language(DEFER CALL set_tests_properties p1272_oom.unit PROPERTIES TIMEOUT 300)
+cmake_language(DEFER CALL set_tests_properties p1272_named_oom.integration PROPERTIES TIMEOUT 300)

@@ -1,0 +1,11 @@
+{
+  "issue": 1272,
+  "release": "C344/C348",
+  "coverage": "additional named-output core OOM coverage; prior source/oracle/FIRST unchanged",
+  "source": "P-template-copy.nl",
+  "source_sha256": "cbafd2bc9cb6a3bf7cfeb6be2aa8fa18eeaae74be617f931fb1d583f44701424",
+  "normal_entry": "real main.c --emit-c17-to, no experimental compiler option",
+  "inject": "only within actual nl_semantic_check_expression or nl_checked_c_node call, fresh phase census; all measured ordinals",
+  "expected": "fired allocation failure produces CLI status5; sentinel bytes/inode/mtime unchanged, no partial temp; ordinary same-candidate retry succeeds with baseline bytes",
+  "native": "no generated C execution in this apparatus"
+}
