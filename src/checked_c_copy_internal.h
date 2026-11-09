@@ -77,14 +77,21 @@ static bool copy_call_proof(Emit *e, const NLCheckedFragment *f,
 static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
                             size_t depth)
 {
-    if (!body || depth > 2)
+    if (!body || depth > 3)
         return reject(e);
     for (size_t id = 1; id <= nl_checked_node_count(body); ++id) {
         const NLCheckedNodeView *node = nl_checked_node_view(body, id);
         if (node && node->kind == NL_CHECKED_MATCH && node->item_count == 2) {
             const NLCheckedNodeView *trial =
                 nl_checked_node_view(body, node->initializer);
-            if (trial && trial->kind == NL_CHECKED_TRY_ALLOCATE_ONE) {
+            const bool linked = e->scalar_issued && depth == 2 && trial &&
+                                trial->type == e->option &&
+                                !node->borrowed_match && !node->terminates &&
+                                node->type == e->unit && !node->result_count &&
+                                node->normal_frame_unchanged &&
+                                node->normal_arms == 2;
+            if (trial &&
+                (trial->kind == NL_CHECKED_TRY_ALLOCATE_ONE || linked)) {
                 for (size_t arm = 0; arm < 2; ++arm) {
                     const NLCheckedFragment *a =
                         nl_checked_match_arm(body, id, arm);
@@ -261,7 +268,8 @@ static bool copy_prepare(Emit *e, const NLCheckedFragment *body)
  * All fields still use that fragment's entry/handoff identities. */
 /* Authenticate an earlier constructor through the completed caller seal and
  * an exact forward, H-effect-free prefix, not a future producer receipt. */
-static bool copy_pre_h(Emit *e, const Env *q, const NLSemanticContext *entry)
+static bool copy_live_h(Emit *e, const Env *q, const NLSemanticContext *entry,
+                        const NLCheckedField *attached)
 {
     if (!q || q->region_slot > 1 || !q->backing || !q->heap_symbol ||
         q->stability_scope || q->stability_domain || q->stability_place)
@@ -332,8 +340,14 @@ static bool copy_pre_h(Emit *e, const Env *q, const NLSemanticContext *entry)
         aggregate->result_count != 1 ||
         !nl_semantic_value_view(nl_checked_context(q->artifact),
                                 aggregate->results[0].value, &born) ||
-        born.field_count != 2 ||
-        memcmp(born.fields, value.fields, 2 * sizeof(*born.fields)))
+        born.field_count != 2 || born.fields[1] != value.fields[1] ||
+        (!attached && born.fields[0] != value.fields[0]) ||
+        (attached && (attached->parent != q->heap_place ||
+                      attached->parent_incarnation != root.incarnation ||
+                      attached->child != root.fixed_fields[0] ||
+                      attached->old_value != born.fields[0] ||
+                      attached->new_value != value.fields[0] ||
+                      attached->parent_post_fact != root.current_fact)))
         return false;
     for (size_t i = 0; i < 2; ++i) {
         NLSemanticPlaceView child;
@@ -344,8 +358,13 @@ static bool copy_pre_h(Emit *e, const Env *q, const NLSemanticContext *entry)
             child.parent_field_index != i || !child.current_fact ||
             child.current_value != value.fields[i] ||
             !nl_semantic_value_view(entry, child.current_value, &current) ||
-            (i == 0 && (current.variant != 1 || current.sum_payload ||
-                        child.payload_occurrence)))
+            (i == 0 &&
+             (attached ? (current.variant != 2 || !current.sum_payload ||
+                          child.current_fact != attached->child_post_fact ||
+                          child.payload_occurrence !=
+                              attached->post_payload_occurrence)
+                       : (current.variant != 1 || current.sum_payload ||
+                          child.payload_occurrence))))
             return false;
     }
     size_t allocations = 0, domains = 0;
@@ -367,6 +386,58 @@ static bool copy_pre_h(Emit *e, const Env *q, const NLSemanticContext *entry)
             return false;
     }
     return allocations == 1 && domains == 1;
+}
+static bool copy_pre_h(Emit *e, const Env *q, const NLSemanticContext *entry)
+{
+    return copy_live_h(e, q, entry, NULL);
+}
+/* This is an observation of the actual call-entry world between one committed
+ * attach/read and its later detach. It cannot manufacture a pre-H world or
+ * promote a Some pointer to ownership. Both still-live originals retain their
+ * real Allocation/Domain; the existing public call proof authenticates entry,
+ * handoff and the exact arm-local T. No state is shared with a sibling arm. */
+static bool copy_linked_world(Emit *e, const Env *env)
+{
+    if (!env || env->artifact != e->copy_issuer || !e->copy_anchor ||
+        !e->scalar_issued || !e->two_heap || !e->live_tail || e->custody ||
+        e->allocations != 2 || e->producer_calls || e->owner_calls ||
+        e->pending_live || e->link_updates != 1 || e->reads != 1 ||
+        e->projections != 2 || e->reloans != 2 || e->copy_expected_calls != 1 ||
+        e->copy_calls > 1 || !e->initial_attach || !e->attach_issuer ||
+        e->initial_attach->kind != NL_CHECKED_REPLACE ||
+        e->initial_attach->type != e->option ||
+        !nl_h_origin_validate(e->origin_root))
+        return false;
+    const Env *original[2] = {NULL, NULL};
+    for (const Env *q = env; q; q = q->parent)
+        if (q->heap_place && q->region_slot < 2 &&
+            domain_heap(env, q->heap_domain) == q && !original[q->region_slot])
+            original[q->region_slot] = q;
+    const Env *head = original[0], *back = original[1];
+    const NLCheckedField *f = &e->initial_attach->field;
+    if (!head || !back || head->backing == back->backing ||
+        head->heap_place == back->heap_place ||
+        head->heap_domain == back->heap_domain ||
+        e->attach_issuer != back->artifact || !f->present ||
+        !f->dependency_compatible || f->nominal != e->node ||
+        f->type != e->option || f->index != 0 || f->access != NL_ACCESS_WRITE ||
+        !f->parent_post_fact || !f->child_post_fact ||
+        !f->post_payload_occurrence || f->parent_post_fact != e->root_fact ||
+        f->child_post_fact != e->link_fact || f->new_value != e->link_value ||
+        f->post_payload_occurrence != e->occurrence ||
+        !copy_live_h(e, head, e->copy_anchor, f) ||
+        !copy_live_h(e, back, e->copy_anchor, NULL))
+        return false;
+    NLSemanticValueView link, pointer;
+    return nl_semantic_value_view(e->copy_anchor, f->new_value, &link) &&
+           link.type == e->option && link.variant == 2 && link.sum_payload &&
+           nl_semantic_value_view(e->copy_anchor, link.sum_payload, &pointer) &&
+           pointer.type == e->ptr && !pointer.reference_count &&
+           pointer.reference.place == back->heap_place &&
+           pointer.reference.incarnation == back->heap_incarnation &&
+           !pointer.reference.scope &&
+           pointer.reference.provenance == NL_PROVENANCE_VALID &&
+           pointer.reference.readable && pointer.reference.writable;
 }
 static bool copy_pre_constructor(Emit *e, const Env *env,
                                  NLCheckedNodeId binding, NLPlaceId *place,
@@ -679,7 +750,7 @@ static bool copy_carrier_world(Emit *e, const Env *env)
             (e->allocations == 2 && e->producer_calls == 1 &&
              e->owner_calls == 0) ||
             copy_post_world(e, env) || copy_pre_world(e, env) ||
-            copy_closed_world(e, env));
+            copy_linked_world(e, env) || copy_closed_world(e, env));
 }
 static bool copy_bind(Emit *e, Env *env, Local *l, NLCheckedNodeId constructor)
 {
