@@ -69,11 +69,11 @@ physical_current_post_prepare(NLPhysicalCurrent *p, NLCheckedNodeId id,
     if (!nl_checked_copy_body_view(p->body, post.call, &view) ||
         !nl_checked_copy_body_parameters(p->body, post.call, &post.parameters))
         return invalid;
-    NLCheckStatus status =
-        nl_checked_copy_body_validate(p->body, post.call, &view);
-    if (status == NL_CHECK_OK)
-        status = nl_checked_copy_body_parameters_validate(p->body, post.call,
-                                                          &post.parameters);
+    /* This validator authenticates the issued substitution and invokes the
+     * full body validator itself. A second replay of that same body would
+     * duplicate scratch clones, without authenticating another obligation. */
+    const NLCheckStatus status = nl_checked_copy_body_parameters_validate(
+        p->body, post.call, &post.parameters);
     if (status != NL_CHECK_OK)
         return status;
     const NLCopyBodyParameters *actual = &post.parameters;
