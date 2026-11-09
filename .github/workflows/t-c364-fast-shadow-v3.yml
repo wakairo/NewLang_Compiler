@@ -1,0 +1,105 @@
+# C364 V3 ONE COHORT. DRAFT NEVERMERGE. Non-required observer only.
+name: T C364 V3 fast regression shadow (NON-REQUIRED)
+
+on:
+  pull_request:
+    types: [opened]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  fast-shadow:
+    if: github.event.pull_request.head.ref == 't/c364-fast-shadow-v3' && github.event.pull_request.head.repo.full_name == github.repository
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: T C364 V3 FAST ASan (NON-REQUIRED)
+            sanitizer: address
+          - name: T C364 V3 FAST UBSan (NON-REQUIRED)
+            sanitizer: undefined
+    env:
+      CC: clang-23
+      CFLAGS: -Wno-error=gcc-install-dir-libstdcxx
+      SAN: ${{ matrix.sanitizer }}
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Checkout the same immutable synthetic merge as ordinary full
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Bind exact base, branch head, checkout parents and T-only diff
+        run: python3 tests/tooling/c364_shadow_v3.py verify-event --output "$RUNNER_TEMP/c364-v3-$SAN"
+
+      - name: Reject stale identities, skips and incomplete test results offline
+        run: python3 tests/tooling/c364_shadow_v3.py selfcheck
+
+      - name: Host prerequisites from signed Ubuntu repositories
+        run: |
+          set -euo pipefail
+          echo "T757 Stage A1: preinstalled tools before signed apt"
+          echo "T757 ImageOS=${ImageOS:-unset} ImageVersion=${ImageVersion:-unset} PATH=$PATH"
+          for tool in cmake gcc-13 g++-13 make python3 zstd; do
+            echo "T757 tool $tool=$(command -v "$tool")"
+          done
+          cmake_before=$(command -v cmake)
+          cmake_version=$(cmake --version | sed -n '1s/^cmake version //p')
+          echo "T757 cmake_before=$cmake_before version=$cmake_version"
+          python3 - "$cmake_version" <<'PY'
+          import re
+          import sys
+          match = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", sys.argv[1])
+          if not match:
+              sys.exit("STOP: unknown preinstalled CMake version")
+          major, minor, patch = map(int, match.groups())
+          if not ((3, 28) <= (major, minor) < (4, 0)):
+              sys.exit("STOP: preinstalled CMake outside project policy [3.28,4.0)")
+          PY
+          for pkg in gcc-13 g++-13 make python3 zstd libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev; do
+            dpkg-query -W -f='${binary:Package}=${Status} ${Version}\n' "$pkg" || true
+          done
+          apt_started=$(date +%s)
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            gcc-13 g++-13 make python3 zstd \
+            libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev
+          echo "T757 A1 apt_seconds=$(( $(date +%s) - apt_started ))"
+          test "$(command -v cmake)" = "$cmake_before"
+          echo "T757 cmake_after=$(command -v cmake) version=$(cmake --version | sed -n '1s/^cmake version //p')"
+          test "$(cmake --version | sed -n '1s/^cmake version //p')" = "$cmake_version"
+      - name: Restore untrusted fixed-SHA curated SDK archive cache
+        id: sdk-cache
+        uses: actions/cache/restore@3edfce9056124e459a23f683a21433670d47daca
+        with:
+          path: .deps/downloads/newlang-llvm-23.1.3-linux-x64-final.tar.zst
+          key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+      - name: Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release)
+        run: python3 scripts/bootstrap.py
+
+
+      - name: Build unchanged full configuration and measure frozen baseline81
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          python3 tests/tooling/c364_shadow_v3.py run \
+            --build "$GITHUB_WORKSPACE/build-c364-v3" \
+            --output "$RUNNER_TEMP/c364-v3-$SAN" --sanitizer "$SAN"
+
+      - name: Preserve first raw as data only (never an admission status)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: c364-v3-${{ matrix.sanitizer }}-${{ github.sha }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/c364-v3-${{ matrix.sanitizer }}/
+          if-no-files-found: error
+          retention-days: 7
+
