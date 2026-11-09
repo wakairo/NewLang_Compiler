@@ -94,6 +94,8 @@ static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
             }
         }
         NLCopyBodyParameters p;
+        if (physical_current_post_call(e->current, body, id))
+            continue; /* Already authenticated by the finite current plan. */
         if (!nl_checked_copy_body_parameters(body, id, &p))
             continue;
         if (!e->two_heap || !e->live_tail || !copy_call_proof(e, body, id, &p))

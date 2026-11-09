@@ -92,6 +92,8 @@ typedef struct {
     const NLCheckedFragment *origin_root;
     const NLPhysicalCurrent *current; /* authenticated, synchronous borrow */
     bool current_h_closed, current_emitted;
+    const NLSemanticContext *current_world;
+    size_t current_post_used;
     const NLCheckedFragment *copy_issuer;
     const NLSemanticContext *copy_anchor;
     /* One main MATCH scheduled by source order; completed only after both
@@ -427,7 +429,8 @@ static bool same_reference(NLReferenceFacts a, NLReferenceFacts b)
 }
 static bool terminal_role_lane(const Emit *e)
 {
-    return e->copy_type && e->live_tail && e->no_pre_read && !e->custody;
+    return (e->copy_type || (e->current && e->current->post_count)) &&
+           e->live_tail && e->no_pre_read && !e->custody;
 }
 
 /* The same source-issued producer original licenses the optional caller read
@@ -1743,7 +1746,10 @@ static bool no_read_entry(Emit *e, Env *env, const NLCheckedNodeView *ref)
             continue;
         NLProducerLocalReturnView local_return;
         if (found ||
-            (e->copy_after_match
+            /* The current plan also keeps T in main across this H fork.
+             * Reuse the full producer validator for its direct RETURN;
+             * the optional whole-local RETURN witness is not required. */
+            ((e->copy_after_match || (e->current && e->current->post_count))
                  ? !producer_status(e, nl_producer_validate(f, i, true))
                  : (!nl_checked_producer_local_return_view(f, i,
                                                            &local_return) ||
@@ -2300,7 +2306,8 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
     NLProducerLocalReturnView local_return = {0};
     const bool local_result = body->item_count == 3;
     if (e->no_pre_read &&
-        ((!e->copy_after_match && !local_result) ||
+        ((!e->copy_after_match && !(e->current && e->current->post_count) &&
+          !local_result) ||
          e->no_read_issuer != env->artifact || e->no_read_call != id))
         return reject(e);
     if (local_result &&
@@ -3369,18 +3376,14 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             }
         }
     }
-    if (!copy_prepare(&e, body)) {
-        free(e.text);
-        return e.status;
-    }
     NLPhysicalCurrent current = {0};
     for (NLCheckedNodeId id = 1; id <= nl_checked_node_count(body); ++id) {
         const NLCheckedNodeView *op = nl_checked_node_view(body, id);
         if (op->kind != NL_CHECKED_LOOP)
             continue;
         const NLCheckStatus status = physical_current_prepare(body, &current);
-        if (status != NL_CHECK_OK || e.copy_type || !e.allocated ||
-            !e.two_heap || !e.live_tail || e.custody) {
+        if (status != NL_CHECK_OK || !e.allocated || !e.two_heap ||
+            !e.live_tail || e.custody) {
             free(e.text);
             return status == NL_CHECK_OUT_OF_MEMORY ? NL_NODE_C_OUT_OF_MEMORY
                    : status == NL_CHECK_RESOURCE_LIMIT
@@ -3389,6 +3392,16 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         }
         e.current = &current;
         break;
+    }
+    if (!copy_prepare(&e, body)) {
+        free(e.text);
+        return e.status;
+    }
+    /* Only the exact calls authenticated by the current plan bypass the
+     * independent Copy lane. Other mixed stateful calls still fail closed. */
+    if (e.current && e.copy_type) {
+        free(e.text);
+        return NL_NODE_C_UNSUPPORTED;
     }
     if (e.copy_after_match)
         env.unit_function_body = get(&env, nl_checked_root(body));
@@ -3537,7 +3550,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     (void)put(&e, "int main(void) {\n");
     Value result = {0};
     if (!block(&e, &env, nl_checked_root(body), &result) || e.pending_live ||
-        (e.current && (!e.current_h_closed || !e.current_emitted)) ||
+        (e.current && (!e.current_h_closed || !e.current_emitted ||
+                       e.current_post_used != e.current->post_count)) ||
         e.roots != (e.three_lexical_links ? 3u : 2u) || result.type != e.unit ||
         (e.copy_type && (!e.copy_roots || e.copy_roots > 2 ||
                          e.copy_calls != e.copy_expected_calls)) ||

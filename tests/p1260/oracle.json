@@ -1,0 +1,201 @@
+{
+  "issue": 1260,
+  "release": "C314",
+  "main": "2fe9b47f07fdf9c1a7982f9ee8e610000a25c94b",
+  "canonical": "Draft17.34",
+  "version": 1,
+  "old_P1259_source_oracle_FIRST": "unchanged, A exact original bytes; prospective sources B/U/N separately frozen before implementation/execution",
+  "scope": "one same original two-u8 T, computed Continue and old-u8 BREAK, then up to two scoped ordinary known Copy-call writes; actual/formal/result/event proof and current frame chain required; no new issuer/world/ABI/general CFG",
+  "cases": {
+    "A-original-refresh-with-history.nl": {
+      "bytes": 4481,
+      "SHA256": "28e5e873f700b385b20d186a4ada1166cd49679132a1ede8b9f4ad7a12beed4d",
+      "CHECK_target": 0,
+      "C17_target": 0,
+      "initial_T": [
+        23,
+        164
+      ],
+      "loop_field": 0,
+      "loop_phases": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "loop_old": [
+        23,
+        41,
+        88,
+        88
+      ],
+      "loop_new": [
+        41,
+        88,
+        88,
+        197
+      ],
+      "BREAK_old": 88,
+      "caller_Copy": 88,
+      "after_loop": [
+        197,
+        164
+      ],
+      "post_fields": [
+        1
+      ],
+      "post_old": [
+        164
+      ],
+      "post_new": [
+        88
+      ],
+      "final_T": [
+        197,
+        88
+      ],
+      "post_result_bindings": {
+        "former_history": 164
+      },
+      "same_bits_distinct_package": false,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_frees_domains_finalized": [
+        0,
+        1,
+        2
+      ],
+      "same_physical_original": true,
+      "closed_loan_each_scope": true,
+      "old_result_origin": "actual old package; bits never authority"
+    },
+    "B-second-field-restore-known-return.nl": {
+      "bytes": 4628,
+      "SHA256": "be496acce44da2712f7206e9e06565f2f44c62f7464c35d3b5a6b8006b096b47",
+      "CHECK_target": 0,
+      "C17_target": 0,
+      "initial_T": [
+        151,
+        31
+      ],
+      "loop_field": 1,
+      "loop_phases": [
+        0,
+        1,
+        2
+      ],
+      "loop_old": [
+        31,
+        137,
+        219
+      ],
+      "loop_new": [
+        137,
+        219,
+        151
+      ],
+      "BREAK_old": 219,
+      "caller_Copy": 219,
+      "after_loop": [
+        151,
+        151
+      ],
+      "post_fields": [
+        0,
+        1
+      ],
+      "post_old": [
+        151,
+        151
+      ],
+      "post_new": [
+        219,
+        151
+      ],
+      "final_T": [
+        219,
+        151
+      ],
+      "post_result_bindings": {
+        "former_history": 151,
+        "replaced_policy": 151,
+        "replaced_policy_copy": 151
+      },
+      "same_bits_distinct_package": true,
+      "H_quotas": [
+        0,
+        1,
+        2
+      ],
+      "H_attempts": [
+        1,
+        2,
+        2
+      ],
+      "H_frees_domains_finalized": [
+        0,
+        1,
+        2
+      ],
+      "same_physical_original": true,
+      "closed_loan_each_scope": true,
+      "old_result_origin": "actual old package; bits never authority"
+    },
+    "N-read-only-history.nl": {
+      "bytes": 4480,
+      "SHA256": "d5cf323519ab1ff714ab06b6da0896f44acc818098c946485022b64f6de5a221",
+      "CHECK_target": 3,
+      "C17_target": 3,
+      "classification": "language-invalid read/write argument contract, affine cleanup or scoped-ref nonescape; no native"
+    },
+    "N-abandoned-first-backing.nl": {
+      "bytes": 4421,
+      "SHA256": "a4806ac41d5fc61ba066de2a8f2a6cc87ee963b2c2edd90c9d636cf81d7ab7b8",
+      "CHECK_target": 3,
+      "C17_target": 3,
+      "classification": "language-invalid read/write argument contract, affine cleanup or scoped-ref nonescape; no native"
+    },
+    "U-call-returns-incoming.nl": {
+      "bytes": 4476,
+      "SHA256": "64958b35dfb8c2d7986507965beb7e4576439e5efa510be7af03fae2b183eaab",
+      "CHECK_target": 0,
+      "C17_target": 4,
+      "classification": "canonical legal returned-incoming helper is outside old-result bridge; fail-closed unsupported, no native"
+    },
+    "N-escaping-post-loop-loan.nl": {
+      "bytes": 4453,
+      "SHA256": "96ce3ffbfdae52751a715032cdbb2d8d48096135503d7b6625a700ed764bea31",
+      "CHECK_target": 3,
+      "C17_target": 3,
+      "classification": "language-invalid read/write argument contract, affine cleanup or scoped-ref nonescape; no native"
+    }
+  },
+  "host_negatives_before_first_execution": [
+    "foreign genuine A/B same numeric IDs/known bits; wrong root/caller/world/body and A destroyed unrestored then B valid/destructible",
+    "wrong field/incarnation/Break target/result; incoming substituted for actual old; active/wrong/escaping loan",
+    "NULL functions/out-of-bounds function index/count; short foreign current signature allocation only after static safety preflight",
+    "forged public Copy parameter/event observation (foreign entry/handoff, field, loan, actual/formal or result), require validator refusal before authority use"
+  ],
+  "native_protocol": "First compile/run unmodified generated guest GCC/Clang C17 O0/O2; only then passive observers with original T live addresses and typed old/new/current/sibling, Source order and H0/1/2",
+  "OOM_protocol": "Original strict P1236/P1227 status/out/root/rollback/retry/named-no-clobber oracle unchanged; fresh reached allocation census and finite selection frozen before injections; record actual function/PC/ordinal, preserve FIRST failures",
+  "final_tree_protocol": "pin one final Git tree before mandatory GCC Release full and focused Clang/ASan/UBSan; no source changes during execution; existing tests/oracles unchanged; no historical SHA generations",
+  "CI_budget": {
+    "Draft_PR_max": 1,
+    "natural_6job_cohorts_max": 2,
+    "total_jobs_max": 12,
+    "manual": 0,
+    "first_reliable_all_green": "stop further push/CI"
+  },
+  "VALUE_ALIGNMENT_RISK": "new normal user operation and reusable backend capability; general soundness, systematic performance and user UB audit/re-audit locality unmeasured",
+  "frozen_UTC": "2026-11-09T00:42:10.429264+00:00",
+  "source_execution_count": 0,
+  "production_changes_before_freeze": 0
+}

@@ -2,6 +2,7 @@
 #define NEWLANG_CHECKED_C_CURRENT_INTERNAL_H
 
 #include "copy_body_internal.h"
+#include "copy_old_result_internal.h"
 #include "linear_break_internal.h"
 
 /* A synchronous borrow of existing CHECK evidence, not a new issuer, world,
@@ -15,6 +16,12 @@ typedef struct {
 } NLPhysicalHelper;
 
 typedef struct {
+    NLCheckedNodeId loan, call;
+    NLCopyBodyParameters parameters;
+    const NLSemanticContext *before;
+} NLPhysicalPostCall;
+
+typedef struct {
     const NLCheckedFragment *body;
     NLCheckedNodeId loop, constructor, binding, heap_match;
     NLLinearBreakView loop_view;
@@ -22,6 +29,8 @@ typedef struct {
     NLTypeId quantity;
     NLSymbolId result;
     bool original_before_heap;
+    NLPhysicalPostCall post[2];
+    size_t post_count;
 } NLPhysicalCurrent;
 
 static bool physical_current_literal(const NLCheckedFragment *f,
@@ -94,6 +103,8 @@ static bool physical_current_world(const NLSemanticContext *world,
            root.incarnation == p->incarnation && root.fixed_field_count == 2 &&
            p->index < 2 && root.fixed_fields[p->index] == p->child;
 }
+
+#include "checked_c_current_post_internal.h"
 
 static bool physical_current_constructor(const NLPhysicalCurrent *p)
 {
@@ -231,6 +242,7 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
         root->result_count || !root->tail)
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     size_t count = 0;
+    const NLSemanticContext *cursor = p.loop_view.post_world;
     for (NLCheckedNodeId id = root->first_item; id;) {
         const NLCheckedNodeView *n = nl_checked_node_view(body, id);
         const NLCheckedNodeView *init =
@@ -272,6 +284,14 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
                     return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
                 p.binding = id;
                 p.result = n->symbol;
+            } else if (init->kind == NL_CHECKED_LOAN_HEADER) {
+                if (!p.binding)
+                    return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+                const NLCheckStatus status =
+                    physical_current_post_prepare(&p, n->initializer, cursor);
+                if (status != NL_CHECK_OK)
+                    return status;
+                cursor = p.post[p.post_count - 1].parameters.handoff;
             } else if ((init->type != p.quantity &&
                         init->type !=
                             nl_semantic_core_type(p.loop_view.entry_world,
