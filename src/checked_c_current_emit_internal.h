@@ -105,15 +105,17 @@ static bool physical_current_field(Emit *e, Env *env,
     const NLLinearBreakView *p = &e->current->loop_view;
     const Local *original = local(env, p->base, p->nominal);
     const NLCheckedField *f = &n->field;
+    const NLSemanticContext *world =
+        env->artifact == e->current->body ? e->current_world : p->post_world;
     NLSemanticPlaceView root, child;
     if (!original || original->place != p->root ||
         original->incarnation != p->incarnation || !f->present ||
         !f->dependency_compatible || f->nominal != p->nominal ||
         f->parent != p->root || f->parent_incarnation != p->incarnation ||
         f->base != p->base || f->index > 1 || f->access != NL_ACCESS_READ ||
-        !nl_semantic_place_view(p->post_world, p->root, &root) ||
+        !nl_semantic_place_view(world, p->root, &root) ||
         f->child != root.fixed_fields[f->index] ||
-        !nl_semantic_place_view(p->post_world, f->child, &child) ||
+        !nl_semantic_place_view(world, f->child, &child) ||
         f->child_incarnation != child.incarnation)
         return reject(e);
     if (env->artifact == e->current->body &&
@@ -131,9 +133,47 @@ static bool physical_current_field(Emit *e, Env *env,
                original->frame, original->symbol, f->index, out->temp);
 }
 
+static bool physical_current_post(Emit *e, Env *env,
+                                  const NLCheckedNodeView *loan, Value *out,
+                                  size_t depth)
+{
+    const NLPhysicalCurrent *p = e->current;
+    if (env->artifact != p->body || !e->current_emitted ||
+        e->current_post_used >= p->post_count)
+        return reject(e);
+    const NLPhysicalPostCall *post = &p->post[e->current_post_used];
+    const NLCopyBodyParameters *actual = &post->parameters;
+    const Local *original =
+        local(env, p->loop_view.base, p->loop_view.nominal);
+    Value incoming = {0};
+    if (loan != get(env, post->loan) || e->current_world != post->before ||
+        !original || original->place != p->loop_view.root ||
+        original->incarnation != p->loop_view.incarnation ||
+        !physical_current_scalar(e, env, actual->arguments[1], &incoming,
+                                 depth + 1) || incoming.type != e->u8)
+        return reject(e);
+    out->type = e->u8;
+    out->temp = ++e->temp;
+    if (!put(e,
+             "uint8_t nl_v_%zu;\n{\nuint8_t *const nl_current_write="
+             "&nl_b_%zu_%zu.f%zu;\nnl_v_%zu=*nl_current_write;\n"
+             "*nl_current_write=nl_v_%zu;\n"
+             "NL_MIXED_COPY_STORE(nl_current_write,nl_v_%zu,nl_v_%zu);\n}\n",
+             out->temp, original->frame, original->symbol, actual->field.index,
+             out->temp, incoming.temp, out->temp, incoming.temp))
+        return false;
+    /* Only the authenticated original's place states advance. The historical
+     * handoff's active outer loan is never used as a permission to emit. */
+    e->current_world = actual->handoff;
+    ++e->current_post_used;
+    return true;
+}
+
 static bool physical_current_loan(Emit *e, Env *env, const NLCheckedNodeView *n,
                                   Value *out, size_t depth)
 {
+    if (env->artifact == e->current->body)
+        return physical_current_post(e, env, n, out, depth);
     const NLLinearBreakView *p = &e->current->loop_view;
     const Local *original = local(env, p->base, p->nominal);
     const NLCheckedNodeView *body = get(env, n->initializer);
@@ -325,6 +365,7 @@ static bool physical_current_loop(Emit *e, Env *env, Value *out)
                     !put(e, "nl_v_%zu=nl_v_%zu;\n", out->temp, old.temp))
                     return reject(e);
                 e->current_emitted = true;
+                e->current_world = v->post_world;
                 return put(e, "NL_CURRENT_RESULT(nl_v_%zu);\nbreak;\n}\n}\n",
                            out->temp);
             }
@@ -344,6 +385,7 @@ static bool physical_current_loop(Emit *e, Env *env, Value *out)
                result->symbol != v->phase_symbol || !put(e, "nl_current_phase"))
         return reject(e);
     e->current_emitted = true;
+    e->current_world = v->post_world;
     return put(e, ";\nNL_CURRENT_RESULT(nl_v_%zu);\nbreak;\n}\n}\n", out->temp);
 }
 

@@ -92,6 +92,8 @@ typedef struct {
     const NLCheckedFragment *origin_root;
     const NLPhysicalCurrent *current; /* authenticated, synchronous borrow */
     bool current_h_closed, current_emitted;
+    const NLSemanticContext *current_world;
+    size_t current_post_used;
     const NLCheckedFragment *copy_issuer;
     const NLSemanticContext *copy_anchor;
     /* One main MATCH scheduled by source order; completed only after both
@@ -3369,17 +3371,13 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             }
         }
     }
-    if (!copy_prepare(&e, body)) {
-        free(e.text);
-        return e.status;
-    }
     NLPhysicalCurrent current = {0};
     for (NLCheckedNodeId id = 1; id <= nl_checked_node_count(body); ++id) {
         const NLCheckedNodeView *op = nl_checked_node_view(body, id);
         if (op->kind != NL_CHECKED_LOOP)
             continue;
         const NLCheckStatus status = physical_current_prepare(body, &current);
-        if (status != NL_CHECK_OK || e.copy_type || !e.allocated ||
+        if (status != NL_CHECK_OK || !e.allocated ||
             !e.two_heap || !e.live_tail || e.custody) {
             free(e.text);
             return status == NL_CHECK_OUT_OF_MEMORY ? NL_NODE_C_OUT_OF_MEMORY
@@ -3389,6 +3387,16 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         }
         e.current = &current;
         break;
+    }
+    if (!copy_prepare(&e, body)) {
+        free(e.text);
+        return e.status;
+    }
+    /* Only the exact calls authenticated by the current plan bypass the
+     * independent Copy lane. Other mixed stateful calls still fail closed. */
+    if (e.current && e.copy_type) {
+        free(e.text);
+        return NL_NODE_C_UNSUPPORTED;
     }
     if (e.copy_after_match)
         env.unit_function_body = get(&env, nl_checked_root(body));
@@ -3537,7 +3545,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     (void)put(&e, "int main(void) {\n");
     Value result = {0};
     if (!block(&e, &env, nl_checked_root(body), &result) || e.pending_live ||
-        (e.current && (!e.current_h_closed || !e.current_emitted)) ||
+        (e.current && (!e.current_h_closed || !e.current_emitted ||
+                      e.current_post_used != e.current->post_count)) ||
         e.roots != (e.three_lexical_links ? 3u : 2u) || result.type != e.unit ||
         (e.copy_type && (!e.copy_roots || e.copy_roots > 2 ||
                          e.copy_calls != e.copy_expected_calls)) ||
