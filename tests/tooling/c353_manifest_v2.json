@@ -1,0 +1,164 @@
+{
+  "issue": 1271,
+  "baseline_sha": "f7ddecfab6e545c94acff67ffea4d2b43bfde2a3",
+  "baseline_tree": "e7b6d21bbec99d58a5e3537a22f035090f5fd6a5",
+  "branch": "t/c353-fast-shadow-f7",
+  "expected_full_count": 817,
+  "expected_partial_count": 816,
+  "full_names_sha256": "74953507f6b4aee167b427f401f7bb7968032ed8c1e31faacee8d8cce08b78d1",
+  "partial_names_sha256": "dd1efde0b5d8877fb142a15c26757c748bd8b48e04f4d836e04fd7ff047683cf",
+  "purpose": "One-cohort NON-REQUIRED measurement only. All original full tests and six required jobs remain unchanged. Not an admission policy.",
+  "groups": {
+    "core": [
+      "source.unit",
+      "lexer.unit",
+      "parser_type.unit",
+      "parser_expression.unit",
+      "parser_loan.unit",
+      "parser_ownership.unit",
+      "parser_limits.unit",
+      "parser_diagnostics.unit",
+      "semantic_type.unit",
+      "semantic_value_use.unit",
+      "semantic_domain.unit",
+      "semantic_transition.unit",
+      "semantic_loan.unit",
+      "semantic_failure.unit",
+      "raw_claim.unit",
+      "raw_access.unit",
+      "raw_current.unit",
+      "raw_failure.unit",
+      "raw_reborrow.unit",
+      "raw_partition.unit",
+      "raw_storage_cycle.integration",
+      "local_root_evidence.unit",
+      "local_root_direct_write_root.unit",
+      "local_root_negatives.unit",
+      "local_root_conflict.unit",
+      "local_root_failures.unit",
+      "local_root_resource.unit",
+      "fixed_field_state.unit",
+      "fixed_field_evidence.unit",
+      "fixed_field_dependencies.unit",
+      "fixed_field_negatives.unit",
+      "fixed_field_failures.unit",
+      "recursive_type_identity.unit",
+      "recursive_type_source.unit",
+      "recursive_type_cycle.unit",
+      "recursive_type_negatives.unit",
+      "recursive_type_failures.unit",
+      "typed_owner_definition.unit",
+      "typed_owner_evidence.unit",
+      "typed_owner_precision.unit",
+      "typed_owner_faults.unit",
+      "custody_source_evidence.unit",
+      "custody_definition_evidence.unit",
+      "custody_codegen_oom.unit",
+      "node_join_same_locator_public_proof.unit",
+      "node_join_public_negative.unit",
+      "node_join_owned_poison.unit",
+      "node_join_public_oom.unit",
+      "source_lexer.integration",
+      "source_parser.integration",
+      "source_semantic.integration"
+    ],
+    "native_negative": [
+      "cli.check_source",
+      "local_root_checked_c.integration",
+      "fixed_field_checked_c.integration",
+      "custody_native.integration",
+      "p517_r516_composition_native.integration",
+      "p990_new_native.integration",
+      "p990_negative_sources.integration",
+      "p1236_source_native.integration",
+      "p1248_source_native.integration",
+      "p1253_source_native.integration",
+      "p1260_source_native.integration",
+      "p1208_negative.unit",
+      "p1193_90-wrong-return-type_boundary.unit",
+      "p1193_91-helper-break_boundary.unit",
+      "p1193_95-mixed-result-binding_boundary.unit",
+      "p1217_resource_status.unit"
+    ],
+    "known_red": [
+      "p1117_native.integration",
+      "p1123_native.integration",
+      "p1133_native.integration",
+      "p1158_native.integration",
+      "p1152_native.integration",
+      "p1208_combined_source.unit",
+      "p1208_oom.unit"
+    ],
+    "oom_current": [
+      "p1123_11-prefix-current_current.unit",
+      "p1123_11-prefix-current_oom.unit",
+      "p1193_signature_return_auth.unit",
+      "p1193_signature_oom.unit",
+      "p1260_oom.unit",
+      "p1227_oom.unit",
+      "p1227_c283_alias_oom.unit"
+    ]
+  },
+  "output_markers": {
+    "p517_r516_composition_native.integration": [
+      "P517 calibrated immutable R replay"
+    ],
+    "p990_new_native.integration": [
+      "P990 RAW NATIVE",
+      "P990 REACHED OUTPUT ERROR/EXACT RETRY",
+      "P1030 FORWARD C112 retained-controls PASS"
+    ],
+    "p1236_source_native.integration": [
+      "P1236 source/current/typed old BREAK/C17/native and source refusal/no-clobber PASS"
+    ],
+    "p1248_source_native.integration": [
+      "P1248 source/owned/current/runtime new/old BREAK/native/H0-1-2"
+    ],
+    "p1253_source_native.integration": [
+      "P1253 source/owned/current/pre-loop Copy/actual old BREAK/native H0-1-2"
+    ],
+    "p1260_source_native.integration": [
+      "P1260 source/owned/old/current/same-original/post-loan writes/H0-1-2 PASS"
+    ],
+    "p1217_resource_status.unit": [
+      "C274 H-only/shared status/logical rejection/no-clobber/OOM/native PASS"
+    ],
+    "p1227_oom.unit": [
+      "P1227 reached exact-OOM/rollback/retry/named-no-clobber PASS"
+    ],
+    "p1227_c283_alias_oom.unit": [
+      "C283 fresh alias every emit/named OOM + newly reached CHECK static-site OOM PASS"
+    ],
+    "p1260_oom.unit": [
+      "P1260 reached exact-OOM/rollback/retry/named-no-clobber PASS"
+    ],
+    "p1123_11-prefix-current_oom.unit": [
+      "reached invocation OOM=",
+      "exact bytes/inode/mtime/temp/retry PASS"
+    ],
+    "p1193_signature_oom.unit": [
+      "AUTH OOM ledger rollback/no-clobber/partial-cleanup/retry=PASS"
+    ],
+    "p1193_95-mixed-result-binding_boundary.unit": [
+      "prospective CHECK/owned/current/C17 PASS; native0"
+    ]
+  },
+  "raw_directories": [
+    "p1208-oom",
+    "p1227-oom",
+    "p1227-c283-alias-oom",
+    "p1260-oom",
+    "p1217-resource-status",
+    "p1236-source-native",
+    "p1248-source-native",
+    "p1253-source-native",
+    "p1260-source-native",
+    "p1208-combined-source"
+  ],
+  "version": 2,
+  "release": "C353/C357",
+  "predecessor_patch_sha256": "cbb06cbe03c9552d32b502e195975ece8b44c63b4af7b087f4e528ab1cab39b3",
+  "canonical_spec": "NewLang_v0_spec_Draft17_35.md",
+  "selector_sha256": "16b0a96272aa77e68384bb2cf78b88d70182897a43791420be2bdc3c81054538",
+  "expected_workflow": "T C353 V2 fast regression shadow (NON-REQUIRED)"
+}
