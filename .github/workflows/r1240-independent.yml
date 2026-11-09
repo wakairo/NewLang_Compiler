@@ -1,0 +1,67 @@
+name: R1240 independent frozen V1 attack (NOT production CI)
+on:
+  push:
+    branches:
+      - 'r-fast/r1240-terminal-old-break-v1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: r1240-independent-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  independent-nine:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout immutable source branch without persisted credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Confirm immutable baseline ancestry and branch-only push
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = push
+          test "$GITHUB_REF" = refs/heads/r-fast/r1240-terminal-old-break-v1
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "${{ github.repository }}" = wakairo/NewLang_Compiler
+          test "$(git rev-parse HEAD^)" = 21577cbbedf2e915c779e24269eb1bf7a19f2857
+          echo "R1240 event=$GITHUB_EVENT_NAME run=$GITHUB_RUN_ID attempt=$GITHUB_RUN_ATTEMPT SHA=$GITHUB_SHA"
+      - name: Install compiler prerequisites from signed Ubuntu repositories
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake_version=$(cmake --version | sed -n '1s/^cmake version //p')
+          python3 - "$cmake_version" <<'PY'
+          import re,sys
+          m=re.fullmatch(r"(\d+)\.(\d+)\.(\d+)",sys.argv[1])
+          if not m or not ((3,28)<=tuple(map(int,m.groups()))[:2]<(4,0)):
+              sys.exit("R1240 STOP: unsupported CMake version")
+          PY
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make python3
+          gcc-13 --version | head -n 1
+      - name: Build exact fixed compiler baseline, LLVM-independent normal CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          CC=gcc-13 cmake -S . -B build-r1240 -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_FRONTEND_ONLY=ON -DBUILD_TESTING=OFF
+          cmake --build build-r1240 --target newlangc --parallel 4
+          build-r1240/newlangc --version
+      - name: Run exact C289 source custody and independent nine-case attack
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tests/r1240/run.py --compiler build-r1240/newlangc --archive tests/r1240/c289_v1.tar.gz --out "$RUNNER_TEMP/r1240-evidence"
+      - name: Upload original raw/stdout/stderr/layer and custody evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r1240-independent-${{ github.sha }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/r1240-evidence/
+          if-no-files-found: warn
+          retention-days: 30
