@@ -53,7 +53,7 @@ typedef enum {
     NL_CHECKED_FIELD_READ,
     NL_CHECKED_TRY_ALLOCATE_ONE,
     NL_CHECKED_REF_FROM_PTR,
-    NL_CHECKED_FIELD_REF,     /* mode-preserving scoped H link projection */
+    NL_CHECKED_FIELD_REF,     /* selected mode-preserving scoped H projection */
     NL_CHECKED_LINK_READ,     /* bounded Copy read through FIELD_REF */
     NL_CHECKED_USIZE_LITERAL, /* native target checked §6 quantity */
     /* §5.2 bool result, first_argument/next_argument are actual LTR operands;

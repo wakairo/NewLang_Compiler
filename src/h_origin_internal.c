@@ -353,6 +353,12 @@ static bool validate_custody(const NLCheckedFragment *root, bool observation)
             p->body_count > p->body_capacity ||
             p->body_count > p->call_capacity)
             return false;
+        /* A published result seal cannot fall back to an unsealed emitter
+         * profile when its displayed nodes are changed. Historical getters
+         * still observe through the separate observation path. Count/base
+         * authentication in issued_nodes_valid precedes any node read. */
+        if (!observation && p->nodes_sealed && !issued_nodes_valid(p))
+            return false;
         size_t arms = 0, bodies = 0;
         bool continuation[2] = {false, false};
         for (const CustodyEdge *e = p->edges; e; e = e->next) {
