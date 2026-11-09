@@ -235,7 +235,7 @@ int main(int argc, char **argv)
     NLSemanticContext *clone = NULL;
     assert(nl_sem_clone(nl_checked_context(call.owner), &clone) == NL_CHECK_OK);
     NLCheckedFragment *mutable = (NLCheckedFragment *)call.owner;
-    NLSemanticContext *world = mutable->context;
+    const NLSemanticContext *world = mutable->context;
     mutable->context = clone;
     assert(nl_checked_copy_body_validate(call.owner, call.id, &body) !=
                NL_CHECK_OK &&
