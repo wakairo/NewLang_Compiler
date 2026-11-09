@@ -429,7 +429,8 @@ static bool same_reference(NLReferenceFacts a, NLReferenceFacts b)
 }
 static bool terminal_role_lane(const Emit *e)
 {
-    return e->copy_type && e->live_tail && e->no_pre_read && !e->custody;
+    return (e->copy_type || e->current) && e->live_tail && e->no_pre_read &&
+           !e->custody;
 }
 
 /* The same source-issued producer original licenses the optional caller read
@@ -1745,7 +1746,10 @@ static bool no_read_entry(Emit *e, Env *env, const NLCheckedNodeView *ref)
             continue;
         NLProducerLocalReturnView local_return;
         if (found ||
-            (e->copy_after_match
+            /* The current plan also keeps T in main across this H fork.
+             * Reuse the full producer validator for its direct RETURN;
+             * the optional whole-local RETURN witness is not required. */
+            ((e->copy_after_match || e->current)
                  ? !producer_status(e, nl_producer_validate(f, i, true))
                  : (!nl_checked_producer_local_return_view(f, i,
                                                            &local_return) ||
