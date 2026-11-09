@@ -1,0 +1,7 @@
+{
+  "source": "N-mismatched-result.nl",
+  "sha256": "a22c59e97cb92226359a3f5cf6789700d4d1003f8bc81c90e80d0101e24deb2e",
+  "CHECK": 3,
+  "reason": "normal H1 unit vs normal H2 u8 after identical owner cleanup; primitive result type mismatch must reject",
+  "original_oracle": "unchanged; prospective additional case only"
+}

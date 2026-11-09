@@ -7148,7 +7148,8 @@ static bool allocated_u8_post_matches(const NLSemanticContext *expected,
                                       const NLCheckedNodeView *result)
 {
     const NLCheckedNodeView unit = {.type = 1};
-    if (!normal_u8_result(arm, result))
+    if (!normal_u8_result(arm, result) ||
+        arm->scope_count < expected->scope_count)
         return false;
     for (size_t i = expected->scope_count; i < arm->scope_count; ++i)
         if (arm->scopes[i].active)
@@ -7592,7 +7593,9 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
     const NLTypeId ptr = c->types[type - 1].option_target;
     bool node_unit_join =
         ptr != 0 && nl_recursive_local_type(c, c->types[ptr - 1].view.target);
-    bool node_copy_join = node_unit_join && check->allocated_slice;
+    bool node_copy_join =
+        node_unit_join && check->allocated_slice && !check->closure_probe &&
+        c->types[c->types[ptr - 1].view.target - 1].view.field_count == 2;
     NLTypeId normal_type = 0;
     bool captured_packet = false;
     if (check->artifact->producer_call != 0) {
