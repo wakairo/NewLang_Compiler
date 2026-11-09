@@ -84,12 +84,11 @@ static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
         if (node && node->kind == NL_CHECKED_MATCH && node->item_count == 2) {
             const NLCheckedNodeView *trial =
                 nl_checked_node_view(body, node->initializer);
-            const bool linked = e->scalar_issued && depth == 2 && trial &&
-                                trial->type == e->option &&
-                                !node->borrowed_match && !node->terminates &&
-                                node->type == e->unit && !node->result_count &&
-                                node->normal_frame_unchanged &&
-                                node->normal_arms == 2;
+            const bool linked =
+                e->scalar_issued && depth == 2 && trial &&
+                trial->type == e->option && !node->borrowed_match &&
+                !node->terminates && match_result_shape(e, body, node) &&
+                node->normal_frame_unchanged && node->normal_arms == 2;
             if (trial &&
                 (trial->kind == NL_CHECKED_TRY_ALLOCATE_ONE || linked)) {
                 for (size_t arm = 0; arm < 2; ++arm) {

@@ -404,6 +404,54 @@ static bool final_unit_return(const NLCheckedFragment *body, NLCheckedNodeId id,
     }
     return false;
 }
+/* Typed results borrow the existing sealed CHECK graph. They do not carry a
+ * root, owner or source authority: only a dependency-free primitive package
+ * can become a C scalar in the parent scope. */
+static bool match_result_shape(const Emit *e, const NLCheckedFragment *f,
+                               const NLCheckedNodeView *v)
+{
+    if (!v || v->terminates)
+        return false;
+    if (v->type == e->unit)
+        return v->result_count == 0;
+    NLSemanticValueView value;
+    return e->scalar_issued && e->allocated && e->two_heap && !e->current &&
+           !e->custody && v->type == e->u8 && v->result_count == 1 &&
+           v->results[0].type == e->u8 &&
+           nl_semantic_value_view(nl_checked_context(f), v->results[0].value,
+                                  &value) &&
+           value.type == e->u8 && value.dependencies == NL_DEPENDENCY_FREE &&
+           !value.value_dependency_count && !value.reference_count &&
+           !value.reference.place && !value.reference.scope &&
+           !value.reference.occurrence_dependency && !value.owner_place &&
+           !value.domain && !value.slot_place && !value.allocation_region &&
+           !value.occupancy.region && !value.aggregate_owner &&
+           !value.field_count && !value.variant && !value.sum_payload &&
+           !value.sum_owner;
+}
+static bool match_arm_body(const Emit *e, const NLCheckedFragment *f,
+                           const NLCheckedNodeView *arm, NLCheckedNodeId body)
+{
+    const NLCheckedNodeView *b = nl_checked_node_view(f, body);
+    return arm && arm->kind == NL_CHECKED_MATCH_ARM &&
+           match_result_shape(e, f, arm) && b && !b->terminates &&
+           b->kind == NL_CHECKED_BLOCK && b->type == arm->type &&
+           b->result_count == 1 && arm->result_count == 1 &&
+           b->results[0].type == arm->results[0].type &&
+           b->results[0].value == arm->results[0].value;
+}
+static bool match_store_result(Emit *e, const NLCheckedFragment *f,
+                               const NLCheckedNodeView *arm,
+                               NLCheckedNodeId body, Value result,
+                               size_t destination)
+{
+    if (!destination)
+        return arm->type == e->unit;
+    if (!match_arm_body(e, f, arm, body) || result.type != e->u8 ||
+        !result.temp)
+        return reject(e);
+    return put(e, "nl_v_%zu = nl_v_%zu;\n", destination, result.temp);
+}
 #include "checked_c_copy_if_internal.h"
 #include "checked_c_copy_internal.h"
 /* Uses the Copy carrier helpers above. */
@@ -600,11 +648,16 @@ static bool initial_some(Emit *e, const Env *env, const NLCheckedNodeView *some)
 static bool block(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
 {
     const NLCheckedNodeView *v = get(env, id);
+    const NLCheckedNodeView *arm = get(env, nl_checked_root(env->artifact));
+    const bool scalar_arm = v && v->type == e->u8 && env->parent && arm &&
+                            (arm->tail ? arm->tail : arm->initializer) == id &&
+                            match_arm_body(e, env->artifact, arm, id);
     const bool unit_return = v && v == env->unit_function_body &&
                              final_unit_return(env->artifact, id, e->unit);
     if (v == NULL || v->kind != NL_CHECKED_BLOCK ||
-        (!unit_return && (v->terminates || v->type != e->unit)) ||
-        v->result_count != 0 || env->depth >= C_DEPTH)
+        (!unit_return && !scalar_arm &&
+         (v->terminates || v->type != e->unit)) ||
+        v->result_count != (scalar_arm ? 1u : 0u) || env->depth >= C_DEPTH)
         return reject(e);
     NLCheckedNodeId item = v->first_item;
     bool custody_suffix = false;
@@ -866,9 +919,12 @@ static bool match_runtime(Emit *e, Env *env, NLCheckedNodeId id,
         return reject(e);
     Value scrutinee = {0};
     if (!expr(e, env, v->initializer, &scrutinee) ||
-        scrutinee.type != e->option ||
-        !put(e, "switch (nl_v_%zu.tag) {\n", scrutinee.temp))
+        scrutinee.type != e->option)
         return reject(e);
+    const size_t result_temp = v->type == e->u8 ? ++e->temp : 0;
+    if ((result_temp && !put(e, "uint8_t nl_v_%zu;\n", result_temp)) ||
+        !put(e, "switch (nl_v_%zu.tag) {\n", scrutinee.temp))
+        return false;
     bool seen[2] = {false, false};
     for (size_t i = 0; i < 2; ++i) {
         const NLCheckedFragment *arm =
@@ -876,8 +932,9 @@ static bool match_runtime(Emit *e, Env *env, NLCheckedNodeId id,
         const NLCheckedNodeView *a =
             nl_checked_node_view(arm, nl_checked_root(arm));
         if (a == NULL || a->kind != NL_CHECKED_MATCH_ARM || a->terminates ||
-            a->type != e->unit || a->result_count != 0 || a->variant < 1 ||
-            a->variant > 2 || seen[a->variant - 1] || env->depth >= C_DEPTH)
+            a->type != v->type || !match_result_shape(e, arm, a) ||
+            a->variant < 1 || a->variant > 2 || seen[a->variant - 1] ||
+            env->depth >= C_DEPTH)
             return reject(e);
         seen[a->variant - 1] = true;
         Env branch = {.artifact = arm,
@@ -907,18 +964,23 @@ static bool match_runtime(Emit *e, Env *env, NLCheckedNodeId id,
         }
         Value ignored = {0};
         if (!block(e, &branch, a->initializer, &ignored) ||
+            !match_store_result(e, arm, a, a->initializer, ignored,
+                                result_temp) ||
             !put(e, "break; }\n"))
             return reject(e);
     }
-    out->type = e->unit;
+    if (result_temp && !put(e, "default: abort();\n"))
+        return false;
+    out->type = v->type;
+    out->temp = result_temp;
     return put(e, "}\n");
 }
 static bool changed_match(Emit *e, Env *env, NLCheckedNodeId id,
                           const NLCheckedNodeView *v, Value *out)
 {
     NLNodeJoinView proof;
-    if (v->borrowed_match || v->terminates || v->type != e->unit ||
-        v->result_count != 0 || v->item_count != 2 || v->normal_arms != 2 ||
+    if (v->borrowed_match || !match_result_shape(e, env->artifact, v) ||
+        v->item_count != 2 || v->normal_arms != 2 ||
         v->normal_frame_unchanged || v->match_binding_prefix == 0 ||
         !nl_checked_node_join_view(env->artifact, id, &proof))
         return reject(e);
@@ -1635,9 +1697,12 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
              ? !closed_capture(e, env, v,
                                nl_checked_captured_post(env->artifact, id))
              : (!v->normal_frame_unchanged || v->captured_frame_closed)) ||
-        v->type != e->unit || v->result_count != 0 || v->terminates)
+        !match_result_shape(e, env->artifact, v))
         return reject(e);
     const size_t site = e->allocations++;
+    const size_t result_temp = v->type == e->u8 ? ++e->temp : 0;
+    if (result_temp && !put(e, "uint8_t nl_v_%zu;\n", result_temp))
+        return false;
     HeapLifecycle incoming[2] = {e->lifecycle[0], e->lifecycle[1]};
     const bool current_closing = e->current && !env->parent &&
                                  env->artifact == e->current->body &&
@@ -1668,7 +1733,7 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
             return reject(e);
         if (a == NULL || a->kind != NL_CHECKED_MATCH_ARM || a->variant < 1 ||
             a->variant > 2 || seen[a->variant - 1] || a->terminates ||
-            a->type != e->unit ||
+            a->type != v->type || !match_result_shape(e, arm, a) ||
             (v->normal_frame_unchanged
                  ? !a->normal_frame_unchanged
                  : (a->normal_frame_unchanged ||
@@ -1740,6 +1805,7 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
             (e->two_heap &&
              ((site == 1 && e->lifecycle[0].stage != 8) ||
               (a->variant == 2 && e->lifecycle[site].stage != 8))) ||
+            !match_store_result(e, arm, a, a->tail, result, result_temp) ||
             !put(e, "}\n"))
             return reject(e);
         if (closing &&
@@ -1763,7 +1829,8 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
         else
             e->copy_h_closed = true;
     }
-    out->type = e->unit;
+    out->type = v->type;
+    out->temp = result_temp;
     return true;
 }
 /* Omitting a target reloan/Some arm requires actual source-issued link/owner
