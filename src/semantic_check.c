@@ -9792,6 +9792,15 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
 failure:
     nl_semantic_destroy(check.context);
     nl_checked_destroy(check.artifact);
+    /* A nested transactional failure can preserve the exact OOM status
+     * without supplying a callee diagnostic. Keep that resource cause visible
+     * to the ordinary CLI instead of falling back to a semantic rejection. */
+    if (check.status == NL_CHECK_OUT_OF_MEMORY &&
+        check.diagnostic.diagnostic.code == NULL)
+        check.diagnostic = (NLCheckDiagnostic){
+            {NL_DIAG_ERROR, "host", "P3-OUT-OF-MEMORY",
+             "host allocation failed during semantic checking", NULL, NULL, 0},
+            root->span};
     if (diagnostic != NULL) {
         *diagnostic = check.diagnostic;
     }
