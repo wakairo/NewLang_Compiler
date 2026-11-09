@@ -32,6 +32,8 @@ for phase in ["check", "emit"]:
         assert p.returncode == 0, (phase, ordinal, p.returncode, p.stderr)
         if phase == "check":
             assert b"error(host)" in p.stderr and b"OUT-OF-MEMORY" in p.stderr
+        else:
+            assert b"error(cli)[NODE-C-RESOURCE]" in p.stderr
         after = target.stat()
         assert target.read_bytes() == sentinel
         assert (before.st_ino, before.st_size, before.st_mtime_ns) == (after.st_ino, after.st_size, after.st_mtime_ns)

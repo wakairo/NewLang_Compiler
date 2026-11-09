@@ -80,7 +80,7 @@ int main(int argc, char **argv)
            hits, fired, status);
     assert(calls == 1);
     if (ordinal)
-        assert(fired && status == (checking ? 3 : 5));
+        assert(fired && status == (checking ? 3 : 1));
     else
         assert(!fired && status == 0 && hits);
     return 0;
