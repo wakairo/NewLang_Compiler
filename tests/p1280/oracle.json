@@ -1,0 +1,114 @@
+{
+  "issue": 1280,
+  "release": "C380/C383",
+  "frozen_before_any_compiler_execution": true,
+  "created_utc": "2026-11-09T08:04:03Z",
+  "main": "f28fa801b36f5ba298daa6fea6c4e13d83eda3e0",
+  "tree": "9b0b9492fbf7f93d9e53cef523ac606aedd77fac",
+  "canonical": "Draft17.35",
+  "cases": {
+    "A-linked-same-arm.nl": {
+      "positive": true,
+      "bytes": 5110,
+      "sha256": "5e87d8de851fc083ebc8190947c524a5b58f3a67b2f61a56bf29e346be6734ef",
+      "description": "front current field Copy -> actual Some-bound pointer; independent genuine back D; real T exists only inside same Some arm",
+      "source_eligibility": "selected-primitives composition hypothesis",
+      "prediction_CHECK": 0,
+      "prediction_earliest_gap": "if CHECK0 require authentic owned/current before C17; current private H/T midworld or same-Some-arm consumer may refuse4",
+      "expected_back_byte": 83,
+      "expected_T": {
+        "originals": 1,
+        "old": 31,
+        "old_copy": 31,
+        "new": 83,
+        "sibling": 127,
+        "write_count": 1,
+        "loan_closed": true,
+        "same_original_after_read": true
+      }
+    },
+    "B-known-back-isolation.nl": {
+      "positive": true,
+      "bytes": 4795,
+      "sha256": "84cb42537d18520018435ef4bbe775bf0db790e22bcd50fed23f512bab5175af",
+      "description": "known back pointer and own D; no claimed Some selection, same post-attach H phase",
+      "source_eligibility": "selected-primitives composition hypothesis",
+      "prediction_CHECK": 0,
+      "prediction_earliest_gap": "if CHECK0 require authentic owned/current before C17; current private H/T midworld or same-Some-arm consumer may refuse4",
+      "expected_back_byte": 167,
+      "expected_T": {
+        "originals": 1,
+        "old": 31,
+        "old_copy": 31,
+        "new": 167,
+        "sibling": 127,
+        "write_count": 1,
+        "loan_closed": true,
+        "same_original_after_read": true
+      }
+    },
+    "N-A-front-domain.nl": {
+      "positive": false,
+      "bytes": 5111,
+      "sha256": "52d382c16ad74b4999d0ff9b7d28923f1163c6cf9c2c3be84edcb07d36c6b8ff",
+      "description": "actual Some-bound back pointer with front D, reject wrong original Domain before access",
+      "source_eligibility": "semantic negative",
+      "prediction_CHECK": 3,
+      "prediction_earliest_gap": "SOURCE/CHECK rejection; owned/C17/native NOT_RUN",
+      "expected_back_byte": null,
+      "expected_T": null
+    },
+    "N-B-escaped-read-ref.nl": {
+      "positive": false,
+      "bytes": 4791,
+      "sha256": "e07284971112d9a46f12e05abdfa6ee92a8b0cc5f8bc14d9d8d6d24174c73235",
+      "description": "read ref escapes its stability loan, reject before payload/T/native",
+      "source_eligibility": "semantic negative",
+      "prediction_CHECK": 3,
+      "prediction_earliest_gap": "SOURCE/CHECK rejection; owned/C17/native NOT_RUN",
+      "expected_back_byte": null,
+      "expected_T": null
+    }
+  },
+  "worlds": {
+    "H0": {
+      "H_allocations": 0,
+      "frees": 0,
+      "T_originals": 0,
+      "T_changes": 0
+    },
+    "H1": {
+      "H_allocations": 1,
+      "frees": 1,
+      "T_originals": 0,
+      "T_changes": 0
+    },
+    "H2": {
+      "H_allocations": 2,
+      "frees": 2,
+      "front_u8": 231,
+      "back_u8": "case-specific83/167",
+      "link_order": "None -> Some(back original) -> actual Copy read -> None via genuine producer",
+      "T_originals": 1,
+      "T_changes": 1,
+      "policy": "A only actual Some arm; None branch no T; no postmatch T root phi",
+      "cleanup": "real back loan closed; caller unlinks -> LiveTail -> back terminal destroy/erase/finalize/deallocate -> front teardown; source failures explicit; no fake replays"
+    }
+  },
+  "binary": {
+    "path": "/workspace/p1272-c344/preserved-final-test-output/gcc/newlangc",
+    "sha256": "7e44701c054a5169195110feedc6de9d1e56e01c59be44c8682b8fc7f5b8196f",
+    "build_commit": "8ab77706277b04d2bf9cd06b0ba8da106df253e1",
+    "build_tree": "9b0b9492fbf7f93d9e53cef523ac606aedd77fac",
+    "relation": "actual main f28 has identical full tree; ordinary production CLI, no fixture option or builtin issuer"
+  },
+  "preserved": {
+    "/workspace/p1263-c322-source-law-STOP.zip": "dffc0200f39ed454a9e46c217f7796c0da61b63f73ffd0a9dcd2604f6d7f6f8a",
+    "/workspace/p1272-c344-stage0-v1.zip": "80cd3f12fc69cd3d583b402e71b3e81bd3055680aff0b26d66a57f19a009c262",
+    "/workspace/p1272-c344-C348-FIRST.zip": "4495f34c8cd3f8812b3fd60e80beccba5df9cf0a881e612d9049fb49bc61845e",
+    "/workspace/p1272-c344-C348-local-final-evidence.zip": "c6c141a1573f2549708f74c73d90e1554f9558c9ae38c32c5ed6d0d9c606d455"
+  },
+  "execution_rule": "ordinary --check first A then B then two negatives; no owned/C17/native on rejected input; unknown source law/new public issuer/Domain/world/broad Some CFG STOP affected to C; one small existing-authority private consumer allowed",
+  "negative_host_safety_future": "mutant current/root/incarnation/foreign same bits/borrowed display only after static safety; existing P negatives retained",
+  "independence": "new P source; R1240 independent source/oracle/runner not read; P1263 unchanged"
+}

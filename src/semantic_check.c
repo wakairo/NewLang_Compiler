@@ -7663,6 +7663,9 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
                   a->span))
             goto failure;
         if (branch.artifact->root == 0 ||
+            /* Authenticate this completed arm's own direct call graph, as
+             * for IF/allocation arms; never borrow a parent's caller seal. */
+            !host(&branch, nl_copy_body_seal_calls(branch.artifact), a->span) ||
             !save_arm(check, id, branch.artifact, a->span))
             goto failure;
         continue;
