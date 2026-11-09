@@ -2306,8 +2306,8 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
     NLProducerLocalReturnView local_return = {0};
     const bool local_result = body->item_count == 3;
     if (e->no_pre_read &&
-        ((!e->copy_after_match &&
-          !(e->current && e->current->post_count) && !local_result) ||
+        ((!e->copy_after_match && !(e->current && e->current->post_count) &&
+          !local_result) ||
          e->no_read_issuer != env->artifact || e->no_read_call != id))
         return reject(e);
     if (local_result &&
@@ -3382,8 +3382,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         if (op->kind != NL_CHECKED_LOOP)
             continue;
         const NLCheckStatus status = physical_current_prepare(body, &current);
-        if (status != NL_CHECK_OK || !e.allocated ||
-            !e.two_heap || !e.live_tail || e.custody) {
+        if (status != NL_CHECK_OK || !e.allocated || !e.two_heap ||
+            !e.live_tail || e.custody) {
             free(e.text);
             return status == NL_CHECK_OUT_OF_MEMORY ? NL_NODE_C_OUT_OF_MEMORY
                    : status == NL_CHECK_RESOURCE_LIMIT
@@ -3551,7 +3551,7 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     Value result = {0};
     if (!block(&e, &env, nl_checked_root(body), &result) || e.pending_live ||
         (e.current && (!e.current_h_closed || !e.current_emitted ||
-                      e.current_post_used != e.current->post_count)) ||
+                       e.current_post_used != e.current->post_count)) ||
         e.roots != (e.three_lexical_links ? 3u : 2u) || result.type != e.unit ||
         (e.copy_type && (!e.copy_roots || e.copy_roots > 2 ||
                          e.copy_calls != e.copy_expected_calls)) ||

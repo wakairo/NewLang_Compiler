@@ -287,8 +287,8 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
             } else if (init->kind == NL_CHECKED_LOAN_HEADER) {
                 if (!p.binding)
                     return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
-                const NLCheckStatus status = physical_current_post_prepare(
-                    &p, n->initializer, cursor);
+                const NLCheckStatus status =
+                    physical_current_post_prepare(&p, n->initializer, cursor);
                 if (status != NL_CHECK_OK)
                     return status;
                 cursor = p.post[p.post_count - 1].parameters.handoff;

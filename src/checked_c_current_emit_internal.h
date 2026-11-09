@@ -143,14 +143,14 @@ static bool physical_current_post(Emit *e, Env *env,
         return reject(e);
     const NLPhysicalPostCall *post = &p->post[e->current_post_used];
     const NLCopyBodyParameters *actual = &post->parameters;
-    const Local *original =
-        local(env, p->loop_view.base, p->loop_view.nominal);
+    const Local *original = local(env, p->loop_view.base, p->loop_view.nominal);
     Value incoming = {0};
     if (loan != get(env, post->loan) || e->current_world != post->before ||
         !original || original->place != p->loop_view.root ||
         original->incarnation != p->loop_view.incarnation ||
         !physical_current_scalar(e, env, actual->arguments[1], &incoming,
-                                 depth + 1) || incoming.type != e->u8)
+                                 depth + 1) ||
+        incoming.type != e->u8)
         return reject(e);
     out->type = e->u8;
     out->temp = ++e->temp;

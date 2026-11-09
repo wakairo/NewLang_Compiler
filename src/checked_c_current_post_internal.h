@@ -6,13 +6,11 @@ static bool physical_current_same(const NLSemanticContext *a,
                                   const NLLinearBreakView *loop)
 {
     NLSemanticPlaceView x[3], y[3];
-    if (!physical_current_world(a, loop) ||
-        !physical_current_world(b, loop) || !nl_copy_trio(a, loop->root, x) ||
-        !nl_copy_trio(b, loop->root, y))
+    if (!physical_current_world(a, loop) || !physical_current_world(b, loop) ||
+        !nl_copy_trio(a, loop->root, x) || !nl_copy_trio(b, loop->root, y))
         return false;
     for (size_t i = 0; i < 3; ++i)
-        if (x[i].type != y[i].type ||
-            x[i].incarnation != y[i].incarnation ||
+        if (x[i].type != y[i].type || x[i].incarnation != y[i].incarnation ||
             x[i].current_fact != y[i].current_fact ||
             x[i].current_value != y[i].current_value ||
             x[i].parent_aggregate != y[i].parent_aggregate ||
@@ -23,9 +21,9 @@ static bool physical_current_same(const NLSemanticContext *a,
            x[0].fixed_fields[1] == y[0].fixed_fields[1];
 }
 
-static const NLPhysicalPostCall *physical_current_post_call(
-    const NLPhysicalCurrent *p, const NLCheckedFragment *body,
-    NLCheckedNodeId call)
+static const NLPhysicalPostCall *
+physical_current_post_call(const NLPhysicalCurrent *p,
+                           const NLCheckedFragment *body, NLCheckedNodeId call)
 {
     if (p && body == p->body)
         for (size_t i = 0; i < p->post_count; ++i)
@@ -34,9 +32,9 @@ static const NLPhysicalPostCall *physical_current_post_call(
     return NULL;
 }
 
-static NLCheckStatus physical_current_post_prepare(
-    NLPhysicalCurrent *p, NLCheckedNodeId id,
-    const NLSemanticContext *before)
+static NLCheckStatus
+physical_current_post_prepare(NLPhysicalCurrent *p, NLCheckedNodeId id,
+                              const NLSemanticContext *before)
 {
     const NLCheckStatus invalid = NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLLinearBreakView *loop = &p->loop_view;
@@ -55,30 +53,27 @@ static NLCheckStatus physical_current_post_prepare(
         loan->loan.from_ptr || loan->loan.is_exclusive ||
         loan->loan.access != NL_ACCESS_WRITE ||
         loan->loan.source != loop->base || !loan->loan.scope ||
-        !nl_semantic_scope_view(nl_checked_context(p->body),
-                                loan->loan.scope, &closed) ||
+        !nl_semantic_scope_view(nl_checked_context(p->body), loan->loan.scope,
+                                &closed) ||
         closed.active || !block || block->kind != NL_CHECKED_BLOCK ||
         block->item_count || block->first_item || block->terminates ||
         block->type != u8 || block->result_count != 1 || !call ||
         call->kind != NL_CHECKED_REGISTERED_CALL || call->terminates ||
         call->argument_count != 2 || call->result_count != 1 ||
-        call->type != u8 ||
-        loan->results[0].value != call->results[0].value ||
+        call->type != u8 || loan->results[0].value != call->results[0].value ||
         block->results[0].value != call->results[0].value)
         return invalid;
-    NLPhysicalPostCall post = {.loan = id,
-                               .call = block->tail,
-                               .before = before};
+    NLPhysicalPostCall post = {
+        .loan = id, .call = block->tail, .before = before};
     NLCopyBodyView view;
     if (!nl_checked_copy_body_view(p->body, post.call, &view) ||
-        !nl_checked_copy_body_parameters(p->body, post.call,
-                                         &post.parameters))
+        !nl_checked_copy_body_parameters(p->body, post.call, &post.parameters))
         return invalid;
     NLCheckStatus status =
         nl_checked_copy_body_validate(p->body, post.call, &view);
     if (status == NL_CHECK_OK)
-        status = nl_checked_copy_body_parameters_validate(
-            p->body, post.call, &post.parameters);
+        status = nl_checked_copy_body_parameters_validate(p->body, post.call,
+                                                          &post.parameters);
     if (status != NL_CHECK_OK)
         return status;
     const NLCopyBodyParameters *actual = &post.parameters;
@@ -108,8 +103,7 @@ static NLCheckStatus physical_current_post_prepare(
         end[0].fixed_fields[0] != entry[0].fixed_fields[0] ||
         end[0].fixed_fields[1] != entry[0].fixed_fields[1])
         return invalid;
-    const NLCheckedNodeView *ref =
-        nl_checked_node_view(view.body, event.node);
+    const NLCheckedNodeView *ref = nl_checked_node_view(view.body, event.node);
     const NLCheckedNodeView *lhs =
         ref ? nl_checked_node_view(view.body, ref->first_argument) : NULL;
     const NLCheckedNodeView *rhs =
