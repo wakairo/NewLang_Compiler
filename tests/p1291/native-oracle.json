@@ -1,0 +1,11 @@
+{
+  "source_oracle": "oracle.json unchanged",
+  "source": ["A-original.nl", "B-index-value-control.nl"],
+  "native": "configured GCC or Clang, O0 and O2, raw unmodified guest before passive wrapper",
+  "A": {"H0": 11, "H1": 23, "H2": 53, "new": 173, "sibling": 197, "field": 0},
+  "B": {"H0": 7, "H1": 19, "H2": 61, "new": 131, "sibling": 181, "field": 1},
+  "def_use": "actual H payload load to actual T call, actual old result through all three typed matches into three outer ordinary bindings",
+  "physical": "same live T field pointers during call, distinct actual H allocations/Ds, frees0/1/2 and exact teardown, scalar/H/T loans closed before scalar continuation",
+  "observer": "source-issued frame and symbol together; never read another frame or dereference ended T/H storage; no guest payload or result mutation",
+  "failure": "any wrong value/physical/loan acceptance or unsafe execution => STOP C"
+}
