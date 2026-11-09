@@ -310,6 +310,8 @@ Coordinationは**境界を設定し、証拠を評価し、track間を裁定す�
 
 **通常 PR / main で必須の実証：** 固定 HEAD に対する適切な build/format、約束した合法 source と偽の権限を拒否する負例、CHECK/owned/current/loan/provenance、該当する GCC/Clang の C17/native、sanitizer、failure/teardown、OOM・rollback・no-clobber、関連する機能的回帰検査を維持する。独立 F/R は重要な ownership/issuer/UB 境界でリスクに応じて行い、あらゆる CMake・テスト登録変更の一律必須 gate にしない。安全性違反や想定外の誤受理、wrong-code は STOP し、CI 緑やコストを理由に免除しない。
 
+**早期GO（次の実装着手）とマージGOの分離（C394 / 2026-11-09）：** 同一PRの固定HEADで非Requiredの早期ASan・UBSanサブセットが両方SUCCESSとなり、既知の重大な安全性STOPがない場合、Coordinationは**既に認可したscope内で次の実装に着手するGO**を判断できる。これは一律の必須gateでもTrack/Codexの自動起動でもなく、当該PRのREADY・マージ許可でもない。マージには従来どおり**全Required検証の真正な成功、リスクに応じた独立レビュー、Coordinationの採用判断**を要する。元のフルセットは削除せず同じHEADで最後まで確認し、後からfullがRED・skip・cancel・未実行・staleなら早期GREENを代用せず、影響する作業を停止・再評価して必要な修正・再試験を行う。HEADが変われば以前の早期GREENは流用しない。実行設定は[非Requiredの早期CTest workflow](../.github/workflows/compiler-early-ci.yml)を参照し、GitHubのRequired status checksや言語仕様はこの運用で変更しない。
+
 **通常 CI から分離できるもの：** 過去の全 tracked file の SHA を幾世代にもわたり重複列挙する独自 manifest、世代ごとの全履歴・旧 verifier 再実行、未来の架空世代まで合格させる protocol selftest、Git が保全する旧 blob の機械的再証明は、原則として**任意の historical audit / 調査用**とする。過去の元 source/oracle/FIRST/RED・負例・CI job/raw は Git/Issue/Actions 上で区別して保存し、新しい実行成功で過去の RED を遡及変更しない。独自 manifest の generation 上限を維持するためだけに通常の PR を停滞させない。
 
 **重要な分離規律：** 既存の一つのテストが、実際の source/negative/native/owner/OOM 検証と純粋な過去 SHA 再検証を混在させている場合、通常 CI から外してよいのは後者だけである。元の安全性テストの意味、期待値、実行経路、観測された拒否・失敗を維持し、どの検査を mandatory から optional にしたかを PR で明示する。テストの無効化、`WILL_FAIL` による成功偽装、未実行を PASS とすること、旧 raw の削除は認めない。C が変更対象の検査の役割と fixed HEAD の実結果をレビューし、必要な安全性 CI が真に通った場合だけ採用する。
