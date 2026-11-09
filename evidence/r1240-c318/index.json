@@ -1,0 +1,805 @@
+{
+  "issue": "https://github.com/wakairo/NewLang_Compiler/issues/1240",
+  "authority": "C318/C360 ARCHIVE ONLY",
+  "parent": "202237b260ebba42c0b71afc6d98fa717927f200",
+  "parent_tree": "f62f1eb22b775c68f93e2416c7502170c916eb12",
+  "branch": "r-archive/r1240-c318-original-runs",
+  "original_fixed_test_compiler": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+  "canonical": "Draft17.34",
+  "created_UTC": "2026-11-09T05:10:12.747287+00:00",
+  "files": [
+    {
+      "type": "Original GitHub Actions artifact ZIP",
+      "local": "artifact-13641445385.zip",
+      "path": "evidence/r1240-c318/artifact-13641445385.zip",
+      "run_id": 42540174314,
+      "job_id": 128913115154,
+      "size": 16879,
+      "sha256": "bb36bad14b90b527620a6f0e103d3556dcaf97af4eb2c7d45f704d687ede2944",
+      "blob_sha": "33a560c52880cd13425051fcdff1f53c98c2e9c9",
+      "ZIP_members": [
+        {
+          "name": "N01/check.command.json",
+          "size": 321,
+          "compressed_size": 215,
+          "crc32": "c909ee6f"
+        },
+        {
+          "name": "N01/check.stdout.raw",
+          "size": 0,
+          "compressed_size": 2,
+          "crc32": "00000000"
+        },
+        {
+          "name": "N01/check.stderr.raw",
+          "size": 208,
+          "compressed_size": 173,
+          "crc32": "b4b72c0e"
+        },
+        {
+          "name": "N02/check.command.json",
+          "size": 316,
+          "compressed_size": 211,
+          "crc32": "763790be"
+        },
+        {
+          "name": "N02/check.stderr.raw",
+          "size": 203,
+          "compressed_size": 167,
+          "crc32": "45366e88"
+        },
+        {
+          "name": "N02/check.stdout.raw",
+          "size": 0,
+          "compressed_size": 2,
+          "crc32": "00000000"
+        },
+        {
+          "name": "N03/check.command.json",
+          "size": 322,
+          "compressed_size": 216,
+          "crc32": "c8a36ab7"
+        },
+        {
+          "name": "N03/check.stderr.raw",
+          "size": 194,
+          "compressed_size": 165,
+          "crc32": "3c357d0c"
+        },
+        {
+          "name": "N03/check.stdout.raw",
+          "size": 0,
+          "compressed_size": 2,
+          "crc32": "00000000"
+        },
+        {
+          "name": "N04/check.command.json",
+          "size": 317,
+          "compressed_size": 212,
+          "crc32": "dda7a86b"
+        },
+        {
+          "name": "N04/check.stderr.raw",
+          "size": 181,
+          "compressed_size": 154,
+          "crc32": "7dfaa25e"
+        },
+        {
+          "name": "N04/check.stdout.raw",
+          "size": 0,
+          "compressed_size": 2,
+          "crc32": "00000000"
+        },
+        {
+          "name": "N05/check.command.json",
+          "size": 323,
+          "compressed_size": 215,
+          "crc32": "29f79fff"
+        },
+        {
+          "name": "N05/check.stderr.raw",
+          "size": 210,
+          "compressed_size": 174,
+          "crc32": "d2da2ea9"
+        },
+        {
+          "name": "N05/check.stdout.raw",
+          "size": 0,
+          "compressed_size": 2,
+          "crc32": "00000000"
+        },
+        {
+          "name": "N06/check.command.json",
+          "size": 318,
+          "compressed_size": 212,
+          "crc32": "31da3cd9"
+        },
+        {
+          "name": "N06/check.stderr.raw",
+          "size": 205,
+          "compressed_size": 172,
+          "crc32": "7fc737b3"
+        },
+        {
+          "name": "N06/check.stdout.raw",
+          "size": 0,
+          "compressed_size": 2,
+          "crc32": "00000000"
+        },
+        {
+          "name": "N07/check.command.json",
+          "size": 318,
+          "compressed_size": 213,
+          "crc32": "c84aa97e"
+        },
+        {
+          "name": "N07/check.stderr.raw",
+          "size": 185,
+          "compressed_size": 156,
+          "crc32": "618af949"
+        },
+        {
+          "name": "N07/check.stdout.raw",
+          "size": 0,
+          "compressed_size": 2,
+          "crc32": "00000000"
+        },
+        {
+          "name": "P01/check.command.json",
+          "size": 310,
+          "compressed_size": 209,
+          "crc32": "c6aff3ca"
+        },
+        {
+          "name": "P01/check.stderr.raw",
+          "size": 197,
+          "compressed_size": 166,
+          "crc32": "0837c27d"
+        },
+        {
+          "name": "P01/check.stdout.raw",
+          "size": 0,
+          "compressed_size": 2,
+          "crc32": "00000000"
+        },
+        {
+          "name": "P02/check.command.json",
+          "size": 307,
+          "compressed_size": 205,
+          "crc32": "e343f431"
+        },
+        {
+          "name": "P02/check.stderr.raw",
+          "size": 194,
+          "compressed_size": 164,
+          "crc32": "b9150f72"
+        },
+        {
+          "name": "P02/check.stdout.raw",
+          "size": 0,
+          "compressed_size": 2,
+          "crc32": "00000000"
+        },
+        {
+          "name": "custody.json",
+          "size": 1962,
+          "compressed_size": 890,
+          "crc32": "6ba56149"
+        },
+        {
+          "name": "sources/N01_equal_value_foreign_root_tripwire.nl",
+          "size": 817,
+          "compressed_size": 331,
+          "crc32": "b2e1574f"
+        },
+        {
+          "name": "sources/N02_postcurrent_not_old_tripwire.nl",
+          "size": 707,
+          "compressed_size": 323,
+          "crc32": "268c16f7"
+        },
+        {
+          "name": "sources/N03_break_crosses_loan_boundary_reject.nl",
+          "size": 539,
+          "compressed_size": 256,
+          "crc32": "e839e881"
+        },
+        {
+          "name": "sources/N04_loan_escape_into_break_reject.nl",
+          "size": 522,
+          "compressed_size": 248,
+          "crc32": "58894092"
+        },
+        {
+          "name": "sources/N05_sibling_intentional_change_tripwire.nl",
+          "size": 783,
+          "compressed_size": 337,
+          "crc32": "ab9d84bd"
+        },
+        {
+          "name": "sources/N06_missing_head_deallocate_reject.nl",
+          "size": 5462,
+          "compressed_size": 1211,
+          "crc32": "fc88688d"
+        },
+        {
+          "name": "sources/N07_wrong_break_static_type_reject.nl",
+          "size": 824,
+          "compressed_size": 335,
+          "crc32": "cab81469"
+        },
+        {
+          "name": "sources/P01_meter_T_first_terminal.nl",
+          "size": 5520,
+          "compressed_size": 1214,
+          "crc32": "b0b0b354"
+        },
+        {
+          "name": "sources/P02_orchard_inner_break.nl",
+          "size": 5720,
+          "compressed_size": 1260,
+          "crc32": "01ab0f43"
+        },
+        {
+          "name": "summary.json",
+          "size": 12116,
+          "compressed_size": 1585,
+          "crc32": "fe6e4902"
+        }
+      ],
+      "CRC": "all OK",
+      "custody_original": {
+        "archive_sha256": "e59f22067f192decb2a6c6fb8f7a8d2112608d3a3a82d52a36d96686bbd4a807",
+        "manifest_sha256": "34ed05d2589d37f0933b319ef2561907e7830d60485f014919452a083af2ae00",
+        "oracle_sha256": "183db6732a7d63e5e32d4933938335096bafc4de2b95d85a33e3d6d0dec149ad",
+        "sources": {
+          "P01_meter_T_first_terminal.nl": {
+            "sha256": "b50522d3ef313aff1a7e7ae4189d7a489d06e86cf8c7d5c2195ef41033c86f9d",
+            "bytes": 5520
+          },
+          "P02_orchard_inner_break.nl": {
+            "sha256": "9d3f9f3332efedee3fb9c7a6643a04808d93aa201a701a056828f4f95bef38be",
+            "bytes": 5720
+          },
+          "N01_equal_value_foreign_root_tripwire.nl": {
+            "sha256": "94ef49b1136dbce726925481f3ee3838a7e115f7bc5692035f8a8becc519dd49",
+            "bytes": 817
+          },
+          "N02_postcurrent_not_old_tripwire.nl": {
+            "sha256": "b2f9f7a7cd3ec1cfa538ceff8407abd59336844cfce59620ee522952934cf420",
+            "bytes": 707
+          },
+          "N03_break_crosses_loan_boundary_reject.nl": {
+            "sha256": "ffc4d4a74faff0e0cb6dbd6b4665eec4c03b64c938b6a1150f404cb5ab483d95",
+            "bytes": 539
+          },
+          "N04_loan_escape_into_break_reject.nl": {
+            "sha256": "3da2c6eec8c7faadee69602c266a7ed8c4f20db6b0d39eb66b097341305d6c70",
+            "bytes": 522
+          },
+          "N05_sibling_intentional_change_tripwire.nl": {
+            "sha256": "3d8b24069f237fd652a54e0b4f6ac07eaa197fdd9b10bed8d963b12f566ba0bd",
+            "bytes": 783
+          },
+          "N06_missing_head_deallocate_reject.nl": {
+            "sha256": "335d03e2bc8d3647b978dc5767efbb22e99f3aca347d5ff0e43a2f7a08716aed",
+            "bytes": 5462
+          },
+          "N07_wrong_break_static_type_reject.nl": {
+            "sha256": "3206ac2dcfdee7c9ea907fd340989669170e06c7074676907cf7d151ee358aec",
+            "bytes": 824
+          }
+        },
+        "manifest_top_level_keys": [
+          "authority",
+          "cases",
+          "execution",
+          "frozen_at_utc",
+          "isolation",
+          "normalization",
+          "oracle_json",
+          "schema"
+        ],
+        "oracle_top_level_keys": [
+          "authority",
+          "cases",
+          "observation",
+          "schema"
+        ]
+      },
+      "summary_original": {
+        "track": "R1240 C303/C309",
+        "baseline": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+        "archive_sha256": "e59f22067f192decb2a6c6fb8f7a8d2112608d3a3a82d52a36d96686bbd4a807",
+        "execution": "GitHub Actions only",
+        "cases": [
+          {
+            "id": "P01",
+            "original_file": "P01_meter_T_first_terminal.nl",
+            "expected_category": "POSITIVE",
+            "base": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+            "sha256": "b50522d3ef313aff1a7e7ae4189d7a489d06e86cf8c7d5c2195ef41033c86f9d",
+            "layers": {
+              "SOURCE": "FROZEN_SHA_MATCH_NOT_CHECK_ACCEPTANCE",
+              "CHECK": "REJECTED_DIAGNOSTIC_UNCLASSIFIED",
+              "owned": "NOT_RUN_CHECK_REJECTED",
+              "C17": "NOT_RUN",
+              "native_O0": "NOT_RUN",
+              "native_O2": "NOT_RUN",
+              "ASan_UBSan": "NOT_RUN",
+              "OOM": "NOT_RUN",
+              "physical_old_current": "NOT_RUN"
+            },
+            "commands": [
+              {
+                "label": "check",
+                "argv": [
+                  "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-r1240/newlangc",
+                  "--check",
+                  "/home/runner/work/_temp/r1240-evidence/sources/P01_meter_T_first_terminal.nl"
+                ],
+                "timeout_seconds": 90,
+                "exit_code": 3,
+                "status": "EXIT",
+                "duration_seconds": 0.002,
+                "stdout_bytes": 0,
+                "stderr_bytes": 197
+              }
+            ],
+            "finding": [
+              "Expected source-valid rejected: syntax, precision or unsupported; classify from raw, NOT native PASS"
+            ],
+            "stop": false
+          },
+          {
+            "id": "P02",
+            "original_file": "P02_orchard_inner_break.nl",
+            "expected_category": "POSITIVE",
+            "base": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+            "sha256": "9d3f9f3332efedee3fb9c7a6643a04808d93aa201a701a056828f4f95bef38be",
+            "layers": {
+              "SOURCE": "FROZEN_SHA_MATCH_NOT_CHECK_ACCEPTANCE",
+              "CHECK": "REJECTED_DIAGNOSTIC_UNCLASSIFIED",
+              "owned": "NOT_RUN_CHECK_REJECTED",
+              "C17": "NOT_RUN",
+              "native_O0": "NOT_RUN",
+              "native_O2": "NOT_RUN",
+              "ASan_UBSan": "NOT_RUN",
+              "OOM": "NOT_RUN",
+              "physical_old_current": "NOT_RUN"
+            },
+            "commands": [
+              {
+                "label": "check",
+                "argv": [
+                  "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-r1240/newlangc",
+                  "--check",
+                  "/home/runner/work/_temp/r1240-evidence/sources/P02_orchard_inner_break.nl"
+                ],
+                "timeout_seconds": 90,
+                "exit_code": 3,
+                "status": "EXIT",
+                "duration_seconds": 0.002,
+                "stdout_bytes": 0,
+                "stderr_bytes": 194
+              }
+            ],
+            "finding": [
+              "Expected source-valid rejected: syntax, precision or unsupported; classify from raw, NOT native PASS"
+            ],
+            "stop": false
+          },
+          {
+            "id": "N01",
+            "original_file": "N01_equal_value_foreign_root_tripwire.nl",
+            "expected_category": "VALID_CONTROL",
+            "base": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+            "sha256": "94ef49b1136dbce726925481f3ee3838a7e115f7bc5692035f8a8becc519dd49",
+            "layers": {
+              "SOURCE": "FROZEN_SHA_MATCH_NOT_CHECK_ACCEPTANCE",
+              "CHECK": "REJECTED_DIAGNOSTIC_UNCLASSIFIED",
+              "owned": "NOT_RUN_CHECK_REJECTED",
+              "C17": "NOT_RUN",
+              "native_O0": "NOT_RUN",
+              "native_O2": "NOT_RUN",
+              "ASan_UBSan": "NOT_RUN",
+              "OOM": "NOT_RUN",
+              "physical_old_current": "NOT_RUN"
+            },
+            "commands": [
+              {
+                "label": "check",
+                "argv": [
+                  "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-r1240/newlangc",
+                  "--check",
+                  "/home/runner/work/_temp/r1240-evidence/sources/N01_equal_value_foreign_root_tripwire.nl"
+                ],
+                "timeout_seconds": 90,
+                "exit_code": 3,
+                "status": "EXIT",
+                "duration_seconds": 0.001,
+                "stdout_bytes": 0,
+                "stderr_bytes": 208
+              }
+            ],
+            "finding": [
+              "Expected source-valid rejected: syntax, precision or unsupported; classify from raw, NOT native PASS"
+            ],
+            "stop": false
+          },
+          {
+            "id": "N02",
+            "original_file": "N02_postcurrent_not_old_tripwire.nl",
+            "expected_category": "VALID_CONTROL",
+            "base": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+            "sha256": "b2f9f7a7cd3ec1cfa538ceff8407abd59336844cfce59620ee522952934cf420",
+            "layers": {
+              "SOURCE": "FROZEN_SHA_MATCH_NOT_CHECK_ACCEPTANCE",
+              "CHECK": "REJECTED_DIAGNOSTIC_UNCLASSIFIED",
+              "owned": "NOT_RUN_CHECK_REJECTED",
+              "C17": "NOT_RUN",
+              "native_O0": "NOT_RUN",
+              "native_O2": "NOT_RUN",
+              "ASan_UBSan": "NOT_RUN",
+              "OOM": "NOT_RUN",
+              "physical_old_current": "NOT_RUN"
+            },
+            "commands": [
+              {
+                "label": "check",
+                "argv": [
+                  "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-r1240/newlangc",
+                  "--check",
+                  "/home/runner/work/_temp/r1240-evidence/sources/N02_postcurrent_not_old_tripwire.nl"
+                ],
+                "timeout_seconds": 90,
+                "exit_code": 3,
+                "status": "EXIT",
+                "duration_seconds": 0.001,
+                "stdout_bytes": 0,
+                "stderr_bytes": 203
+              }
+            ],
+            "finding": [
+              "Expected source-valid rejected: syntax, precision or unsupported; classify from raw, NOT native PASS"
+            ],
+            "stop": false
+          },
+          {
+            "id": "N03",
+            "original_file": "N03_break_crosses_loan_boundary_reject.nl",
+            "expected_category": "INVALID_REJECT",
+            "base": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+            "sha256": "ffc4d4a74faff0e0cb6dbd6b4665eec4c03b64c938b6a1150f404cb5ab483d95",
+            "layers": {
+              "SOURCE": "FROZEN_SHA_MATCH_NOT_CHECK_ACCEPTANCE",
+              "CHECK": "REJECTED_DIAGNOSTIC_UNCLASSIFIED",
+              "owned": "NOT_RUN_CHECK_REJECTED",
+              "C17": "NOT_RUN",
+              "native_O0": "NOT_RUN",
+              "native_O2": "NOT_RUN",
+              "ASan_UBSan": "NOT_RUN",
+              "OOM": "NOT_RUN",
+              "physical_old_current": "NOT_RUN"
+            },
+            "commands": [
+              {
+                "label": "check",
+                "argv": [
+                  "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-r1240/newlangc",
+                  "--check",
+                  "/home/runner/work/_temp/r1240-evidence/sources/N03_break_crosses_loan_boundary_reject.nl"
+                ],
+                "timeout_seconds": 90,
+                "exit_code": 3,
+                "status": "EXIT",
+                "duration_seconds": 0.001,
+                "stdout_bytes": 0,
+                "stderr_bytes": 194
+              }
+            ],
+            "finding": [
+              "Expected-invalid rejected; diagnostic/source-law reason must be audited from raw"
+            ],
+            "stop": false
+          },
+          {
+            "id": "N04",
+            "original_file": "N04_loan_escape_into_break_reject.nl",
+            "expected_category": "INVALID_REJECT",
+            "base": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+            "sha256": "3da2c6eec8c7faadee69602c266a7ed8c4f20db6b0d39eb66b097341305d6c70",
+            "layers": {
+              "SOURCE": "FROZEN_SHA_MATCH_NOT_CHECK_ACCEPTANCE",
+              "CHECK": "REJECTED_DIAGNOSTIC_UNCLASSIFIED",
+              "owned": "NOT_RUN_CHECK_REJECTED",
+              "C17": "NOT_RUN",
+              "native_O0": "NOT_RUN",
+              "native_O2": "NOT_RUN",
+              "ASan_UBSan": "NOT_RUN",
+              "OOM": "NOT_RUN",
+              "physical_old_current": "NOT_RUN"
+            },
+            "commands": [
+              {
+                "label": "check",
+                "argv": [
+                  "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-r1240/newlangc",
+                  "--check",
+                  "/home/runner/work/_temp/r1240-evidence/sources/N04_loan_escape_into_break_reject.nl"
+                ],
+                "timeout_seconds": 90,
+                "exit_code": 3,
+                "status": "EXIT",
+                "duration_seconds": 0.001,
+                "stdout_bytes": 0,
+                "stderr_bytes": 181
+              }
+            ],
+            "finding": [
+              "Expected-invalid rejected; diagnostic/source-law reason must be audited from raw"
+            ],
+            "stop": false
+          },
+          {
+            "id": "N05",
+            "original_file": "N05_sibling_intentional_change_tripwire.nl",
+            "expected_category": "VALID_CONTROL",
+            "base": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+            "sha256": "3d8b24069f237fd652a54e0b4f6ac07eaa197fdd9b10bed8d963b12f566ba0bd",
+            "layers": {
+              "SOURCE": "FROZEN_SHA_MATCH_NOT_CHECK_ACCEPTANCE",
+              "CHECK": "REJECTED_DIAGNOSTIC_UNCLASSIFIED",
+              "owned": "NOT_RUN_CHECK_REJECTED",
+              "C17": "NOT_RUN",
+              "native_O0": "NOT_RUN",
+              "native_O2": "NOT_RUN",
+              "ASan_UBSan": "NOT_RUN",
+              "OOM": "NOT_RUN",
+              "physical_old_current": "NOT_RUN"
+            },
+            "commands": [
+              {
+                "label": "check",
+                "argv": [
+                  "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-r1240/newlangc",
+                  "--check",
+                  "/home/runner/work/_temp/r1240-evidence/sources/N05_sibling_intentional_change_tripwire.nl"
+                ],
+                "timeout_seconds": 90,
+                "exit_code": 3,
+                "status": "EXIT",
+                "duration_seconds": 0.001,
+                "stdout_bytes": 0,
+                "stderr_bytes": 210
+              }
+            ],
+            "finding": [
+              "Expected source-valid rejected: syntax, precision or unsupported; classify from raw, NOT native PASS"
+            ],
+            "stop": false
+          },
+          {
+            "id": "N06",
+            "original_file": "N06_missing_head_deallocate_reject.nl",
+            "expected_category": "INVALID_REJECT",
+            "base": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+            "sha256": "335d03e2bc8d3647b978dc5767efbb22e99f3aca347d5ff0e43a2f7a08716aed",
+            "layers": {
+              "SOURCE": "FROZEN_SHA_MATCH_NOT_CHECK_ACCEPTANCE",
+              "CHECK": "REJECTED_DIAGNOSTIC_UNCLASSIFIED",
+              "owned": "NOT_RUN_CHECK_REJECTED",
+              "C17": "NOT_RUN",
+              "native_O0": "NOT_RUN",
+              "native_O2": "NOT_RUN",
+              "ASan_UBSan": "NOT_RUN",
+              "OOM": "NOT_RUN",
+              "physical_old_current": "NOT_RUN"
+            },
+            "commands": [
+              {
+                "label": "check",
+                "argv": [
+                  "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-r1240/newlangc",
+                  "--check",
+                  "/home/runner/work/_temp/r1240-evidence/sources/N06_missing_head_deallocate_reject.nl"
+                ],
+                "timeout_seconds": 90,
+                "exit_code": 3,
+                "status": "EXIT",
+                "duration_seconds": 0.002,
+                "stdout_bytes": 0,
+                "stderr_bytes": 205
+              }
+            ],
+            "finding": [
+              "Expected-invalid rejected; diagnostic/source-law reason must be audited from raw"
+            ],
+            "stop": false
+          },
+          {
+            "id": "N07",
+            "original_file": "N07_wrong_break_static_type_reject.nl",
+            "expected_category": "INVALID_REJECT",
+            "base": "21577cbbedf2e915c779e24269eb1bf7a19f2857",
+            "sha256": "3206ac2dcfdee7c9ea907fd340989669170e06c7074676907cf7d151ee358aec",
+            "layers": {
+              "SOURCE": "FROZEN_SHA_MATCH_NOT_CHECK_ACCEPTANCE",
+              "CHECK": "REJECTED_DIAGNOSTIC_UNCLASSIFIED",
+              "owned": "NOT_RUN_CHECK_REJECTED",
+              "C17": "NOT_RUN",
+              "native_O0": "NOT_RUN",
+              "native_O2": "NOT_RUN",
+              "ASan_UBSan": "NOT_RUN",
+              "OOM": "NOT_RUN",
+              "physical_old_current": "NOT_RUN"
+            },
+            "commands": [
+              {
+                "label": "check",
+                "argv": [
+                  "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-r1240/newlangc",
+                  "--check",
+                  "/home/runner/work/_temp/r1240-evidence/sources/N07_wrong_break_static_type_reject.nl"
+                ],
+                "timeout_seconds": 90,
+                "exit_code": 3,
+                "status": "EXIT",
+                "duration_seconds": 0.002,
+                "stdout_bytes": 0,
+                "stderr_bytes": 185
+              }
+            ],
+            "finding": [
+              "Expected-invalid rejected; diagnostic/source-law reason must be audited from raw"
+            ],
+            "stop": false
+          }
+        ],
+        "overall": "OBSERVED_WITH_UNVERIFIED_PHYSICAL_LAYERS",
+        "meaning": "Native exit0 is smoke, not source-owned original/result proof"
+      },
+      "nine_source_bytes_equal_frozen_tar": true,
+      "head": "202237b260ebba42c0b71afc6d98fa717927f200",
+      "event": "push",
+      "attempt": 1,
+      "conclusion": "failure"
+    },
+    {
+      "type": "Original GitHub-produced whole-run ZIP at GET time",
+      "local": "run-42539901170-logs.zip",
+      "path": "evidence/r1240-c318/run-42539901170-logs.zip",
+      "run_id": 42539901170,
+      "job_id": 128912270075,
+      "endpoint": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/42539901170/logs",
+      "GET_start_UTC": "2026-11-09T05:08:49.659114+00:00",
+      "GET_end_UTC": "2026-11-09T05:08:50.232590+00:00",
+      "ZIP_members": [
+        {
+          "name": "0_independent-nine.txt",
+          "size": 13753,
+          "compressed_size": 3955,
+          "crc32": "eb3a4ba1"
+        },
+        {
+          "name": "independent-nine/system.txt",
+          "size": 628,
+          "compressed_size": 307,
+          "crc32": "9bb69c89"
+        }
+      ],
+      "size": 4566,
+      "sha256": "835dd25ca6e19be0114892f2bfb4fd6c626eac38e161ece195ad457dfe20a79b",
+      "blob_sha": "20ada39ca67eb6e913563ac424f576b3c603999f",
+      "CRC": "all OK",
+      "head": "d8d0163b95ed7c2a04324d4ca422d902370fe8f8",
+      "event": "push",
+      "attempt": 1,
+      "conclusion": "failure"
+    },
+    {
+      "type": "Complete original decoded whole-job member bytes, unchanged; not artifact ZIP",
+      "local": "job-128912270075-complete.log",
+      "path": "evidence/r1240-c318/job-128912270075-complete.log",
+      "run_id": 42539901170,
+      "job_id": 128912270075,
+      "source_zip": "run-42539901170-logs.zip",
+      "source_member": "0_independent-nine.txt",
+      "note": "Individual job API redirect Forbidden; supported whole-run ZIP API used. Entire root job-text member preserved without encoding or newline changes; all system/step bytes remain in original run ZIP.",
+      "size": 13753,
+      "sha256": "1ef63323ed516eaafd0181b92247b42d968905fa8ef4798344b5dc672432f352",
+      "blob_sha": "3362e1600f6ee17cc9737df455984e9526ac7514",
+      "head": "d8d0163b95ed7c2a04324d4ca422d902370fe8f8",
+      "event": "push",
+      "attempt": 1,
+      "conclusion": "failure"
+    },
+    {
+      "type": "Original GitHub-produced whole-run ZIP at GET time",
+      "local": "run-42540174314-logs.zip",
+      "path": "evidence/r1240-c318/run-42540174314-logs.zip",
+      "run_id": 42540174314,
+      "job_id": 128913115154,
+      "endpoint": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/42540174314/logs",
+      "GET_start_UTC": "2026-11-09T05:08:50.233980+00:00",
+      "GET_end_UTC": "2026-11-09T05:08:50.811247+00:00",
+      "ZIP_members": [
+        {
+          "name": "0_independent-nine.txt",
+          "size": 30474,
+          "compressed_size": 7491,
+          "crc32": "74304ced"
+        },
+        {
+          "name": "independent-nine/system.txt",
+          "size": 628,
+          "compressed_size": 310,
+          "crc32": "579c68e2"
+        }
+      ],
+      "size": 8105,
+      "sha256": "7bdffe99e3d7fe3b486b799ae5d08ee74c666608855957ed7c4e371b1065e47e",
+      "blob_sha": "3a5fb39bbfce103228bc7fa3e94616fa288ebb67",
+      "CRC": "all OK",
+      "head": "202237b260ebba42c0b71afc6d98fa717927f200",
+      "event": "push",
+      "attempt": 1,
+      "conclusion": "failure"
+    },
+    {
+      "type": "Complete original decoded whole-job member bytes, unchanged; not artifact ZIP",
+      "local": "job-128913115154-complete.log",
+      "path": "evidence/r1240-c318/job-128913115154-complete.log",
+      "run_id": 42540174314,
+      "job_id": 128913115154,
+      "source_zip": "run-42540174314-logs.zip",
+      "source_member": "0_independent-nine.txt",
+      "note": "Individual job API redirect Forbidden; supported whole-run ZIP API used. Entire root job-text member preserved without encoding or newline changes; all system/step bytes remain in original run ZIP.",
+      "size": 30474,
+      "sha256": "240a3ff399fa09817c31436147fc3f14dec6cc6f82ed7103f248e24325bda9f6",
+      "blob_sha": "091759c60ca2d58fded1f96edbbc3f79b8fa6ebe",
+      "head": "202237b260ebba42c0b71afc6d98fa717927f200",
+      "event": "push",
+      "attempt": 1,
+      "conclusion": "failure"
+    }
+  ],
+  "provider_artifact": {
+    "id": 13641445385,
+    "node_id": "MDg6QXJ0aWZhY3QxMzY0MTQ0NTM4NQ==",
+    "name": "r1240-independent-202237b260ebba42c0b71afc6d98fa717927f200-attempt1",
+    "size_in_bytes": 16879,
+    "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/artifacts/13641445385",
+    "archive_download_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/artifacts/13641445385/zip",
+    "expired": false,
+    "digest": "sha256:bb36bad14b90b527620a6f0e103d3556dcaf97af4eb2c7d45f704d687ede2944",
+    "created_at": "2026-11-09T00:26:36Z",
+    "updated_at": "2026-11-09T00:26:36Z",
+    "expires_at": "2026-12-09T00:26:35Z",
+    "workflow_run": {
+      "id": 42540174314,
+      "repository_id": 1404213211,
+      "head_repository_id": 1404213211,
+      "head_branch": "r-fast/r1240-terminal-old-break-v1",
+      "head_sha": "202237b260ebba42c0b71afc6d98fa717927f200"
+    }
+  },
+  "frozen_source_validation": {
+    "archive_sha256": "e59f22067f192decb2a6c6fb8f7a8d2112608d3a3a82d52a36d96686bbd4a807",
+    "manifest_sha256": "34ed05d2589d37f0933b319ef2561907e7830d60485f014919452a083af2ae00",
+    "oracle_sha256": "183db6732a7d63e5e32d4933938335096bafc4de2b95d85a33e3d6d0dec149ad",
+    "nine_original_sources_equal_artifact": true
+  },
+  "classification": "FIRST run42539901170/job128912270075 failure on shallow checkout ancestry, all nine CHECK NOT_RUN. Second run42540174314/job128913115154 nine CHECK exit3: six P14 conservative precision gates + three direct semantic negative refusals. Eligibility remains historical prediction, not new source-law decision. Public-owned/C17/native/physical original/H cleanup/OOM NOT_RUN. No repair/regrade/rerun.",
+  "raw_log_transport": "Individual job API redirect returned Forbidden. Authenticated supported run-log ZIP API captured complete original GET-time ZIPs, then entire root job text member preserved as binary bytes without newline/encoding changes. Original system/step members remain inside ZIPs. Not reconstructed from decoded text. No historical packaging digest asserted for run-log ZIPs.",
+  "Git_transport": "Original file -> generated base64/JSON payload file with strict decode equality verified before POST -> Git blob SHA check -> independently raw GET real blob bytes and exact byte/SHA/size/CRC readback after new ref creation. No model transcription.",
+  "workflow_filters": "compiler-ci/frontend: pull_request or push main; r-preflight: push r-fast/**; r1240-independent: push r-fast/r1240-terminal-old-break-v1 only. No r-archive match. Preserve every workflow byte.",
+  "execution_mode": "GitHub専用ブランチ＋GitHub Actionsのみ。Pと同等の実行環境は禁止。This archival stage Actions/CI/compiler/semantic rerun/AST/native/Lean/build/PR/r-fast push=0. Byte inspection and Git only.",
+  "missing": [],
+  "limits": "P1272 continues independently; no coordination gate on P. No new R test, source/oracle/FIRST edits, READY/merge/Product GO or Issue close.",
+  "VALUE_ALIGNMENT_RISK": "Custody protects independent evidence only, not native/general soundness or reduced library-author+ordinary-safe-caller UB audit locality versus well-factored C; UNMEASURED. Product GO PAUSED/H1 HOLD.",
+  "artifact_API_capture_UTC": {
+    "start": "2026-11-09 05:07:43 UTC",
+    "end": "2026-11-09 05:07:45 UTC"
+  }
+}

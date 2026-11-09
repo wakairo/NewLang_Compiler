@@ -1,0 +1,1 @@
+C318/C360 R1240 original evidence custody only. See index.json for original artifact ZIP, both original GET-time run-log ZIPs and exact complete whole-job member bytes. FIRST shallow ancestry failure stays NOT_RUN; second CHECK remains six precision/three semantic refusals, all higher layers NOT_RUN. No execution or Product GO.
