@@ -15,3 +15,9 @@ add_test(NAME p1291_owned_A.unit COMMAND p1291_owned
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1291/sources/A-original.nl" 53 173 197 0)
 add_test(NAME p1291_owned_B.unit COMMAND p1291_owned
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1291/sources/B-index-value-control.nl" 61 131 181 1)
+add_test(NAME p1291_check_oom_A.unit COMMAND p1291_check_oom
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1291/sources/A-original.nl" check)
+add_test(NAME p1291_check_oom_B.unit COMMAND p1291_check_oom
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1291/sources/B-index-value-control.nl" check)
+set_tests_properties(p1291_check_oom_A.unit p1291_check_oom_B.unit
+    PROPERTIES RUN_SERIAL TRUE TIMEOUT 90)
