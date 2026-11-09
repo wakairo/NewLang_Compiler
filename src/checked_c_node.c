@@ -979,8 +979,8 @@ static bool changed_match(Emit *e, Env *env, NLCheckedNodeId id,
                           const NLCheckedNodeView *v, Value *out)
 {
     NLNodeJoinView proof;
-    if (v->borrowed_match || !match_result_shape(e, env->artifact, v) ||
-        v->item_count != 2 || v->normal_arms != 2 ||
+    if (v->borrowed_match || v->terminates || v->type != e->unit ||
+        v->result_count != 0 || v->item_count != 2 || v->normal_arms != 2 ||
         v->normal_frame_unchanged || v->match_binding_prefix == 0 ||
         !nl_checked_node_join_view(env->artifact, id, &proof))
         return reject(e);
@@ -1025,8 +1025,8 @@ static bool match(Emit *e, Env *env, NLCheckedNodeId id,
     if (!v->normal_frame_unchanged || original_change ||
         nl_checked_node_join_view(env->artifact, id, &issued))
         return changed_match(e, env, id, v, out);
-    if (v->borrowed_match || v->terminates || v->type != e->unit ||
-        v->result_count != 0 || v->item_count != 2 || v->normal_arms != 2 ||
+    if (v->borrowed_match || !match_result_shape(e, env->artifact, v) ||
+        v->item_count != 2 || v->normal_arms != 2 ||
         !v->normal_frame_unchanged || v->match_binding_prefix == 0)
         return reject(e);
     return match_runtime(e, env, id, v, out, NULL);
