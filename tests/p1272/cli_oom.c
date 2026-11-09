@@ -49,7 +49,8 @@ NLCheckStatus __wrap_nl_semantic_check_expression(NLSemanticContext *c,
     }
     const NLCheckStatus status =
         __real_nl_semantic_check_expression(c, t, f, d);
-    armed = false;
+    if (checking)
+        armed = false;
     if (checking && fired)
         assert(status == NL_CHECK_OUT_OF_MEMORY);
     return status;
@@ -62,7 +63,8 @@ NLNodeCStatus __wrap_nl_checked_c_node(const NLCheckedFragment *f, char **out,
         armed = true;
     }
     const NLNodeCStatus status = __real_nl_checked_c_node(f, out, length);
-    armed = false;
+    if (!checking)
+        armed = false;
     if (!checking && fired)
         assert(status == NL_NODE_C_OUT_OF_MEMORY);
     return status;
