@@ -2,6 +2,11 @@ add_executable(p1291_owned tests/p1291/owned.c)
 target_include_directories(p1291_owned PRIVATE src)
 target_compile_options(p1291_owned PRIVATE -UNDEBUG)
 target_link_libraries(p1291_owned PRIVATE newlang_checked_c_node)
+add_executable(p1291_emit_owned tests/p1291/owned.c)
+target_include_directories(p1291_emit_owned PRIVATE src)
+target_compile_definitions(p1291_emit_owned PRIVATE P1291_EMIT=1)
+target_compile_options(p1291_emit_owned PRIVATE -UNDEBUG)
+target_link_libraries(p1291_emit_owned PRIVATE newlang_checked_c_node)
 add_executable(p1291_check_oom tests/p1291/check_oom.c)
 target_include_directories(p1291_check_oom PRIVATE src)
 target_compile_options(p1291_check_oom PRIVATE -UNDEBUG -fno-pie)
@@ -21,3 +26,12 @@ add_test(NAME p1291_check_oom_B.unit COMMAND p1291_check_oom
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1291/sources/B-index-value-control.nl" check)
 set_tests_properties(p1291_check_oom_A.unit p1291_check_oom_B.unit
     PROPERTIES RUN_SERIAL TRUE TIMEOUT 90)
+add_test(NAME p1291_emit_owned_A.unit COMMAND p1291_emit_owned
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1291/sources/A-original.nl" 53 173 197 0)
+add_test(NAME p1291_emit_owned_B.unit COMMAND p1291_emit_owned
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1291/sources/B-index-value-control.nl" 61 131 181 1)
+add_test(NAME p1291_native.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1291/native.py"
+    "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1291_owned>"
+    "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_BINARY_DIR}/p1291-native")
+set_tests_properties(p1291_native.integration PROPERTIES RUN_SERIAL TRUE TIMEOUT 180)

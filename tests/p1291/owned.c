@@ -9,12 +9,41 @@ typedef struct {
     size_t seen_count, match_count, reads, calls;
     Site matches[16], read, call;
 } Observation;
+#ifdef P1291_EMIT
+static char *baseline_c;
+static size_t baseline_length;
+#endif
 
 static void healthy(const PInput *p)
 {
     assert(p->entry && nl_h_origin_has_sites(p->entry) &&
            nl_h_origin_validate(p->entry) && nl_h_custody_validate(p->entry) &&
            nl_h_custody_result_valid(p->entry, nl_checked_root(p->entry)));
+#ifdef P1291_EMIT
+    char *text = NULL;
+    size_t length = 98765;
+    assert(nl_checked_c_node(p->entry, &text, &length) == NL_NODE_C_OK &&
+           text && length);
+    if (!baseline_c) {
+        baseline_c = text;
+        baseline_length = length;
+    } else {
+        assert(length == baseline_length && !memcmp(text, baseline_c, length));
+        free(text);
+    }
+#endif
+}
+static void refused(const PInput *p)
+{
+    assert(!nl_h_custody_validate(p->entry) &&
+           !nl_h_custody_result_valid(p->entry, nl_checked_root(p->entry)));
+#ifdef P1291_EMIT
+    char *text = NULL;
+    size_t length = 98765;
+    assert(nl_checked_c_node(p->entry, &text, &length) ==
+               NL_NODE_C_UNSUPPORTED &&
+           !text && length == 98765);
+#endif
 }
 static size_t byte(const NLSemanticContext *c, NLValueId id)
 {
@@ -118,8 +147,7 @@ static void destruction_controls(const char *source)
             a.entry->body_count += 17;
         else
             a.entry->bodies = b.entry->bodies;
-        assert(!nl_h_custody_validate(a.entry) &&
-               !nl_h_custody_result_valid(a.entry, nl_checked_root(a.entry)));
+        refused(&a);
         /* Do not restore A's view. Canonical child custody must never free
          * B's genuine allocations or trust a caller-supplied cardinality. */
         p_dispose(&a);
@@ -219,9 +247,7 @@ int main(int argc, char **argv)
                 n->result_count = 0;
             else
                 ++n->results[0].value;
-            assert(
-                !nl_h_custody_validate(p.entry) &&
-                !nl_h_custody_result_valid(p.entry, nl_checked_root(p.entry)));
+            refused(&p);
             *n = saved;
             healthy(&p);
             ++rejected;
@@ -240,6 +266,7 @@ int main(int argc, char **argv)
     assert(nl_checked_copy_body_validate(call.owner, call.id, &body) !=
                NL_CHECK_OK &&
            !nl_h_custody_validate(p.entry));
+    refused(&p);
     mutable->context = world;
     nl_semantic_destroy(clone);
     healthy(&p);
@@ -250,5 +277,8 @@ int main(int argc, char **argv)
     p_dispose(&p);
     destruction_controls(argv[1]);
     puts("CANONICAL-DESTROY-PASS controls=6");
+#ifdef P1291_EMIT
+    free(baseline_c);
+#endif
     return 0;
 }
