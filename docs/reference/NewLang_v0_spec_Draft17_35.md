@@ -1,6 +1,6 @@
-# NewLang v0 仕様書（Draft 17.35 — C332 PROPOSED / UNMERGED）
+# NewLang v0 仕様書（Draft 17.35）
 
-> 状態: **PROPOSED / UNMERGED — C332 bounded source-selection only, not canonical or Production authority**
+> 状態: **設計検証用ドラフト — CURRENT_SPEC が Draft17.35 を選択した場合にのみ normative**
 >
 > この文書は、NewLang v0 コンパイラを実装し、設計をスクラップ・アンド・ビルドするための仕様書である。
 > ISO 規格相当の網羅性・厳密性・用語整備を目標としない。
@@ -10,13 +10,13 @@
 
 
 
-## Draft 17.35 候補の唯一の差分 — Issue #1267 C332
+## Draft 17.35 の主変更 — Issue #1267 C332（CURRENT_SPEC選択時の限定source採用）
 
-**PROPOSED / UNMERGED / HOLD; canonical main/CURRENT_SPEC→Draft17.34 remains unchanged.** This is a **source-admission candidate only**. It is not parser/CHECK/owned/C17/native evidence, independent F/R soundness review, Product GO, or permission for P to change Production. Normative adoption requires independent Coordination [§4.2 Gate E](https://github.com/wakairo/NewLang_Compiler/issues/1267), reviewed merge, and subsequent explicit CURRENT_SPEC selection.
+**Authority / selected status:** [Coordination C340 §4.2 Gate E](https://github.com/wakairo/NewLang_Compiler/pull/1270#issuecomment-6731727909) independently accepted this **source-admission-only** bounded rule. It is **normative solely on branches whose CURRENT_SPEC explicitly selects Draft17.35**; earlier Draft17.34 branches continue rejecting the same H scalar payload source. Gate E does **not** establish actual Production parser/CHECK/owned/C17/native, independent F/R soundness, or Product GO, nor does it itself authorize a new P implementation.
 
-Draft17.34 §16.3.8's **exactly one completed one-link recursive H + one separate ordinary two-u8 T in one semantic unit**, with two same-H fallible original allocation sites, remains the sole eligible source-unit category. Within this category alone, §17.1 below proposes **one additional read-only source form** for the already genuine, live, correctly Domain-scoped ordinary `ref<read,H>` root: `read(r@declared_payload_field):u8`. H's second declared u8 scalar field is determined by true nominal/declaration index, not by its spelling. The existing typed projection/Copy/currentness/loan/owner rules are preserved. No new original, Allocation, Domain, Storage, field lifetime, read→write, general ptr dereference, extra H root, cross-root proof or ABI is created.
+Draft17.34 §16.3.8's **exactly one completed one-link recursive H + one separate ordinary two-u8 T in one semantic unit**, with two same-H fallible original allocation sites, remains the sole eligible source-unit category. Within this category alone, §17.1 below selects **one additional read-only source form** only when CURRENT_SPEC selects Draft17.35 for the already genuine, live, correctly Domain-scoped ordinary `ref<read,H>` root: `read(r@declared_payload_field):u8`. H's second declared u8 scalar field is determined by true nominal/declaration index, not by its spelling. The existing typed projection/Copy/currentness/loan/owner rules are preserved. No new original, Allocation, Domain, Storage, field lifetime, read→write, general ptr dereference, extra H root, cross-root proof or ABI is created.
 
-Draft17.25's link-only `r@link` and explicit payload rejection remain historical for their older bounded source profiles; the new §17.35 source rule, **if selected**, is their one tightly scoped later exception, **not** an amendment to the old five-root/three-link profile. Earlier [M393 design candidate](https://github.com/wakairo/NewLang_Compiler/issues/393#issuecomment-6138319527) was not normative; [C393 five-root investment HOLD](https://github.com/wakairo/NewLang_Compiler/issues/393#issuecomment-6138373666) is preserved. [P1263 SOURCE-LAW STOP](https://github.com/wakairo/NewLang_Compiler/issues/1263#issuecomment-6730741184) remains NOT_RUN at every compiler/native layer. Historical ledger DI-019 is PROPOSED only; DI-001/006/007/009/010/014/017/018 and all core laws are KEPT. Product GO #624 PAUSED, H1 #268 HOLD.
+Draft17.25's link-only `r@link` and explicit payload rejection remain historical for their older bounded source profiles; the new §17.35 source rule, **when CURRENT_SPEC selects Draft17.35**, is their one tightly scoped later exception, **not** an amendment to the old five-root/three-link profile. Earlier [M393 design candidate](https://github.com/wakairo/NewLang_Compiler/issues/393#issuecomment-6138319527) was not normative; [C393 five-root investment HOLD](https://github.com/wakairo/NewLang_Compiler/issues/393#issuecomment-6138373666) is preserved. [P1263 SOURCE-LAW STOP](https://github.com/wakairo/NewLang_Compiler/issues/1263#issuecomment-6730741184) remains NOT_RUN at every compiler/native layer. Historical ledger DI-019 is ADOPTED / BOUNDED only when CURRENT_SPEC selects Draft17.35; DI-001/006/007/009/010/014/017/018 and all core laws are KEPT. Product GO #624 PAUSED, H1 #268 HOLD.
 
 ## Draft 17.34 の主変更 — Issue #749: single-unit exactly one recursive H + one two-u8 Copy T（**ADOPTED / BOUNDED WHEN CURRENT_SPEC SELECTS**）
 
@@ -7027,9 +7027,9 @@ general loan syntax、FFI/C ABI/LLVM/layout、cJSON、new effects**を導入し�
 もし将来実装や独立reviewで§10/11/13/17/26のcore access/dependency invariantsを
 変更しなければ正当化できない具体例が出たら、この候補をBLOCKしてCoordinationへ戻す。
 
-### Draft 17.35 C332 PROPOSED — one bounded live-original H u8 payload read-only source category
+### Draft 17.35 C332 SELECTED / BOUNDED — one live-original H u8 payload read-only source category
 
-**Status: PROPOSED / UNMERGED, not yet source-admitted on current main.** This exact later category is an exception **only** to Draft17.25 §17.1's historical committed-link-only `ref@field` fence and negative `r@payload` row. The older rule and its negative matrix continue to describe all earlier/five-root/general categories. This clause becomes normative only if reviewed and explicitly selected by CURRENT_SPEC.
+**Status: SELECTED / BOUNDED only where CURRENT_SPEC selects Draft17.35 following C340 independent Gate E.** This exact later category is an exception **only** to Draft17.25 §17.1's historical committed-link-only `ref@field` fence and negative `r@payload` row. The older rule and its negative matrix continue to describe all earlier/five-root/general categories. On earlier Draft17.34 branches this candidate is not selected and the old rejection remains authoritative.
 
 ~~~text
 bounded_H_payload_read :=
@@ -7063,14 +7063,14 @@ let from_H = loan_read(back_domain) { |stable_back|
 
 | Case | Expected rejection |
 | --- | --- |
-| `ptr_H@priority`, direct H value local `h@priority`, foreign/incomplete/unknown nominal, unknown/third field, general `ref_expr@field`, nested `r@link@priority` | **SOURCE-PROFILE UNSUPPORTED**; this proposal did not admit broad ptr/ref/heap field paths |
+| `ptr_H@priority`, direct H value local `h@priority`, foreign/incomplete/unknown nominal, unknown/third field, general `ref_expr@field`, nested `r@link@priority` | **SOURCE-PROFILE UNSUPPORTED**; this selected limited source rule does not admit broad ptr/ref/heap field paths |
 | Retained Copy ptr after target EndRoot, same-address fresh incarnation, wrong D_front used for back, expired Domain/stability, invalid source pointer | **SEMANTIC REJECT** when invalid §10.1 condition proven; otherwise precision refusal, never safe access from `Some(ptr)` |
 | `replace(r@priority,new_u8)` where r is ref<read,H>, read→write/exclusive or Allocation/Domain mint | **SEMANTIC REJECT**, mode-preserving read-only projection |
 | ref/loan/current dependency escaping ended scope, conflicting Change or stale ValueFact | **SEMANTIC REJECT/precision** under §§13.5a/13.8, no laundering |
 | Missing H0/1/2 cleanup, double owner consume, payload read when second allocation failed | **SEMANTIC REJECT** for actual affine/liveness violation |
 | Same-byte foreign H root/field or same numeric PlaceId in independent world | reject or precision until exact original/ProjectionId/source owner proven |
 
-**Review and STOP:** A new later P release must first demonstrate real source-issued checked field-ref/read and completely validated **read-only** owned evidence with origin/Domain/current/loan and all source branches, not merely lift the HEAP-LINK-FIELD-PROFILE guard or count read-only operations as phantom writes. No C17/natives before genuine independent consumer proof. New owner issuer, broad public proof, general pointer dereference/traversal, heap/ABI/CFG/lifetime change, unsoundness or uncontrolled TCB **STOP C**; this candidate supplies no implementation authority. Author+ordinary-safe-caller UB-prevention audit/re-audit locality vs well-factored C remains **UNMEASURED**; M393 five-root HOLD, H1 #268 HOLD and Product GO #624 PAUSED remain.
+**Review and STOP:** A new later P release must first demonstrate real source-issued checked field-ref/read and completely validated **read-only** owned evidence with origin/Domain/current/loan and all source branches, not merely lift the HEAP-LINK-FIELD-PROFILE guard or count read-only operations as phantom writes. No C17/natives before genuine independent consumer proof. New owner issuer, broad public proof, general pointer dereference/traversal, heap/ABI/CFG/lifetime change, unsoundness or uncontrolled TCB **STOP C**; this source-selection decision by itself supplies no P implementation authority. Author+ordinary-safe-caller UB-prevention audit/re-audit locality vs well-factored C remains **UNMEASURED**; M393 five-root HOLD, H1 #268 HOLD and Product GO #624 PAUSED remain.
 
 ### Draft 17.23 bounded fixed-field source profile
 
