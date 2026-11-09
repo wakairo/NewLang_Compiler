@@ -219,6 +219,21 @@ static void adversarial(const char *path)
     NLCopyBodyView view;
     assert(nl_checked_copy_body_parameters(a.owner, ids[0], &p) &&
            nl_checked_copy_body_view(a.owner, ids[0], &view));
+    NLCopyBodyParameters foreign;
+    NLCopyBodyView foreign_view;
+    assert(nl_checked_copy_body_parameters(b.owner, other_ids[0], &foreign) &&
+           nl_checked_copy_body_view(b.owner, other_ids[0], &foreign_view));
+    NLCopyBodyParameters candidate = p;
+    candidate.entry = foreign.entry;
+    assert(nl_checked_copy_body_parameters_validate(a.owner, ids[0],
+                                                    &candidate) != NL_CHECK_OK);
+    candidate = p;
+    candidate.handoff = foreign.handoff;
+    assert(nl_checked_copy_body_parameters_validate(a.owner, ids[0],
+                                                    &candidate) != NL_CHECK_OK);
+    assert(nl_checked_copy_body_validate(a.owner, ids[0], &foreign_view) !=
+           NL_CHECK_OK);
+    observations += 3;
     NLCheckedFragment *callee = (NLCheckedFragment *)view.body;
     NLCheckedNodeView *loan = &a.owner->nodes[p.loan - 1];
 #define MUTATE(object, statement)                                              \
@@ -288,6 +303,18 @@ static void adversarial(const char *path)
     dispose(&a);
     accepted(&b);
     dispose(&b);
+    /* Truncating display cardinalities also cannot leak canonical children. */
+    a = (Input){0};
+    b = (Input){0};
+    load(&a, path);
+    load(&b, path);
+    helper = (NLCheckedFragment *)a.view.helper_body;
+    helper->arm_count = 0;
+    a.owner->body_count = 0;
+    rejected(&a);
+    dispose(&a);
+    accepted(&b);
+    dispose(&b);
 }
 int main(int argc, char **argv)
 {
@@ -304,6 +331,6 @@ int main(int argc, char **argv)
     printf("P1260 REJECT %zu observations %zu; A destroyed unrestored/B "
            "survives; genuine owned/current/typed Copy PASS\n",
            refused, observations);
-    assert(refused >= 29 && observations >= 44);
+    assert(refused >= 30 && observations >= 47);
     return 0;
 }
