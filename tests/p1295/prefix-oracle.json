@@ -1,0 +1,7 @@
+{
+  "source": "P-surviving-state.nl",
+  "purpose": "Observe the existing sealed unchanged-prefix relation, the same surviving original/root/incarnation and its actual postmatch loan/replace/current/sibling. No C17 or semantic authority is constructed.",
+  "expected": "CHECK0; canonical custody/origin valid; both outer normal arms prove unchanged prefix; retained initial fields [213,101]; actual postmatch replace returns old101, receives unknown dependency-free runtime u8; reads use postcurrent child and unchanged sibling; loan closes",
+  "execution": "before any Production change",
+  "failure": "Preserve first mismatch; do not infer missing CHECK proof from a probe-shape assertion. No unsafe native execution."
+}

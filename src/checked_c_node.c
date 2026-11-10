@@ -102,6 +102,11 @@ typedef struct {
      * normal arms have passed the existing H carrier/cleanup checks. */
     NLCheckedNodeId copy_after_match;
     bool copy_h_closed;
+    /* One unchanged main-prefix original. Its pre-state is observed only
+     * through the exact sealed outer None arm's public prefix relation. */
+    const NLCheckedFragment *copy_surviving_issuer;
+    const NLSemanticContext *copy_surviving_anchor;
+    NLCheckedNodeId copy_surviving_constructor, copy_surviving_match;
     /* Borrowed admission ledger, never a semantic capability. */
     const NLCheckedFragment *pre_copy_issuer;
     NLCheckedNodeId pre_copy_constructors[2];
@@ -1708,8 +1713,11 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
                                  env->artifact == e->current->body &&
                                  e->current->heap_match == id;
     const bool closing =
-        current_closing || (e->copy_after_match == id &&
-                            env->artifact == e->copy_issuer && !env->parent);
+        current_closing ||
+        (e->copy_after_match == id && env->artifact == e->copy_issuer &&
+         !env->parent) ||
+        (e->copy_surviving_match == id &&
+         env->artifact == e->copy_surviving_issuer && !env->parent);
     if (closing && (site || e->copy_h_closed || e->current_h_closed ||
                     env->backing || env->heap_place || env->heap_domain))
         return reject(e);
@@ -3718,6 +3726,7 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         (e.copy_type && (!e.copy_roots || e.copy_roots > 2 ||
                          e.copy_calls != e.copy_expected_calls)) ||
         (e.copy_second_function && e.copy_roots != e.copy_expected_roots) ||
+        (e.copy_surviving_issuer && (!e.copy_h_closed || e.copy_roots != 2)) ||
         (e.post_copy_issuer && e.copy_roots != 2) ||
         (e.no_pre_read && e.producer_calls != 1) ||
         (e.custody && (!e.custody_authorized || e.recipient_calls != 1)) ||

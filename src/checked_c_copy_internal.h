@@ -258,9 +258,76 @@ static bool copy_two_helpers(Emit *e, const NLCheckedFragment *body)
              copy_closed_plan(e, body))) ||
            reject(e);
 }
+/* Preserve one already emitted lexical T across a typed, closed H match.
+ * CHECK's sealed unchanged-prefix relation licenses this observation of the
+ * incoming T, not any allocation-success world. Both normal H paths must
+ * still pass allocated_match before the same carrier can be used again. */
+static bool copy_surviving_plan(Emit *e, const NLCheckedFragment *body)
+{
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(body, nl_checked_root(body));
+    const NLCheckedNodeView *binding =
+        root ? nl_checked_node_view(body, root->first_item) : NULL;
+    const NLCheckedNodeView *constructor =
+        binding ? nl_checked_node_view(body, binding->initializer) : NULL;
+    if (!e->copy_type || e->copy_issuer == body || !constructor ||
+        constructor->kind != NL_CHECKED_AGGREGATE ||
+        constructor->type != e->copy_type)
+        return true;
+    const NLCheckedNodeView *result =
+        nl_checked_node_view(body, binding->next_item);
+    const NLCheckedNodeView *match =
+        result ? nl_checked_node_view(body, result->initializer) : NULL;
+    const NLCheckedNodeView *trial =
+        match ? nl_checked_node_view(body, match->initializer) : NULL;
+    if (!e->scalar_issued || !e->two_heap || !e->live_tail || e->custody ||
+        e->copy_expected_calls != 1 || e->copy_after_match ||
+        root->kind != NL_CHECKED_BLOCK || root->terminates ||
+        binding->kind != NL_CHECKED_BINDING || !result ||
+        result->kind != NL_CHECKED_BINDING || !match ||
+        match->kind != NL_CHECKED_MATCH || match->type != e->u8 ||
+        !match_result_shape(e, body, match) || match->terminates ||
+        !match->normal_frame_unchanged || match->captured_frame_closed ||
+        match->normal_arms != 2 || match->item_count != 2 ||
+        binding->symbol > match->match_binding_prefix || !trial ||
+        trial->kind != NL_CHECKED_TRY_ALLOCATE_ONE ||
+        body != nl_checked_call_body(e->origin_root,
+                                     nl_checked_root(e->origin_root)))
+        return reject(e);
+    bool seen[2] = {0};
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *arm =
+            nl_checked_match_arm(body, result->initializer, i);
+        const NLCheckedNodeView *a =
+            nl_checked_node_view(arm, nl_checked_root(arm));
+        if (!a || a->kind != NL_CHECKED_MATCH_ARM || a->variant < 1 ||
+            a->variant > 2 || seen[a->variant - 1] ||
+            !a->normal_frame_unchanged || a->terminates ||
+            !nl_h_origin_edge(e->origin_root, body, result->initializer, i,
+                              arm))
+            return reject(e);
+        seen[a->variant - 1] = true;
+        if (a->variant == 1)
+            e->copy_surviving_anchor = nl_checked_context(arm);
+    }
+    NLSemanticSnapshot prefix;
+    NLSemanticBindingView original;
+    if (!e->copy_surviving_anchor ||
+        !nl_semantic_snapshot(e->copy_surviving_anchor, &prefix) ||
+        prefix.backing_regions || prefix.domains || prefix.raw_intervals ||
+        !nl_semantic_binding_view(e->copy_surviving_anchor, binding->symbol,
+                                  &original) ||
+        original.type != e->copy_type || original.availability != NL_AVAILABLE)
+        return reject(e);
+    e->copy_surviving_issuer = body;
+    e->copy_surviving_constructor = binding->initializer;
+    e->copy_surviving_match = result->initializer;
+    return true;
+}
 static bool copy_prepare(Emit *e, const NLCheckedFragment *body)
 {
-    return copy_prepare_at(e, body, 0) && copy_two_helpers(e, body);
+    return copy_prepare_at(e, body, 0) && copy_two_helpers(e, body) &&
+           copy_surviving_plan(e, body);
 }
 /* A nested Copy original is allowed only in the exact publicly validated
  * caller fragment after its one producer has returned the original H owner.
@@ -744,6 +811,21 @@ static bool copy_closed_world(const Emit *e, const Env *env)
 }
 static bool copy_carrier_world(Emit *e, const Env *env)
 {
+    if (e->copy_surviving_issuer && env->artifact == e->copy_surviving_issuer &&
+        !env->parent && !env->backing && !env->heap_place &&
+        !env->heap_domain) {
+        if (!e->allocations)
+            return !e->copy_h_closed;
+        if (!e->copy_h_closed || e->allocations != 2 ||
+            e->producer_calls != 1 || e->owner_calls != 1 || e->pending_live ||
+            e->active_owner_call || e->active_owner_body)
+            return false;
+        for (size_t i = 0; i < 2; ++i)
+            if (e->lifecycle[i].stage || e->lifecycle[i].owner_symbol ||
+                e->lifecycle[i].domain_symbol)
+                return false;
+        return true;
+    }
     return env->artifact == e->copy_issuer &&
            (!e->allocations ||
             (e->allocations == 2 && e->producer_calls == 1 &&
@@ -754,14 +836,17 @@ static bool copy_carrier_world(Emit *e, const Env *env)
 static bool copy_bind(Emit *e, Env *env, Local *l, NLCheckedNodeId constructor)
 {
     const NLSemanticContext *c = nl_checked_context(env->artifact);
+    const NLSemanticContext *anchor = env->artifact == e->copy_surviving_issuer
+                                          ? e->copy_surviving_anchor
+                                          : e->copy_anchor;
     NLSemanticBindingView b;
     NLSemanticPlaceView root;
     const NLCheckedNodeView *init = get(env, constructor);
     if (!copy_carrier_world(e, env) || !init ||
         init->kind != NL_CHECKED_AGGREGATE ||
-        !nl_semantic_binding_view(e->copy_anchor, l->symbol, &b) ||
+        !nl_semantic_binding_view(anchor, l->symbol, &b) ||
         b.type != e->copy_type ||
-        !nl_semantic_place_view(e->copy_anchor, b.place, &root) ||
+        !nl_semantic_place_view(anchor, b.place, &root) ||
         root.type != e->copy_type || root.incarnation != l->incarnation ||
         b.place != l->place || !root.live || !root.independent_root ||
         !root.implicit_local || root.governing_domain || ++e->copy_roots > 2)
@@ -781,13 +866,11 @@ static bool copy_bind(Emit *e, Env *env, Local *l, NLCheckedNodeId constructor)
         NLSemanticValueView actual, expected;
         if (!field || field->field_index > 1 || seen[field->field_index] ||
             !value || value->result_count != 1 ||
-            !nl_semantic_place_view(e->copy_anchor,
-                                    root.fixed_fields[field->field_index],
-                                    &child) ||
+            !nl_semantic_place_view(
+                anchor, root.fixed_fields[field->field_index], &child) ||
             child.parent_aggregate != b.place || !child.live ||
             !copy_plain(c, value->results[0].value, e->u8, &actual) ||
-            !copy_plain(e->copy_anchor, child.current_value, e->u8,
-                        &expected) ||
+            !copy_plain(anchor, child.current_value, e->u8, &expected) ||
             actual.scalar_value != expected.scalar_value)
             return reject(e);
         size_t index = field->field_index;
@@ -827,6 +910,9 @@ static bool copy_constructor(Emit *e, Env *env, const NLCheckedNodeView *v,
 {
     if (!copy_carrier_world(e, env) || v->type != e->copy_type ||
         v->argument_count != 2)
+        return reject(e);
+    if (env->artifact == e->copy_surviving_issuer &&
+        (e->allocations || v != get(env, e->copy_surviving_constructor)))
         return reject(e);
     if (e->pre_copy_issuer && !e->producer_calls &&
         v != get(env, e->pre_copy_constructors[0]) &&

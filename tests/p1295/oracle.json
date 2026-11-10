@@ -1,0 +1,66 @@
+{
+  "issue": 1295,
+  "authority": "C439",
+  "base": "d2b9d99725e1ff23ed9ed9f9f54a25bfde933232",
+  "canonical": "Draft17.35",
+  "files": {
+    "N-unclosed-front.nl": {
+      "sha256": "07b28d0fae23b964c8c33bcb86db27076773f25f5980430506535aed23acbec0",
+      "bytes": 4945
+    },
+    "N-undeclared-post-field.nl": {
+      "sha256": "0c7deb4ddf2fd6d747337f509b3763ca7068ce2ea50464dce066e569c4ce0245",
+      "bytes": 4920
+    },
+    "P-surviving-state.nl": {
+      "sha256": "a1716e62f43011d33c9520bc960c35d5b59f02b18b2b98ad9e3c261de9788bc5",
+      "bytes": 4918
+    }
+  },
+  "source_eligibility": "exactly one H and one T nominal, two nested fallible H sites, two distinct lexical T originals of same nominal; retained original lives unchanged through H worlds; only flat-u8 Copy leaves matches, no T-root or memory phi",
+  "positive_expected": {
+    "SOURCE": "eligible:3.2/16.3.8/17.1/17.4/18.1/19.1/26.24-25/27.1/27.3",
+    "CHECK": 0,
+    "H0": {
+      "computed": 13,
+      "frees": 0,
+      "post_old": 101,
+      "post_current": 13,
+      "post_sibling": 213
+    },
+    "H1": {
+      "computed": 29,
+      "frees": 1,
+      "post_old": 101,
+      "post_current": 29,
+      "post_sibling": 213
+    },
+    "H2": {
+      "computed": 71,
+      "frees": 2,
+      "working_old": 71,
+      "working_current": 163,
+      "working_sibling": 179,
+      "post_old": 101,
+      "post_current": 71,
+      "post_sibling": 213
+    },
+    "physical": "retained T constructed before first allocation, same root/child/incarnation unchanged at match join; afterwards same field index1 receives actual computed u8 once, sibling index0 unchanged, no open loan across match"
+  },
+  "negatives": {
+    "N-undeclared-post-field.nl": "CHECK3 unknown declared field if postmatch consumer reached",
+    "N-unclosed-front.nl": "CHECK3 scope obligation on H1 if cleanup reached"
+  },
+  "first_barrier_prediction": "Possible CHECK captured-prefix precision when a live implicit T precedes a nested H allocation; otherwise owned/C17 plan may lack surviving pre-H T consumer. No layer PASS assumed. First unexpected positive refusal halts remaining dynamic observations for diagnosis. At most one new private bridge; if independent checker+consumer gaps, STOP C.",
+  "alternative": "An existing in-arm write ends with the arm and cannot update retained T after all H worlds; a pure u8 helper/binding uses the result but does not show surviving-original Change/current/sibling. Not accepted as substitute.",
+  "gate0_limits": {
+    "positive": 1,
+    "negative": 2,
+    "plain_CLI_max": 9,
+    "native_max_if_existing_supported": 8,
+    "private_bridges_max": 1,
+    "remote_before_main6_and_local_native": "0"
+  },
+  "R": "UNREAD",
+  "original_P1289_P1291": "unchanged"
+}
