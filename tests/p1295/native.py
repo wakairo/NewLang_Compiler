@@ -52,7 +52,8 @@ for name in names:
                      str(bindings[name]) + r" =", text)
 assert text.index("nl_copy_record " + retained) < text.index("malloc(24)")
 store = re.search(re.escape(retained) + r"\.f1=(nl_v_\d+);", text)
-assert store and text.index("free(nl_v_112.handle)") < store.start()
+releases = list(re.finditer(r"free\(nl_v_\d+\.handle\);", text))
+assert store and releases and all(m.end() < store.start() for m in releases)
 incoming = "nl_b_" + str(frame) + "_" + str(bindings["supplied"])
 assert re.search(r"uint8_t " + store[1] + r" = " + incoming + ";", text)
 assert "uint8_t old=*target;*target=next;" in text
