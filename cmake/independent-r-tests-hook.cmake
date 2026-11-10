@@ -95,3 +95,33 @@ function(_t993_late_register)
     message(STATUS "T993: strict declarative manifest registered ${_added} CHECK-only CTests")
 endfunction()
 cmake_language(DEFER CALL _t993_late_register)
+
+# R1288 ONLY / NEVERMERGE evidence branch: register a read-only layer-observation
+# CTest on the same five immutable T993-declared sources. NO Production changes.
+function(_r1288_late_register)
+    if(NOT BUILD_TESTING)
+        return()
+    endif()
+    set(_r1288_dir "${CMAKE_SOURCE_DIR}/tests/r1288")
+    if(NOT EXISTS "${_r1288_dir}/trace.py")
+        return()
+    endif()
+    if(IS_SYMLINK "${_r1288_dir}" OR IS_SYMLINK "${_r1288_dir}/trace.py")
+        message(FATAL_ERROR "R1288: symlink runner path")
+    endif()
+    if(NOT TARGET newlangc OR NOT Python3_EXECUTABLE OR NOT CMAKE_C_COMPILER)
+        message(FATAL_ERROR "R1288: Production CLI/Python/host C compiler unavailable")
+    endif()
+    if(TEST r1288_layer_trace.integration)
+        message(FATAL_ERROR "R1288: duplicate evidence CTest")
+    endif()
+    add_test(NAME r1288_layer_trace.integration
+        COMMAND "${Python3_EXECUTABLE}" "${_r1288_dir}/trace.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${_r1288_dir}")
+    set_tests_properties(r1288_layer_trace.integration PROPERTIES
+        TIMEOUT 180
+        ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    message(STATUS "R1288: layer-trace CTest registered; NOT executed at configure time")
+endfunction()
+cmake_language(DEFER CALL _r1288_late_register)
