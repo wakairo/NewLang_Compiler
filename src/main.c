@@ -196,8 +196,8 @@ static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
             if (loop_origin)
                 *loop_origin = id;
             if (loop.changing_current) {
-                if (p->aggregate != loop.nominal || p->u8_export ||
-                    p->scalar_depth || p->formal_body)
+                if (loop.paired_current || p->aggregate != loop.nominal ||
+                    p->u8_export || p->scalar_depth || p->formal_body)
                     return false;
                 if (!current_helper_selection(&loop, p))
                     return false;
@@ -2517,6 +2517,8 @@ static bool linear_break_selection(const NLCheckedFragment *f,
     if (p->u8_export || p->scalar_depth || p->formal_body)
         return false;
     const NLCheckStatus status = nl_linear_break_validate(f, id, &v);
+    if (status == NL_CHECK_OK && v.paired_current)
+        return false;
     if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
         p->copy_body_status = status;
     if (status != NL_CHECK_OK || !avs_shape(f, v.nominal, p))
@@ -3216,6 +3218,8 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
                               NLCheckedNodeId id, NLSymbolId result,
                               size_t depth)
 {
+    if (p->paired_current)
+        return false;
     const NLCheckedFragment *arm = p->iteration;
     const NLCheckedNodeView *wrapper =
         nl_checked_node_view(arm, nl_checked_root(arm));

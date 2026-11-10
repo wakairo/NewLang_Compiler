@@ -5258,10 +5258,17 @@ static bool linear_break_source(Check *check, const NLSyntaxView *s)
             value->kind == NL_SYNTAX_EXPR_NAME);
 }
 
-static bool linear_break_frame(const NLSemanticContext *a,
-                               const NLSemanticContext *b,
-                               const NLCheckedField *field)
+/* The same frame predicate consumes either one actual Change or the ordered
+ * pair retained by the private current-cycle relation. No intermediate world
+ * is invented: the first aggregate package remains in the checked history. */
+static bool linear_break_frame_changes(const NLSemanticContext *a,
+                                       const NLSemanticContext *b,
+                                       const NLCheckedField *fields,
+                                       size_t count)
 {
+    if (!fields || !count || count > 2)
+        return false;
+    const NLCheckedField *field = &fields[0], *last = &fields[count - 1];
     const NLPlaceId root = field->parent, child = field->child;
     if (!root || root > a->place_count || !child || child > a->place_count ||
         a->binding_count > b->binding_count ||
@@ -5294,9 +5301,35 @@ static bool linear_break_frame(const NLSemanticContext *a,
     if (a->types[r.type - 1].field_types[0] != u8 ||
         a->types[r.type - 1].field_types[1] != u8 || p.type != u8)
         return false;
+    if (count == 2) {
+        if (!last->present || !last->dependency_compatible ||
+            last->base != field->base || last->parent != root ||
+            last->nominal != field->nominal || last->type != u8 ||
+            last->index >= 2 || last->index == field->index ||
+            last->child != r.fixed_fields[last->index] || !last->child ||
+            last->child > a->place_count || last->child == child ||
+            last->access != NL_ACCESS_WRITE ||
+            last->parent_incarnation != r.incarnation ||
+            last->parent_fact != field->parent_post_fact ||
+            last->parent_post_fact <= field->parent_post_fact ||
+            last->child_post_fact <= field->parent_post_fact ||
+            last->parent_post_fact == last->child_post_fact ||
+            field->new_value <= a->value_count ||
+            last->new_value <= a->value_count)
+            return false;
+        const NLSemanticPlaceView other = a->places[last->child - 1];
+        if (other.parent_aggregate != root ||
+            other.parent_field_index != last->index || other.type != u8 ||
+            other.incarnation != last->child_incarnation ||
+            other.current_fact != last->child_fact ||
+            other.current_value != last->old_value ||
+            b->places[last->child - 1].current_fact != last->child_post_fact ||
+            b->places[last->child - 1].current_value != last->new_value)
+            return false;
+    }
     const NLSemanticPlaceView post = b->places[root - 1],
                               changed = b->places[child - 1];
-    if (post.current_fact != field->parent_post_fact ||
+    if (post.current_fact != last->parent_post_fact ||
         changed.current_fact != field->child_post_fact ||
         post.current_fact <= a->last_value_fact ||
         changed.current_fact <= a->last_value_fact ||
@@ -5306,7 +5339,8 @@ static bool linear_break_frame(const NLSemanticContext *a,
         const NLSemanticPlaceView x = a->places[i], y = b->places[i];
         if (!same_place_frame(x, y) ||
             x.payload_occurrence != y.payload_occurrence ||
-            ((i + 1 != root && i + 1 != child) &&
+            ((i + 1 != root && i + 1 != child &&
+              (count == 1 || i + 1 != last->child)) &&
              (x.current_value != y.current_value ||
               x.current_fact != y.current_fact)))
             return false;
@@ -5341,12 +5375,29 @@ static bool linear_break_frame(const NLSemanticContext *a,
             b->values[now - 1].aggregate_owner != next ||
             b->values[now - 1].carrier != NL_CARRIER_AGGREGATE)
             return false;
-        if (member != child) {
+        if (member != child && (count == 1 || member != last->child)) {
             NLSemanticValueView sibling = b->values[now - 1];
             sibling.aggregate_owner = aggregate;
             if (now != old || !nl_node_value_same(a->values[old - 1], sibling))
                 return false;
         }
+    }
+    if (count == 2) {
+        size_t intermediate = 0;
+        for (size_t i = a->value_count; i < b->value_count; ++i) {
+            const NLSemanticValueView middle = b->values[i];
+            if (middle.type == r.type && middle.field_count == 2 &&
+                middle.carrier == NL_CARRIER_ENDED && !middle.owner_place &&
+                !middle.aggregate_owner &&
+                middle.fields[field->index] == field->new_value &&
+                middle.fields[last->index] == last->old_value)
+                ++intermediate;
+        }
+        /* First store preserves the second child; the final canonical root
+         * above preserves first.new while installing second.new. IDs and
+         * ordered parent facts, never coincident u8 bits, connect the steps. */
+        if (intermediate != 1)
+            return false;
     }
     for (size_t i = 0; i < a->value_count; ++i) {
         NLSemanticValueView x = a->values[i], y = b->values[i];
@@ -5397,6 +5448,13 @@ static bool linear_break_frame(const NLSemanticContext *a,
         if (b->places[i].live)
             return false;
     return true;
+}
+
+static bool linear_break_frame(const NLSemanticContext *a,
+                               const NLSemanticContext *b,
+                               const NLCheckedField *field)
+{
+    return linear_break_frame_changes(a, b, field, 1);
 }
 
 /* The source constructor may inspect its just-checked definition body,
