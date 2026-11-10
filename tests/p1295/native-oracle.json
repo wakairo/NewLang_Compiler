@@ -1,0 +1,6 @@
+{
+  "expected": "Strict untouched C17 native first at O0/O2. Passive observer changes only malloc failure quota and records actual values: H0/H1/H2 free0/1/2 before postmatch T store; same pre-H field address receives actual runtime13/29/71 once; actual old101 and sibling213 source reads survive; linked working T71->163 sibling179 and original H pointer/Domain/loan/cleanup remain genuine.",
+  "allowed_instrumentation": "Existing passive observer hooks and guest allocation-failure choice only. No replacement result, field write, forged pointer/semantic evidence or branch selection.",
+  "compilers": "GCC and Clang O0/O2; same profiles under host/guest ASan/UBSan",
+  "stop": "Any unsafe native result, ownership/cleanup or source-current mismatch => STOP C; do not fix oracle to accept it."
+}
