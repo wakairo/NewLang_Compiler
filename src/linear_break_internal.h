@@ -20,7 +20,7 @@ typedef struct {
     bool scalar_loop; /* free usize normal result, no field authority */
     bool changing_current;
     /* Both distinct fixed children are carried by the same cyclic relation.
-     * Current C17 consumers must decline this private, CHECK-only extension. */
+     * Consumers must explicitly support this private paired relation. */
     bool paired_current;
     /* A genuine one-field terminal Change, not a scalar phase result. */
     bool terminal_old;

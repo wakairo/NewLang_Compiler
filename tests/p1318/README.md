@@ -34,7 +34,9 @@ exit3/error(host)[P3-OUT-OF-MEMORY]. `failure-contract.json` records that correc
 ordinary semantic exit3 is never accepted as OOM. The original source/oracle
 and all failed apparatus records remain preserved.
 
-The two-field source remains a CHECK3/USIZE-ADDITION-PRECISION boundary.
+The immutable two-field source was a CHECK3/USIZE-ADDITION-PRECISION boundary
+at P1318's fixed baseline. P1323 advances that same source to a positive
+CHECK/owned/C17/native test; the historical source/oracle/FIRST remain preserved.
 This increment does not extend paired-current CHECK, H/mixed emitters, terminal
 helper-call lowering, source law, owner/Domain authority, ABI or general CFG.
 Existing usize-result and H+T output byte compatibility is checked separately.

@@ -1,0 +1,148 @@
+{
+  "utc": "2026-11-10T13:18:49.958647+00:00",
+  "before_first_integrated_target_execution": true,
+  "baseline": "33caf173124cf7c9e8bcb910872374df53de978f",
+  "baseline_tree": "c4a4e4e174104644b8bd19bf5acd64b01aee0acf",
+  "canonical": "Draft17.35",
+  "ported_from": "bdb7c7c8cfa9311c812fa64e032d0419a4f6d680",
+  "original_source_oracle_FIRST_kept": true,
+  "source": {
+    "N-ended-ref.nl": {
+      "bytes": 871,
+      "sha256": "536c4927c24ac6892c3990768b7d76b45c9f050522eebbb58ddbfa836663ba7a"
+    },
+    "N-duplicate-child.nl": {
+      "bytes": 888,
+      "sha256": "186f280e3d729291a4699774e2a65acaf731a4ebaf3a7d264d96f95695cba8f4"
+    },
+    "A-paired.nl": {
+      "bytes": 885,
+      "sha256": "08986e742dde294bec8be2908da32ead7e195c242f65455af40ab06db4c40d7f"
+    },
+    "N-second-original.nl": {
+      "bytes": 944,
+      "sha256": "004aa17db9b5c44b4c492d35019a42cb888433484ba024c9d5735711d3f0d079"
+    },
+    "N-wrong-second-type.nl": {
+      "bytes": 889,
+      "sha256": "59f7b491d9219a2d718a5eeb853b5c870b66d811a822d7b8d010aba31fe799c1"
+    },
+    "B-reversed-distinct.nl": {
+      "bytes": 881,
+      "sha256": "56059931a2eeec9341bd77d4b1e19af5b52b280f49a74eaf4ed2872c4ec3f35c"
+    }
+  },
+  "A": {
+    "initial": [
+      17,
+      193
+    ],
+    "indexes": [
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    "old": [
+      17,
+      193,
+      61,
+      61,
+      137
+    ],
+    "new": [
+      61,
+      61,
+      137,
+      137,
+      229
+    ],
+    "sibling_after": [
+      193,
+      61,
+      61,
+      137,
+      137
+    ],
+    "post": [
+      229,
+      137
+    ],
+    "terminal_old": 137
+  },
+  "B": {
+    "initial": [
+      31,
+      211
+    ],
+    "indexes": [
+      1,
+      0,
+      1,
+      0,
+      1
+    ],
+    "old": [
+      211,
+      31,
+      73,
+      109,
+      163
+    ],
+    "new": [
+      73,
+      109,
+      163,
+      109,
+      241
+    ],
+    "sibling_after": [
+      31,
+      73,
+      109,
+      163,
+      109
+    ],
+    "post": [
+      109,
+      241
+    ],
+    "terminal_old": 163
+  },
+  "same": {
+    "T_originals": 1,
+    "H": 0,
+    "phases": [
+      0,
+      1,
+      2
+    ],
+    "real_Continue_backedges": 2,
+    "source_Changes_and_closed_lexical_loans": 5,
+    "static_replace_sites": 3,
+    "post_field_reads": 2,
+    "checker_Known_not_from_native": true
+  },
+  "initial_port_prediction": "Reexecute real CHECK/owned/current; paired CLI C17 should remain safe unsupported4 while imported eligibility guards remain. Save new FIRST before consumer change.",
+  "consumer_prediction": "Same actual owned loan/replace list; strict untouched C17 GCC/Clang O0/O2 raw first, passive actual pointers and field-index/value sequences above, guest ASan/LSan/UBSan. No program value injection. Source events5 are not optimized machine-store counts.",
+  "negative_expectations": {
+    "N-ended-ref.nl": "CHECK3 P8-EXIT-DEPENDENCY",
+    "N-wrong-second-type.nl": "CHECK3 P3-TYPE-MISMATCH",
+    "N-duplicate-child.nl": "CHECK3 precision P14-LOOP-PRECISION (lawful outside finite relation)",
+    "N-second-original.nl": "CHECK3 precision P14-LOOP-PRECISION (lawful outside finite relation)"
+  },
+  "migration": "Only old p1318 N-two-field-boundary expectation3 becomes this same SHA A positive after actual support. Original .nl/oracle/FIRST immutable; semantic negatives/OOM/no-clobber retained.",
+  "limits": {
+    "positive": 2,
+    "new_guest_actual": 0,
+    "guest_max": 24,
+    "raw_passive_planned": 16,
+    "guest_sanitizer_planned": 4,
+    "repair_reserve": 4,
+    "PR_max": 1,
+    "natural_workflow_rounds_max": 2,
+    "manual_rerun_dispatch_cancel": 0,
+    "remote_gate": "actual main33caf postmerge FULL5+PARTIAL six original logs success"
+  }
+}

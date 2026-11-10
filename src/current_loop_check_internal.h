@@ -477,7 +477,8 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
                 body ? nl_syntax_node_view(body->data.block.tail) : NULL;
             const NLSyntaxView *target =
                 nl_syntax_node_view(expr->data.loan.source);
-            if (++writers > 2 || expr->data.loan.access != NL_ACCESS_WRITE ||
+            if (++writers > 2 || (writers > 1 && !terminal_old) ||
+                expr->data.loan.access != NL_ACCESS_WRITE ||
                 expr->data.loan.from_ptr || expr->data.loan.is_exclusive ||
                 !target || target->kind != NL_SYNTAX_FIELD_DESIGNATOR ||
                 !body || body->kind != NL_SYNTAX_BLOCK ||
