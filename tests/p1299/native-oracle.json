@@ -1,0 +1,6 @@
+{
+  "expected": "Strict unmodified C17 GCC/Clang O0/O2 before passive H0/H1/H2. Real nested callee old67 -> match result -> actual root-callee argument19/43/67. Root callee must store into the same pre-H field0 and return real old103; sibling227; H frees0/1/2 BEFORE root named call; scratch67->149 sibling193; both H originals preserve pointer/Domain/loan/lifecycle.",
+  "method": "P-owned passive physical checks reused from P1295 with new independent source oracle and two-call roles. Original P1295 harness is untouched. Observer only controls malloc failure quota and observes actual memory/results; it never supplies result values or performs source updates.",
+  "negative": "A direct-store substitute, wrong root/field, stale old, wrong callee/result flow, late H cleanup or duplicate call must fail. Never fix an oracle to accept wrong native results.",
+  "scope": "One positive frozen source, two declared helper functions, no R inputs or general soundness claim."
+}
