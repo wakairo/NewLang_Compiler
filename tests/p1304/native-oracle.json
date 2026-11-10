@@ -1,0 +1,9 @@
+{
+  "before_execution": true,
+  "expected": "four runs per compiler: O0/O2 untouched C then passive; exactly one shared generated helper definition invoked twice from distinct actual named callers",
+  "primary": "same own T through lifetime, actual write167, old83, sibling211",
+  "secondary": "receives upstream real old83, own T write83, old109, sibling37",
+  "identity": "per-caller lifetime, no claim of different addresses across sequential ended originals; no pointer dereference after caller exit",
+  "observations": "assertions and observer-only counters/addresses; no change to original stores/call arguments/return expressions, no host result injection",
+  "sanitizers": "Clang passive O0/O2 additionally ASan+UBSan; separate from host compiler sanitizer matrix"
+}
