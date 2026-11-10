@@ -1,0 +1,8 @@
+{
+  "new_controls": "12 real graph mutations: surviving loan/base/parent/index/child/current, source/place/result-forwarding, outer unchanged-prefix, replace old/new. Each must fail closed unsupported4/null/length98765; restored original must emit byte-identically. Existing public Copy world controls and 6 unrestored-A canonical-destroy controls run on the new source.",
+  "CHECK_OOM": "Fresh CHECK census, first reached callsites plus first/last8 and spread32; at most128 selected and total<=4096; every selected allocation actually fires, OOM/null artifact, exact rollback, sem/raw validation and retry owned success",
+  "emitter_OOM": "Fresh complete emitter census<=512; every ordinal must actually fire and preserve strict OOM/null/length98765, owned graph and byte-identical retry",
+  "named_OOM": "Fresh CLI census<=4096 CHECK and<=512 emitter; first/last8+middle CHECK and EVERY emitter ordinal; sentinel bytes/inode/size/mtime and no temp file must remain; normal retry matches baseline",
+  "source_negatives": "Both original frozen CHECK3 controls must retain their precise diagnostic and zero C; named output remains untouched",
+  "stop": "Any actual unsafe acceptance/current/ownership/OOM/rollback/no-clobber violation or unexplained resource expansion => STOP C. Original source/oracle/FIRST remain unchanged."
+}

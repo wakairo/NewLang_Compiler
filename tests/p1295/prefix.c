@@ -10,6 +10,60 @@ static size_t scalar(const NLSemanticContext *c, NLValueId id)
     return v.scalar_value;
 }
 
+#ifdef P1295_EMIT
+static void controls(PInput *p, const NLCheckedFragment *body,
+                     NLCheckedNodeId match, NLCheckedNodeId loan,
+                     NLCheckedNodeId change)
+{
+    char *baseline = NULL;
+    size_t baseline_length = 98765;
+    assert(nl_checked_c_node(p->entry, &baseline, &baseline_length) ==
+               NL_NODE_C_OK && baseline && baseline_length);
+    for (size_t fault = 0; fault < 12; ++fault) {
+        const NLCheckedNodeId id = fault < 8 ? loan : fault < 10 ? match : change;
+        NLCheckedNodeView *n = &((NLCheckedFragment *)body)->nodes[id - 1];
+        const NLCheckedNodeView saved = *n;
+        if (fault == 0)
+            ++n->field.base;
+        else if (fault == 1)
+            ++n->field.parent;
+        else if (fault == 2)
+            n->field.index ^= 1;
+        else if (fault == 3)
+            ++n->field.child;
+        else if (fault == 4)
+            ++n->field.parent_fact;
+        else if (fault == 5)
+            ++n->loan.place;
+        else if (fault == 6)
+            ++n->loan.source;
+        else if (fault == 7)
+            n->loan.normal_result_forwarded = false;
+        else if (fault == 8)
+            n->normal_frame_unchanged = false;
+        else if (fault == 9)
+            n->match_binding_prefix = 0;
+        else if (fault == 10)
+            ++n->field.old_value;
+        else
+            ++n->field.new_value;
+        char *text = NULL;
+        size_t length = 98765;
+        assert(!nl_h_custody_validate(p->entry) &&
+               nl_checked_c_node(p->entry, &text, &length) ==
+                   NL_NODE_C_UNSUPPORTED && !text && length == 98765);
+        *n = saved;
+        assert(nl_h_custody_validate(p->entry) &&
+               nl_checked_c_node(p->entry, &text, &length) == NL_NODE_C_OK &&
+               text && length == baseline_length &&
+               !memcmp(text, baseline, length));
+        free(text);
+    }
+    free(baseline);
+    puts("SURVIVING-CURRENT-REFUSALS=12 no-clobber=1 restore-retry=1");
+}
+#endif
+
 int main(int argc, char **argv)
 {
     assert(argc == 2);
@@ -62,6 +116,9 @@ int main(int argc, char **argv)
     assert(scalar(entry, fields[0].current_value) == 213 &&
            scalar(entry, fields[1].current_value) == 101);
     size_t loans = 0, reads = 0;
+#ifdef P1295_EMIT
+    NLCheckedNodeId loan_id = 0, change_id = 0;
+#endif
     const NLCheckedNodeView *change = NULL;
     for (size_t id = 1; id <= nl_checked_node_count(body); ++id) {
         const NLCheckedNodeView *n = nl_checked_node_view(body, id);
@@ -69,6 +126,10 @@ int main(int argc, char **argv)
             const NLCheckedNodeView *block =
                 nl_checked_node_view(body, n->initializer);
             change = nl_checked_node_view(body, block->tail);
+#ifdef P1295_EMIT
+            loan_id = id;
+            change_id = block->tail;
+#endif
             assert(++loans == 1 && n->field.base == binding->symbol &&
                    n->field.parent == inherited.place && n->field.index == 1 &&
                    n->field.parent_fact == initial.current_fact &&
@@ -107,6 +168,9 @@ int main(int argc, char **argv)
            "old=101 runtime-current=unknown sibling=213 closed-loan=1 "
            "reads=2 final-live=%u\n", inherited.place, initial.incarnation,
            end.live);
+#ifdef P1295_EMIT
+    controls(&p, body, result->initializer, loan_id, change_id);
+#endif
     p_dispose(&p);
     return 0;
 }
