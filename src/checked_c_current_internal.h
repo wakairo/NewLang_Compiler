@@ -248,7 +248,7 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *origin,
         nl_linear_break_validate(body, p.loop, &p.loop_view);
     if (validated != NL_CHECK_OK)
         return validated;
-    if (!p.loop_view.changing_current ||
+    if (!p.loop_view.changing_current || p.loop_view.paired_current ||
         p.loop_view.scalar_loop == p.loop_view.terminal_old ||
         !p.loop_view.incoming_call || !p.loop_view.entry_world ||
         !p.loop_view.post_world ||

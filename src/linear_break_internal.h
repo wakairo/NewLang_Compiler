@@ -19,6 +19,9 @@ typedef struct {
     bool computed_carry, subtract_carry;
     bool scalar_loop; /* free usize normal result, no field authority */
     bool changing_current;
+    /* Both distinct fixed children are carried by the same cyclic relation.
+     * Consumers must explicitly support this private paired relation. */
+    bool paired_current;
     /* A genuine one-field terminal Change, not a scalar phase result. */
     bool terminal_old;
     NLCheckedNodeId terminal_loan;

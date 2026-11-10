@@ -25,8 +25,7 @@ def snapshot(path):
 
 
 for name, diagnostic in [("N-ended-ref.nl", b"P8-EXIT-DEPENDENCY"),
-                         ("N-field-type.nl", b"P3-TYPE-MISMATCH"),
-                         ("N-two-field-boundary.nl", b"USIZE-ADDITION-PRECISION")]:
+                         ("N-field-type.nl", b"P3-TYPE-MISMATCH")]:
     target = work / (name + ".c")
     target.write_bytes(b"existing named output\n")
     before = snapshot(target)
@@ -66,6 +65,6 @@ for name in ["A-index0.nl", "B-index1.nl"]:
         assert target.read_bytes() == original
         print(name, "OOM", ordinal, "of", total, "status", status,
               "no-clobber retry PASS", flush=True)
-(work / "summary.json").write_text(json.dumps({"CLI_oom": 8, "flush_failure": 2, "source_negative": 3,
+(work / "summary.json").write_text(json.dumps({"CLI_oom": 8, "flush_failure": 2, "source_negative": 2,
     "named_bytes_inode_mtime": True, "temp_residue": False, "retries_byte_identical": True}, indent=2))
 print(work, flush=True)

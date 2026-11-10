@@ -123,6 +123,7 @@ if(BUILD_TESTING)
     include(tests/p1304/CMakeLists.txt)
     include(tests/p1312/CMakeLists.txt)
     include(tests/p1318/CMakeLists.txt)
+    include(tests/p1323/CMakeLists.txt)
     # P930 diagnostic-only wrappers: production libraries/CLI remain unchanged.
     add_executable(p930_observe tests/p930/observe.c)
     add_executable(p930_oom tests/p930/observe.c)
