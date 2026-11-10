@@ -2,6 +2,8 @@
 #define _XOPEN_SOURCE 700
 #endif
 #include "checked_c_target.h"
+#include "copy_body_internal.h"
+#include "h_origin_internal.h"
 #include "if_field_internal.h"
 #include "linear_break_internal.h"
 #include "newlang/array4.h"
@@ -2118,6 +2120,86 @@ static bool v1_copy_body(const NLCheckedFragment *f, V0Program *p,
            root->results[0].value == tail->results[0].value;
 }
 
+/* A nested write-u8 call already retains the complete CHECK-issued caller
+ * graph. Borrow that snapshot before any node-array read, then require its
+ * existing CURRENT validation. This admits no new proof or caller role. */
+static bool v1_composed_body(const NLCheckedFragment *f, V0Program *p,
+                             NLCheckedNodeId *result, bool *selected)
+{
+    *selected = false;
+    if (p->u8_export || p->scalar_depth != 1)
+        return false;
+    if (!f->h_origin || !nl_h_custody_borrow_valid(f)) {
+        *selected = true;
+        return false;
+    }
+    const NLCopyBodyProof *anchor = NULL;
+    for (size_t i = 0; i < f->body_count; ++i) {
+        const NLCheckedFragment *child =
+            nl_checked_call_body(f, f->body_calls[i]);
+        const NLCopyBodyProof *a = child ? child->copy_body : NULL;
+        if (a && a->formal_write && !a->unit_call && a->sealed &&
+            a->owner == child && a->caller == f && a->caller_nodes) {
+            anchor = a;
+            break;
+        }
+    }
+    if (!anchor)
+        return false; /* Existing pure/flat callers keep their old path. */
+    *selected = true;
+    if (f->source != anchor->caller_source ||
+        f->body_owner != anchor->caller_body ||
+        f->nodes != anchor->caller_nodes_origin ||
+        f->count != anchor->caller_count || f->capacity < f->count ||
+        f->count > NL_SEMANTIC_MAX_ENTRIES || f->root != anchor->caller_root ||
+        memcmp(f->nodes, anchor->caller_nodes, f->count * sizeof(*f->nodes)))
+        return false;
+    const NLCheckStatus status = nl_checked_copy_body_parameters_validate(
+        f, anchor->call, &anchor->parameters);
+    if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
+        p->copy_body_status = status;
+    if (status != NL_CHECK_OK || f->arm_count ||
+        nl_control_exits_count(nl_checked_control_exits(f)))
+        return false;
+    const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
+    if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
+        root->type != p->u8 || root->result_count != 1 ||
+        root->results[0].type != p->u8)
+        return false;
+    size_t count = 0;
+    for (NLCheckedNodeId id = root->first_item; id;) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        if (!n || ++count > f->count || n->kind != NL_CHECKED_BINDING)
+            return false;
+        const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
+        if (!init || (init->kind != NL_CHECKED_U8_LITERAL &&
+                      init->kind != NL_CHECKED_IDENTIFIER &&
+                      init->kind != NL_CHECKED_FIELD_READ &&
+                      init->kind != NL_CHECKED_AGGREGATE &&
+                      init->kind != NL_CHECKED_LOAN_HEADER))
+            return false;
+        if (init->kind == NL_CHECKED_LOAN_HEADER) {
+            const NLCheckedNodeView *loan_body =
+                nl_checked_node_view(f, init->initializer);
+            const NLCheckedNodeView *call =
+                loan_body ? nl_checked_node_view(f, loan_body->tail) : NULL;
+            if (!init->field.present || init->loan.access != NL_ACCESS_WRITE ||
+                init->type != p->u8 || init->result_count != 1 || !call ||
+                call->kind != NL_CHECKED_REGISTERED_CALL)
+                return false;
+        }
+        if (!v0_validate_node(f, id, p))
+            return false;
+        id = n->next_item;
+    }
+    const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
+    if (count != root->item_count || !tail || !v1_scalar(f, root->tail, p) ||
+        root->results[0].value != tail->results[0].value)
+        return false;
+    *result = root->tail;
+    return true;
+}
+
 static bool v0_validate_call(const NLCheckedFragment *fragment,
                              NLCheckedNodeId id, V0Program *program)
 {
@@ -2191,15 +2273,23 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
         NLCheckedNodeId returned = 0;
         NLCopyBodyView proof;
         const bool temporal = nl_checked_copy_body_view(fragment, id, &proof);
-        bool valid = !temporal && v1_copy_body(body, program, &returned) &&
-                     call->results[0].value ==
-                         nl_checked_node_view(body, returned)->results[0].value;
+        bool composed = false;
+        bool valid = v1_composed_body(body, program, &returned, &composed);
+        if (composed) {
+            valid = valid &&
+                    call->results[0].value ==
+                        nl_checked_node_view(body, returned)->results[0].value;
+        } else {
+            valid = !temporal && v1_copy_body(body, program, &returned) &&
+                    call->results[0].value ==
+                        nl_checked_node_view(body, returned)->results[0].value;
+        }
         /* Stateful internal returns require the new issuer-owned temporal
          * certificate. Do not widen the separate foreign export contract. */
         NLCopyBodyParameters parameters;
         const bool write_formals =
             nl_checked_copy_body_parameters(fragment, id, &parameters);
-        if (temporal && !program->u8_export &&
+        if (!composed && temporal && !program->u8_export &&
             (parameter == 0 || write_formals)) {
             const NLCheckStatus status =
                 nl_checked_copy_body_validate(fragment, id, &proof);

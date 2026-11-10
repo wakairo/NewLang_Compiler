@@ -1,0 +1,9 @@
+{
+  "source_sha256": "ce5fea006721936844f3b78c952bb186844485a11e9f0b2ff402ac7f0116be25",
+  "before_execution": true,
+  "input": "normal public parse/register/check(main()), no private semantic seeds/issuer",
+  "expected": "two distinct actual named caller fragments/functions, same helper function, independent source entry worlds; per-world original/incarnation/field0or1/current/sibling and closed loan",
+  "values": "old83/current167/sibling211 and old109/current83/sibling37; sound Unknown accepted for current abstract value, never fabricated as known",
+  "negatives": "eight: each caller rejects other genuine caller parameters/body/event and wrong field; healthy validation retries pass",
+  "failure_policy": "missing GET/current evidence is first status5/6, stop before C17/native; retain RED, no oracle relaxation"
+}

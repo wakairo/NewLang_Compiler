@@ -1,0 +1,21 @@
+{
+  "before_first_source_execution": true,
+  "files": {
+    "N-primary-ref-escape.nl": {
+      "bytes": 998,
+      "sha256": "5e7bd301be99afdf0800853a651dd803e27ef2e227129b93f4dbfc6448b0fe37"
+    },
+    "N-secondary-value-not-ref.nl": {
+      "bytes": 981,
+      "sha256": "5a8425dacf898bed74cdeccec58b1ac765721385191fc8c068fb7360891743f8"
+    },
+    "P-named-callers.nl": {
+      "bytes": 971,
+      "sha256": "ce5fea006721936844f3b78c952bb186844485a11e9f0b2ff402ac7f0116be25"
+    },
+    "oracle.json": {
+      "bytes": 3620,
+      "sha256": "22b20d19569f7ecea49eb8d196ddb0a7bfa587bba3601b29988eca6f4a01a8c4"
+    }
+  }
+}

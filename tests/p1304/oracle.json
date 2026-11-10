@@ -1,0 +1,35 @@
+{
+  "authority": { "main": "202c7be8b7c3dedb204d1680a515913b9043aa81", "tree": "d1ca642fdbd8b6a3515bbcef6515c6eb313b82b0", "canonical": "Draft17.35", "issue": 1304, "release": "C464/C465" },
+  "selected": [
+    "6 typed u8(n) literals",
+    "17.1 Draft17.33: exact two-u8 nominal and scoped direct-local fields in ordinary registered-function bodies",
+    "18.1 ordinary non-generic same-unit named functions; 13.5c transitive known-direct actual-place substitution",
+    "13.8/18.5/18.7/18.8 loan scope/result/current/exit compatibility"
+  ],
+  "positive": {
+    "source": "P-named-callers.nl",
+    "expected_check_exit": 0,
+    "shared_helper_definitions": 1,
+    "distinct_named_caller_functions": 2,
+    "static_helper_call_sites": 2,
+    "static_main_calls": 2,
+    "primary": { "target_index": 0, "old": 83, "incoming": 167, "current": 167, "sibling": 211, "return": 83 },
+    "secondary": { "target_index": 1, "old": 109, "incoming": 83, "current": 83, "sibling": 37, "return": 109 },
+    "upstream": "main receives genuine old83 then passes its Copy to secondary; receives genuine old109; caller-local current/sibling are read before their original ends, no ref/original escapes",
+    "worlds": "each named caller has its own genuine original/root/child/current and scoped ref; IDs are context-local and can have equal numeric bits across worlds without authority identity",
+    "physical": "same original placement/incarnation from its construction through helper write and subsequent caller reads; sequential caller lifetimes need not have globally different machine addresses",
+    "owned": "real main parse/register/check, public source-issued body/parameters/event GET followed by current validation independently at each helper call; same callee function, distinct caller fragments/entry worlds",
+    "backend_prediction": "SOURCE/CHECK and public proofs should succeed; first likely implemented gap is private scalar-caller C17 consumer refusing T-local body, exit4/empty output; actual emit0 yields NO CHANGE after native",
+    "native_if_reached": "GCC/Clang strict C17 O0/O2 untouched generated C first then passive address/old/current/sibling observations; no host value injection",
+    "H_failure_worlds": "N/A, H-free; no Allocation/Storage/LifetimeDomain source grant"
+  },
+  "negatives": [
+    { "source": "N-secondary-value-not-ref.nl", "expected_check_exit": 3, "first_contract": "secondary caller's scalar field value cannot substitute for required write-ref authority", "predicted_code": "P3-TYPE-MISMATCH" },
+    { "source": "N-primary-ref-escape.nl", "expected_check_exit": 3, "first_contract": "primary caller's loan-local ref cannot survive the ending scope and be used by shared helper", "predicted_code": "P8-EXIT-DEPENDENCY" }
+  ],
+  "alternatives": ["same-main two call sites (P1302 lower-bound conclusion only)","one named wrapper","direct replaces","separate helper definitions"],
+  "gate0_budget": { "ordinary_CLI_max": 8, "public_owned_positive_instances": 1, "native_max": 8 },
+  "implementation_condition": "one measured reusable existing-private consumer bridge only; source law clearly selected and owned genuine; post scope before edit; retain source/oracle/FIRST, old compatibility, meaningful negatives/OOM/rollback/no-clobber",
+  "stop": "source law doubt/new issuer/owner/ABI/general CFG/fixture roles; two distinct trusted bridges or safety/OOM/no-clobber defect; fixed main change before remote; preserve FIRST and return C",
+  "publication": "C465 main6 GREEN ACK received; only actual needed qualified implementation may lead to one DRAFT/HOLD PR; no P READY/merge"
+}
