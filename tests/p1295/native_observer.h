@@ -127,9 +127,8 @@ static void p_t_store(uint8_t *target, uint8_t old, uint8_t incoming)
     assert(!p1295.stores && target == p1295.target && old == 101 &&
            incoming == p1295_results[p1295.quota] &&
            incoming == p1295.computed && incoming == p1295.supplied &&
-           *target == incoming && *p1295.sibling == 213 &&
-           p1295.scalars == 2 && p1295.frees == p1295.quota &&
-           p1295.finalized == p1295.quota);
+           *target == incoming && *p1295.sibling == 213 && p1295.scalars == 2 &&
+           p1295.frees == p1295.quota && p1295.finalized == p1295.quota);
     ++p1295.stores;
 }
 static void p_binding(size_t frame, size_t symbol, const void *address)
@@ -149,8 +148,9 @@ static void p_binding(size_t frame, size_t symbol, const void *address)
             else
                 p1295.supplied = actual;
         } else {
-            assert(p1295.stores == 1 &&
-                   actual == (i == 3 ? p1295.supplied : i == 4 ? 213 : 101));
+            assert(p1295.stores == 1 && actual == (i == 3   ? p1295.supplied
+                                                   : i == 4 ? 213
+                                                            : 101));
         }
         ++p1295.scalars;
     }
@@ -182,8 +182,8 @@ static void p_change(const nl_node_option *field, const nl_node_option *old)
 }
 static void p_tail(const nl_node *n, const void *allocation, size_t domain)
 {
-    assert(h_index(n) == 1 && allocation == n &&
-           domain == p1295.h[1].domain && !p1295.h[1].ended);
+    assert(h_index(n) == 1 && allocation == n && domain == p1295.h[1].domain &&
+           !p1295.h[1].ended);
 }
 static void p_end(const nl_node *n, size_t d)
 {
@@ -255,7 +255,8 @@ static void p_finish(void)
 #define NL_HEAP_RETURNED(a, d) assert((a)->handle == NULL && (d)->token == 0)
 #define NL_LIVE_SEND(p, a, d, ...) p_tail(p, a, d)
 #define NL_LIVE_ENTER(h, p, a, d) p_tail(p, a, d)
-#define NL_LIVE_RETURN(v) p_tail((v).ptr, (v).allocation.handle, (v).domain.token)
+#define NL_LIVE_RETURN(v)                                                      \
+    p_tail((v).ptr, (v).allocation.handle, (v).domain.token)
 #define NL_LIVE_RECEIVE(...) ((void)0)
 #define NL_MIXED_COPY_BIND(f, s, a, b) p_t_bind(f, a, b)
 #define NL_MIXED_COPY_CALL(p, o, n) p_t_call(p, o, n)

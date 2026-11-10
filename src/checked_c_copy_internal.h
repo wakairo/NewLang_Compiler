@@ -811,9 +811,9 @@ static bool copy_closed_world(const Emit *e, const Env *env)
 }
 static bool copy_carrier_world(Emit *e, const Env *env)
 {
-    if (e->copy_surviving_issuer &&
-        env->artifact == e->copy_surviving_issuer && !env->parent &&
-        !env->backing && !env->heap_place && !env->heap_domain) {
+    if (e->copy_surviving_issuer && env->artifact == e->copy_surviving_issuer &&
+        !env->parent && !env->backing && !env->heap_place &&
+        !env->heap_domain) {
         if (!e->allocations)
             return !e->copy_h_closed;
         if (!e->copy_h_closed || e->allocations != 2 ||
@@ -836,9 +836,9 @@ static bool copy_carrier_world(Emit *e, const Env *env)
 static bool copy_bind(Emit *e, Env *env, Local *l, NLCheckedNodeId constructor)
 {
     const NLSemanticContext *c = nl_checked_context(env->artifact);
-    const NLSemanticContext *anchor =
-        env->artifact == e->copy_surviving_issuer ? e->copy_surviving_anchor
-                                                 : e->copy_anchor;
+    const NLSemanticContext *anchor = env->artifact == e->copy_surviving_issuer
+                                          ? e->copy_surviving_anchor
+                                          : e->copy_anchor;
     NLSemanticBindingView b;
     NLSemanticPlaceView root;
     const NLCheckedNodeView *init = get(env, constructor);
@@ -866,13 +866,11 @@ static bool copy_bind(Emit *e, Env *env, Local *l, NLCheckedNodeId constructor)
         NLSemanticValueView actual, expected;
         if (!field || field->field_index > 1 || seen[field->field_index] ||
             !value || value->result_count != 1 ||
-            !nl_semantic_place_view(anchor,
-                                    root.fixed_fields[field->field_index],
-                                    &child) ||
+            !nl_semantic_place_view(
+                anchor, root.fixed_fields[field->field_index], &child) ||
             child.parent_aggregate != b.place || !child.live ||
             !copy_plain(c, value->results[0].value, e->u8, &actual) ||
-            !copy_plain(anchor, child.current_value, e->u8,
-                        &expected) ||
+            !copy_plain(anchor, child.current_value, e->u8, &expected) ||
             actual.scalar_value != expected.scalar_value)
             return reject(e);
         size_t index = field->field_index;
@@ -914,8 +912,7 @@ static bool copy_constructor(Emit *e, Env *env, const NLCheckedNodeView *v,
         v->argument_count != 2)
         return reject(e);
     if (env->artifact == e->copy_surviving_issuer &&
-        (e->allocations ||
-         v != get(env, e->copy_surviving_constructor)))
+        (e->allocations || v != get(env, e->copy_surviving_constructor)))
         return reject(e);
     if (e->pre_copy_issuer && !e->producer_calls &&
         v != get(env, e->pre_copy_constructors[0]) &&

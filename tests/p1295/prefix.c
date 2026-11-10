@@ -18,9 +18,12 @@ static void controls(PInput *p, const NLCheckedFragment *body,
     char *baseline = NULL;
     size_t baseline_length = 98765;
     assert(nl_checked_c_node(p->entry, &baseline, &baseline_length) ==
-               NL_NODE_C_OK && baseline && baseline_length);
+               NL_NODE_C_OK &&
+           baseline && baseline_length);
     for (size_t fault = 0; fault < 12; ++fault) {
-        const NLCheckedNodeId id = fault < 8 ? loan : fault < 10 ? match : change;
+        const NLCheckedNodeId id = fault < 8    ? loan
+                                   : fault < 10 ? match
+                                                : change;
         NLCheckedNodeView *n = &((NLCheckedFragment *)body)->nodes[id - 1];
         const NLCheckedNodeView saved = *n;
         if (fault == 0)
@@ -51,7 +54,8 @@ static void controls(PInput *p, const NLCheckedFragment *body,
         size_t length = 98765;
         assert(!nl_h_custody_validate(p->entry) &&
                nl_checked_c_node(p->entry, &text, &length) ==
-                   NL_NODE_C_UNSUPPORTED && !text && length == 98765);
+                   NL_NODE_C_UNSUPPORTED &&
+               !text && length == 98765);
         *n = saved;
         assert(nl_h_custody_validate(p->entry) &&
                nl_checked_c_node(p->entry, &text, &length) == NL_NODE_C_OK &&
@@ -111,8 +115,8 @@ int main(int argc, char **argv)
            initial.incarnation == end.incarnation);
     for (size_t i = 0; i < 2; ++i)
         assert(nl_semantic_place_view(entry, initial.fixed_fields[i],
-                                      &fields[i]) && fields[i].live &&
-               fields[i].parent_aggregate == inherited.place);
+                                      &fields[i]) &&
+               fields[i].live && fields[i].parent_aggregate == inherited.place);
     assert(scalar(entry, fields[0].current_value) == 213 &&
            scalar(entry, fields[1].current_value) == 101);
     size_t loans = 0, reads = 0;
@@ -145,29 +149,30 @@ int main(int argc, char **argv)
                    change->field.child_post_fact != fields[1].current_fact &&
                    scalar(current, change->results[0].value) == 101);
             NLSemanticValueView incoming;
-            assert(nl_semantic_value_view(current, change->field.new_value,
-                                          &incoming) &&
-                   incoming.type == nl_semantic_core_type(current, NL_TYPE_U8) &&
-                   !incoming.scalar_known &&
-                   incoming.dependencies == NL_DEPENDENCY_FREE &&
-                   !incoming.reference_count && !incoming.value_dependency_count);
+            assert(
+                nl_semantic_value_view(current, change->field.new_value,
+                                       &incoming) &&
+                incoming.type == nl_semantic_core_type(current, NL_TYPE_U8) &&
+                !incoming.scalar_known &&
+                incoming.dependencies == NL_DEPENDENCY_FREE &&
+                !incoming.reference_count && !incoming.value_dependency_count);
         }
         if (n->kind == NL_CHECKED_FIELD_READ &&
             n->field.base == binding->symbol) {
             assert(change && n->field.parent == inherited.place &&
                    n->field.parent_fact == change->field.parent_post_fact &&
                    n->field.child == initial.fixed_fields[n->field.index] &&
-                   n->field.child_fact ==
-                       (n->field.index == 1 ? change->field.child_post_fact
-                                            : fields[0].current_fact));
+                   n->field.child_fact == (n->field.index == 1
+                                               ? change->field.child_post_fact
+                                               : fields[0].current_fact));
             ++reads;
         }
     }
     assert(loans == 1 && reads == 2);
     printf("PREFIX-PASS original=%zu incarnation=%zu unchanged-all-H=1 "
            "old=101 runtime-current=unknown sibling=213 closed-loan=1 "
-           "reads=2 final-live=%u\n", inherited.place, initial.incarnation,
-           end.live);
+           "reads=2 final-live=%u\n",
+           inherited.place, initial.incarnation, end.live);
 #ifdef P1295_EMIT
     controls(&p, body, result->initializer, loan_id, change_id);
 #endif
