@@ -429,10 +429,17 @@ static bool physical_current_main(Emit *e, Env *env, NLCheckedNodeId id,
                    l->symbol);
     }
     Value value = {0};
-    if (!(id == p->binding
-              ? physical_current_loop(e, env, &value)
-              : physical_current_scalar(e, env, n->initializer, &value, 0)) ||
-        !add_local(e, env, n->symbol, value.type, false) ||
+    if (id == p->heap_binding) {
+        /* The existing H serializer computes its real selected u8 once and
+         * proves all allocation/cleanup paths closed before publishing it. */
+        if (!expr(e, env, n->initializer, &value) || !e->current_h_closed ||
+            value.type != e->u8 || !value.temp)
+            return reject(e);
+    } else if (!(id == p->binding ? physical_current_loop(e, env, &value)
+                                  : physical_current_scalar(
+                                        e, env, n->initializer, &value, 0)))
+        return reject(e);
+    if (!add_local(e, env, n->symbol, value.type, false) ||
         !put(e, "%s nl_b_%zu_%zu=nl_v_%zu;\n(void)nl_b_%zu_%zu;\n",
              physical_current_type(e, value.type), env->frame, n->symbol,
              value.temp, env->frame, n->symbol))

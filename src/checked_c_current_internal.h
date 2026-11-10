@@ -3,6 +3,7 @@
 
 #include "copy_body_internal.h"
 #include "copy_old_result_internal.h"
+#include "h_origin_internal.h"
 #include "linear_break_internal.h"
 
 /* A synchronous borrow of existing CHECK evidence, not a new issuer, world,
@@ -22,8 +23,13 @@ typedef struct {
 } NLPhysicalPostCall;
 
 typedef struct {
+    const NLCheckedFragment *owner, *arms[2];
+    NLCheckedNodeId match;
+} NLPhysicalHeapResult;
+
+typedef struct {
     const NLCheckedFragment *body;
-    NLCheckedNodeId loop, constructor, binding, heap_match;
+    NLCheckedNodeId loop, constructor, binding, heap_match, heap_binding;
     NLLinearBreakView loop_view;
     NLPhysicalHelper helper, terminal_helper, preloop_helper;
     NLTypeId quantity;
@@ -31,7 +37,70 @@ typedef struct {
     bool original_before_heap;
     NLPhysicalPostCall post[2];
     size_t post_count;
+    /* Borrowed exact allocation-result ancestry, never ownership. The
+     * existing H serializer still verifies both branches and each cleanup. */
+    NLPhysicalHeapResult heap_results[2];
+    size_t heap_result_count;
 } NLPhysicalCurrent;
+
+static bool physical_current_heap_result(const NLPhysicalCurrent *p,
+                                         const NLCheckedFragment *f,
+                                         const NLCheckedNodeView *node)
+{
+    if (!p || !p->heap_binding)
+        return false;
+    for (size_t i = 0; i < p->heap_result_count; ++i) {
+        const NLPhysicalHeapResult *r = &p->heap_results[i];
+        if (f == r->owner && nl_checked_node_view(f, r->match) == node)
+            return true;
+        for (size_t a = 0; a < 2; ++a)
+            if (f == r->arms[a] &&
+                nl_checked_node_view(f, nl_checked_root(f)) == node)
+                return true;
+    }
+    return false;
+}
+
+/* This is the same bounded H ancestry the serializer independently visits.
+ * Collect only canonical CHECK-owned endpoints after current validation;
+ * no arm/result is selected here and no semantic world is constructed. */
+static bool physical_current_heap_results(NLPhysicalCurrent *p,
+                                          const NLCheckedFragment *origin,
+                                          const NLCheckedFragment *owner,
+                                          NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *match = nl_checked_node_view(owner, id);
+    const NLCheckedNodeView *trial =
+        match ? nl_checked_node_view(owner, match->initializer) : NULL;
+    const NLTypeId u8 =
+        nl_semantic_core_type(p->loop_view.entry_world, NL_TYPE_U8);
+    if (p->heap_result_count >= 2 || !match || !trial ||
+        match->kind != NL_CHECKED_MATCH || match->type != u8 ||
+        match->result_count != 1 || match->results[0].type != u8 ||
+        match->item_count != 2 || match->normal_arms != 2 ||
+        match->terminates || trial->kind != NL_CHECKED_TRY_ALLOCATE_ONE ||
+        !trial->allocation_trial)
+        return false;
+    NLPhysicalHeapResult *r = &p->heap_results[p->heap_result_count++];
+    r->owner = owner;
+    r->match = id;
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedFragment *arm = nl_checked_match_arm(owner, id, a);
+        if (!arm || !nl_h_origin_edge(origin, owner, id, a, arm))
+            return false;
+        r->arms[a] = arm;
+        for (NLCheckedNodeId n = 1; n <= nl_checked_node_count(arm); ++n) {
+            const NLCheckedNodeView *child = nl_checked_node_view(arm, n);
+            const NLCheckedNodeView *input =
+                child ? nl_checked_node_view(arm, child->initializer) : NULL;
+            if (child && child->kind == NL_CHECKED_MATCH && input &&
+                input->kind == NL_CHECKED_TRY_ALLOCATE_ONE &&
+                !physical_current_heap_results(p, origin, arm, n))
+                return false;
+        }
+    }
+    return true;
+}
 
 static bool physical_current_literal(const NLCheckedFragment *f,
                                      const NLCheckedNodeView *n)
@@ -160,7 +229,8 @@ static bool physical_current_constructor(const NLPhysicalCurrent *p)
 /* The full validator authenticates the owner/source/world/target/ordinal and
  * current entry -> inductive header -> Break summary before any borrow below.
  * Declining this lane does not relax the old stateful-Copy/H consumers. */
-static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
+static NLCheckStatus physical_current_prepare(const NLCheckedFragment *origin,
+                                              const NLCheckedFragment *body,
                                               NLPhysicalCurrent *out)
 {
     NLPhysicalCurrent p = {.body = body};
@@ -273,6 +343,17 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
                     return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
                 p.constructor = n->initializer;
                 p.original_before_heap = !p.heap_match;
+            } else if (init->kind == NL_CHECKED_MATCH) {
+                if (p.heap_match || p.binding ||
+                    !init->normal_frame_unchanged ||
+                    init->captured_frame_closed ||
+                    !nl_h_custody_result_valid(origin,
+                                               nl_checked_root(origin)) ||
+                    !physical_current_heap_results(&p, origin, body,
+                                                   n->initializer))
+                    return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+                p.heap_binding = id;
+                p.heap_match = n->initializer;
             } else if (n->initializer == p.loop) {
                 if (!p.constructor || !p.heap_match || p.binding ||
                     init->type != p.loop_view.result.type ||
@@ -313,7 +394,8 @@ static NLCheckStatus physical_current_prepare(const NLCheckedFragment *body,
     }
     const NLCheckedNodeView *tail = nl_checked_node_view(body, root->tail);
     if (count != root->item_count || !tail || tail->kind != NL_CHECKED_UNIT ||
-        !p.binding || !physical_current_constructor(&p))
+        !p.binding || (p.heap_binding && p.heap_result_count != 2) ||
+        !physical_current_constructor(&p))
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     *out = p;
     return NL_CHECK_OK;
