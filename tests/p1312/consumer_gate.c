@@ -352,6 +352,33 @@ static void focused(const char *path, NLCheckedFragment *entry)
     rejected_cycle(a, loop, "changed-issued-H-result");
     h->nodes[h->root - 1] = arm;
     valid_cycle(entry);
+    /* Each actual allocation world has its own issued result. No success
+     * arm's value may stand in for a missing H0/H1/H2 result package. */
+    NLCheckedFragment *worlds[3] = {
+        (NLCheckedFragment *)nl_checked_match_arm(a, match, 0), NULL, NULL};
+    for (NLCheckedNodeId id = 1; id <= h->count; ++id) {
+        const NLCheckedNodeView *node = nl_checked_node_view(h, id);
+        const NLCheckedNodeView *input =
+            node ? nl_checked_node_view(h, node->initializer) : NULL;
+        if (node && node->kind == NL_CHECKED_MATCH && input &&
+            input->kind == NL_CHECKED_TRY_ALLOCATE_ONE) {
+            assert(!worlds[1] && !worlds[2]);
+            worlds[1] = (NLCheckedFragment *)nl_checked_match_arm(h, id, 0);
+            worlds[2] = (NLCheckedFragment *)nl_checked_match_arm(h, id, 1);
+        }
+    }
+    const char *labels[] = {"H0-unissued-result", "H1-unissued-result",
+                            "H2-unissued-result"};
+    for (size_t i = 0; i < 3; ++i) {
+        assert(worlds[i]);
+        NLCheckedNodeView *result = &worlds[i]->nodes[worlds[i]->root - 1];
+        assert(result->result_count == 1 && result->results[0].value);
+        const NLCheckedNodeView issued = *result;
+        result->results[0].value = 0;
+        rejected_cycle(a, loop, labels[i]);
+        *result = issued;
+        valid_cycle(entry);
+    }
     release(&foreign);
     Fixture baseline = {0};
     prepare(&baseline, path);
@@ -387,7 +414,7 @@ static void focused(const char *path, NLCheckedFragment *entry)
         valid_cycle(x.entry);
         release(&x);
     }
-    puts("FOCUSED CURRENT negative5 OOM4 rollback4 retry4 PASS");
+    puts("FOCUSED CURRENT negative8 OOM4 rollback4 retry4 PASS");
 }
 
 static void emitter_oom(NLCheckedFragment *entry)
