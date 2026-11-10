@@ -2467,6 +2467,49 @@ static bool current_helper_selection(const NLLinearBreakView *v, V0Program *p)
     return true;
 }
 
+/* A borrow of the already validated one-field cyclic proof. Keep admission
+ * and serialization on the same typed terminal-result subset; the separate
+ * H/current consumer and CHECK's paired-field precision are unchanged. */
+static bool current_old_result_shape(const NLLinearBreakView *p)
+{
+    if (!p->changing_current || !p->terminal_old || p->scalar_loop ||
+        !p->breaking || !p->terminal_loan || p->terminal_call)
+        return false;
+    const NLTypeId u8 =
+        nl_semantic_core_type(nl_checked_context(p->breaking), NL_TYPE_U8);
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(p->breaking, nl_checked_root(p->breaking));
+    const NLCheckedNodeView *block =
+        root ? nl_checked_node_view(p->breaking, root->initializer) : NULL;
+    if (p->result.type != u8 || p->terminal_change.type != u8 || !block ||
+        block->kind != NL_CHECKED_BLOCK || block->tail)
+        return false;
+    size_t count = 0;
+    for (NLCheckedNodeId id = block->first_item; id;) {
+        const NLCheckedNodeView *n = nl_checked_node_view(p->breaking, id);
+        const NLCheckedNodeView *value =
+            n ? nl_checked_node_view(p->breaking, n->initializer) : NULL;
+        if (!n || !value || ++count > block->item_count)
+            return false;
+        if (n->kind == NL_CHECKED_BREAK)
+            return !n->next_item && count == block->item_count &&
+                   n->initializer == p->break_value && value->type == u8 &&
+                   (value->kind == NL_CHECKED_IDENTIFIER ||
+                    (value->kind == NL_CHECKED_LOAN_HEADER &&
+                     n->initializer == p->terminal_loan));
+        if (n->kind != NL_CHECKED_BINDING ||
+            (value->kind != NL_CHECKED_IDENTIFIER &&
+             value->kind != NL_CHECKED_U8_LITERAL &&
+             value->kind != NL_CHECKED_USIZE_LITERAL &&
+             value->kind != NL_CHECKED_FIELD_READ &&
+             !(value->kind == NL_CHECKED_LOAN_HEADER &&
+               n->initializer == p->terminal_loan)))
+            return false;
+        id = n->next_item;
+    }
+    return false;
+}
+
 static bool linear_break_selection(const NLCheckedFragment *f,
                                    NLCheckedNodeId id, V0Program *p)
 {
@@ -2482,6 +2525,12 @@ static bool linear_break_selection(const NLCheckedFragment *f,
         return false;
     if (!current_helper_selection(&v, p))
         return false;
+    if (v.changing_current && v.terminal_old) {
+        if (!current_old_result_shape(&v))
+            return false;
+        p->current_loop = true;
+        p->uses_usize = true;
+    }
     p->linear_break = true;
     if (v.stuttering) {
         p->stuttering_loop = true;
@@ -3063,10 +3112,11 @@ static bool emit_current_quantity(FILE *stream, const NLLinearBreakView *p,
 
 static bool emit_current_copy(FILE *stream, const NLLinearBreakView *p,
                               NLCheckedNodeId loop,
+                              const NLCheckedFragment *fragment,
                               const NLCheckedNodeView *binding, size_t depth)
 {
     const NLCheckedNodeView *init =
-        nl_checked_node_view(p->iteration, binding->initializer);
+        nl_checked_node_view(fragment, binding->initializer);
     return v0_indent(stream, depth) &&
            fprintf(stream, "const size_t nl_local_%zu = ", binding->symbol) >=
                0 &&
@@ -3100,6 +3150,67 @@ static bool emit_current_helper(FILE *stream, const NLLinearBreakView *p,
            fprintf(stream, "(void)nl_local_%zu;\n", binding) >= 0;
 }
 
+static bool emit_current_loan_observation(FILE *stream,
+                                          const NLLinearBreakView *p,
+                                          size_t depth, NLSymbolId old)
+{
+    return v0_indent(stream, depth) &&
+           (old ? fprintf(stream,
+                          "NL_LOOP_AFTER(&nl_local_%zu.f0, &nl_local_%zu.f1, "
+                          "%zu, nl_local_%zu);\n",
+                          p->base, p->base, p->index, old)
+                : fprintf(stream,
+                          "NL_LOOP_BEFORE(&nl_local_%zu.f0, "
+                          "&nl_local_%zu.f1, %zu);\n",
+                          p->base, p->base, p->index)) >= 0;
+}
+
+static bool emit_current_old_terminal(FILE *stream, const NLLinearBreakView *p,
+                                      NLCheckedNodeId loop, NLSymbolId result,
+                                      size_t depth)
+{
+    const NLCheckedFragment *f = p->breaking;
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    const NLCheckedNodeView *block = nl_checked_node_view(f, root->initializer);
+    for (NLCheckedNodeId id = block->first_item; id;) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        const NLCheckedNodeView *value =
+            nl_checked_node_view(f, n->initializer);
+        if (n->kind == NL_CHECKED_BREAK) {
+            const bool direct = value->kind == NL_CHECKED_LOAN_HEADER;
+            if (direct &&
+                (!emit_current_loan_observation(stream, p, depth, 0) ||
+                 !gate_emit_loan(stream, f, value, depth)))
+                return false;
+            if (!v0_indent(stream, depth) ||
+                fprintf(stream, "nl_local_%zu = ", result) < 0 ||
+                !(direct ? fprintf(stream, "nl_loan_result_%zu",
+                                   value->loan.scope) >= 0
+                         : v1_emit_scalar(stream, value)) ||
+                fputs(";\n", stream) < 0 ||
+                (direct &&
+                 !emit_current_loan_observation(stream, p, depth, result)))
+                return false;
+            return v0_indent(stream, depth) &&
+                   fprintf(stream, "NL_CURRENT_RESULT(nl_local_%zu);\n",
+                           result) >= 0 &&
+                   v0_indent(stream, depth) && fputs("break;\n", stream) >= 0;
+        }
+        const bool loan = value->kind == NL_CHECKED_LOAN_HEADER;
+        if (loan && !emit_current_loan_observation(stream, p, depth, 0))
+            return false;
+        if (!(value->type == nl_semantic_core_type(nl_checked_context(f),
+                                                   NL_TYPE_USIZE)
+                  ? emit_current_copy(stream, p, loop, f, n, depth)
+                  : v0_emit_node(stream, f, id, depth)) ||
+            (loan &&
+             !emit_current_loan_observation(stream, p, depth, n->symbol)))
+            return false;
+        id = n->next_item;
+    }
+    return false;
+}
+
 static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
                               const NLCheckedFragment *caller,
                               NLCheckedNodeId id, NLSymbolId result,
@@ -3114,8 +3225,11 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
         nl_checked_node_view(caller, p->initial_node);
     const NLCheckedNodeView *result_value =
         nl_checked_node_view(p->breaking, p->break_value);
-    if (!block || !initial || !result_value || !v0_indent(stream, depth) ||
-        fprintf(stream, "size_t nl_local_%zu;\n", result) < 0 ||
+    if (!block || !initial || !result_value ||
+        (p->terminal_old && !current_old_result_shape(p)) ||
+        !v0_indent(stream, depth) ||
+        fprintf(stream, "%s nl_local_%zu;\n",
+                p->terminal_old ? "uint8_t" : "size_t", result) < 0 ||
         !v0_indent(stream, depth) ||
         fprintf(stream, "size_t nl_loop_carry_%zu = ", id) < 0 ||
         !(initial->kind == NL_CHECKED_USIZE_LITERAL
@@ -3146,13 +3260,20 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
             n && n->kind == NL_CHECKED_STATEMENT
                 ? nl_checked_node_view(arm, n->initializer)
                 : NULL;
+        const NLCheckedNodeView *initializer =
+            n ? nl_checked_node_view(arm, n->initializer) : NULL;
+        const bool observe_loan = p->terminal_old && receiver && initializer &&
+                                  initializer->kind == NL_CHECKED_LOAN_HEADER;
+        if (observe_loan &&
+            !emit_current_loan_observation(stream, p, depth + 2, 0))
+            return false;
         if (!n ||
             !(discard && discard->type ==
                              nl_semantic_core_type(arm->context, NL_TYPE_USIZE)
                   ? emit_current_discard(stream, p, id, discard, depth + 2)
               : receiver && receiver->type == nl_semantic_core_type(
                                                   arm->context, NL_TYPE_USIZE)
-                  ? emit_current_copy(stream, p, id, n, depth + 2)
+                  ? emit_current_copy(stream, p, id, arm, n, depth + 2)
               : p->incoming_if && n->kind == NL_CHECKED_BINDING &&
                       n->initializer == p->incoming_if
                   ? emit_current_selection(stream, p, id, n->symbol, depth + 2)
@@ -3161,6 +3282,9 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
                   ? emit_current_helper(stream, p, id, n->symbol, depth + 2)
                   : v0_emit_node(stream, arm, item, depth + 2)))
             return false;
+        if (observe_loan &&
+            !emit_current_loan_observation(stream, p, depth + 2, n->symbol))
+            return false;
         if (n->kind == NL_CHECKED_BINDING &&
             (!v0_indent(stream, depth + 2) ||
              fprintf(stream, "NL_CURRENT_LOCAL(%zu, nl_local_%zu);\n",
@@ -3168,14 +3292,20 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
             return false;
         item = n->next_item;
     }
-    return item == p->continue_node && v0_indent(stream, depth + 2) &&
-           fprintf(stream,
-                   "nl_loop_carry_%zu = nl_loop_phase_%zu + "
-                   "(size_t)UINTMAX_C(%zu);\n",
-                   id, id, p->next_phase) >= 0 &&
-           v0_indent(stream, depth + 2) && fputs("continue;\n", stream) >= 0 &&
-           v0_indent(stream, depth + 1) && fputs("}\n", stream) >= 0 &&
-           v0_indent(stream, depth + 1) &&
+    if (!(item == p->continue_node && v0_indent(stream, depth + 2) &&
+          fprintf(stream,
+                  "nl_loop_carry_%zu = nl_loop_phase_%zu + "
+                  "(size_t)UINTMAX_C(%zu);\n",
+                  id, id, p->next_phase) >= 0 &&
+          v0_indent(stream, depth + 2) && fputs("continue;\n", stream) >= 0 &&
+          v0_indent(stream, depth + 1) && fputs("}\n", stream) >= 0))
+        return false;
+    if (p->terminal_old)
+        return emit_current_old_terminal(stream, p, id, result, depth + 1) &&
+               v0_indent(stream, depth) && fputs("}\n", stream) >= 0 &&
+               v0_indent(stream, depth) &&
+               fprintf(stream, "(void)nl_local_%zu;\n", result) >= 0;
+    return v0_indent(stream, depth + 1) &&
            fprintf(stream, "nl_local_%zu = ", result) >= 0 &&
            (result_value->kind == NL_CHECKED_USIZE_LITERAL
                 ? fprintf(stream, "(size_t)UINTMAX_C(%zu)",
