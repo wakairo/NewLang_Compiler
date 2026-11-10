@@ -1,0 +1,8 @@
+{
+  "utc": "2026-11-10T11:56:17.523235+00:00",
+  "baseline_verified_before_change": true,
+  "test_source_change_frozen_in_tool_patch_before_v3_execution": true,
+  "receipt_after_v3_due_independent_archive_recovery_assertion": true,
+  "classification": "CLI host CHECK OOM is adopted exit3+error(host)[P3-OUT-OF-MEMORY]; driver resource failure exit1. Original strict new-test oracle, source and FIRST retained. CHECK OOM status4/null/rollback/retry unchanged.",
+  "negative_sha256": "80c42c2275e356ff04b6a412ce23f2ea4759d2830ca59119ee226277fbb1f669"
+}

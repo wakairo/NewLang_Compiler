@@ -1,0 +1,102 @@
+{
+  "authority": "56da4210829b86c111f9f91f6d83cbdefb8338c1",
+  "tree": "9ca9278c9f21761c0fb755ebd0ba829badd19874",
+  "canonical": "Draft17.35",
+  "frozen_utc": "2026-11-10T11:38:20.048500+00:00",
+  "before_first_new_baseline_or_candidate_execution": true,
+  "source": {
+    "A-index0.nl": {
+      "bytes": 778,
+      "sha256": "8a2177dc7c7507ba8379198f245885fd6a0c31db38060375703436a2273c9c82"
+    },
+    "B-index1.nl": {
+      "bytes": 786,
+      "sha256": "55754b166cf6f6f801ca14549f43e3b31432345ae5ce1db550c1b5688fc2d021"
+    },
+    "N-ended-ref.nl": {
+      "bytes": 838,
+      "sha256": "2a54a4eec892976dacb7d76fc1033df83830ac125710ea9671ae955f248c303c"
+    },
+    "N-field-type.nl": {
+      "bytes": 782,
+      "sha256": "a2f2d41326bf56d2cf3390f7fca043c84202969f76c7c8b7906c47aa18f2fc55"
+    },
+    "N-two-field-boundary.nl": {
+      "bytes": 885,
+      "sha256": "08986e742dde294bec8be2908da32ead7e195c242f65455af40ab06db4c40d7f"
+    }
+  },
+  "A": {
+    "field_index": 0,
+    "initial_fields": [
+      17,
+      193
+    ],
+    "stores": [
+      61,
+      137,
+      229
+    ],
+    "old_values": [
+      17,
+      61,
+      137
+    ],
+    "post_fields": [
+      229,
+      193
+    ],
+    "Break_old": 137
+  },
+  "B": {
+    "field_index": 1,
+    "initial_fields": [
+      59,
+      23
+    ],
+    "stores": [
+      85,
+      173,
+      211
+    ],
+    "old_values": [
+      23,
+      85,
+      173
+    ],
+    "post_fields": [
+      59,
+      211
+    ],
+    "Break_old": 173
+  },
+  "same_for_both": {
+    "T_original_count": 1,
+    "H_originals": 0,
+    "phases": [
+      0,
+      1,
+      2
+    ],
+    "actual_backedges": 2,
+    "actual_stores": 3,
+    "terminal_store_exactly_once": true,
+    "runtime_loans": 3,
+    "static_ended_loan_records": 2,
+    "incarnations": "Same source-issued original and distinct fixed children retained across all edges; actual addresses observed passively, not supplied by oracle."
+  },
+  "baseline_prediction": "A/B CHECK0 and authentic owned/current0; C17 likely V0-C-OUTPUT1. Reobserve actual new-main result and preserve FIRST if different.",
+  "candidate_prediction": "A/B actual CHECK/owned/current0 + ordinary C17emit0; untouched strict GCC/Clang O0/O2 runtime values above.",
+  "negative_oracles": {
+    "N-ended-ref.nl": "CHECK3 P8-EXIT-DEPENDENCY",
+    "N-field-type.nl": "CHECK3 P3-TYPE-MISMATCH",
+    "N-two-field-boundary.nl": "legal selected source but existing CHECK3 USIZE-ADDITION-PRECISION; paired-current remains out of scope"
+  },
+  "host_adversarial_plan": "Real CHECK-owned views only; wrong terminal field, stale current child incarnation, active ended-loan marker, genuine foreign world must fail closed; restore then healthy. No deliberately short/invalid allocation dereference.",
+  "OOM_failure_plan": "Real CHECK/CLI/admission census; selected actual failures first/second/mid/last only; preserve resource status, caller/root, named bytes/inode/mtime/temp, healthy retry. Output failure checked without native execution.",
+  "native_budget": {
+    "maximum": 24,
+    "planned": "two sources x raw GCC/Clang O0/O2 + passive GCC/Clang O0/O2 =16; guest Clang sanitizer O0/O2 for each source=4; reserve4 for necessary apparatus/repair, no rerun of passed matrix"
+  },
+  "stop": "New authority/public issuer/API/ABI/owner/Domain/law, fake Known/dummy H/second original, wrong-code/unsafe/unresolved independent material finding => affected STOP C. Two-field CHECK not modified."
+}
