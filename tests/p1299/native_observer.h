@@ -149,8 +149,8 @@ static void p_binding(size_t frame, size_t symbol, const void *address)
             else
                 p1299.supplied = actual;
         } else {
-            assert(p1299.root_calls == 1 && actual == (i == 3   ? p1299.supplied
-                                                   : i == 4 ? 227
+            assert(p1299.root_calls == 1 && actual == (i == 4   ? p1299.supplied
+                                                   : i == 5 ? 227
                                                             : 103));
         }
         ++p1299.scalars;
