@@ -294,9 +294,8 @@ static bool copy_surviving_plan(Emit *e, const NLCheckedFragment *body)
         match ? nl_checked_node_view(body, match->initializer) : NULL;
     if (!e->scalar_issued || !e->two_heap || !e->live_tail || e->custody ||
         e->copy_expected_calls != (e->copy_surviving_call ? 2u : 1u) ||
-        e->copy_after_match ||
-        root->kind != NL_CHECKED_BLOCK || root->terminates ||
-        binding->kind != NL_CHECKED_BINDING || !result ||
+        e->copy_after_match || root->kind != NL_CHECKED_BLOCK ||
+        root->terminates || binding->kind != NL_CHECKED_BINDING || !result ||
         result->kind != NL_CHECKED_BINDING || !match ||
         match->kind != NL_CHECKED_MATCH || match->type != e->u8 ||
         !match_result_shape(e, body, match) || match->terminates ||
@@ -347,8 +346,8 @@ static bool copy_surviving_plan(Emit *e, const NLCheckedFragment *body)
             !nl_semantic_snapshot(p.entry, &closed) || closed.backing_regions ||
             closed.domains || closed.raw_intervals ||
             !nl_semantic_binding_view(p.entry, binding->symbol, &actual) ||
-            actual.availability != NL_AVAILABLE || actual.type != e->copy_type ||
-            actual.place != original.place ||
+            actual.availability != NL_AVAILABLE ||
+            actual.type != e->copy_type || actual.place != original.place ||
             !nl_semantic_place_view(e->copy_surviving_anchor, original.place,
                                     &initial) ||
             !nl_semantic_place_view(p.entry, actual.place, &entry) ||
@@ -367,7 +366,8 @@ static bool copy_surviving_plan(Emit *e, const NLCheckedFragment *body)
             if (initial.fixed_fields[i] != entry.fixed_fields[i] ||
                 !nl_semantic_place_view(e->copy_surviving_anchor,
                                         initial.fixed_fields[i], &before) ||
-                !nl_semantic_place_view(p.entry, entry.fixed_fields[i], &after) ||
+                !nl_semantic_place_view(p.entry, entry.fixed_fields[i],
+                                        &after) ||
                 !before.live || !after.live ||
                 before.incarnation != after.incarnation ||
                 before.current_fact != after.current_fact ||
@@ -376,7 +376,8 @@ static bool copy_surviving_plan(Emit *e, const NLCheckedFragment *body)
         }
         const NLCheckedNodeView *loan = nl_checked_node_view(body, p.loan);
         if (!loan || loan->kind != NL_CHECKED_LOAN_HEADER ||
-            !loan->loan.implicit_local || loan->loan.source != binding->symbol ||
+            !loan->loan.implicit_local ||
+            loan->loan.source != binding->symbol ||
             loan->loan.place != p.field.child ||
             loan->loan.incarnation != p.field.child_incarnation ||
             !loan->loan.body_nonescape_proved ||
@@ -628,8 +629,7 @@ static bool copy_pre_constructor(Emit *e, const Env *env,
 }
 static bool copy_pre_world(Emit *e, const Env *env)
 {
-    const bool two_calls =
-        copy_nested_calls(e) == 2 && e->copy_second_function;
+    const bool two_calls = copy_nested_calls(e) == 2 && e->copy_second_function;
     if (env->artifact != e->copy_issuer || !e->copy_anchor || !e->two_heap ||
         !e->live_tail || e->custody || e->allocations != 2 ||
         e->producer_calls || e->owner_calls || e->link_updates || e->reloans ||

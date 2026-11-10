@@ -41,7 +41,8 @@ static void refused(const PInput *p)
     char *text = NULL;
     size_t length = 98765;
     assert(nl_checked_c_node(p->entry, &text, &length) ==
-               NL_NODE_C_UNSUPPORTED && !text && length == 98765);
+               NL_NODE_C_UNSUPPORTED &&
+           !text && length == 98765);
 #endif
 }
 static NLSemanticValueView scalar(const NLSemanticContext *c, NLValueId id)
@@ -68,7 +69,8 @@ static void visit(Observation *o, const NLCheckedFragment *f)
         NLSemanticBindingView b;
         if (n->kind == NL_CHECKED_BINDING &&
             nl_semantic_binding_view(nl_checked_context(f), n->symbol, &b) &&
-            b.type == nl_semantic_core_type(nl_checked_context(f), NL_TYPE_U8)) {
+            b.type ==
+                nl_semantic_core_type(nl_checked_context(f), NL_TYPE_U8)) {
             NLSourceView name;
             if (nl_source_view(f->source, n->name, &name))
                 printf("BIND %.*s %zu\n", (int)name.length,
@@ -85,12 +87,11 @@ static void visit(Observation *o, const NLCheckedFragment *f)
                    nl_checked_copy_body_event(f, id, 0, &call->event) &&
                    nl_checked_copy_body_validate(f, id, &call->body) ==
                        NL_CHECK_OK &&
-                   nl_checked_copy_body_parameters_validate(f, id,
-                                                            &parameters) ==
-                       NL_CHECK_OK &&
-                   nl_checked_copy_body_event_validate(f, id, 0,
-                                                       &call->event) ==
-                       NL_CHECK_OK && call->body.event_count == 1 &&
+                   nl_checked_copy_body_parameters_validate(
+                       f, id, &parameters) == NL_CHECK_OK &&
+                   nl_checked_copy_body_event_validate(
+                       f, id, 0, &call->event) == NL_CHECK_OK &&
+                   call->body.event_count == 1 &&
                    call->event.kind == NL_COPY_BODY_CHANGE &&
                    copy_old_result(&call->body, &call->event,
                                    nl_semantic_core_type(nl_checked_context(f),
@@ -100,9 +101,11 @@ static void visit(Observation *o, const NLCheckedFragment *f)
         if (n->kind != NL_CHECKED_MATCH)
             continue;
         ++o->matches;
-        assert(n->type == nl_semantic_core_type(nl_checked_context(f), NL_TYPE_U8) &&
-               n->normal_arms == 2 && n->item_count == 2 &&
-               !scalar(nl_checked_context(f), n->results[0].value).scalar_known);
+        assert(
+            n->type ==
+                nl_semantic_core_type(nl_checked_context(f), NL_TYPE_U8) &&
+            n->normal_arms == 2 && n->item_count == 2 &&
+            !scalar(nl_checked_context(f), n->results[0].value).scalar_known);
         for (size_t arm = 0; arm < 2; ++arm)
             visit(o, nl_checked_match_arm(f, id, arm));
     }
@@ -152,7 +155,8 @@ static void facts(const Call *c, bool outer)
            loan->loan.body_nonescape_proved &&
            loan->loan.normal_result_forwarded &&
            nl_semantic_scope_view(nl_checked_context(c->owner),
-                                  loan->loan.scope, &scope) && !scope.active);
+                                  loan->loan.scope, &scope) &&
+           !scope.active);
     const NLSemanticContext *body = nl_checked_context(c->body.body);
     NLSemanticBindingView formal;
     assert(nl_semantic_binding_view(body, p->parameters[1], &formal));
@@ -162,7 +166,8 @@ static void facts(const Call *c, bool outer)
     if (outer) {
         NLSemanticSnapshot closed;
         assert(nl_semantic_snapshot(p->entry, &closed) &&
-               !closed.backing_regions && !closed.domains && !closed.raw_intervals);
+               !closed.backing_regions && !closed.domains &&
+               !closed.raw_intervals);
     }
     printf("CALL role=%s function=%zu old=%zu current=%s sibling=%zu "
            "same-original=1 field=0 closed-loan=1 actual-formal=1\n",
@@ -172,11 +177,14 @@ static void facts(const Call *c, bool outer)
 static void prefix(const PInput *p, const NLCheckedFragment *body,
                    const Call *call)
 {
-    const NLCheckedNodeView *root =
-        nl_checked_node_view(body, nl_checked_root(body)),
-                            *binding = nl_checked_node_view(body, root->first_item),
-                            *result = nl_checked_node_view(body, binding->next_item),
-                            *match = nl_checked_node_view(body, result->initializer);
+    const NLCheckedNodeView *root = nl_checked_node_view(body,
+                                                         nl_checked_root(body)),
+                            *binding =
+                                nl_checked_node_view(body, root->first_item),
+                            *result =
+                                nl_checked_node_view(body, binding->next_item),
+                            *match =
+                                nl_checked_node_view(body, result->initializer);
     assert(binding->kind == NL_CHECKED_BINDING &&
            binding->symbol == call->parameters.field.base &&
            match->kind == NL_CHECKED_MATCH && match->normal_frame_unchanged &&
@@ -198,7 +206,8 @@ static void prefix(const PInput *p, const NLCheckedFragment *body,
                nl_semantic_place_view(nl_checked_context(a), inherited.place,
                                       &before) &&
                nl_semantic_place_view(call->parameters.entry, inherited.place,
-                                      &entry) && before.live && entry.live &&
+                                      &entry) &&
+               before.live && entry.live &&
                before.incarnation == entry.incarnation &&
                before.current_fact == entry.current_fact &&
                before.current_value == entry.current_value);
@@ -229,7 +238,8 @@ static void destruction(const char *source)
                               a.entry, nl_checked_root(a.entry)),
                           *bb = (NLCheckedFragment *)nl_checked_call_body(
                               b.entry, nl_checked_root(b.entry));
-        assert(aa->arm_count && bb->arm_count && aa->body_count && bb->body_count);
+        assert(aa->arm_count && bb->arm_count && aa->body_count &&
+               bb->body_count);
         if (fault == 0)
             aa->arms = bb->arms;
         else if (fault == 1)
@@ -243,7 +253,8 @@ static void destruction(const char *source)
         else
             aa->bodies = bb->bodies;
         refused(&a);
-        p_dispose(&a); /* Deliberately unrestored; B must remain a true owner. */
+        p_dispose(
+            &a); /* Deliberately unrestored; B must remain a true owner. */
         healthy(&b);
         p_dispose(&b);
         printf("CANONICAL-DESTROY fault=%zu unrestored-A B-live=1\n", fault);
@@ -286,7 +297,8 @@ int main(int argc, char **argv)
         assert(nl_sem_clone(f->context, &clone) == NL_CHECK_OK);
         const NLSemanticContext *saved = f->context;
         f->context = clone;
-        assert(nl_checked_copy_body_validate(f, c->id, &c->body) != NL_CHECK_OK);
+        assert(nl_checked_copy_body_validate(f, c->id, &c->body) !=
+               NL_CHECK_OK);
         refused(&p);
         f->context = saved;
         nl_semantic_destroy(clone);

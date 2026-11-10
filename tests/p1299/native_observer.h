@@ -1,4 +1,5 @@
-/* P-owned passive physical method reused from P1295; original file unchanged. */
+/* P-owned passive physical method reused from P1295; original file unchanged.
+ */
 #ifndef P1299_NATIVE_OBSERVER_H
 #define P1299_NATIVE_OBSERVER_H
 #include <assert.h>
@@ -97,7 +98,8 @@ static void p_t_bind(size_t frame, uint8_t *first, uint8_t *second)
 {
     assert(first != second);
     if (frame == P1299_ROOT_FRAME) {
-        assert(!p1299.binds && !p1299.attempts && *first == 103 && *second == 227);
+        assert(!p1299.binds && !p1299.attempts && *first == 103 &&
+               *second == 227);
         p1299.target = first;
         p1299.sibling = second;
     } else {
@@ -150,8 +152,8 @@ static void p_binding(size_t frame, size_t symbol, const void *address)
                 p1299.supplied = actual;
         } else {
             assert(p1299.root_calls == 1 && actual == (i == 4   ? p1299.supplied
-                                                   : i == 5 ? 227
-                                                            : 103));
+                                                       : i == 5 ? 227
+                                                                : 103));
         }
         ++p1299.scalars;
     }
