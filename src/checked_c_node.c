@@ -107,6 +107,9 @@ typedef struct {
     const NLCheckedFragment *copy_surviving_issuer;
     const NLSemanticContext *copy_surviving_anchor;
     NLCheckedNodeId copy_surviving_constructor, copy_surviving_match;
+    /* Optional exact main-caller call, separate from the nested Copy issuer.
+     * Admission still needs the unchanged-prefix/closed-H plan below. */
+    NLCheckedNodeId copy_surviving_call;
     /* Borrowed admission ledger, never a semantic capability. */
     const NLCheckedFragment *pre_copy_issuer;
     NLCheckedNodeId pre_copy_constructors[2];

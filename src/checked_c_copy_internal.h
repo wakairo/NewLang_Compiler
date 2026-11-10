@@ -74,6 +74,13 @@ static bool copy_call_proof(Emit *e, const NLCheckedFragment *f,
         e->copy_second_function = v.function;
     return true;
 }
+/* A postmatch main call does not increase the nested caller's call budget.
+ * The optional role is scheduled only after both existing public call proofs
+ * validate; copy_surviving_plan must separately bind it to the original. */
+static size_t copy_nested_calls(const Emit *e)
+{
+    return e->copy_expected_calls - (e->copy_surviving_call != 0);
+}
 static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
                             size_t depth)
 {
@@ -106,9 +113,14 @@ static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
             continue;
         if (!e->two_heap || !e->live_tail || !copy_call_proof(e, body, id, &p))
             return reject(e);
-        if (e->copy_issuer && e->copy_issuer != body)
-            return reject(e);
-        if (!e->copy_anchor) {
+        if (e->copy_issuer && e->copy_issuer != body) {
+            if (depth || e->copy_surviving_call ||
+                e->copy_expected_calls != 1 ||
+                body != nl_checked_call_body(e->origin_root,
+                                             nl_checked_root(e->origin_root)))
+                return reject(e);
+            e->copy_surviving_call = id;
+        } else if (!e->copy_anchor) {
             e->copy_anchor = p.entry;
             e->copy_issuer = body;
         }
@@ -281,7 +293,8 @@ static bool copy_surviving_plan(Emit *e, const NLCheckedFragment *body)
     const NLCheckedNodeView *trial =
         match ? nl_checked_node_view(body, match->initializer) : NULL;
     if (!e->scalar_issued || !e->two_heap || !e->live_tail || e->custody ||
-        e->copy_expected_calls != 1 || e->copy_after_match ||
+        e->copy_expected_calls != (e->copy_surviving_call ? 2u : 1u) ||
+        e->copy_after_match ||
         root->kind != NL_CHECKED_BLOCK || root->terminates ||
         binding->kind != NL_CHECKED_BINDING || !result ||
         result->kind != NL_CHECKED_BINDING || !match ||
@@ -319,6 +332,58 @@ static bool copy_surviving_plan(Emit *e, const NLCheckedFragment *body)
                                   &original) ||
         original.type != e->copy_type || original.availability != NL_AVAILABLE)
         return reject(e);
+    if (e->copy_surviving_call) {
+        NLCopyBodyParameters p;
+        NLSemanticSnapshot closed;
+        NLSemanticBindingView actual;
+        NLSemanticPlaceView initial, entry;
+        const NLCheckedNodeView *call =
+            nl_checked_node_view(body, e->copy_surviving_call);
+        if (!call || call->kind != NL_CHECKED_REGISTERED_CALL ||
+            call->span.start_byte <= match->span.end_byte ||
+            !copy_call_proof(e, body, e->copy_surviving_call, &p) ||
+            p.field.base != binding->symbol || p.field.index > 1 ||
+            p.field.parent != original.place ||
+            !nl_semantic_snapshot(p.entry, &closed) || closed.backing_regions ||
+            closed.domains || closed.raw_intervals ||
+            !nl_semantic_binding_view(p.entry, binding->symbol, &actual) ||
+            actual.availability != NL_AVAILABLE || actual.type != e->copy_type ||
+            actual.place != original.place ||
+            !nl_semantic_place_view(e->copy_surviving_anchor, original.place,
+                                    &initial) ||
+            !nl_semantic_place_view(p.entry, actual.place, &entry) ||
+            !initial.live || !entry.live || !initial.implicit_local ||
+            !initial.independent_root || initial.governing_domain ||
+            initial.fixed_field_count != 2 || entry.fixed_field_count != 2 ||
+            initial.incarnation != entry.incarnation ||
+            initial.incarnation != p.field.parent_incarnation ||
+            initial.current_fact != entry.current_fact ||
+            initial.current_fact != p.field.parent_fact ||
+            initial.current_value != entry.current_value ||
+            initial.fixed_fields[p.field.index] != p.field.child)
+            return reject(e);
+        for (size_t i = 0; i < 2; ++i) {
+            NLSemanticPlaceView before, after;
+            if (initial.fixed_fields[i] != entry.fixed_fields[i] ||
+                !nl_semantic_place_view(e->copy_surviving_anchor,
+                                        initial.fixed_fields[i], &before) ||
+                !nl_semantic_place_view(p.entry, entry.fixed_fields[i], &after) ||
+                !before.live || !after.live ||
+                before.incarnation != after.incarnation ||
+                before.current_fact != after.current_fact ||
+                before.current_value != after.current_value)
+                return reject(e);
+        }
+        const NLCheckedNodeView *loan = nl_checked_node_view(body, p.loan);
+        if (!loan || loan->kind != NL_CHECKED_LOAN_HEADER ||
+            !loan->loan.implicit_local || loan->loan.source != binding->symbol ||
+            loan->loan.place != p.field.child ||
+            loan->loan.incarnation != p.field.child_incarnation ||
+            !loan->loan.body_nonescape_proved ||
+            !loan->loan.normal_result_forwarded)
+            return reject(e);
+        e->copy_expected_roots = 2;
+    }
     e->copy_surviving_issuer = body;
     e->copy_surviving_constructor = binding->initializer;
     e->copy_surviving_match = result->initializer;
@@ -326,8 +391,12 @@ static bool copy_surviving_plan(Emit *e, const NLCheckedFragment *body)
 }
 static bool copy_prepare(Emit *e, const NLCheckedFragment *body)
 {
-    return copy_prepare_at(e, body, 0) && copy_two_helpers(e, body) &&
-           copy_surviving_plan(e, body);
+    if (!copy_prepare_at(e, body, 0))
+        return false;
+    if (e->copy_surviving_call)
+        return copy_surviving_plan(e, body) &&
+               (e->copy_surviving_issuer == body || reject(e));
+    return copy_two_helpers(e, body) && copy_surviving_plan(e, body);
 }
 /* A nested Copy original is allowed only in the exact publicly validated
  * caller fragment after its one producer has returned the original H owner.
@@ -468,7 +537,7 @@ static bool copy_linked_world(Emit *e, const Env *env)
         !e->scalar_issued || !e->two_heap || !e->live_tail || e->custody ||
         e->allocations != 2 || e->producer_calls || e->owner_calls ||
         e->pending_live || e->link_updates != 1 || e->reads != 1 ||
-        e->projections != 2 || e->reloans != 2 || e->copy_expected_calls != 1 ||
+        e->projections != 2 || e->reloans != 2 || copy_nested_calls(e) != 1 ||
         e->copy_calls > 1 || !e->initial_attach || !e->attach_issuer ||
         e->initial_attach->kind != NL_CHECKED_REPLACE ||
         e->initial_attach->type != e->option ||
@@ -560,12 +629,12 @@ static bool copy_pre_constructor(Emit *e, const Env *env,
 static bool copy_pre_world(Emit *e, const Env *env)
 {
     const bool two_calls =
-        e->copy_expected_calls == 2 && e->copy_second_function;
+        copy_nested_calls(e) == 2 && e->copy_second_function;
     if (env->artifact != e->copy_issuer || !e->copy_anchor || !e->two_heap ||
         !e->live_tail || e->custody || e->allocations != 2 ||
         e->producer_calls || e->owner_calls || e->link_updates || e->reloans ||
-        (e->copy_expected_calls != 1 && !two_calls) ||
-        e->copy_calls > e->copy_expected_calls || e->lifecycle[0].stage != 4 ||
+        (copy_nested_calls(e) != 1 && !two_calls) ||
+        e->copy_calls > copy_nested_calls(e) || e->lifecycle[0].stage != 4 ||
         e->lifecycle[1].stage != 4)
         return false;
     if (e->pre_copy_issuer)
@@ -746,7 +815,7 @@ static bool copy_post_world(Emit *e, const Env *env)
         e->allocations != 2 || e->producer_calls != 1 || e->owner_calls != 1 ||
         e->pending_live || e->active_owner_call || e->active_owner_body ||
         e->producer_issuer != env->artifact ||
-        e->terminal_issuer != env->artifact || e->copy_expected_calls != 1 ||
+        e->terminal_issuer != env->artifact || copy_nested_calls(e) != 1 ||
         (e->post_copy_issuer && e->post_copy_issuer != env->artifact) ||
         (!e->post_copy_issuer && (e->copy_roots || e->copy_calls)))
         return false;
