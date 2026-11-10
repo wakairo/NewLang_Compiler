@@ -6771,6 +6771,57 @@ static bool node_unit_arm_frame(const NLSemanticContext *before,
     return true;
 }
 
+/* Only a plain primitive result may leave these completed source arms.
+ * Its package belongs to the arm world; callers create a fresh parent value
+ * instead of treating equal post-fork numeric IDs as an identity mapping. */
+static bool normal_u8_result(const NLSemanticContext *c,
+                             const NLCheckedNodeView *result)
+{
+    if (result->terminates || result->result_count != 1 || result->type == 0 ||
+        result->type > c->type_count ||
+        c->types[result->type - 1].view.kind != NL_TYPE_U8 ||
+        !c->types[result->type - 1].view.is_copy ||
+        !c->types[result->type - 1].view.is_discardable ||
+        result->results[0].type != result->type ||
+        result->results[0].value == 0 ||
+        result->results[0].value > c->value_count)
+        return false;
+    const NLSemanticValueView v = c->values[result->results[0].value - 1];
+    return v.type == result->type && v.carrier == NL_CARRIER_LOOSE &&
+           !v.owner_place && v.dependencies == NL_DEPENDENCY_FREE &&
+           !v.value_dependency_count && !v.reference_count &&
+           !v.reference.place && !v.reference.scope &&
+           !v.reference.occurrence_dependency && !v.domain && !v.slot_place &&
+           !v.allocation_region && !v.occupancy.region && !v.aggregate_owner &&
+           !v.field_count && !v.variant && !v.sum_payload && !v.sum_owner;
+}
+
+static bool node_u8_arm_frame(const NLSemanticContext *before,
+                              const NLSemanticContext *after, NLValueId input,
+                              const NLCheckedNodeView *result)
+{
+    if (!normal_u8_result(after, result) ||
+        after->place_count < before->place_count ||
+        after->scope_count < before->scope_count ||
+        after->value_count < before->value_count ||
+        after->binding_count < before->binding_count ||
+        after->occurrence_count < before->occurrence_count ||
+        nl_sem_validate(after) != NL_CHECK_OK)
+        return false;
+    for (size_t i = before->place_count; i < after->place_count; ++i)
+        if (after->places[i].live)
+            return false;
+    for (size_t i = before->scope_count; i < after->scope_count; ++i)
+        if (after->scopes[i].active)
+            return false;
+    for (size_t i = before->value_count; i < after->value_count; ++i)
+        if (after->values[i].carrier != NL_CARRIER_ENDED &&
+            !after->types[after->values[i].type - 1].view.is_discardable)
+            return false;
+    const NLCheckedNodeView unit = {.type = 1};
+    return node_unit_arm_frame(before, after, input, &unit);
+}
+
 /* One original lexical Node link may differ across two normal unit arms.
  * Authenticate the actual replace, then compare the rest of the complete
  * incoming frame. The comparison clone is never a semantic continuation.
@@ -7088,6 +7139,24 @@ bool nl_allocated_post_matches(const NLSemanticContext *expected,
     return node_unit_arm_frame(expected, &prefix, 0, result);
 }
 
+/* Keep the existing shared unit-only closure validator unchanged. The
+ * primitive result has no owner or hidden dependency to import; the exact
+ * source arm must still close every suffix responsibility and prove the
+ * same ancestor-derived post-frame as the unit lane. */
+static bool allocated_u8_post_matches(const NLSemanticContext *expected,
+                                      const NLSemanticContext *arm,
+                                      const NLCheckedNodeView *result)
+{
+    const NLCheckedNodeView unit = {.type = 1};
+    if (!normal_u8_result(arm, result) ||
+        arm->scope_count < expected->scope_count)
+        return false;
+    for (size_t i = expected->scope_count; i < arm->scope_count; ++i)
+        if (arm->scopes[i].active)
+            return false;
+    return nl_allocated_post_matches(expected, arm, &unit);
+}
+
 static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
 {
     const NLSyntaxView *trial =
@@ -7206,6 +7275,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
             return 0;
         }
     }
+    NLTypeId normal_type = 0;
     for (size_t i = 0; i < 2; ++i) {
         Check branch = *check;
         branch.context = NULL;
@@ -7256,8 +7326,12 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         NLCheckedNodeView result = *view(&branch, body);
         const NLSemanticContext *expected =
             closed_prefix != NULL ? closed_prefix : c;
-        if (branch.terminated ||
-            !nl_allocated_post_matches(expected, branch.context, &result)) {
+        const bool scalar =
+            !certified &&
+            allocated_u8_post_matches(expected, branch.context, &result);
+        if (branch.terminated || (normal_type && normal_type != result.type) ||
+            (!scalar &&
+             !nl_allocated_post_matches(expected, branch.context, &result))) {
             fail(&branch, NL_CHECK_ANALYSIS_PRECISION_LIMIT, arms[i]->span,
                  closed_prefix != NULL ? "ALLOCATED-CAPTURED-JOIN-PRECISION"
                                        : "ALLOCATED-CLOSED-WORLD-PRECISION",
@@ -7265,6 +7339,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
                  "and prove the exact captured-prefix post-state");
             goto failure;
         }
+        normal_type = result.type;
         branch.artifact->root =
             add(&branch, (NLCheckedNodeView){.kind = NL_CHECKED_MATCH_ARM,
                                              .span = arms[i]->span,
@@ -7275,6 +7350,12 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
                                              .type = 1,
                                              .normal_frame_unchanged =
                                                  closed_prefix == NULL});
+        if (scalar && branch.artifact->root) {
+            NLCheckedNodeView *arm = view(&branch, branch.artifact->root);
+            arm->type = result.type;
+            arm->result_count = 1;
+            arm->results[0] = result.results[0];
+        }
         /* Seal this real completed allocation arm before any publication.
          * Only its direct source-owned callees can receive its immutable graph;
          * a failure leaves parent/closure ownership on the old cleanup path. */
@@ -7340,6 +7421,16 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
     view(check, id)->normal_arms = 2;
     view(check, id)->normal_frame_unchanged =
         !certificate.captured_frame_closed;
+    if (normal_type != 1) {
+        const NLValueId value = new_value(
+            check, (NLSemanticValueView){.type = normal_type}, syntax->span);
+        if (!value)
+            return 0;
+        view(check, id)->type = normal_type;
+        view(check, id)->result_count = 1;
+        view(check, id)->results[0] =
+            (NLCheckedResult){.type = normal_type, .value = value};
+    }
     nl_h_origin_finish_site(check->artifact, id);
     return id;
 }
@@ -7502,6 +7593,10 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
     const NLTypeId ptr = c->types[type - 1].option_target;
     bool node_unit_join =
         ptr != 0 && nl_recursive_local_type(c, c->types[ptr - 1].view.target);
+    bool node_copy_join =
+        node_unit_join && check->allocated_slice && !check->closure_probe &&
+        c->types[c->types[ptr - 1].view.target - 1].view.field_count == 2;
+    NLTypeId normal_type = 0;
     bool captured_packet = false;
     if (check->artifact->producer_call != 0) {
         const NLValueId packet =
@@ -7630,6 +7725,14 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             nl_control_exits_count(branch.artifact->exits) == 0 &&
             nl_control_exits_count(branch.artifact->loop_returns) == 0 &&
             node_unit_arm_frame(c, branch.context, input, &result);
+        node_copy_join =
+            node_copy_join && !branch.terminated &&
+            (!normal_type || normal_type == result.type) &&
+            nl_control_exits_count(branch.artifact->exits) == 0 &&
+            nl_control_exits_count(branch.artifact->loop_returns) == 0 &&
+            node_u8_arm_frame(c, branch.context, input, &result);
+        if (!branch.terminated)
+            normal_type = result.type;
         branch.artifact->root = add(
             &branch, (NLCheckedNodeView){.kind = NL_CHECKED_MATCH_ARM,
                                          .span = a->span,
@@ -7723,6 +7826,21 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             view(check, id)->normal_arms = normal;
             view(check, id)->normal_frame_unchanged = true;
             view(check, id)->type = 1;
+            return id;
+        }
+        if (node_copy_join) {
+            const NLValueId value =
+                new_value(check, (NLSemanticValueView){.type = normal_type},
+                          syntax->span);
+            if (!value)
+                return 0;
+            end_temporary(check, input);
+            view(check, id)->normal_arms = normal;
+            view(check, id)->normal_frame_unchanged = true;
+            view(check, id)->type = normal_type;
+            view(check, id)->result_count = 1;
+            view(check, id)->results[0] =
+                (NLCheckedResult){.type = normal_type, .value = value};
             return id;
         }
         if (count == 2 && node_memory_join(check, id, input, syntax->span))

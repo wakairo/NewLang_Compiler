@@ -1,0 +1,11 @@
+{
+  "sources": "original A/B and original oracle unchanged; typed-result negative separate forward freeze",
+  "API": "fresh per-source per-binary census before fault sweep; every baseline allocator PC first, first/last64+spread for CHECK, every emitter ordinal",
+  "limits": {"CHECK_allocations": 4096, "CHECK_selected": 384, "emitter_all": 512},
+  "API_oracle": "exact OUT_OF_MEMORY, entry/output NULL, length98765 preserved, original semantic context bytes unchanged, raw+semantic validity, clean owned+byte-identical C retry, canonical cleanup",
+  "named": "fresh CHECK first/last8+midpoint, every emitter ordinal; sentinel bytes/inode/size/mtime unchanged, no staged temp, real normal CLI retry byte-identical",
+  "negative": "5 originally frozen invalid sources; CHECK3 before C, stdout0 and named no-clobber",
+  "STOP": "unexpected status, output mutation, owner/current/loan/physical error, or bound exceeded => preserve first evidence and STOP C",
+  "initial_local_failure_profiles": ["GCC", "GCC ASan/LSan"],
+  "R": "UNREAD"
+}

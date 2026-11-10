@@ -1,0 +1,85 @@
+{
+  "authority": "C416 Issue1291",
+  "base": "f220d5924bca164c4562caafad9dbb9f27549e04",
+  "spec": "Draft17.35",
+  "prior_P1289_source_oracle_FIRST": "immutable",
+  "Stage1": {
+    "sources": {
+      "A-original.nl": "eb25b16e0b871fe6295f849aeccd4d1585f8fd90b3d58c05c2ce92b0f54d7f6c",
+      "B-index-value-control.nl": "9d11093935b389b7949fb9ce4068bc217933e08d32cb6a7575e1d15bd4e75e01",
+      "N-double-owner.nl": "e71259d5efa6024c8f4ce97ceafbd86fc54f4acfdcc58775242bea02e884ae4e",
+      "N-incomplete-H1-cleanup.nl": "43b841de050b147dcf3fcd926a3af495f9efa2654d4f7eb068ae9b7a1cb953e1",
+      "N-loan-escape.nl": "531ccf073fab125161b3af40c1466e26715d3ba4719958b3733e19a821afdaee",
+      "N-wrong-back-domain.nl": "79857ee1888f27aa0eabd548c320298ae7221b53f65ae4cc735ec2bbd1666dc3"
+    },
+    "positive": [
+      "A-original.nl",
+      "B-index-value-control.nl"
+    ],
+    "CHECK_expected": {
+      "A-original.nl": 0,
+      "B-index-value-control.nl": 0,
+      "N-incomplete-H1-cleanup.nl": 3,
+      "N-wrong-back-domain.nl": 3,
+      "N-loan-escape.nl": 3,
+      "N-double-owner.nl": 3
+    },
+    "owned": "genuine actual main CHECK, h_origin/custody/call-body/Copy parameters/current validators; parent flat-u8 result fresh in parent world, unknown join scalar unless truly same facts; every source arm actual result retained; no arm ID import",
+    "world": "unchanged ancestor prefix or exact closed captured prefix; closed loans/owners; flat dependency-free u8 only; no nonCopy/ref/owner phi",
+    "negative_host": "same-bits foreign arm; node result mutation; arm count shortening, incorrect entry/world, canonical destruction exactly once; current parameters unchanged",
+    "native_C17": "NOT_RUN until Stage1 report passes",
+    "OOM": "after safe positive/negative/owned, finite selected CHECK sites and retry; fresh census before injections"
+  },
+  "Stage2_conditional": {
+    "enabled_only_after": "Stage1 safe gates success posted to Issue",
+    "native": {
+      "compilers": [
+        "GCC",
+        "Clang"
+      ],
+      "optimization": [
+        "O0",
+        "O2"
+      ],
+      "raw_guest_before_passive": true,
+      "H": [
+        "0",
+        "1",
+        "2"
+      ],
+      "A": {
+        "result": [
+          11,
+          23,
+          53
+        ],
+        "old": 53,
+        "new": 173,
+        "sibling": 197,
+        "field": 0
+      },
+      "B": {
+        "result": [
+          7,
+          19,
+          61
+        ],
+        "old": 61,
+        "new": 131,
+        "sibling": 181,
+        "field": 1
+      }
+    },
+    "unit_byte_identity": "baseline existing adopted P1280 A/B and P1286 exact source+output hashes before Production edits",
+    "failure": "genuine CHECK/emitter exact OOM/rollback/null/length sentinel/retry/named no-clobber; bounds freeze after fresh census"
+  },
+  "STOP": [
+    "M1292 SOURCE-LAW STOP",
+    "new public issuer/source law/world/owner/CFG/ABI",
+    "unsafe acceptance or physical/result/loan/OOM invariant failure",
+    "third independent trusted bridge or cost explosion"
+  ],
+  "remote": "0 until both stages safely pass",
+  "publication": "one DRAFT one natural Required6+EARLY2 cohort manual0 per Issue",
+  "R": "UNREAD"
+}
