@@ -1,6 +1,0 @@
-{
-  "purpose": "Observe only; retain old failing assertion; same Production binary/C/source. One H0 native replay maximum before any repair.",
-  "prediction": "i3=caller_old=103, supplied=19, root_calls=1; stale observer expects i3 supplied19 while frozen semantic oracle requires old103. If values differ unexpectedly, STOP C for safety.",
-  "changes": "fprintf only, no result/store/branch injection",
-  "preserve": "all original source/oracle/native first RED immutable"
-}

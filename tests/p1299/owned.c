@@ -169,6 +169,86 @@ static void facts(const Call *c, bool outer)
            outer ? "postmatch" : "inside", c->body.function, expected_old,
            outer ? "runtime-u8" : "149", expected_sibling);
 }
+static void prefix(const PInput *p, const NLCheckedFragment *body,
+                   const Call *call)
+{
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(body, nl_checked_root(body)),
+                            *binding = nl_checked_node_view(body, root->first_item),
+                            *result = nl_checked_node_view(body, binding->next_item),
+                            *match = nl_checked_node_view(body, result->initializer);
+    assert(binding->kind == NL_CHECKED_BINDING &&
+           binding->symbol == call->parameters.field.base &&
+           match->kind == NL_CHECKED_MATCH && match->normal_frame_unchanged &&
+           match->match_binding_prefix >= binding->symbol);
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *a =
+            nl_checked_match_arm(body, result->initializer, i);
+        const NLCheckedNodeView *arm =
+            nl_checked_node_view(a, nl_checked_root(a));
+        assert(nl_h_origin_edge(p->entry, body, result->initializer, i, a) &&
+               arm->normal_frame_unchanged);
+        if (arm->variant != 1)
+            continue;
+        NLSemanticBindingView inherited;
+        NLSemanticPlaceView before, entry;
+        assert(nl_semantic_binding_view(nl_checked_context(a), binding->symbol,
+                                        &inherited) &&
+               inherited.place == call->parameters.field.parent &&
+               nl_semantic_place_view(nl_checked_context(a), inherited.place,
+                                      &before) &&
+               nl_semantic_place_view(call->parameters.entry, inherited.place,
+                                      &entry) && before.live && entry.live &&
+               before.incarnation == entry.incarnation &&
+               before.current_fact == entry.current_fact &&
+               before.current_value == entry.current_value);
+        for (size_t j = 0; j < 2; ++j) {
+            NLSemanticPlaceView x, y;
+            assert(before.fixed_fields[j] == entry.fixed_fields[j] &&
+                   nl_semantic_place_view(nl_checked_context(a),
+                                          before.fixed_fields[j], &x) &&
+                   nl_semantic_place_view(call->parameters.entry,
+                                          entry.fixed_fields[j], &y) &&
+                   x.incarnation == y.incarnation &&
+                   x.current_fact == y.current_fact &&
+                   x.current_value == y.current_value);
+        }
+    }
+    puts("PREFIX-PASS original-before-H-to-real-call-entry=1");
+}
+static void destruction(const char *source)
+{
+    for (size_t fault = 0; fault < 6; ++fault) {
+        PInput a = {0}, b = {0};
+        p_load(&a, source);
+        p_load(&b, source);
+        assert(p_check(&a) == NL_CHECK_OK && p_check(&b) == NL_CHECK_OK);
+        healthy(&a);
+        healthy(&b);
+        NLCheckedFragment *aa = (NLCheckedFragment *)nl_checked_call_body(
+                              a.entry, nl_checked_root(a.entry)),
+                          *bb = (NLCheckedFragment *)nl_checked_call_body(
+                              b.entry, nl_checked_root(b.entry));
+        assert(aa->arm_count && bb->arm_count && aa->body_count && bb->body_count);
+        if (fault == 0)
+            aa->arms = bb->arms;
+        else if (fault == 1)
+            aa->arm_count = 0;
+        else if (fault == 2)
+            aa->arm_count += 17;
+        else if (fault == 3)
+            aa->body_count = 0;
+        else if (fault == 4)
+            aa->body_count += 17;
+        else
+            aa->bodies = bb->bodies;
+        refused(&a);
+        p_dispose(&a); /* Deliberately unrestored; B must remain a true owner. */
+        healthy(&b);
+        p_dispose(&b);
+        printf("CANONICAL-DESTROY fault=%zu unrestored-A B-live=1\n", fault);
+    }
+}
 int main(int argc, char **argv)
 {
     assert(argc == 2);
@@ -187,6 +267,8 @@ int main(int argc, char **argv)
     for (size_t i = 0; i < 2; ++i) {
         Call *c = &o.calls[i], *other = &o.calls[1 - i];
         facts(c, c->owner == main_body);
+        if (c->owner == main_body)
+            prefix(&p, main_body, c);
         NLCopyBodyParameters bad = c->parameters;
         bad.field.index ^= 1;
         assert(nl_checked_copy_body_parameters_validate(c->owner, c->id,
@@ -209,9 +291,25 @@ int main(int argc, char **argv)
         f->context = saved;
         nl_semantic_destroy(clone);
         healthy(&p);
+        NLCheckedNodeView *node = &f->nodes[c->id - 1];
+        const NLCheckedNodeView original = *node;
+        for (size_t fault = 0; fault < 3; ++fault) {
+            if (fault == 0)
+                node->function = other->body.function;
+            else if (fault == 1)
+                node->result_count = 0;
+            else
+                ++node->results[0].value;
+            assert(nl_checked_copy_body_validate(f, c->id, &c->body) !=
+                   NL_CHECK_OK);
+            refused(&p);
+            *node = original;
+            healthy(&p);
+        }
     }
-    puts("OWNED-PASS two-source-callers=1 public-refusals=8");
+    puts("OWNED-PASS two-source-callers=1 public-refusals=14");
     p_dispose(&p);
+    destruction(argv[1]);
 #ifdef P1299_EMIT
     free(baseline);
 #endif
