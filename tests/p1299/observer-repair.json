@@ -1,0 +1,12 @@
+{
+  "original_native_freeze": "2509e7e78ca7585e7b380a0c6ee2b04f4fd7e428",
+  "original_observer_sha256": "416cb1f2e629b1f3006606b8a2a237050dad8147857d0b8ac3d94ac9ee9076e1",
+  "FIRST_NATIVE_SHA256": "0e1c676793f0da60195a8ca2d59c553e09578b50519f2afd1fabfd1bee826a89",
+  "FIRST_NATIVE_PACKET_SHA256": "9e2cdf295594ae58fc316d2ada879d3c9ddf7e425d52c18c357d7c231d6f8d1d",
+  "diagnostic_freeze": "d24d327d207cb69e6cbc0278f5edb9d2fdcebdcb",
+  "actual_H0_diagnostic": "i0 archived=19, i1 forwarded=19, i2 previous=103, i3 caller_old=103; root_calls=1, supplied=19; unchanged stale assertion then fails as before",
+  "cause": "Observer implementation inherited P1295 binding order. Its i3 expected current19 despite P1299 frozen source/oracle specifying caller_old103. A string transformation did not match the formatted multiline expression. Production generated C and all frozen semantic expectations remain unchanged.",
+  "forward_fix": "Only the newly owned observer index map: i2/i3 old103; i4 current supplied; i5 sibling227. This restores the original oracle rather than accepting a wrong value. Native matrix restarts as a distinct successor; original native failure remains FAIL in Git/raw.",
+  "later_limits": "At most the eight GCC/Clang O0/O2 raw/passive matrix profiles for this successor before new diagnosis. One additional H0 diagnostic was executed, and the original raw plus failed physical runs are separately counted. No Production repair for this apparatus issue.",
+  "STOP": "Any actual unsafe/wrong native result, owner/current/loan/cleanup violation or unexplained cost remains STOP C. Source/oracle and original FIRST are immutable."
+}

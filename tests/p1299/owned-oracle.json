@@ -1,0 +1,8 @@
+{
+  "expected": "Real function-unit CHECK0; canonical custody/origin; three typed u8 matches; two genuine Copy call bodies in different caller fragments, different source functions; all body/parameters/event current validators succeed and exact old-result chain holds.",
+  "inside": "original scratch field0 old67 -> actual H payload149; sibling193; same original/child/incarnation; ended loan in source caller",
+  "postmatch": "original pre-H panel field0 old103 -> dependency-free unknown runtime u8 passed as actual/formal parameter; sibling227; no H owner/Domain/Backing remains in root call entry; same original/child/incarnation, real old103 returns to caller and loan ends",
+  "negative": "Per caller: wrong field, other genuine caller entry, other genuine body and cloned caller world all fail current validation. Restore must preserve healthy owned state; emitter mode additionally requires unsupported/null/length98765 on bad worlds and exact healthy C retry.",
+  "before": "First execution occurs against unchanged Production main d054; P1299_EMIT variant is not run until C17 is safely supported.",
+  "stop": "Preserve any first unexpected mismatch. Do not reinterpret equal IDs/values across worlds as authority or add an issuer to pass the probe."
+}

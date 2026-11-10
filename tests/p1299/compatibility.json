@@ -1,0 +1,42 @@
+{
+  "adopted_base": "d054536aefd8ff549b436efa335301a661174b18",
+  "baseline_binary_sha256": "13a788ff13e3a27a3331495f74eac4e8bddd64e2b4ae69bdce6e9998ada0f673",
+  "expectation": "New candidate real C17 must remain byte-identical for each unchanged original source. This is live functional output compatibility, not a historical verifier generation.",
+  "cases": [
+    {
+      "source": "tests/p1280/sources/A-linked-same-arm.nl",
+      "source_sha256": "5e87d8de851fc083ebc8190947c524a5b58f3a67b2f61a56bf29e346be6734ef",
+      "C_sha256": "2f81a164076f5bd6f65d6f449d763dffbbdc43ac9298ab2be349995c91aa5399",
+      "C_bytes": 14985,
+      "kind": "unit H-match"
+    },
+    {
+      "source": "tests/p1280/sources/B-known-back-isolation.nl",
+      "source_sha256": "84cb42537d18520018435ef4bbe775bf0db790e22bcd50fed23f512bab5175af",
+      "C_sha256": "b11d3319fda16de018513665559b120c92ccd5ddf6babfc607385564fbe60569",
+      "C_bytes": 14727,
+      "kind": "unit H-match"
+    },
+    {
+      "source": "tests/p1291/sources/A-original.nl",
+      "source_sha256": "eb25b16e0b871fe6295f849aeccd4d1585f8fd90b3d58c05c2ce92b0f54d7f6c",
+      "C_sha256": "5a526f5dc03a477334b11481ba27f33ee36eb092beff943d99bab2b3e77c4a07",
+      "C_bytes": 15695,
+      "kind": "typed H-result"
+    },
+    {
+      "source": "tests/p1291/sources/B-index-value-control.nl",
+      "source_sha256": "9d11093935b389b7949fb9ce4068bc217933e08d32cb6a7575e1d15bd4e75e01",
+      "C_sha256": "5afd01512a5ea8f28eacd80077123745e9c4de9666b40a84ba9f3939c3da51cd",
+      "C_bytes": 15694,
+      "kind": "typed H-result"
+    },
+    {
+      "source": "tests/p1295/P-surviving-state.nl",
+      "source_sha256": "a1716e62f43011d33c9520bc960c35d5b59f02b18b2b98ad9e3c261de9788bc5",
+      "C_sha256": "44bfaadfb354a70bda21935d0a243030e9f128650cdac6234943a256574cefb6",
+      "C_bytes": 15973,
+      "kind": "direct post-H Change"
+    }
+  ]
+}
