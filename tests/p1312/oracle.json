@@ -1,0 +1,95 @@
+{
+  "authority": "63cffbbb841d9bca12cc71ff3dd77e5916ba95d4",
+  "original_freeze_utc": "2026-11-10T09:48:29.482721+00:00",
+  "source": {
+    "positive.nl": {
+      "bytes": 4348,
+      "sha256": "960d4fd1e85b9a09dc98ca8ea844fa4df8b10c98cd7db6329f0eb3d193cc77c6"
+    },
+    "control.nl": {
+      "bytes": 3883,
+      "sha256": "2eef9bc26d6bd50593f4ee3017a2939f7256340c15435f9b11e8099ad1d635ab"
+    },
+    "foreign-domain.nl": {
+      "bytes": 3883,
+      "sha256": "c7ed086f9d01073a23ce60b2666096bdb97e92074c5d0583ccbd528edfafb9d4"
+    },
+    "ending-loan-ref.nl": {
+      "bytes": 3872,
+      "sha256": "af580b08fbdc82b40636eba735254b4b859d4c2c7914208c04fc2e96c6f18313"
+    },
+    "unreleased-original.nl": {
+      "bytes": 4302,
+      "sha256": "c35e945e247ea8506206be9a2b579d760bc761e13e865ab27a73effb204ad44a"
+    },
+    "wrong-continue.nl": {
+      "bytes": 4337,
+      "sha256": "1de085b6f646500595a22bc197d144f4b41dbd5137cad857115adeac101fdf6c"
+    }
+  },
+  "expected": {
+    "H0": {
+      "outcome": 27,
+      "attempts": 1,
+      "allocations": 0,
+      "frees": 0
+    },
+    "H1": {
+      "outcome": 83,
+      "attempts": 2,
+      "allocations": 1,
+      "frees": 1
+    },
+    "H2": {
+      "outcome": 212,
+      "attempts": 2,
+      "allocations": 2,
+      "frees": 2,
+      "actual_back_payload": 212
+    },
+    "T": {
+      "same_original_count": 1,
+      "initial": 41,
+      "sibling": 167,
+      "phases": [
+        0,
+        1,
+        2
+      ],
+      "real_backedges": 2,
+      "updates": [
+        49,
+        117,
+        "real H byte"
+      ],
+      "old": [
+        41,
+        49,
+        117
+      ],
+      "terminal_old": 117,
+      "postcurrent": [
+        27,
+        83,
+        212
+      ]
+    },
+    "control": {
+      "old": 41,
+      "loop": false,
+      "current": [
+        27,
+        83,
+        212
+      ]
+    },
+    "negatives": "Domain/ref escape/unclean H2/wrong Continue exact type rejected, no output clobber"
+  },
+  "public_current_note": "Public owned and existing private cyclic current are separate; C178 single-Break is inapplicable.",
+  "negative_check_exit": 3,
+  "control_check_exit": 0,
+  "control_emit_exit": 4,
+  "failed_output": "NULL and unchanged length98765; named outputs byte/inode/mtime preserved",
+  "oom": "Inject actual CHECK1/2/mid/last and emitter1/2/mid/last; OUT_OF_MEMORY, rollback/no-clobber and byte-identical successful retry required.",
+  "future_validation": "Ordinary safety tests, Git history preserved; no generation/SHA protocol changes."
+}

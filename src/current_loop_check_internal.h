@@ -1089,6 +1089,47 @@ static void current_collect_capture(NLCurrentLoopProof *s)
     }
 }
 
+/* Borrow the already checked, closed allocation result, never an H owner.
+ * The parent declaration walk below binds this exact package to the loop E.
+ * Published validation additionally authenticates the existing sealed main
+ * call and its complete H subtree before observing any arm view. */
+static bool current_closed_h_result(const NLCurrentLoopProof *s,
+                                    const NLCheckedNodeView *match,
+                                    NLTypeId type)
+{
+    const NLCheckedFragment *parent = s->parent;
+    const NLCheckedNodeId id = (NLCheckedNodeId)(match - parent->nodes) + 1;
+    if (s->sealed) {
+        const NLLinearBreakProof *proof = parent->linear_breaks;
+        while (proof && proof->current_cycle != s)
+            proof = proof->next;
+        if (!proof || !proof->sealed || proof->owner != parent ||
+            !nl_h_origin_validate(proof->root) ||
+            !nl_h_custody_result_valid(proof->root, proof->call))
+            return false;
+    }
+    const NLCheckedNodeView *trial =
+        nl_checked_node_view(parent, match->initializer);
+    if (id >= s->initial_node || match->type != type || match->terminates ||
+        match->borrowed_match || !match->normal_frame_unchanged ||
+        match->captured_frame_closed || match->normal_arms != 2 ||
+        match->item_count != 2 || !trial ||
+        trial->kind != NL_CHECKED_TRY_ALLOCATE_ONE || !trial->allocation_trial)
+        return false;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *arm = nl_checked_match_arm(parent, id, i);
+        const NLCheckedNodeView *result =
+            arm ? nl_checked_node_view(arm, nl_checked_root(arm)) : NULL;
+        NLSemanticValueView value;
+        if (!arm || arm->source != parent->source || !result ||
+            result->kind != NL_CHECKED_MATCH_ARM || result->variant != i + 1 ||
+            !result->normal_frame_unchanged ||
+            !current_copy_value(arm->context, result, type, &value))
+            return false;
+    }
+    return true;
+}
+
 static bool current_capture_origin(const NLCurrentLoopProof *s,
                                    NLSymbolId symbol, NLTypeId type)
 {
@@ -1107,6 +1148,8 @@ static bool current_capture_origin(const NLCurrentLoopProof *s,
         if (init->kind == NL_CHECKED_U8_LITERAL)
             return init->has_scalar_result && value.scalar_known &&
                    value.scalar_value <= 255;
+        if (init->kind == NL_CHECKED_MATCH)
+            return current_closed_h_result(s, init, type);
         if (init->kind == NL_CHECKED_REGISTERED_CALL) {
             const NLCheckedNodeId id =
                 (NLCheckedNodeId)(init - parent->nodes) + 1;

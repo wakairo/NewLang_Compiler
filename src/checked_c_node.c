@@ -423,7 +423,8 @@ static bool match_result_shape(const Emit *e, const NLCheckedFragment *f,
     if (v->type == e->unit)
         return v->result_count == 0;
     NLSemanticValueView value;
-    return e->scalar_issued && e->allocated && e->two_heap && !e->current &&
+    return e->scalar_issued && e->allocated && e->two_heap &&
+           (!e->current || physical_current_heap_result(e->current, f, v)) &&
            !e->custody && v->type == e->u8 && v->result_count == 1 &&
            v->results[0].type == e->u8 &&
            nl_semantic_value_view(nl_checked_context(f), v->results[0].value,
@@ -3554,7 +3555,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         const NLCheckedNodeView *op = nl_checked_node_view(body, id);
         if (op->kind != NL_CHECKED_LOOP)
             continue;
-        const NLCheckStatus status = physical_current_prepare(body, &current);
+        const NLCheckStatus status =
+            physical_current_prepare(entry, body, &current);
         if (status != NL_CHECK_OK || !e.allocated || !e.two_heap ||
             !e.live_tail || e.custody) {
             free(e.text);
