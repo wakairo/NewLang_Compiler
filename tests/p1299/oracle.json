@@ -1,0 +1,74 @@
+{
+  "issue": 1299,
+  "authority": "C451",
+  "base": "d054536aefd8ff549b436efa335301a661174b18",
+  "canonical": "Draft17.35",
+  "source_eligibility": "one recursive H nominal, one nonrecursive two-u8 T nominal, two nested H sites; prefix T unchanged across all H normal worlds; existing known direct ref-write/u8 to u8 functions; no owner/ref/nonCopy result escapes matches",
+  "files": {
+    "N-callee-read-write.nl": {
+      "sha256": "5541beadedbde377aa42267b88bc88313ecbf7670e63a067f4b3b6aceea30eea",
+      "bytes": 5214
+    },
+    "N-unclosed-head.nl": {
+      "sha256": "ba5817b8835beb5f919382e2ef8ce10ade8adbbc2f826aa99d78abe0d93b775c",
+      "bytes": 5225
+    },
+    "P-named-display.nl": {
+      "sha256": "4d6ae25743bcb6ced05a55d3ab6fac8df500a8ee90870053c3752c1809868240",
+      "bytes": 5215
+    }
+  },
+  "predictions": {
+    "positive": {
+      "SOURCE": "selected under 16.3.8/17.1/18.1 and existing known-direct substitution",
+      "CHECK": 0,
+      "owned": "two distinct true caller fragments and named callees; real field0 current change/old result; root/child/incarnation retained; both loans close",
+      "C17": "Possible first private consumer gap: existing single Copy issuer only handles the nested caller, while the postmatch named call belongs to root caller. No missing authority presumed.",
+      "native": "NOT_RUN until genuine owned and C17 verified"
+    },
+    "H0": {
+      "result": 19,
+      "frees": 0,
+      "caller_old": 103,
+      "caller_current": 19,
+      "caller_sibling": 227
+    },
+    "H1": {
+      "result": 43,
+      "frees": 1,
+      "caller_old": 103,
+      "caller_current": 43,
+      "caller_sibling": 227
+    },
+    "H2": {
+      "result": 67,
+      "frees": 2,
+      "inner_old": 67,
+      "inner_current": 149,
+      "inner_sibling": 193,
+      "caller_old": 103,
+      "caller_current": 67,
+      "caller_sibling": 227
+    },
+    "physical": "same pre-H Display panel and field0; H0/1/2 cleanup before one actual publish_sample call; callee writes real runtime result and returns old103; sibling field1 stays227",
+    "N-callee-read-write.nl": "CHECK3: callee cannot obtain write access from its declared ref<read,u8>; no C/native",
+    "N-unclosed-head.nl": "CHECK3: H1 leaves original nonDiscardable allocation obligation; no C/native"
+  },
+  "alternatives": {
+    "adopted_P1295": "already genuine USER-CLI-1 finite technical route; direct postmatch replace is a lower-cost control, not a callee/current/result composition",
+    "pure_helper": "does not perform source-owned stateful effect on caller original"
+  },
+  "limits": {
+    "Gate0_plain_CLI_max": 6,
+    "native_profiles_initial_max": 8,
+    "trusted_private_bridges_max": 1,
+    "CHECK_census_max": 4096,
+    "CHECK_selected_max": 128,
+    "emitter_census_max": 768,
+    "new_branch_push_PR_CI": "0 until real main push6 and local safety both green"
+  },
+  "STOP": "new source law/public issuer/world/ABI/general CFG; second trusted bridge; actual unsafe acceptance/wrong code/owner-current-loan/OOM/no-clobber violation; true main push6 red/skip/cancel or excessive cost => STOP C",
+  "R_inputs": "UNREAD",
+  "original_P1295_source_oracle_FIRST": "UNCHANGED",
+  "value_risk": "bounded user/compiler capability only, not ordinary-safe library/API or comparative UB audit closure/general soundness/Product GO"
+}
