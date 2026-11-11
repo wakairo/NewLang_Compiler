@@ -11,6 +11,8 @@
   "cause": "The existing ordinary REPLACE replay clones the real before-world and applies nl_fixed_change. A current-loop-only inner validator does not perform this outer Change replay. The initial new harness's 12 bound incorrectly assumed only per-call Replay workspace allocations. Production is unchanged.",
   "outer_validator_allocation_limit": 48,
   "inner_validator_allocation_limit": 8,
+  "wrong_declared_tail_result_diagnostic": "P8-BODY-RESULT",
+  "wrong_declared_tail_baseline_check": "Unchanged3fd and candidate1 reject the identical source with the same exit3/P8-BODY-RESULT; stderr SHA56b2711c9c3b454edc155b9eedf0745d1c6b428ddfd8f60c71c4f2eb8df930ae. Original new-test prediction P3 was incorrect; source, semantic rejection, registration rollback, FIRST and old oracles remain unchanged.",
   "selected_CHECK_OOM_limit_per_source": 12,
   "unchanged": ["all six source bytes and semantic/native expectations", "source issuer/current/Copy/custody requirements", "every actual outer/inner validator allocation injection", "OOM status=NL_CHECK_OUT_OF_MEMORY", "view and context no-clobber", "full rollback and successful retry"]
 }

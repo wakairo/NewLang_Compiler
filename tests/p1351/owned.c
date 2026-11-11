@@ -487,7 +487,7 @@ int main(int argc, char **argv)
     else {
         assert(argc == 4 && !strcmp(argv[1], "negative"));
         semantic_negative(argv[2], "P8-EXIT-DEPENDENCY");
-        semantic_negative(argv[3], "P3-TYPE-MISMATCH");
+        semantic_negative(argv[3], "P8-BODY-RESULT");
     }
     return 0;
 }
