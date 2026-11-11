@@ -2538,13 +2538,51 @@ static bool current_loan_field(const NLLinearBreakView *p,
     return true;
 }
 
+/* Transport only the existing successfully validated current relation.
+ * In particular a numeric node ID in another owner is not this call. */
+static bool current_terminal_call_shape(const NLLinearBreakView *p)
+{
+    if (!p->terminal_call)
+        return true;
+    if (p->paired_current || !p->iteration || !p->breaking ||
+        !p->terminal_helper_body || !p->terminal_helper_formal ||
+        !p->terminal_helper_selection)
+        return false;
+    const NLCheckedNodeView *call =
+        nl_checked_node_view(p->breaking, p->terminal_call);
+    const NLCheckedNodeView *actual =
+        call ? nl_checked_node_view(p->breaking, call->first_argument) : NULL;
+    const NLCheckedNodeView *incoming =
+        nl_checked_node_view(p->iteration, p->incoming_call);
+    const NLCheckedNodeView *root = nl_checked_node_view(
+        p->terminal_helper_body, nl_checked_root(p->terminal_helper_body));
+    const NLCheckedNodeView *choice = nl_checked_node_view(
+        p->terminal_helper_body, p->terminal_helper_selection);
+    const NLTypeId u8 =
+        nl_semantic_core_type(nl_checked_context(p->breaking), NL_TYPE_U8);
+    return call && incoming && actual && root && choice &&
+           call->kind == NL_CHECKED_REGISTERED_CALL &&
+           call->function == incoming->function && call->argument_count == 1 &&
+           call->result_count == 1 && call->type == u8 &&
+           actual->kind == NL_CHECKED_IDENTIFIER &&
+           actual->symbol == p->phase_symbol &&
+           actual->value_use == NL_VALUE_COPIED && !actual->next_argument &&
+           actual->type ==
+               nl_semantic_core_type(nl_checked_context(p->breaking),
+                                     NL_TYPE_USIZE) &&
+           nl_checked_context(p->terminal_helper_body) ==
+               nl_checked_context(p->breaking) &&
+           !root->terminates && root->tail == p->terminal_helper_selection &&
+           choice->normal_arms == 2;
+}
+
 /* A borrow of the already validated cyclic proof. Keep admission and
  * serialization on the same typed terminal-result subset; the separate
  * H/current consumer still declines paired relations. */
 static bool current_old_result_shape(const NLLinearBreakView *p)
 {
     if (!p->changing_current || !p->terminal_old || p->scalar_loop ||
-        !p->breaking || !p->terminal_loan || p->terminal_call)
+        !p->breaking || !p->terminal_loan || !current_terminal_call_shape(p))
         return false;
     size_t loans = 0, index = 0;
     for (NLCheckedNodeId id = 1; id <= nl_checked_node_count(p->iteration);
@@ -2571,6 +2609,7 @@ static bool current_old_result_shape(const NLLinearBreakView *p)
         block->kind != NL_CHECKED_BLOCK || block->tail)
         return false;
     size_t count = 0;
+    bool terminal_call_seen = false;
     for (NLCheckedNodeId id = block->first_item; id;) {
         const NLCheckedNodeView *n = nl_checked_node_view(p->breaking, id);
         const NLCheckedNodeView *value =
@@ -2579,6 +2618,7 @@ static bool current_old_result_shape(const NLLinearBreakView *p)
             return false;
         if (n->kind == NL_CHECKED_BREAK)
             return !n->next_item && count == block->item_count &&
+                   terminal_call_seen == (p->terminal_call != 0) &&
                    n->initializer == p->break_value && value->type == u8 &&
                    (value->kind == NL_CHECKED_IDENTIFIER ||
                     (value->kind == NL_CHECKED_LOAN_HEADER &&
@@ -2588,9 +2628,13 @@ static bool current_old_result_shape(const NLLinearBreakView *p)
              value->kind != NL_CHECKED_U8_LITERAL &&
              value->kind != NL_CHECKED_USIZE_LITERAL &&
              value->kind != NL_CHECKED_FIELD_READ &&
+             !(value->kind == NL_CHECKED_REGISTERED_CALL &&
+               n->initializer == p->terminal_call && !terminal_call_seen) &&
              !(value->kind == NL_CHECKED_LOAN_HEADER &&
                n->initializer == p->terminal_loan)))
             return false;
+        if (value->kind == NL_CHECKED_REGISTERED_CALL)
+            terminal_call_seen = true;
         id = n->next_item;
     }
     return false;
@@ -3257,19 +3301,27 @@ static bool emit_current_discard(FILE *stream, const NLLinearBreakView *p,
 }
 
 static bool emit_current_helper(FILE *stream, const NLLinearBreakView *p,
-                                NLCheckedNodeId loop, NLSymbolId binding,
-                                size_t depth)
+                                const NLCheckedFragment *owner,
+                                NLCheckedNodeId call_id, NLCheckedNodeId loop,
+                                NLSymbolId binding, size_t depth)
 {
-    const NLCheckedNodeView *call =
-        nl_checked_node_view(p->iteration, p->incoming_call);
+    if (!((owner == p->iteration && call_id == p->incoming_call) ||
+          (owner == p->breaking && call_id == p->terminal_call &&
+           !p->paired_current)))
+        return false;
+    const NLCheckedNodeView *call = nl_checked_node_view(owner, call_id);
     const NLCheckedNodeView *actual =
-        call ? nl_checked_node_view(p->iteration, call->first_argument) : NULL;
+        call ? nl_checked_node_view(owner, call->first_argument) : NULL;
     return call && actual && v0_indent(stream, depth) &&
            fprintf(stream, "const uint8_t nl_local_%zu = nl_fn_%zu(", binding,
                    call->function) >= 0 &&
            emit_current_quantity(stream, p, loop, actual) &&
            fputs(");\n", stream) >= 0 && v0_indent(stream, depth) &&
-           fprintf(stream, "(void)nl_local_%zu;\n", binding) >= 0;
+           fprintf(stream, "(void)nl_local_%zu;\n", binding) >= 0 &&
+           (owner != p->breaking ||
+            (v0_indent(stream, depth) &&
+             fprintf(stream, "NL_CURRENT_LOCAL(%zu, nl_local_%zu);\n", binding,
+                     binding) >= 0));
 }
 
 static bool emit_current_loan_observation(FILE *stream,
@@ -3326,6 +3378,10 @@ static bool emit_current_old_terminal(FILE *stream, const NLLinearBreakView *p,
         if (!(value->type == nl_semantic_core_type(nl_checked_context(f),
                                                    NL_TYPE_USIZE)
                   ? emit_current_copy(stream, p, loop, f, n, depth)
+              : value->kind == NL_CHECKED_REGISTERED_CALL &&
+                      n->initializer == p->terminal_call
+                  ? emit_current_helper(stream, p, f, p->terminal_call, loop,
+                                        n->symbol, depth)
                   : v0_emit_node(stream, f, id, depth)) ||
             (loan && !emit_current_loan_observation(stream, p, value, depth,
                                                     n->symbol)))
@@ -3405,7 +3461,8 @@ static bool emit_current_loop(FILE *stream, const NLLinearBreakView *p,
                   ? emit_current_selection(stream, p, id, n->symbol, depth + 2)
               : p->incoming_call && n->kind == NL_CHECKED_BINDING &&
                       n->initializer == p->incoming_call
-                  ? emit_current_helper(stream, p, id, n->symbol, depth + 2)
+                  ? emit_current_helper(stream, p, arm, p->incoming_call, id,
+                                        n->symbol, depth + 2)
                   : v0_emit_node(stream, arm, item, depth + 2)))
             return false;
         if (observe_loan && !emit_current_loan_observation(

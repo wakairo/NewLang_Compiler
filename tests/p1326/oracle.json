@@ -1,0 +1,45 @@
+{
+  "baseline": "4ed8d5f585f4bbd3f586f46809552a7003ef9429",
+  "canonical": "Draft17.35",
+  "positive": {
+    "check": 0,
+    "owned_owner_current": 0,
+    "C17": 0,
+    "index": 0,
+    "initial": [
+      29,
+      173
+    ],
+    "phases": [
+      0,
+      1,
+      2
+    ],
+    "actual_helper_returns": [
+      83,
+      83,
+      227
+    ],
+    "terminal_normal_arm": 1,
+    "old": [
+      29,
+      83,
+      83
+    ],
+    "new": [
+      83,
+      83,
+      227
+    ],
+    "final": [
+      227,
+      173
+    ],
+    "terminal_old": 83
+  },
+  "active_positive": "A-helper.nl",
+  "unsupported_legal_B": "Original opposite-operand source preserves baseline P14 CHECK3; not claimed supported",
+  "original_two-source_prospective_oracle_sha256": "6f1ffa6f5545d9212d97dc7843985c1238e05f9334b50f10dbdbf00dad9961fe",
+  "source_sha256": "a6ec26e67822a9c73adec69e9285210a991fe1c57599522941da32e3c2bd07ac",
+  "scope": "H-free single-changing-field; same ordinary helper before terminal loan; exact owner/call, real phase Copy; paired terminal-call refused"
+}
