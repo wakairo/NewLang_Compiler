@@ -390,12 +390,17 @@ int main(int argc, char **argv)
         Snapshot before = snapshot(p.context);
         NLCheckStatus status = nl_semantic_register_function_unit(
             p.context, inputs, 1, &diagnostic);
-        const NLCheckStatus expected = !strcmp(argv[1], "negative-semantic")
-                                           ? NL_CHECK_SEMANTIC_ERROR
-                                           : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        const NLCheckStatus expected =
+            !strcmp(argv[1], "negative-semantic") ? NL_CHECK_SEMANTIC_ERROR
+            : !strcmp(argv[1], "negative-unsupported")
+                ? NL_CHECK_SEMANTIC_UNSUPPORTED
+                : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         printf("negative definition status%d code%s\n", status,
                diagnostic.diagnostic.diagnostic.code);
         assert(status == expected && !p.entry);
+        if (!strcmp(argv[1], "negative-unsupported"))
+            assert(!strcmp(diagnostic.diagnostic.diagnostic.code,
+                           "LOCAL-LOAN-PROFILE"));
         unchanged(p.context, &before);
         p_dispose(&p);
     } else if (!strcmp(argv[1], "oom"))

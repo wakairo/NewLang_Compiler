@@ -2333,14 +2333,18 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
         NLCopyBodyParameters parameters;
         const bool write_formals =
             nl_checked_copy_body_parameters(fragment, id, &parameters);
+        const bool readonly_formal =
+            body->copy_body && !body->copy_body->formal_write && parameter &&
+            body->copy_body->readonly_parameter == parameter;
         if (!composed && temporal && !program->u8_export &&
-            (parameter == 0 || write_formals)) {
+            (parameter == 0 || write_formals || readonly_formal)) {
             const NLCheckStatus status =
                 nl_checked_copy_body_validate(fragment, id, &proof);
             if (status == NL_CHECK_OUT_OF_MEMORY ||
                 status == NL_CHECK_RESOURCE_LIMIT)
                 program->copy_body_status = status;
-            valid = status == NL_CHECK_OK;
+            valid = status == NL_CHECK_OK &&
+                    (!readonly_formal || nl_copy_body_readonly_valid(body));
             for (size_t i = 1; valid && i <= nl_checked_node_count(body); ++i) {
                 const NLCheckedNodeView *v = nl_checked_node_view(body, i);
                 if (v->kind == NL_CHECKED_AGGREGATE)
@@ -2644,8 +2648,12 @@ static bool current_copy_selection(const NLCheckedFragment *f,
                                    NLCheckedNodeId loop, V0Program *p)
 {
     const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    const NLSymbolId readonly =
+        f->copy_body ? f->copy_body->readonly_parameter : 0;
     if (p->u8_export || p->scalar_depth != 1 || p->formal_body != f ||
-        p->formal || !root || root->kind != NL_CHECKED_BLOCK ||
+        p->formal != readonly ||
+        (readonly && !nl_copy_body_readonly_valid(f)) || !root ||
+        root->kind != NL_CHECKED_BLOCK ||
         root->terminates || !root->tail || f->body_count || f->arm_count != 1 ||
         copy_origin(f, root->tail) != loop)
         return false;
@@ -2656,6 +2664,7 @@ static bool current_copy_selection(const NLCheckedFragment *f,
     if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
         p->copy_body_status = status;
     if (status != NL_CHECK_OK || !v.changing_current || !v.terminal_old ||
+        v.readonly_parameter != readonly ||
         v.paired_current || v.scalar_loop || v.preloop_call || v.incoming_if ||
         v.incoming_call || v.terminal_call || v.result.type != p->u8 ||
         !current_old_result_shape(&v) || !avs_shape(f, v.nominal, p))

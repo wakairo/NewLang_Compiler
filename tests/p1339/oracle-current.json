@@ -1,0 +1,20 @@
+{
+  "inherits_immutable_oracle": "oracle.json",
+  "inherits_SHA256": "6187629d7a1bbeb7482e876697a8c9f9e348f62fce1238d131ad53d7e9425b16",
+  "correction": {
+    "N-formal-write.nl": {
+      "old_prediction": "precision status3 at readonly current input check",
+      "observed_first": "NL_CHECK_SEMANTIC_UNSUPPORTED=2 / LOCAL-LOAN-PROFILE during independent definition; CLI3, no entry",
+      "prospective_expectation": "exact existing LOCAL-LOAN-PROFILE semantic-unsupported rejection; context rollback; no accepted entry",
+      "reason": "function parameter backing is not marked supported implicit lexical-local root by the existing local-loan admission; this rejects before new readonly current relation",
+      "not_claimed": "source-level reach of mutable formal into current relation; no new parameter qualifier or source law"
+    }
+  },
+  "safety_expectations_unchanged": [
+    "no entry on rejected input",
+    "all positive values/current/loan/physical outcomes",
+    "actual/formal/foreign/stale/dependency tests",
+    "all OOM/rollback/no-clobber/retry"
+  ],
+  "old_FIRST_and_oracle_unchanged": true
+}
