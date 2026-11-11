@@ -383,6 +383,25 @@ NLCheckStatus nl_copy_body_current(NLCheckedFragment *f, NLCheckedNodeId loop)
     return NL_CHECK_OK;
 }
 
+NLCheckStatus nl_copy_body_forward_current(NLCheckedFragment *f,
+                                           const NLCheckedFragment *child,
+                                           NLCheckedNodeId id)
+{
+    NLCopyBodyProof *p = f->copy_body;
+    const NLCopyBodyProof *q = child->copy_body;
+    const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+    if (!p || p->sealed || p->formal_write || p->readonly_parameter ||
+        p->current_loop || p->current_call || f->body_count || !p->first ||
+        p->first->view.kind != NL_COPY_BODY_INITIALIZE || !q || !q->sealed ||
+        q->caller != f || q->call != id || !q->readonly_parameter ||
+        !q->current_loop || !n || n->kind != NL_CHECKED_REGISTERED_CALL ||
+        !n->body_backed || n->argument_count != 1 || n->result_count != 1 ||
+        n->terminates)
+        return INVALID;
+    p->current_call = id;
+    return NL_CHECK_OK;
+}
+
 NLCheckStatus nl_copy_body_exit(NLCheckedFragment *f,
                                 const NLSemanticContext *c, NLCheckedResult r)
 {
@@ -411,7 +430,9 @@ NLCheckStatus nl_copy_body_seal_calls(NLCheckedFragment *f)
     NLCheckStatus status = NL_CHECK_OK;
     for (size_t i = 0; i < f->body_count; ++i) {
         NLCopyBodyProof *child = f->bodies[i]->copy_body;
-        if (!child || (!child->formal_write && !child->readonly_parameter) ||
+        if (!child ||
+            (!child->formal_write && !child->readonly_parameter &&
+             !child->current_call) ||
             !child->sealed)
             continue;
         if (child->caller != f || child->caller_nodes || !f->count ||
@@ -519,6 +540,48 @@ proof_for_validation(const NLCheckedFragment *caller, NLCheckedNodeId id)
                    p->call == id
                ? p
                : NULL;
+}
+
+/* Only an existing, sealed Copy record and canonical child slot are used.
+ * No current/Copy validator is called here, avoiding a wrapper/inner cycle. */
+bool nl_copy_body_forward_origin(const NLCheckedFragment *f)
+{
+    if (!f || !nl_h_custody_borrow_valid(f))
+        return false;
+    const NLCopyBodyProof *p = f->copy_body;
+    if (!p || !p->sealed || p->owner != f || !p->current_call ||
+        p->current_loop || p->readonly_parameter || p->formal_write ||
+        !p->caller || !nl_h_custody_borrow_valid(p->caller) ||
+        f->source != p->source || f->body_owner != p->body || !p->nodes ||
+        f->nodes != p->nodes_origin || f->count != p->count ||
+        f->capacity < f->count || f->count > NL_SEMANTIC_MAX_ENTRIES ||
+        f->root != p->view.root || f->body_count != 1 || f->arm_count ||
+        !f->bodies || !f->body_calls || f->body_calls[0] != p->current_call ||
+        memcmp(f->nodes, p->nodes, p->count * sizeof(*p->nodes)) ||
+        !p->caller_nodes || p->caller->nodes != p->caller_nodes_origin ||
+        p->caller->count != p->caller_count ||
+        p->caller->capacity < p->caller_count ||
+        p->caller_count > NL_SEMANTIC_MAX_ENTRIES ||
+        p->caller->root != p->caller_root ||
+        p->caller->source != p->caller_source ||
+        p->caller->body_owner != p->caller_body ||
+        memcmp(p->caller->nodes, p->caller_nodes,
+               p->caller_count * sizeof(*p->caller_nodes)) ||
+        nl_checked_call_body(p->caller, p->call) != f ||
+        !nl_h_custody_result_valid(p->caller, p->call))
+        return false;
+    const NLCheckedNodeView *call = nl_checked_node_view(p->caller, p->call);
+    const NLCheckedFragment *child = nl_checked_call_body(f, p->current_call);
+    return call && call->kind == NL_CHECKED_REGISTERED_CALL &&
+           call->body_backed && !call->terminates && !call->argument_count &&
+           !call->first_argument && call->result_count == 1 &&
+           call->function == p->view.function &&
+           call->results[0].type == p->view.result.type &&
+           call->results[0].value == p->view.result.value && child &&
+           child == f->bodies[0] && child->copy_body &&
+           child->copy_body->current_loop &&
+           child->copy_body->readonly_parameter &&
+           nl_h_custody_result_valid(f, p->current_call);
 }
 bool nl_checked_copy_body_view(const NLCheckedFragment *c, NLCheckedNodeId id,
                                NLCopyBodyView *out)
@@ -736,6 +799,37 @@ static bool expression(Replay *r, NLCheckedNodeId id,
     if (!n)
         goto done;
     switch (n->kind) {
+    case NL_CHECKED_REGISTERED_CALL: {
+        if (id != r->proof->current_call || loan || r->current_seen ||
+            !nl_copy_body_forward_origin(r->f) || !scalar(r, id) ||
+            n->argument_count != 1 || !n->first_argument ||
+            !expression(r, n->first_argument, NULL))
+            break;
+        const NLCheckedNodeView *arg =
+            nl_checked_node_view(r->f, n->first_argument);
+        const NLCheckedFragment *child = nl_checked_call_body(r->f, id);
+        NLCopyBodyView copy;
+        if (!arg || arg->next_argument || !child ||
+            !nl_checked_copy_body_view(r->f, id, &copy))
+            break;
+        r->status = nl_checked_copy_body_validate(r->f, id, &copy);
+        if (r->status != NL_CHECK_OK)
+            break;
+        const NLCopyBodyProof *q = child->copy_body;
+        const CopyEvent *first = r->proof->first;
+        NLSemanticPlaceView entry[3], exit[3];
+        if (!first || first->view.kind != NL_COPY_BODY_INITIALIZE ||
+            !nl_copy_trio(q->entry, first->view.field.parent, entry) ||
+            !nl_copy_trio(q->exit, first->view.field.parent, exit) ||
+            memcmp(entry, exit, sizeof(entry)) ||
+            !modeled(r, entry, first->view.field.parent) ||
+            copy.result.value != n->results[0].value ||
+            copy.result.type != n->results[0].type)
+            break;
+        r->current_seen = true;
+        ok = true;
+        break;
+    }
     case NL_CHECKED_LOOP: {
         if (id != r->proof->current_loop || r->current_seen || loan ||
             r->proof->formal_write)
@@ -1332,10 +1426,14 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
         (candidate && !same_body_view(candidate, &p->view)))
         return INVALID;
     const NLCheckedFragment *f = p->owner;
-    if (p->readonly_parameter) {
+    if (p->readonly_parameter || p->current_call) {
         /* Authenticate every current signature allocation BEFORE indexing a
          * current caller signature. This consumes the same current record. */
-        const NLCheckStatus status = nl_linear_break_owner_validate(f);
+        const NLCheckedFragment *current =
+            p->current_call ? nl_checked_call_body(f, p->current_call) : f;
+        if (!current)
+            return INVALID;
+        const NLCheckStatus status = nl_linear_break_owner_validate(current);
         if (status != NL_CHECK_OK)
             return status;
     }
@@ -1363,8 +1461,10 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
         f->nodes != p->nodes_origin || !p->nodes ||
         p->count > NL_SEMANTIC_MAX_ENTRIES ||
         memcmp(f->nodes, p->nodes, p->count * sizeof(*p->nodes)) ||
-        f->arm_count != (p->current_loop ? 1u : 0u) || f->body_count ||
-        p->pending || p->exit != p->view.live_exit || !p->exit ||
+        f->arm_count != (p->current_loop ? 1u : 0u) ||
+        f->body_count != (p->current_call ? 1u : 0u) ||
+        (p->current_call && !nl_copy_body_forward_origin(f)) || p->pending ||
+        p->exit != p->view.live_exit || !p->exit ||
         p->exit->place_count > NL_SEMANTIC_MAX_ENTRIES ||
         p->exit->binding_count > NL_SEMANTIC_MAX_ENTRIES ||
         p->exit->scope_count != p->scope_count ||
@@ -1415,7 +1515,7 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
             root->results[0].value != p->view.result.value)
             goto done;
     }
-    if (p->current_loop && !r.current_seen)
+    if ((p->current_loop || p->current_call) && !r.current_seen)
         goto done;
     bool changed = r.current_seen;
     for (const CopyEvent *e = p->first; e; e = e->next) {

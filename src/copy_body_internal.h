@@ -26,6 +26,9 @@ typedef struct NLCopyBodyProof {
     /* Borrowed node identity of the existing CHECK-owned current relation.
      * No event, world or independent proof is issued here. */
     NLCheckedNodeId current_loop;
+    /* The exact existing current-call child forwarded by this Copy body.
+     * Its own current record remains the sole authority for the inner loop. */
+    NLCheckedNodeId current_call;
     NLCopyBodyView view;
     CopyEvent *first, *last;
     NLSemanticContext *pending, *exit;
@@ -74,6 +77,11 @@ NLCheckStatus nl_copy_body_seal(NLCheckedFragment *, const NLCheckedFragment *,
                                 const NLSemanticContext *);
 NLCheckStatus nl_copy_body_seal_calls(NLCheckedFragment *);
 NLCheckStatus nl_copy_body_current(NLCheckedFragment *, NLCheckedNodeId);
+NLCheckStatus nl_copy_body_forward_current(NLCheckedFragment *,
+                                           const NLCheckedFragment *,
+                                           NLCheckedNodeId);
+/* Origin/graph checks only: deliberately does not recurse into a validator. */
+bool nl_copy_body_forward_origin(const NLCheckedFragment *);
 NLCheckStatus nl_copy_body_readonly(NLCheckedFragment *,
                                     const NLCheckedFragment *, NLCheckedNodeId,
                                     NLSymbolId, const NLSemanticContext *);
