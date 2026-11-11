@@ -31,7 +31,8 @@ for source, expected in spec["expected"].items():
         kept = re.search(rb"const uint8_t (nl_local_\d+) = " + first_binding[1] + rb";", data)
         second_binding = re.search(rb"const uint8_t (nl_local_\d+) = " + second[1] + rb";", data)
         assert kept and second_binding and kept[1] != second_binding[1]
-        stores = re.findall(rb"\*nl_local_\d+ = (nl_local_\d+);", data[second.end():])
+        function_end = data.index(b"\n}\n", second.end())
+        stores = re.findall(rb"\*nl_local_\d+ = (nl_local_\d+);", data[second.end():function_end])
         assert stores == [kept[1]], (source, stores, kept[1])
         print(source, "first-Copy C binding origin after second call PASS", flush=True)
     print(source, "C byte identity PASS", flush=True)
