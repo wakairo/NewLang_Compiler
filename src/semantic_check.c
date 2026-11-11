@@ -5824,6 +5824,10 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *,
                                             const NLCheckedFragment *,
                                             NLLinearBreakView *);
 static bool current_copy_cycle(const NLLinearBreakProof *);
+static bool current_copy_prefix_frame(const Check *,
+                                      const NLLinearBreakProof *);
+static bool current_copy_pair(const NLLinearBreakProof *,
+                              const NLLinearBreakProof *);
 
 static bool current_old_tail(const NLCheckedFragment *f, NLCheckedNodeId loop)
 {
@@ -5893,8 +5897,8 @@ static bool current_copy_prefix(const Check *c)
     if (!f || f != parent->bodies[0] || id == c->body_call || !call ||
         !nl_h_custody_result_valid(parent, id) ||
         call->kind != NL_CHECKED_REGISTERED_CALL || !call->body_backed ||
-        call->function != c->body_function || call->argument_count ||
-        call->first_argument || call->terminates || call->result_count != 1)
+        call->function != c->body_function || call->terminates ||
+        call->result_count != 1)
         return false;
     const NLCopyBodyProof *copy = f->copy_body;
     const NLLinearBreakProof *p = f->linear_breaks;
@@ -5917,6 +5921,13 @@ static bool current_copy_prefix(const Check *c)
         c->function_binding_floor > w->binding_count ||
         c->function_scope_floor > w->scope_count)
         return false;
+    if (copy->readonly_parameter) {
+        if (!c->readonly_u8_parameter || call->argument_count != 1 ||
+            call->first_argument != copy->readonly_argument)
+            return false;
+    } else if (c->readonly_u8_parameter || call->argument_count ||
+               call->first_argument)
+        return false;
     const NLPlaceId original = copy->first->view.field.parent;
     if (!original || original > c->function_place_floor)
         return false;
@@ -5933,21 +5944,7 @@ static bool current_copy_prefix(const Check *c)
     for (size_t i = 0; i < c->function_scope_floor; ++i)
         if (w->scopes[i].active)
             return false;
-    for (size_t i = 0; i < c->function_place_floor; ++i) {
-        const NLSemanticPlaceView v = w->places[i];
-        if (v.live &&
-            (v.type != u8 || !v.independent_root || v.parent_aggregate ||
-             v.parent_sum || v.governing_domain || v.placement.region ||
-             !nl_copy_plain(w, v.current_value, u8)))
-            return false;
-    }
-    for (size_t i = 0; i < c->function_binding_floor; ++i) {
-        const NLBindingEntry b = w->bindings[i];
-        if (!b.hidden && b.view.availability == NL_AVAILABLE &&
-            (b.view.type != u8 || !nl_copy_plain(w, b.view.value, u8)))
-            return false;
-    }
-    return !w->domain_count && !w->region_count && !w->occurrence_count;
+    return current_copy_prefix_frame(c, p);
 }
 
 /* Actual main()->inner() only. This reuses the current relation and Copy
@@ -5978,8 +5975,7 @@ static bool current_copy_callee(const Check *c)
     return fn->body == c->artifact->body_owner &&
            (readonly ? (fn->count == 1 && fn->parameters &&
                         fn->parameters[0] == c->function_result &&
-                        copy->readonly_parameter == c->readonly_u8_parameter &&
-                        !c->caller->artifact->body_count)
+                        copy->readonly_parameter == c->readonly_u8_parameter)
                      : (!fn->count && !fn->parameters)) &&
            !fn->caller_effects && !fn->hidden_dependencies &&
            !fn->owner_receiver && !fn->owner_producer &&
@@ -6001,6 +5997,7 @@ static bool linear_copy_calls(const NLLinearBreakProof *p, bool sealed)
         !caller->bodies || !caller->body_calls)
         return false;
     bool found = false;
+    const NLLinearBreakProof *previous = NULL;
     for (size_t i = 0; i < caller->body_count; ++i) {
         const NLCheckedNodeId id = caller->body_calls[i];
         const NLCheckedFragment *f = nl_checked_call_body(caller, id);
@@ -6013,11 +6010,10 @@ static bool linear_copy_calls(const NLLinearBreakProof *p, bool sealed)
             return false;
         const NLLinearBreakProof *q = f->linear_breaks;
         const NLCopyBodyProof *copy = f->copy_body;
-        if (!copy ||
-            (copy->readonly_parameter
-                 ? (caller->body_count != 1 || call->argument_count != 1 ||
-                    call->first_argument != copy->readonly_argument)
-                 : (call->argument_count || call->first_argument)))
+        if (!copy || (copy->readonly_parameter
+                          ? (call->argument_count != 1 ||
+                             call->first_argument != copy->readonly_argument)
+                          : (call->argument_count || call->first_argument)))
             return false;
         if (!q || q->next || !q->copy_callee || !q->current_cycle ||
             q->owner != f || q->root != p->root || q->caller != caller ||
@@ -6035,6 +6031,9 @@ static bool linear_copy_calls(const NLLinearBreakProof *p, bool sealed)
         for (size_t j = 0; j < i; ++j)
             if (caller->body_calls[j] == id || caller->bodies[j] == f)
                 return false;
+        if (previous && !current_copy_pair(previous, q))
+            return false;
+        previous = q;
         found |= q == p && f == p->owner && id == p->call;
     }
     return found;
