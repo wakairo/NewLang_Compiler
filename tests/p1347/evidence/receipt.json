@@ -1,0 +1,97 @@
+{
+  "issue": 1347,
+  "local_final": "11a230959f474ca3ab7d741be172fe657b57e3a6",
+  "local_tree": "3ebdf65fde014203b64cd5da808a4245dad85069",
+  "baseline": "c9846ac4918db913159ac070d0b6d999b647e8d8",
+  "adopted_main": "730f5d7d3ad3a5f82aa9608c56677e0bfaf20085",
+  "integration_parents": [
+    "11a230959f474ca3ab7d741be172fe657b57e3a6",
+    "730f5d7d3ad3a5f82aa9608c56677e0bfaf20085"
+  ],
+  "integration_pre_evidence_tree": "3ebdf65fde014203b64cd5da808a4245dad85069",
+  "packet": "P1347-local-evidence.zip",
+  "packet_bytes": 536936,
+  "packet_sha256": "68af0c199eeb31528f27cad07441a75d774ee51e01ff8430db06c6f59b2d3603",
+  "entries": 211,
+  "provenance": "contains all candidate freezes, FIRST compile RED, CLI semantic FIRST, own raw/tests/native, original P1346 packet, actual adopted main six raw job logs/GET receipts; excludes all ELF/build cache and independent F/R input",
+  "new_guest": 20,
+  "manual_CI": 0,
+  "publication_budget": "one draft; natural Required6+EARLY2 <=2 sets; no manual action; first trustworthy all-green stops further push",
+  "main_postmerge_raw_receipt": {
+    "main": {
+      "sha": "730f5d7d3ad3a5f82aa9608c56677e0bfaf20085",
+      "tree": "1b3c2bd6d84c9244765cdc541a2ae0b0013f8188",
+      "parents": [
+        "d842ec9f2247069773940cf8b2dd4d015d7ce110",
+        "c9846ac4918db913159ac070d0b6d999b647e8d8"
+      ]
+    },
+    "runs": [
+      {
+        "id": 43006975568,
+        "head_sha": "730f5d7d3ad3a5f82aa9608c56677e0bfaf20085",
+        "event": "push",
+        "run_attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "path": ".github/workflows/compiler-ci.yml",
+        "jobs": [
+          {
+            "id": 130476766119,
+            "name": "ASan",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 130476766416,
+            "name": "GCC Release",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 130476766431,
+            "name": "UBSan",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 130476766510,
+            "name": "Clang",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 130476766552,
+            "name": "GCC",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 43006975347,
+        "head_sha": "730f5d7d3ad3a5f82aa9608c56677e0bfaf20085",
+        "event": "push",
+        "run_attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "path": ".github/workflows/compiler-frontend-ci.yml",
+        "jobs": [
+          {
+            "id": 130476764990,
+            "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "priorPR": {
+      "number": 1345,
+      "merged": true,
+      "head": "c9846ac4918db913159ac070d0b6d999b647e8d8",
+      "merge_commit": "730f5d7d3ad3a5f82aa9608c56677e0bfaf20085"
+    }
+  },
+  "risk": "finite capability, not general soundness/audit-locality/Product GO; Product GO PAUSED/H1 HOLD"
+}

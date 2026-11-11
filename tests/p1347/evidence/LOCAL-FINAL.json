@@ -1,0 +1,168 @@
+{
+  "issue": 1347,
+  "release": "C617/C618",
+  "HEAD": "11a230959f474ca3ab7d741be172fe657b57e3a6",
+  "tree": "3ebdf65fde014203b64cd5da808a4245dad85069",
+  "baseline": "c9846ac4918db913159ac070d0b6d999b647e8d8",
+  "canonical": "Draft17.35",
+  "time_JST": "2026-11-11T20:29:21.261387+09:00",
+  "outcome": "LOCAL safety PASS; existing C17 consumer unchanged; conditional publication requires final live authority check",
+  "hosts": [
+    "GCC14 Release",
+    "Clang19 ASan+LSan",
+    "Clang19 UBSan"
+  ],
+  "tests_per_host": {
+    "current_and_impacted_owned_units": 29,
+    "meaning_scope_CLI_OOM_no_clobber_retry": 5,
+    "usize_predicate_and_Copy_lineage_units": 8
+  },
+  "guest": {
+    "raw_GCC_Clang_O0_O2": 8,
+    "passive_GCC_Clang_O0_O2": 8,
+    "passive_ASan_LSan_UBSan": 4,
+    "used": 20,
+    "limit": 24
+  },
+  "CHECK_OOM": {
+    "census": 2666,
+    "selected": [
+      1,
+      2,
+      87,
+      346,
+      745,
+      1852,
+      856,
+      2002,
+      2049,
+      1333,
+      2665,
+      2666
+    ],
+    "init": [
+      87,
+      346
+    ],
+    "retention": [
+      745,
+      1852
+    ],
+    "inner_and_parent_seals": [
+      856,
+      2002,
+      2049
+    ],
+    "all_fired": true,
+    "status": "NL_CHECK_OUT_OF_MEMORY / null entry / full rollback / retry0"
+  },
+  "Copy_validator_OOM": {
+    "allocations_each": 3,
+    "each_selected": [
+      1,
+      2,
+      3
+    ],
+    "all_fired": true,
+    "output_unchanged": true,
+    "context_rollback": true
+  },
+  "CLI_output_OOM": {
+    "census": 5312,
+    "selected": [
+      1,
+      2,
+      2656,
+      5312
+    ],
+    "io_faults": [
+      "write",
+      "flush"
+    ],
+    "no_clobber": [
+      "bytes",
+      "inode",
+      "mtime",
+      "no temp residue"
+    ],
+    "retry_generated_C_identical": true
+  },
+  "C17_compatibility": [
+    {
+      "source": "/workspace/p1347-c617/repo/tests/p1332/A-callee-local.nl",
+      "sha256": "a9dc5297b54f0aa99d4604045a3a8f0f680fb2e6a9716e89e8da2c17f7d34a6b",
+      "bytes": 3913,
+      "identical": true
+    },
+    {
+      "source": "/workspace/p1347-c617/repo/tests/p1332/B-index1.nl",
+      "sha256": "5016d9eb08ef0fe11b99d2e2a7f0c54e2632a64c99c2e327f066c8b62459bbd7",
+      "bytes": 3914,
+      "identical": true
+    },
+    {
+      "source": "/workspace/p1347-c617/repo/tests/p1335/A-two-calls.nl",
+      "sha256": "dc30c242e955dfbaec1e6239c28b11150b870bbbf253d2f452195ab5aaa145f8",
+      "bytes": 4161,
+      "identical": true
+    },
+    {
+      "source": "/workspace/p1347-c617/repo/tests/p1335/B-two-calls-index1.nl",
+      "sha256": "7cbaa672de61c4d3a41e197414c510b99a680a92440667b8b6bdd056f0197262",
+      "bytes": 4162,
+      "identical": true
+    },
+    {
+      "source": "/workspace/p1347-c617/repo/tests/p1339/A-input67.nl",
+      "sha256": "f40d3e067663cd6dae2419d8bdc61716596cc772379e51c33cd55367e0eda515",
+      "bytes": 3973,
+      "identical": true
+    },
+    {
+      "source": "/workspace/p1347-c617/repo/tests/p1339/B-input109.nl",
+      "sha256": "d380cd7c5d01a52b391129f2c1df8d23aeeae4ead19c520ae6f655d1efd8190a",
+      "bytes": 3974,
+      "identical": true
+    },
+    {
+      "source": "/workspace/p1347-c617/repo/tests/p1343/A-caller-live.nl",
+      "sha256": "a786a4750d99d51c016201e91b1f55eac01201e42d91d59b808f755518bc5146",
+      "bytes": 4798,
+      "identical": true
+    },
+    {
+      "source": "/workspace/p1347-c617/repo/tests/p1343/B-index1.nl",
+      "sha256": "09a5477c3da6512faa2ae81fc541e5475a5eef256c3ac9374b3fac0e1b77b8fd",
+      "bytes": 4798,
+      "identical": true
+    }
+  ],
+  "safety_negatives": [
+    "wrong source/plan/call slot/body/cross formal/actual/old/tail/result/metadata/foreign short signature",
+    "caller Change postfact/value/root/field",
+    "reopened loan",
+    "wrong input type",
+    "escaped ended loan",
+    "third call precision",
+    "extra caller original precision"
+  ],
+  "retained_history": "P1346 FIRST, P1343 oracle and prior CI, candidate1 harness compile RED and actual CLI CHECK0, candidate2 onward freeze; no retroactive PASS",
+  "implementation": "same existing current/Copy/call sealing relation; replay actual enclosing checked Changes between snapshots; no main.c/emitter/public API/ABI/issuer/world/law change",
+  "scope": "two calls to same one-readonly-u8 current-loop function; at most one caller original; distinct callee originals/formals/Copy IDs and sealed body slots; no H/ref-write/recursion/third calls",
+  "self_review": {
+    "issuer_and_storage": "existing source-owned snapshot descriptors authenticated before reading; reuse sealed entry/exit and existing original/child facts",
+    "rollback": "no added allocation or ownership change; old transaction and immutable child ledger remain",
+    "physical": "caller address inspected only while alive, callee pointers cleared before function return, no expired-address comparison; real same emitted function body at both call sites",
+    "regression_transition": "legal old two-input-call sources retained and registered as current positives; old oracles/runners/FIRST intact; all other negatives/output fault logic retained"
+  },
+  "unverified": [
+    "all allocations exhaustive sweep",
+    "arbitrary calls/inputs or general CFG",
+    "H composition",
+    "cross-call loans",
+    "general soundness",
+    "UB-prevention audit-locality/Product GO"
+  ],
+  "unresolved_material_STOP": false,
+  "VALUE_ALIGNMENT_RISK": "Ordinary function reuse is useful; current finite profile remains narrow and adds private validation maintenance. No general soundness, audit-locality or Product GO claim. Product GO PAUSED/H1 HOLD."
+}
