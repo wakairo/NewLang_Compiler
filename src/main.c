@@ -77,6 +77,7 @@ typedef struct {
     bool stuttering_loop;
     bool scalar_loop;
     bool current_loop;
+    bool current_callee;  /* authenticated normal-tail Copy/current consumer */
     bool two_normal_unit; /* validated new profile; passive C hooks only */
     const NLCopyBodyParameters *unit_parameters;
     const NLCheckedFragment *formal_body; /* current validation only */
@@ -94,6 +95,49 @@ static V0Function *v0_find_function(V0Program *program, size_t function)
 }
 
 static bool current_helper_selection(const NLLinearBreakView *, V0Program *);
+static bool current_copy_selection(const NLCheckedFragment *, NLCheckedNodeId,
+                                   V0Program *);
+
+/* Follow actual source Copy bindings in one owner. No value bits or spelling
+ * identify an origin, and no caller/callee node-ID namespaces are merged. */
+static NLCheckedNodeId copy_origin(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id)
+{
+    for (size_t step = 0; step < nl_checked_node_count(f); ++step) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        if (!n ||
+            n->type != nl_semantic_core_type(nl_checked_context(f), NL_TYPE_U8))
+            return 0;
+        if (n->kind != NL_CHECKED_IDENTIFIER)
+            return id;
+        if (n->value_use != NL_VALUE_COPIED || !n->symbol)
+            return 0;
+        NLCheckedNodeId binding = 0;
+        for (NLCheckedNodeId i = 1; i <= nl_checked_node_count(f); ++i) {
+            const NLCheckedNodeView *b = nl_checked_node_view(f, i);
+            if (b->kind == NL_CHECKED_BINDING && b->symbol == n->symbol) {
+                if (binding)
+                    return 0;
+                binding = i;
+            }
+        }
+        const NLCheckedNodeView *b = nl_checked_node_view(f, binding);
+        if (!b)
+            return 0;
+        id = b->initializer;
+    }
+    return 0;
+}
+
+static bool current_caller_value(const NLCheckedFragment *f, NLCheckedNodeId id)
+{
+    const NLCheckedNodeId call = copy_origin(f, id);
+    const NLCheckedNodeView *n = nl_checked_node_view(f, call);
+    if (!n || n->kind != NL_CHECKED_REGISTERED_CALL)
+        return false;
+    const NLCheckedFragment *body = nl_checked_call_body(f, call);
+    return body && body->copy_body && body->copy_body->current_loop;
+}
 
 /* Shared resolved projection predicate. Point-in-time proof is supplied by
  * the checker; final local liveness is not a replay of that proof. */
@@ -2302,6 +2346,9 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
                 if (v->kind == NL_CHECKED_AGGREGATE)
                     valid = avs_shape(body, v->type, program);
             }
+            if (valid && body->copy_body && body->copy_body->current_loop)
+                valid = current_copy_selection(
+                    body, body->copy_body->current_loop, program);
         }
         program->formal_body = saved_body;
         program->formal = saved_formal;
@@ -2549,6 +2596,31 @@ static bool current_old_result_shape(const NLLinearBreakView *p)
     return false;
 }
 
+static bool current_copy_selection(const NLCheckedFragment *f,
+                                   NLCheckedNodeId loop, V0Program *p)
+{
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    if (p->u8_export || p->scalar_depth != 1 || p->formal_body != f ||
+        p->formal || !root || root->kind != NL_CHECKED_BLOCK ||
+        root->terminates || !root->tail || f->body_count || f->arm_count != 1 ||
+        copy_origin(f, root->tail) != loop)
+        return false;
+    NLLinearBreakView v = {0};
+    NLCheckStatus status = nl_linear_break_owner_validate(f);
+    if (status == NL_CHECK_OK)
+        status = nl_linear_break_validate(f, loop, &v);
+    if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
+        p->copy_body_status = status;
+    if (status != NL_CHECK_OK || !v.changing_current || !v.terminal_old ||
+        v.paired_current || v.scalar_loop || v.preloop_call || v.incoming_if ||
+        v.incoming_call || v.terminal_call || v.result.type != p->u8 ||
+        !current_old_result_shape(&v) || !avs_shape(f, v.nominal, p))
+        return false;
+    p->uses_usize = p->current_loop = p->linear_break = true;
+    p->current_callee = true;
+    return true;
+}
+
 static bool linear_break_selection(const NLCheckedFragment *f,
                                    NLCheckedNodeId id, V0Program *p)
 {
@@ -2676,6 +2748,25 @@ static bool v0_indent(FILE *stream, size_t depth)
 static bool v0_emit_node(FILE *, const NLCheckedFragment *, NLCheckedNodeId,
                          size_t);
 
+static bool emit_current_binding(FILE *stream, const NLCheckedFragment *f,
+                                 const NLCheckedNodeView *binding, size_t depth)
+{
+    if (!f->linear_breaks || binding->kind != NL_CHECKED_BINDING)
+        return true;
+    const NLCheckedNodeView *value =
+        nl_checked_node_view(f, binding->initializer);
+    if (value->kind == NL_CHECKED_AGGREGATE &&
+        (!v0_indent(stream, depth) ||
+         fprintf(stream, "NL_LOOP_BIND(&nl_local_%zu.f0, &nl_local_%zu.f1);\n",
+                 binding->symbol, binding->symbol) < 0))
+        return false;
+    return value->kind != NL_CHECKED_FIELD_READ ||
+           (v0_indent(stream, depth) &&
+            fprintf(stream, "NL_LOOP_READ(&nl_local_%zu.f%zu, nl_local_%zu);\n",
+                    value->field.base, value->field.index,
+                    binding->symbol) >= 0);
+}
+
 static bool v0_emit_items(FILE *stream, const NLCheckedFragment *fragment,
                           const NLCheckedNodeView *block, size_t depth,
                           bool observe)
@@ -2706,23 +2797,8 @@ static bool v0_emit_items(FILE *stream, const NLCheckedFragment *fragment,
                          view->symbol) < 0))
                 return false;
         }
-        if (fragment->linear_breaks && view->kind == NL_CHECKED_BINDING) {
-            const NLCheckedNodeView *value =
-                nl_checked_node_view(fragment, view->initializer);
-            if (value->kind == NL_CHECKED_AGGREGATE &&
-                (!v0_indent(stream, depth) ||
-                 fprintf(stream,
-                         "NL_LOOP_BIND(&nl_local_%zu.f0, &nl_local_%zu.f1);\n",
-                         view->symbol, view->symbol) < 0))
-                return false;
-            if (value->kind == NL_CHECKED_FIELD_READ &&
-                (!v0_indent(stream, depth) ||
-                 fprintf(stream,
-                         "NL_LOOP_READ(&nl_local_%zu.f%zu, nl_local_%zu);\n",
-                         value->field.base, value->field.index,
-                         view->symbol) < 0))
-                return false;
-        }
+        if (!emit_current_binding(stream, fragment, view, depth))
+            return false;
         item = view->next_item;
     }
     if (block->tail != 0 && !v0_emit_node(stream, fragment, block->tail, depth))
@@ -2940,6 +3016,11 @@ static bool v1_emit_call(FILE *stream, const NLCheckedFragment *f,
                                nl_checked_node_view(f, v->first_argument)))
         return false;
     if (fputs(");\n", stream) < 0)
+        return false;
+    if (scalar && current_caller_value(f, id) &&
+        (!v0_indent(stream, depth) ||
+         fprintf(stream, "NL_CURRENT_CALL_RESULT(%zu, %zu, nl_call_%zu);\n",
+                 v->function, id, id) < 0))
         return false;
     return !scalar || (v0_indent(stream, depth) &&
                        fprintf(stream, "(void)nl_call_%zu;\n", id) >= 0);
@@ -3714,6 +3795,11 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
             return false;
         if (fputs(";\n", stream) < 0)
             return false;
+        if (current_caller_value(fragment, view->initializer) &&
+            (!v0_indent(stream, depth) ||
+             fprintf(stream, "NL_CURRENT_CALLER_COPY(%zu, nl_local_%zu);\n",
+                     view->symbol, view->symbol) < 0))
+            return false;
         /* Suppress C unused-local warnings even when NewLang never reads this
          * Discardable binding. This emits no language-level operation. */
         return v0_indent(stream, depth) &&
@@ -3847,7 +3933,8 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
                 !emit_less_operands(
                     stream, f, nl_checked_node_view(f, init->initializer), 1))
                 return false;
-            if (!v0_emit_node(stream, f, i, 1))
+            if (!v0_emit_node(stream, f, i, 1) ||
+                !emit_current_binding(stream, f, v, 1))
                 return false;
         }
         i = v->next_item;
@@ -3931,6 +4018,14 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
               "((void)0)\n#endif\n"
               "#ifndef NL_CURRENT_RESULT\n#define NL_CURRENT_RESULT(...) "
               "((void)0)\n#endif\n\n",
+              stream) < 0)
+        return false;
+
+    if (program->current_callee &&
+        fputs("#ifndef NL_CURRENT_CALL_RESULT\n"
+              "#define NL_CURRENT_CALL_RESULT(...) ((void)0)\n#endif\n"
+              "#ifndef NL_CURRENT_CALLER_COPY\n"
+              "#define NL_CURRENT_CALLER_COPY(...) ((void)0)\n#endif\n\n",
               stream) < 0)
         return false;
 

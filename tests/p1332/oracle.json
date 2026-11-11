@@ -1,0 +1,62 @@
+{
+  "baseline": "4ed8d5f585f4bbd3f586f46809552a7003ef9429",
+  "CHECK_parent": "7517eb1178c53ff9551b65591ef1721d14a9c57e",
+  "canonical": "Draft17.35",
+  "positives": {
+    "A-callee-local.nl": {
+      "index": 0,
+      "initial": [
+        43,
+        181
+      ],
+      "limit": 2,
+      "old": [
+        43,
+        95,
+        95
+      ],
+      "new": [
+        95,
+        95,
+        233
+      ],
+      "caller_value": 95,
+      "sibling": 181,
+      "final": 233
+    },
+    "B-index1.nl": {
+      "index": 1,
+      "initial": [
+        157,
+        41
+      ],
+      "limit": 3,
+      "old": [
+        41,
+        107,
+        107,
+        107
+      ],
+      "new": [
+        107,
+        107,
+        107,
+        239
+      ],
+      "caller_value": 107,
+      "sibling": 157,
+      "final": 239
+    }
+  },
+  "prediction": "Source/definition/actual CHECK0, genuine owner/current/Copy0, exact normal-tail old lineage, C170 with complete metadata/preamble; one physical callee-local original ends, call once returns actual old to both caller bindings. Runtime old is not Known in semantic evidence.",
+  "negative": {
+    "N-type.nl": "CHECK3 P3-TYPE-MISMATCH",
+    "N-ended-ref.nl": "CHECK3 P8-EXIT-DEPENDENCY",
+    "N-current-tail.nl": "lawful CHECK/owned/Copy0, outside old-result normal-tail consumer => C17 unsupported4/no-clobber",
+    "N-explicit-return.nl": "lawful outside normal-tail contract; upstream precision3 permitted, otherwise C17 unsupported4/no-clobber; not supported/claimed even if other existing RETURN mechanisms exist"
+  },
+  "guest_plan": "raw GCC/Clang O0/O2 A/B8 first; passive same8 only after raw8 pass; optional Clang ASan+UBSan O0/O2 A/B4; total20 with integration reserve4, max24",
+  "passive": "Default-no-op hooks only; actual call once, return scalar, caller Copy binding values read; original pointer dereferenced only while callee lives, finish/caller hooks scalar+metadata only. No define/function patch to generated C.",
+  "host": "GCC Release/Clang ASan+LSan/UBSan focused once per candidate, consumer selected OOM up to8 and CLI up to8 plus serializer/flush, no-clobber/retry; original CHECK OOM/rollback retained",
+  "scope": "new Production main.c only on preserved P1329; no new law/issuer/API/ABI/proof/registry, no unadopted PR1331 code; remote conditional on specified actual main parents/tree"
+}
