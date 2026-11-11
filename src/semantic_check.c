@@ -3745,6 +3745,18 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         !body.definition &&
         (function->count == 0 || readonly_current_body(function, c)) &&
         function->result == nl_semantic_core_type(c, NL_TYPE_U8);
+    /* The signature arrays belong to the current semantic world.  Checking a
+     * body may commit a successor world and release those arrays, so retain
+     * only this authenticated scalar classification across function_block().
+     */
+    const bool predicate_result =
+        !body.definition && function->kind == NL_CHECKED_REGISTERED_CALL &&
+        function->count == 1 && function->parameters &&
+        function->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
+        function->result == nl_semantic_core_type(c, NL_TYPE_U8) &&
+        !function->caller_effects && !function->hidden_dependencies &&
+        !function->owner_receiver && !function->owner_producer &&
+        !function->custody_recipient;
     NLSymbolId copy_parameters[2] = {0};
     for (size_t i = 0; i < function->count; ++i) {
         const NLCheckedNodeView argument = *view(caller, arguments[i]);
@@ -3992,14 +4004,6 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
               nl_producer_local_seal(body.artifact, caller->artifact, call_id),
               call_span))
         goto failure;
-    const bool predicate_result =
-        !body.definition && function->kind == NL_CHECKED_REGISTERED_CALL &&
-        function->count == 1 && function->parameters &&
-        function->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
-        function->result == nl_semantic_core_type(c, NL_TYPE_U8) &&
-        !function->caller_effects && !function->hidden_dependencies &&
-        !function->owner_receiver && !function->owner_producer &&
-        !function->custody_recipient;
     bool current_result =
         body.artifact->copy_body && body.artifact->copy_body->current_loop;
     for (size_t i = 0; !current_result && i < body.artifact->body_count; ++i)
