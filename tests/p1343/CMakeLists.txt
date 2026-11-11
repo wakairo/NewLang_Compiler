@@ -26,3 +26,12 @@ foreach(profile N-extra-caller N-two-input-calls)
     add_test(NAME p1343_${profile}.unit COMMAND p1343_frame scope
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1343/${profile}.nl" 0)
 endforeach()
+add_test(NAME p1343_native.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1343/native.py" "$<TARGET_FILE:newlangc>"
+    "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_BINARY_DIR}/p1343-native"
+    "${NEWLANG_SANITIZER}")
+add_test(NAME p1343_negative_cli_oom.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1343/negative.py" "$<TARGET_FILE:newlangc>"
+    "$<TARGET_FILE:p1332_cli_oom>" "${CMAKE_CURRENT_BINARY_DIR}/p1343-negative")
+set_tests_properties(p1343_native.integration p1343_negative_cli_oom.integration
+    PROPERTIES TIMEOUT 180)

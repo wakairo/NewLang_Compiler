@@ -2804,13 +2804,36 @@ static bool v0_emit_node(FILE *, const NLCheckedFragment *, NLCheckedNodeId,
 static bool emit_current_binding(FILE *stream, const NLCheckedFragment *f,
                                  const NLCheckedNodeView *binding, size_t depth)
 {
-    if (!f->linear_breaks || binding->kind != NL_CHECKED_BINDING)
+    if (binding->kind != NL_CHECKED_BINDING)
+        return true;
+    /* Optional observations of the already-admitted caller frame. This
+     * selects C carrier names only; it neither admits a call nor issues a
+     * current proof. Literal-input and zero-argument output stays identical. */
+    NLSymbolId caller = 0;
+    for (NLCheckedNodeId id = 1; id <= nl_checked_node_count(f); ++id) {
+        const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+        if (call->kind != NL_CHECKED_REGISTERED_CALL ||
+            call->argument_count != 1 || !current_caller_value(f, id))
+            continue;
+        const NLCheckedNodeView *input =
+            nl_checked_node_view(f, copy_origin(f, call->first_argument));
+        if (input && input->kind == NL_CHECKED_FIELD_READ)
+            caller = input->field.base;
+    }
+    if (!f->linear_breaks && !caller)
         return true;
     const NLCheckedNodeView *value =
         nl_checked_node_view(f, binding->initializer);
     if (value->kind == NL_CHECKED_AGGREGATE &&
+        (f->linear_breaks || binding->symbol == caller) &&
         (!v0_indent(stream, depth) ||
          fprintf(stream, "NL_LOOP_BIND(&nl_local_%zu.f0, &nl_local_%zu.f1);\n",
+                 binding->symbol, binding->symbol) < 0))
+        return false;
+    if (caller && value->kind == NL_CHECKED_LOAN_HEADER &&
+        value->loan.source == caller && value->loan.access == NL_ACCESS_WRITE &&
+        (!v0_indent(stream, depth) ||
+         fprintf(stream, "NL_CURRENT_LOCAL(%zu, nl_local_%zu);\n",
                  binding->symbol, binding->symbol) < 0))
         return false;
     return value->kind != NL_CHECKED_FIELD_READ ||
