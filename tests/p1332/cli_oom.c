@@ -1,3 +1,6 @@
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
 #include <stdio.h>
 
 /* Keep injection at the actual serializer call site. Fortified stdio can
