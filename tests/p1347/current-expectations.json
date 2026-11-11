@@ -1,0 +1,15 @@
+{
+  "historical_sources_oracles_FIRST": "unchanged; never rewrite past precision result",
+  "current_owned_successors": {
+    "p1339_two_input_calls_precision.unit": "p1339_two_input_calls_current.unit: original N-two-input-calls.nl via genuine two-call owner/current/Copy + source-slot negatives",
+    "p1343_N-two-input-calls.unit": "p1343_two_input_calls_current.unit: original N-two-input-calls.nl via genuine caller-frame and per-call owner/current/Copy"
+  },
+  "failure_runner_successor": "tests/p1347/failure.py keeps all original semantic/scope negative no-clobber checks other than these two newly supported sources, and every original allocation/write/flush/retry check; old negative.py and old oracle.json retained",
+  "scope_guards": [
+    "two calls maximum",
+    "one readonly u8 formal",
+    "at most one preserved caller original",
+    "closed loans and ended callee locals per call",
+    "distinct actual/formal/result/call-slot seals"
+  ]
+}

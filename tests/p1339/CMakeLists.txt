@@ -24,14 +24,14 @@ foreach(negative N-argument-type N-ended-ref)
 endforeach()
 add_test(NAME p1339_formal_loan_source_rejection.unit COMMAND p1339_readonly negative-unsupported
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1339/N-formal-write.nl" 0)
-add_test(NAME p1339_two_input_calls_precision.unit COMMAND p1339_readonly scope
+add_test(NAME p1339_two_input_calls_current.unit COMMAND p1347_reuse positive
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1339/N-two-input-calls.nl" 0)
 add_test(NAME p1339_native.integration COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1339/native.py" "$<TARGET_FILE:newlangc>"
     "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_BINARY_DIR}/p1339-native"
     "${NEWLANG_SANITIZER}")
 add_test(NAME p1339_negative_cli_oom.integration COMMAND "${Python3_EXECUTABLE}"
-    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1339/negative.py" "$<TARGET_FILE:newlangc>"
-    "$<TARGET_FILE:p1332_cli_oom>" "${CMAKE_CURRENT_BINARY_DIR}/p1339-negative")
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1347/failure.py" "$<TARGET_FILE:newlangc>"
+    "$<TARGET_FILE:p1332_cli_oom>" "${CMAKE_CURRENT_BINARY_DIR}/p1339-negative" p1339)
 set_tests_properties(p1339_native.integration p1339_negative_cli_oom.integration
     PROPERTIES TIMEOUT 180)
