@@ -1,0 +1,46 @@
+{
+  "baseline": "950d8e048bcb2b4a9688f6ed9eca3e35ad386471",
+  "baseline_tree": "cf03371d9b39d45176011c1eb17c5ebdae083382",
+  "original_FIRST": "P1333 reused 7517 CHECK3/entryNULL/rollback, no repeat Gate0",
+  "migration": "A bytes preserved; original CHECK3 precision negative becomes new CHECK0/owned positive. Old oracle/FIRST immutable; two-originals negative remains",
+  "positive": [
+    {
+      "file": "A-two-calls.nl",
+      "bytes": 775,
+      "sha256": "bc5094ea1302682bfc30598b60510de8f66e75e2d7d2d2dc2ca219bb1e445aa6",
+      "field_index": 0,
+      "initial": 43,
+      "sibling": 181,
+      "changed": 95,
+      "terminal_new": 233,
+      "backedges_per_call": 2,
+      "actual_calls": 2,
+      "returned_old_each": 95,
+      "caller_first_Copy_survives_second": true
+    },
+    {
+      "file": "B-two-calls-index1.nl",
+      "bytes": 773,
+      "sha256": "52c4772f817c3764f3c11ed41ebe79730b2cf470f11ee8d505db8a91be1d78e8",
+      "field_index": 1,
+      "initial": 41,
+      "sibling": 157,
+      "changed": 107,
+      "terminal_new": 239,
+      "backedges_per_call": 3,
+      "actual_calls": 2,
+      "returned_old_each": 107,
+      "caller_first_Copy_survives_second": true
+    }
+  ],
+  "Stage_A": "CHECK0, each exact call canonical BODY different; current owner/current/Copy0; source plan shared only; old result normal tail lineage; T and loans end per invocation; cross-call/body/slot/current/old/tail/view/foreign/stale rejection + restoration; second-call generation/retention/seal OOM4 entryNULL context+8arrays+planowners rollback and retry",
+  "Stage_B": "only after A: unmodified main.c consumer per-call authentication before representative reuse; unmodified strict raw8 then passive8 then guest ASan+UBSan4; value bits and stack address may repeat; expired T pointer never read",
+  "OOM": "new census and stage labels; max8 selected points per path; true fired1, no-clobber, cleanup, exact retry; allocation0 not a failure test",
+  "budgets": {
+    "source_max": 2,
+    "candidate_max": 3,
+    "guest_max": 24,
+    "remote_PR_CI": 0
+  },
+  "STOP": "unsafe, authority/issuer/second-proof/public API/ABI/new law, or main.c/emitter change needed"
+}

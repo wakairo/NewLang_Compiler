@@ -235,6 +235,13 @@ typedef struct NLCurrentLoopProof {
     CurrentCapturedCall capture;
 } NLCurrentLoopProof;
 
+static bool current_copy_cycle(const NLLinearBreakProof *p)
+{
+    const NLCurrentLoopProof *s = p->current_cycle;
+    return s && s->terminal_old && !s->paired && !s->scalar && !s->helper &&
+           !s->terminal_call && !s->capture.call && !s->carry_source;
+}
+
 static size_t current_graph_count(const NLCurrentLoopProof *s)
 {
     return s->terminal_call ? CURRENT_GRAPH_LIMIT
