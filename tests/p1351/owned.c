@@ -445,6 +445,8 @@ static void oom(const char *path, size_t index)
         status = nl_checked_copy_body_validate(caller, call, &out);
         armed = false;
         size_t total_calls = events;
+        printf("validator%zu census status%d allocations%zu fired%d\n", which,
+               status, total_calls, fired);
         assert(status == NL_CHECK_OK && total_calls &&
                total_calls <= (which ? 8u : 12u));
         printf("validator%zu actual allocations%zu\n", which, total_calls);
