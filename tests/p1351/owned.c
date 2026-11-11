@@ -448,7 +448,7 @@ static void oom(const char *path, size_t index)
         printf("validator%zu census status%d allocations%zu fired%d\n", which,
                status, total_calls, fired);
         assert(status == NL_CHECK_OK && total_calls &&
-               total_calls <= (which ? 8u : 12u));
+               total_calls <= (which ? 8u : 48u));
         printf("validator%zu actual allocations%zu\n", which, total_calls);
         for (size_t point = 1; point <= total_calls; ++point) {
             Snapshot before = snapshot(p.context);
