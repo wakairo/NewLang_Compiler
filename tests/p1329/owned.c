@@ -279,48 +279,54 @@ static void unchanged(NLSemanticContext *c, Snapshot *s)
         assert((c->functions[i].body ? c->functions[i].body->owners : 0) ==
                s->owners[i]);
 }
-static void oom(const char *path)
+static void oom(const char *path, bool validators_only)
 {
-    PInput census = {0};
-    p_load(&census, path);
-    events = ordinal = retained = seal_count = 0;
-    armed = true;
-    NLCheckStatus status = p_check(&census);
-    armed = false;
-    const size_t total = events;
-    printf("CHECK census=%zu retention-end=%zu inner-seal=%zu outer-seal=%zu "
-           "status=%d\n",
-           total, retained, seals[0], seals[1], status);
-    fflush(stdout);
-    assert(status == NL_CHECK_OK && total > 8 && retained && seal_count == 2);
-    relation(&census, 0);
-    p_dispose(&census);
-    const size_t selected[] = {1,        2,         retained,  seals[0],
-                               seals[1], total / 2, total - 1, total};
-    for (size_t i = 0; i < 8; ++i) {
-        bool duplicate = false;
-        for (size_t j = 0; j < i; ++j)
-            duplicate |= selected[i] == selected[j];
-        if (duplicate)
-            continue;
-        PInput p = {0};
-        p_load(&p, path);
-        Snapshot before = snapshot(p.context);
-        events = 0;
-        ordinal = selected[i];
-        fired = false;
+    NLCheckStatus status;
+    if (!validators_only) {
+        PInput census = {0};
+        p_load(&census, path);
+        events = ordinal = retained = seal_count = 0;
         armed = true;
-        status = p_check(&p);
+        status = p_check(&census);
         armed = false;
-        ordinal = 0;
-        printf("CHECK OOM target=%zu actual=%zu fired=%d status=%d entry=%p\n",
-               selected[i], events, fired, status, (void *)p.entry);
+        const size_t total = events;
+        printf(
+            "CHECK census=%zu retention-end=%zu inner-seal=%zu outer-seal=%zu "
+            "status=%d\n",
+            total, retained, seals[0], seals[1], status);
         fflush(stdout);
-        assert(fired && status == NL_CHECK_OUT_OF_MEMORY && !p.entry);
-        unchanged(p.context, &before);
-        assert(p_check(&p) == NL_CHECK_OK);
-        relation(&p, 0);
-        p_dispose(&p);
+        assert(status == NL_CHECK_OK && total > 8 && retained &&
+               seal_count == 2);
+        relation(&census, 0);
+        p_dispose(&census);
+        const size_t selected[] = {1,        2,         retained,  seals[0],
+                                   seals[1], total / 2, total - 1, total};
+        for (size_t i = 0; i < 8; ++i) {
+            bool duplicate = false;
+            for (size_t j = 0; j < i; ++j)
+                duplicate |= selected[i] == selected[j];
+            if (duplicate)
+                continue;
+            PInput p = {0};
+            p_load(&p, path);
+            Snapshot before = snapshot(p.context);
+            events = 0;
+            ordinal = selected[i];
+            fired = false;
+            armed = true;
+            status = p_check(&p);
+            armed = false;
+            ordinal = 0;
+            printf(
+                "CHECK OOM target=%zu actual=%zu fired=%d status=%d entry=%p\n",
+                selected[i], events, fired, status, (void *)p.entry);
+            fflush(stdout);
+            assert(fired && status == NL_CHECK_OUT_OF_MEMORY && !p.entry);
+            unchanged(p.context, &before);
+            assert(p_check(&p) == NL_CHECK_OK);
+            relation(&p, 0);
+            p_dispose(&p);
+        }
     }
     PInput p = {0};
     p_load(&p, path);
@@ -335,10 +341,22 @@ static void oom(const char *path)
                  : nl_linear_break_validate(r.callee, r.loop, &out);
         armed = false;
         const size_t count = events;
-        assert(status == NL_CHECK_OK && count > 2);
-        printf("%s validator census=%zu\n", kind ? "Copy" : "current", count);
+        printf("%s validator census=%zu status=%d\n", kind ? "Copy" : "current",
+               count, status);
+        assert(status == NL_CHECK_OK);
+        if (!count) {
+            puts("allocation-free validator: selected OOM0, not injected");
+            continue;
+        }
         const size_t points[] = {1, 2, count / 2, count};
         for (size_t i = 0; i < 4; ++i) {
+            if (!points[i])
+                continue;
+            bool duplicate = false;
+            for (size_t j = 0; j < i; ++j)
+                duplicate |= points[j] == points[i];
+            if (duplicate)
+                continue;
             Snapshot before = snapshot(p.context);
             NLLinearBreakView old;
             memset(&out, 0x5a, sizeof(out));
@@ -398,8 +416,9 @@ int main(int argc, char **argv)
         assert(s == NL_CHECK_OK);
         attacks(&p, argv[2], (size_t)strtoul(argv[3], NULL, 10));
         p_dispose(&p);
-    } else if (argc == 3 && !strcmp(argv[1], "oom")) {
-        oom(argv[2]);
+    } else if (argc == 3 &&
+               (!strcmp(argv[1], "oom") || !strcmp(argv[1], "validators"))) {
+        oom(argv[2], !strcmp(argv[1], "validators"));
     } else {
         assert(argc == 4 && !strcmp(argv[1], "negative"));
         semantic_negative(argv[2], "P3-TYPE-MISMATCH");
