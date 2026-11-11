@@ -2299,3 +2299,5 @@ if(BUILD_TESTING)
 endif()
 
 include(tests/p1335/CMakeLists.txt)
+
+include(tests/p1339/CMakeLists.txt)

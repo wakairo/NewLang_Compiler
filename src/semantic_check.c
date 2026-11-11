@@ -49,7 +49,10 @@ typedef struct Check {
     size_t *body_budget;   /* borrowed counter for this synchronous body walk */
     bool in_function_body, definition, terminated, in_source_loan;
     bool capture_copy_body; /* actual supported u8 call, not definition */
-    bool *scalar_h_read;    /* borrowed synchronous enclosing body CHECK */
+    NLSymbolId readonly_u8_parameter;
+    NLSemanticBindingView readonly_binding;
+    NLSemanticPlaceView readonly_place;
+    bool *scalar_h_read; /* borrowed synchronous enclosing body CHECK */
     NLTypeId function_result;
     size_t function_binding_floor, function_scope_floor, function_place_floor;
     size_t function_value_prefix;
@@ -3641,6 +3644,30 @@ failure:
     return check.status;
 }
 
+static bool readonly_current_body(const NLFunctionEntry *fn,
+                                  const NLSemanticContext *c)
+{
+    if (fn->count != 1 || !fn->parameters ||
+        fn->parameters[0] != nl_semantic_core_type(c, NL_TYPE_U8) ||
+        fn->result != fn->parameters[0] || !fn->body)
+        return false;
+    const NLSyntaxView *root =
+        nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
+    if (!root || root->kind != NL_SYNTAX_BLOCK)
+        return false;
+    for (const NLSyntaxNode *n = root->data.block.items; n;
+         n = nl_syntax_next_argument(n)) {
+        const NLSyntaxView *v = nl_syntax_node_view(n);
+        const NLSyntaxView *init =
+            v->kind == NL_SYNTAX_BINDING
+                ? nl_syntax_node_view(v->data.binding.initializer)
+                : NULL;
+        if (init && init->kind == NL_SYNTAX_LOOP)
+            return true;
+    }
+    return false;
+}
+
 static bool run_body(Check *caller, NLCheckedNodeId call_id,
                      const NLFunctionEntry *function,
                      const NLCheckedNodeId *arguments)
@@ -3715,8 +3742,21 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         body.origin_call = call_id;
     }
     body.capture_copy_body =
-        !body.definition && function->count == 0 &&
+        !body.definition &&
+        (function->count == 0 || readonly_current_body(function, c)) &&
         function->result == nl_semantic_core_type(c, NL_TYPE_U8);
+    /* The signature arrays belong to the current semantic world.  Checking a
+     * body may commit a successor world and release those arrays, so retain
+     * only this authenticated scalar classification across function_block().
+     */
+    const bool predicate_result =
+        !body.definition && function->kind == NL_CHECKED_REGISTERED_CALL &&
+        function->count == 1 && function->parameters &&
+        function->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
+        function->result == nl_semantic_core_type(c, NL_TYPE_U8) &&
+        !function->caller_effects && !function->hidden_dependencies &&
+        !function->owner_receiver && !function->owner_producer &&
+        !function->custody_recipient;
     NLSymbolId copy_parameters[2] = {0};
     for (size_t i = 0; i < function->count; ++i) {
         const NLCheckedNodeView argument = *view(caller, arguments[i]);
@@ -3745,6 +3785,11 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
             goto failure;
         if (i < 2)
             copy_parameters[i] = symbol;
+        if (i == 0 && readonly_current_body(function, c)) {
+            body.readonly_u8_parameter = symbol;
+            body.readonly_binding = c->bindings[symbol - 1].view;
+            body.readonly_place = c->places[body.readonly_binding.place - 1];
+        }
         if (function->owner_producer) {
             view(caller, call_id)->producer.parameters[i] = symbol;
             if (i == 3)
@@ -3760,6 +3805,12 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                     .implicit_local = true;
         }
     }
+    if (body.capture_copy_body && body.readonly_u8_parameter &&
+        !host(&body,
+              nl_copy_body_readonly(body.artifact, caller->artifact, call_id,
+                                    body.readonly_u8_parameter, c),
+              call_span))
+        goto failure;
     if (function->count == 2 &&
         ((!body.definition &&
           function->result == nl_semantic_core_type(c, NL_TYPE_U8)) ||
@@ -3953,14 +4004,6 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
               nl_producer_local_seal(body.artifact, caller->artifact, call_id),
               call_span))
         goto failure;
-    const bool predicate_result =
-        !body.definition && function->kind == NL_CHECKED_REGISTERED_CALL &&
-        function->count == 1 && function->parameters &&
-        function->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
-        function->result == nl_semantic_core_type(c, NL_TYPE_U8) &&
-        !function->caller_effects && !function->hidden_dependencies &&
-        !function->owner_receiver && !function->owner_producer &&
-        !function->custody_recipient;
     bool current_result =
         body.artifact->copy_body && body.artifact->copy_body->current_loop;
     for (size_t i = 0; !current_result && i < body.artifact->body_count; ++i)
@@ -5931,8 +5974,14 @@ static bool current_copy_callee(const Check *c)
         return false;
     const NLFunctionEntry *fn = &w->functions[c->body_function - 1],
                           *outer = &w->functions[c->caller->body_function - 1];
-    return fn->body == c->artifact->body_owner && !fn->count &&
-           !fn->parameters && !fn->caller_effects && !fn->hidden_dependencies &&
+    const bool readonly = copy->readonly_parameter != 0;
+    return fn->body == c->artifact->body_owner &&
+           (readonly ? (fn->count == 1 && fn->parameters &&
+                        fn->parameters[0] == c->function_result &&
+                        copy->readonly_parameter == c->readonly_u8_parameter &&
+                        !c->caller->artifact->body_count)
+                     : (!fn->count && !fn->parameters)) &&
+           !fn->caller_effects && !fn->hidden_dependencies &&
            !fn->owner_receiver && !fn->owner_producer &&
            !fn->custody_recipient &&
            outer->body == c->caller->artifact->body_owner && !outer->count &&
@@ -5959,11 +6008,17 @@ static bool linear_copy_calls(const NLLinearBreakProof *p, bool sealed)
         if (!f || f != caller->bodies[i] || !call ||
             !nl_h_custody_result_valid(caller, id) ||
             call->kind != NL_CHECKED_REGISTERED_CALL || !call->body_backed ||
-            call->function != p->function || call->argument_count ||
-            call->first_argument || call->terminates || call->result_count != 1)
+            call->function != p->function || call->terminates ||
+            call->result_count != 1)
             return false;
         const NLLinearBreakProof *q = f->linear_breaks;
         const NLCopyBodyProof *copy = f->copy_body;
+        if (!copy ||
+            (copy->readonly_parameter
+                 ? (caller->body_count != 1 || call->argument_count != 1 ||
+                    call->first_argument != copy->readonly_argument)
+                 : (call->argument_count || call->first_argument)))
+            return false;
         if (!q || q->next || !q->copy_callee || !q->current_cycle ||
             q->owner != f || q->root != p->root || q->caller != caller ||
             q->outer_call != p->outer_call || q->call != id ||
@@ -6011,7 +6066,10 @@ static bool linear_callable(const NLLinearBreakProof *p,
         return false;
     const NLFunctionEntry *fn = &c->functions[p->function - 1];
     return fn->kind == NL_CHECKED_REGISTERED_CALL && fn->body == p->plan &&
-           fn->count == 0 && !fn->parameters &&
+           (p->copy_callee && p->owner->copy_body &&
+                    p->owner->copy_body->readonly_parameter
+                ? (fn->count == 1 && fn->parameters)
+                : (fn->count == 0 && !fn->parameters)) &&
            fn->result ==
                (p->copy_callee ? nl_semantic_core_type(c, NL_TYPE_U8) : 1) &&
            !fn->caller_effects && !fn->hidden_dependencies &&
@@ -6021,7 +6079,7 @@ static bool linear_callable(const NLLinearBreakProof *p,
             (fn->name && p->post->functions[p->function - 1].name &&
              !strcmp(fn->name, p->post->functions[p->function - 1].name))) &&
            p->plan->syntax == p->syntax && p->plan->source == p->source &&
-           p->plan->count == 0;
+           p->plan->count == fn->count;
 }
 
 static NLCheckStatus retain_current_break(Check *check, LoopControl *loop,
@@ -6048,9 +6106,10 @@ static NLCheckStatus retain_current_break(Check *check, LoopControl *loop,
         return NL_CHECK_OK;
     const NLFunctionEntry *fn =
         &check->context->functions[check->body_function - 1];
-    if (fn->count || fn->parameters || fn->caller_effects ||
-        fn->hidden_dependencies || fn->owner_receiver || fn->owner_producer ||
-        fn->custody_recipient)
+    if ((!(copy_callee && check->readonly_u8_parameter) &&
+         (fn->count || fn->parameters)) ||
+        fn->caller_effects || fn->hidden_dependencies || fn->owner_receiver ||
+        fn->owner_producer || fn->custody_recipient)
         return NL_CHECK_OK;
     NLLinearBreakProof *p = calloc(1, sizeof(*p));
     if (!p)
@@ -10690,6 +10749,12 @@ static bool check_definition(Check *registration, size_t function_id)
                                        values[i], 0, &symbol),
                   span))
             goto failure;
+        if (i == 0 && readonly_current_body(&function, c)) {
+            definition.readonly_u8_parameter = symbol;
+            definition.readonly_binding = c->bindings[symbol - 1].view;
+            definition.readonly_place =
+                c->places[definition.readonly_binding.place - 1];
+        }
     }
     definition.artifact = malloc(sizeof(*definition.artifact));
     if (definition.artifact == NULL) {

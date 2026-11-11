@@ -12,6 +12,7 @@
 #include "copy_body_internal.h"
 #include "if_field_internal.h"
 #include "linear_break_internal.h"
+static void destroy(NLCheckedFragment *);
 
 /* A retained world address does not freeze its present function table. Check
  * each world's own table and bound before even forming an element pointer. */
@@ -77,6 +78,51 @@ bool nl_copy_state_matches(const NLSemanticContext *c,
         if (memcmp(&c->bindings[i].view, &a->bindings[i], sizeof(*a->bindings)))
             return false;
     return true;
+}
+NLCheckStatus nl_copy_body_readonly(NLCheckedFragment *f,
+                                    const NLCheckedFragment *caller,
+                                    NLCheckedNodeId id, NLSymbolId symbol,
+                                    const NLSemanticContext *c)
+{
+    const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
+    const NLFunctionEntry *fn = call ? function_entry(c, call->function) : NULL;
+    const NLCheckedNodeView *a =
+        call ? nl_checked_node_view(caller, call->first_argument) : NULL;
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    if (f->copy_body || !fn || !fn->parameters || fn->count != 1 ||
+        fn->parameters[0] != u8 || fn->result != u8 ||
+        fn->body != f->body_owner || !fn->body || fn->body->count != 1 ||
+        !fn->body->parameter_names[0] || !symbol || symbol > c->binding_count ||
+        call->argument_count != 1 || !a || a->next_argument ||
+        a->result_count != 1 || a->type != u8 ||
+        !nl_copy_plain(c, a->results[0].value, u8) ||
+        c->bindings[symbol - 1].view.type != u8 ||
+        !nl_copy_plain(c, c->bindings[symbol - 1].view.value, u8))
+        return INVALID;
+    NLCopyBodyProof *p = calloc(1, sizeof(*p));
+    if (!p)
+        return NL_CHECK_OUT_OF_MEMORY;
+    f->copy_body = p;
+    f->destroy_copy_body = destroy;
+    p->owner = f;
+    p->body = f->body_owner;
+    p->source = f->source;
+    p->caller = caller;
+    p->call = id;
+    p->readonly_parameter = symbol;
+    p->readonly_argument = call->first_argument;
+    p->arguments[0] = *a;
+    p->parameter_types[0] = u8;
+    p->readonly_plan_name = p->body->parameter_names[0];
+    NLCheckStatus status = nl_sem_clone(c, &p->entry);
+    if (status == NL_CHECK_OK) {
+        p->readonly_storage = *p->entry;
+        p->readonly_entry_parameters =
+            p->entry->functions[call->function - 1].parameters;
+        p->readonly_name = p->entry->bindings[symbol - 1].name;
+        status = nl_copy_state_anchor(p->entry, &p->entry_anchor);
+    }
+    return status;
 }
 static void destroy(NLCheckedFragment *f)
 {
@@ -365,7 +411,8 @@ NLCheckStatus nl_copy_body_seal_calls(NLCheckedFragment *f)
     NLCheckStatus status = NL_CHECK_OK;
     for (size_t i = 0; i < f->body_count; ++i) {
         NLCopyBodyProof *child = f->bodies[i]->copy_body;
-        if (!child || !child->formal_write || !child->sealed)
+        if (!child || (!child->formal_write && !child->readonly_parameter) ||
+            !child->sealed)
             continue;
         if (child->caller != f || child->caller_nodes || !f->count ||
             f->count > NL_SEMANTIC_MAX_ENTRIES) {
@@ -444,6 +491,8 @@ NLCheckStatus nl_copy_body_seal(NLCheckedFragment *f,
     p->view.body = f;
     p->view.function = function;
     p->view.root = f->root;
+    if (p->readonly_parameter)
+        p->readonly_exit_storage = *p->exit;
     p->sealed = true;
     return NL_CHECK_OK;
 }
@@ -1207,6 +1256,73 @@ static bool parameter_entry(const NLCopyBodyProof *p,
            nl_copy_plain(entry, p->arguments[1].results[0].value,
                          fn->parameters[1]);
 }
+static bool readonly_entry(const NLCopyBodyProof *p,
+                           const NLCheckedFragment *caller,
+                           const NLCheckedNodeView *call)
+{
+    const NLSemanticContext *e = p->entry, *c = nl_checked_context(caller);
+    const NLSymbolId symbol = p->readonly_parameter;
+    if (!e || !p->exit ||
+        memcmp(p->exit, &p->readonly_exit_storage, sizeof(*p->exit)) ||
+        memcmp(e, &p->readonly_storage, sizeof(*e)) ||
+        !nl_copy_state_matches(e, &p->entry_anchor) || !symbol ||
+        symbol > e->binding_count || symbol > p->exit->binding_count ||
+        call->argument_count != 1 ||
+        call->first_argument != p->readonly_argument || !p->caller_nodes ||
+        caller->nodes != p->caller_nodes_origin ||
+        caller->count != p->caller_count || caller->root != p->caller_root ||
+        caller->source != p->caller_source ||
+        caller->body_owner != p->caller_body ||
+        memcmp(caller->nodes, p->caller_nodes,
+               p->caller_count * sizeof(*p->caller_nodes)))
+        return false;
+    const NLFunctionEntry *issued = function_entry(e, call->function),
+                          *now = function_entry(c, call->function);
+    const NLCheckedNodeView *a =
+        nl_checked_node_view(caller, p->readonly_argument);
+    if (!issued || !now || issued->parameters != p->readonly_entry_parameters ||
+        issued->count != 1 || !issued->parameters ||
+        issued->parameters[0] != p->parameter_types[0] || now->count != 1 ||
+        !now->parameters || now->parameters[0] != p->parameter_types[0] ||
+        issued->body != p->body || now->body != p->body ||
+        p->body->count != 1 ||
+        p->body->parameter_names[0] != p->readonly_plan_name ||
+        e->bindings[symbol - 1].name != p->readonly_name ||
+        strcmp(p->readonly_name, p->readonly_plan_name) || !a ||
+        memcmp(a, &p->arguments[0], sizeof(*a)) ||
+        !nl_copy_plain(e, a->results[0].value, p->parameter_types[0]))
+        return false;
+    const NLSemanticBindingView b = e->bindings[symbol - 1].view;
+    if (b.value != a->results[0].value ||
+        a->parameter_type != p->parameter_types[0] || !b.place ||
+        b.place > e->place_count || b.place > c->place_count ||
+        !nl_copy_plain(e, b.value, p->parameter_types[0]) ||
+        memcmp(&b, &p->exit->bindings[symbol - 1].view, sizeof(b)))
+        return false;
+    const NLSemanticPlaceView before = e->places[b.place - 1],
+                              ended = c->places[b.place - 1];
+    return before.live && before.independent_root &&
+           before.current_value == b.value && b.value <= p->exit->value_count &&
+           nl_node_value_same(e->values[b.value - 1],
+                              p->exit->values[b.value - 1]) &&
+           !memcmp(&before, &p->exit->places[b.place - 1], sizeof(before)) &&
+           !ended.live && !ended.current_value && !ended.current_fact &&
+           ended.incarnation == before.incarnation;
+}
+bool nl_copy_body_readonly_valid(const NLCheckedFragment *f)
+{
+    const NLCopyBodyProof *p = f ? f->copy_body : NULL;
+    if (!p || !p->caller || p->caller->context != f->context ||
+        p->caller->nodes != p->caller_nodes_origin ||
+        p->caller->count != p->caller_count || !p->caller_nodes)
+        return false;
+    const NLCheckedNodeView *call =
+        p && p->caller ? nl_checked_node_view(p->caller, p->call) : NULL;
+    return p && p->sealed && p->owner == f && !p->formal_write &&
+           p->readonly_parameter && p->current_loop && call &&
+           readonly_entry(p, p->caller, call);
+}
+
 NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
                                             NLCheckedNodeId id,
                                             const NLCopyBodyView *candidate)
@@ -1216,12 +1332,20 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
         (candidate && !same_body_view(candidate, &p->view)))
         return INVALID;
     const NLCheckedFragment *f = p->owner;
+    if (p->readonly_parameter) {
+        /* Authenticate every current signature allocation BEFORE indexing a
+         * current caller signature. This consumes the same current record. */
+        const NLCheckStatus status = nl_linear_break_owner_validate(f);
+        if (status != NL_CHECK_OK)
+            return status;
+    }
     const NLSemanticContext *c = nl_checked_context(caller);
     const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
     const NLFunctionEntry *fn = call ? function_entry(c, call->function) : NULL;
     if (!fn || !call || call->kind != NL_CHECKED_REGISTERED_CALL ||
         !call->body_backed || call->terminates ||
-        (!p->formal_write && (call->argument_count || call->first_argument)) ||
+        (!p->formal_write && !p->readonly_parameter &&
+         (call->argument_count || call->first_argument)) ||
         call->result_count != 1 || call->function != p->view.function ||
         !call->function || call->function > c->function_count ||
         nl_checked_context(f) != c || f->body_owner != p->body ||
@@ -1229,7 +1353,8 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
         fn->body != p->body || fn->kind != NL_CHECKED_REGISTERED_CALL ||
         fn->caller_effects || fn->hidden_dependencies || fn->owner_receiver ||
         fn->owner_producer || fn->custody_recipient ||
-        (!p->formal_write && (fn->count || p->body->count)) ||
+        (!p->formal_write && !p->readonly_parameter &&
+         (fn->count || p->body->count)) ||
         call->type != nl_semantic_core_type(c, NL_TYPE_U8) ||
         fn->result != call->type ||
         call->results[0].type != p->view.result.type ||
@@ -1252,6 +1377,9 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
     if (p->formal_write && (!nl_copy_same_types(p->entry, p->exit) ||
                             !nl_copy_same_types(p->handoff, p->exit) ||
                             !parameter_entry(p, caller, call)))
+        return INVALID;
+    if (p->readonly_parameter && (p->formal_write || !p->current_loop ||
+                                  !readonly_entry(p, caller, call)))
         return INVALID;
     Replay r = {.proof = p,
                 .f = f,

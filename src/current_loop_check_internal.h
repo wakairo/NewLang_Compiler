@@ -201,6 +201,7 @@ typedef struct NLCurrentLoopProof {
     const NLControlTarget *target;
     const NLSyntaxNode *carry_source, *scalar_source, *terminal_source;
     NLSymbolId base, phase;
+    NLSymbolId readonly_parameter;
     NLPlaceId root, child;
     NLPlaceId second_child;
     size_t second_index;
@@ -1254,7 +1255,9 @@ static bool current_inherited_scalar(CurrentWalk *r,
     const NLSemanticContext *entry = nl_control_state_context(s->entry),
                             *world = r->arm->context;
     const NLTypeId type = nl_semantic_core_type(world, NL_TYPE_U8);
-    if (!s->helper || !s->parent ||
+    const bool input = value && s->readonly_parameter &&
+                       value->symbol == s->readonly_parameter;
+    if ((!s->helper && !input) || !s->parent ||
         nl_checked_source(s->parent) != nl_checked_source(r->arm) ||
         nl_checked_source(s->parent) != nl_checked_source(s->graph) || !value ||
         value->kind != NL_CHECKED_IDENTIFIER ||
@@ -1265,7 +1268,7 @@ static bool current_inherited_scalar(CurrentWalk *r,
         !current_capture_binding(entry, world, value->symbol, type) ||
         !current_copy_name(r->arm, value->name,
                            entry->bindings[value->symbol - 1].name) ||
-        !current_capture_origin(s, value->symbol, type))
+        (!input && !current_capture_origin(s, value->symbol, type)))
         return false;
     NLSemanticValueView copy;
     if (!current_copy_value(world, value, type, &copy)) {
@@ -1273,9 +1276,10 @@ static bool current_inherited_scalar(CurrentWalk *r,
          * fresh Copy package may already be the selected current member.
          * Authenticate that exact attachment; inspect only a local content
          * view, without detaching anything or changing the semantic world. */
-        if (!r->terminal || value->type != type || value->result_count != 1 ||
-            value->results[0].type != type || !s->root || !s->child ||
-            s->root > world->place_count || s->child > world->place_count ||
+        if ((!r->terminal && !input) || value->type != type ||
+            value->result_count != 1 || value->results[0].type != type ||
+            !s->root || !s->child || s->root > world->place_count ||
+            s->child > world->place_count ||
             !nl_semantic_value_view(world, value->results[0].value, &copy))
             return false;
         const NLSemanticPlaceView root = world->places[s->root - 1],
@@ -1385,7 +1389,10 @@ static bool current_loan(CurrentWalk *r, const NLCheckedNodeView *loan,
                 (!r->scalar || value->kind != NL_CHECKED_IDENTIFIER ||
                  !value->symbol || value->symbol > NL_SEMANTIC_MAX_ENTRIES ||
                  !r->incoming[value->symbol - 1]))
-         : second ? false
+         : second                ? false
+         : s->readonly_parameter ? (value->kind != NL_CHECKED_IDENTIFIER ||
+                                    value->symbol != s->readonly_parameter ||
+                                    !current_inherited_scalar(r, value))
          : s->scalar_source
              ? (!r->scalar || value->kind != NL_CHECKED_IDENTIFIER ||
                 !value->symbol || value->symbol > NL_SEMANTIC_MAX_ENTRIES ||
@@ -1665,14 +1672,15 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
                 return bad;
             const NLSemanticValueView incoming =
                 a->values[changes[0].new_value - 1];
-            if (s->scalar_source
-                    ? (!scalar || incoming.scalar_known)
-                    : (!incoming.scalar_known || incoming.scalar_value > 255))
+            if (!s->readonly_parameter &&
+                (s->scalar_source
+                     ? (!scalar || incoming.scalar_known)
+                     : (!incoming.scalar_known || incoming.scalar_value > 255)))
                 return bad;
-            if (s->sealed &&
-                (s->scalar != scalar ||
-                 (!s->scalar_source && s->incoming != incoming.scalar_value) ||
-                 s->terminal != leaf->source_node))
+            if (s->sealed && (s->scalar != scalar ||
+                              (!s->scalar_source && !s->readonly_parameter &&
+                               s->incoming != incoming.scalar_value) ||
+                              s->terminal != leaf->source_node))
                 return bad;
             if (s->helper) {
                 NLPureU8Call pure;
@@ -1688,7 +1696,9 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
             }
             if (!s->sealed) {
                 s->scalar = scalar;
-                s->incoming = s->scalar_source ? 0 : incoming.scalar_value;
+                s->incoming = s->scalar_source || s->readonly_parameter
+                                  ? 0
+                                  : incoming.scalar_value;
                 s->terminal = leaf->source_node;
             }
         } else {
@@ -2081,6 +2091,10 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                               p->parent_count, p->parent_root) ||
         !current_signature_origin(s, f->context, CURRENT_CALLER_SLOT) ||
         !current_signature_origin(s, p->post, CURRENT_POST_SLOT) ||
+        (s->readonly_parameter &&
+         (!f->copy_body ||
+          f->copy_body->readonly_parameter != s->readonly_parameter ||
+          !nl_copy_body_readonly_valid(f))) ||
         !linear_world_matches(f->context, &p->final_storage, p->final,
                               &p->final_anchor) ||
         !linear_callable(p, f->context) || !linear_callable(p, p->post) ||
@@ -2214,7 +2228,8 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         n->first_argument != s->initial_node || n->argument_count != 1 ||
         n->result_count != 1 || n->results[0].value != p->result.value ||
         n->results[0].type != p->result.type || p->target != s->target ||
-        call->function != p->function || call->argument_count ||
+        call->function != p->function ||
+        call->argument_count != (s->readonly_parameter ? 1u : 0u) ||
         nl_checked_call_body(call_owner, p->call) != f ||
         !current_copy_origin(f, f->context, s->initial_node, 0, true, 2,
                              &initial) ||
@@ -2261,6 +2276,7 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         .break_value = terminal->initializer,
         .continue_node = s->terminal,
         .phase_symbol = s->phase,
+        .readonly_parameter = s->readonly_parameter,
         .initial_node = s->initial_node,
         .initial_phase = s->initial,
         .limit = s->limit,
@@ -2323,6 +2339,23 @@ static NLCheckedNodeId source_current_loop(Check *check,
     s->terminal_old = source->terminal_old;
     s->helper = source->scalar && nl_syntax_node_view(source->scalar)->kind ==
                                       NL_SYNTAX_EXPR_CALL;
+    if (check->readonly_u8_parameter) {
+        const NLSymbolId symbol = check->readonly_u8_parameter;
+        const NLSemanticContext *c = check->context;
+        const NLSemanticBindingView b = symbol <= c->binding_count
+                                            ? c->bindings[symbol - 1].view
+                                            : (NLSemanticBindingView){0};
+        if (!s->terminal_old || s->paired || s->scalar_source ||
+            s->terminal_source || !b.place || b.place > c->place_count ||
+            memcmp(&b, &check->readonly_binding, sizeof(b)) ||
+            memcmp(&c->places[b.place - 1], &check->readonly_place,
+                   sizeof(check->readonly_place)) ||
+            !nl_copy_plain(c, b.value, nl_semantic_core_type(c, NL_TYPE_U8))) {
+            loop_precision(check, syntax->span);
+            goto cleanup;
+        }
+        s->readonly_parameter = symbol;
+    }
     if (!current_packages(check->context, s->root) ||
         !check->context->types[field.nominal - 1].view.is_copy ||
         check->context->places[s->root - 1].fixed_field_count != 2) {

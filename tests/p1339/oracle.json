@@ -1,0 +1,56 @@
+{
+  "baseline": "e1655cb633ed4470d4686126091d1e150f8ec6e4",
+  "canonical_main": "8b3d0b80c3ffde32f3c9e80f6c8f4b542bfc2911",
+  "canonical": "Draft17.35",
+  "source_positive": {
+    "A-input67.nl": {
+      "argument": 67,
+      "field0_initial": 43,
+      "sibling": 181,
+      "backedges": 2,
+      "iteration_writes": [
+        67,
+        67
+      ],
+      "terminal_new": 233,
+      "physical_terminal_old": 67,
+      "caller_Copy": 67,
+      "semantic_result": "plain dependency-free u8; do not fabricate Known from literal actual"
+    },
+    "B-input109.nl": {
+      "argument": 109,
+      "field0_initial": 43,
+      "sibling": 181,
+      "backedges": 2,
+      "iteration_writes": [
+        109,
+        109
+      ],
+      "terminal_new": 233,
+      "physical_terminal_old": 109,
+      "caller_Copy": 109,
+      "semantic_result": "plain dependency-free u8; no fake Known"
+    }
+  },
+  "negative_oracles": {
+    "N-argument-type.nl": "semantic3 u8/usize argument mismatch, no accepted entry",
+    "N-ended-ref.nl": "semantic3 ended loan reference escape, no accepted entry",
+    "N-two-input-calls.nl": "legally expressible but outside this single-call slice: precision3/no entry",
+    "N-formal-write.nl": "legally expressible fresh formal mutation is outside read-only slice: precision3/no entry"
+  },
+  "host_negative_oracles": [
+    "actual argument/formal/slot/current/body/old/tail/result foreign/stale and same-bit different origin reject without out-clobber; restore accepts",
+    "short foreign signature allocation rejected before read; NULL/functions/count bounds fail-closed",
+    "dependencyful/loan-bearing actual or mutated formal rejected",
+    "CHECK/retention/seal/validator real OOM -> no entry, complete context/array/shared-plan owner rollback, retry success"
+  ],
+  "guest_budget": {
+    "raw": 8,
+    "passive": 8,
+    "guest_sanitizer": 4,
+    "repair_reserve": 4,
+    "max": 24
+  },
+  "remote_push_PR_CI": 0,
+  "plan": "existing current relation + existing Copy proof private readonly input, never formal_write, no second proof"
+}
