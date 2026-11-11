@@ -310,6 +310,19 @@ static void attacks(PInput *p, const char *path, size_t index)
         CHANGE(NLTypeId, "stale-signature",
                p->context->functions[fn - 1].result,
                nl_semantic_unit_type(p->context));
+        for (NLCheckedNodeId id = a.call + 1; id < b.call; ++id) {
+            NLCheckedNodeView *change = &a.caller->nodes[id - 1];
+            if (change->kind != NL_CHECKED_REPLACE)
+                continue;
+            CHANGE(NLValueFactId, "caller-Change-post-fact",
+                   change->field.parent_post_fact, 0);
+            CHANGE(NLValueId, "caller-Change-value", change->field.new_value,
+                   b.copy.result.value);
+            CHANGE(NLPlaceId, "caller-Change-foreign-root",
+                   change->field.parent, a.current.root);
+            CHANGE(size_t, "caller-Change-wrong-field", change->field.index,
+                   1 - index);
+        }
         NLCheckedFragment *iteration = (NLCheckedFragment *)a.current.iteration;
         NLScopeId loan = 0;
         for (size_t i = 0; i < iteration->count; ++i)

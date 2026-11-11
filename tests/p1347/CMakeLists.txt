@@ -25,3 +25,13 @@ foreach(profile N-third-call N-extra-original)
     add_test(NAME p1347_${profile}.unit COMMAND p1347_reuse precision
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1347/${profile}.nl")
 endforeach()
+add_test(NAME p1347_native.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1347/native.py" "$<TARGET_FILE:newlangc>"
+    "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_BINARY_DIR}/p1347-native"
+    "${NEWLANG_SANITIZER}")
+add_test(NAME p1347_negative_cli_oom.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1347/failure.py" "$<TARGET_FILE:newlangc>"
+    "$<TARGET_FILE:p1332_cli_oom>" "${CMAKE_CURRENT_BINARY_DIR}/p1347-negative" p1347)
+set_tests_properties(p1347_native.integration p1347_negative_cli_oom.integration
+    p1339_two_input_calls_current.unit p1343_two_input_calls_current.unit
+    PROPERTIES TIMEOUT 180)
