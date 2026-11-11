@@ -37,6 +37,8 @@ typedef struct {
     NLCheckedNodeId incoming_if; /* authenticated iteration-local scalar join */
     NLCheckedNodeId incoming_call; /* authenticated iteration-local pure call */
     NLSymbolId phase_symbol;
+    /* Borrowed from this same validated current/Copy input relation. */
+    NLSymbolId readonly_parameter;
     /* Tagged payload: literal successor normally; arithmetic step when
      * computed_carry is true. A computed successor is never known here. */
     size_t initial_phase, next_phase, limit;

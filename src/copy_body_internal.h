@@ -37,6 +37,14 @@ typedef struct NLCopyBodyProof {
     size_t count;
     bool sealed;
     bool formal_write, unit_call;
+    /* A plain read-only scalar formal, distinct from ref-write parameters.
+     * The existing entry anchor and final caller seal own this handoff. */
+    NLSymbolId readonly_parameter;
+    NLCheckedNodeId readonly_argument;
+    NLSemanticContext readonly_storage;
+    NLSemanticContext readonly_exit_storage;
+    const NLTypeId *readonly_entry_parameters;
+    const char *readonly_name, *readonly_plan_name;
     NLSemanticContext *normal_end;
     NLCopyCallAnchor normal_end_anchor;
     NLCheckedNodeId conditional;
@@ -66,6 +74,13 @@ NLCheckStatus nl_copy_body_seal(NLCheckedFragment *, const NLCheckedFragment *,
                                 const NLSemanticContext *);
 NLCheckStatus nl_copy_body_seal_calls(NLCheckedFragment *);
 NLCheckStatus nl_copy_body_current(NLCheckedFragment *, NLCheckedNodeId);
+NLCheckStatus nl_copy_body_readonly(NLCheckedFragment *,
+                                    const NLCheckedFragment *, NLCheckedNodeId,
+                                    NLSymbolId, const NLSemanticContext *);
+/* Called after the current relation authenticates current signature origins.
+ * Consumes this same Copy entry/caller seal; never calls a current validator.
+ */
+bool nl_copy_body_readonly_valid(const NLCheckedFragment *);
 
 NLCheckStatus nl_copy_body_parameters(NLCheckedFragment *,
                                       const NLCheckedFragment *,
