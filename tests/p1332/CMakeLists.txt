@@ -7,7 +7,7 @@ foreach(target p1332_consumer p1332_cli_oom)
     target_link_options(${target} PRIVATE
         -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
 endforeach()
-target_link_options(p1332_cli_oom PRIVATE -Wl,--wrap=fflush -Wl,--wrap=fprintf)
+target_link_options(p1332_cli_oom PRIVATE -Wl,--wrap=fflush)
 add_test(NAME p1332_callee_current_consumer.unit COMMAND p1332_consumer
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1332/A-callee-local.nl"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1332/B-index1.nl")

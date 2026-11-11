@@ -1,6 +1,13 @@
+#include <stdio.h>
+
+/* Keep injection at the actual serializer call site. Fortified stdio can
+ * redirect fprintf to __fprintf_chk before a linker --wrap can see it. */
+static int p1332_fprintf(FILE *, const char *, ...);
+#define fprintf p1332_fprintf
 #define main p1332_actual_cli
 #include "main.c"
 #undef main
+#undef fprintf
 #include <assert.h>
 #include <errno.h>
 #include <stdarg.h>
@@ -43,7 +50,7 @@ int __wrap_fflush(FILE *stream)
     }
     return __real_fflush(stream);
 }
-int __wrap_fprintf(FILE *stream, const char *format, ...)
+static int p1332_fprintf(FILE *stream, const char *format, ...)
 {
     if (armed && fail_write && !fired && stream != stderr && stream != stdout) {
         fired = true;
