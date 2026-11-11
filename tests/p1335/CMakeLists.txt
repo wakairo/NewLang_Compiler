@@ -17,3 +17,16 @@ foreach(profile A-two-calls B-two-calls-index1)
     add_test(NAME p1335_${profile}_oom.unit COMMAND p1335_two_calls oom
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1335/${profile}.nl" ${index})
 endforeach()
+add_test(NAME p1335_semantic_negative.unit COMMAND p1335_two_calls negative
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1329/N-type.nl"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1329/N-ended-ref.nl")
+add_test(NAME p1335_negative_cli_oom.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1335/negative.py" "$<TARGET_FILE:newlangc>"
+    "$<TARGET_FILE:p1332_cli_oom>" "${CMAKE_CURRENT_BINARY_DIR}/p1335-negative")
+add_test(NAME p1335_native.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1335/native.py" "$<TARGET_FILE:newlangc>"
+    "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_BINARY_DIR}/p1335-native")
+set_tests_properties(p1335_A-two-calls_owned.unit p1335_B-two-calls-index1_owned.unit
+    p1335_A-two-calls_oom.unit p1335_B-two-calls-index1_oom.unit
+    p1335_semantic_negative.unit p1335_negative_cli_oom.integration
+    p1335_native.integration PROPERTIES TIMEOUT 180)

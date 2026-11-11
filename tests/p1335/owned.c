@@ -134,20 +134,20 @@ static void valid(PInput *p, size_t index)
     assert(nl_checked_copy_body_validate(a.caller, a.call, &b.copy) !=
            NL_CHECK_OK);
     assert(!memcmp(&a.copy, &before, sizeof(before)));
-    /* Caller Copy uses are traced to the first/second actual call by source
-     * operands. Equal unknown scalar bits never replace this lineage. */
+    /* Actual Copy operands lead back to the first call even after the
+     * second call. Equal scalar bits are not used to identify that origin. */
     size_t calls = 0, late_first = 0;
     for (size_t i = 0; i < a.caller->count; ++i) {
         const NLCheckedNodeView *n = &a.caller->nodes[i];
         if (n->kind == NL_CHECKED_REGISTERED_CALL)
             ++calls;
-        if (n->kind == NL_CHECKED_IDENTIFIER &&
-            n->value_use == NL_VALUE_COPIED &&
+        if (n->kind == NL_CHECKED_BINDING &&
             n->span.start_byte >
-                nl_checked_node_view(a.caller, b.call)->span.end_byte)
+                nl_checked_node_view(a.caller, b.call)->span.end_byte &&
+            copy_origin(a.caller, n->initializer) == a.call)
             ++late_first;
     }
-    assert(calls == 2 && late_first >= 2);
+    assert(calls == 2 && late_first == 1);
 }
 static void rejected(PInput *p, Call *r, const char *label)
 {
@@ -168,11 +168,12 @@ static void rejected(PInput *p, Call *r, const char *label)
 static void attacks(PInput *p, const char *path, size_t index)
 {
     valid(p, index);
-    Call a = get_call(p, 0, index), b = get_call(p, 1, index);
     PInput other = {0};
     p_load(&other, path);
     assert(p_check(&other) == NL_CHECK_OK);
-    Call foreign = get_call(&other, 0, index);
+    for (size_t slot = 0; slot < 2; ++slot) {
+        Call a = get_call(p, slot, index), b = get_call(p, 1 - slot, index);
+        Call foreign = get_call(&other, slot, index);
 #define CHANGE(type, label, member, bad)                                       \
     do {                                                                       \
         type saved = (member);                                                 \
@@ -181,39 +182,55 @@ static void attacks(PInput *p, const char *path, size_t index)
         (member) = saved;                                                      \
         valid(p, index);                                                       \
     } while (0)
-    CHANGE(NLCheckedNodeId, "cross-call-slot", a.caller->body_calls[0], b.call);
-    CHANGE(NLCheckedFragment *, "cross-BODY-slot", a.caller->bodies[0], b.body);
-    CHANGE(NLCheckedFragment *, "same-ID-foreign-BODY", a.caller->bodies[0],
-           foreign.body);
-    CHANGE(const NLSource *, "source", a.body->source, foreign.body->source);
-    CHANGE(NLFunctionBody *, "plan", a.body->body_owner,
-           foreign.body->body_owner);
-    CHANGE(struct NLLinearBreakProof *, "cross-current-record",
-           a.body->linear_breaks, b.body->linear_breaks);
-    NLSemanticContext *post = (NLSemanticContext *)a.current.post_world;
-    CHANGE(NLValueFactId, "postcurrent",
-           post->places[a.current.child - 1].current_fact,
-           post->places[a.current.child - 1].current_fact + 1);
-    NLControlExitView *edge =
-        (NLControlExitView *)nl_control_exit_view(a.current.breaking->exits, 0);
-    const NLControlExitView *other_edge =
-        nl_control_exit_view(b.current.breaking->exits, 0);
-    CHANGE(const NLControlTarget *, "cross-Break-target", edge->target,
-           other_edge->target);
-    NLCheckedFragment *arm = (NLCheckedFragment *)a.current.breaking;
-    CHANGE(NLValueId, "cross-old-result",
-           arm->nodes[a.current.break_value - 1].results[0].value,
-           b.current.result.value);
-    NLCheckedNodeView *tail =
-        &a.body->nodes[a.body->nodes[a.body->root - 1].tail - 1];
-    CHANGE(NLValueId, "cross-normal-tail", tail->results[0].value,
-           b.copy.result.value);
-    CHANGE(NLValueId, "cross-call-result",
-           a.caller->nodes[a.call - 1].results[0].value, b.copy.result.value);
-    const size_t fn = a.caller->nodes[a.call - 1].function;
-    CHANGE(NLTypeId, "stale-signature", p->context->functions[fn - 1].result,
-           nl_semantic_unit_type(p->context));
+        CHANGE(NLCheckedNodeId, "cross-call-slot", a.caller->body_calls[slot],
+               b.call);
+        CHANGE(NLCheckedFragment *, "cross-BODY-slot", a.caller->bodies[slot],
+               b.body);
+        CHANGE(NLCheckedFragment *, "same-ID-foreign-BODY",
+               a.caller->bodies[slot], foreign.body);
+        CHANGE(const NLSource *, "source", a.body->source,
+               foreign.body->source);
+        CHANGE(NLFunctionBody *, "plan", a.body->body_owner,
+               foreign.body->body_owner);
+        CHANGE(struct NLLinearBreakProof *, "cross-current-record",
+               a.body->linear_breaks, b.body->linear_breaks);
+        NLSemanticContext *post = (NLSemanticContext *)a.current.post_world;
+        CHANGE(NLValueFactId, "postcurrent",
+               post->places[a.current.child - 1].current_fact,
+               post->places[a.current.child - 1].current_fact + 1);
+        NLControlExitView *edge = (NLControlExitView *)nl_control_exit_view(
+            a.current.breaking->exits, 0);
+        const NLControlExitView *other_edge =
+            nl_control_exit_view(b.current.breaking->exits, 0);
+        CHANGE(const NLControlTarget *, "cross-Break-target", edge->target,
+               other_edge->target);
+        NLCheckedFragment *arm = (NLCheckedFragment *)a.current.breaking;
+        CHANGE(NLValueId, "cross-old-result",
+               arm->nodes[a.current.break_value - 1].results[0].value,
+               b.current.result.value);
+        NLCheckedNodeView *tail =
+            &a.body->nodes[a.body->nodes[a.body->root - 1].tail - 1];
+        CHANGE(NLValueId, "cross-normal-tail", tail->results[0].value,
+               b.copy.result.value);
+        CHANGE(NLValueId, "cross-call-result",
+               a.caller->nodes[a.call - 1].results[0].value,
+               b.copy.result.value);
+        const size_t fn = a.caller->nodes[a.call - 1].function;
+        CHANGE(NLTypeId, "stale-signature",
+               p->context->functions[fn - 1].result,
+               nl_semantic_unit_type(p->context));
+        NLCheckedFragment *iteration = (NLCheckedFragment *)a.current.iteration;
+        NLScopeId loan = 0;
+        for (size_t i = 0; i < iteration->count; ++i)
+            if (iteration->nodes[i].kind == NL_CHECKED_LOAN_HEADER)
+                loan = iteration->nodes[i].loan.scope;
+        assert(loan);
+        CHANGE(
+            bool, "loan-reopened",
+            ((NLSemanticContext *)iteration->context)->scopes[loan - 1].active,
+            true);
 #undef CHANGE
+    }
     p_dispose(&other);
     puts("two actual witnesses: cross-call/foreign/stale rejection + restore "
          "PASS");
