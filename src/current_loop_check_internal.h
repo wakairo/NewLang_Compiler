@@ -392,8 +392,9 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
                                  CurrentSource *out)
 {
     if (s->data.loop.count != 1 || c->loop || c->in_source_loan ||
-        c->in_match_arm || c->capture_copy_body || c->allocated_slice ||
-        c->artifact->if_parent || c->artifact->node_join_parent)
+        c->in_match_arm || (c->capture_copy_body && !current_copy_callee(c)) ||
+        c->allocated_slice || c->artifact->if_parent ||
+        c->artifact->node_join_parent)
         return false;
     for (size_t i = 0; i < c->artifact->count; ++i)
         if (c->artifact->nodes[i].kind == NL_CHECKED_LOOP)
@@ -506,6 +507,10 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
         lhs->kind != NL_SYNTAX_EXPR_NAME ||
         !stutter_name(c, lhs->data.name, p->data.binding.name) || !rhs ||
         rhs->kind != NL_SYNTAX_USIZE_LITERAL)
+        return false;
+    if (c->capture_copy_body &&
+        (second_field || scalar || terminal_scalar || !terminal_old ||
+         init->kind != NL_SYNTAX_USIZE_LITERAL))
         return false;
     *out = (CurrentSource){.parameter = s->data.loop.parameters,
                            .conditional = b->data.block.tail,
@@ -2189,8 +2194,9 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                 refs[i].node != s->returns[i].ref.node)
                 return bad;
     }
+    const NLCheckedFragment *call_owner = linear_call_owner(p);
     const NLCheckedNodeView *n = nl_checked_node_view(f, p->loop),
-                            *call = nl_checked_node_view(p->root, p->call);
+                            *call = nl_checked_node_view(call_owner, p->call);
     const NLSemanticContext *e = nl_control_state_context(s->entry),
                             *h = nl_control_state_context(s->header);
     size_t initial = 0;
@@ -2200,7 +2206,7 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         n->result_count != 1 || n->results[0].value != p->result.value ||
         n->results[0].type != p->result.type || p->target != s->target ||
         call->function != p->function || call->argument_count ||
-        nl_checked_call_body(p->root, p->call) != f ||
+        nl_checked_call_body(call_owner, p->call) != f ||
         !current_copy_origin(f, f->context, s->initial_node, 0, true, 2,
                              &initial) ||
         initial != s->initial ||
@@ -2443,7 +2449,8 @@ static NLCheckedNodeId source_current_loop(Check *check,
             nl_checked_if_arm(s->graph, s->conditional, 1);
         if (!host(check,
                   retain_current_break(check, &normal, id, breaking, NULL,
-                                       s->terminal_call),
+                                       s->terminal_call,
+                                       current_copy_callee(check)),
                   syntax->span))
             id = 0;
         /* Even a later failure belongs to the enclosing transaction. */
@@ -2454,6 +2461,10 @@ static NLCheckedNodeId source_current_loop(Check *check,
                 s = NULL;
                 break;
             }
+        if (id && current_copy_callee(check) &&
+            !host(check, nl_copy_body_current(check->artifact, id),
+                  syntax->span))
+            id = 0;
     } else
         id = 0;
 normal_cleanup:

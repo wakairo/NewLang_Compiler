@@ -1,0 +1,21 @@
+{
+  "baseline": "4ed8d5f585f4bbd3f586f46809552a7003ef9429",
+  "canonical": "Draft17.35",
+  "predictions": {
+    "A-callee-local.nl": "SOURCE/definition/actual CHECK0, exact program/main/inner/callee custody; callee current+owner0 and public Copy validator0; result dependency-free actual unknown old-u8, index0; no guest/C17 implementation",
+    "B-index1.nl": "same bounded contract with different nominal/callee spelling, field index1, guard limit3, initial41/sibling157, iteration107 and terminal239; no guest",
+    "N-type.nl": "definition semantic P3-TYPE-MISMATCH; no entry/context publication",
+    "N-ended-ref.nl": "definition P8-EXIT-DEPENDENCY; no loan escape"
+  },
+  "validator_negatives": "exact call/body/source/plan, foreign same-ID owner, loop target/old/postcurrent/loan scope, normal tail and call result substitutions rejected; observation historical GET may succeed; after every restoration original success",
+  "OOM": "CHECK up to8 selected including observed retention/seal boundaries, owner/current up to8, Copy replay up to8; status4 on real allocation failure, entry/view/output unchanged, context+array+plan ownership rollback and retry; no exhaustive claim",
+  "scope": "new ability guest0; src/main.c/public API/ABI unchanged; remote/PR/Actions/CI0; no new issuer/independent proof; F/R unused",
+  "budgets": {
+    "candidates_max": 3,
+    "positives_max": 2,
+    "C17_diagnostic_max": 2,
+    "guest": 0,
+    "focused_sets_per_candidate_per_compiler": 1
+  },
+  "disclosure": "full local payload only, prior automatic approval rejection not bypassed"
+}
