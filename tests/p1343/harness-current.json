@@ -1,0 +1,8 @@
+{
+  "original_candidate": "bb53629a5025ab4cd78c84ecaba415cdd22d657d",
+  "first_stderr_sha256": "3d9414ae79a96a9dfa93ee0e25510831883f6dbe05478a729ce5f98f9df39686",
+  "classification": "new harness inherited literal node Known-flag assumption from P1339; actual CHECK/current/Copy succeeded before assert",
+  "prospective_check": "exact field-read source via actual Copy binding, matching actual valueID and fresh formal package, plain dependency; numeric value checked if semantically Known; runtime expected137/103 unchanged",
+  "original_oracle_unchanged": true,
+  "production_change": false
+}

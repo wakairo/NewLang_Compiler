@@ -1,0 +1,110 @@
+{
+  "OOM": "fresh allocation census, at most8 selected CHECK allocation points per A/B (init/retention/seal/end included); copy-validator count<=8 all observed points; true fired/out-of-memory/entryNULL; context8arrays+shared plan owner rollback; retry; emitted output write/flush/selected alloc no-clobber inode/mtime/bytes retry",
+  "P1342_original_FIRST_preserved": "506c0a3dca864e2e97dcd4c595c424c9171a78144318efff3609db92b7484d57",
+  "STOP": "new public issuer/secondproof/source law/API/ABI/unsafe or beyond scope/budget; prior PR material finding priority",
+  "Stage_A": "definition/actual CHECK0; custody root->main->exact fold BODY; caller original and children distinct from callee; readonly field Copy actual->fresh formal; entry/header/continue/break/return caller unchanged; current owner/current/Copy0; old/tail/call result unknown plain u8; all loans closed; actual named original current/sibling read; foreign/stale/wrong root/child/current/source/call/formal and dependency refusal + restore",
+  "Stage_B": "only after A: GCC/Clang O0/O2 raw8 + passive8, guest sanitizers4, reserve4, maximum24. Same caller pointer remains live across call, callee different live address, returned old and caller store source are actual runtime values; never dereference expired callee",
+  "baseline": "b193ece0c30f2c5a46a23915375c4e9f1debd655",
+  "budgets": {
+    "guest_max": 24,
+    "host_max": 3,
+    "local_fixed_max": 4,
+    "remote_until_main_identity_postmerge6": 0
+  },
+  "canonical": "Draft17.35",
+  "canonical_main": "5cd4a2ecf2a95725cde6aab13b46e46c53bd527d",
+  "issue": 1343,
+  "positive": {
+    "A-caller-live.nl": {
+      "actual_callee_old": 137,
+      "actual_caller_old": 61,
+      "backedges": 2,
+      "callee_index": 0,
+      "callee_initial": [
+        29,
+        173
+      ],
+      "callee_post": [
+        229,
+        173
+      ],
+      "caller_initial": [
+        61,
+        137
+      ],
+      "caller_post": [
+        137,
+        137
+      ],
+      "caller_write_index": 0,
+      "input": 137,
+      "input_field": 1,
+      "terminal_new": 229
+    },
+    "B-index1.nl": {
+      "actual_callee_old": 103,
+      "actual_caller_old": 47,
+      "backedges": 3,
+      "callee_index": 1,
+      "callee_initial": [
+        157,
+        37
+      ],
+      "callee_post": [
+        157,
+        211
+      ],
+      "caller_initial": [
+        103,
+        47
+      ],
+      "caller_post": [
+        103,
+        103
+      ],
+      "caller_write_index": 1,
+      "input": 103,
+      "input_field": 0,
+      "terminal_new": 211
+    }
+  },
+  "release": "C608",
+  "semantic_negative": {
+    "N-ended-ref.nl": "NL_CHECK_SEMANTIC_ERROR/P8-EXIT-DEPENDENCY no entry",
+    "N-extra-caller.nl": "lawful outside finite one-caller-original profile: precision/no entry",
+    "N-two-input-calls.nl": "lawful outside one readonly invocation profile: precision/no entry",
+    "N-wrong-argument.nl": "NL_CHECK_SEMANTIC_ERROR/P3-TYPE-MISMATCH no entry"
+  },
+  "sources": {
+    "A-caller-live.nl": {
+      "bytes": 1010,
+      "sha256": "c38806d7ef812ab56446fd2d290d959e16e235d944eb08402c3b8e821dafbbc6",
+      "source": "struct Cell { datum:u8, stamp:u8 }\nfn fold(incoming:u8) -> u8 {\n    let scratch = Cell { datum:u8(29), stamp:u8(173) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(2)) {\n            let previous = loan_write(scratch@datum) { |slot|\n                replace(slot,incoming)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(scratch@datum) { |slot|\n                replace(slot,u8(229))\n            };\n            break old;\n        }\n    };\n    let current = scratch@datum;\n    let sibling = scratch@stamp;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn main() -> unit {\n    let original = Cell { datum:u8(61), stamp:u8(137) };\n    let incoming = original@stamp;\n    let returned = fold(incoming);\n    let old_caller = loan_write(original@datum) { |slot|\n        replace(slot,returned)\n    };\n    let current = original@datum;\n    let sibling = original@stamp;\n    old_caller;\n    current;\n    sibling;\n    unit\n}\n"
+    },
+    "B-index1.nl": {
+      "bytes": 1010,
+      "sha256": "a952d3dcfbfdb0e82df6676ec3c21701750c295900200973daefefa5e70f0eb7",
+      "source": "struct Cell { datum:u8, stamp:u8 }\nfn fold(incoming:u8) -> u8 {\n    let scratch = Cell { datum:u8(157), stamp:u8(37) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(3)) {\n            let previous = loan_write(scratch@stamp) { |slot|\n                replace(slot,incoming)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(scratch@stamp) { |slot|\n                replace(slot,u8(211))\n            };\n            break old;\n        }\n    };\n    let current = scratch@stamp;\n    let sibling = scratch@datum;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn main() -> unit {\n    let original = Cell { datum:u8(103), stamp:u8(47) };\n    let incoming = original@datum;\n    let returned = fold(incoming);\n    let old_caller = loan_write(original@stamp) { |slot|\n        replace(slot,returned)\n    };\n    let current = original@stamp;\n    let sibling = original@datum;\n    old_caller;\n    current;\n    sibling;\n    unit\n}\n"
+    },
+    "N-ended-ref.nl": {
+      "bytes": 1085,
+      "sha256": "a782159d03e8afe1953995050d0d8d2eecaea29bbac8ea093051db5d8b0cf69b",
+      "source": "struct Cell { datum:u8, stamp:u8 }\nfn fold(incoming:u8) -> u8 {\n    let scratch = Cell { datum:u8(29), stamp:u8(173) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(2)) {\n            let previous = loan_write(scratch@datum) { |slot|\n                replace(slot,incoming)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(scratch@datum) { |slot|\n                replace(slot,u8(229))\n            };\n            break old;\n        }\n    };\n    let current = scratch@datum;\n    let sibling = scratch@stamp;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn main() -> unit {\n    let original = Cell { datum:u8(61), stamp:u8(137) };\n    let escaped = loan_write(original@datum) { |slot| slot };\n    escaped;\n    let incoming = original@stamp;\n    let returned = fold(incoming);\n    let old_caller = loan_write(original@datum) { |slot|\n        replace(slot,returned)\n    };\n    let current = original@datum;\n    let sibling = original@stamp;\n    old_caller;\n    current;\n    sibling;\n    unit\n}\n"
+    },
+    "N-extra-caller.nl": {
+      "bytes": 1074,
+      "sha256": "ce1d7cbf286f76356b41b43301e50c4b860f77e25322bff87d9af53c6f0f1ac1",
+      "source": "struct Cell { datum:u8, stamp:u8 }\nfn fold(incoming:u8) -> u8 {\n    let scratch = Cell { datum:u8(29), stamp:u8(173) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(2)) {\n            let previous = loan_write(scratch@datum) { |slot|\n                replace(slot,incoming)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(scratch@datum) { |slot|\n                replace(slot,u8(229))\n            };\n            break old;\n        }\n    };\n    let current = scratch@datum;\n    let sibling = scratch@stamp;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn main() -> unit {\n    let original = Cell { datum:u8(61), stamp:u8(137) };\n    let extra = Cell { datum:u8(17), stamp:u8(83) };\n    extra;\n    let incoming = original@stamp;\n    let returned = fold(incoming);\n    let old_caller = loan_write(original@datum) { |slot|\n        replace(slot,returned)\n    };\n    let current = original@datum;\n    let sibling = original@stamp;\n    old_caller;\n    current;\n    sibling;\n    unit\n}\n"
+    },
+    "N-two-input-calls.nl": {
+      "bytes": 1057,
+      "sha256": "5bc1d444b21b609589998c1783d79204e983ac0446312fc2818c0e6c15138cfe",
+      "source": "struct Cell { datum:u8, stamp:u8 }\nfn fold(incoming:u8) -> u8 {\n    let scratch = Cell { datum:u8(29), stamp:u8(173) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(2)) {\n            let previous = loan_write(scratch@datum) { |slot|\n                replace(slot,incoming)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(scratch@datum) { |slot|\n                replace(slot,u8(229))\n            };\n            break old;\n        }\n    };\n    let current = scratch@datum;\n    let sibling = scratch@stamp;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn main() -> unit {\n    let original = Cell { datum:u8(61), stamp:u8(137) };\n    let incoming = original@stamp;\n    let returned = fold(incoming);\n    let another = fold(incoming);\n    another;\n    let old_caller = loan_write(original@datum) { |slot|\n        replace(slot,returned)\n    };\n    let current = original@datum;\n    let sibling = original@stamp;\n    old_caller;\n    current;\n    sibling;\n    unit\n}\n"
+    },
+    "N-wrong-argument.nl": {
+      "bytes": 1012,
+      "sha256": "e25e27cf346f461e6d4da24c801ec81030f3715e870d40137265da8f22d95046",
+      "source": "struct Cell { datum:u8, stamp:u8 }\nfn fold(incoming:u8) -> u8 {\n    let scratch = Cell { datum:u8(29), stamp:u8(173) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(2)) {\n            let previous = loan_write(scratch@datum) { |slot|\n                replace(slot,incoming)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(scratch@datum) { |slot|\n                replace(slot,u8(229))\n            };\n            break old;\n        }\n    };\n    let current = scratch@datum;\n    let sibling = scratch@stamp;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn main() -> unit {\n    let original = Cell { datum:u8(61), stamp:u8(137) };\n    let incoming = original@stamp;\n    let returned = fold(usize(137));\n    let old_caller = loan_write(original@datum) { |slot|\n        replace(slot,returned)\n    };\n    let current = original@datum;\n    let sibling = original@stamp;\n    old_caller;\n    current;\n    sibling;\n    unit\n}\n"
+    }
+  }
+}
