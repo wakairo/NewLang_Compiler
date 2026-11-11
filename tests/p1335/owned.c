@@ -3,8 +3,8 @@
 #include <errno.h>
 
 static bool armed, fired;
-static size_t events, ordinal, retained, seals[3], seal_count, init_at[2],
-    init_count, retain_at[2], retain_count;
+static size_t events, ordinal, seals[3], seal_count, init_at[2], init_count,
+    retain_at[2], retain_count;
 void *__real_malloc(size_t);
 void *__real_calloc(size_t, size_t);
 void *__real_realloc(void *, size_t);
@@ -36,7 +36,6 @@ NLCheckStatus __wrap_nl_copy_body_current(NLCheckedFragment *f,
                                           NLCheckedNodeId id)
 {
     if (armed && !ordinal) {
-        retained = events;
         if (retain_count < 2)
             retain_at[retain_count++] = events;
     }
