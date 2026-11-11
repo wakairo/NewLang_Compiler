@@ -2301,3 +2301,5 @@ endif()
 include(tests/p1335/CMakeLists.txt)
 
 include(tests/p1339/CMakeLists.txt)
+
+include(tests/p1343/CMakeLists.txt)

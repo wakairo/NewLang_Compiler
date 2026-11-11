@@ -203,6 +203,11 @@ typedef struct NLCurrentLoopProof {
     NLSymbolId base, phase;
     NLSymbolId readonly_parameter;
     NLPlaceId root, child;
+    /* One caller-owned original survives this callee's current cycle. These
+     * identify members of the existing E/header/exit worlds, not a new proof
+     * or authority. Every non-target frame member remains exact below. */
+    NLPlaceId preserved_root;
+    NLSymbolId preserved_base;
     NLPlaceId second_child;
     size_t second_index;
     bool paired;
@@ -537,8 +542,10 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
  * bits could launder. Check EVERY surviving package, not just the child.
  * Ended lexical loan packages may remain as history, never as a blocker.
  */
-static bool current_packages(const NLSemanticContext *c, NLPlaceId root)
+static bool current_packages(const NLSemanticContext *c,
+                             const NLCurrentLoopProof *s)
 {
+    const NLPlaceId root = s->root;
     if (!c || !root || root > c->place_count || c->domain_count ||
         c->region_count || c->occurrence_count ||
         nl_fixed_validate(c) != NL_CHECK_OK)
@@ -546,6 +553,28 @@ static bool current_packages(const NLSemanticContext *c, NLPlaceId root)
     const NLValueId aggregate = c->places[root - 1].current_value;
     NLSemanticPlaceView trio[3];
     if (!nl_copy_trio(c, root, trio))
+        return false;
+    NLValueId preserved = 0;
+    if (s->preserved_root) {
+        NLSemanticPlaceView frame[3];
+        if (!s->readonly_parameter || s->preserved_root == root ||
+            !s->preserved_base || s->preserved_base > c->binding_count ||
+            !nl_copy_trio(c, s->preserved_root, frame) ||
+            frame[0].type != trio[0].type)
+            return false;
+        const NLSemanticBindingView binding =
+            c->bindings[s->preserved_base - 1].view;
+        if (binding.place != s->preserved_root ||
+            binding.value != frame[0].current_value ||
+            binding.type != frame[0].type ||
+            binding.availability != NL_AVAILABLE)
+            return false;
+        for (size_t i = 0; i < 2; ++i)
+            for (size_t j = 0; j < 2; ++j)
+                if (frame[0].fixed_fields[i] == trio[0].fixed_fields[j])
+                    return false;
+        preserved = frame[0].current_value;
+    } else if (s->preserved_base)
         return false;
     for (size_t i = 0; i < c->value_count; ++i) {
         const NLSemanticValueView v = c->values[i];
@@ -555,7 +584,7 @@ static bool current_packages(const NLSemanticContext *c, NLPlaceId root)
             v.dependencies != NL_DEPENDENCY_FREE || v.value_dependency_count ||
             v.reference_count || v.reference.place)
             return false;
-        if (i + 1 == aggregate)
+        if (i + 1 == aggregate || i + 1 == preserved)
             continue;
         if (!flat_copy(c, v.type) ||
             c->types[v.type - 1].view.kind == NL_TYPE_REF)
@@ -567,7 +596,7 @@ static bool current_frame(const NLCurrentLoopProof *s,
                           const NLSemanticContext *a,
                           const NLSemanticContext *b)
 {
-    if (!current_packages(a, s->root) || !current_packages(b, s->root) ||
+    if (!current_packages(a, s) || !current_packages(b, s) ||
         a->binding_count != b->binding_count ||
         a->place_count != b->place_count || a->scope_count != b->scope_count ||
         !nl_copy_same_types(a, b) || a->function_count != b->function_count ||
@@ -751,7 +780,7 @@ static bool current_pure_prefix(const NLCurrentLoopProof *s,
                                 const NLSemanticContext *b)
 {
     const NLSemanticContext *a = s->graph->context;
-    if (!current_packages(b, s->root) || !nl_copy_same_types(a, b) ||
+    if (!current_packages(b, s) || !nl_copy_same_types(a, b) ||
         a->function_count != b->function_count ||
         a->binding_count > b->binding_count ||
         a->place_count > b->place_count || a->scope_count > b->scope_count ||
@@ -1634,7 +1663,7 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
         lhs->kind != NL_CHECKED_IDENTIFIER || lhs->symbol != s->phase ||
         !stutter_literal(rhs, type, s->limit) || rhs->next_argument ||
         !stutter_free_quantity(g->context, lhs->results[0].value, type) ||
-        g->count != 5 || !current_packages(g->context, s->root) ||
+        g->count != 5 || !current_packages(g->context, s) ||
         nl_control_exits_count(g->exits) != 2)
         return bad;
     for (size_t i = 0; i < 2; ++i) {
@@ -2296,6 +2325,48 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
     return NL_CHECK_OK;
 }
 
+/* Ordinary scalar substitution may execute with one already-live caller T.
+ * Only a source-owned lexical root from before this invocation is selected;
+ * callee storage/formals and further caller aggregates cannot become frames.
+ * The same current_frame relation subsequently compares every member across
+ * E, H, Continue, BREAK and the normal post. No loan crosses this boundary. */
+static bool current_preserve_caller(const Check *check, NLCurrentLoopProof *s)
+{
+    if (!s->readonly_parameter)
+        return true;
+    const NLSemanticContext *c = check->context;
+    if (check->function_place_floor > c->place_count ||
+        check->function_binding_floor > c->binding_count ||
+        check->function_scope_floor > c->scope_count)
+        return false;
+    for (size_t i = 0; i < check->function_scope_floor; ++i)
+        if (c->scopes[i].active)
+            return false;
+    for (size_t i = 0; i < check->function_place_floor; ++i) {
+        const NLSemanticPlaceView p = c->places[i];
+        if (!p.live || !p.independent_root || !p.fixed_field_count)
+            continue;
+        NLSemanticPlaceView trio[3];
+        if (s->preserved_root || i + 1 == s->root ||
+            !nl_copy_trio(c, i + 1, trio) ||
+            p.type != c->places[s->root - 1].type)
+            return false;
+        s->preserved_root = i + 1;
+        for (size_t j = 0; j < check->function_binding_floor; ++j) {
+            const NLBindingEntry b = c->bindings[j];
+            if (!b.hidden && b.view.availability == NL_AVAILABLE &&
+                b.view.place == s->preserved_root) {
+                if (s->preserved_base)
+                    return false;
+                s->preserved_base = j + 1;
+            }
+        }
+        if (!s->preserved_base)
+            return false;
+    }
+    return true;
+}
+
 static NLCheckedNodeId source_current_loop(Check *check,
                                            const NLSyntaxView *syntax,
                                            const CurrentSource *source)
@@ -2356,7 +2427,8 @@ static NLCheckedNodeId source_current_loop(Check *check,
         }
         s->readonly_parameter = symbol;
     }
-    if (!current_packages(check->context, s->root) ||
+    if (!current_preserve_caller(check, s) ||
+        !current_packages(check->context, s) ||
         !check->context->types[field.nominal - 1].view.is_copy ||
         check->context->places[s->root - 1].fixed_field_count != 2) {
         loop_precision(check, syntax->span);
