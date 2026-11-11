@@ -235,6 +235,15 @@ typedef struct NLCurrentLoopProof {
     CurrentCapturedCall capture;
 } NLCurrentLoopProof;
 
+static bool current_copy_cycle(const NLLinearBreakProof *p)
+{
+    const NLCurrentLoopProof *s = p->current_cycle;
+    /* carry_source is the genuine Continue(phase+step) expression, not an
+     * extra caller capability. Its closure remains checked by the relation. */
+    return s && s->terminal_old && !s->paired && !s->scalar && !s->helper &&
+           !s->terminal_call && !s->capture.call;
+}
+
 static size_t current_graph_count(const NLCurrentLoopProof *s)
 {
     return s->terminal_call ? CURRENT_GRAPH_LIMIT

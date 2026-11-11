@@ -2297,3 +2297,5 @@ if(BUILD_TESTING)
         set_tests_properties(p1193_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
 endif()
+
+include(tests/p1335/CMakeLists.txt)

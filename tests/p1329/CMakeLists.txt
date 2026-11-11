@@ -19,8 +19,7 @@ add_test(NAME p1329_semantic_negative.unit COMMAND p1329_current_copy negative
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1329/N-ended-ref.nl")
 add_test(NAME p1329_current_copy_oom.unit COMMAND p1329_current_copy oom
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1329/A-callee-local.nl")
-add_test(NAME p1329_scope_precision.unit COMMAND p1329_current_copy precision
-    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1329/N-two-calls.nl"
+add_test(NAME p1329_scope_precision.unit COMMAND $<TARGET_FILE:p1335_two_calls> precision
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1329/N-two-originals.nl")
 set_tests_properties(p1329_A-callee-local_owned.unit p1329_B-index1_owned.unit
     p1329_semantic_negative.unit p1329_current_copy_oom.unit

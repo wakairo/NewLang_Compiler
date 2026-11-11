@@ -5780,6 +5780,36 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *);
 static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *,
                                             const NLCheckedFragment *,
                                             NLLinearBreakView *);
+static bool current_copy_cycle(const NLLinearBreakProof *);
+
+static bool current_old_tail(const NLCheckedFragment *f, NLCheckedNodeId loop)
+{
+    const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
+    if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates)
+        return false;
+    NLCheckedNodeId id = root->tail;
+    for (size_t step = 0; step < f->count; ++step) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        if (!n)
+            return false;
+        if (id == loop)
+            return n->kind == NL_CHECKED_LOOP;
+        if (n->kind != NL_CHECKED_IDENTIFIER || n->value_use != NL_VALUE_COPIED)
+            return false;
+        NLCheckedNodeId binding = 0;
+        for (size_t i = 0; i < f->count; ++i)
+            if (f->nodes[i].kind == NL_CHECKED_BINDING &&
+                f->nodes[i].symbol == n->symbol) {
+                if (binding)
+                    return false;
+                binding = f->nodes[i].initializer;
+            }
+        if (!binding)
+            return false;
+        id = binding;
+    }
+    return false;
+}
 
 static void destroy_linear_breaks(NLCheckedFragment *f)
 {
@@ -5803,6 +5833,80 @@ static void destroy_linear_breaks(NLCheckedFragment *f)
     f->linear_breaks = NULL;
 }
 
+/* Producer-only prefix: the preceding actual invocation has returned a
+ * dependency-free Copy and ended every local loan/original. The enclosing
+ * caller is still being built, so no final current validator is called here.
+ * Its real custody result seal and per-child records are already present. */
+static bool current_copy_prefix(const Check *c)
+{
+    const NLCheckedFragment *parent = c->caller->artifact;
+    if (!parent->body_count)
+        return true;
+    if (parent->body_count != 1 || !parent->bodies || !parent->body_calls)
+        return false;
+    const NLCheckedNodeId id = parent->body_calls[0];
+    const NLCheckedFragment *f = nl_checked_call_body(parent, id);
+    const NLCheckedNodeView *call = nl_checked_node_view(parent, id);
+    if (!f || f != parent->bodies[0] || id == c->body_call || !call ||
+        !nl_h_custody_result_valid(parent, id) ||
+        call->kind != NL_CHECKED_REGISTERED_CALL || !call->body_backed ||
+        call->function != c->body_function || call->argument_count ||
+        call->first_argument || call->terminates || call->result_count != 1)
+        return false;
+    const NLCopyBodyProof *copy = f->copy_body;
+    const NLLinearBreakProof *p = f->linear_breaks;
+    const NLSemanticContext *w = c->context;
+    const NLTypeId u8 = nl_semantic_core_type(w, NL_TYPE_U8);
+    if (!copy || !copy->sealed || copy->formal_write || copy->owner != f ||
+        copy->caller != parent || copy->call != id ||
+        copy->view.function != c->body_function || !copy->exit ||
+        !copy->first || copy->first->view.kind != NL_COPY_BODY_INITIALIZE ||
+        !p || p->next || !p->copy_callee || !p->current_cycle ||
+        p->owner != f || p->caller != parent || p->call != id ||
+        p->root != c->origin_root || p->outer_call != c->origin_call ||
+        p->loop != copy->current_loop || !current_copy_cycle(p) ||
+        !current_old_tail(f, p->loop) ||
+        f->body_owner != c->artifact->body_owner || call->type != u8 ||
+        copy->view.result.type != u8 ||
+        call->results[0].value != copy->view.result.value ||
+        !nl_copy_plain(w, copy->view.result.value, u8) ||
+        c->function_place_floor > w->place_count ||
+        c->function_binding_floor > w->binding_count ||
+        c->function_scope_floor > w->scope_count)
+        return false;
+    const NLPlaceId original = copy->first->view.field.parent;
+    if (!original || original > c->function_place_floor)
+        return false;
+    const NLPlaceId places[3] = {original, copy->first->post[0].fixed_fields[0],
+                                 copy->first->post[0].fixed_fields[1]};
+    for (size_t i = 0; i < 3; ++i) {
+        if (!places[i] || places[i] > c->function_place_floor)
+            return false;
+        const NLSemanticPlaceView v = w->places[places[i] - 1];
+        if (v.live || v.current_value || v.current_fact ||
+            v.incarnation != copy->first->post[i].incarnation)
+            return false;
+    }
+    for (size_t i = 0; i < c->function_scope_floor; ++i)
+        if (w->scopes[i].active)
+            return false;
+    for (size_t i = 0; i < c->function_place_floor; ++i) {
+        const NLSemanticPlaceView v = w->places[i];
+        if (v.live &&
+            (v.type != u8 || !v.independent_root || v.parent_aggregate ||
+             v.parent_sum || v.governing_domain || v.placement.region ||
+             !nl_copy_plain(w, v.current_value, u8)))
+            return false;
+    }
+    for (size_t i = 0; i < c->function_binding_floor; ++i) {
+        const NLBindingEntry b = w->bindings[i];
+        if (!b.hidden && b.view.availability == NL_AVAILABLE &&
+            (b.view.type != u8 || !nl_copy_plain(w, b.view.value, u8)))
+            return false;
+    }
+    return !w->domain_count && !w->region_count && !w->occurrence_count;
+}
+
 /* Actual main()->inner() only. This reuses the current relation and Copy
  * issuance; it is not permission to capture arbitrary nested control flow. */
 static bool current_copy_callee(const Check *c)
@@ -5811,8 +5915,7 @@ static bool current_copy_callee(const Check *c)
         !c->caller->caller || c->origin_root->function_target ||
         c->caller->caller->artifact != c->origin_root ||
         c->caller->artifact != c->origin_invocation ||
-        c->caller->artifact->body_count || c->caller->function_result != 1 ||
-        !c->body_call ||
+        c->caller->function_result != 1 || !c->body_call ||
         c->function_result != nl_semantic_core_type(c->context, NL_TYPE_U8) ||
         !c->artifact->copy_body || c->artifact->copy_body->formal_write)
         return false;
@@ -5835,14 +5938,58 @@ static bool current_copy_callee(const Check *c)
            outer->body == c->caller->artifact->body_owner && !outer->count &&
            !outer->parameters && outer->result == 1 && !outer->caller_effects &&
            !outer->hidden_dependencies && !outer->owner_receiver &&
-           !outer->owner_producer && !outer->custody_recipient;
+           !outer->owner_producer && !outer->custody_recipient &&
+           current_copy_prefix(c);
+}
+
+/* A bounded completed caller authenticates both exact BODY slots. Each child
+ * retains its own current/Copy record and final seal; a common function plan
+ * is only a further restriction, never a substitute for either witness. */
+static bool linear_copy_calls(const NLLinearBreakProof *p, bool sealed)
+{
+    const NLCheckedFragment *caller = p->caller;
+    if (!caller || !caller->body_count || caller->body_count > 2 ||
+        !caller->bodies || !caller->body_calls)
+        return false;
+    bool found = false;
+    for (size_t i = 0; i < caller->body_count; ++i) {
+        const NLCheckedNodeId id = caller->body_calls[i];
+        const NLCheckedFragment *f = nl_checked_call_body(caller, id);
+        const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
+        if (!f || f != caller->bodies[i] || !call ||
+            !nl_h_custody_result_valid(caller, id) ||
+            call->kind != NL_CHECKED_REGISTERED_CALL || !call->body_backed ||
+            call->function != p->function || call->argument_count ||
+            call->first_argument || call->terminates || call->result_count != 1)
+            return false;
+        const NLLinearBreakProof *q = f->linear_breaks;
+        const NLCopyBodyProof *copy = f->copy_body;
+        if (!q || q->next || !q->copy_callee || !q->current_cycle ||
+            q->owner != f || q->root != p->root || q->caller != caller ||
+            q->outer_call != p->outer_call || q->call != id ||
+            q->function != p->function || q->plan != p->plan ||
+            (sealed && !q->sealed) || !copy || !copy->sealed ||
+            copy->owner != f || copy->caller != caller || copy->call != id ||
+            copy->view.function != p->function ||
+            copy->current_loop != q->loop ||
+            copy->view.result.type != call->type ||
+            copy->view.result.value != call->results[0].value ||
+            (caller->body_count == 2 &&
+             (!current_copy_cycle(q) || !current_old_tail(f, q->loop))))
+            return false;
+        for (size_t j = 0; j < i; ++j)
+            if (caller->body_calls[j] == id || caller->bodies[j] == f)
+                return false;
+        found |= q == p && f == p->owner && id == p->call;
+    }
+    return found;
 }
 
 static const NLCheckedFragment *linear_call_owner(const NLLinearBreakProof *p)
 {
     if (!p->copy_callee)
         return p->root;
-    if (!p->caller || p->caller == p->root || p->caller->body_count != 1 ||
+    if (!p->caller || p->caller == p->root || !linear_copy_calls(p, true) ||
         !nl_h_custody_result_valid(p->root, p->outer_call) ||
         nl_checked_call_body(p->root, p->outer_call) != p->caller ||
         !nl_h_custody_result_valid(p->caller, p->call))
@@ -5994,7 +6141,7 @@ static NLCheckStatus seal_linear_tree(NLCheckedFragment *root,
     if (depth > NL_SEMANTIC_MAX_DEPTH)
         return NL_CHECK_RESOURCE_LIMIT;
     for (NLLinearBreakProof *p = f->linear_breaks; p; p = p->next) {
-        if (p->copy_callee && p->caller->body_count != 1)
+        if (p->copy_callee && !linear_copy_calls(p, false))
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         p->final_storage = *final;
         p->body_storage = *p->body->context;
