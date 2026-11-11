@@ -5811,9 +5811,15 @@ static bool current_copy_callee(const Check *c)
         !c->caller->caller || c->origin_root->function_target ||
         c->caller->caller->artifact != c->origin_root ||
         c->caller->artifact != c->origin_invocation ||
-        c->caller->function_result != 1 || !c->body_call ||
+        c->caller->artifact->body_count || c->caller->function_result != 1 ||
+        !c->body_call ||
         c->function_result != nl_semantic_core_type(c->context, NL_TYPE_U8) ||
         !c->artifact->copy_body || c->artifact->copy_body->formal_write)
+        return false;
+    const NLCopyBodyProof *copy = c->artifact->copy_body;
+    if (copy->view.event_count != 1 || !copy->first ||
+        copy->first != copy->last ||
+        copy->first->view.kind != NL_COPY_BODY_INITIALIZE)
         return false;
     const NLSemanticContext *w = c->context;
     if (!w->functions || !c->body_function ||
@@ -5836,7 +5842,7 @@ static const NLCheckedFragment *linear_call_owner(const NLLinearBreakProof *p)
 {
     if (!p->copy_callee)
         return p->root;
-    if (!p->caller || p->caller == p->root ||
+    if (!p->caller || p->caller == p->root || p->caller->body_count != 1 ||
         !nl_h_custody_result_valid(p->root, p->outer_call) ||
         nl_checked_call_body(p->root, p->outer_call) != p->caller ||
         !nl_h_custody_result_valid(p->caller, p->call))
@@ -5988,6 +5994,8 @@ static NLCheckStatus seal_linear_tree(NLCheckedFragment *root,
     if (depth > NL_SEMANTIC_MAX_DEPTH)
         return NL_CHECK_RESOURCE_LIMIT;
     for (NLLinearBreakProof *p = f->linear_breaks; p; p = p->next) {
+        if (p->copy_callee && p->caller->body_count != 1)
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         p->final_storage = *final;
         p->body_storage = *p->body->context;
         p->parent_origin = f->nodes;

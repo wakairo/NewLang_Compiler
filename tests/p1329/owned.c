@@ -405,6 +405,18 @@ static void semantic_negative(const char *path, const char *code)
     unchanged(p.context, &before);
     p_dispose(&p);
 }
+static void precision_negative(const char *path)
+{
+    PInput p = {0};
+    p_load(&p, path);
+    Snapshot before = snapshot(p.context);
+    const NLCheckStatus status = p_check(&p);
+    printf("lawful out-of-profile precision status=%d entry=%p\n", status,
+           (void *)p.entry);
+    assert(status == NL_CHECK_ANALYSIS_PRECISION_LIMIT && !p.entry);
+    unchanged(p.context, &before);
+    p_dispose(&p);
+}
 int main(int argc, char **argv)
 {
     setbuf(stdout, NULL);
@@ -419,6 +431,9 @@ int main(int argc, char **argv)
     } else if (argc == 3 &&
                (!strcmp(argv[1], "oom") || !strcmp(argv[1], "validators"))) {
         oom(argv[2], !strcmp(argv[1], "validators"));
+    } else if (argc == 4 && !strcmp(argv[1], "precision")) {
+        precision_negative(argv[2]);
+        precision_negative(argv[3]);
     } else {
         assert(argc == 4 && !strcmp(argv[1], "negative"));
         semantic_negative(argv[2], "P3-TYPE-MISMATCH");

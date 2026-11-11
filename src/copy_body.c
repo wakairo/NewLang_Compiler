@@ -410,6 +410,16 @@ NLCheckStatus nl_copy_body_seal(NLCheckedFragment *f,
     if (!p->exit || p->pending || !f->count ||
         f->count > NL_SEMANTIC_MAX_ENTRIES)
         return NL_CHECK_OK; /* unproved richer body stays backend unsupported */
+    if (p->current_loop) {
+        size_t originals = 0;
+        for (const CopyEvent *e = p->first; e; e = e->next) {
+            originals += e->view.kind == NL_COPY_BODY_INITIALIZE;
+            if (e->view.kind == NL_COPY_BODY_CHANGE)
+                return INVALID;
+        }
+        if (originals != 1)
+            return INVALID;
+    }
     const NLCheckStatus joined = nl_if_call_seal_two_normal(f, c);
     if (joined != NL_CHECK_OK)
         return joined;
@@ -581,6 +591,8 @@ static const NLCheckedNodeView *take(Replay *r, NLCheckedNodeId id)
 static bool modeled(Replay *r, const NLSemanticPlaceView a[3], NLPlaceId root)
 {
     return root && root <= r->proof->exit->place_count && r->model[root].live &&
+           a[0].fixed_fields[0] <= r->proof->exit->place_count &&
+           a[0].fixed_fields[1] <= r->proof->exit->place_count &&
            memcmp(&r->model[root], &a[0], sizeof(a[0])) == 0 &&
            memcmp(&r->model[a[0].fixed_fields[0]], &a[1], sizeof(a[1])) == 0 &&
            memcmp(&r->model[a[0].fixed_fields[1]], &a[2], sizeof(a[2])) == 0;
