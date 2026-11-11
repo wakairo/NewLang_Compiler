@@ -22,16 +22,18 @@ foreach(profile N-wrong-argument N-ended-ref)
     add_test(NAME p1343_${profile}.unit COMMAND p1343_frame negative-semantic
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1343/${profile}.nl" 0)
 endforeach()
-foreach(profile N-extra-caller N-two-input-calls)
+foreach(profile N-extra-caller)
     add_test(NAME p1343_${profile}.unit COMMAND p1343_frame scope
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1343/${profile}.nl" 0)
 endforeach()
+add_test(NAME p1343_two_input_calls_current.unit COMMAND p1347_reuse positive
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1343/N-two-input-calls.nl" 0)
 add_test(NAME p1343_native.integration COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1343/native.py" "$<TARGET_FILE:newlangc>"
     "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_BINARY_DIR}/p1343-native"
     "${NEWLANG_SANITIZER}")
 add_test(NAME p1343_negative_cli_oom.integration COMMAND "${Python3_EXECUTABLE}"
-    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1343/negative.py" "$<TARGET_FILE:newlangc>"
-    "$<TARGET_FILE:p1332_cli_oom>" "${CMAKE_CURRENT_BINARY_DIR}/p1343-negative")
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1347/failure.py" "$<TARGET_FILE:newlangc>"
+    "$<TARGET_FILE:p1332_cli_oom>" "${CMAKE_CURRENT_BINARY_DIR}/p1343-negative" p1343)
 set_tests_properties(p1343_native.integration p1343_negative_cli_oom.integration
     PROPERTIES TIMEOUT 180)

@@ -267,10 +267,10 @@ static void attacks(PInput *p, const char *path, size_t index)
         CHANGE(NLValueId, "cross-actual-Copy",
                a.caller->nodes[cn->first_argument - 1].results[0].value,
                b.copy.result.value);
-        NLFunctionEntry *fn = &p->context->functions[cn->function - 1];
+        NLFunctionEntry *entry = &p->context->functions[cn->function - 1];
         void *short_foreign = malloc(1);
         assert(short_foreign);
-        CHANGE(NLTypeId *, "foreign-short-signature", fn->parameters,
+        CHANGE(NLTypeId *, "foreign-short-signature", entry->parameters,
                short_foreign);
         free(short_foreign);
         CHANGE(NLCheckedNodeId, "cross-call-slot", a.caller->body_calls[slot],
