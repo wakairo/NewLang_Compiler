@@ -11,6 +11,7 @@
  * those facts are captured independently while the original is still live. */
 #include "copy_body_internal.h"
 #include "if_field_internal.h"
+#include "linear_break_internal.h"
 
 /* A retained world address does not freeze its present function table. Check
  * each world's own table and bound before even forming an element pointer. */
@@ -325,6 +326,17 @@ NLCheckStatus nl_copy_body_event(NLCheckedFragment *f, NLCheckedNodeId id,
                ? scopes(e->before, &e->scopes_before, &e->before_count)
                : s;
 }
+NLCheckStatus nl_copy_body_current(NLCheckedFragment *f, NLCheckedNodeId loop)
+{
+    NLCopyBodyProof *p = f->copy_body;
+    const NLCheckedNodeView *n = nl_checked_node_view(f, loop);
+    if (!p || p->sealed || p->formal_write || p->current_loop || !n ||
+        n->kind != NL_CHECKED_LOOP || !f->linear_breaks)
+        return INVALID;
+    p->current_loop = loop;
+    return NL_CHECK_OK;
+}
+
 NLCheckStatus nl_copy_body_exit(NLCheckedFragment *f,
                                 const NLSemanticContext *c, NLCheckedResult r)
 {
@@ -557,6 +569,7 @@ typedef struct {
     size_t events, depth;
     NLTypeId u8;
     NLCheckStatus status;
+    bool current_seen;
 } Replay;
 static const NLCheckedNodeView *take(Replay *r, NLCheckedNodeId id)
 {
@@ -662,6 +675,44 @@ static bool expression(Replay *r, NLCheckedNodeId id,
     if (!n)
         goto done;
     switch (n->kind) {
+    case NL_CHECKED_LOOP: {
+        if (id != r->proof->current_loop || r->current_seen || loan ||
+            r->proof->formal_write)
+            break;
+        NLLinearBreakView v = {0};
+        r->status = nl_linear_break_validate(r->f, id, &v);
+        if (r->status != NL_CHECK_OK)
+            break;
+        NLSemanticPlaceView entry[3], post[3];
+        if (!v.changing_current || !v.terminal_old || v.paired_current ||
+            v.scalar_loop || v.terminal_call || v.incoming_call ||
+            v.incoming_if || v.preloop_call || !scalar(r, id) ||
+            v.result.type != n->results[0].type ||
+            v.result.value != n->results[0].value ||
+            !nl_copy_plain(v.post_world, v.result.value, r->u8) ||
+            !intrinsic(&v.post_world->values[v.result.value - 1],
+                       &r->proof->exit->values[v.result.value - 1]) ||
+            !nl_copy_trio(v.entry_world, v.root, entry) ||
+            !nl_copy_trio(v.post_world, v.root, post) ||
+            !modeled(r, entry, v.root))
+            break;
+        const NLCheckedNodeView *phase = take(r, v.initial_node);
+        const NLTypeId quantity =
+            nl_semantic_core_type(r->proof->exit, NL_TYPE_USIZE);
+        if (!phase || phase->kind != NL_CHECKED_USIZE_LITERAL ||
+            !phase->has_scalar_result || !phase->scalar_result.known ||
+            phase->type != quantity || phase->result_count != 1 ||
+            phase->scalar_result.value != v.initial_phase ||
+            !nl_copy_plain(r->proof->exit, phase->results[0].value, quantity))
+            break;
+        /* The existing cyclic validator owns all iteration/Break effects.
+         * Consume that one relation at the exact ordered prefix, then continue
+         * the ordinary read/Copy/exit replay from its authenticated post. */
+        install(r, v.root, post);
+        r->current_seen = true;
+        ok = true;
+        break;
+    }
     case NL_CHECKED_U8_LITERAL:
         ok = scalar(r, id) && n->has_scalar_result && n->scalar_result.known &&
              n->scalar_result.value <= 255 &&
@@ -1175,8 +1226,8 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
         f->nodes != p->nodes_origin || !p->nodes ||
         p->count > NL_SEMANTIC_MAX_ENTRIES ||
         memcmp(f->nodes, p->nodes, p->count * sizeof(*p->nodes)) ||
-        f->arm_count || f->body_count || p->pending ||
-        p->exit != p->view.live_exit || !p->exit ||
+        f->arm_count != (p->current_loop ? 1u : 0u) || f->body_count ||
+        p->pending || p->exit != p->view.live_exit || !p->exit ||
         p->exit->place_count > NL_SEMANTIC_MAX_ENTRIES ||
         p->exit->binding_count > NL_SEMANTIC_MAX_ENTRIES ||
         p->exit->scope_count != p->scope_count ||
@@ -1224,7 +1275,9 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
             root->results[0].value != p->view.result.value)
             goto done;
     }
-    bool changed = false;
+    if (p->current_loop && !r.current_seen)
+        goto done;
+    bool changed = r.current_seen;
     for (const CopyEvent *e = p->first; e; e = e->next) {
         if (!nl_copy_same_types(e->after, p->exit))
             goto done;

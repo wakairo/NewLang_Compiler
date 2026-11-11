@@ -36,6 +36,7 @@ typedef struct LoopControl {
 typedef struct Check {
     NLCheckedFragment *origin_root, *origin_invocation;
     NLCheckedNodeId origin_call;
+    NLCheckedNodeId body_call;  /* exact immediate call, not the root call */
     const struct Check *caller; /* borrowed synchronous active call chain */
     NLSemanticContext *context;
     NLCheckedFragment *artifact;
@@ -3678,6 +3679,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                   .function_scope_floor = scope_floor,
                   .function_place_floor = place_floor,
                   .body_function = view(caller, call_id)->function};
+    body.body_call = call_id;
     body.custody_recipient_body = function->custody_recipient;
     if (function->custody_recipient) {
         body.custody_origin = view(caller, call_id)->custody_call.origin;
@@ -3959,7 +3961,12 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         !function->caller_effects && !function->hidden_dependencies &&
         !function->owner_receiver && !function->owner_producer &&
         !function->custody_recipient;
-    if ((predicate_result || scalar_h_read) &&
+    bool current_result =
+        body.artifact->copy_body && body.artifact->copy_body->current_loop;
+    for (size_t i = 0; !current_result && i < body.artifact->body_count; ++i)
+        current_result = body.artifact->bodies[i]->copy_body &&
+                         body.artifact->bodies[i]->copy_body->current_loop;
+    if ((predicate_result || scalar_h_read || current_result) &&
         !host(
             &body,
             nl_h_custody_seal_result(caller->artifact, body.artifact, call_id),
@@ -5729,6 +5736,9 @@ static void destroy_current_cycle(struct NLCurrentLoopProof *);
 typedef struct NLLinearBreakProof {
     struct NLLinearBreakProof *next;
     const NLCheckedFragment *owner, *root, *body;
+    const NLCheckedFragment *caller;
+    NLCheckedNodeId outer_call;
+    bool copy_callee;
     const NLSemanticContext *world;
     const NLSource *source;
     NLFunctionBody *plan;
@@ -5793,6 +5803,54 @@ static void destroy_linear_breaks(NLCheckedFragment *f)
     f->linear_breaks = NULL;
 }
 
+/* Actual main()->inner() only. This reuses the current relation and Copy
+ * issuance; it is not permission to capture arbitrary nested control flow. */
+static bool current_copy_callee(const Check *c)
+{
+    if (!c->capture_copy_body || c->definition || !c->caller ||
+        !c->caller->caller || c->origin_root->function_target ||
+        c->caller->caller->artifact != c->origin_root ||
+        c->caller->artifact != c->origin_invocation ||
+        c->caller->function_result != 1 || !c->body_call ||
+        c->function_result != nl_semantic_core_type(c->context, NL_TYPE_U8) ||
+        !c->artifact->copy_body || c->artifact->copy_body->formal_write)
+        return false;
+    const NLSemanticContext *w = c->context;
+    if (!w->functions || !c->body_function ||
+        c->body_function > w->function_count || !c->caller->body_function ||
+        c->caller->body_function > w->function_count)
+        return false;
+    const NLFunctionEntry *fn = &w->functions[c->body_function - 1],
+                          *outer = &w->functions[c->caller->body_function - 1];
+    return fn->body == c->artifact->body_owner && !fn->count &&
+           !fn->parameters && !fn->caller_effects && !fn->hidden_dependencies &&
+           !fn->owner_receiver && !fn->owner_producer &&
+           !fn->custody_recipient &&
+           outer->body == c->caller->artifact->body_owner && !outer->count &&
+           !outer->parameters && outer->result == 1 && !outer->caller_effects &&
+           !outer->hidden_dependencies && !outer->owner_receiver &&
+           !outer->owner_producer && !outer->custody_recipient;
+}
+
+static const NLCheckedFragment *linear_call_owner(const NLLinearBreakProof *p)
+{
+    if (!p->copy_callee)
+        return p->root;
+    if (!p->caller || p->caller == p->root ||
+        !nl_h_custody_result_valid(p->root, p->outer_call) ||
+        nl_checked_call_body(p->root, p->outer_call) != p->caller ||
+        !nl_h_custody_result_valid(p->caller, p->call))
+        return NULL;
+    const NLCheckedNodeView *outer =
+        nl_checked_node_view(p->root, p->outer_call);
+    return outer && outer->kind == NL_CHECKED_REGISTERED_CALL &&
+                   outer->body_backed && !outer->argument_count &&
+                   !outer->first_argument && outer->type == 1 &&
+                   !outer->result_count && !outer->terminates
+               ? p->caller
+               : NULL;
+}
+
 static bool linear_callable(const NLLinearBreakProof *p,
                             const NLSemanticContext *c)
 {
@@ -5800,7 +5858,9 @@ static bool linear_callable(const NLLinearBreakProof *p,
         return false;
     const NLFunctionEntry *fn = &c->functions[p->function - 1];
     return fn->kind == NL_CHECKED_REGISTERED_CALL && fn->body == p->plan &&
-           fn->count == 0 && !fn->parameters && fn->result == 1 &&
+           fn->count == 0 && !fn->parameters &&
+           fn->result ==
+               (p->copy_callee ? nl_semantic_core_type(c, NL_TYPE_U8) : 1) &&
            !fn->caller_effects && !fn->hidden_dependencies &&
            !fn->owner_receiver && !fn->owner_producer &&
            !fn->custody_recipient &&
@@ -5815,17 +5875,20 @@ static NLCheckStatus retain_current_break(Check *check, LoopControl *loop,
                                           NLCheckedNodeId id,
                                           const NLCheckedFragment *body,
                                           struct NLStutterProof *cycle,
-                                          NLCheckedNodeId current_pure_call)
+                                          NLCheckedNodeId current_pure_call,
+                                          bool copy_callee)
 {
     /* First native cohort: an actual direct zero-argument unit invocation,
      * ordinary local T storage. Definitions/arms/nested calls and H worlds
      * keep their existing CHECK behavior without acquiring this consumer. */
-    if (check->definition || !check->caller ||
-        check->origin_root->function_target ||
-        check->caller->artifact != check->origin_root ||
-        check->artifact != check->origin_invocation ||
-        check->context->region_count || check->context->domain_count ||
-        check->context->occurrence_count || check->function_result != 1)
+    if ((!copy_callee &&
+         (check->definition || !check->caller ||
+          check->origin_root->function_target ||
+          check->caller->artifact != check->origin_root ||
+          check->artifact != check->origin_invocation ||
+          check->context->region_count || check->context->domain_count ||
+          check->context->occurrence_count || check->function_result != 1)) ||
+        (copy_callee && !current_copy_callee(check)))
         return NL_CHECK_OK;
     if (!check->context->functions || !check->body_function ||
         check->body_function > check->context->function_count)
@@ -5845,13 +5908,16 @@ static NLCheckStatus retain_current_break(Check *check, LoopControl *loop,
     check->artifact->destroy_linear_breaks = destroy_linear_breaks;
     p->owner = check->artifact;
     p->root = check->origin_root;
+    p->copy_callee = copy_callee;
+    p->caller = check->caller->artifact;
+    p->outer_call = copy_callee ? check->origin_call : 0;
     p->body = body;
     p->world = check->artifact->context;
     p->source = check->source;
     p->plan = check->artifact->body_owner;
     p->syntax = p->plan ? p->plan->syntax : NULL;
     p->function = check->body_function;
-    p->call = check->origin_call;
+    p->call = copy_callee ? check->body_call : check->origin_call;
     p->loop = id;
     p->result = loop->normal_result;
     p->target = loop->target;
@@ -5897,7 +5963,7 @@ static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
                                          const NLCheckedFragment *body,
                                          struct NLStutterProof *cycle)
 {
-    return retain_current_break(check, loop, id, body, cycle, 0);
+    return retain_current_break(check, loop, id, body, cycle, 0, false);
 }
 
 static NLCheckStatus linear_seal_graph(const NLCheckedFragment *f,
@@ -5914,44 +5980,62 @@ static NLCheckStatus linear_seal_graph(const NLCheckedFragment *f,
 
 /* All allocations are before the enclosing semantic commit. Canonical
  * membership/count checks precede any display-array traversal. */
+static NLCheckStatus seal_linear_tree(NLCheckedFragment *root,
+                                      NLCheckedFragment *f,
+                                      const NLSemanticContext *final,
+                                      size_t depth)
+{
+    if (depth > NL_SEMANTIC_MAX_DEPTH)
+        return NL_CHECK_RESOURCE_LIMIT;
+    for (NLLinearBreakProof *p = f->linear_breaks; p; p = p->next) {
+        p->final_storage = *final;
+        p->body_storage = *p->body->context;
+        p->parent_origin = f->nodes;
+        p->body_origin = p->body->nodes;
+        p->root_origin = root->nodes;
+        p->parent_count = f->count;
+        p->body_count = p->body->count;
+        p->root_count = root->count;
+        p->parent_root = f->root;
+        p->body_root = p->body->root;
+        p->root_root = root->root;
+        NLCheckStatus s = linear_seal_graph(f, &p->parent_nodes);
+        if (s == NL_CHECK_OK)
+            s = linear_seal_graph(p->body, &p->body_nodes);
+        if (s == NL_CHECK_OK)
+            s = linear_seal_graph(root, &p->root_nodes);
+        if (s == NL_CHECK_OK)
+            s = nl_sem_clone(final, &p->final);
+        if (s == NL_CHECK_OK)
+            s = nl_copy_state_anchor(final, &p->final_anchor);
+        if (s == NL_CHECK_OK && p->cycle)
+            s = seal_stutter_cycle(p);
+        if (s == NL_CHECK_OK && p->current_cycle)
+            s = seal_current_cycle(p);
+        if (s != NL_CHECK_OK)
+            return s;
+        p->sealed = true;
+    }
+    for (size_t i = 0; i < f->body_count; ++i) {
+        NLCheckStatus s =
+            seal_linear_tree(root, f->bodies[i], final, depth + 1);
+        if (s != NL_CHECK_OK)
+            return s;
+    }
+    for (size_t i = 0; i < f->arm_count; ++i) {
+        NLCheckStatus s =
+            seal_linear_tree(root, f->arms[i].artifact, final, depth + 1);
+        if (s != NL_CHECK_OK)
+            return s;
+    }
+    return NL_CHECK_OK;
+}
+
 static NLCheckStatus seal_linear_breaks(NLCheckedFragment *root,
                                         const NLSemanticContext *final)
 {
-    if (!nl_h_custody_validate(root))
-        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
-    for (size_t i = 0; i < root->body_count; ++i) {
-        NLCheckedFragment *f = root->bodies[i];
-        for (NLLinearBreakProof *p = f->linear_breaks; p; p = p->next) {
-            p->final_storage = *final;
-            p->body_storage = *p->body->context;
-            p->parent_origin = f->nodes;
-            p->body_origin = p->body->nodes;
-            p->root_origin = root->nodes;
-            p->parent_count = f->count;
-            p->body_count = p->body->count;
-            p->root_count = root->count;
-            p->parent_root = f->root;
-            p->body_root = p->body->root;
-            p->root_root = root->root;
-            NLCheckStatus s = linear_seal_graph(f, &p->parent_nodes);
-            if (s == NL_CHECK_OK)
-                s = linear_seal_graph(p->body, &p->body_nodes);
-            if (s == NL_CHECK_OK)
-                s = linear_seal_graph(root, &p->root_nodes);
-            if (s == NL_CHECK_OK)
-                s = nl_sem_clone(final, &p->final);
-            if (s == NL_CHECK_OK)
-                s = nl_copy_state_anchor(final, &p->final_anchor);
-            if (s == NL_CHECK_OK && p->cycle)
-                s = seal_stutter_cycle(p);
-            if (s == NL_CHECK_OK && p->current_cycle)
-                s = seal_current_cycle(p);
-            if (s != NL_CHECK_OK)
-                return s;
-            p->sealed = true;
-        }
-    }
-    return NL_CHECK_OK;
+    return nl_h_custody_validate(root) ? seal_linear_tree(root, root, final, 0)
+                                       : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
 }
 
 static bool linear_graph_matches(const NLCheckedFragment *f,
