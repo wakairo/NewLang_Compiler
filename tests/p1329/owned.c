@@ -183,7 +183,7 @@ static void attacks(PInput *p, const char *path, size_t index)
     MUTATE(NLFunctionBody *, "callee-plan", r.callee->body_owner,
            foreign.callee->body_owner);
     NLFunctionBody *plan = r.callee->body_owner;
-    MUTATE(const NLSource *, "plan-source", plan->source,
+    MUTATE(NLSource *, "plan-source", plan->source,
            foreign.callee->body_owner->source);
     const size_t function = r.main_body->nodes[r.call - 1].function;
     MUTATE(NLTypeId, "current-signature-result",
