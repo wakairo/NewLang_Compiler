@@ -329,9 +329,17 @@ static void oom(const char *path, size_t input)
         valid(&x, input);
         p_dispose(&x);
     }
+    p = (PInput){0};
     p_load(&p, path);
     assert(p_check(&p) == NL_CHECK_OK);
     InputCall r = valid(&p, input);
+    events = ordinal = 0;
+    armed = true;
+    NLLinearBreakView observed = r.current;
+    status = nl_linear_break_validate(r.body, r.loop, &observed);
+    armed = false;
+    assert(status == NL_CHECK_OK);
+    printf("Current validator actual allocation census%zu\n", events);
     events = ordinal = 0;
     armed = true;
     status = nl_checked_copy_body_validate(r.caller, r.call, &r.copy);
@@ -359,7 +367,38 @@ int main(int argc, char **argv)
     assert(argc == 4);
     setbuf(stdout, NULL);
     const size_t input = strtoul(argv[3], NULL, 10);
-    if (!strcmp(argv[1], "oom"))
+    if (!strcmp(argv[1], "scope")) {
+        PInput p = {0};
+        p_load(&p, argv[2]);
+        Snapshot before = snapshot(p.context);
+        NLCheckStatus status = p_check(&p);
+        printf("out-of-profile actual status%d entry%p\n", status,
+               (void *)p.entry);
+        assert(status == NL_CHECK_ANALYSIS_PRECISION_LIMIT && !p.entry);
+        unchanged(p.context, &before);
+        p_dispose(&p);
+    } else if (!strncmp(argv[1], "negative-", 9)) {
+        PInput p = {0};
+        NLParseDiagnostic parse = {0};
+        NLFunctionUnitDiagnostic diagnostic = {0};
+        assert(nl_source_load(argv[2], &p.source) == NL_SOURCE_OK);
+        assert(nl_parser_create(p.source, &p.parser) == NL_PARSE_OK);
+        assert(nl_parser_parse_function_unit(p.parser, &p.tree, &parse) ==
+               NL_PARSE_OK);
+        assert(nl_semantic_create(&p.context) == NL_CHECK_OK);
+        const NLSyntaxTree *inputs[] = {p.tree};
+        Snapshot before = snapshot(p.context);
+        NLCheckStatus status = nl_semantic_register_function_unit(
+            p.context, inputs, 1, &diagnostic);
+        const NLCheckStatus expected = !strcmp(argv[1], "negative-semantic")
+                                           ? NL_CHECK_SEMANTIC_ERROR
+                                           : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        printf("negative definition status%d code%s\n", status,
+               diagnostic.diagnostic.diagnostic.code);
+        assert(status == expected && !p.entry);
+        unchanged(p.context, &before);
+        p_dispose(&p);
+    } else if (!strcmp(argv[1], "oom"))
         oom(argv[2], input);
     else {
         PInput p = {0};

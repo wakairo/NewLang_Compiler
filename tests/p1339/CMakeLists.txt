@@ -18,3 +18,11 @@ foreach(profile A-input67 B-input109)
         set_tests_properties(p1339_${profile}_${mode}.unit PROPERTIES TIMEOUT 180)
     endforeach()
 endforeach()
+foreach(negative N-argument-type N-ended-ref)
+    add_test(NAME p1339_${negative}.unit COMMAND p1339_readonly negative-semantic
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1339/${negative}.nl" 0)
+endforeach()
+add_test(NAME p1339_readonly_formal_precision.unit COMMAND p1339_readonly negative-precision
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1339/N-formal-write.nl" 0)
+add_test(NAME p1339_two_input_calls_precision.unit COMMAND p1339_readonly scope
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1339/N-two-input-calls.nl" 0)
