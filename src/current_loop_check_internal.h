@@ -2228,7 +2228,8 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         n->first_argument != s->initial_node || n->argument_count != 1 ||
         n->result_count != 1 || n->results[0].value != p->result.value ||
         n->results[0].type != p->result.type || p->target != s->target ||
-        call->function != p->function || call->argument_count ||
+        call->function != p->function ||
+        call->argument_count != (s->readonly_parameter ? 1u : 0u) ||
         nl_checked_call_body(call_owner, p->call) != f ||
         !current_copy_origin(f, f->context, s->initial_node, 0, true, 2,
                              &initial) ||

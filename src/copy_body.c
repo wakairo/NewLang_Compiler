@@ -1293,7 +1293,9 @@ static bool readonly_entry(const NLCopyBodyProof *p,
         !nl_copy_plain(e, a->results[0].value, p->parameter_types[0]))
         return false;
     const NLSemanticBindingView b = e->bindings[symbol - 1].view;
-    if (!b.place || b.place > e->place_count || b.place > c->place_count ||
+    if (b.value != a->results[0].value ||
+        a->parameter_type != p->parameter_types[0] || !b.place ||
+        b.place > e->place_count || b.place > c->place_count ||
         !nl_copy_plain(e, b.value, p->parameter_types[0]) ||
         memcmp(&b, &p->exit->bindings[symbol - 1].view, sizeof(b)))
         return false;
@@ -1310,7 +1312,8 @@ static bool readonly_entry(const NLCopyBodyProof *p,
 bool nl_copy_body_readonly_valid(const NLCheckedFragment *f)
 {
     const NLCopyBodyProof *p = f ? f->copy_body : NULL;
-    if (!p || !p->caller || p->caller->nodes != p->caller_nodes_origin ||
+    if (!p || !p->caller || p->caller->context != f->context ||
+        p->caller->nodes != p->caller_nodes_origin ||
         p->caller->count != p->caller_count || !p->caller_nodes)
         return false;
     const NLCheckedNodeView *call =

@@ -223,6 +223,13 @@ static void attacks(PInput *p, const char *path, size_t input)
     *argument = saved;
     valid(p, input);
     NLCheckedNodeId slot = call->first_argument;
+    /* Preserve all value bits/IDs while claiming a different source origin. */
+    argument->kind = NL_CHECKED_IDENTIFIER;
+    argument->symbol = proof->readonly_parameter;
+    argument->value_use = NL_VALUE_COPIED;
+    rejected(&r);
+    *argument = saved;
+    valid(p, input);
     call->first_argument = 0;
     rejected(&r);
     call->first_argument = slot;
