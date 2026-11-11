@@ -136,7 +136,10 @@ static bool current_caller_value(const NLCheckedFragment *f, NLCheckedNodeId id)
     if (!n || n->kind != NL_CHECKED_REGISTERED_CALL)
         return false;
     const NLCheckedFragment *body = nl_checked_call_body(f, call);
-    return body && body->copy_body && body->copy_body->current_loop;
+    return body && body->copy_body &&
+           (body->copy_body->current_loop ||
+            (body->copy_body->current_call &&
+             nl_copy_body_forward_origin(body)));
 }
 
 /* Shared resolved projection predicate. Point-in-time proof is supplied by
@@ -2353,6 +2356,11 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
             if (valid && body->copy_body && body->copy_body->current_loop)
                 valid = current_copy_selection(
                     body, body->copy_body->current_loop, program);
+            if (valid && body->copy_body && body->copy_body->current_call)
+                valid = program->scalar_depth == 1 &&
+                        nl_copy_body_forward_origin(body) &&
+                        v0_validate_call(body, body->copy_body->current_call,
+                                         program);
         }
         program->formal_body = saved_body;
         program->formal = saved_formal;
@@ -2650,8 +2658,12 @@ static bool current_copy_selection(const NLCheckedFragment *f,
     const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
     const NLSymbolId readonly =
         f->copy_body ? f->copy_body->readonly_parameter : 0;
-    if (p->u8_export || p->scalar_depth != 1 || p->formal_body != f ||
-        p->formal != readonly ||
+    const NLCopyBodyProof *copy = f->copy_body;
+    const bool wrapper = copy && copy->caller && p->scalar_depth == 2 &&
+                         nl_copy_body_forward_origin(copy->caller) &&
+                         copy->caller->copy_body->current_call == copy->call;
+    if (p->u8_export || (p->scalar_depth != 1 && !wrapper) ||
+        p->formal_body != f || p->formal != readonly ||
         (readonly && !nl_copy_body_readonly_valid(f)) || !root ||
         root->kind != NL_CHECKED_BLOCK || root->terminates || !root->tail ||
         f->body_count || f->arm_count != 1 ||

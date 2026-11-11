@@ -1,0 +1,20 @@
+{
+  "issue": 1351,
+  "StageA": "candidate4 passes7/7 on GCC Release/ASan+LSan/UBSan; outer real40 allocations and inner3 all injected, selectedCHECK12 OOM/rollback/retry; old oracle/FIRST unchanged",
+  "StageB_initial": "same StageA candidate emitted incomplete C (exit0, missing inner function/type/hooks metadata); captured before native; this artifact is never executed",
+  "implementation": "same authenticated Copy forwarding child is traversed for C17 function metadata; current admission depth2 only with exact authenticated wrapper call. Existing hooks observe outer result without touching expired carriers. No new proof/API/ABI/source law.",
+  "native_budget": {
+    "GCC_O0_O2_raw_A_B": 4,
+    "GCC_O0_O2_passive_A_B": 4,
+    "Clang_O0_O2_raw_A_B": 4,
+    "Clang_O0_O2_passive_A_B": 4,
+    "ASan_LSan_passive_A_B": 2,
+    "UBSan_passive_A_B": 2,
+    "reserve": 4,
+    "limit": 24
+  },
+  "oracle": "original oracle.json source/values unchanged; oracle-current.json has the measured validator count and unchanged baseline P8 result diagnostic",
+  "C_compatibility": "legacy-C.json freezes10 old emitted C SHA from fixed3fd binary; compatibility.py also traces first/kept-Copy C variable into post-second-call store for own P1347 A/B, without relying on equal returned bits",
+  "regression": "new p1351 unit+native+failure+compat plus direct one/two readonly/caller/usize and output failure; no optionalize safety",
+  "limits": "after this candidate5, only authorized forward integration candidate6 remains; if another local candidate needed, preserve and budget STOP C"
+}
