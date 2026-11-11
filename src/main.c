@@ -2653,8 +2653,8 @@ static bool current_copy_selection(const NLCheckedFragment *f,
     if (p->u8_export || p->scalar_depth != 1 || p->formal_body != f ||
         p->formal != readonly ||
         (readonly && !nl_copy_body_readonly_valid(f)) || !root ||
-        root->kind != NL_CHECKED_BLOCK ||
-        root->terminates || !root->tail || f->body_count || f->arm_count != 1 ||
+        root->kind != NL_CHECKED_BLOCK || root->terminates || !root->tail ||
+        f->body_count || f->arm_count != 1 ||
         copy_origin(f, root->tail) != loop)
         return false;
     NLLinearBreakView v = {0};
@@ -2664,10 +2664,10 @@ static bool current_copy_selection(const NLCheckedFragment *f,
     if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
         p->copy_body_status = status;
     if (status != NL_CHECK_OK || !v.changing_current || !v.terminal_old ||
-        v.readonly_parameter != readonly ||
-        v.paired_current || v.scalar_loop || v.preloop_call || v.incoming_if ||
-        v.incoming_call || v.terminal_call || v.result.type != p->u8 ||
-        !current_old_result_shape(&v) || !avs_shape(f, v.nominal, p))
+        v.readonly_parameter != readonly || v.paired_current || v.scalar_loop ||
+        v.preloop_call || v.incoming_if || v.incoming_call || v.terminal_call ||
+        v.result.type != p->u8 || !current_old_result_shape(&v) ||
+        !avs_shape(f, v.nominal, p))
         return false;
     p->uses_usize = p->current_loop = p->linear_break = true;
     p->current_callee = true;

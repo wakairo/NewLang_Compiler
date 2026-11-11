@@ -5,11 +5,20 @@
 #include <stdlib.h>
 
 #if P1339_PROFILE == 0
-enum { input = 67 };
+enum {
+    input = 67
+};
 #else
-enum { input = 109 };
+enum {
+    input = 109
+};
 #endif
-enum { initial = 43, sibling = 181, final = 233, limit = 2 };
+enum {
+    initial = 43,
+    sibling = 181,
+    final = 233,
+    limit = 2
+};
 
 static uint8_t *fields[2];
 static size_t phases, before, after, locals, reads, read_mask, results, calls,
@@ -21,19 +30,17 @@ static bool pending;
 static void p1339_finish(void)
 {
     /* The callee-local original has ended; keep only scalar observations. */
-    assert(phases == limit + 1 && before == limit + 1 &&
-           after == limit + 1 && locals == limit && !pending && reads == 2 &&
-           read_mask == 3 && results == 1 && calls == 1 && copies == 2 &&
-           actual_old == input);
+    assert(phases == limit + 1 && before == limit + 1 && after == limit + 1 &&
+           locals == limit && !pending && reads == 2 && read_mask == 3 &&
+           results == 1 && calls == 1 && copies == 2 && actual_old == input);
     printf("P1339 physical original input%u old%u current%u sibling%u PASS\n",
-           (unsigned)input, (unsigned)actual_old, (unsigned)final,
+           (unsigned)input, (unsigned)actual_old, (unsigned) final,
            (unsigned)sibling);
 }
 
 static void p1339_bind(uint8_t *a, uint8_t *b)
 {
-    assert(!fields[0] && !phases && a != b && *a == initial &&
-           *b == sibling);
+    assert(!fields[0] && !phases && a != b && *a == initial && *b == sibling);
     fields[0] = a;
     fields[1] = b;
     assert(atexit(p1339_finish) == 0);
@@ -48,9 +55,8 @@ static void p1339_phase(size_t phase, uint8_t *a, uint8_t *b)
 
 static void p1339_before(uint8_t *a, uint8_t *b, size_t field)
 {
-    assert(a == fields[0] && b == fields[1] && field == 0 &&
-           before <= limit && !pending &&
-           *a == (before == 0 ? initial : input) && *b == sibling);
+    assert(a == fields[0] && b == fields[1] && field == 0 && before <= limit &&
+           !pending && *a == (before == 0 ? initial : input) && *b == sibling);
     ++before;
     pending = true;
 }
@@ -59,9 +65,9 @@ static void p1339_after(uint8_t *a, uint8_t *b, size_t field, uint8_t old)
 {
     const uint8_t expected_old = after == 0 ? initial : input;
     const uint8_t expected_new = after == limit ? final : input;
-    assert(a == fields[0] && b == fields[1] && field == 0 &&
-           after <= limit && pending && old == expected_old &&
-           *a == expected_new && *b == sibling);
+    assert(a == fields[0] && b == fields[1] && field == 0 && after <= limit &&
+           pending && old == expected_old && *a == expected_new &&
+           *b == sibling);
     ++after;
     pending = false;
 }
