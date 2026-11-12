@@ -2309,3 +2309,4 @@ include(tests/p1347/CMakeLists.txt)
 include(tests/p1351/CMakeLists.txt)
 
 include(tests/p1355/CMakeLists.txt)
+include(tests/p1359/CMakeLists.txt)

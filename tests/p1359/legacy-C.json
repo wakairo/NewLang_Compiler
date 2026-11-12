@@ -1,0 +1,62 @@
+{
+  "baseline": "acf775ea4bdeb39387730e302422f650d31ab5bd",
+  "binary_sha256": "49efbf30a902227f8debe6b518d4673a33584e0aeef459b0aa91bb1a17a718b4",
+  "expected": {
+    "tests/p1332/A-callee-local.nl": {
+      "source_sha256": "2ddc76c01c17ba4bd9aa0e17caaf1a2ca26681e4cf6b042cdde99b7e89854852",
+      "C_sha256": "a9dc5297b54f0aa99d4604045a3a8f0f680fb2e6a9716e89e8da2c17f7d34a6b"
+    },
+    "tests/p1332/B-index1.nl": {
+      "source_sha256": "1cdbc7c97b3483ed103d45948335ee43203361a651f7a8061bfc1e3fe3be0f9b",
+      "C_sha256": "5016d9eb08ef0fe11b99d2e2a7f0c54e2632a64c99c2e327f066c8b62459bbd7"
+    },
+    "tests/p1335/A-two-calls.nl": {
+      "source_sha256": "bc5094ea1302682bfc30598b60510de8f66e75e2d7d2d2dc2ca219bb1e445aa6",
+      "C_sha256": "dc30c242e955dfbaec1e6239c28b11150b870bbbf253d2f452195ab5aaa145f8"
+    },
+    "tests/p1335/B-two-calls-index1.nl": {
+      "source_sha256": "52c4772f817c3764f3c11ed41ebe79730b2cf470f11ee8d505db8a91be1d78e8",
+      "C_sha256": "7cbaa672de61c4d3a41e197414c510b99a680a92440667b8b6bdd056f0197262"
+    },
+    "tests/p1339/A-input67.nl": {
+      "source_sha256": "d2a3dd024737911de8f67221d2bb2c9308bbc3630550ab24c0c9b1f8e9f6da99",
+      "C_sha256": "f40d3e067663cd6dae2419d8bdc61716596cc772379e51c33cd55367e0eda515"
+    },
+    "tests/p1339/B-input109.nl": {
+      "source_sha256": "6abaf9145ca341e55dbe49e3d6bf2dd9b656d6947b72d36f79a606b8d4f67b9a",
+      "C_sha256": "d380cd7c5d01a52b391129f2c1df8d23aeeae4ead19c520ae6f655d1efd8190a"
+    },
+    "tests/p1343/A-caller-live.nl": {
+      "source_sha256": "c38806d7ef812ab56446fd2d290d959e16e235d944eb08402c3b8e821dafbbc6",
+      "C_sha256": "a786a4750d99d51c016201e91b1f55eac01201e42d91d59b808f755518bc5146"
+    },
+    "tests/p1343/B-index1.nl": {
+      "source_sha256": "a952d3dcfbfdb0e82df6676ec3c21701750c295900200973daefefa5e70f0eb7",
+      "C_sha256": "09a5477c3da6512faa2ae81fc541e5475a5eef256c3ac9374b3fac0e1b77b8fd"
+    },
+    "tests/p1347/A-updated-caller.nl": {
+      "source_sha256": "2169f8fd2820761a6afa0a212bca8d870e5272e6d3fbed24e98742095f692935",
+      "C_sha256": "1a08f0e0f2d871d616f63b66a41db13f9ab480528dee6bcdaf3f3eda2572ed3a"
+    },
+    "tests/p1347/B-reverse-field.nl": {
+      "source_sha256": "e4b7356a60b3a932c03ce48cb5435bcd0ee6ec4a026453e3e718380d6f1d28f0",
+      "C_sha256": "53063b4fd1e7d6d535cb47e72684750f51bc7593ceb8f77ba1ecea05558fec42"
+    },
+    "tests/p1351/A-wrapper.nl": {
+      "source_sha256": "eb7990970229875fb46ffd619b9cff43531fd67c8a64a676d9eddb087175f9cc",
+      "C_sha256": "ee70e6e6fb2533461ba7cdfa8a7811398455be428141d99722943ec28d6cec83"
+    },
+    "tests/p1351/B-wrapper-index1.nl": {
+      "source_sha256": "6149364bea63ecf2dbe2d6a106c2829063242f79d238602765fe7191c9469780",
+      "C_sha256": "2f984d82b03b1805a94c2b8ef57e5988a90753bcb91ec8516cb14cfab80f4555"
+    },
+    "tests/p1355/A-input83.nl": {
+      "source_sha256": "b55f30f86fb31586f096f5e2fee7f6d7f0c32170d5b6de8209799ab43c78921e",
+      "C_sha256": "27188fcf336c2d02f6d7964274d5c20b6ad810d1a4afe9578ef7c703743d8ac8"
+    },
+    "tests/p1355/B-input137-index1.nl": {
+      "source_sha256": "11636299a819a31ac8a158fadd8611270ee85169fc1de04bfeab76bc61850924",
+      "C_sha256": "e9e0626a5f874e398018a09e63174aabf2a94e6a64f49ae7d99ad9bb7125a584"
+    }
+  }
+}

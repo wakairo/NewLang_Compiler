@@ -1,0 +1,279 @@
+{
+  "time_JST": "2026-11-12T13:45:19.030404+09:00",
+  "baseline": {
+    "time_JST": "2026-11-12T13:08:02.082698+09:00",
+    "baseline": "acf775ea4bdeb39387730e302422f650d31ab5bd",
+    "tree": "7186728df24fd99162874ae74c0dd98e38e5fc41",
+    "parents": [
+      "66eda4e95fa07b528cadd6035c3ff9075be1d880",
+      "072ac5e9aa10a671081e55b46164e66ef4f398db"
+    ],
+    "canonical": "Draft17.35",
+    "branch": "p1359-two-input-wrapper-copy",
+    "P1358_packet_SHA256": "8a75f165a751a128a4e2ffdbff201120f7081c969d9f372269731cc8c4aeacf9",
+    "C649_answer_SHA256": "6540d76deef709894c245a9b1ed760aa858fc3a1d102d83a9c83c835b29ca859",
+    "main_push_CI": {
+      "FULL5": 43150951263,
+      "PARTIAL": 43150951356,
+      "state_at_start": "in_progress; local allowed; publication not yet allowed"
+    },
+    "budget": {
+      "feature_fixed_candidates": 4,
+      "all_fixed_candidates": 6,
+      "hosts": 3,
+      "guest": 24,
+      "natural_CI_sets": 2,
+      "manual_CI": 0
+    },
+    "independent_F_R_material": "unread"
+  },
+  "tested_HEAD": "58469f670567a183fd9a4bf49299731e001419e9",
+  "tested_tree": "50fefb6b9da51efb6a036f3af0d642ba5ac89973",
+  "preexecution_freeze_SHA256": "176b82a1c869434858816728d6e744fcad87fd4546a1163c2c2421daf99a15e6",
+  "files": {
+    "CMakeLists.txt": "757d623d73abf1b11506541446f977e05e2534b397dc6e5e01d137aac8456841",
+    "src/current_loop_check_internal.h": "1635c24bf707c07fcac6fbcf5a938d9dfea195d6950a824a999937616ec0c5f6",
+    "src/semantic_check.c": "100f7bfcecc25b54f661f3ed7ecbf1fde30023bfd8ce144f793768f658a4ec5f",
+    "tests/p1359/A-two-inputs.nl": "4d51cfb1510c36b1a2da94e6f03bdd7cc42bcd130dcbb62286540002c280bcef",
+    "tests/p1359/B-reversed-field.nl": "1ebb8e293ef5adf90c33704ec5c029e8308e57077e15ef5b89dc517df343f13d",
+    "tests/p1359/CMakeLists.txt": "deaae8dde986ba37f48ac709d3af701342fa96e53534a76a8fce72f2bdf944b3",
+    "tests/p1359/N-ended-loan.nl": "f106e13e784f9504947dd72fe442a241bef5f21b361ca6fd27b442bf5121007a",
+    "tests/p1359/N-third-call.nl": "6c3835297dca77df290c36c3840bee8d93d2ebea35383eb195d5e07f549e56ea",
+    "tests/p1359/N-wrong-argument.nl": "f554be532c0d2193640fb1ae2708a194d96dfc06cb79a973649f4f7f8238fa7d",
+    "tests/p1359/compatibility.py": "d607effd8e545ca79d895c8518c6b84053d25a9a6210e6c76ae296976731f5f5",
+    "tests/p1359/failure.py": "e46e25165dabf6f6965f4e3ca11e91102cfbc20a2407c0390a98ea4038dde2df",
+    "tests/p1359/legacy-C.json": "82a385a84cdd0490159efcabdeb4813191b5d509294be966d4bfd40c5e37c1fe",
+    "tests/p1359/native.py": "629294329fed26ae55680b0ec40335d2c41adb30ece1dc92357a9e73a9e4a22a",
+    "tests/p1359/observer.h": "a1ba8a44923a0332a7c05b25af8302aace78cf51ba9955cafb3ccd69274b3b58",
+    "tests/p1359/oracle.json": "4d2690a3623446ed1623e7e2f31a80cb282a9f6eb91638d11885bd1c51d7f778",
+    "tests/p1359/owned.c": "2ffea570cc873c83ad9b97c1f8fd1d47e90da02940beec5fd4272064b8384118"
+  },
+  "old_P1358_FIRST_SHA256": "20e89b21bf0c5967a725446b8da69633a8fbfab0e48f9f5c60f5c23ddc34b70b",
+  "candidate1_FIRST_SHA256": "2700eb529d68dade7171ec7a96418d34ae742cd97850e62eb9771d198106b729",
+  "candidate1": "safe CHECK3 / nil entry; original logs retained; original ELF hashes only after incremental rebuild",
+  "hosts": [
+    {
+      "host": "gcc",
+      "new_StageA_unit": 6,
+      "impact_unit": 76,
+      "failure_compat_integration": 11,
+      "all_PASS": true,
+      "newlangc_SHA256": "88bcea71f338b27ec3a5c0dd1f761f121e45465e44f68454cc73c86336d3c886",
+      "owned_ELF_SHA256": "8110a6b68f748162d5635624791a07325bca76702b9899321ca09e6f3e868e93",
+      "raw": {
+        "gcc-related-unit.raw": "85fde4e8189a2167b055e84421d36177e63cb8b4b24d38ae9c19692d7b0db60b",
+        "gcc-build.raw": "290b2825a2bee226b4bd73060f858bf44371d1f96ea9055dcd12088fa6327e20",
+        "gcc-related-build.raw": "8e0b6d1546819cf88a264826492a2b7f66ebaac4886c2e3328f3e787097080b3",
+        "gcc-failure-compat.raw": "ab6b876f3f46ca8874ddaa52b9eb12d81913de2cbb20b1a25f860f49605b4988",
+        "gcc-native.raw": "d9d5ac641d50ecd8f1f5d03ae627258a67b1a9b98ce299eb4044750cbecc8fda",
+        "gcc-StageA.raw": "3ba4bb83d29bcf49eba81e4a1b707b05f1499ecefe68c7878e50144c1eac48c0"
+      }
+    },
+    {
+      "host": "asan",
+      "new_StageA_unit": 6,
+      "impact_unit": 76,
+      "failure_compat_integration": 11,
+      "all_PASS": true,
+      "newlangc_SHA256": "f5335bc5cb530e64d4be0f1eaa64442856d8ae0cf170621f254a731e4d221f32",
+      "owned_ELF_SHA256": "42c4656ca967f715968830d7145dfc6ab32d308cadeee191d11d8e5ab22f72f0",
+      "raw": {
+        "asan-failure-compat.raw": "b3f0ae8ac75c46ba7d6d0613f0806053437259e13848d85181f4dca638281079",
+        "asan-build.raw": "e2fa82aa3ff0e05085a28877b9a5896d43d8cf8684112eb4b0bc9d113668bc1b",
+        "asan-related-unit.raw": "67962cc32c3a7cc904cc739557885df2239d48b00fef32f80ff50defa4365ad7",
+        "asan-native.raw": "f0b06a5ed52b935235d8a61f22da60454db2de7cda9fb2b212af126afe073a6b",
+        "asan-related-build.raw": "f5fcab0f0afab9d81edeb5352a97240628492f2f3a1858965f61a6e166e0b90d",
+        "asan-StageA.raw": "200662bab5f8bfb69372982a70739c0f8fdf80e6bcf322109902e6d1c64f6ee5"
+      }
+    },
+    {
+      "host": "ubsan",
+      "new_StageA_unit": 6,
+      "impact_unit": 76,
+      "failure_compat_integration": 11,
+      "all_PASS": true,
+      "newlangc_SHA256": "18b727380e002f84fe155f69bd37149976c98934b380d46849b67ba9259d81dd",
+      "owned_ELF_SHA256": "6e488aad34733f119049b9a596e351ab3553b706792aaa55b5ee5788e8886504",
+      "raw": {
+        "ubsan-related-unit.raw": "3211b915fa14ea16753397248d70fac0c38cc5163b727998af12084e54eee80e",
+        "ubsan-related-build.raw": "fb609fccc3d4593a3673808ba8ed3202baa67a558930e89c39939aec41207e9f",
+        "ubsan-StageA.raw": "59ce4e910ce981f9fe8acd44dd6f461faae337cf73d72f93c3c3e5a03bee9b8f",
+        "ubsan-build.raw": "074994e690af0db6d40f9ecae3462d8feb2ecd3125ecb74b3a19ba17534992ab",
+        "ubsan-failure-compat.raw": "cec15fd4ad0dc20284bca3553554a5cce88c79cdd558e1364c67777a4de144c7",
+        "ubsan-native.raw": "93ee526b2047d9431e6cdc36e9818c8e93f0931ac9f6c2e4198f3daf3086a716"
+      }
+    }
+  ],
+  "native": [
+    {
+      "mode": "gcc",
+      "guest_count": 8,
+      "all_exit0": true,
+      "generated_C_SHA256s": [
+        "0d327812feb1d93aa229f8105dd9c10a6244dfcdf95ed9fff1bbe463ef38d324",
+        "ed54bc62f359ecc6fb73f37e6755f5d9fa81ef07d7a3ae673db739d48bbd1840"
+      ],
+      "guest_records_SHA256": "1652cb29e7a7b99248b91e2b8a076d13aca8f8623aeaa8b57d977bc8619323af"
+    },
+    {
+      "mode": "clang",
+      "guest_count": 8,
+      "all_exit0": true,
+      "generated_C_SHA256s": [
+        "0d327812feb1d93aa229f8105dd9c10a6244dfcdf95ed9fff1bbe463ef38d324",
+        "ed54bc62f359ecc6fb73f37e6755f5d9fa81ef07d7a3ae673db739d48bbd1840"
+      ],
+      "guest_records_SHA256": "a02ad3fea01d0c65f32a1ee4755da2d8434da5f3001a71f7bbe4a531d2122454"
+    },
+    {
+      "mode": "asan",
+      "guest_count": 2,
+      "all_exit0": true,
+      "generated_C_SHA256s": [
+        "0d327812feb1d93aa229f8105dd9c10a6244dfcdf95ed9fff1bbe463ef38d324",
+        "ed54bc62f359ecc6fb73f37e6755f5d9fa81ef07d7a3ae673db739d48bbd1840"
+      ],
+      "guest_records_SHA256": "618b3dcaba3b4846b4577aafd3467d6daf19f7a0e1534bb14b57b6403cc2fa52"
+    },
+    {
+      "mode": "ubsan",
+      "guest_count": 2,
+      "all_exit0": true,
+      "generated_C_SHA256s": [
+        "0d327812feb1d93aa229f8105dd9c10a6244dfcdf95ed9fff1bbe463ef38d324",
+        "ed54bc62f359ecc6fb73f37e6755f5d9fa81ef07d7a3ae673db739d48bbd1840"
+      ],
+      "guest_records_SHA256": "04fd4d5f23926b9b3fee04f65614959fcea1479c1b998ef7781f4d6b134c46da"
+    }
+  ],
+  "native_count": 20,
+  "CHECK_OOM": {
+    "census_per_source": 3976,
+    "distinct_selected_per_source": 28,
+    "covered": "four initialization + four readonly capture boundaries, five Copy/custody seals, current attachment surrounding markers, early/middle/final",
+    "exhaustive": false
+  },
+  "Copy_OOM": {
+    "first_outer": 43,
+    "first_inner": 3,
+    "second_outer": 61,
+    "second_inner": 3,
+    "exhaustive_reached_per_source_per_host": true
+  },
+  "old_C_byte_identity_sources": 14,
+  "old_P1358_B_successor": {
+    "HEAD": "58469f670567a183fd9a4bf49299731e001419e9",
+    "source": "/workspace/p1358-c646/sources/B-two-calls.nl",
+    "source_SHA256": "155265d592ef8c5ce3133d449490a74a82576804ffff8905824d909556ff93c0",
+    "original_FIRST_unchanged": true,
+    "runs": [
+      {
+        "label": "CHECK",
+        "command": [
+          "/workspace/p1359-c653/builds/gcc/newlangc",
+          "--check",
+          "/workspace/p1358-c646/sources/B-two-calls.nl"
+        ],
+        "exit_status": 0
+      },
+      {
+        "label": "C17",
+        "command": [
+          "/workspace/p1359-c653/builds/gcc/newlangc",
+          "--emit-c17-to",
+          "/workspace/p1359-c653/candidate2/P1358-B-successor.c",
+          "/workspace/p1358-c646/sources/B-two-calls.nl"
+        ],
+        "exit_status": 0
+      }
+    ],
+    "new_C_SHA256": "0e640ccbaac9ea2a67aa9434e8d103a08dbf5612a4252744318da030b4f37c61",
+    "guest": 0
+  },
+  "main_original_CI": [
+    {
+      "id": 130959691054,
+      "raw_SHA256": "2c8d1afc5fa1c3fdb0a93cd6a3952456a2b4c0bb078045abf471e5c80894d850",
+      "tests": 932,
+      "checkout": "acf775ea4bdeb39387730e302422f650d31ab5bd",
+      "state": "original push attempt1 success"
+    },
+    {
+      "id": 130959691211,
+      "raw_SHA256": "d444759aeedc1934804884fdac936885e9c19c1bbb4527da8a8ba271866c27cf",
+      "tests": 932,
+      "checkout": "acf775ea4bdeb39387730e302422f650d31ab5bd",
+      "state": "original push attempt1 success"
+    },
+    {
+      "id": 130959691254,
+      "raw_SHA256": "b3a7e7aa8ec82a6996b6bf186e936b678b9486cf92e5b68669bcd0cf65a91114",
+      "tests": 932,
+      "checkout": "acf775ea4bdeb39387730e302422f650d31ab5bd",
+      "state": "original push attempt1 success"
+    },
+    {
+      "id": 130959691277,
+      "raw_SHA256": "a28f4da0fa04e2eac509f88096ee0e72d85101007e92f81ab0783bf924b832bc",
+      "tests": 932,
+      "checkout": "acf775ea4bdeb39387730e302422f650d31ab5bd",
+      "state": "original push attempt1 success"
+    },
+    {
+      "id": 130959691293,
+      "raw_SHA256": "161490df6bfa0ee03c30f19b817f7d8ee0981b997e3891098b9427150eea2201",
+      "tests": 932,
+      "checkout": "acf775ea4bdeb39387730e302422f650d31ab5bd",
+      "state": "original push attempt1 success"
+    },
+    {
+      "id": 130959691297,
+      "raw_SHA256": "bc6359997bab7a94e8f80dea01e9bb6a09141826c1618c03c7e455024e12a710",
+      "tests": 931,
+      "checkout": "acf775ea4bdeb39387730e302422f650d31ab5bd",
+      "state": "original push attempt1 success"
+    }
+  ],
+  "self_review": {
+    "Production_files": [
+      "src/semantic_check.c",
+      "src/current_loop_check_internal.h"
+    ],
+    "new_stored_proof_or_world": false,
+    "C17_public_API_ABI_issuer_changes": false,
+    "caller_signature_authentication_before_parameter_read": "existing public validator origin preflight retained; C649 raw private driver hardening contract not added",
+    "borrowed_metadata": "stack-only normalized view borrows existing owned records; no registry/world mutation or lifetime extension",
+    "ownership": "canonical call children and original destruction unchanged",
+    "validator_cycle": "entry/origin/prefix checks only; no recursive full validator calls",
+    "scope": "two one-u8 wrapper calls, each one inner current-loop; main scalar only",
+    "unsupported": [
+      "third wrapper call",
+      "extra depth",
+      "multiple inner calls",
+      "extra main aggregate/H",
+      "multiple formals",
+      "cross-call reference loans"
+    ],
+    "maintenance": "267 private relation lines plus narrow existing admission/owner changes; no extra trusted record. Further call/loan generalization remains outside this finite result."
+  },
+  "budget": {
+    "functional_fixed_used": 2,
+    "all_fixed_before_evidence_commit": 2,
+    "evidence_only_successor_planned": 1,
+    "hosts": 3,
+    "local_guest": 20,
+    "remote_push": 0,
+    "new_PR": 0,
+    "new_CI": 0,
+    "manual": 0
+  },
+  "independent_F_R_material": "unread",
+  "material_STOP": "none observed in local scope; candidate1 refused safely and diagnostic apparatus failure retained",
+  "VALUE_ALIGNMENT_RISK": "Finite ordinary reuse only. No general soundness, representation protection, library author+ordinary caller UB audit-locality Product PASS. Product GO PAUSED/H1 HOLD.",
+  "#packet": {
+    "path": "tests/p1359/evidence/local-raw.zip",
+    "bytes": 2131447,
+    "SHA256": "3d0196fc9431822c0ef1988d986e87d1c1d033c64ac716aa3986fcdd4999617f",
+    "entries": 209
+  }
+}
