@@ -10,9 +10,12 @@ import tempfile
 compiler, parent = sys.argv[1:3]
 root = Path(__file__).resolve().parents[2]
 spec = json.loads((Path(__file__).parent / "legacy-C.json").read_text())
+targeted = json.loads((Path(__file__).parent / "p1304-C.json").read_text())
+assert not (spec["expected"].keys() & targeted["expected"].keys())
+expected_profiles = dict(spec["expected"], **targeted["expected"])
 Path(parent).mkdir(parents=True, exist_ok=True)
 work = Path(tempfile.mkdtemp(prefix="C-compat-", dir=parent))
-for source, expected in spec["expected"].items():
+for source, expected in expected_profiles.items():
     path = root / source
     assert hashlib.sha256(path.read_bytes()).hexdigest() == expected["source_sha256"]
     target = work / (path.parent.name + "-" + path.stem + ".c")

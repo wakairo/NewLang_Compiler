@@ -220,8 +220,64 @@ static Borrow healthy(PInput *p, size_t index)
     const V0Function *selected = v0_find_function(&program, call->function);
     assert(selected && selected->body == b.helper &&
            selected->parameter == v->helper_formal &&
-           !selected->ref_parameter && !selected->quantity_parameter);
+           !selected->ref_parameter && !selected->quantity_parameter &&
+           selected->current_local_copy);
     return b;
+}
+static char *body_text(const V0Function *function)
+{
+    FILE *stream = tmpfile();
+    assert(stream && v1_emit_body(stream, function) && !fflush(stream));
+    const long size = ftell(stream);
+    assert(size > 0 && size < 65536 && !fseek(stream, 0, SEEK_SET));
+    char *text = malloc((size_t)size + 1);
+    assert(text && fread(text, 1, (size_t)size, stream) == (size_t)size &&
+           !fclose(stream));
+    text[size] = 0;
+    return text;
+}
+static void observation_selection(PInput *p)
+{
+    V0Program program = {.unit = nl_semantic_unit_type(p->context),
+                         .u8 = nl_semantic_core_type(p->context, NL_TYPE_U8)};
+    assert(v0_validate_call(p->entry, nl_checked_root(p->entry), &program) &&
+           program.current_local_copy);
+    const V0Function *selected = NULL;
+    for (size_t i = 0; i < program.count; ++i)
+        if (program.functions[i].current_local_copy) {
+            assert(!selected);
+            selected = &program.functions[i];
+        }
+    assert(selected && selected->body->copy_body->readonly_local);
+    char *observed = body_text(selected);
+    /* Keep the genuine body/proofs unchanged. Only this private emission
+     * selection copy is unselected, while the enclosing program still has
+     * its authentically selected helper. A body tag alone must not observe. */
+    V0Function unselected = *selected;
+    unselected.current_local_copy = false;
+    char *plain = body_text(&unselected);
+    assert(strstr(observed, "NL_CURRENT_CALLEE_INPUT(") &&
+           !strstr(plain, "NL_CURRENT_CALLEE_"));
+    char *filtered = malloc(strlen(observed) + 1);
+    assert(filtered);
+    size_t count = 0;
+    for (const char *line = observed; *line;) {
+        const char *end = strchr(line, '\n');
+        const size_t length = end ? (size_t)(end - line) + 1 : strlen(line);
+        const char *hook = strstr(line, "NL_CURRENT_CALLEE_");
+        if (!hook || hook >= line + length) {
+            memcpy(filtered + count, line, length);
+            count += length;
+        }
+        line += length;
+    }
+    filtered[count] = 0;
+    assert(!strcmp(filtered, plain));
+    free(filtered);
+    free(plain);
+    free(observed);
+    puts("selected helper only: same readonly body unselected, no hooks, "
+         "other emitted C identical PASS");
 }
 static void rejected(PInput *p, Borrow b, const char *name)
 {
@@ -656,6 +712,7 @@ int main(int argc, char **argv)
     p_load(&p, argv[2]);
     assert(p_check(&p) == NL_CHECK_OK);
     healthy(&p, index);
+    observation_selection(&p);
     attacks(&p, argv[2], index);
     p_dispose(&p);
     puts("P1372 genuine current-u8/call/Copy/closure negatives restore PASS");

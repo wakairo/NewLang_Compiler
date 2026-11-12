@@ -64,6 +64,9 @@ typedef struct {
         parameter; /* representative body-local C formal, not caller ID */
     NLSymbolId ref_parameter; /* authenticated explicit scoped write formal */
     bool quantity_parameter;  /* private pure-predicate size_t carrier */
+    /* Set only after this exact helper's current-local replay is consumed;
+     * a provisional readonly-local body classification is insufficient. */
+    bool current_local_copy;
 } V0Function;
 
 typedef struct {
@@ -2382,8 +2385,14 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
                (prior->ref_parameter != 0) == (ref_parameter != 0);
     if (program->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
         return false;
-    program->functions[program->count++] = (V0Function){
-        call->function, body, call->type, parameter, ref_parameter, false};
+    program->functions[program->count++] =
+        (V0Function){.function = call->function,
+                     .body = body,
+                     .result = call->type,
+                     .parameter = parameter,
+                     .ref_parameter = ref_parameter,
+                     .quantity_parameter = false,
+                     .current_local_copy = false};
     return scalar || unit_formals ||
            v0_validate_node(body, nl_checked_root(body), program);
 }
@@ -2508,6 +2517,7 @@ static bool current_helper_selection(const NLLinearBreakView *v, V0Program *p)
 {
     if (v->incoming_call) {
         NLPureU8Call pure;
+        bool local_copy = false;
         /* v is the immediately preceding successful loop validation. Its
          * private records authenticate all helper return worlds; standalone
          * predicate admission deliberately remains normal-arm-only. */
@@ -2543,6 +2553,7 @@ static bool current_helper_selection(const NLLinearBreakView *v, V0Program *p)
             pure = (NLPureU8Call){.body = local.body,
                                   .formal = local.formal,
                                   .function = local.function};
+            local_copy = true;
             p->current_local_copy = true;
         }
         const bool quantity = pure.selection != 0;
@@ -2551,11 +2562,26 @@ static bool current_helper_selection(const NLLinearBreakView *v, V0Program *p)
         if (prior) {
             if (prior->quantity_parameter != quantity || prior->result != p->u8)
                 return false;
+            if (local_copy) {
+                if (prior->ref_parameter)
+                    return false;
+                /* Keep the representative body/formal of the exact replay
+                 * just validated, not an unrelated prior call instance. */
+                prior->body = pure.body;
+                prior->parameter = pure.formal;
+                prior->current_local_copy = true;
+            }
         } else {
             if (p->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
                 return false;
-            p->functions[p->count++] = (V0Function){
-                pure.function, pure.body, p->u8, pure.formal, 0, quantity};
+            p->functions[p->count++] =
+                (V0Function){.function = pure.function,
+                             .body = pure.body,
+                             .result = p->u8,
+                             .parameter = pure.formal,
+                             .ref_parameter = 0,
+                             .quantity_parameter = quantity,
+                             .current_local_copy = local_copy};
         }
     }
     return true;
@@ -4056,7 +4082,9 @@ static bool predicate_emit_binding(FILE *stream, const NLCheckedFragment *f,
 static bool v1_emit_body(FILE *stream, const V0Function *fn)
 {
     const NLCheckedFragment *f = fn->body;
-    const bool local = f->copy_body && f->copy_body->readonly_local;
+    const bool local = fn->current_local_copy;
+    if (local && (!f->copy_body || !f->copy_body->readonly_local))
+        return false;
     NLPureU8Plan pure = {0};
     if (fn->quantity_parameter &&
         !nl_pure_u8_body(f, fn->parameter,
@@ -4200,6 +4228,11 @@ static bool v0_emit_signature(FILE *stream, const V0Function *fn, NLTypeId u8)
 
 static bool v0_emit_c(FILE *stream, const V0Program *program)
 {
+    bool local_observations = false;
+    for (size_t i = 0; i < program->count; ++i)
+        local_observations |= program->functions[i].current_local_copy;
+    if (local_observations != program->current_local_copy)
+        return false;
     if (fputs(
             "/* North Star V0/V1/AVS Checked-C reference output. */\n#include "
             "<stdint.h>\n\n" NL_C17_U8_TARGET_GUARD,
@@ -4247,7 +4280,7 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
               stream) < 0)
         return false;
 
-    if (program->current_local_copy &&
+    if (local_observations &&
         fputs("#ifndef NL_CURRENT_CALLEE_INPUT\n"
               "#define NL_CURRENT_CALLEE_INPUT(...) ((void)0)\n#endif\n"
               "#ifndef NL_CURRENT_CALLEE_BIND\n"

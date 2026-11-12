@@ -1,0 +1,13 @@
+{
+  "authority_main": "3dd2798834cb799f19b836270cbb93bf4851accf",
+  "actual_build_HEAD": "1a700fc934686cbf37bc0a2a9e17abf61a0c4fe0",
+  "compiler_build_inputs_main_equivalent": true,
+  "baseline_ELF_SHA256": "a628b8da457014e14eee3cab21e1080f72c5550f9cbf4e51ffabbfff85b46cc7",
+  "baseline_receipt_SHA256": "4d39a85fa2fe1160a1f450531acbacfd849144def6989c3c112b10b5b6c04c72",
+  "expected": {
+    "tests/p1304/P-named-callers.nl": {
+      "source_sha256": "ce5fea006721936844f3b78c952bb186844485a11e9f0b2ff402ac7f0116be25",
+      "C_sha256": "ec07d59f894a3d1889f43ef6f01a87942cd71d32cb2c316b7ae7b14c6c42ca3a"
+    }
+  }
+}
