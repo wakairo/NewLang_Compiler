@@ -3644,8 +3644,8 @@ failure:
     return check.status;
 }
 
-static bool readonly_current_body(const NLFunctionEntry *fn,
-                                  const NLSemanticContext *c)
+static bool readonly_loop_body(const NLFunctionEntry *fn,
+                               const NLSemanticContext *c)
 {
     if (fn->count != 1 || !fn->parameters ||
         fn->parameters[0] != nl_semantic_core_type(c, NL_TYPE_U8) ||
@@ -3666,6 +3666,50 @@ static bool readonly_current_body(const NLFunctionEntry *fn,
             return true;
     }
     return false;
+}
+
+/* Capture the same scalar entry for one forwarding frame. This syntax check
+ * is only a constructor filter: the actual child, original frame, current
+ * record and final Copy seal still supply every validation obligation. */
+static bool readonly_current_body(const NLFunctionEntry *fn,
+                                  const NLSemanticContext *c)
+{
+    if (readonly_loop_body(fn, c))
+        return true;
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    if (fn->count != 1 || !fn->parameters || fn->parameters[0] != u8 ||
+        fn->result != u8 || !fn->body)
+        return false;
+    const NLSyntaxView *root =
+        nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
+    if (!root || root->kind != NL_SYNTAX_BLOCK)
+        return false;
+    size_t calls = 0;
+    bool current = false;
+    for (const NLSyntaxNode *n = root->data.block.items; n;
+         n = nl_syntax_next_argument(n)) {
+        const NLSyntaxView *v = nl_syntax_node_view(n);
+        const NLSyntaxView *call =
+            v->kind == NL_SYNTAX_BINDING
+                ? nl_syntax_node_view(v->data.binding.initializer)
+                : NULL;
+        if (!call || call->kind != NL_SYNTAX_EXPR_CALL)
+            continue;
+        ++calls;
+        NLSourceView name;
+        if (call->data.call.argument_count != 1 ||
+            !nl_source_view(fn->body->source, call->data.call.callee, &name))
+            return false;
+        for (size_t i = 0; i < c->function_count; ++i) {
+            const NLFunctionEntry *child = &c->functions[i];
+            if (child != fn && child->name &&
+                strlen(child->name) == name.length &&
+                !memcmp(child->name, name.bytes, name.length) &&
+                readonly_loop_body(child, c))
+                current = true;
+        }
+    }
+    return calls == 1 && current;
 }
 
 static bool run_body(Check *caller, NLCheckedNodeId call_id,
@@ -4018,8 +4062,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
             call_span))
         goto failure;
     if (body.artifact->copy_body && body.artifact->copy_body->current_loop &&
-        caller->capture_copy_body && !caller->readonly_u8_parameter &&
-        caller->artifact->copy_body &&
+        caller->capture_copy_body && caller->artifact->copy_body &&
         !caller->artifact->copy_body->formal_write &&
         !host(&body,
               nl_copy_body_forward_current(caller->artifact, body.artifact,
@@ -5958,7 +6001,7 @@ static bool current_copy_prefix(const Check *c)
     return current_copy_prefix_frame(c, p);
 }
 
-/* Actual main()->inner(), or one zero-argument Copy wrapper in that path.
+/* Actual main()->inner(), or one zero/one-u8 Copy wrapper in that path.
  * The original program root and every call slot remain unchanged. */
 static bool current_copy_callee(const Check *c)
 {
@@ -5979,8 +6022,7 @@ static bool current_copy_callee(const Check *c)
         main_frame->artifact == c->origin_invocation &&
         main_frame->function_result == 1 &&
         outer_frame->function_result == c->function_result &&
-        outer_frame->capture_copy_body && !outer_frame->readonly_u8_parameter &&
-        outer_frame->artifact->copy_body &&
+        outer_frame->capture_copy_body && outer_frame->artifact->copy_body &&
         !outer_frame->artifact->copy_body->formal_write &&
         !outer_frame->artifact->body_count && !main_frame->artifact->body_count;
     if (!direct && !wrapper)
@@ -6006,8 +6048,13 @@ static bool current_copy_callee(const Check *c)
            !fn->caller_effects && !fn->hidden_dependencies &&
            !fn->owner_receiver && !fn->owner_producer &&
            !fn->custody_recipient &&
-           outer->body == c->caller->artifact->body_owner && !outer->count &&
-           !outer->parameters &&
+           outer->body == c->caller->artifact->body_owner &&
+           (wrapper && outer_frame->readonly_u8_parameter
+                ? (outer->count == 1 && outer->parameters &&
+                   outer->parameters[0] == c->function_result &&
+                   outer_frame->artifact->copy_body->readonly_parameter ==
+                       outer_frame->readonly_u8_parameter)
+                : (!outer->count && !outer->parameters)) &&
            outer->result == (wrapper ? c->function_result : 1) &&
            (!wrapper || readonly) && !outer->caller_effects &&
            !outer->hidden_dependencies && !outer->owner_receiver &&

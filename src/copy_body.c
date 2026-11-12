@@ -390,7 +390,10 @@ NLCheckStatus nl_copy_body_forward_current(NLCheckedFragment *f,
     NLCopyBodyProof *p = f->copy_body;
     const NLCopyBodyProof *q = child->copy_body;
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-    if (!p || p->sealed || p->formal_write || p->readonly_parameter ||
+    if (!p || p->sealed || p->formal_write ||
+        (p->readonly_parameter &&
+         (!p->entry ||
+          memcmp(p->entry, &p->readonly_storage, sizeof(*p->entry)))) ||
         p->current_loop || p->current_call || f->body_count || !p->first ||
         p->first->view.kind != NL_COPY_BODY_INITIALIZE || !q || !q->sealed ||
         q->caller != f || q->call != id || !q->readonly_parameter ||
@@ -550,13 +553,13 @@ bool nl_copy_body_forward_origin(const NLCheckedFragment *f)
         return false;
     const NLCopyBodyProof *p = f->copy_body;
     if (!p || !p->sealed || p->owner != f || !p->current_call ||
-        p->current_loop || p->readonly_parameter || p->formal_write ||
-        !p->caller || !nl_h_custody_borrow_valid(p->caller) ||
-        f->source != p->source || f->body_owner != p->body || !p->nodes ||
-        f->nodes != p->nodes_origin || f->count != p->count ||
-        f->capacity < f->count || f->count > NL_SEMANTIC_MAX_ENTRIES ||
-        f->root != p->view.root || f->body_count != 1 || f->arm_count ||
-        !f->bodies || !f->body_calls || f->body_calls[0] != p->current_call ||
+        p->current_loop || p->formal_write || !p->caller ||
+        !nl_h_custody_borrow_valid(p->caller) || f->source != p->source ||
+        f->body_owner != p->body || !p->nodes || f->nodes != p->nodes_origin ||
+        f->count != p->count || f->capacity < f->count ||
+        f->count > NL_SEMANTIC_MAX_ENTRIES || f->root != p->view.root ||
+        f->body_count != 1 || f->arm_count || !f->bodies || !f->body_calls ||
+        f->body_calls[0] != p->current_call ||
         memcmp(f->nodes, p->nodes, p->count * sizeof(*p->nodes)) ||
         !p->caller_nodes || p->caller->nodes != p->caller_nodes_origin ||
         p->caller->count != p->caller_count ||
@@ -572,10 +575,21 @@ bool nl_copy_body_forward_origin(const NLCheckedFragment *f)
         return false;
     const NLCheckedNodeView *call = nl_checked_node_view(p->caller, p->call);
     const NLCheckedFragment *child = nl_checked_call_body(f, p->current_call);
+    const NLCheckedNodeView *argument =
+        p->readonly_parameter
+            ? nl_checked_node_view(p->caller, p->readonly_argument)
+            : NULL;
+    const bool incoming =
+        p->readonly_parameter
+            ? (p->entry &&
+               !memcmp(p->entry, &p->readonly_storage, sizeof(*p->entry)) &&
+               call && call->argument_count == 1 &&
+               call->first_argument == p->readonly_argument && argument &&
+               !memcmp(argument, &p->arguments[0], sizeof(*argument)))
+            : (call && !call->argument_count && !call->first_argument);
     return call && call->kind == NL_CHECKED_REGISTERED_CALL &&
-           call->body_backed && !call->terminates && !call->argument_count &&
-           !call->first_argument && call->result_count == 1 &&
-           call->function == p->view.function &&
+           call->body_backed && !call->terminates && incoming &&
+           call->result_count == 1 && call->function == p->view.function &&
            call->results[0].type == p->view.result.type &&
            call->results[0].value == p->view.result.value && child &&
            child == f->bodies[0] && child->copy_body &&
@@ -876,6 +890,15 @@ static bool expression(Replay *r, NLCheckedNodeId id,
                  r->proof->exit->values[n->results[0].value - 1].scalar_value;
         break;
     case NL_CHECKED_IDENTIFIER:
+        if (r->proof->readonly_parameter &&
+            n->symbol == r->proof->readonly_parameter) {
+            const NLValueId value =
+                r->proof->entry->bindings[n->symbol - 1].view.value;
+            ok = scalar(r, id) && n->value_use == NL_VALUE_COPIED &&
+                 intrinsic(&r->proof->exit->values[n->results[0].value - 1],
+                           &r->proof->entry->values[value - 1]);
+            break;
+        }
         if (r->proof->formal_write &&
             n->symbol == r->proof->parameters.parameters[1]) {
             const NLValueId v =
@@ -1413,8 +1436,8 @@ bool nl_copy_body_readonly_valid(const NLCheckedFragment *f)
     const NLCheckedNodeView *call =
         p && p->caller ? nl_checked_node_view(p->caller, p->call) : NULL;
     return p && p->sealed && p->owner == f && !p->formal_write &&
-           p->readonly_parameter && p->current_loop && call &&
-           readonly_entry(p, p->caller, call);
+           p->readonly_parameter && (p->current_loop || p->current_call) &&
+           call && readonly_entry(p, p->caller, call);
 }
 
 NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
@@ -1478,8 +1501,9 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
                             !nl_copy_same_types(p->handoff, p->exit) ||
                             !parameter_entry(p, caller, call)))
         return INVALID;
-    if (p->readonly_parameter && (p->formal_write || !p->current_loop ||
-                                  !readonly_entry(p, caller, call)))
+    if (p->readonly_parameter &&
+        (p->formal_write || (!p->current_loop && !p->current_call) ||
+         !readonly_entry(p, caller, call)))
         return INVALID;
     Replay r = {.proof = p,
                 .f = f,

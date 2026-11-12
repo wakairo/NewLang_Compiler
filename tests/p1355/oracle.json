@@ -1,0 +1,44 @@
+{
+  "release": "C640",
+  "baseline": "66eda4e95fa07b528cadd6035c3ff9075be1d880",
+  "StageA": "actual CHECK0; root->main->wrapper->inner custody, two fresh readonly formals, owner/current/Copy/final seal; challenges reject and restore",
+  "A": {
+    "input": 83,
+    "index": 0,
+    "inner_initial": 13,
+    "inner_current": 227,
+    "inner_sibling": 191,
+    "backedges": 2,
+    "wrapper_old": 47,
+    "wrapper_current": 83,
+    "wrapper_sibling": 83,
+    "outer_Copy": 83
+  },
+  "B": {
+    "input": 137,
+    "index": 1,
+    "inner_initial": 19,
+    "inner_current": 239,
+    "inner_sibling": 179,
+    "backedges": 3,
+    "wrapper_old": 61,
+    "wrapper_current": 137,
+    "wrapper_sibling": 137,
+    "outer_Copy": 137
+  },
+  "negative": {
+    "N-ended-loan": "P8-EXIT-DEPENDENCY registration + rollback",
+    "N-wrong-argument": "P3-TYPE-MISMATCH registration + rollback",
+    "N-two-inner": "precision, nil entry, rollback",
+    "N-extra-wrapper": "precision, nil entry, rollback"
+  },
+  "OOM": "fresh census; selected initialization/readonly-entry-anchor/retain/seal/final points all fire with OOM/nil/unchanged/retry; both Copy validators inject every reached allocation, outer finite ceiling128, inner8",
+  "StageB": "CHECK->unedited C17 GCC/Clang O0/O2 raw8/passive8 + guest ASan/UBSan4 =20 guest; original pointers used only while alive; real scalar results after exit",
+  "budgets": {
+    "feature_candidates": 4,
+    "total_fixed_candidates": 6,
+    "host_configs": 3,
+    "native_guest": 24
+  },
+  "old_P1354_source_oracle_FIRST": "unchanged; new files separate; no independent F/R materials"
+}
