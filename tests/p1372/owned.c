@@ -212,6 +212,15 @@ static Borrow healthy(PInput *p, size_t index)
            "sealed/closed PASS\n",
            (size_t)v->root, (size_t)v->child, index, (size_t)v->incoming_call,
            (size_t)v->helper_formal, root->item_count);
+    V0Program program = {.unit = nl_semantic_unit_type(p->context),
+                         .u8 = nl_semantic_core_type(p->context, NL_TYPE_U8)};
+    assert(v0_validate_call(p->entry, nl_checked_root(p->entry), &program) &&
+           program.current_loop && program.current_local_copy &&
+           program.current_readonly_call && program.count == 2);
+    const V0Function *selected = v0_find_function(&program, call->function);
+    assert(selected && selected->body == b.helper &&
+           selected->parameter == v->helper_formal &&
+           !selected->ref_parameter && !selected->quantity_parameter);
     return b;
 }
 static void rejected(PInput *p, Borrow b, const char *name)
@@ -224,8 +233,10 @@ static void rejected(PInput *p, Borrow b, const char *name)
     assert(nl_linear_break_owner_validate(b.main) != NL_CHECK_OK);
     assert(nl_checked_copy_body_validate(b.arm, b.v.incoming_call, NULL) !=
            NL_CHECK_OK);
+    V0Program program = {.unit = nl_semantic_unit_type(p->context),
+                         .u8 = nl_semantic_core_type(p->context, NL_TYPE_U8)};
+    assert(!v0_validate_call(p->entry, nl_checked_root(p->entry), &program));
     printf("negative %s status=%d unchanged-output PASS\n", name, status);
-    (void)p;
 }
 static void attacks(PInput *p, const char *path, size_t index)
 {

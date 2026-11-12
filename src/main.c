@@ -79,7 +79,8 @@ typedef struct {
     bool current_loop;
     bool current_callee; /* authenticated normal-tail Copy/current consumer */
     bool current_readonly_call; /* current-u8 operand, passive result hook */
-    bool two_normal_unit; /* validated new profile; passive C hooks only */
+    bool current_local_copy; /* the same authenticated straight-line replay */
+    bool two_normal_unit;    /* validated new profile; passive C hooks only */
     const NLCopyBodyParameters *unit_parameters;
     const NLCheckedFragment *formal_body; /* current validation only */
     NLSymbolId formal;
@@ -2510,10 +2511,40 @@ static bool current_helper_selection(const NLLinearBreakView *v, V0Program *p)
         /* v is the immediately preceding successful loop validation. Its
          * private records authenticate all helper return worlds; standalone
          * predicate admission deliberately remains normal-arm-only. */
-        if (!nl_h_custody_result_valid(v->iteration, v->incoming_call) ||
-            (!nl_pure_u8_contents(v->iteration, v->incoming_call, &pure) &&
-             !nl_readonly_u8_contents(v->iteration, v->incoming_call, &pure)))
+        if (!nl_h_custody_result_valid(v->iteration, v->incoming_call))
             return false;
+        if (!nl_pure_u8_contents(v->iteration, v->incoming_call, &pure) &&
+            !nl_readonly_u8_contents(v->iteration, v->incoming_call, &pure)) {
+            NLCopyLocalCall local;
+            if (!nl_copy_body_local_contents(v->iteration, v->incoming_call,
+                                             &local))
+                return false;
+            /* Consume the already-issued Copy replay, including its exact
+             * entry, local ending and completed caller seal. The borrowed
+             * metadata alone never admits a callee or substitutes a root. */
+            const NLCheckStatus status =
+                nl_copy_body_local_validate(v->iteration, v->incoming_call);
+            if (status != NL_CHECK_OK) {
+                if (status == NL_CHECK_OUT_OF_MEMORY ||
+                    status == NL_CHECK_RESOURCE_LIMIT)
+                    p->copy_body_status = status;
+                return false;
+            }
+            /* The CLI has one two-u8 C carrier declaration. Preserve that
+             * existing nominal/layout boundary for this local as well. */
+            for (NLCheckedNodeId i = 1; i <= nl_checked_node_count(local.body);
+                 ++i) {
+                const NLCheckedNodeView *n =
+                    nl_checked_node_view(local.body, i);
+                if (n->kind == NL_CHECKED_AGGREGATE &&
+                    !avs_shape(local.body, n->type, p))
+                    return false;
+            }
+            pure = (NLPureU8Call){.body = local.body,
+                                  .formal = local.formal,
+                                  .function = local.function};
+            p->current_local_copy = true;
+        }
         const bool quantity = pure.selection != 0;
         p->current_readonly_call |= !quantity;
         V0Function *prior = v0_find_function(p, pure.function);
@@ -4025,6 +4056,7 @@ static bool predicate_emit_binding(FILE *stream, const NLCheckedFragment *f,
 static bool v1_emit_body(FILE *stream, const V0Function *fn)
 {
     const NLCheckedFragment *f = fn->body;
+    const bool local = f->copy_body && f->copy_body->readonly_local;
     NLPureU8Plan pure = {0};
     if (fn->quantity_parameter &&
         !nl_pure_u8_body(f, fn->parameter,
@@ -4038,6 +4070,11 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
         return false;
     if (fn->ref_parameter &&
         fprintf(stream, "    (void)nl_local_%zu;\n", fn->ref_parameter) < 0)
+        return false;
+    if (local && fprintf(stream,
+                         "    NL_CURRENT_CALLEE_INPUT(%zu, "
+                         "nl_local_%zu);\n",
+                         fn->function, fn->parameter) < 0)
         return false;
     for (NLCheckedNodeId i = root->first_item; i != 0;) {
         const NLCheckedNodeView *v = nl_checked_node_view(f, i);
@@ -4081,11 +4118,47 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
             if (!v0_emit_node(stream, f, i, 1) ||
                 !emit_current_binding(stream, f, v, 1))
                 return false;
+            /* Passive observations of this admitted local carrier only.
+             * The ordinary aggregate/loan/old-load/store/Copy emitters above
+             * remain responsible for the actual C dataflow. */
+            if (local && v->kind == NL_CHECKED_BINDING && init) {
+                if (init->kind == NL_CHECKED_AGGREGATE &&
+                    fprintf(stream,
+                            "    NL_CURRENT_CALLEE_BIND(&nl_local_%zu.f0, "
+                            "&nl_local_%zu.f1);\n",
+                            v->symbol, v->symbol) < 0)
+                    return false;
+                if (init->kind == NL_CHECKED_FIELD_READ &&
+                    fprintf(stream,
+                            "    NL_CURRENT_CALLEE_READ(&nl_local_%zu.f%zu, "
+                            "nl_local_%zu);\n",
+                            init->field.base, init->field.index, v->symbol) < 0)
+                    return false;
+                if (init->kind == NL_CHECKED_LOAN_HEADER &&
+                    init->loan.access == NL_ACCESS_WRITE &&
+                    fprintf(stream,
+                            "    NL_CURRENT_CALLEE_CHANGE(&nl_local_%zu.f0, "
+                            "&nl_local_%zu.f1, %zu, nl_local_%zu);\n",
+                            init->loan.source, init->loan.source,
+                            init->field.index, v->symbol) < 0)
+                    return false;
+                if (init->kind == NL_CHECKED_IDENTIFIER &&
+                    fprintf(stream,
+                            "    NL_CURRENT_CALLEE_COPY(%zu, nl_local_%zu);\n",
+                            v->symbol, v->symbol) < 0)
+                    return false;
+            }
         }
         i = v->next_item;
     }
     if (root->tail != 0) {
         const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
+        /* The admitted local profile has a normal identifier Copy tail.
+         * Clear any passive borrowed C pointers while the local is live. */
+        if (local &&
+            (fputs("    NL_CURRENT_CALLEE_END(", stream) < 0 ||
+             !v1_emit_scalar(stream, tail) || fputs(");\n", stream) < 0))
+            return false;
         if (fn->quantity_parameter && tail->kind == NL_CHECKED_IF) {
             if (!predicate_emit_return(stream, f, tail))
                 return false;
@@ -4171,6 +4244,22 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
               "#define NL_CURRENT_CALL_RESULT(...) ((void)0)\n#endif\n"
               "#ifndef NL_CURRENT_CALLER_COPY\n"
               "#define NL_CURRENT_CALLER_COPY(...) ((void)0)\n#endif\n\n",
+              stream) < 0)
+        return false;
+
+    if (program->current_local_copy &&
+        fputs("#ifndef NL_CURRENT_CALLEE_INPUT\n"
+              "#define NL_CURRENT_CALLEE_INPUT(...) ((void)0)\n#endif\n"
+              "#ifndef NL_CURRENT_CALLEE_BIND\n"
+              "#define NL_CURRENT_CALLEE_BIND(...) ((void)0)\n#endif\n"
+              "#ifndef NL_CURRENT_CALLEE_READ\n"
+              "#define NL_CURRENT_CALLEE_READ(...) ((void)0)\n#endif\n"
+              "#ifndef NL_CURRENT_CALLEE_CHANGE\n"
+              "#define NL_CURRENT_CALLEE_CHANGE(...) ((void)0)\n#endif\n"
+              "#ifndef NL_CURRENT_CALLEE_COPY\n"
+              "#define NL_CURRENT_CALLEE_COPY(...) ((void)0)\n#endif\n"
+              "#ifndef NL_CURRENT_CALLEE_END\n"
+              "#define NL_CURRENT_CALLEE_END(...) ((void)0)\n#endif\n\n",
               stream) < 0)
         return false;
 

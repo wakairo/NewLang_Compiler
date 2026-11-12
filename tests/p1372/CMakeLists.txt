@@ -22,3 +22,15 @@ add_test(NAME p1372_loan_negative.unit COMMAND p1372_owned negative-loan
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1372/N-local-loan-escape.nl" 1)
 add_test(NAME p1372_type_negative.unit COMMAND p1372_owned negative-type
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1372/N-wrong-actual.nl" 1)
+add_test(NAME p1372_native.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1372/native.py" "$<TARGET_FILE:newlangc>"
+    "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_BINARY_DIR}/p1372-native"
+    "${NEWLANG_SANITIZER}")
+add_test(NAME p1372_negative_cli_oom.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1372/failure.py" "$<TARGET_FILE:newlangc>"
+    "$<TARGET_FILE:p1332_cli_oom>" "${CMAKE_CURRENT_BINARY_DIR}/p1372-negative" p1372)
+add_test(NAME p1372_legacy_C_origin.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1372/compatibility.py" "$<TARGET_FILE:newlangc>"
+    "${CMAKE_CURRENT_BINARY_DIR}/p1372-compat")
+set_tests_properties(p1372_native.integration p1372_negative_cli_oom.integration
+    p1372_legacy_C_origin.integration PROPERTIES TIMEOUT 180)
