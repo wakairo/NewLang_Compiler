@@ -73,12 +73,6 @@ typedef struct {
     NLCheckedNodeId loop;
     NLLinearBreakView v;
 } Borrow;
-static bool admission(PInput *p)
-{
-    V0Program program = {.unit = nl_semantic_unit_type(p->context),
-                         .u8 = nl_semantic_core_type(p->context, NL_TYPE_U8)};
-    return v0_validate_call(p->entry, nl_checked_root(p->entry), &program);
-}
 static Borrow healthy(PInput *p, size_t index)
 {
     Borrow b = {0};
@@ -182,7 +176,7 @@ static void attacks(PInput *p, const char *path, size_t index)
     *arg = saved;
     healthy(p, index);
     saved = *call;
-    call->results[0].value = arg->results[0].value;
+    call->results[0].value = 0;
     rejected(p, b, "result package");
     *call = saved;
     healthy(p, index);
