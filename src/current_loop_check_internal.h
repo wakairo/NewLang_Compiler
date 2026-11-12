@@ -259,7 +259,7 @@ static bool current_copy_cycle(const NLLinearBreakProof *p)
 static size_t current_graph_count(const NLCurrentLoopProof *s)
 {
     return s->terminal_call ? CURRENT_GRAPH_LIMIT
-           : s->helper      ? 6u
+           : s->helper      ? (s->helper_choice ? 6u : 4u)
            : s->scalar      ? 5u
                             : 3u;
 }
@@ -812,6 +812,7 @@ typedef struct {
     bool seen[NL_SEMANTIC_MAX_ENTRIES];
     NLValueId bound[NL_SEMANTIC_MAX_ENTRIES];
     bool incoming[NL_SEMANTIC_MAX_ENTRIES];
+    bool current_read[NL_SEMANTIC_MAX_ENTRIES];
     NLCheckedNodeId scalar;
     NLCheckedField change;
     NLCheckedField changes[2];
@@ -819,6 +820,14 @@ typedef struct {
     bool changed, terminal;
 } CurrentWalk;
 static const NLCheckedNodeView *current_take(CurrentWalk *, NLCheckedNodeId);
+static bool current_scalar(CurrentWalk *, const NLCheckedNodeView *);
+
+static bool current_call_contents(const NLCheckedFragment *f,
+                                  NLCheckedNodeId id, NLPureU8Call *out)
+{
+    return nl_pure_u8_contents(f, id, out) ||
+           nl_readonly_u8_contents(f, id, out);
+}
 
 /* Every persistent prefix member, including the actual phase package/fact,
  * is unchanged before the writer. Extra scalar locals are checked by the
@@ -899,6 +908,9 @@ static bool current_return_refs(const NLCurrentLoopProof *s,
                                 nl_checked_node_view(body, pure->selection),
                             *root = nl_checked_node_view(body, body->root);
     *count = 0;
+    if (!pure->selection)
+        return root && !root->terminates && !pure->plan.final_return &&
+               !pure->plan.body_returns && !nl_control_exits_count(body->exits);
     size_t joined = 0;
     for (size_t i = 0; i < 2; ++i) {
         const NLCheckedFragment *arm =
@@ -1059,8 +1071,35 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
         r->scalar || r->changed || !v || !stutter_span(v->span, source->span) ||
         !stutter_span(v->name, source->data.call.callee) ||
         (s->sealed && !nl_h_custody_result_valid(r->arm, id)) ||
-        !nl_pure_u8_contents(r->arm, id, &pure))
+        !current_call_contents(r->arm, id, &pure))
         return false;
+    if (!pure.selection) {
+        /* A genuine current-u8 operand, not the phase or an equal scalar.
+         * Every declaration in current_read was already checked by this
+         * exhaustive walk against the exact header FIELD_READ facts. */
+        const NLCheckedNodeView *arg = current_take(r, v->first_argument);
+        const NLSyntaxView *actual =
+            nl_syntax_node_view(source->data.call.arguments);
+        const NLSemanticContext *c = r->arm->context;
+        const NLSemanticBindingView formal =
+            pure.formal && pure.formal <= c->binding_count
+                ? c->bindings[pure.formal - 1].view
+                : (NLSemanticBindingView){0};
+        if (r->terminal || s->paired || s->readonly_parameter ||
+            s->preserved_count || !arg || !actual ||
+            !stutter_span(arg->span, actual->span) || arg->next_argument ||
+            arg->kind != NL_CHECKED_IDENTIFIER || !arg->symbol ||
+            arg->symbol > NL_SEMANTIC_MAX_ENTRIES ||
+            !r->current_read[arg->symbol - 1] || !current_scalar(r, arg) ||
+            formal.value != arg->results[0].value ||
+            formal.place <= r->header->place_count ||
+            formal.place > c->place_count || c->places[formal.place - 1].live ||
+            c->places[formal.place - 1].current_value ||
+            c->places[formal.place - 1].current_fact)
+            return false;
+        r->scalar = id;
+        return true;
+    }
     if (r->terminal) {
         const NLCheckedNodeView *root =
             nl_checked_node_view(pure.body, pure.body->root);
@@ -1648,6 +1687,18 @@ static bool current_arm(const NLCurrentLoopProof *s,
                         x->results[0].value)
                     return false;
                 r.bound[v->symbol - 1] = x->results[0].value;
+                r.current_read[v->symbol - 1] =
+                    !r.changed &&
+                    ((x->kind == NL_CHECKED_FIELD_READ &&
+                      x->field.child == s->child &&
+                      x->field.index == s->index && x->symbol == s->base &&
+                      x->value_use == NL_VALUE_COPIED &&
+                      x->field.access == NL_ACCESS_READ &&
+                      x->field.type == x->type &&
+                      x->field.nominal == r.header->places[s->root - 1].type) ||
+                     (x->kind == NL_CHECKED_IDENTIFIER && x->symbol &&
+                      x->symbol <= NL_SEMANTIC_MAX_ENTRIES &&
+                      r.current_read[x->symbol - 1]));
                 if (!continuing && x->kind == NL_CHECKED_LOAN_HEADER)
                     old_loan = v->initializer;
                 r.incoming[v->symbol - 1] =
@@ -1761,7 +1812,7 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
             if (s->helper) {
                 NLPureU8Call pure;
                 if ((s->sealed && !nl_h_custody_result_valid(arm, scalar)) ||
-                    !nl_pure_u8_contents(arm, scalar, &pure) ||
+                    !current_call_contents(arm, scalar, &pure) ||
                     (s->sealed && s->helper_choice != pure.selection))
                     return bad;
                 if (!s->sealed) {
@@ -2038,7 +2089,9 @@ static bool current_helper_entry(const NLCurrentLoopProof *s,
            fn->body == s->helper_plan && fn->count == 1 &&
            fn->parameters == origin->parameters && origin->count == 1 &&
            fn->parameters &&
-           fn->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
+           fn->parameters[0] == nl_semantic_core_type(c, s->helper_choice
+                                                             ? NL_TYPE_USIZE
+                                                             : NL_TYPE_U8) &&
            fn->result == nl_semantic_core_type(c, NL_TYPE_U8) &&
            !fn->caller_effects && !fn->hidden_dependencies &&
            !fn->owner_receiver && !fn->owner_producer &&
@@ -2078,7 +2131,7 @@ static NLCheckStatus seal_current_cycle(NLLinearBreakProof *p)
         const NLCheckedFragment *iteration =
             nl_checked_if_arm(s->graph, s->conditional, 0);
         NLPureU8Call pure;
-        if (!nl_pure_u8_contents(iteration, s->scalar, &pure))
+        if (!current_call_contents(iteration, s->scalar, &pure))
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         CurrentReturnRef refs[4];
         size_t count;
@@ -2285,7 +2338,7 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
         }
         CurrentReturnRef refs[4];
         size_t count;
-        if (!nl_pure_u8_contents(s->graphs[1].fragment, s->scalar, &pure) ||
+        if (!current_call_contents(s->graphs[1].fragment, s->scalar, &pure) ||
             !current_return_refs(s, &pure, refs, &count) ||
             count != s->return_count)
             return bad;

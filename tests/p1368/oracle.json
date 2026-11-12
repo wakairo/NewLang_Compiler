@@ -1,0 +1,70 @@
+{
+  "release": "C688",
+  "base": "bbeec928b9ccdaaab0dd083dee7681bc3f07b88b",
+  "canonical": "Draft17.35",
+  "sources": {
+    "A-current-copy-call.nl": {
+      "bytes": 799,
+      "SHA256": "0d6a17d3bff7026d9def91e2834f083ae1439fee4e1ee7e0b6baa183b5c20ed1"
+    },
+    "B-field-zero-alias.nl": {
+      "bytes": 888,
+      "SHA256": "84614539bb028aca80f4fecbcd342396132fd229a169955f284f48067b2ff706"
+    },
+    "N-iteration-loan-escape.nl": {
+      "bytes": 806,
+      "SHA256": "b8e731513c7068c14a1180482145c2d95f039071c66ddd3ac705f86def21a2ca"
+    },
+    "N-wrong-actual.nl": {
+      "bytes": 842,
+      "SHA256": "9ea6ba264b00a13df8c86b8f05674cae65bb00a2dfae5effc85fa8649aeedcfe"
+    }
+  },
+  "A": {
+    "original_P1366_A_unchanged": true,
+    "index": 1,
+    "initial": 37,
+    "terminal": 203,
+    "sibling": 181,
+    "backedges": 2,
+    "iteration_current_actual_result_old": [
+      37,
+      37
+    ],
+    "loop_old_result": 37,
+    "postcurrent": 203
+  },
+  "B": {
+    "index": 0,
+    "initial": 91,
+    "terminal": 151,
+    "sibling": 217,
+    "backedges": 3,
+    "iteration_current_actual_result_old": [
+      91,
+      91,
+      91
+    ],
+    "loop_old_result": 91,
+    "postcurrent": 151,
+    "independent": "opposite declared index, other nominal/names/values/limit and3 local helper aliases + caller result alias"
+  },
+  "baseline_prediction": "both positives registration CHECK3 P14; N-loan semantic P8, N-wrong-actual semantic P3; static prediction not a dynamic trace",
+  "StageA": "definition/actual CHECK0 genuine canonical main/iteration/helper root, FIELD_READ exact root/child/incarnation/header fact; real readonly free-u8 actual/fresh formal/Copy alias/result; source/plan/signature origin and finished-result seal; closure Entry<=H, Continue(H)<=H, exact sibling/other state; no fake Known/INITIALIZE/current-loop; public validator/custody reject all focused tamper with restore/retry",
+  "negative": "wrong actual/formal/result/BODY/source/field/current/incarnation/call slot/signature; short foreign signature allocation authenticated before first read; same-bits foreign checked instance rejected; original ended-loan and wrong-actual semantic refusals maintained",
+  "OOM": "fresh registration/actual census; bounded selected early/middle/last, plan and clone boundaries and result-custody seal allocations; each actual reached failure must report OOM, nil/unmodified output, full prior seeded context/body owner rollback, cleanup/retry. Not exhaustive unless explicitly measured. Relevant validator OOM output remains unchanged",
+  "StageB": "after genuine StageA: unmodified strict GCC/Clang C17 O0/O2 raw/passive, both sources16 guests + passive ASan+LSan/UBSan4=20; passive sees iteration FIELD_READ/input/result/old/new/sibling and exact same live storage; no retired pointer comparison. malloc/write/flush named output failures preserve bytes/inode/mtime, no temp leaks/retry",
+  "compatibility": "existing usize-phase/u8 IF family, ordinary current/Copy one/two-call/wrapper/direct caller/H compatibility and previous C bytes; original historical files untouched",
+  "budgets": {
+    "functional": 4,
+    "all_fixed": 6,
+    "hosts": 3,
+    "guest": 24,
+    "planned_guest": 20,
+    "natural_CI_sets": 2,
+    "manual": 0
+  },
+  "independent_F_R": "unread",
+  "scope_out": "P1366 B wrapper/inner-loop in iteration, extra originals/formals, ref crossing, Array/generalCFG/recursion/publicissuer/API/ABI/source semantics",
+  "VALUE_ALIGNMENT_RISK": "finite compiler capability only; no audit-locality Product PASS; Product GO PAUSED/H1 HOLD"
+}

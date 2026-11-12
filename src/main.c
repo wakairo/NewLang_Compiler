@@ -77,7 +77,8 @@ typedef struct {
     bool stuttering_loop;
     bool scalar_loop;
     bool current_loop;
-    bool current_callee;  /* authenticated normal-tail Copy/current consumer */
+    bool current_callee; /* authenticated normal-tail Copy/current consumer */
+    bool current_readonly_call; /* current-u8 operand, passive result hook */
     bool two_normal_unit; /* validated new profile; passive C hooks only */
     const NLCopyBodyParameters *unit_parameters;
     const NLCheckedFragment *formal_body; /* current validation only */
@@ -2510,17 +2511,20 @@ static bool current_helper_selection(const NLLinearBreakView *v, V0Program *p)
          * private records authenticate all helper return worlds; standalone
          * predicate admission deliberately remains normal-arm-only. */
         if (!nl_h_custody_result_valid(v->iteration, v->incoming_call) ||
-            !nl_pure_u8_contents(v->iteration, v->incoming_call, &pure))
+            (!nl_pure_u8_contents(v->iteration, v->incoming_call, &pure) &&
+             !nl_readonly_u8_contents(v->iteration, v->incoming_call, &pure)))
             return false;
+        const bool quantity = pure.selection != 0;
+        p->current_readonly_call |= !quantity;
         V0Function *prior = v0_find_function(p, pure.function);
         if (prior) {
-            if (!prior->quantity_parameter || prior->result != p->u8)
+            if (prior->quantity_parameter != quantity || prior->result != p->u8)
                 return false;
         } else {
             if (p->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
                 return false;
             p->functions[p->count++] = (V0Function){
-                pure.function, pure.body, p->u8, pure.formal, 0, true};
+                pure.function, pure.body, p->u8, pure.formal, 0, quantity};
         }
     }
     return true;
@@ -3386,16 +3390,26 @@ static bool emit_current_helper(FILE *stream, const NLLinearBreakView *p,
     const NLCheckedNodeView *call = nl_checked_node_view(owner, call_id);
     const NLCheckedNodeView *actual =
         call ? nl_checked_node_view(owner, call->first_argument) : NULL;
-    return call && actual && v0_indent(stream, depth) &&
-           fprintf(stream, "const uint8_t nl_local_%zu = nl_fn_%zu(", binding,
-                   call->function) >= 0 &&
-           emit_current_quantity(stream, p, loop, actual) &&
-           fputs(");\n", stream) >= 0 && v0_indent(stream, depth) &&
-           fprintf(stream, "(void)nl_local_%zu;\n", binding) >= 0 &&
-           (owner != p->breaking ||
-            (v0_indent(stream, depth) &&
-             fprintf(stream, "NL_CURRENT_LOCAL(%zu, nl_local_%zu);\n", binding,
-                     binding) >= 0));
+    const bool readonly_u8 =
+        actual && actual->type == nl_semantic_core_type(
+                                      nl_checked_context(owner), NL_TYPE_U8);
+    if (!(call && actual && v0_indent(stream, depth) &&
+          fprintf(stream, "const uint8_t nl_local_%zu = nl_fn_%zu(", binding,
+                  call->function) >= 0 &&
+          (readonly_u8 ? v1_emit_scalar(stream, actual)
+                       : emit_current_quantity(stream, p, loop, actual)) &&
+          fputs(");\n", stream) >= 0 && v0_indent(stream, depth) &&
+          fprintf(stream, "(void)nl_local_%zu;\n", binding) >= 0))
+        return false;
+    if (readonly_u8 &&
+        !(v0_indent(stream, depth) &&
+          fprintf(stream, "NL_CURRENT_CALL_RESULT(%zu, %zu, nl_local_%zu);\n",
+                  call->function, call_id, binding) >= 0))
+        return false;
+    return owner != p->breaking ||
+           (v0_indent(stream, depth) &&
+            fprintf(stream, "NL_CURRENT_LOCAL(%zu, nl_local_%zu);\n", binding,
+                    binding) >= 0);
 }
 
 static bool emit_current_loan_observation(FILE *stream,
@@ -4152,7 +4166,7 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
               stream) < 0)
         return false;
 
-    if (program->current_callee &&
+    if ((program->current_callee || program->current_readonly_call) &&
         fputs("#ifndef NL_CURRENT_CALL_RESULT\n"
               "#define NL_CURRENT_CALL_RESULT(...) ((void)0)\n#endif\n"
               "#ifndef NL_CURRENT_CALLER_COPY\n"
