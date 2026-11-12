@@ -4,5 +4,6 @@
   "negative_type_exact_code": "P3-TYPE-MISMATCH",
   "reason": "Original frozen oracle predicted P3-ARGUMENT-TYPE spelling. Unmodified baseline actually reported P3-TYPE-MISMATCH at semantic type refusal. Preserve that prediction and FIRST; new harness requires the actual baseline's exact semantic refusal, not acceptance or a precision substitute.",
   "negative_loan_exact_code": "P8-EXIT-DEPENDENCY",
-  "source_oracle_numeric_lifetime_and_rejection_expectations": "unchanged"
+  "source_oracle_numeric_lifetime_and_rejection_expectations": "unchanged",
+  "world_separation": "A terminal loan reopened in the other breaking arm invalidates the outer current proof, not the unaffected continuing caller's Copy proof. A loan reopened in the Copy call's own completed caller invalidates both. Original candidate2 first assertion/RED is preserved."
 }

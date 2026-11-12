@@ -216,6 +216,7 @@ static void destroy(NLCheckedFragment *f)
     nl_semantic_destroy(p->handoff);
     nl_copy_state_destroy(&p->entry_anchor);
     nl_copy_state_destroy(&p->handoff_anchor);
+    nl_copy_state_destroy(&p->local_caller_anchor);
     nl_semantic_destroy(p->pending);
     nl_semantic_destroy(p->exit);
     free(p->exit_scopes);
@@ -537,6 +538,9 @@ NLCheckStatus nl_copy_body_seal_calls(NLCheckedFragment *f)
         memcpy(pending[i], f->nodes, f->count * sizeof(*f->nodes));
         if (child->readonly_local) {
             status = signature_seal(f->context, &child->caller_signatures);
+            if (status == NL_CHECK_OK)
+                status = nl_copy_state_anchor(f->context,
+                                              &child->local_caller_anchor);
             if (status != NL_CHECK_OK)
                 goto failure;
             child->local_caller_world = f->context;
@@ -563,6 +567,8 @@ failure:
         if (p && p->readonly_local && !p->caller_nodes) {
             free(p->caller_signatures.entries);
             p->caller_signatures = (CopySignatureSet){0};
+            nl_copy_state_destroy(&p->local_caller_anchor);
+            p->local_caller_anchor = (NLCopyCallAnchor){0};
         }
     }
     return status;
@@ -920,6 +926,7 @@ static bool local_preflight(const NLCopyBodyProof *p,
         p->current_loop || p->current_call || !p->entry || !p->exit ||
         current != p->local_caller_world || !current ||
         memcmp(current, &p->local_caller_storage, sizeof(*current)) ||
+        !nl_copy_state_matches(current, &p->local_caller_anchor) ||
         !p->handoff || p->body->syntax != p->readonly_syntax ||
         memcmp(p->entry, &p->readonly_storage, sizeof(*p->entry)) ||
         memcmp(p->exit, &p->readonly_exit_storage, sizeof(*p->exit)) ||

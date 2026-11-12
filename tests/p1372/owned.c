@@ -314,8 +314,30 @@ static void attacks(PInput *p, const char *path, size_t index)
         &breaking->context->scopes[loan->loan.scope - 1];
     assert(!scope->active);
     scope->active = true;
-    rejected(p, b, "reopened loan");
+    /* This is the OTHER arm's world. Its loan invalidates the outer current
+     * proof, not the unaffected iteration's historical/local Copy proof. */
+    NLLinearBreakView out, unchanged_out;
+    memset(&out, 0x63, sizeof(out));
+    memcpy(&unchanged_out, &out, sizeof(out));
+    assert(nl_linear_break_validate(b.main, b.loop, &out) != NL_CHECK_OK &&
+           !memcmp(&out, &unchanged_out, sizeof(out)));
+    assert(nl_linear_break_owner_validate(b.main) != NL_CHECK_OK);
+    assert(nl_checked_copy_body_validate(b.arm, b.v.incoming_call, NULL) ==
+           NL_CHECK_OK);
+    puts("negative other-arm terminal loan: outer current rejects; "
+         "independent iteration Copy remains valid PASS");
     scope->active = false;
+    healthy(p, index);
+    const NLCheckedNodeView *own_loan = NULL;
+    for (size_t i = 0; i < b.arm->count; ++i)
+        if (b.arm->nodes[i].kind == NL_CHECKED_LOAN_HEADER)
+            own_loan = &b.arm->nodes[i];
+    assert(own_loan && own_loan->loan.scope);
+    NLSemanticScopeView *own_scope = &c->scopes[own_loan->loan.scope - 1];
+    assert(!own_scope->active);
+    own_scope->active = true;
+    rejected(p, b, "same completed caller loan reopened");
+    own_scope->active = false;
     healthy(p, index);
     NLCopyBodyProof *proof = b.helper->copy_body;
     NLSemanticContext *worlds[32] = {proof->entry, proof->exit, proof->handoff};

@@ -64,6 +64,7 @@ typedef struct NLCopyBodyProof {
     NLSemanticContext handoff_storage;
     const NLSemanticContext *local_caller_world;
     NLSemanticContext local_caller_storage;
+    NLCopyCallAnchor local_caller_anchor;
     const NLSyntaxTree *readonly_syntax;
     /* A plain read-only scalar formal, distinct from ref-write parameters.
      * The existing entry anchor and final caller seal own this handoff. */
