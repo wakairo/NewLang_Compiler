@@ -1,0 +1,289 @@
+{
+  "time_JST": "2026-11-12T15:41:58.940158+09:00",
+  "baseline_HEAD": "8db2dfe0e399da2144d4c7b346766eb9045bc10e",
+  "baseline_tree": "fcddffb0f122ec768bb91e60d967262f225023f2",
+  "tested_HEAD": "11aa0d49145a11ff5bbce4f8458f9cc49b58a00c",
+  "tested_tree": "f353cacc55b4063ecc046d1ce090e5c29ddad522",
+  "freeze_SHA256": "76b323e94343b9835f74b03ea291b3899971d7e1875dd60eb73137fea02f1dde",
+  "input_files": {
+    "CMakeLists.txt": "9f0845af4e80a5a6cc3784ba4c18a46737d9442261f557135d91bb23b9d70ca4",
+    "src/current_loop_check_internal.h": "4a996feee0521538d153243197cca6a12cc4241009dcbe8aee1816aeae705604",
+    "src/main.c": "aafceade3e24787db42b38c00c75483a3e0a775819001233f6fc41ec9946e6e4",
+    "src/semantic_check.c": "4d02d35de47fe23a9735f981356a992e04eac52030df1626f58de7f42941bc9d",
+    "tests/p1364/A-caller-original.nl": "cec34da3bfc1db0b2c2f3664178005a271b99ecd839daa3286a4919a8d784bb2",
+    "tests/p1364/B-reversed-field.nl": "d88943550b6c406b368290dd2e7b0299b4cd08e881ed62fa51cbaa29198fce8f",
+    "tests/p1364/CMakeLists.txt": "63ad2bb689e817007597cc0880c363c8ed2f27fec82a599ef8493d7639bdc41d",
+    "tests/p1364/N-ended-loan.nl": "f070e864fe04b93b0bb56aef99b68b9880bc1b640f25f43a1d2d559cd638c568",
+    "tests/p1364/N-extra-main.nl": "cca270a0465849b12706e23a1819b5d67cd65c84b2a6328ae8388e78249171f2",
+    "tests/p1364/N-second-wrapper.nl": "7ceca3d6b9a0afd1618b2f6a7627d00bda420956abbab93a28ad20b5f226f435",
+    "tests/p1364/N-wrong-argument.nl": "d05e6315edc9f3709a04451698354df0a3bf341aef7c8079d12cd0d19a6f53f0",
+    "tests/p1364/compatibility.py": "d607effd8e545ca79d895c8518c6b84053d25a9a6210e6c76ae296976731f5f5",
+    "tests/p1364/control-A-copy-actual.nl": "61ac93eaec28647bbafd06c9c6d7c2137008b21913f147fe712cfed0e9dfee30",
+    "tests/p1364/failure.py": "7a2571e54a16edbd82c3fd202562c290c97f03ee17732a078c8c8e7b1fa7f668",
+    "tests/p1364/legacy-C.json": "4382d7d6fd0050f9e39d5bc67024e4ae9607296d61680a7018ba89b02f0a363d",
+    "tests/p1364/native.py": "7701ee7e30d1d9432d39b915bd34439f8805f30dc583080207ce3eabdfe3ba94",
+    "tests/p1364/observer.h": "e5dd313f93a5339ebf3c6f155b35ef04c4e5f62483464be1183645d1f470e828",
+    "tests/p1364/oracle.json": "2546f1b0c61222200e90e3e69d9cb11082832fe4b3546eaa8365406df041d1c0",
+    "tests/p1364/owned.c": "71b66961759c55e36f3d3bbf5beb90a3de5915e4342e8ebe368aedcf2a74bcb1"
+  },
+  "oracle": {
+    "release": "C670",
+    "baseline": "8db2dfe0e399da2144d4c7b346766eb9045bc10e",
+    "canonical": "Draft17.35",
+    "A": {
+      "source": "original P1362 B bytes unchanged",
+      "input": 89,
+      "index": 1,
+      "main_initial_old": 29,
+      "main_final_current": 89,
+      "main_sibling": 199,
+      "wrapper_old": 59,
+      "wrapper_final_current_and_sibling": 89,
+      "inner_initial": 17,
+      "inner_old": 89,
+      "inner_current": 197,
+      "inner_sibling": 211,
+      "backedges": 3
+    },
+    "B": {
+      "source": "new reversed declared fields and new values",
+      "input": 111,
+      "index": 0,
+      "main_initial_old": 47,
+      "main_final_current": 111,
+      "main_sibling": 167,
+      "wrapper_old": 61,
+      "wrapper_final_current_and_sibling": 111,
+      "inner_initial": 23,
+      "inner_old": 111,
+      "inner_current": 233,
+      "inner_sibling": 173,
+      "backedges": 2
+    },
+    "StageA": "registration and actual CHECK0; real program root->main->one wrapper->one inner; validate owner/current/inner+outer Copy and exact actual/fresh formal; main and wrapper originals unchanged across E/H/Continue/Break/exit, callee EndLocals excludes main; main direct scoped Change has real old and source-call new value, then current/sibling; negative reject/restore. No private driver raw world contract.",
+    "registration_OOM": "fresh complete census, selected1/2/middle/last + every3 plan allocation start + first/middle/last recorded clone begin/end; each must fire OOM with whole preexisting seeded context/body owners unchanged, cleanup/retry. Not exhaustive census.",
+    "actual_OOM": "fresh complete census, both Copy initializations, three Copy/custody seals, both readonly capture begin/end plus first/middle/last; each must fire OOM/nil/unchanged full context and existing body owners, cleanup/retry; retain/current attachment is a surrounding marker, not an allocating operation.",
+    "Copy_OOM": "every reached outer<=128 and inner<=8 allocation, fail unchanged output/context/owners and restore/retry",
+    "semantic_negative": {
+      "N-ended-loan": "registration P8-EXIT-DEPENDENCY",
+      "N-wrong-argument": "registration P3-TYPE-MISMATCH"
+    },
+    "scope_negative": {
+      "N-extra-main": "safe precision, no entry/rollback",
+      "N-second-wrapper": "safe precision, no entry/rollback"
+    },
+    "StageB": "only after genuine StageA: unedited raw/passive GCC and Clang O0/O2 both positives16 guests + passive guest ASan+LSan/UBSan4=20. Live main storage remains identical from before wrapper to after its own Change; three simultaneously live originals disjoint; only live pointers dereferenced, pointers cleared before exit; main old/new/sibling and actual call results observed.",
+    "named_output": "selected malloc census points1/2/middle/last + write/flush failure, output bytes/inode/mtime unchanged, temp cleanup/retry",
+    "compatibility": "17 old C source/hash oracles unchanged, including P1362 A dataflow control and P1359 two-call positives",
+    "budgets": {
+      "functional_fixed": 4,
+      "all_fixed": 6,
+      "hosts": 3,
+      "new_guest": 24,
+      "planned_guest": 20
+    },
+    "preservation": "old P1362 source/oracle/FIRST/native NOT_OBSERVED unchanged; new tests provide their own observations",
+    "independent_F_R": "unread"
+  },
+  "candidate1_FIRST_SHA256": "514b782772a00a804b75e74d750fec5b23c30b26827337df9dbdd83689db12f3",
+  "baseline_trace_SHA256": "aa26e95cf2acbcc4bfa9383582c34e19f8a61dcd43008ef91a7dcf396022e29e",
+  "hosts": [
+    {
+      "host": "gcc",
+      "StageA_unit": 9,
+      "impact_unit": 85,
+      "failure_compat_integration": 13,
+      "all_PASS": true,
+      "ELF": {
+        "newlangc": "7af44f1232f79d2b7e537636158f4307cc49b1fd9c32a6fee06c7dd4a02ecd59",
+        "p1364_wrapper": "291a1a2be9dffa0034e42e7ad4755ae62f415174f0d346c9f1eb1af4594e00ce"
+      },
+      "raw_SHA256": {
+        "gcc-related-unit.raw": "26b60cb1bad2c1541c15c5e3576fe550cd3867cf05823cb3922e4e8e5cac7a3d",
+        "gcc-build.raw": "d618135d2742af61b70c42f6356da4fe674f6881c4c5bc3464e76be61c1499ba",
+        "gcc-related-build.raw": "b94e3e2fbf6090dda538701c8ee5e504e5fff7d1972abce27fd20af4a911435a",
+        "gcc-failure-compat.raw": "3ef1e5658babb040143fc27539d63fac130aa1ad3ba104c0d1debc39da0bb686",
+        "gcc-native.raw": "5d9112a5d6e8b3d21acfe7241bbe466d94f8366baed77cbe18a5bdf8778ae9c3",
+        "gcc-StageA.raw": "7cce08343a313799c66a0c4967f7e9048d0a312c0d124d32bb308eb0c3121630"
+      }
+    },
+    {
+      "host": "asan",
+      "StageA_unit": 9,
+      "impact_unit": 85,
+      "failure_compat_integration": 13,
+      "all_PASS": true,
+      "ELF": {
+        "newlangc": "7289b5b7e9b9c9dc06696b89ab59c12d3e4dd5434ebdeacddb3267b90a333a60",
+        "p1364_wrapper": "ee5133a2103192cb63078d37740307e183154af2f2d87d24d0ea9222c1a1a02b"
+      },
+      "raw_SHA256": {
+        "asan-failure-compat.raw": "fdf8674405df0c275f855114a2f85aeff88d6815b1b22fecc0ea40746be59189",
+        "asan-build.raw": "e802f51b9cf01cc34bbdcf545ad9d8b84af3b3cbf436f3b39498a2b0d8530517",
+        "asan-related-unit.raw": "14b027ed976d88d5ab304202de0a16e44f8c12ceac02740e561f409c9bee05ea",
+        "asan-native.raw": "40a62dfb3640f6c2a0f852c02bb587a962e36fd217b2bd3339b4ce61df86a7c1",
+        "asan-related-build.raw": "1cfabbcd8afb12aaa9fddf1391e6500ccd8b5ea592b81cf2a1572cbb0500838f",
+        "asan-StageA.raw": "cf053ade38471f682e0cbe7476211471e037b1a674c1530acfb5f5f2c7f71dbc"
+      }
+    },
+    {
+      "host": "ubsan",
+      "StageA_unit": 9,
+      "impact_unit": 85,
+      "failure_compat_integration": 13,
+      "all_PASS": true,
+      "ELF": {
+        "newlangc": "d092a435b2d4d9fb3495b18f9afc6d10f003c5e856d227dad0c0b0dc549283f7",
+        "p1364_wrapper": "3934574d13c839ff03e63125666e9ae6b8efc3e935348721b29044c5a5129835"
+      },
+      "raw_SHA256": {
+        "ubsan-related-unit.raw": "8de7184f7122256b5e0b2895f43309048cc3bcb720ce1b294cb98b11c9eceaca",
+        "ubsan-related-build.raw": "9a253c16980f103050a3d9b719062c3032e9cad00b087b275d249e5d58889c42",
+        "ubsan-StageA.raw": "7e7523dd7a7fbf535abe95a6e0ebd12973519aefc179e786ad6c848a36448b79",
+        "ubsan-build.raw": "42dbda05bed39987dac6c4a39935413f2190dffe130e75de059969a3ad83bd15",
+        "ubsan-failure-compat.raw": "bbabdd1ae589ef4de5ab7ff2ace80f6244db4e071e6d75c54d6587db7584b14b",
+        "ubsan-native.raw": "a6ff6203000794d4d2248f79dd1fa86832b451c5c27879d098f6b91288e4e790"
+      }
+    }
+  ],
+  "native": [
+    {
+      "mode": "gcc",
+      "guest_count": 8,
+      "passed": true,
+      "C_SHA256s": [
+        "29ae508f0a341a4131fc7438325c56ebc035dc2dd018bf17376df87376f9f81f",
+        "ae510b7cc8b126503c75c8653b279212e33ccb86bec8cc3e8c81cb20af03cb10"
+      ],
+      "attempts_SHA256": "2beb3365a16ff069a30abcc72a3aff66cf0ba6b11c653b08a923e243e9735cb4"
+    },
+    {
+      "mode": "clang",
+      "guest_count": 8,
+      "passed": true,
+      "C_SHA256s": [
+        "29ae508f0a341a4131fc7438325c56ebc035dc2dd018bf17376df87376f9f81f",
+        "ae510b7cc8b126503c75c8653b279212e33ccb86bec8cc3e8c81cb20af03cb10"
+      ],
+      "attempts_SHA256": "39a3c00b67e22b128061e115d4b58015ec64d1f1cc081db123f2c71e104ed783"
+    },
+    {
+      "mode": "asan",
+      "guest_count": 2,
+      "passed": true,
+      "C_SHA256s": [
+        "29ae508f0a341a4131fc7438325c56ebc035dc2dd018bf17376df87376f9f81f",
+        "ae510b7cc8b126503c75c8653b279212e33ccb86bec8cc3e8c81cb20af03cb10"
+      ],
+      "attempts_SHA256": "ed6599f334c24ef5328c684a890e5501ac0d567ba1faf144c8ce9c12573d79b0"
+    },
+    {
+      "mode": "ubsan",
+      "guest_count": 2,
+      "passed": true,
+      "C_SHA256s": [
+        "29ae508f0a341a4131fc7438325c56ebc035dc2dd018bf17376df87376f9f81f",
+        "ae510b7cc8b126503c75c8653b279212e33ccb86bec8cc3e8c81cb20af03cb10"
+      ],
+      "attempts_SHA256": "bf3cc83d62f28e118f6871aa5d0624263ea96e3a099a919fe8c79ca0627de3ae"
+    }
+  ],
+  "registration_OOM": {
+    "A_census": 2680,
+    "B_census": 2679,
+    "clones": 61,
+    "plans": 3,
+    "distinct_selected_per_source": 12,
+    "exhaustive": false,
+    "existing_seeded_context_and_body_owners": "unchanged on every selected failure; cleanup/retry PASS"
+  },
+  "actual_OOM": {
+    "census_per_source": 1721,
+    "distinct_selected_per_source": 16,
+    "exhaustive": false,
+    "entry": "nil on every OOM, unchanged old context/owners, cleanup/retry PASS"
+  },
+  "Copy_validation_OOM": {
+    "outer_allocations": 45,
+    "inner_allocations": 3,
+    "all_reached_points_injected_per_source_per_host": true,
+    "outputs_context_owners": "unchanged; retry PASS"
+  },
+  "old_C_hashes": 17,
+  "actual_main_postmerge_original_jobs": [
+    {
+      "job": 130994889531,
+      "raw_SHA256": "029bc7a42995f90d43cb0b9bbc319809d693a606fba2779931a5652d8c9000b7",
+      "tests": 941,
+      "checkout": "8db2dfe0e399da2144d4c7b346766eb9045bc10e"
+    },
+    {
+      "job": 130994889754,
+      "raw_SHA256": "c2c6849e3dcef897a9bccf4b2789131ff2ff3ca3aea7abdcdc0a5515e979bc8d",
+      "tests": 941,
+      "checkout": "8db2dfe0e399da2144d4c7b346766eb9045bc10e"
+    },
+    {
+      "job": 130994889785,
+      "raw_SHA256": "497abc648479be2a79ee572fbd51860ec371279d538ee5985b02e635e4959da1",
+      "tests": 941,
+      "checkout": "8db2dfe0e399da2144d4c7b346766eb9045bc10e"
+    },
+    {
+      "job": 130994889787,
+      "raw_SHA256": "790a0b9ad5cbac4c911d1229e9b038de7c1516d5dbc84142fb993f1c0678b6d4",
+      "tests": 941,
+      "checkout": "8db2dfe0e399da2144d4c7b346766eb9045bc10e"
+    },
+    {
+      "job": 130994890032,
+      "raw_SHA256": "efb658ff58e032aa3d6d1653ba4218533724f67bc1ad889e3fcb19578edd2ab5",
+      "tests": 941,
+      "checkout": "8db2dfe0e399da2144d4c7b346766eb9045bc10e"
+    },
+    {
+      "job": 130994889413,
+      "raw_SHA256": "842b0279c6f8d363863e37a77e092742368e96e320a704de96f8a2acab7d6c3c",
+      "tests": 940,
+      "checkout": "8db2dfe0e399da2144d4c7b346766eb9045bc10e"
+    }
+  ],
+  "self_review": {
+    "source_semantics_public_API_ABI_issuer_world": "unchanged",
+    "trusted_mechanism": "same current relation/Copy replay/canonical custody; numeric member IDs identify existing worlds, no new independent certificate",
+    "nearest_wrapper_guarantee": "retained nearest alias checked against member list; main is not substituted for wrapper",
+    "caller_transition": "during-call frame comparisons distinct from subsequent checked main Change/Copy/read lineage",
+    "signature_and_cycle": "public signature origin preflight retained; entry/origin helpers do not recurse into full validator",
+    "ownership": "no owning field or allocation added by frame descriptors; canonical children/destruction unchanged",
+    "passive_C_hooks": "carrier names selected only after admission, exact return/Change provenance; no admission widened here",
+    "unsupported": [
+      "extra main T/H/Array",
+      "multiple formals",
+      "cross-call ref loan",
+      "additional depth/inner call",
+      "multiple wrapper calls in new main-T shape",
+      "general CFG/recursion"
+    ],
+    "C649_boundary": "no new arbitrary mutable private-driver contract",
+    "maintenance": "bounded source/frame/dataflow predicates add private maintenance cost; no per-count proof family or new source prohibition"
+  },
+  "budget": {
+    "feature_fixed": 2,
+    "all_fixed_before_evidence_successor": 2,
+    "hosts": 3,
+    "guest": 20,
+    "remote_push": 0,
+    "new_PR": 0,
+    "new_CI": 0,
+    "manual": 0
+  },
+  "independent_F_R_material": "unread",
+  "material_STOP": "none observed; original missing-observer-hook FIRST retained separately",
+  "VALUE_ALIGNMENT_RISK": "Finite v0 caller-state composition only. C/Rust handle this simple value-call pattern naturally; this capability test is not proof of C target suitability, library representation protection, general soundness or author+ordinary safe caller audit-locality Product PASS. Product GO PAUSED/H1 HOLD.",
+  "packet": {
+    "path": "tests/p1364/evidence/local-raw.zip",
+    "entries": 225,
+    "bytes": 5593727,
+    "SHA256": "78d3bb6eafc79713beb0d195751a2e40d3d329f8350a6ea14aab9bec305af8ea"
+  }
+}
