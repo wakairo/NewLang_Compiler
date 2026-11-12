@@ -2739,7 +2739,26 @@ static bool current_wrapper_prefix(const Check *c)
     const NLCopyBodyProof *next = wrapper->artifact->copy_body;
     if (caller->body_count != 1 || !caller->body_calls || !next ||
         !next->first || next->current_call || next->current_loop ||
-        next->sealed || next->view.event_count != 1)
+        next->sealed || next->first->view.kind != NL_COPY_BODY_INITIALIZE)
+        return false;
+    /* Preparing the inner actual may read the wrapper's original. These
+     * are the same Copy events replayed by its eventual validator, not an
+     * extra original or an update of the caller prefix. */
+    size_t events = 1;
+    const CopyEvent *last = next->first;
+    for (const CopyEvent *e = last->next; e; e = e->next) {
+        const NLCheckedNodeView *n =
+            nl_checked_node_view(wrapper->artifact, e->view.node);
+        if (++events > next->view.event_count || !n ||
+            e->view.kind != NL_COPY_BODY_READ ||
+            n->kind != NL_CHECKED_FIELD_READ ||
+            e->view.field.parent != next->first->view.field.parent ||
+            memcmp(&n->field, &e->view.field, sizeof(n->field)) ||
+            n->result_count != 1 || n->results[0].value != e->view.result)
+            return false;
+        last = e;
+    }
+    if (events != next->view.event_count || last != next->last)
         return false;
     CurrentWrappedCall previous;
     if (!current_wrapped_call(caller, caller->body_calls[0], false,
