@@ -70,7 +70,7 @@ static void local(size_t symbol, uint8_t value)
             assert(calls == phases);
         assert(locals < iteration_locals);
     } else
-        assert(posts == limit + 1 && !locals);
+        assert(false); /* Terminal reports RESULT, not an extra LOCAL. */
     ++locals;
 }
 static void call_result(size_t function, size_t call, uint8_t value)
@@ -107,7 +107,7 @@ static void after(uint8_t *a, uint8_t *b, size_t index, uint8_t old)
 static void result(uint8_t value)
 {
     assert(live && !pending && !results && calls == limit &&
-           posts == limit + 1 && locals == 1 && value == initial &&
+           posts == limit + 1 && locals == 0 && value == initial &&
            *storage[field_index] == terminal);
     ++results;
 }
