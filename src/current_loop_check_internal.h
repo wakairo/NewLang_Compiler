@@ -813,6 +813,7 @@ typedef struct {
     NLValueId bound[NL_SEMANTIC_MAX_ENTRIES];
     bool incoming[NL_SEMANTIC_MAX_ENTRIES];
     bool current_read[NL_SEMANTIC_MAX_ENTRIES];
+    NLCheckStatus *status;
     NLCheckedNodeId scalar;
     NLCheckedField change;
     NLCheckedField changes[2];
@@ -825,8 +826,15 @@ static bool current_scalar(CurrentWalk *, const NLCheckedNodeView *);
 static bool current_call_contents(const NLCheckedFragment *f,
                                   NLCheckedNodeId id, NLPureU8Call *out)
 {
-    return nl_pure_u8_contents(f, id, out) ||
-           nl_readonly_u8_contents(f, id, out);
+    if (nl_pure_u8_contents(f, id, out) || nl_readonly_u8_contents(f, id, out))
+        return true;
+    NLCopyLocalCall local;
+    if (!nl_copy_body_local_contents(f, id, &local))
+        return false;
+    *out = (NLPureU8Call){
+        local.body, local.formal, 0, local.function, {0, 0, 2, 0}};
+    return true; /* Borrowed contents; current_pure_call consumes Copy replay.
+                  */
 }
 
 /* Every persistent prefix member, including the actual phase package/fact,
@@ -1074,6 +1082,14 @@ static bool current_pure_call(CurrentWalk *r, NLCheckedNodeId id,
         !current_call_contents(r->arm, id, &pure))
         return false;
     if (!pure.selection) {
+        if (pure.body->copy_body && pure.body->copy_body->readonly_local) {
+            const NLCheckStatus status =
+                nl_copy_body_local_validate(r->arm, id);
+            if (status != NL_CHECK_OK) {
+                *r->status = status;
+                return false;
+            }
+        }
         /* A genuine current-u8 operand, not the phase or an equal scalar.
          * Every declaration in current_read was already checked by this
          * exhaustive walk against the exact header FIELD_READ facts. */
@@ -1606,11 +1622,13 @@ static bool current_break_value(const NLCurrentLoopProof *s,
 
 static bool current_arm(const NLCurrentLoopProof *s,
                         const NLCheckedFragment *arm, bool continuing,
-                        NLCheckedField *field, NLCheckedNodeId *scalar)
+                        NLCheckedField *field, NLCheckedNodeId *scalar,
+                        NLCheckStatus *status)
 {
     CurrentWalk r = {.proof = s,
                      .arm = arm,
                      .header = nl_control_state_context(s->header),
+                     .status = status,
                      .terminal = !continuing};
     if (!arm || arm->count > NL_SEMANTIC_MAX_ENTRIES ||
         !nl_control_source_terminal_valid(
@@ -1768,9 +1786,12 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
         const NLCheckedFragment *arm = nl_checked_if_arm(g, s->conditional, i);
         NLCheckedField changes[2] = {0};
         NLCheckedNodeId scalar = 0;
-        if (!current_arm(s, arm, i == 0, changes, &scalar) || !arm ||
-            arm->if_parent != g || arm->if_parent_node != s->conditional ||
-            arm->if_arm_index != i || arm->source != g->source)
+        NLCheckStatus status = NL_CHECK_OK;
+        if (!current_arm(s, arm, i == 0, changes, &scalar, &status))
+            return status == NL_CHECK_OK ? bad : status;
+        if (!arm || arm->if_parent != g ||
+            arm->if_parent_node != s->conditional || arm->if_arm_index != i ||
+            arm->source != g->source)
             return bad;
         const NLControlExitView *leaf = nl_control_exit_view(arm->exits, 0);
         const NLControlExitView *joined = nl_control_exit_view(g->exits, i);
@@ -2372,9 +2393,11 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                             !stutter_free_quantity(p->post, p->result.value,
                                                    p->result.type) ||
                             p->result.value != p->post->value_count)) ||
-        !stutter_frame(e, nl_control_state_context(p->entry), 0) ||
-        current_relation(s) != NL_CHECK_OK)
+        !stutter_frame(e, nl_control_state_context(p->entry), 0))
         return bad;
+    const NLCheckStatus relation = current_relation(s);
+    if (relation != NL_CHECK_OK)
+        return relation;
     const NLSemanticPlaceView r = h->places[s->root - 1],
                               c = h->places[s->child - 1];
     const NLCheckedFragment *breaking = s->graphs[2].fragment;
@@ -3191,8 +3214,15 @@ static NLCheckedNodeId source_current_loop(Check *check,
     s->graph->root = expression(&body, syntax->data.loop.body);
     if (!s->graph->root || body.status != NL_CHECK_OK)
         goto body_failure;
-    if (!body.terminated || current_relation(s) != NL_CHECK_OK) {
-        loop_precision(check, syntax->span);
+    const NLCheckStatus relation = body.terminated
+                                       ? current_relation(s)
+                                       : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    if (relation != NL_CHECK_OK) {
+        if (relation == NL_CHECK_OUT_OF_MEMORY ||
+            relation == NL_CHECK_RESOURCE_LIMIT)
+            (void)host(check, relation, syntax->span);
+        else
+            loop_precision(check, syntax->span);
         goto cleanup;
     }
     LoopControl normal = {.source_parent = check->artifact, .target = target};

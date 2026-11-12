@@ -2,6 +2,20 @@
 #define NEWLANG_COPY_BODY_INTERNAL_H
 #include "newlang/copy_body.h"
 #include "semantic_internal.h"
+/* Allocation extents only, not semantic evidence or an authority issuer.
+ * A replay clone reads every registered signature/name/body in its world. */
+typedef struct {
+    const NLTypeId *parameters;
+    size_t count, name_length;
+    const char *name;
+    const NLFunctionBody *body;
+    NLCheckedKind kind;
+} CopySignatureOrigin;
+typedef struct {
+    const NLFunctionEntry *functions;
+    size_t count;
+    CopySignatureOrigin *entries;
+} CopySignatureSet;
 typedef struct CopyEvent {
     NLCopyBodyEventView view, issued;
     NLSemanticContext *before, *after;
@@ -9,6 +23,8 @@ typedef struct CopyEvent {
     NLSemanticValueView pre_values[3], post_values[3], result, incoming;
     NLSemanticScopeView *scopes_before, *scopes_after;
     size_t before_count, after_count;
+    NLSemanticContext before_storage, after_storage;
+    CopySignatureSet before_signatures, after_signatures;
     struct CopyEvent *next;
 } CopyEvent;
 typedef struct {
@@ -40,6 +56,16 @@ typedef struct NLCopyBodyProof {
     size_t count;
     bool sealed;
     bool formal_write, unit_call;
+    /* The same straight-line event replay with a free readonly u8 input.
+     * There is no inner current loop or second certificate. */
+    bool readonly_local;
+    CopySignatureSet entry_signatures, exit_signatures, handoff_signatures,
+        caller_signatures;
+    NLSemanticContext handoff_storage;
+    const NLSemanticContext *local_caller_world;
+    NLSemanticContext local_caller_storage;
+    NLCopyCallAnchor local_caller_anchor;
+    const NLSyntaxTree *readonly_syntax;
     /* A plain read-only scalar formal, distinct from ref-write parameters.
      * The existing entry anchor and final caller seal own this handoff. */
     NLSymbolId readonly_parameter;
@@ -85,6 +111,22 @@ bool nl_copy_body_forward_origin(const NLCheckedFragment *);
 NLCheckStatus nl_copy_body_readonly(NLCheckedFragment *,
                                     const NLCheckedFragment *, NLCheckedNodeId,
                                     NLSymbolId, const NLSemanticContext *);
+NLCheckStatus nl_copy_body_local_entry(NLCheckedFragment *,
+                                       const NLCheckedFragment *,
+                                       NLCheckedNodeId, NLSymbolId,
+                                       const NLSemanticContext *, size_t,
+                                       size_t, size_t);
+/* Borrowed contents; validation still consumes the existing full Copy replay.
+ * Definition uses it privately; it is never a new public source issuer. */
+typedef struct {
+    const NLCheckedFragment *body;
+    NLSymbolId formal;
+    size_t function;
+} NLCopyLocalCall;
+bool nl_copy_body_local_contents(const NLCheckedFragment *, NLCheckedNodeId,
+                                 NLCopyLocalCall *);
+NLCheckStatus nl_copy_body_local_validate(const NLCheckedFragment *,
+                                          NLCheckedNodeId);
 /* Called after the current relation authenticates current signature origins.
  * Consumes this same Copy entry/caller seal; never calls a current validator.
  */

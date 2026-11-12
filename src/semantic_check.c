@@ -48,7 +48,7 @@ typedef struct Check {
     size_t *branch_budget; /* synchronous finite checking/replay work */
     size_t *body_budget;   /* borrowed counter for this synchronous body walk */
     bool in_function_body, definition, terminated, in_source_loan;
-    bool capture_copy_body; /* actual supported u8 call, not definition */
+    bool capture_copy_body; /* actual or unpublished local-Copy contents */
     NLSymbolId readonly_u8_parameter;
     NLSemanticBindingView readonly_binding;
     NLSemanticPlaceView readonly_place;
@@ -3743,6 +3743,46 @@ static bool readonly_copy_body(const NLFunctionEntry *fn,
     return true;
 }
 
+/* Constructor filter only. The existing Copy event replay, not this syntax
+ * classification, proves the local original, Change, old tail and endings. */
+static bool readonly_local_body(const NLFunctionEntry *fn,
+                                const NLSemanticContext *c)
+{
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    if (fn->count != 1 || !fn->parameters || fn->parameters[0] != u8 ||
+        fn->result != u8 || !fn->body || !fn->body->syntax)
+        return false;
+    const NLSyntaxView *root =
+        nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
+    const NLSyntaxView *tail = root && root->kind == NL_SYNTAX_BLOCK
+                                   ? nl_syntax_node_view(root->data.block.tail)
+                                   : NULL;
+    if (!tail || tail->kind != NL_SYNTAX_EXPR_NAME)
+        return false;
+    size_t originals = 0;
+    for (const NLSyntaxNode *n = root->data.block.items; n;
+         n = nl_syntax_next_argument(n)) {
+        const NLSyntaxView *v = nl_syntax_node_view(n);
+        if (!v)
+            return false;
+        const NLSyntaxView *init =
+            v->kind == NL_SYNTAX_BINDING
+                ? nl_syntax_node_view(v->data.binding.initializer)
+            : v->kind == NL_SYNTAX_STATEMENT
+                ? nl_syntax_node_view(v->data.statement.expression)
+                : NULL;
+        if (!init)
+            return false;
+        if (init->kind == NL_SYNTAX_AGGREGATE)
+            ++originals;
+        else if (init->kind != NL_SYNTAX_EXPR_NAME &&
+                 init->kind != NL_SYNTAX_FIELD_DESIGNATOR &&
+                 init->kind != NL_SYNTAX_LOCAL_WRITE_LOAN)
+            return false;
+    }
+    return originals == 1;
+}
+
 static bool run_body(Check *caller, NLCheckedNodeId call_id,
                      const NLFunctionEntry *function,
                      const NLCheckedNodeId *arguments)
@@ -3816,9 +3856,11 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         body.origin_invocation = body.artifact;
         body.origin_call = call_id;
     }
+    const bool local_copy = readonly_local_body(function, c);
     body.capture_copy_body =
-        !body.definition &&
-        (function->count == 0 || readonly_current_body(function, c)) &&
+        ((!body.definition &&
+          (function->count == 0 || readonly_current_body(function, c))) ||
+         local_copy) &&
         function->result == nl_semantic_core_type(c, NL_TYPE_U8);
     /* The signature arrays belong to the current semantic world.  Checking a
      * body may commit a successor world and release those arrays, so retain
@@ -3861,7 +3903,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
             goto failure;
         if (i < 2)
             copy_parameters[i] = symbol;
-        if (i == 0 && readonly_current_body(function, c)) {
+        if (i == 0 && (readonly_current_body(function, c) || local_copy)) {
             body.readonly_u8_parameter = symbol;
             body.readonly_binding = c->bindings[symbol - 1].view;
             body.readonly_place = c->places[body.readonly_binding.place - 1];
@@ -3883,8 +3925,13 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     }
     if (body.capture_copy_body && body.readonly_u8_parameter &&
         !host(&body,
-              nl_copy_body_readonly(body.artifact, caller->artifact, call_id,
-                                    body.readonly_u8_parameter, c),
+              local_copy ? nl_copy_body_local_entry(
+                               body.artifact, caller->artifact, call_id,
+                               body.readonly_u8_parameter, c, binding_floor,
+                               place_floor, scope_floor)
+                         : nl_copy_body_readonly(body.artifact,
+                                                 caller->artifact, call_id,
+                                                 body.readonly_u8_parameter, c),
               call_span))
         goto failure;
     if (function->count == 2 &&
@@ -4082,7 +4129,8 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         goto failure;
     bool current_result =
         body.artifact->copy_body && (body.artifact->copy_body->current_loop ||
-                                     body.artifact->copy_body->current_call);
+                                     body.artifact->copy_body->current_call ||
+                                     body.artifact->copy_body->readonly_local);
     for (size_t i = 0; !current_result && i < body.artifact->body_count; ++i)
         current_result = body.artifact->bodies[i]->copy_body &&
                          (body.artifact->bodies[i]->copy_body->current_loop ||

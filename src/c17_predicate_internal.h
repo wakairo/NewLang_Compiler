@@ -73,7 +73,7 @@ static bool predicate_call(const NLCheckedFragment *f, NLCheckedNodeId id,
     if (p->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
         return false;
     p->functions[p->count++] =
-        (V0Function){call->function, body, p->u8, formal, 0, true};
+        (V0Function){call->function, body, p->u8, formal, 0, true, false};
     p->uses_usize = true;
     return true;
 }
