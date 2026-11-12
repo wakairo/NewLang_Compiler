@@ -1,0 +1,104 @@
+{
+  "issue": 1351,
+  "release": "C626/C627",
+  "baseline": "3fdc09a8b03b9378ca57d2e63cf471c99ec43bab",
+  "canonical": "Draft17.35",
+  "source_eligibility": "selected ordinary declarations/Copy/fresh formal/direct two-u8 field/scoped loan/normal tail/Continue-Break; N-ended-loan violates nonescape; N-wrong-type violates exact result type; other N are lawful outside finite current consumer",
+  "positive": {
+    "A-wrapper.nl": {
+      "index": 0,
+      "input": 167,
+      "wrapper_initial": [
+        41,
+        167
+      ],
+      "wrapper_old": 41,
+      "wrapper_final": [
+        167,
+        167
+      ],
+      "inner_initial": [
+        17,
+        193
+      ],
+      "inner_backedges": 2,
+      "inner_current": 211,
+      "inner_sibling": 193,
+      "inner_old": 167,
+      "returned_Copy": 167
+    },
+    "B-wrapper-index1.nl": {
+      "index": 1,
+      "input": 149,
+      "wrapper_initial": [
+        149,
+        59
+      ],
+      "wrapper_old": 59,
+      "wrapper_final": [
+        149,
+        149
+      ],
+      "inner_initial": [
+        181,
+        23
+      ],
+      "inner_backedges": 3,
+      "inner_current": 239,
+      "inner_sibling": 181,
+      "inner_old": 149,
+      "returned_Copy": 149
+    }
+  },
+  "negative": {
+    "N-ended-loan.nl": "P8-EXIT-DEPENDENCY",
+    "N-wrong-type.nl": "P3-TYPE-MISMATCH",
+    "N-two-inner.nl": "safe actual precision, no owned entry",
+    "N-extra-wrapper.nl": "safe actual precision, no owned entry"
+  },
+  "Stage_A": "actual program root -> main -> exact wrapper -> exact inner; separate original roots/incarnations; own readonly actual/fresh formal/real old; wrapper unchanged inside inner, its actual Change after inner; closed loans; true normal-tail/call result with final seals; semantic/scope/graph/world/call/type tamper rejection; reached OOM/full rollback/no-clobber/retry",
+  "OOM": "fresh CHECK census; <=12 selected allocations including both placements, inner/wrapper/main Copy sealing and custody sealing, final graph; no allocation is invented at marker store. Each real validator allocation up to12 outer/up to8 inner injected with out/context unchanged and retry",
+  "Stage_B": "only after genuine StageA success; strict unchanged raw C17 GCC/Clang O0/O2 raw8+passive8+guest sanitizer4+reserve4, <=24. Observe wrapper and inner carrier only while alive; end pointer before lifetime; outer Copy used after wrapper ends. Allocation/write/flush named-output no-clobber/retry. Existing direct one/two call/C origin retention regressions.",
+  "limits": {
+    "LOCAL_fixed_candidates": 4,
+    "all_fixed_candidates": 6,
+    "hosts": [
+      "GCC Release",
+      "ASan+LSan",
+      "UBSan"
+    ],
+    "local_guest": 24
+  },
+  "sources": {
+    "A-wrapper.nl": {
+      "source": "struct Gauge { live:u8, mark:u8 }\nfn cycle(seed:u8) -> u8 {\n    let inner = Gauge { live:u8(17), mark:u8(193) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(2)) {\n            let prior = loan_write(inner@live) { |slot|\n                replace(slot,seed)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(inner@live) { |slot|\n                replace(slot,u8(211))\n            };\n            break old;\n        }\n    };\n    let current = inner@live;\n    let sibling = inner@mark;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn wrap() -> u8 {\n    let original = Gauge { live:u8(41), mark:u8(167) };\n    let input = original@mark;\n    let answer = cycle(input);\n    let displaced = loan_write(original@live) { |slot|\n        replace(slot,answer)\n    };\n    let current = original@live;\n    let sibling = original@mark;\n    displaced;\n    current;\n    sibling;\n    let copied = answer;\n    copied\n}\nfn main() -> unit {\n    let result = wrap();\n    let held = result;\n    held;\n    unit\n}\n",
+      "bytes": 1082,
+      "sha256": "eb7990970229875fb46ffd619b9cff43531fd67c8a64a676d9eddb087175f9cc"
+    },
+    "B-wrapper-index1.nl": {
+      "source": "struct Gauge { live:u8, mark:u8 }\nfn cycle(seed:u8) -> u8 {\n    let inner = Gauge { live:u8(181), mark:u8(23) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(3)) {\n            let prior = loan_write(inner@mark) { |slot|\n                replace(slot,seed)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(inner@mark) { |slot|\n                replace(slot,u8(239))\n            };\n            break old;\n        }\n    };\n    let current = inner@mark;\n    let sibling = inner@live;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn wrap() -> u8 {\n    let original = Gauge { live:u8(149), mark:u8(59) };\n    let input = original@live;\n    let answer = cycle(input);\n    let displaced = loan_write(original@mark) { |slot|\n        replace(slot,answer)\n    };\n    let current = original@mark;\n    let sibling = original@live;\n    displaced;\n    current;\n    sibling;\n    let copied = answer;\n    copied\n}\nfn main() -> unit {\n    let result = wrap();\n    let held = result;\n    held;\n    unit\n}\n",
+      "bytes": 1082,
+      "sha256": "6149364bea63ecf2dbe2d6a106c2829063242f79d238602765fe7191c9469780"
+    },
+    "N-ended-loan.nl": {
+      "source": "struct Gauge { live:u8, mark:u8 }\nfn cycle(seed:u8) -> u8 {\n    let inner = Gauge { live:u8(17), mark:u8(193) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(2)) {\n            let prior = loan_write(inner@live) { |slot|\n                replace(slot,seed)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(inner@live) { |slot|\n                replace(slot,u8(211))\n            };\n            break old;\n        }\n    };\n    let current = inner@live;\n    let sibling = inner@mark;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn wrap() -> u8 {\n    let original = Gauge { live:u8(41), mark:u8(167) };\n    let escaped = loan_write(original@live) { |slot| slot };\n    escaped;\n    let input = original@mark;\n    let answer = cycle(input);\n    let displaced = loan_write(original@live) { |slot|\n        replace(slot,answer)\n    };\n    let current = original@live;\n    let sibling = original@mark;\n    displaced;\n    current;\n    sibling;\n    let copied = answer;\n    copied\n}\nfn main() -> unit {\n    let result = wrap();\n    let held = result;\n    held;\n    unit\n}\n",
+      "bytes": 1156,
+      "sha256": "3444c6314d6174f94ae963887af2369fd40a3f3613cbc51b86d59d30736eeb8a"
+    },
+    "N-wrong-type.nl": {
+      "source": "struct Gauge { live:u8, mark:u8 }\nfn cycle(seed:u8) -> u8 {\n    let inner = Gauge { live:u8(17), mark:u8(193) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(2)) {\n            let prior = loan_write(inner@live) { |slot|\n                replace(slot,seed)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(inner@live) { |slot|\n                replace(slot,u8(211))\n            };\n            break old;\n        }\n    };\n    let current = inner@live;\n    let sibling = inner@mark;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn wrap() -> usize {\n    let original = Gauge { live:u8(41), mark:u8(167) };\n    let input = original@mark;\n    let answer = cycle(input);\n    let displaced = loan_write(original@live) { |slot|\n        replace(slot,answer)\n    };\n    let current = original@live;\n    let sibling = original@mark;\n    displaced;\n    current;\n    sibling;\n    let copied = answer;\n    copied\n}\nfn main() -> unit {\n    let result = wrap();\n    let held = result;\n    held;\n    unit\n}\n",
+      "bytes": 1085,
+      "sha256": "0eb65618c9491f25e36d3f500b2e842c83152c0cd7094cd1dfdbfdea61dd1ad5"
+    },
+    "N-two-inner.nl": {
+      "source": "struct Gauge { live:u8, mark:u8 }\nfn cycle(seed:u8) -> u8 {\n    let inner = Gauge { live:u8(17), mark:u8(193) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(2)) {\n            let prior = loan_write(inner@live) { |slot|\n                replace(slot,seed)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(inner@live) { |slot|\n                replace(slot,u8(211))\n            };\n            break old;\n        }\n    };\n    let current = inner@live;\n    let sibling = inner@mark;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn wrap() -> u8 {\n    let original = Gauge { live:u8(41), mark:u8(167) };\n    let input = original@mark;\n    let answer = cycle(input);\n    let again = cycle(input);\n    again;\n    let displaced = loan_write(original@live) { |slot|\n        replace(slot,answer)\n    };\n    let current = original@live;\n    let sibling = original@mark;\n    displaced;\n    current;\n    sibling;\n    let copied = answer;\n    copied\n}\nfn main() -> unit {\n    let result = wrap();\n    let held = result;\n    held;\n    unit\n}\n",
+      "bytes": 1123,
+      "sha256": "e49283642280a9570704b4e39ee7bd7ddc4e0168288ebec30dc8ac43b4cb123b"
+    },
+    "N-extra-wrapper.nl": {
+      "source": "struct Gauge { live:u8, mark:u8 }\nfn cycle(seed:u8) -> u8 {\n    let inner = Gauge { live:u8(17), mark:u8(193) };\n    let loop_old = loop(phase=usize(0)) {\n        if (phase < usize(2)) {\n            let prior = loan_write(inner@live) { |slot|\n                replace(slot,seed)\n            };\n            continue(phase+usize(1));\n        } else {\n            let old = loan_write(inner@live) { |slot|\n                replace(slot,u8(211))\n            };\n            break old;\n        }\n    };\n    let current = inner@live;\n    let sibling = inner@mark;\n    current;\n    sibling;\n    let copied = loop_old;\n    copied\n}\nfn wrap() -> u8 {\n    let original = Gauge { live:u8(41), mark:u8(167) };\n    let input = original@mark;\n    let answer = cycle(input);\n    let displaced = loan_write(original@live) { |slot|\n        replace(slot,answer)\n    };\n    let current = original@live;\n    let sibling = original@mark;\n    displaced;\n    current;\n    sibling;\n    let copied = answer;\n    copied\n}\nfn outer() -> u8 {\n    let answer = wrap();\n    answer\n}\nfn main() -> unit {\n    let result = outer();\n    let held = result;\n    held;\n    unit\n}\n",
+      "bytes": 1140,
+      "sha256": "225813adf0502fc45ae9514ad199efca3524bc5dfcc5bfdee145b477e0b90fab"
+    }
+  }
+}

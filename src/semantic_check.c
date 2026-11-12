@@ -4005,15 +4005,26 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
               call_span))
         goto failure;
     bool current_result =
-        body.artifact->copy_body && body.artifact->copy_body->current_loop;
+        body.artifact->copy_body && (body.artifact->copy_body->current_loop ||
+                                     body.artifact->copy_body->current_call);
     for (size_t i = 0; !current_result && i < body.artifact->body_count; ++i)
         current_result = body.artifact->bodies[i]->copy_body &&
-                         body.artifact->bodies[i]->copy_body->current_loop;
+                         (body.artifact->bodies[i]->copy_body->current_loop ||
+                          body.artifact->bodies[i]->copy_body->current_call);
     if ((predicate_result || scalar_h_read || current_result) &&
         !host(
             &body,
             nl_h_custody_seal_result(caller->artifact, body.artifact, call_id),
             call_span))
+        goto failure;
+    if (body.artifact->copy_body && body.artifact->copy_body->current_loop &&
+        caller->capture_copy_body && !caller->readonly_u8_parameter &&
+        caller->artifact->copy_body &&
+        !caller->artifact->copy_body->formal_write &&
+        !host(&body,
+              nl_copy_body_forward_current(caller->artifact, body.artifact,
+                                           call_id),
+              call_span))
         goto failure;
     nl_h_custody_commit(caller->artifact, body.artifact, NL_CUSTODY_BODY,
                         count);
@@ -5947,17 +5958,32 @@ static bool current_copy_prefix(const Check *c)
     return current_copy_prefix_frame(c, p);
 }
 
-/* Actual main()->inner() only. This reuses the current relation and Copy
- * issuance; it is not permission to capture arbitrary nested control flow. */
+/* Actual main()->inner(), or one zero-argument Copy wrapper in that path.
+ * The original program root and every call slot remain unchanged. */
 static bool current_copy_callee(const Check *c)
 {
     if (!c->capture_copy_body || c->definition || !c->caller ||
         !c->caller->caller || c->origin_root->function_target ||
-        c->caller->caller->artifact != c->origin_root ||
-        c->caller->artifact != c->origin_invocation ||
-        c->caller->function_result != 1 || !c->body_call ||
+        !c->body_call ||
         c->function_result != nl_semantic_core_type(c->context, NL_TYPE_U8) ||
         !c->artifact->copy_body || c->artifact->copy_body->formal_write)
+        return false;
+    const Check *outer_frame = c->caller;
+    const bool direct = outer_frame->caller->artifact == c->origin_root &&
+                        outer_frame->artifact == c->origin_invocation &&
+                        outer_frame->function_result == 1;
+    const Check *main_frame = outer_frame->caller;
+    const bool wrapper =
+        !direct && main_frame->caller &&
+        main_frame->caller->artifact == c->origin_root &&
+        main_frame->artifact == c->origin_invocation &&
+        main_frame->function_result == 1 &&
+        outer_frame->function_result == c->function_result &&
+        outer_frame->capture_copy_body && !outer_frame->readonly_u8_parameter &&
+        outer_frame->artifact->copy_body &&
+        !outer_frame->artifact->copy_body->formal_write &&
+        !outer_frame->artifact->body_count && !main_frame->artifact->body_count;
+    if (!direct && !wrapper)
         return false;
     const NLCopyBodyProof *copy = c->artifact->copy_body;
     if (copy->view.event_count != 1 || !copy->first ||
@@ -5981,7 +6007,9 @@ static bool current_copy_callee(const Check *c)
            !fn->owner_receiver && !fn->owner_producer &&
            !fn->custody_recipient &&
            outer->body == c->caller->artifact->body_owner && !outer->count &&
-           !outer->parameters && outer->result == 1 && !outer->caller_effects &&
+           !outer->parameters &&
+           outer->result == (wrapper ? c->function_result : 1) &&
+           (!wrapper || readonly) && !outer->caller_effects &&
            !outer->hidden_dependencies && !outer->owner_receiver &&
            !outer->owner_producer && !outer->custody_recipient &&
            current_copy_prefix(c);
@@ -6045,12 +6073,24 @@ static const NLCheckedFragment *linear_call_owner(const NLLinearBreakProof *p)
         return p->root;
     if (!p->caller || p->caller == p->root || !linear_copy_calls(p, true) ||
         !nl_h_custody_result_valid(p->root, p->outer_call) ||
-        nl_checked_call_body(p->root, p->outer_call) != p->caller ||
         !nl_h_custody_result_valid(p->caller, p->call))
         return NULL;
     const NLCheckedNodeView *outer =
         nl_checked_node_view(p->root, p->outer_call);
-    return outer && outer->kind == NL_CHECKED_REGISTERED_CALL &&
+    const NLCheckedFragment *main =
+        nl_checked_call_body(p->root, p->outer_call);
+    if (main != p->caller) {
+        if (!main || !nl_copy_body_forward_origin(p->caller))
+            return NULL;
+        const NLCopyBodyProof *wrapper = p->caller->copy_body;
+        if (wrapper->caller != main || wrapper->current_call != p->call ||
+            main->body_count != 1 || main->arm_count)
+            return NULL;
+        for (size_t i = 0; i < main->count; ++i)
+            if (main->nodes[i].kind == NL_CHECKED_AGGREGATE)
+                return NULL;
+    }
+    return main && outer && outer->kind == NL_CHECKED_REGISTERED_CALL &&
                    outer->body_backed && !outer->argument_count &&
                    !outer->first_argument && outer->type == 1 &&
                    !outer->result_count && !outer->terminates

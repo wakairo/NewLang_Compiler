@@ -1,0 +1,18 @@
+{
+  "original_oracle_sha256": "17ee0aa7651caf82155b6fe7281241a6a7c7d961bd2b0fe13c1908b42543e71b",
+  "original_oracle_source_FIRST_unchanged": true,
+  "prospective_change": "Outer Copy validator census bound 12 -> 48; every actual allocation is still injected, true OOM/output/context rollback/retry remain mandatory",
+  "observed_diagnostic": {
+    "candidate": "f84b79a8bbcb18dc1a96e617ed1790d28fe63e0a",
+    "outer_status": 0,
+    "outer_allocations": 40,
+    "stdout_sha256": "00c894a41a87909abe61840a41791236ca941f90525db6b8466a5bc81661199d"
+  },
+  "cause": "The existing ordinary REPLACE replay clones the real before-world and applies nl_fixed_change. A current-loop-only inner validator does not perform this outer Change replay. The initial new harness's 12 bound incorrectly assumed only per-call Replay workspace allocations. Production is unchanged.",
+  "outer_validator_allocation_limit": 48,
+  "inner_validator_allocation_limit": 8,
+  "wrong_declared_tail_result_diagnostic": "P8-BODY-RESULT",
+  "wrong_declared_tail_baseline_check": "Unchanged3fd and candidate1 reject the identical source with the same exit3/P8-BODY-RESULT; stderr SHA56b2711c9c3b454edc155b9eedf0745d1c6b428ddfd8f60c71c4f2eb8df930ae. Original new-test prediction P3 was incorrect; source, semantic rejection, registration rollback, FIRST and old oracles remain unchanged.",
+  "selected_CHECK_OOM_limit_per_source": 12,
+  "unchanged": ["all six source bytes and semantic/native expectations", "source issuer/current/Copy/custody requirements", "every actual outer/inner validator allocation injection", "OOM status=NL_CHECK_OUT_OF_MEMORY", "view and context no-clobber", "full rollback and successful retry"]
+}

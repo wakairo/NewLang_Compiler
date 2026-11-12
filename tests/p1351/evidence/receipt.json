@@ -1,0 +1,18 @@
+{
+  "issue": 1351,
+  "local_code_HEAD": "10cf8c8184f98ec401b16681087d67d98e0930b1",
+  "local_code_tree": "8ca2b534dacf27e3b41d40d78ca8470ff0d54fc3",
+  "adopted_main": "deb6d1ba2bdfba9217b381cdd3a3dbd7caaf1246",
+  "ordered_merge_parents": [
+    "10cf8c8184f98ec401b16681087d67d98e0930b1",
+    "deb6d1ba2bdfba9217b381cdd3a3dbd7caaf1246"
+  ],
+  "integration_difference": "same Production and source/oracle bytes; one-line C collector scope repair plus README/evidence only; all registered gates required before publication",
+  "packet_bytes": 629153,
+  "packet_sha256": "64d3655ced870131ce6e45d28f4bcd0bda19ac8db1ce3fdad735e73a7c54c45f",
+  "packet_entries": 238,
+  "guest_used": 20,
+  "candidate_count_total": 6,
+  "manual_CI": 0,
+  "FIRST": "all provisional oracle/harness RED and incomplete prototype C preserved; none relabelled as historic PASS"
+}
