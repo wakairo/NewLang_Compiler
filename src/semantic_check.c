@@ -3693,7 +3693,7 @@ static bool readonly_current_body(const NLFunctionEntry *fn,
             v->kind == NL_SYNTAX_BINDING
                 ? nl_syntax_node_view(v->data.binding.initializer)
                 : NULL;
-        if (!call || call->kind != NL_SYNTAX_CALL)
+        if (!call || call->kind != NL_SYNTAX_EXPR_CALL)
             continue;
         ++calls;
         NLSourceView name;
