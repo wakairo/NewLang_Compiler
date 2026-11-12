@@ -11,12 +11,21 @@ import tempfile
 p = argparse.ArgumentParser()
 p.add_argument('compiler'); p.add_argument('cc'); p.add_argument('parent')
 p.add_argument('sanitizer', choices=['none', 'address', 'undefined'])
+p.add_argument('--completed-raw', help='local restart only: exact earlier raw successes')
 args = p.parse_args()
 root = Path(__file__).resolve().parent
 oracle = json.loads((root / 'oracle.json').read_text())
 Path(args.parent).mkdir(parents=True, exist_ok=True)
 work = Path(tempfile.mkdtemp(prefix='native-', dir=args.parent))
 attempts, commands = [], []
+previous = Path(args.completed_raw) if args.completed_raw else None
+previous_commands = {}
+if previous:
+    assert args.sanitizer == 'none'
+    identity = json.loads((previous.parent.parent / 'gcc-native-plan.json').read_text())
+    assert identity['ELF_SHA256'] == hashlib.sha256(Path(args.compiler).read_bytes()).hexdigest()
+    previous_commands = {x['label']: x for x in json.loads((previous / 'commands.json').read_text())}
+    previous_attempts = {x['label']: x for x in json.loads((previous / 'guest-attempts.json').read_text())}
 
 
 def run(label, command, env=None):
@@ -102,6 +111,20 @@ for profile, name in enumerate(['L-straight-local-old', 'B-field-zero-local-alia
             if args.sanitizer != 'none':
                 cmd += ['-fsanitize=' + args.sanitizer, '-fno-sanitize-recover=all', '-fno-omit-frame-pointer']
             cmd += [target, '-o', binary]
+            completed = previous_commands.get(label)
+            if completed and not passive:
+                attempt = previous_attempts[label + '.run']
+                assert completed['passive'] is False and completed['C_SHA256'] == sha
+                assert completed['command'][:-3] == list(map(str, cmd))[:-3]
+                assert attempt['status'] == 0 and Path(attempt['command'][0]).is_file()
+                assert (previous / (label + '.run.stdout')).read_bytes() == b''
+                assert (previous / (label + '.run.stderr')).read_bytes() == b''
+                assert (previous / target.name).read_bytes() == data
+                commands.append(dict(completed, reused_completed_raw=str(previous),
+                                     original_attempt=attempt))
+                (work / 'commands.json').write_text(json.dumps(commands, indent=2) + '\n')
+                print(label, 'REUSED exact prior raw SUCCESS; not rerun', flush=True)
+                continue
             run(label + '.build', cmd)
             assert target.read_bytes() == data
             env = dict(os.environ, ASAN_OPTIONS='detect_leaks=1:halt_on_error=1',

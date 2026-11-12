@@ -142,8 +142,8 @@ static void callee_copy(size_t symbol, uint8_t value)
 {
     assert(live && entered && !ended && symbol && value == initial &&
            *storage[field_index] == initial);
-    if (copies < pre_copies)
-        assert(!local_live && !changed);
+    if (!local_live)
+        assert(pre_copies == 1 && !copies && !changed);
     else
         assert(local_live && changed && local_reads == 3 && local_mask == 3 &&
                copies < pre_copies + tail_copies);
