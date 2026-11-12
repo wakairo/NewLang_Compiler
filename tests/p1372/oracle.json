@@ -1,0 +1,83 @@
+{
+  "time_JST": "2026-11-12T18:22:06.523087+09:00",
+  "authority": "main3dd2798834cb799f19b836270cbb93bf4851accf / treeff618096a986e8179ff5d3570060480e6d6a9ce1 / CURRENT_SPEC -> Draft17.35",
+  "source": {
+    "B-field-zero-local-alias.nl": {
+      "bytes": 1250,
+      "SHA256": "4e62f5ea5e1f0ce31f874426b4c814d25f566decd08deca1e74559f08806dcb2"
+    },
+    "L-straight-local-old.nl": {
+      "bytes": 1098,
+      "SHA256": "77d27a0c95acb754a3a568486f84c0fd9ec91956bb77de239597a6dd8c4196d2"
+    },
+    "N-local-loan-escape.nl": {
+      "bytes": 1125,
+      "SHA256": "1213fe5d0312d99ae323727e6586035c08fe178162d406da2f3c72e9be430e45"
+    },
+    "N-wrong-actual.nl": {
+      "bytes": 1143,
+      "SHA256": "dd581f1b120da44f1647b6ba6aa580bf05fe0d45be3903c4e764ea5c88608e9b"
+    }
+  },
+  "L": {
+    "field_index": 1,
+    "initial_current": 47,
+    "main_sibling": 173,
+    "callee_new": 227,
+    "callee_sibling": 109,
+    "terminal_new": 239,
+    "Break_old": 47,
+    "backedges": 3,
+    "callee_initial_old_returned_and_caller_iteration_new": 47,
+    "caller_original_survives": true,
+    "callee_local_distinct_while_live": true,
+    "loan_local_formal_ended_before_caller_use": true
+  },
+  "B": {
+    "field_index": 0,
+    "initial_current": 83,
+    "main_sibling": 211,
+    "callee_new": 201,
+    "callee_sibling": 157,
+    "terminal_new": 197,
+    "Break_old": 83,
+    "backedges": 2,
+    "callee_initial_old_returned_and_caller_iteration_new": 83,
+    "caller_original_survives": true,
+    "callee_local_distinct_while_live": true,
+    "loan_local_formal_ended_before_caller_use": true,
+    "different_Copy_chain": "actual/callee initializer and triple old-result aliases/caller result alias"
+  },
+  "negative": {
+    "N-local-loan-escape.nl": {
+      "registration_CHECK": 3,
+      "diagnostic": "P8-EXIT-DEPENDENCY",
+      "C17_guest": "NOT_RUN"
+    },
+    "N-wrong-actual.nl": {
+      "registration_CHECK": 3,
+      "diagnostic": "P3-ARGUMENT-TYPE",
+      "C17_guest": "NOT_RUN"
+    }
+  },
+  "baseline_prediction": {
+    "L": "Use unchanged original P1370 compiler FIRST, registration definition CHECK3 P14 main loop18:18-32:6; no repeated baseline L run needed.",
+    "B": "Existing compiler definition CHECK3 P14 at outer loop or call; exact inner predicate not traced.",
+    "negative": "semantic type/loan-ending refusal before precision; no oracle rewrite if unexpected."
+  },
+  "target": {
+    "Stage_A": "definition + actual CHECK0, genuine public owned/current/custody/CopyBody replay, exact actual/formal/source/plan/signature allocation, free old result, callee EndLocals and same caller frame/Continue closure; no fake Known/root/world",
+    "Stage_B": "only after genuine Stage A, unedited strict C17 raw/passive GCC+Clang O0/O2 and ASan/LSan+UBSan passive; runtime values/physical separation while simultaneously live; clear callee pointer before ending, do not compare expired pointer or reject legal stack address reuse",
+    "failure": "finite tamper, selected registration/actual/Copy validation OOM, context/body-owner/out no-clobber, cleanup/retry, CLI named-output bytes/inode/mtime; nonexhaustive"
+  },
+  "budget": {
+    "functional_max": 4,
+    "host_config_max": 3,
+    "local_guest_max": 24,
+    "fixed_hash_max": 6,
+    "natural_sets_max": 2,
+    "manual_rerun_dispatch": 0,
+    "publication": "LOCAL FINAL + actual adopted main Required6 + no material STOP; READY/merge C only"
+  },
+  "independence": "P original sources only, independent F1371/F/R unread; W excluded; P1368/P1370 evidence not overwritten"
+}
