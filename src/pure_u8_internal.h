@@ -17,7 +17,7 @@ typedef struct {
     const NLCheckedFragment *body;
     const NLSemanticContext *context;
     NLSymbolId formal;
-    NLTypeId quantity, boolean, u8;
+    NLTypeId quantity, boolean, u8, parameter;
     NLCheckedNodeId bindings[NL_SEMANTIC_MAX_ENTRIES];
     bool seen[NL_PARSER_MAX_NODES];
     size_t depth, selections;
@@ -228,6 +228,10 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
     const NLCheckedNodeView *n = predicate_take(w, id);
     NLSemanticValueView value;
     bool valid = false;
+    /* The readonly-u8 alternative is an actual formal/Copy chain, not the
+     * phase predicate family with its type guard removed. */
+    if (w->parameter == w->u8 && (!n || n->kind != NL_CHECKED_IDENTIFIER))
+        goto done;
     if (n && n->kind == NL_CHECKED_IF) {
         valid = predicate_selection(w, id, n);
         goto done;
@@ -260,7 +264,7 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
             !predicate_name(w->body, n->name, c->bindings[n->symbol - 1].name))
             break;
         NLValueId origin;
-        if (n->symbol == w->formal && n->type == w->quantity)
+        if (n->symbol == w->formal && n->type == w->parameter)
             origin = c->bindings[n->symbol - 1].view.value;
         else {
             const NLCheckedNodeView *declaration =
@@ -321,16 +325,20 @@ done:
     return valid;
 }
 
-static bool nl_pure_u8_body_at(const NLCheckedFragment *f, NLSymbolId formal,
-                               NLTypeId unit, NLTypeId u8,
-                               const NLSemanticContext *c, NLPureU8Plan *plan)
+static bool nl_scalar_u8_body_at(const NLCheckedFragment *f, NLSymbolId formal,
+                                 NLTypeId unit, NLTypeId u8,
+                                 const NLSemanticContext *c, bool readonly_u8,
+                                 NLPureU8Plan *plan)
 {
-    PredicateWalk w = {.body = f,
-                       .context = c,
-                       .formal = formal,
-                       .quantity = nl_semantic_core_type(c, NL_TYPE_USIZE),
-                       .boolean = nl_semantic_core_type(c, NL_TYPE_BOOL),
-                       .u8 = u8};
+    PredicateWalk w = {
+        .body = f,
+        .context = c,
+        .formal = formal,
+        .quantity = nl_semantic_core_type(c, NL_TYPE_USIZE),
+        .boolean = nl_semantic_core_type(c, NL_TYPE_BOOL),
+        .u8 = u8,
+        .parameter =
+            readonly_u8 ? u8 : nl_semantic_core_type(c, NL_TYPE_USIZE)};
     const NLCheckedNodeView *root = predicate_take(&w, nl_checked_root(f));
     if (!root || root->kind != NL_CHECKED_BLOCK ||
         nl_checked_node_count(f) > NL_PARSER_MAX_NODES)
@@ -366,7 +374,7 @@ static bool nl_pure_u8_body_at(const NLCheckedFragment *f, NLSymbolId formal,
                 !predicate_scalar(&w, n->initializer))
                 return false;
             w.bindings[n->symbol - 1] = id;
-        } else if (n->kind == NL_CHECKED_STATEMENT) {
+        } else if (n->kind == NL_CHECKED_STATEMENT && !readonly_u8) {
             const NLCheckedNodeView *value =
                 nl_checked_node_view(f, n->initializer);
             /* Generic statement lowering has unit RETURNs. A discarded IF
@@ -379,7 +387,7 @@ static bool nl_pure_u8_body_at(const NLCheckedFragment *f, NLSymbolId formal,
                              ";") ||
                 !predicate_scalar(&w, n->initializer))
                 return false;
-        } else if (n->kind == NL_CHECKED_RETURN) {
+        } else if (n->kind == NL_CHECKED_RETURN && !readonly_u8) {
             const NLCheckedNodeView *value =
                 nl_checked_node_view(f, n->initializer);
             if (n->next_item || !n->terminates || !value || value->type != u8 ||
@@ -402,6 +410,20 @@ static bool nl_pure_u8_body_at(const NLCheckedFragment *f, NLSymbolId formal,
         tail = nl_checked_node_view(f, root->tail);
         if (!tail || !predicate_scalar(&w, root->tail))
             return false;
+    }
+    if (readonly_u8) {
+        if (w.selections || f->arm_count || f->body_count ||
+            nl_control_exits_count(f->exits) || root->terminates ||
+            root->type != u8 || root->result_count != 1 ||
+            root->results[0].type != u8 ||
+            root->results[0].value != tail->results[0].value)
+            return false;
+        for (size_t i = 0; i < nl_checked_node_count(f); ++i)
+            if (!w.seen[i])
+                return false;
+        if (plan)
+            *plan = (NLPureU8Plan){0, 0, 2, 0};
+        return true;
     }
     const NLCheckedNodeView *choice = nl_checked_node_view(f, w.selection);
     if (!choice || w.selections != 1 || choice->normal_arms > 2)
@@ -460,6 +482,14 @@ static bool nl_pure_u8_body_at(const NLCheckedFragment *f, NLSymbolId formal,
     return true;
 }
 
+static inline bool nl_pure_u8_body_at(const NLCheckedFragment *f,
+                                      NLSymbolId formal, NLTypeId unit,
+                                      NLTypeId u8, const NLSemanticContext *c,
+                                      NLPureU8Plan *plan)
+{
+    return nl_scalar_u8_body_at(f, formal, unit, u8, c, false, plan);
+}
+
 static inline bool nl_pure_u8_body(const NLCheckedFragment *f,
                                    NLSymbolId formal, NLTypeId unit,
                                    NLTypeId u8, NLPureU8Plan *plan)
@@ -480,10 +510,10 @@ typedef struct {
 /* CHECK may read the genuine precommit transaction; published consumers use
  * the wrapper below and the current public caller. This changes no child
  * context/ownership and never turns a shallow foreign-world view into proof. */
-static bool nl_pure_u8_contents_at(const NLCheckedFragment *f,
-                                   NLCheckedNodeId id,
-                                   const NLSemanticContext *c,
-                                   NLPureU8Call *out)
+static bool nl_scalar_u8_contents_at(const NLCheckedFragment *f,
+                                     NLCheckedNodeId id,
+                                     const NLSemanticContext *c,
+                                     bool readonly_u8, NLPureU8Call *out)
 {
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLCheckedFragment *body = nl_checked_call_body(f, id);
@@ -495,26 +525,27 @@ static bool nl_pure_u8_contents_at(const NLCheckedFragment *f,
         return false;
     const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8),
                    quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLTypeId parameter = readonly_u8 ? u8 : quantity;
     const NLFunctionEntry *fn = &c->functions[call->function - 1];
     const NLCheckedNodeView *arg =
         nl_checked_node_view(f, call->first_argument);
     if (call->type != u8 || call->results[0].type != u8 ||
         fn->kind != NL_CHECKED_REGISTERED_CALL || fn->count != 1 ||
-        !fn->parameters || fn->parameters[0] != quantity || fn->result != u8 ||
+        !fn->parameters || fn->parameters[0] != parameter || fn->result != u8 ||
         !fn->body || fn->body->count != 1 || !fn->body->parameter_names[0] ||
         !fn->body->syntax || body->body_owner != fn->body ||
         body->source != fn->body->source ||
         nl_syntax_tree_source(fn->body->syntax) != fn->body->source ||
         fn->caller_effects || fn->hidden_dependencies || fn->owner_receiver ||
         fn->owner_producer || fn->custody_recipient || !arg ||
-        arg->next_argument || arg->result_count != 1 || arg->type != quantity ||
-        arg->parameter_type != quantity ||
+        arg->next_argument || arg->result_count != 1 ||
+        arg->type != parameter || arg->parameter_type != parameter ||
         !predicate_name(f, call->name, fn->name))
         return false;
     NLSymbolId formal = 0;
     for (size_t i = 0; i < c->binding_count; ++i) {
         const NLBindingEntry *b = &c->bindings[i];
-        if (b->hidden && b->view.type == quantity &&
+        if (b->hidden && b->view.type == parameter &&
             b->view.value == arg->results[0].value && b->name &&
             !strcmp(b->name, fn->body->parameter_names[0])) {
             if (formal)
@@ -523,8 +554,8 @@ static bool nl_pure_u8_contents_at(const NLCheckedFragment *f,
         }
     }
     NLPureU8Plan plan;
-    if (!formal || !nl_pure_u8_body_at(body, formal, nl_semantic_unit_type(c),
-                                       u8, c, &plan))
+    if (!formal || !nl_scalar_u8_body_at(body, formal, nl_semantic_unit_type(c),
+                                         u8, c, readonly_u8, &plan))
         return false;
     const NLCheckedNodeView *root = nl_checked_node_view(body, body->root);
     const NLCheckedResult result =
@@ -534,6 +565,24 @@ static bool nl_pure_u8_contents_at(const NLCheckedFragment *f,
         return false;
     *out = (NLPureU8Call){body, formal, plan.selection, call->function, plan};
     return true;
+}
+
+static inline bool nl_pure_u8_contents_at(const NLCheckedFragment *f,
+                                          NLCheckedNodeId id,
+                                          const NLSemanticContext *c,
+                                          NLPureU8Call *out)
+{
+    return nl_scalar_u8_contents_at(f, id, c, false, out);
+}
+
+/* Same owned graph walk and finished-result seal, distinct operand contract.
+ * Current consumers authenticate their signature allocations before this
+ * read, then prove the u8 actual comes from the exact current FIELD_READ. */
+static inline bool nl_readonly_u8_contents(const NLCheckedFragment *f,
+                                           NLCheckedNodeId id,
+                                           NLPureU8Call *out)
+{
+    return nl_scalar_u8_contents_at(f, id, nl_checked_context(f), true, out);
 }
 
 static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,

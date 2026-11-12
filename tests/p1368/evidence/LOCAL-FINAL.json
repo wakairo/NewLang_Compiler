@@ -1,0 +1,389 @@
+{
+  "time_JST": "2026-11-12T17:38:37.297244+09:00",
+  "issue": 1368,
+  "authority": {
+    "base_main": "bbeec928b9ccdaaab0dd083dee7681bc3f07b88b",
+    "base_tree": "63afc0af7f508b9f9aed592b344bc53b2ac3ea3b",
+    "canonical": "CURRENT_SPEC -> Draft17.35",
+    "Coordination": [
+      "C688",
+      "C692"
+    ]
+  },
+  "status": "LOCAL Stage A + Stage B PASS; publication and new-head CI NOT_RUN",
+  "tested_HEAD": "1a700fc934686cbf37bc0a2a9e17abf61a0c4fe0",
+  "tested_tree": "e0b8728c1f477aaaacec93e8e238aa8c32ca5601",
+  "tested_inputs": {
+    "CMakeLists.txt": "12efa592b677a073ebe73c1676c38a3aec890f637936f03ce1e3822bee7c85d1",
+    "src/current_loop_check_internal.h": "f0829cc8eccb70747d6f16fe436ab3a7b81d36c1d8ded26257e43ed43b67706e",
+    "src/main.c": "91714ec9fd665775196e530e6d39f704d726a99d72381c854826116943c1e529",
+    "src/pure_u8_internal.h": "8b30ce46b862d4267544a0c1e2a9179d35d9a91562b1cb5e5c0f734431b99f1b",
+    "src/semantic_check.c": "c3cce7f2c1995592bb4d733dab7b60025875b74808a3a0f0b8146e2253746286",
+    "tests/p1368/A-current-copy-call.nl": "0d6a17d3bff7026d9def91e2834f083ae1439fee4e1ee7e0b6baa183b5c20ed1",
+    "tests/p1368/B-field-zero-alias.nl": "84614539bb028aca80f4fecbcd342396132fd229a169955f284f48067b2ff706",
+    "tests/p1368/CMakeLists.txt": "c47ee4bb2d59aa1b32d4aa9b0352c78d006685593cbb074be983589b52a9f66c",
+    "tests/p1368/N-iteration-loan-escape.nl": "b8e731513c7068c14a1180482145c2d95f039071c66ddd3ac705f86def21a2ca",
+    "tests/p1368/N-wrong-actual.nl": "9ea6ba264b00a13df8c86b8f05674cae65bb00a2dfae5effc85fa8649aeedcfe",
+    "tests/p1368/compatibility.py": "d607effd8e545ca79d895c8518c6b84053d25a9a6210e6c76ae296976731f5f5",
+    "tests/p1368/failure.py": "6cc8923b082305b461752341ceb9cdd504fee5096c60307c3da651f6159a1594",
+    "tests/p1368/legacy-C.json": "b0c821ca0d84da5e34c832544723518cd724c468f2a931edf1f12fd718a39293",
+    "tests/p1368/native.py": "66a2028cbb106d7fa0464b9c920c14351137b74031fdc19c4df06fd392bffae5",
+    "tests/p1368/observer.h": "b73708fd1e4b8578b14890eeaa742643c627682a71f7a0b980548bd92f5afb3a",
+    "tests/p1368/oracle.json": "f5c6e8ddd2b4ce095567da97303bf029522d69f9c3498c6b8e64c55d6df6ad53",
+    "tests/p1368/owned.c": "ae19183898b4b3004d527be67ca148f6500e2e233930984a35ce1579ff35b34f"
+  },
+  "preexecution_freeze_SHA256": "d1a8d28d2ae3541d4b976c07ff8db04d68f1d247feecdeede4dae45ccff48caa",
+  "source_freeze_SHA256": "83e6c592ae326c1db13ad4ab648f5e9d0833e06527f445109319b5f8ad43fe45",
+  "baseline_FIRST_SHA256": "fd7de7027caf2015c144ae0851adb22c7d4d18c4f0f2df559cd2dfd32810976e",
+  "preserved_P1366_FIRST_SHA256": "9f0b36d6fa32302f4e3f34adcc9fae0d722d9dd5e9cfeeb89e02d2877f0b8b3b",
+  "results": {
+    "HEAD": "1a700fc934686cbf37bc0a2a9e17abf61a0c4fe0",
+    "tree": "e0b8728c1f477aaaacec93e8e238aa8c32ca5601",
+    "oracle_SHA256": "f5c6e8ddd2b4ce095567da97303bf029522d69f9c3498c6b8e64c55d6df6ad53",
+    "hosts": [
+      {
+        "host": "gcc",
+        "new_units": 8,
+        "impact_units": 119,
+        "impact_completed_attempts": [
+          28,
+          91
+        ],
+        "failure_compat": 15,
+        "ELF": {
+          "newlangc": "a628b8da457014e14eee3cab21e1080f72c5550f9cbf4e51ffabbfff85b46cc7",
+          "p1368_owned": "202d93ab861c7adf6ab661a00831e50d1d72a184756662812345450fc0c4ab5d",
+          "p1332_cli_oom": "4e213a3daf99a486488d0cae295e09ffa7ccca2e8e7ca28018632aa207f1a96c"
+        },
+        "StageA_raw_SHA256": "64438aec0aab42b4ec893eab52e506287eb33d8de59fb6e61e22b6fa44e9d2df",
+        "impact_retry_SHA256": "decce13af873e7e82726eaca71aa8231c76bb8922fc98dd48010079fe470b4b6",
+        "failure_compat_SHA256": "646ef2459123e5e5c04f166f86931fd066246577afbbd98c4473c160bea437af"
+      },
+      {
+        "host": "asan",
+        "new_units": 8,
+        "impact_units": 119,
+        "impact_completed_attempts": [
+          28,
+          91
+        ],
+        "failure_compat": 15,
+        "ELF": {
+          "newlangc": "b88309b5fb6fdfef2154625e79c5ed70663171ef93b1c3da660f0f20aa3b247b",
+          "p1368_owned": "136f61caf38a4e03e6526b88dd7a20f9d9d36c6963d7e51c442c11927ce62c56",
+          "p1332_cli_oom": "1c04b0676c78664ea2fea9f4c17234a36e8feddf7db2fd565307c4e9a952d1c9"
+        },
+        "StageA_raw_SHA256": "c41b14ff52c7a6e61084c8fe71b9ad06f0d682f70e092fb9215ffecc7fdcda58",
+        "impact_retry_SHA256": "e704e7f51592bec6b3e9d717072e49547fe4de9d6995921dd180ffd8313fd63d",
+        "failure_compat_SHA256": "063e62e15661651ffcd06091d2c5b4a07c949305cd4679a0bf863774632ae9d3"
+      },
+      {
+        "host": "ubsan",
+        "new_units": 8,
+        "impact_units": 119,
+        "impact_completed_attempts": [
+          28,
+          91
+        ],
+        "failure_compat": 15,
+        "ELF": {
+          "newlangc": "1ac9e4117d3e7de0ee4524988ee79b26ec6a94d465915cb294da06e8b97cebb7",
+          "p1368_owned": "aeb250504fa11d9728bdbb7962f807cdf66edcf9f038e4897d979402973afcd8",
+          "p1332_cli_oom": "9f715ffec9a15ffecb8a5ba1475134e689427571a8a73d4eddd36775bbc65d82"
+        },
+        "StageA_raw_SHA256": "12928b1e1a70009965cdaecc9c75d16318135a9b56c51aec105a492b69938324",
+        "impact_retry_SHA256": "8825208692e8a5cd79c51dd4efd5f1630ced1ef9316a2ee251c0e2a0912bae6f",
+        "failure_compat_SHA256": "62e0f134d573a5cd0d6393450f0f64832baa40b773d1a5eafcacb24c229fba0e"
+      }
+    ],
+    "native": [
+      {
+        "mode": "gcc",
+        "guests": 8,
+        "C": [
+          {
+            "source": "A-current-copy-call",
+            "C_SHA256": "02e6c400994d76d922c910668b9b22acdedf51212df817e483c4e4b6aba35725",
+            "read": "nl_local_3",
+            "original": "nl_local_1",
+            "field_index": 1,
+            "real_call": "nl_fn_10",
+            "returned_binding": "nl_local_6",
+            "store_Copy_chain": [
+              "nl_local_6"
+            ],
+            "stored_to_same_original": true,
+            "callee_return_traces_to_actual_formal": true
+          },
+          {
+            "source": "B-field-zero-alias",
+            "C_SHA256": "471603edd3c90fa5dcb982288414f48dbb00131a41b6d3b7da98c22fd56593e1",
+            "read": "nl_local_3",
+            "original": "nl_local_1",
+            "field_index": 0,
+            "real_call": "nl_fn_11",
+            "returned_binding": "nl_local_8",
+            "store_Copy_chain": [
+              "nl_local_9",
+              "nl_local_8"
+            ],
+            "stored_to_same_original": true,
+            "callee_return_traces_to_actual_formal": true
+          }
+        ],
+        "raw_SHA256": "22a55919dbd099d3306c95a29c9e9b801cd1dd66ecd9400c55b13e64b4f91c23",
+        "attempts_SHA256": "9233f79505717f4134a822d4c968ebbf0cac4c0d47eb046a415d8f61f6425f04"
+      },
+      {
+        "mode": "clang",
+        "guests": 8,
+        "C": [
+          {
+            "source": "A-current-copy-call",
+            "C_SHA256": "02e6c400994d76d922c910668b9b22acdedf51212df817e483c4e4b6aba35725",
+            "read": "nl_local_3",
+            "original": "nl_local_1",
+            "field_index": 1,
+            "real_call": "nl_fn_10",
+            "returned_binding": "nl_local_6",
+            "store_Copy_chain": [
+              "nl_local_6"
+            ],
+            "stored_to_same_original": true,
+            "callee_return_traces_to_actual_formal": true
+          },
+          {
+            "source": "B-field-zero-alias",
+            "C_SHA256": "471603edd3c90fa5dcb982288414f48dbb00131a41b6d3b7da98c22fd56593e1",
+            "read": "nl_local_3",
+            "original": "nl_local_1",
+            "field_index": 0,
+            "real_call": "nl_fn_11",
+            "returned_binding": "nl_local_8",
+            "store_Copy_chain": [
+              "nl_local_9",
+              "nl_local_8"
+            ],
+            "stored_to_same_original": true,
+            "callee_return_traces_to_actual_formal": true
+          }
+        ],
+        "raw_SHA256": "caf31f1f6b745c1fa1689e6e8d06b47326e4cc8208a9c64c41da42023305290d",
+        "attempts_SHA256": "180b33dcadf816e2060a0e40116e45f17412fe8a730fa2e041fdbdd7db860671"
+      },
+      {
+        "mode": "asan",
+        "guests": 2,
+        "C": [
+          {
+            "source": "A-current-copy-call",
+            "C_SHA256": "02e6c400994d76d922c910668b9b22acdedf51212df817e483c4e4b6aba35725",
+            "read": "nl_local_3",
+            "original": "nl_local_1",
+            "field_index": 1,
+            "real_call": "nl_fn_10",
+            "returned_binding": "nl_local_6",
+            "store_Copy_chain": [
+              "nl_local_6"
+            ],
+            "stored_to_same_original": true,
+            "callee_return_traces_to_actual_formal": true
+          },
+          {
+            "source": "B-field-zero-alias",
+            "C_SHA256": "471603edd3c90fa5dcb982288414f48dbb00131a41b6d3b7da98c22fd56593e1",
+            "read": "nl_local_3",
+            "original": "nl_local_1",
+            "field_index": 0,
+            "real_call": "nl_fn_11",
+            "returned_binding": "nl_local_8",
+            "store_Copy_chain": [
+              "nl_local_9",
+              "nl_local_8"
+            ],
+            "stored_to_same_original": true,
+            "callee_return_traces_to_actual_formal": true
+          }
+        ],
+        "raw_SHA256": "bd0026971c5c1beed09917c8ab06c51b0cb0755338fa1fc8718817ac47eae12c",
+        "attempts_SHA256": "237e9f22d6f482e0afc7a5f1f70ae9de3485be8391faf2505b3e2c9aa2cf0514"
+      },
+      {
+        "mode": "ubsan",
+        "guests": 2,
+        "C": [
+          {
+            "source": "A-current-copy-call",
+            "C_SHA256": "02e6c400994d76d922c910668b9b22acdedf51212df817e483c4e4b6aba35725",
+            "read": "nl_local_3",
+            "original": "nl_local_1",
+            "field_index": 1,
+            "real_call": "nl_fn_10",
+            "returned_binding": "nl_local_6",
+            "store_Copy_chain": [
+              "nl_local_6"
+            ],
+            "stored_to_same_original": true,
+            "callee_return_traces_to_actual_formal": true
+          },
+          {
+            "source": "B-field-zero-alias",
+            "C_SHA256": "471603edd3c90fa5dcb982288414f48dbb00131a41b6d3b7da98c22fd56593e1",
+            "read": "nl_local_3",
+            "original": "nl_local_1",
+            "field_index": 0,
+            "real_call": "nl_fn_11",
+            "returned_binding": "nl_local_8",
+            "store_Copy_chain": [
+              "nl_local_9",
+              "nl_local_8"
+            ],
+            "stored_to_same_original": true,
+            "callee_return_traces_to_actual_formal": true
+          }
+        ],
+        "raw_SHA256": "cbb78426484ffab35dadaeeede12e17b20a11d3ca887d0e5f334a487ad1626bc",
+        "attempts_SHA256": "8e01ea40499a6fd9027361611384d6bd77617d79aeed4db306e5cc10076679b4"
+      }
+    ],
+    "registration_OOM": {
+      "A_census": 880,
+      "B_census": 922,
+      "clones": 23,
+      "plans": 2,
+      "selected_per_source": 11,
+      "exhaustive": false
+    },
+    "actual_OOM": {
+      "A_census": 955,
+      "B_census": 985,
+      "clones": 31,
+      "finished_seals": 1,
+      "selected_per_source": 10,
+      "exhaustive": false
+    },
+    "legacy_C_cases": 20,
+    "public_validator_OOM": "no allocating replay protocol added; registration/actual and CLI emitter selected OOM measured, no exhaustive validator allocation claim",
+    "Prod_source_test_inputs_unchanged": true
+  },
+  "summary_SHA256": "1934b5a72905879f18ad6d1600abedb1c6ec5405e8a80ceecf0b9bde5d6a4a8a",
+  "registration": {
+    "local_total": 962,
+    "new_tests": [
+      "p1368_A-current-copy-call_positive.unit",
+      "p1368_A-current-copy-call_registration-oom.unit",
+      "p1368_A-current-copy-call_oom.unit",
+      "p1368_B-field-zero-alias_positive.unit",
+      "p1368_B-field-zero-alias_registration-oom.unit",
+      "p1368_B-field-zero-alias_oom.unit",
+      "p1368_loan_negative.unit",
+      "p1368_type_negative.unit",
+      "p1368_native.integration",
+      "p1368_negative_cli_oom.integration",
+      "p1368_legacy_C_origin.integration"
+    ],
+    "CI_expected_full": 964,
+    "CI_expected_partial": 963,
+    "local_unregistered_CI_tooling": [
+      "t991_contract_accept.integration",
+      "t991_contract_reject.integration"
+    ]
+  },
+  "base_main_original_CI": [
+    {
+      "job": 131037777425,
+      "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+      "run": 43175241935,
+      "checkout": "bbeec928b9ccdaaab0dd083dee7681bc3f07b88b",
+      "tests": 952,
+      "raw_SHA256": "ce735f4186fa440cc56c9ab3341cfc0cef11b7a13fe3f274b3fea5fd295093f5"
+    },
+    {
+      "job": 131037778590,
+      "name": "Clang",
+      "run": 43175242202,
+      "checkout": "bbeec928b9ccdaaab0dd083dee7681bc3f07b88b",
+      "tests": 953,
+      "raw_SHA256": "76cef23939813554f0d3dcc845aa8cabb636acd5a812999b2910f7ff7ee68d1e"
+    },
+    {
+      "job": 131037778620,
+      "name": "ASan",
+      "run": 43175242202,
+      "checkout": "bbeec928b9ccdaaab0dd083dee7681bc3f07b88b",
+      "tests": 953,
+      "raw_SHA256": "f06b8d0d3d62899deee732d80beeb26f563bed0f10557752b113772b860531a2"
+    },
+    {
+      "job": 131037778665,
+      "name": "GCC Release",
+      "run": 43175242202,
+      "checkout": "bbeec928b9ccdaaab0dd083dee7681bc3f07b88b",
+      "tests": 953,
+      "raw_SHA256": "7077fa15aacbc0bbec48050b0bcec617b1b652f01ddb3ea42450897892e581c9"
+    },
+    {
+      "job": 131037778732,
+      "name": "UBSan",
+      "run": 43175242202,
+      "checkout": "bbeec928b9ccdaaab0dd083dee7681bc3f07b88b",
+      "tests": 953,
+      "raw_SHA256": "41b9669d8259fcad0e7859dba7d64ed7714b60e04e61d020f038bcf00d3133cd"
+    },
+    {
+      "job": 131037778841,
+      "name": "GCC",
+      "run": 43175242202,
+      "checkout": "bbeec928b9ccdaaab0dd083dee7681bc3f07b88b",
+      "tests": 953,
+      "raw_SHA256": "2656d50ff7f6e33223f7a84c76caf1947d7b96095e999083325fc9b70f85de54"
+    }
+  ],
+  "base_main_CI_receipt_SHA256": "67acfd49f2fe9245c888d18e819757a42398c44e89b03fe2bcff32d41a26f3c2",
+  "apparatus": {
+    "inode_exhaustion": "Original configure RED retained; archived configs, removed only regenerable old CMake files; same three host tuples retry PASS.",
+    "inode_receipt_SHA256": "3205d0ab95d62ec5fd5000a0dbbdd04b02d8050d3c6ff1223df98311de282db4",
+    "impact_dependency_omission": "Each host first 28 PASS, then unexecuted missing wrapped executable. Built p1184_signature/p1193_observe and executed only remaining 91 PASS.",
+    "impact_FIRST_SHA256": "ae2af2118d72a0d9a59f4c4eafea1f903a6c67afd3a1329ff9e7e41545d43ff4",
+    "static_C_audit": "External read-only pointer regex corrected. No generated C/source/native rerun or change.",
+    "static_C_audit_receipt_SHA256": "e523c717a2c6f34a0346b84822ce5457289deaafe0f1f61d6530c3e50bbdd2e1",
+    "registration_count": "An unfinished packaging preflight expected CI964 locally; actual local962 is exactly CI minus the two opt-in T991 tooling tests. No packet existed; no compiler/test failure or changed registration."
+  },
+  "self_review": {
+    "signature": "Origin allocation pointer and count preflight retained before scalar body traversal.",
+    "custody": "Canonical destruction untouched; no new owning pointer or proof/certificate issuer.",
+    "dataflow": "Exact current field read, fresh u8 formal, normal Copy alias tail, returned actual call value, same-original scoped store.",
+    "world": "Helper graph is final iteration world, never a pre-call snapshot; existing header/frame/loan/exit relation enforces closure.",
+    "legacy": "Existing usize/IF operand mode remains distinct; 20 old C outputs byte-identical on every producer host.",
+    "independence": "No independent F/R inputs, review, source or oracle read or reused."
+  },
+  "budget": {
+    "functional_implementations": 1,
+    "fixed_hashes_before_evidence_commit": 3,
+    "host_configurations": 3,
+    "guest_attempts": 20,
+    "remote_push_PR_new_CI_at_local_final": 0,
+    "preserved_prebuild_unexecuted_hashes": [
+      "f9bed1861ab94ed09ebfa140da0cc5a2d15d1ba8",
+      "a78df42959b9b72b7fbebf60750e3736b994ed3b"
+    ]
+  },
+  "not_claimed": [
+    "exhaustive OOM",
+    "wrapper/inner-loop B",
+    "extra originals/formals",
+    "helper nested calls/effects/RETURN/IF extensions",
+    "general CFG",
+    "universal soundness",
+    "Product PASS",
+    "new-head CI success",
+    "independent F1 result"
+  ],
+  "VALUE_ALIGNMENT_RISK": "One shared private authentication mechanism and finite reusable source capability; maintenance grew but no profile-specific authority. Audit-locality and practical C-target value remain unproved. Product GO PAUSED / H1 HOLD.",
+  "evidence_packet": {
+    "path": "local-raw.zip",
+    "bytes": 23114199,
+    "entries": 271,
+    "SHA256": "428a508b60774aaa13791623afbb1d4ee21ed27fefd93a7907c6166966e0e215"
+  }
+}

@@ -3712,6 +3712,37 @@ static bool readonly_current_body(const NLFunctionEntry *fn,
     return calls == 1 && current;
 }
 
+/* Constructor classification only. The common owned-graph walk consumes
+ * every actual formal/alias/result node, and publication requires the same
+ * finished-result custody receipt as the existing scalar predicate family.
+ * This does not classify a plain helper as a current-loop CopyBody. */
+static bool readonly_copy_body(const NLFunctionEntry *fn,
+                               const NLSemanticContext *c)
+{
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    if (fn->count != 1 || !fn->parameters || fn->parameters[0] != u8 ||
+        fn->result != u8 || !fn->body || !fn->body->syntax)
+        return false;
+    const NLSyntaxView *root =
+        nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
+    const NLSyntaxView *tail = root && root->kind == NL_SYNTAX_BLOCK
+                                   ? nl_syntax_node_view(root->data.block.tail)
+                                   : NULL;
+    if (!tail || tail->kind != NL_SYNTAX_EXPR_NAME)
+        return false;
+    for (const NLSyntaxNode *n = root->data.block.items; n;
+         n = nl_syntax_next_argument(n)) {
+        const NLSyntaxView *v = nl_syntax_node_view(n);
+        const NLSyntaxView *init =
+            v && v->kind == NL_SYNTAX_BINDING
+                ? nl_syntax_node_view(v->data.binding.initializer)
+                : NULL;
+        if (!init || init->kind != NL_SYNTAX_EXPR_NAME)
+            return false;
+    }
+    return true;
+}
+
 static bool run_body(Check *caller, NLCheckedNodeId call_id,
                      const NLFunctionEntry *function,
                      const NLCheckedNodeId *arguments)
@@ -3796,7 +3827,8 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     const bool predicate_result =
         !body.definition && function->kind == NL_CHECKED_REGISTERED_CALL &&
         function->count == 1 && function->parameters &&
-        function->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
+        (function->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) ||
+         readonly_copy_body(function, c)) &&
         function->result == nl_semantic_core_type(c, NL_TYPE_U8) &&
         !function->caller_effects && !function->hidden_dependencies &&
         !function->owner_receiver && !function->owner_producer &&
