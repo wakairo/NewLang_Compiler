@@ -1,0 +1,13 @@
+{
+  "expected": {
+    "tests/p1372/L-straight-local-old.nl": {
+      "source_sha256": "77d27a0c95acb754a3a568486f84c0fd9ec91956bb77de239597a6dd8c4196d2",
+      "C_sha256": "bf1b904fc87fb5295627af7282cd0ee5ffdbb9a7b924ddbc66aaa7f5c3ce1264"
+    },
+    "tests/p1372/B-field-zero-local-alias.nl": {
+      "source_sha256": "4e62f5ea5e1f0ce31f874426b4c814d25f566decd08deca1e74559f08806dcb2",
+      "C_sha256": "c35764251fc90900e292b4c069bb092ee9a54bb975d69a56233f81cf74515f3e"
+    }
+  },
+  "baseline": "adopted main691b treeequals original C8; original P1372 emitted C retained in packet and CI"
+}
