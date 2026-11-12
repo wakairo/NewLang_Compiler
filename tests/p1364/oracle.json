@@ -1,0 +1,59 @@
+{
+  "release": "C670",
+  "baseline": "8db2dfe0e399da2144d4c7b346766eb9045bc10e",
+  "canonical": "Draft17.35",
+  "A": {
+    "source": "original P1362 B bytes unchanged",
+    "input": 89,
+    "index": 1,
+    "main_initial_old": 29,
+    "main_final_current": 89,
+    "main_sibling": 199,
+    "wrapper_old": 59,
+    "wrapper_final_current_and_sibling": 89,
+    "inner_initial": 17,
+    "inner_old": 89,
+    "inner_current": 197,
+    "inner_sibling": 211,
+    "backedges": 3
+  },
+  "B": {
+    "source": "new reversed declared fields and new values",
+    "input": 111,
+    "index": 0,
+    "main_initial_old": 47,
+    "main_final_current": 111,
+    "main_sibling": 167,
+    "wrapper_old": 61,
+    "wrapper_final_current_and_sibling": 111,
+    "inner_initial": 23,
+    "inner_old": 111,
+    "inner_current": 233,
+    "inner_sibling": 173,
+    "backedges": 2
+  },
+  "StageA": "registration and actual CHECK0; real program root->main->one wrapper->one inner; validate owner/current/inner+outer Copy and exact actual/fresh formal; main and wrapper originals unchanged across E/H/Continue/Break/exit, callee EndLocals excludes main; main direct scoped Change has real old and source-call new value, then current/sibling; negative reject/restore. No private driver raw world contract.",
+  "registration_OOM": "fresh complete census, selected1/2/middle/last + every3 plan allocation start + first/middle/last recorded clone begin/end; each must fire OOM with whole preexisting seeded context/body owners unchanged, cleanup/retry. Not exhaustive census.",
+  "actual_OOM": "fresh complete census, both Copy initializations, three Copy/custody seals, both readonly capture begin/end plus first/middle/last; each must fire OOM/nil/unchanged full context and existing body owners, cleanup/retry; retain/current attachment is a surrounding marker, not an allocating operation.",
+  "Copy_OOM": "every reached outer<=128 and inner<=8 allocation, fail unchanged output/context/owners and restore/retry",
+  "semantic_negative": {
+    "N-ended-loan": "registration P8-EXIT-DEPENDENCY",
+    "N-wrong-argument": "registration P3-TYPE-MISMATCH"
+  },
+  "scope_negative": {
+    "N-extra-main": "safe precision, no entry/rollback",
+    "N-second-wrapper": "safe precision, no entry/rollback"
+  },
+  "StageB": "only after genuine StageA: unedited raw/passive GCC and Clang O0/O2 both positives16 guests + passive guest ASan+LSan/UBSan4=20. Live main storage remains identical from before wrapper to after its own Change; three simultaneously live originals disjoint; only live pointers dereferenced, pointers cleared before exit; main old/new/sibling and actual call results observed.",
+  "named_output": "selected malloc census points1/2/middle/last + write/flush failure, output bytes/inode/mtime unchanged, temp cleanup/retry",
+  "compatibility": "17 old C source/hash oracles unchanged, including P1362 A dataflow control and P1359 two-call positives",
+  "budgets": {
+    "functional_fixed": 4,
+    "all_fixed": 6,
+    "hosts": 3,
+    "new_guest": 24,
+    "planned_guest": 20
+  },
+  "preservation": "old P1362 source/oracle/FIRST/native NOT_OBSERVED unchanged; new tests provide their own observations",
+  "independent_F_R": "unread"
+}
