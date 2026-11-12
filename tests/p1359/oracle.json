@@ -1,0 +1,76 @@
+{
+  "release": "C653",
+  "baseline": "acf775ea4bdeb39387730e302422f650d31ab5bd",
+  "StageA": "actual CHECK0; exact root->main->two wrapper->each one inner; both current/Copy seals, distinct actual/formal/original/result; first free Copy survives in second entry and in post-second source bindings; affected negatives reject and restore",
+  "A": {
+    "inputs": [
+      43,
+      181
+    ],
+    "index": 1,
+    "inner_initial": 17,
+    "inner_current": 197,
+    "inner_sibling": 211,
+    "backedges": 3,
+    "wrapper_old": 59,
+    "wrapper_current": [
+      43,
+      181
+    ],
+    "wrapper_sibling": [
+      43,
+      181
+    ],
+    "main_Copy_sequence": [
+      43,
+      43,
+      181,
+      181,
+      43,
+      181
+    ]
+  },
+  "B": {
+    "inputs": [
+      91,
+      157
+    ],
+    "index": 0,
+    "inner_initial": 23,
+    "inner_current": 233,
+    "inner_sibling": 173,
+    "backedges": 2,
+    "wrapper_old": 61,
+    "wrapper_current": [
+      91,
+      157
+    ],
+    "wrapper_sibling": [
+      91,
+      157
+    ],
+    "main_Copy_sequence": [
+      91,
+      91,
+      157,
+      157,
+      91,
+      157
+    ]
+  },
+  "negative": {
+    "N-wrong-argument": "registration P3-TYPE-MISMATCH, rollback",
+    "N-ended-loan": "registration P8-EXIT-DEPENDENCY, rollback",
+    "N-third-call": "actual precision, nil entry, rollback"
+  },
+  "OOM": "fresh census; selected points for all four originals/readonly captures, two current attachment events, five Copy/custody seals and last allocation; each point must actually fire with OOM/nil/unchanged ownership and retry; every reached outer Copy allocation <=256 and inner <=64, for both invocations",
+  "StageB": "after genuine StageA only: unedited raw/passive GCC/Clang O0/O2 for both sources 16 guests, plus passive ASan+LSan/UBSan4 =20; each live wrapper/inner original separate, temporal stack address reuse between invocations allowed; main Copy values after second invocation must be input1 then input2",
+  "budgets": {
+    "functional_candidates": 4,
+    "total_fixed": 6,
+    "host_configs": 3,
+    "local_guest": 24
+  },
+  "P1358_FIRST_source_oracle": "unchanged; new source aliases expose actual post-second use; old B bytes preserved separately",
+  "private_consumer_input": "only genuine immutable synchronous source CHECK output, no new raw signature/world tamper contract (C651/C649)"
+}

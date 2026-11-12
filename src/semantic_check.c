@@ -5882,6 +5882,9 @@ static bool current_copy_prefix_frame(const Check *,
                                       const NLLinearBreakProof *);
 static bool current_copy_pair(const NLLinearBreakProof *,
                               const NLLinearBreakProof *);
+static bool current_wrapper_prefix(const Check *);
+static bool current_wrapper_calls(const NLLinearBreakProof *,
+                                  const NLCheckedFragment *);
 
 static bool current_old_tail(const NLCheckedFragment *f, NLCheckedNodeId loop)
 {
@@ -6024,7 +6027,8 @@ static bool current_copy_callee(const Check *c)
         outer_frame->function_result == c->function_result &&
         outer_frame->capture_copy_body && outer_frame->artifact->copy_body &&
         !outer_frame->artifact->copy_body->formal_write &&
-        !outer_frame->artifact->body_count && !main_frame->artifact->body_count;
+        !outer_frame->artifact->body_count &&
+        (!main_frame->artifact->body_count || current_wrapper_prefix(c));
     if (!direct && !wrapper)
         return false;
     const NLCopyBodyProof *copy = c->artifact->copy_body;
@@ -6131,7 +6135,8 @@ static const NLCheckedFragment *linear_call_owner(const NLLinearBreakProof *p)
             return NULL;
         const NLCopyBodyProof *wrapper = p->caller->copy_body;
         if (wrapper->caller != main || wrapper->current_call != p->call ||
-            main->body_count != 1 || main->arm_count)
+            main->arm_count ||
+            (main->body_count != 1 && !current_wrapper_calls(p, main)))
             return NULL;
         for (size_t i = 0; i < main->count; ++i)
             if (main->nodes[i].kind == NL_CHECKED_AGGREGATE)

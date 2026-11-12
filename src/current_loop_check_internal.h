@@ -2543,6 +2543,254 @@ static bool current_copy_pair(const NLLinearBreakProof *a,
                                    p->exit, q->entry);
 }
 
+/* A borrowed view of the existing wrapper/inner records, never a stored
+ * certificate. Construction consumes only the already-completed prefix;
+ * published validation additionally requires the final caller graph seal. */
+typedef struct {
+    const NLCheckedFragment *wrapper, *inner;
+    const NLCopyBodyProof *copy, *child;
+    const NLLinearBreakProof *current;
+} CurrentWrappedCall;
+
+static bool current_wrapped_call(const NLCheckedFragment *main,
+                                 NLCheckedNodeId id, bool published,
+                                 CurrentWrappedCall *out)
+{
+    const NLCheckedFragment *f = nl_checked_call_body(main, id);
+    const NLCheckedNodeView *call = nl_checked_node_view(main, id);
+    const NLCopyBodyProof *w = f ? f->copy_body : NULL;
+    if (!f || !call || !w || !w->sealed || w->owner != f || w->caller != main ||
+        w->call != id || w->formal_write || !current_readonly_entry_origin(w) ||
+        !w->current_call || w->current_loop || f->arm_count ||
+        f->body_count != 1 || f->linear_breaks || !w->first ||
+        w->first->view.kind != NL_COPY_BODY_INITIALIZE ||
+        f->source != w->source || f->body_owner != w->body ||
+        f->nodes != w->nodes_origin || f->count != w->count || !w->nodes ||
+        memcmp(f->nodes, w->nodes, w->count * sizeof(*w->nodes)) ||
+        call->kind != NL_CHECKED_REGISTERED_CALL || !call->body_backed ||
+        call->terminates || call->function != w->view.function ||
+        call->argument_count != 1 ||
+        call->first_argument != w->readonly_argument ||
+        call->result_count != 1 ||
+        call->results[0].type != w->view.result.type ||
+        call->results[0].value != w->view.result.value ||
+        !nl_h_custody_result_valid(main, id) ||
+        (published && !nl_copy_body_forward_origin(f)))
+        return false;
+    const NLCheckedFragment *inner = nl_checked_call_body(f, w->current_call);
+    const NLCopyBodyProof *q = inner ? inner->copy_body : NULL;
+    const NLLinearBreakProof *p = inner ? inner->linear_breaks : NULL;
+    if (!inner || !q || !q->sealed || q->owner != inner || q->caller != f ||
+        q->call != w->current_call || !current_readonly_entry_origin(q) ||
+        !q->first || q->first->view.kind != NL_COPY_BODY_INITIALIZE ||
+        q->current_call || !q->current_loop || !p || p->next ||
+        !p->copy_callee || p->owner != inner || p->caller != f ||
+        p->call != q->call || p->loop != q->current_loop ||
+        !current_copy_cycle(p) || !current_old_tail(inner, p->loop) ||
+        p->current_cycle->root != q->first->view.field.parent ||
+        p->current_cycle->preserved_root != w->first->view.field.parent ||
+        !linear_copy_calls(p, published) || (published && !p->sealed))
+        return false;
+    *out = (CurrentWrappedCall){f, inner, w, q, p};
+    return true;
+}
+
+static bool current_wrapped_closed(const CurrentWrappedCall *f,
+                                   const NLSemanticContext *end)
+{
+    const NLSemanticContext *live = f->copy->exit;
+    if (!live || !end ||
+        memcmp(live, &f->copy->readonly_exit_storage, sizeof(*live)) ||
+        live->place_count > end->place_count ||
+        live->binding_count > end->binding_count ||
+        !current_ended_formal(f->copy, end) ||
+        !current_ended_formal(f->child, end) ||
+        !nl_copy_plain(end, f->copy->view.result.value,
+                       f->copy->view.result.type))
+        return false;
+    const CopyEvent *initials[] = {f->copy->first, f->child->first};
+    if (initials[0]->view.field.parent == initials[1]->view.field.parent)
+        return false;
+    for (size_t k = 0; k < 2; ++k) {
+        const CopyEvent *e = initials[k];
+        const NLPlaceId ids[] = {e->view.field.parent,
+                                 e->post[0].fixed_fields[0],
+                                 e->post[0].fixed_fields[1]};
+        for (size_t i = 0; i < 3; ++i) {
+            if (!ids[i] || ids[i] > end->place_count)
+                return false;
+            const NLSemanticPlaceView v = end->places[ids[i] - 1];
+            if (v.live || v.current_value || v.current_fact ||
+                v.incarnation != e->post[i].incarnation ||
+                v.type != e->post[i].type)
+                return false;
+        }
+    }
+    const NLPlaceId formal =
+        f->copy->entry->bindings[f->copy->readonly_parameter - 1].view.place;
+    for (size_t i = formal - 1; i < live->place_count; ++i) {
+        const NLSemanticPlaceView v = end->places[i], a = live->places[i];
+        if (v.live || v.current_value || v.current_fact ||
+            v.incarnation != a.incarnation || v.type != a.type)
+            return false;
+    }
+    for (size_t i = f->copy->readonly_parameter - 1; i < live->binding_count;
+         ++i) {
+        NLSemanticBindingView expected = live->bindings[i].view;
+        if (!live->bindings[i].hidden && expected.availability == NL_AVAILABLE)
+            expected.availability = NL_CONSUMED;
+        if (!end->bindings[i].hidden ||
+            memcmp(&expected, &end->bindings[i].view, sizeof(expected)))
+            return false;
+    }
+    for (size_t i = 0; i < end->scope_count; ++i)
+        if (end->scopes[i].active)
+            return false;
+    return !end->domain_count && !end->region_count && !end->occurrence_count;
+}
+
+/* The Copy record preserves a LIVE return world, not a post-teardown world.
+ * Match caller-prefix facts from its entry, and require actual EndLocals in
+ * the next entry. Main may append ordinary u8 bindings, while the first free
+ * result keeps its own package identity. No projected world is constructed.
+ * Do not use current_caller_transfer(root=0)'s empty frame as this proof. */
+static bool current_wrapper_transfer(const CurrentWrappedCall *old,
+                                     const NLCopyBodyProof *next)
+{
+    const NLSemanticContext *a = old->copy->entry, *live = old->copy->exit,
+                            *b = next ? next->entry : NULL;
+    if (!current_readonly_entry_origin(next) ||
+        !current_wrapped_closed(old, b) ||
+        !nl_copy_state_matches(b, &next->entry_anchor) ||
+        old->copy->body != next->body || old->copy->source != next->source ||
+        old->copy->caller != next->caller || old->copy->call >= next->call ||
+        old->copy->readonly_parameter == next->readonly_parameter ||
+        !current_ended_formal(old->copy, b) ||
+        !current_ended_formal(old->child, b) ||
+        live->place_count > b->place_count ||
+        live->value_count > b->value_count ||
+        live->binding_count > b->binding_count ||
+        live->scope_count > b->scope_count ||
+        a->function_count != b->function_count || !nl_copy_same_types(a, b) ||
+        b->domain_count || b->region_count || b->occurrence_count ||
+        !nl_copy_plain(b, old->copy->view.result.value,
+                       old->copy->view.result.type))
+        return false;
+    const NLTypeId u8 = nl_semantic_core_type(b, NL_TYPE_U8);
+    const NLPlaceId formal =
+        a->bindings[old->copy->readonly_parameter - 1].view.place;
+    for (size_t i = 0; i + 1 < formal; ++i) {
+        const NLSemanticPlaceView v = a->places[i];
+        if (memcmp(&v, &b->places[i], sizeof(v)) ||
+            (v.live &&
+             (!v.independent_root || v.parent_aggregate || v.parent_sum ||
+              v.governing_domain || v.placement.region || v.type != u8 ||
+              !nl_copy_plain(b, v.current_value, u8))))
+            return false;
+        if (v.live && (!nl_copy_plain(a, v.current_value, u8) ||
+                       a->values[v.current_value - 1].scalar_known !=
+                           b->values[v.current_value - 1].scalar_known ||
+                       a->values[v.current_value - 1].scalar_value !=
+                           b->values[v.current_value - 1].scalar_value))
+            return false;
+    }
+    for (size_t i = 0; i + 1 < old->copy->readonly_parameter; ++i)
+        if (a->bindings[i].hidden != b->bindings[i].hidden ||
+            memcmp(&a->bindings[i].view, &b->bindings[i].view,
+                   sizeof(a->bindings[i].view)))
+            return false;
+    for (size_t i = 0; i < b->scope_count; ++i)
+        if (b->scopes[i].active ||
+            (i < a->scope_count &&
+             memcmp(&a->scopes[i], &b->scopes[i], sizeof(a->scopes[i]))))
+            return false;
+    for (size_t i = live->place_count; i < b->place_count; ++i) {
+        const NLSemanticPlaceView v = b->places[i];
+        if (v.live &&
+            (!v.independent_root || v.parent_aggregate || v.parent_sum ||
+             v.placement.region || v.governing_domain || v.type != u8 ||
+             !nl_copy_plain(b, v.current_value, u8)))
+            return false;
+    }
+    for (size_t i = live->binding_count; i < b->binding_count; ++i) {
+        const NLSemanticBindingView v = b->bindings[i].view;
+        if (v.availability == NL_AVAILABLE &&
+            (v.type != u8 || !nl_copy_plain(b, v.value, u8)))
+            return false;
+    }
+    const NLValueId result = old->copy->view.result.value;
+    if (!nl_copy_plain(live, result, u8) ||
+        live->values[result - 1].scalar_known !=
+            b->values[result - 1].scalar_known ||
+        live->values[result - 1].scalar_value !=
+            b->values[result - 1].scalar_value)
+        return false;
+    const NLCheckedNodeView *first =
+        nl_checked_node_view(next->caller, old->copy->call);
+    const NLCheckedNodeView *second =
+        nl_checked_node_view(next->caller, next->call);
+    return first && second && first->span.end_byte < second->span.start_byte;
+}
+
+static bool current_wrapper_prefix(const Check *c)
+{
+    const Check *wrapper = c->caller, *main = wrapper->caller;
+    const NLCheckedFragment *caller = main->artifact;
+    const NLCopyBodyProof *next = wrapper->artifact->copy_body;
+    if (caller->body_count != 1 || !caller->body_calls || !next ||
+        !next->first || next->current_call || next->current_loop ||
+        next->sealed || next->view.event_count != 1)
+        return false;
+    CurrentWrappedCall previous;
+    if (!current_wrapped_call(caller, caller->body_calls[0], false,
+                              &previous) ||
+        previous.copy->view.function != wrapper->body_function ||
+        previous.current->function != c->body_function ||
+        previous.current->root != c->origin_root ||
+        previous.current->outer_call != c->origin_call ||
+        previous.inner->body_owner != c->artifact->body_owner ||
+        previous.copy->first->view.field.parent ==
+            next->first->view.field.parent)
+        return false;
+    return current_wrapper_transfer(&previous, next);
+}
+
+static bool current_wrapper_calls(const NLLinearBreakProof *p,
+                                  const NLCheckedFragment *main)
+{
+    /* validate_current_cycle has authenticated the common final registry
+     * before this entry-only check. No full validator is called recursively. */
+    if (!main || main->body_count != 2 || !main->body_calls ||
+        !nl_h_custody_borrow_valid(main))
+        return false;
+    CurrentWrappedCall a, b;
+    if (!current_wrapped_call(main, main->body_calls[0], true, &a) ||
+        !current_wrapped_call(main, main->body_calls[1], true, &b) ||
+        a.wrapper == b.wrapper || a.inner == b.inner ||
+        a.copy->view.function != b.copy->view.function ||
+        a.copy->view.result.value == b.copy->view.result.value ||
+        a.current->function != b.current->function ||
+        a.current->plan != b.current->plan || a.current->root != p->root ||
+        b.current->root != p->root || a.current->outer_call != p->outer_call ||
+        b.current->outer_call != p->outer_call ||
+        (p != a.current && p != b.current) ||
+        a.child->readonly_parameter == b.child->readonly_parameter ||
+        a.current->current_cycle->root == b.current->current_cycle->root ||
+        !current_wrapped_closed(&b, main->context) ||
+        !nl_copy_body_readonly_valid(a.wrapper) ||
+        !nl_copy_body_readonly_valid(b.wrapper) ||
+        !nl_copy_body_readonly_valid(a.inner) ||
+        !nl_copy_body_readonly_valid(b.inner) ||
+        !current_signature_origin(a.current->current_cycle, a.current->post,
+                                  CURRENT_POST_SLOT) ||
+        !current_signature_origin(b.current->current_cycle, b.current->post,
+                                  CURRENT_POST_SLOT) ||
+        !nl_copy_state_matches(a.current->post, &a.current->post_anchor) ||
+        !nl_copy_state_matches(b.current->post, &b.current->post_anchor))
+        return false;
+    return current_wrapper_transfer(&a, b.copy);
+}
+
 static NLCheckedNodeId source_current_loop(Check *check,
                                            const NLSyntaxView *syntax,
                                            const CurrentSource *source)
