@@ -59,6 +59,45 @@ def origin(symbol, assignments):
     return symbol
 
 
+def continuing_arm(data):
+    arm = re.search(rb'if \(nl_loop_phase_\d+ < \(size_t\)UINTMAX_C\(\d+\)\) \{', data)
+    assert arm
+    depth = 1
+    for i in range(arm.end(), len(data)):
+        depth += (data[i] == ord('{')) - (data[i] == ord('}'))
+        if not depth:
+            return arm.end(), i
+    raise AssertionError('unclosed continuing arm')
+
+
+def prefix_aliases(data, operation, arm):
+    start, end = arm
+    assert start <= operation < end
+    return aliases(data[start:operation])
+
+
+def check_disjoint_scopes():
+    # Parser-only C text, never a substitute for the actual emitted operands.
+    data = (b'if (nl_loop_phase_1 < (size_t)UINTMAX_C(2)) {\n'
+            b'const uint8_t nl_local_4 = nl_local_3;\n'
+            b'const uint8_t nl_local_5 = nl_fn_1(nl_local_4);\n'
+            b'const uint8_t nl_local_6 = nl_local_5;\n'
+            b'{ *nl_local_7 = nl_local_6; }\n}\n'
+            b'const uint8_t nl_local_4 = nl_local_8;\n'
+            b'const uint8_t nl_local_6 = nl_local_9;\n')
+    arm = continuing_arm(data)
+    call = data.index(b'const uint8_t nl_local_5')
+    store = data.index(b'*nl_local_7 =')
+    assert origin(b'nl_local_4', prefix_aliases(data, call, arm)) == b'nl_local_3'
+    assert origin(b'nl_local_6', prefix_aliases(data, store, arm)) == b'nl_local_5'
+    assert origin(b'nl_local_4', aliases(data)) != b'nl_local_3'
+    assert origin(b'nl_local_6', aliases(data)) != b'nl_local_5'
+
+
+check_disjoint_scopes()
+print('P1372 disjoint-scope alias selfcheck PASS', flush=True)
+
+
 for profile, name in enumerate(['L-straight-local-old', 'B-field-zero-local-alias']):
     source = root / (name + '.nl')
     assert hashlib.sha256(source.read_bytes()).hexdigest() == oracle['source'][source.name]['SHA256']
@@ -90,14 +129,16 @@ for profile, name in enumerate(['L-straight-local-old', 'B-field-zero-local-alia
     caller = re.search(rb'static void nl_fn_\d+\(void\)\n\{\n(.*?)\n\}\n', data, re.S)
     assert caller
     caller = caller[1]
-    assignments = aliases(caller)
-    read = re.search(rb'const uint8_t (nl_local_\d+) = (nl_local_\d+)\.f' + index + rb';', caller)
+    arm = continuing_arm(caller)
     call = re.search(rb'const uint8_t (nl_local_\d+) = ' + function + rb'\((nl_local_\d+)\);', caller)
-    assert read and call and origin(call[2], assignments) == read[1]
-    writer = re.search(rb'uint8_t \*const (nl_local_\d+) = &' + read[2] + rb'\.f' + index + rb';', caller)
+    assert call
+    before_call = prefix_aliases(caller, call.start(), arm)
+    read = re.search(rb'const uint8_t (nl_local_\d+) = (nl_local_\d+)\.f' + index + rb';', caller[arm[0]:call.start()])
+    assert read and origin(call[2], before_call) == read[1]
+    writer = re.compile(rb'uint8_t \*const (nl_local_\d+) = &' + read[2] + rb'\.f' + index + rb';').search(caller, call.end(), arm[1])
     assert writer
-    store = re.search(rb'\*' + writer[1] + rb' = (nl_local_\d+);', caller)
-    assert store and origin(store[1], assignments) == call[1]
+    store = re.compile(rb'\*' + writer[1] + rb' = (nl_local_\d+);').search(caller, writer.end(), arm[1])
+    assert store and origin(store[1], prefix_aliases(caller, store.start(), arm)) == call[1]
     assert data.count(b'NL_LOOP_BIND(&') == data.count(b'NL_CURRENT_CALLEE_BIND(&') == 1
     assert body.index(b'NL_CURRENT_CALLEE_END(') < body.index(b'    return ')
     for passive in ([False, True] if args.sanitizer == 'none' else [True]):
