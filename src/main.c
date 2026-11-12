@@ -2832,6 +2832,36 @@ static bool emit_current_binding(FILE *stream, const NLCheckedFragment *f,
         if (input && input->kind == NL_CHECKED_FIELD_READ)
             caller = input->field.base;
     }
+    /* The admitted wrapper can take an independent scalar while its result
+     * later updates a live caller original. Select that existing C carrier
+     * from the exact checked return/Change dataflow, not from the actual's
+     * spelling or value. This only emits optional observations. */
+    if (!caller)
+        for (NLCheckedNodeId id = 1; id <= nl_checked_node_count(f); ++id) {
+            const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+            const NLCheckedFragment *body =
+                call->kind == NL_CHECKED_REGISTERED_CALL
+                    ? nl_checked_call_body(f, id)
+                    : NULL;
+            if (!body || !body->copy_body || !body->copy_body->current_call ||
+                !body->copy_body->readonly_parameter)
+                continue;
+            for (NLCheckedNodeId i = id + 1; i <= nl_checked_node_count(f);
+                 ++i) {
+                const NLCheckedNodeView *n = nl_checked_node_view(f, i);
+                const NLCheckedNodeView *ref =
+                    n->kind == NL_CHECKED_REPLACE
+                        ? nl_checked_node_view(f, n->first_argument)
+                        : NULL;
+                if (ref && n->field.present &&
+                    n->field.access == NL_ACCESS_WRITE &&
+                    copy_origin(f, ref->next_argument) == id) {
+                    if (caller && caller != n->field.base)
+                        return false;
+                    caller = n->field.base;
+                }
+            }
+        }
     if (!f->linear_breaks && !caller)
         return true;
     const NLCheckedNodeView *value =
