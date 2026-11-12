@@ -203,11 +203,17 @@ typedef struct NLCurrentLoopProof {
     NLSymbolId base, phase;
     NLSymbolId readonly_parameter;
     NLPlaceId root, child;
-    /* One caller-owned original survives this callee's current cycle. These
-     * identify members of the existing E/header/exit worlds, not a new proof
-     * or authority. Every non-target frame member remains exact below. */
+    /* Caller originals are members of the existing E/header/exit worlds,
+     * never independent certificates or projected worlds. The legacy pair
+     * names the nearest caller (the wrapper), including when main also lives.
+     */
     NLPlaceId preserved_root;
     NLSymbolId preserved_base;
+    struct {
+        NLPlaceId root;
+        NLSymbolId base;
+    } preserved[2];
+    size_t preserved_count;
     NLPlaceId second_child;
     size_t second_index;
     bool paired;
@@ -542,6 +548,37 @@ static bool current_source_shape(Check *c, const NLSyntaxView *s,
  * bits could launder. Check EVERY surviving package, not just the child.
  * Ended lexical loan packages may remain as history, never as a blocker.
  */
+/* Resolve a retained lexical original in its actual owning body, rather than
+ * accepting an equal type/value or a binding inherited by another function. */
+static bool current_frame_source(const NLCheckedFragment *f,
+                                 const NLSemanticContext *c, NLPlaceId root,
+                                 NLSymbolId base)
+{
+    if (!f || !c || !base || base > c->binding_count || !root ||
+        root > c->place_count || c->bindings[base - 1].hidden ||
+        c->bindings[base - 1].view.place != root ||
+        c->bindings[base - 1].view.availability != NL_AVAILABLE)
+        return false;
+    size_t originals = 0, bindings = 0;
+    for (size_t id = 1; id <= f->count; ++id) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        originals += n->kind == NL_CHECKED_AGGREGATE;
+        if (n->kind != NL_CHECKED_BINDING || n->symbol != base)
+            continue;
+        const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
+        const NLCheckedNodeView *receiver =
+            nl_checked_node_view(f, n->first_argument);
+        if (!init || init->kind != NL_CHECKED_AGGREGATE ||
+            init->type != c->places[root - 1].type || init->result_count != 1 ||
+            n->argument_count != 1 || !receiver ||
+            receiver->kind != NL_CHECKED_RECEIVER || receiver->symbol != base ||
+            receiver->type != init->type)
+            return false;
+        ++bindings;
+    }
+    return originals == 1 && bindings == 1;
+}
+
 static bool current_packages(const NLSemanticContext *c,
                              const NLCurrentLoopProof *s)
 {
@@ -554,17 +591,23 @@ static bool current_packages(const NLSemanticContext *c,
     NLSemanticPlaceView trio[3];
     if (!nl_copy_trio(c, root, trio))
         return false;
-    NLValueId preserved = 0;
-    if (s->preserved_root) {
+    NLValueId preserved[2] = {0};
+    if (s->preserved_count > 2 ||
+        (!s->preserved_count && (s->preserved_root || s->preserved_base)) ||
+        (s->preserved_count &&
+         (s->preserved_root != s->preserved[s->preserved_count - 1].root ||
+          s->preserved_base != s->preserved[s->preserved_count - 1].base)))
+        return false;
+    for (size_t k = 0; k < s->preserved_count; ++k) {
+        const NLPlaceId r = s->preserved[k].root;
+        const NLSymbolId base = s->preserved[k].base;
         NLSemanticPlaceView frame[3];
-        if (!s->readonly_parameter || s->preserved_root == root ||
-            !s->preserved_base || s->preserved_base > c->binding_count ||
-            !nl_copy_trio(c, s->preserved_root, frame) ||
+        if (!s->readonly_parameter || r == root || !base ||
+            base > c->binding_count || !nl_copy_trio(c, r, frame) ||
             frame[0].type != trio[0].type)
             return false;
-        const NLSemanticBindingView binding =
-            c->bindings[s->preserved_base - 1].view;
-        if (binding.place != s->preserved_root ||
+        const NLSemanticBindingView binding = c->bindings[base - 1].view;
+        if (binding.place != r || c->bindings[base - 1].hidden ||
             binding.value != frame[0].current_value ||
             binding.type != frame[0].type ||
             binding.availability != NL_AVAILABLE)
@@ -573,9 +616,11 @@ static bool current_packages(const NLSemanticContext *c,
             for (size_t j = 0; j < 2; ++j)
                 if (frame[0].fixed_fields[i] == trio[0].fixed_fields[j])
                     return false;
-        preserved = frame[0].current_value;
-    } else if (s->preserved_base)
-        return false;
+        for (size_t j = 0; j < k; ++j)
+            if (r == s->preserved[j].root || base == s->preserved[j].base)
+                return false;
+        preserved[k] = frame[0].current_value;
+    }
     for (size_t i = 0; i < c->value_count; ++i) {
         const NLSemanticValueView v = c->values[i];
         if (v.carrier == NL_CARRIER_ENDED)
@@ -584,7 +629,9 @@ static bool current_packages(const NLSemanticContext *c,
             v.dependencies != NL_DEPENDENCY_FREE || v.value_dependency_count ||
             v.reference_count || v.reference.place)
             return false;
-        if (i + 1 == aggregate || i + 1 == preserved)
+        if (i + 1 == aggregate ||
+            (s->preserved_count && i + 1 == preserved[0]) ||
+            (s->preserved_count == 2 && i + 1 == preserved[1]))
             continue;
         if (!flat_copy(c, v.type) ||
             c->types[v.type - 1].view.kind == NL_TYPE_REF)
@@ -2351,21 +2398,37 @@ static bool current_preserve_caller(const Check *check, NLCurrentLoopProof *s)
         if (!p.live || !p.independent_root || !p.fixed_field_count)
             continue;
         NLSemanticPlaceView trio[3];
-        if (s->preserved_root || i + 1 == s->root ||
+        if (s->preserved_count == 2 || i + 1 == s->root ||
             !nl_copy_trio(c, i + 1, trio) ||
             p.type != c->places[s->root - 1].type)
             return false;
-        s->preserved_root = i + 1;
+        const size_t at = s->preserved_count;
+        s->preserved[at].root = i + 1;
         for (size_t j = 0; j < check->function_binding_floor; ++j) {
             const NLBindingEntry b = c->bindings[j];
             if (!b.hidden && b.view.availability == NL_AVAILABLE &&
-                b.view.place == s->preserved_root) {
-                if (s->preserved_base)
+                b.view.place == i + 1) {
+                if (s->preserved[at].base)
                     return false;
-                s->preserved_base = j + 1;
+                s->preserved[at].base = j + 1;
             }
         }
-        if (!s->preserved_base)
+        if (!s->preserved[at].base)
+            return false;
+        ++s->preserved_count;
+        s->preserved_root = s->preserved[at].root;
+        s->preserved_base = s->preserved[at].base;
+    }
+    if (s->preserved_count == 2) {
+        const Check *wrapper = check->caller;
+        const Check *main = wrapper ? wrapper->caller : NULL;
+        const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+        if (!main || main->function_result != 1 ||
+            wrapper->function_result != u8 || check->function_result != u8 ||
+            !current_frame_source(main->artifact, c, s->preserved[0].root,
+                                  s->preserved[0].base) ||
+            !current_frame_source(wrapper->artifact, c, s->preserved[1].root,
+                                  s->preserved[1].base))
             return false;
     }
     return true;
@@ -2525,6 +2588,8 @@ static bool current_copy_pair(const NLLinearBreakProof *a,
     const NLCurrentLoopProof *x = a->current_cycle, *y = b->current_cycle;
     const NLCopyBodyProof *p = a->owner->copy_body, *q = b->owner->copy_body;
     if (!x || !y || !p || !q || a->caller != b->caller || a->call >= b->call ||
+        x->preserved_count != y->preserved_count ||
+        memcmp(x->preserved, y->preserved, sizeof(x->preserved)) ||
         x->root == y->root || x->preserved_root != y->preserved_root ||
         x->preserved_base != y->preserved_base ||
         !!p->readonly_parameter != !!q->readonly_parameter ||
@@ -2808,6 +2873,139 @@ static bool current_wrapper_calls(const NLLinearBreakProof *p,
         !nl_copy_state_matches(b.current->post, &b.current->post_anchor))
         return false;
     return current_wrapper_transfer(&a, b.copy);
+}
+
+/* Follow existing checked scalar Copy bindings to this exact call. No scalar
+ * bits, caller name or equal result from another invocation proves origin. */
+static bool current_call_result_origin(const NLCheckedFragment *f,
+                                       NLCheckedNodeId id, NLCheckedNodeId call)
+{
+    const NLSemanticContext *c = f->context;
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    for (size_t steps = 0; steps < f->count && id; ++steps) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        NLSemanticValueView value;
+        if (!current_copy_value(c, n, u8, &value))
+            return false;
+        if (id == call)
+            return n->kind == NL_CHECKED_REGISTERED_CALL;
+        const NLCheckedNodeView *init = NULL;
+        if (n->kind != NL_CHECKED_IDENTIFIER ||
+            n->value_use != NL_VALUE_COPIED ||
+            !current_copy_binding(f, c, id, n->symbol, &init))
+            return false;
+        id = (NLCheckedNodeId)(init - f->nodes) + 1;
+    }
+    return false;
+}
+
+static bool current_original_unchanged(const NLSemanticContext *a,
+                                       const NLSemanticContext *b,
+                                       NLPlaceId root)
+{
+    NLSemanticPlaceView x[3], y[3];
+    if (!nl_copy_trio(a, root, x) || !nl_copy_trio(b, root, y) ||
+        memcmp(x, y, sizeof(x)))
+        return false;
+    for (size_t i = 0; i < 3; ++i)
+        if (!nl_node_value_same(a->values[x[i].current_value - 1],
+                                b->values[y[i].current_value - 1]))
+            return false;
+    return true;
+}
+
+/* The normal unit caller is not a scalar Copy body. Its existing canonical
+ * graph/child seal owns the initializer and subsequent Change; do not invent
+ * a unit Copy certificate or an after-call world. The wrapper's LIVE exit is
+ * still before both callee EndLocals and the caller's distinct scoped Change.
+ */
+static bool current_wrapper_original(const NLLinearBreakProof *p,
+                                     const NLCheckedFragment *main)
+{
+    const NLCurrentLoopProof *s = p->current_cycle;
+    CurrentWrappedCall call;
+    if (s->preserved_count != 2 || main->body_count != 1 || !main->body_calls ||
+        main->arm_count ||
+        !current_wrapped_call(main, main->body_calls[0], true, &call) ||
+        call.current != p || call.wrapper != p->caller ||
+        !current_wrapped_closed(&call, main->context))
+        return false;
+    const NLPlaceId root = s->preserved[0].root;
+    const NLSymbolId base = s->preserved[0].base;
+    const NLSemanticContext *entry = call.copy->entry;
+    if (s->preserved[1].root != s->preserved_root ||
+        s->preserved[1].base != s->preserved_base ||
+        !current_frame_source(main, entry, root, base) ||
+        !current_frame_source(call.wrapper, call.child->entry,
+                              s->preserved_root, s->preserved_base) ||
+        !current_original_unchanged(entry, call.child->entry, root) ||
+        !current_original_unchanged(entry, call.child->exit, root) ||
+        !current_original_unchanged(entry, call.copy->exit, root))
+        return false;
+    NLSemanticPlaceView original[3];
+    if (!nl_copy_trio(entry, root, original))
+        return false;
+    const NLPlaceId ids[3] = {root, original[0].fixed_fields[0],
+                              original[0].fixed_fields[1]};
+    for (size_t i = 0; i < 3; ++i) {
+        if (ids[i] > main->context->place_count)
+            return false;
+        const NLSemanticPlaceView ended = main->context->places[ids[i] - 1];
+        if (ended.live || ended.current_value || ended.current_fact ||
+            ended.incarnation != original[i].incarnation ||
+            ended.type != original[i].type)
+            return false;
+    }
+    const NLCheckedNodeView *change = NULL;
+    NLCheckedNodeId changed = 0;
+    for (size_t id = 1; id <= main->count; ++id) {
+        const NLCheckedNodeView *n = nl_checked_node_view(main, id);
+        if (n->kind != NL_CHECKED_REPLACE)
+            continue;
+        const NLCheckedField f = n->field;
+        const NLCheckedNodeView *ref =
+            nl_checked_node_view(main, n->first_argument);
+        const NLCheckedNodeView *incoming =
+            ref ? nl_checked_node_view(main, ref->next_argument) : NULL;
+        if (change || id <= call.copy->call || !f.present ||
+            !f.dependency_compatible || f.parent != root || f.base != base ||
+            f.index >= 2 || f.nominal != original[0].type ||
+            f.access != NL_ACCESS_WRITE || f.child != ids[f.index + 1] ||
+            f.parent_incarnation != original[0].incarnation ||
+            f.child_incarnation != original[f.index + 1].incarnation ||
+            f.parent_fact != original[0].current_fact ||
+            f.child_fact != original[f.index + 1].current_fact ||
+            f.old_value != original[f.index + 1].current_value ||
+            !f.parent_post_fact || !f.child_post_fact || !incoming ||
+            !current_call_result_origin(main, ref->next_argument,
+                                        call.copy->call))
+            return false;
+        change = n;
+        changed = id;
+    }
+    if (!change)
+        return false;
+    unsigned reads = 0;
+    for (size_t id = changed + 1; id <= main->count; ++id) {
+        const NLCheckedNodeView *n = nl_checked_node_view(main, id);
+        if (n->kind != NL_CHECKED_FIELD_READ)
+            continue;
+        const NLCheckedField f = n->field, update = change->field;
+        if (f.parent != root || f.base != base || f.index >= 2 ||
+            f.child != ids[f.index + 1] ||
+            f.parent_incarnation != original[0].incarnation ||
+            f.child_incarnation != original[f.index + 1].incarnation ||
+            f.parent_fact != update.parent_post_fact ||
+            f.child_fact != (f.index == update.index
+                                 ? update.child_post_fact
+                                 : original[f.index + 1].current_fact) ||
+            f.old_value != (f.index == update.index
+                                ? update.new_value
+                                : original[f.index + 1].current_value))
+            return false;
+        reads |= 1u << f.index;
+    }
+    return reads == 3;
 }
 
 static NLCheckedNodeId source_current_loop(Check *check,

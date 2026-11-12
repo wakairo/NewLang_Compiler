@@ -5885,6 +5885,8 @@ static bool current_copy_pair(const NLLinearBreakProof *,
 static bool current_wrapper_prefix(const Check *);
 static bool current_wrapper_calls(const NLLinearBreakProof *,
                                   const NLCheckedFragment *);
+static bool current_wrapper_original(const NLLinearBreakProof *,
+                                     const NLCheckedFragment *);
 
 static bool current_old_tail(const NLCheckedFragment *f, NLCheckedNodeId loop)
 {
@@ -6139,7 +6141,8 @@ static const NLCheckedFragment *linear_call_owner(const NLLinearBreakProof *p)
             (main->body_count != 1 && !current_wrapper_calls(p, main)))
             return NULL;
         for (size_t i = 0; i < main->count; ++i)
-            if (main->nodes[i].kind == NL_CHECKED_AGGREGATE)
+            if (main->nodes[i].kind == NL_CHECKED_AGGREGATE &&
+                !current_wrapper_original(p, main))
                 return NULL;
     }
     return main && outer && outer->kind == NL_CHECKED_REGISTERED_CALL &&
