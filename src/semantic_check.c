@@ -6001,7 +6001,7 @@ static bool current_copy_prefix(const Check *c)
     return current_copy_prefix_frame(c, p);
 }
 
-/* Actual main()->inner(), or one zero-argument Copy wrapper in that path.
+/* Actual main()->inner(), or one zero/one-u8 Copy wrapper in that path.
  * The original program root and every call slot remain unchanged. */
 static bool current_copy_callee(const Check *c)
 {

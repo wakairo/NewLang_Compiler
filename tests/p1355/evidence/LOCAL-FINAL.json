@@ -1,0 +1,238 @@
+{
+  "Track": "P",
+  "release": "C640",
+  "time_JST": "2026-11-12T12:12:45.174220+09:00",
+  "baseline": "66eda4e95fa07b528cadd6035c3ff9075be1d880",
+  "tested_HEAD": "3167b7b90e59767dca7600a1ce4c6d82ca9d93a3",
+  "tested_tree": "fc7b931f90f9e57022da4183bff649e21977ac41",
+  "freeze_SHA256": "fd4c7817894f14a35f6373a192aace939fd95b9ddabe78c715ec26f1e7173a69",
+  "StageA": [
+    {
+      "host": "gcc",
+      "stageA": "7/7 PASS",
+      "raw_sha256": "ae94e588df144e584d8e49808b7b33b3f89b0435d8507e2ff7105e451d59e6d3",
+      "OOM": [
+        "922: CHECK census1598 init[81,140] copy-seals[1054,1294,1309] custody[1055,1296,1310] retain-count1 status0",
+        "922: validator0 actual allocations43",
+        "922: validator1 actual allocations3",
+        "924: CHECK census1598 init[81,140] copy-seals[1054,1294,1309] custody[1055,1296,1310] retain-count1 status0",
+        "924: validator0 actual allocations43",
+        "924: validator1 actual allocations3"
+      ]
+    },
+    {
+      "host": "asan",
+      "stageA": "7/7 PASS",
+      "raw_sha256": "32279f29fd3084e6749d757459d321f271310daa8092d51e55512c6bc0cabdb6",
+      "OOM": [
+        "922: CHECK census1598 init[81,140] copy-seals[1054,1294,1309] custody[1055,1296,1310] retain-count1 status0",
+        "922: validator0 actual allocations43",
+        "922: validator1 actual allocations3",
+        "924: CHECK census1598 init[81,140] copy-seals[1054,1294,1309] custody[1055,1296,1310] retain-count1 status0",
+        "924: validator0 actual allocations43",
+        "924: validator1 actual allocations3"
+      ]
+    },
+    {
+      "host": "ubsan",
+      "stageA": "7/7 PASS",
+      "raw_sha256": "5df6caa8756bec0c6fdec9a02fd54b1cc453f84d670950f784fb335ed124e79c",
+      "OOM": [
+        "922: CHECK census1598 init[81,140] copy-seals[1054,1294,1309] custody[1055,1296,1310] retain-count1 status0",
+        "922: validator0 actual allocations43",
+        "922: validator1 actual allocations3",
+        "924: CHECK census1598 init[81,140] copy-seals[1054,1294,1309] custody[1055,1296,1310] retain-count1 status0",
+        "924: validator0 actual allocations43",
+        "924: validator1 actual allocations3"
+      ]
+    }
+  ],
+  "related": [
+    {
+      "host": "gcc",
+      "HEAD": "3167b7b90e59767dca7600a1ce4c6d82ca9d93a3",
+      "related-unit": {
+        "passed": 70,
+        "raw_SHA256": "c18f529f8bed324cf532db20a024a8179dfc25214a0115c7d8e31ccf91eabcbd"
+      },
+      "failure-compat": {
+        "passed": 9,
+        "raw_SHA256": "f5c884b9a4391ad81162c5013389472edbc3802ddf843ca476ba4b7671d5c9fa"
+      }
+    },
+    {
+      "host": "asan",
+      "HEAD": "3167b7b90e59767dca7600a1ce4c6d82ca9d93a3",
+      "related-unit": {
+        "passed": 70,
+        "raw_SHA256": "ec20e60e90758f7d13d734a6f9395bacc41b3ccdfb6c88e8a14658b269ed19ef"
+      },
+      "failure-compat": {
+        "passed": 9,
+        "raw_SHA256": "114a195a00c968dad07025eff4ebc87d59cd5f31af13bc2f34d9fbf7daa9fe7b"
+      }
+    },
+    {
+      "host": "ubsan",
+      "HEAD": "3167b7b90e59767dca7600a1ce4c6d82ca9d93a3",
+      "related-unit": {
+        "passed": 70,
+        "raw_SHA256": "46015658ef3e1c27cf0f2ba1bbe28690218c696ccf88a42f1c54305d1700d364"
+      },
+      "failure-compat": {
+        "passed": 9,
+        "raw_SHA256": "e71c517ad2a48421dd718d628dd5548b055eee62a73eba2c4b785ab66a3a71b9"
+      }
+    }
+  ],
+  "StageB": {
+    "HEAD": "3167b7b90e59767dca7600a1ce4c6d82ca9d93a3",
+    "tree": "fc7b931f90f9e57022da4183bff649e21977ac41",
+    "guest_PASS": 20,
+    "budget": 24,
+    "executions": [
+      {
+        "host": "gcc",
+        "guest": 8,
+        "raw_SHA256": "6cb78cf764ed612fc4e87006f9612a23efc6af9815493822c5725299c1137759",
+        "C_SHA256": [
+          "27188fcf336c2d02f6d7964274d5c20b6ad810d1a4afe9578ef7c703743d8ac8",
+          "e9e0626a5f874e398018a09e63174aabf2a94e6a64f49ae7d99ad9bb7125a584"
+        ],
+        "attempts_SHA256": "d5a1e8ce9f1e90f9b9031993b428e602d3c04898f257317c3b17c1cfd3681dff"
+      },
+      {
+        "host": "clang",
+        "guest": 8,
+        "raw_SHA256": "7f3075059a628a5c1e5b26675ae9f91f86ef92c60ed5cbdcf4c724fd154b821d",
+        "C_SHA256": [
+          "27188fcf336c2d02f6d7964274d5c20b6ad810d1a4afe9578ef7c703743d8ac8",
+          "e9e0626a5f874e398018a09e63174aabf2a94e6a64f49ae7d99ad9bb7125a584"
+        ],
+        "attempts_SHA256": "b7d895578e20f368e4a8aa26e6b08640b35d903d9ac437a76b396b5e7dd5d6ad"
+      },
+      {
+        "host": "asan",
+        "guest": 2,
+        "raw_SHA256": "b2cc358e1f2ca34f71e297204f4200c6bb3a4bf081e2c3293930dedad4adfcc9",
+        "C_SHA256": [
+          "27188fcf336c2d02f6d7964274d5c20b6ad810d1a4afe9578ef7c703743d8ac8",
+          "e9e0626a5f874e398018a09e63174aabf2a94e6a64f49ae7d99ad9bb7125a584"
+        ],
+        "attempts_SHA256": "b6ca10ffa7c8094dd15d8e6b70c30e644fdd4c2c6d93cf910735fa95a93313dd"
+      },
+      {
+        "host": "ubsan",
+        "guest": 2,
+        "raw_SHA256": "354d90c3238a8177d4eec0a7f25a00519ce3ee5ddfb5251a801a504ac5510fff",
+        "C_SHA256": [
+          "27188fcf336c2d02f6d7964274d5c20b6ad810d1a4afe9578ef7c703743d8ac8",
+          "e9e0626a5f874e398018a09e63174aabf2a94e6a64f49ae7d99ad9bb7125a584"
+        ],
+        "attempts_SHA256": "41da56bbdee3633afb1cf7ae1c619639ee1d9c1a49391529c0193231d6b06d92"
+      }
+    ],
+    "raw_C_unchanged": true,
+    "values": {
+      "input": 83,
+      "index": 0,
+      "inner_initial": 13,
+      "inner_current": 227,
+      "inner_sibling": 191,
+      "backedges": 2,
+      "wrapper_old": 47,
+      "wrapper_current": 83,
+      "wrapper_sibling": 83,
+      "outer_Copy": 83,
+      "B": {
+        "input": 137,
+        "index": 1,
+        "inner_initial": 19,
+        "inner_current": 239,
+        "inner_sibling": 179,
+        "backedges": 3,
+        "wrapper_old": 61,
+        "wrapper_current": 137,
+        "wrapper_sibling": 137,
+        "outer_Copy": 137
+      }
+    }
+  },
+  "OOM": {
+    "CHECK_census_each_profile_each_host": 1598,
+    "selected_ordinals_each_profile": [
+      1,
+      2,
+      81,
+      140,
+      1054,
+      1294,
+      1309,
+      1055,
+      1296,
+      1310,
+      41,
+      69,
+      147,
+      178,
+      799,
+      1598
+    ],
+    "readonly_intervals": [
+      [
+        41,
+        69
+      ],
+      [
+        147,
+        178
+      ]
+    ],
+    "outer_Copy_all_reached_allocations": 43,
+    "inner_Copy_all_reached_allocations": 3,
+    "profiles": 2,
+    "hosts": 3,
+    "rollback_nil_out_and_context_preservation_cleanup_retry": "PASS",
+    "not_claimed": "exhaustive CHECK-allocation sweep"
+  },
+  "negative": "wrong actual/formal/source/BODY/call-slot/result/current/root/field/signature; same-bits foreign provenance; ended-loan and wrong type; scope gaps fail-closed; all restore",
+  "old_C_byte_identity": 12,
+  "self_review": {
+    "public_API_ABI_issuer_world": "unchanged",
+    "proof_structure_and_origin_destroy": "unchanged",
+    "signature_read_order": "current_signature_origin before readonly entry/current parameter indexing",
+    "cycle": "entry-only helper never calls full current/Copy validation",
+    "finite_constructor": "one one-u8 wrapper with one known direct current-loop call; actual sealed relation supplies authority",
+    "borrowed_metadata": "same retained source/plan and existing deep readonly entry storage; no borrowed current signature carried across world swap",
+    "physical_observer": "distinct live wrapper/inner originals; no expired pointer comparison or dereference",
+    "native_source": "unedited generated C, actual/formal/binding checks, no fake Known",
+    "old_evidence": "unchanged; enum compile FIRST and metadata-selection error preserved"
+  },
+  "budget": {
+    "functional_candidates": 2,
+    "total_fixed_before_evidence_commit": 2,
+    "host_configs": 3,
+    "guest_used": 20,
+    "guest_limit": 24,
+    "CI_started": 0,
+    "manual_CI_operations": 0,
+    "total_fixed_with_evidence_commit": 3
+  },
+  "unresolved_material_STOP": false,
+  "unverified": [
+    "general call depth/recursion/CFG",
+    "multiple inputs or two inner calls in input wrapper",
+    "main-local extra T/H for this wrapper path",
+    "general soundness or safe facade/audit locality benefit",
+    "independent code review and current-head natural CI pending publication"
+  ],
+  "VALUE-ALIGNMENT-RISK": "ordinary function decomposition increases useful v0 reuse, while the three-file shared validation closure and finite constructor shape remain maintenance costs. C-vs-NewLang author+ordinary-caller audit/re-audit locality is unmeasured; Product GO PAUSED / H1 HOLD.",
+  "packet": {
+    "file": "local-raw.zip",
+    "SHA256": "82a807a9d6e7cfaccb9b229c108e203589f15dfbc252d7225f9aed0521e649db",
+    "bytes": 1827880,
+    "entries": 223,
+    "manifest_entries": 222
+  },
+  "publication_candidate_change": "evidence/README and a two-line comment correction only; source/oracle/harness/semantic code unchanged from tested candidate2"
+}
