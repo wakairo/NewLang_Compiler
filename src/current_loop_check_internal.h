@@ -2120,6 +2120,10 @@ static NLCheckStatus validate_current_cycle(const NLLinearBreakProof *p,
                               p->parent_count, p->parent_root) ||
         !current_signature_origin(s, f->context, CURRENT_CALLER_SLOT) ||
         !current_signature_origin(s, p->post, CURRENT_POST_SLOT) ||
+        (p->caller && p->caller->copy_body &&
+         p->caller->copy_body->current_call &&
+         p->caller->copy_body->readonly_parameter &&
+         !nl_copy_body_readonly_valid(p->caller)) ||
         (s->readonly_parameter &&
          (!f->copy_body ||
           f->copy_body->readonly_parameter != s->readonly_parameter ||
