@@ -1,0 +1,98 @@
+{
+  "time_JST": "2026-11-12T22:27:52.107050+09:00",
+  "authority": "Issue1375 C725 / adopted main691b383bfad3a19451b985bf65b8c9968c0270fb treee6fddb208206956f7ed94e5671a0f9473d2eaf14 / Draft17.35",
+  "source": {
+    "D-nonidentity-old-copy.nl": {
+      "bytes": 1087,
+      "SHA256": "897c5818b26771a83d6353cf88d247a46615091ad05dd8a537e9d01eb3d36d06"
+    },
+    "E-index-zero.nl": {
+      "bytes": 1056,
+      "SHA256": "6b08ddd3ed4cd9cf37910a1c72b61cf55558072e34041e33960e66a4b61d9d4e"
+    },
+    "N-loan-escape.nl": {
+      "bytes": 1125,
+      "SHA256": "1213fe5d0312d99ae323727e6586035c08fe178162d406da2f3c72e9be430e45"
+    },
+    "N-return-formal.nl": {
+      "bytes": 1088,
+      "SHA256": "c5dd3b4eeb22d473d9494b1f91c84d6f4f83cf937c12d92f36dff65c19f87ab3"
+    },
+    "N-wrong-actual.nl": {
+      "bytes": 1089,
+      "SHA256": "64843f602d632bd1255eb083a030ccae2c150603418057f71dd9c1b0d478f49b"
+    }
+  },
+  "D": {
+    "field_index": 1,
+    "initial_current": 43,
+    "main_sibling": 181,
+    "callee_old": 137,
+    "callee_new": 229,
+    "terminal_new": 241,
+    "Break_old": 137,
+    "backedges": 3,
+    "callee_sibling": "actual current input43 then137 then137",
+    "actuals": [
+      43,
+      137,
+      137
+    ],
+    "caller_after_each_backedge": [
+      137,
+      137,
+      137
+    ]
+  },
+  "E": {
+    "field_index": 0,
+    "initial_current": 89,
+    "main_sibling": 157,
+    "callee_old": 211,
+    "callee_new": 73,
+    "terminal_new": 193,
+    "Break_old": 211,
+    "backedges": 2,
+    "callee_sibling": "actual current input89 then211",
+    "actuals": [
+      89,
+      211
+    ],
+    "caller_after_each_backedge": [
+      211,
+      211
+    ]
+  },
+  "negative": {
+    "N-loan-escape.nl": {
+      "kind": "semantic",
+      "status": 3,
+      "diagnostic": "P8-EXIT-DEPENDENCY"
+    },
+    "N-wrong-actual.nl": {
+      "kind": "semantic",
+      "status": 3,
+      "diagnostic": "P3-TYPE-MISMATCH"
+    },
+    "N-return-formal.nl": {
+      "kind": "lawful but outside old-Change-lineage contract",
+      "status": 3,
+      "diagnostic": "P14-LOOP-PRECISION"
+    }
+  },
+  "prediction": {
+    "old_baseline": "D original first P14 reused NOT_RERUN because adopted main treeequals C8; E same computed Known guard expected P14; do not regrade original FIRST",
+    "candidate": "D/E definition+actual CHECK0, full owned/current/Copy validated, header Unknown coversentry initial and computed Known backedge without erasing any fact; generated C/actual native UNKNOWN until StageB",
+    "numeric_or_physical_observation": "only passive native is dynamic evidence; oracle is not a source of proof"
+  },
+  "safety_oracle": "original caller T same incarnation/fields/sibling; callee local distinct concurrently live, actual stored+read in sibling, real old Change137/211 -> tailCopy/call/store, all loans/formals/local end before caller write; each backedge actual input matches previous stored current; terminal realold/knownnew/sibling. Negative tamper and selected registration/actual/validator OOM must reject/unchanged context+out+owners/cleanup/healthy retry; CLI malloc/write/flush no-clobber.",
+  "budget": {
+    "fixed_max": 8,
+    "meaningful_max": 4,
+    "hosts": 3,
+    "guest_max": 24,
+    "natural_sets_max": 2,
+    "manual": 0
+  },
+  "independence": "soleP independent F/R unread; oldP1374/P1372 evidence immutable"
+}

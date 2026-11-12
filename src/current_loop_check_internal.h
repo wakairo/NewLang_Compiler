@@ -1746,6 +1746,54 @@ static bool current_arm(const NLCurrentLoopProof *s,
            (!continuing || !!r.scalar == !!s->scalar_source);
 }
 
+/* Called only after current_arm has consumed the complete local Copy replay
+ * and the exact call -> Copy aliases -> caller Change, and after the existing
+ * projection/frame checks have established E <= H and preserved the caller.
+ * H's selected child is a plain u8 top. A genuine computed Known old Copy is
+ * included in that same H without rewriting the call, edge or header facts.
+ * Both the source Continue and its joined edge must retain that exact value.
+ * There is no extra receipt: published validation repeats the same chain.
+ */
+static bool current_known_local_inclusion(const NLCurrentLoopProof *s,
+                                          const NLCheckedFragment *arm,
+                                          NLCheckedNodeId scalar,
+                                          const NLCheckedField *change,
+                                          const NLSemanticContext *h,
+                                          const NLSemanticContext *a,
+                                          const NLSemanticContext *b)
+{
+    const NLCheckedNodeView *call = nl_checked_node_view(arm, scalar);
+    NLCopyLocalCall local;
+    if (!s->helper || !s->scalar_source || !s->terminal_old || s->paired ||
+        s->readonly_parameter || s->preserved_count || !call ||
+        call->kind != NL_CHECKED_REGISTERED_CALL || call->result_count != 1 ||
+        !nl_copy_body_local_contents(arm, scalar, &local) ||
+        local.function != call->function || !local.formal || !h || !a || !b ||
+        !s->child || s->child > h->place_count || !change ||
+        change->parent != s->root || change->child != s->child ||
+        change->index != s->index)
+        return false;
+    const NLTypeId u8 = nl_semantic_core_type(h, NL_TYPE_U8);
+    const NLValueId top = h->places[s->child - 1].current_value;
+    if (!nl_copy_plain(h, top, u8) || h->values[top - 1].scalar_known ||
+        !nl_copy_plain(arm->context, call->results[0].value, u8))
+        return false;
+    const NLSemanticValueView old =
+        arm->context->values[call->results[0].value - 1];
+    if (!copy_if_plain(old, u8) || !old.scalar_known || old.scalar_value > 255)
+        return false;
+    const NLSemanticContext *edges[] = {a, b};
+    for (size_t i = 0; i < 2; ++i) {
+        const NLSemanticContext *edge = edges[i];
+        if (s->child > edge->place_count ||
+            edge->places[s->child - 1].current_value != change->new_value ||
+            !nl_copy_plain(edge, change->new_value, u8) ||
+            !current_intrinsic(edge->values[change->new_value - 1], old))
+            return false;
+    }
+    return true;
+}
+
 static NLCheckStatus current_relation(NLCurrentLoopProof *s)
 {
     const NLCheckStatus bad = NL_CHECK_ANALYSIS_PRECISION_LIMIT;
@@ -1822,7 +1870,9 @@ static NLCheckStatus current_relation(NLCurrentLoopProof *s)
                 a->values[changes[0].new_value - 1];
             if (!s->readonly_parameter &&
                 (s->scalar_source
-                     ? (!scalar || incoming.scalar_known)
+                     ? (!scalar || (incoming.scalar_known &&
+                                    !current_known_local_inclusion(
+                                        s, arm, scalar, &changes[0], h, a, b)))
                      : (!incoming.scalar_known || incoming.scalar_value > 255)))
                 return bad;
             if (s->sealed && (s->scalar != scalar ||
