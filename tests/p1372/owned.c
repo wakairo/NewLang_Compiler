@@ -345,10 +345,10 @@ static void attacks(PInput *p, const char *path, size_t index)
     healthy(p, index);
     size_t local_scope = proof->scope_floor;
     assert(local_scope < proof->exit->scope_count);
-    NLSemanticScopeView scope = proof->exit->scopes[local_scope];
+    NLSemanticScopeView local_scope_saved = proof->exit->scopes[local_scope];
     proof->exit->scopes[local_scope].active = true;
     rejected(p, b, "callee loan improperly survives");
-    proof->exit->scopes[local_scope] = scope;
+    proof->exit->scopes[local_scope] = local_scope_saved;
     healthy(p, index);
     PInput foreign = {0};
     p_load(&foreign, path);
