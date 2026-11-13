@@ -197,7 +197,7 @@ static bool temporal(Program *p, bool attack)
     first->event.before = (NLSemanticContext *)last.after;
     CHECK(denied(top));
     first->event.before = saved;
-    first->event.before = leaf->context;
+    first->event.before = (NLSemanticContext *)leaf->context;
     CHECK(denied(top));
     first->event.before = saved;
     NLCheckedNodeView *read = &leaf->nodes[first->event.node - 1];
