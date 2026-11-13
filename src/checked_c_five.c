@@ -1,4 +1,5 @@
 #include "checked_c_five.h"
+#include "captured_trace_internal.h"
 #include "checked_c_target.h"
 #include "newlang/captured_closure.h"
 #include <stdarg.h>
@@ -569,7 +570,8 @@ static bool expr(Five *e, World *w, NLCheckedNodeId id, Result *out)
                 nl_checked_captured_change_view(w->fragment, i, &view) &&
                 view.operation == id;
         }
-        return certified && v->argument_count == 2 && ++e->changes <= 6 &&
+        return certified && v->argument_count == 2 &&
+               ++e->changes <= NL_CAPTURED_CHANGE_CAPACITY &&
                put(e,
                    "nl_option nl_v_%zu=*nl_v_%zu;\n"
                    "*nl_v_%zu=nl_v_%zu;\n"
@@ -673,7 +675,9 @@ NLNodeCStatus nl_checked_c_five(const NLCheckedFragment *body, char **out,
     World w = {.fragment = body, .visited = visited};
     Result result;
     if (!expr(&e, &w, nl_checked_root(body), &result) ||
-        result.type != e.unit || e.sites != 5 || e.changes != 6 ||
+        result.type != e.unit || e.sites != 5 ||
+        (e.changes != NL_CAPTURED_SETUP_CHANGES &&
+         e.changes != NL_CAPTURED_UNLINK_CHANGES) ||
         !covered(&e, &w) || !put(&e, "NL_FIVE_FINISH();\nreturn 0;\n}\n")) {
         no(&e);
         free(e.text);

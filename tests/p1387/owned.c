@@ -2,6 +2,7 @@
 #include "../support/semantic_check.h"
 #include "newlang/checked_c_node.h"
 #include <stdint.h>
+#include <stdlib.h>
 
 /* Test-only observation of actual allocation loss INSIDE the original source
  * capture. The wrapper neither produces semantic values nor returns fake OOM.
@@ -302,12 +303,73 @@ static bool oom(const char *path)
     CHECK(cases == 24);
     return true;
 }
+static bool resource_call(Program *p, bool emit, char **out, size_t *length,
+                          bool failure)
+{
+    if (emit) {
+        NLNodeCStatus s = nl_checked_c_node(p->entry, out, length);
+        return s == (failure ? NL_NODE_C_OUT_OF_MEMORY : NL_NODE_C_OK);
+    }
+    const NLCheckedFragment *body =
+        nl_checked_call_body(p->entry, nl_checked_root(p->entry));
+    NLCheckStatus s = nl_checked_captured_closure_validate(body, match(body));
+    return s == (failure ? NL_CHECK_OUT_OF_MEMORY : NL_CHECK_OK);
+}
+static bool resource_oom(const char *path, bool emit)
+{
+    Program p = {0};
+    CHECK(prepare(path, &p) == NL_CHECK_OK && owned(&p, true, false));
+    char *baseline = NULL;
+    size_t size = 98765;
+    wanted_offset = SIZE_MAX;
+    allocation_index = 0;
+    in_capture = true;
+    bool ok = resource_call(&p, emit, &baseline, &size, false);
+    in_capture = false;
+    CHECK(ok);
+    const size_t total = allocation_index;
+    CHECK(total > 16);
+    if (emit)
+        CHECK(baseline && size == strlen(baseline));
+    NLSemanticSnapshot before, after;
+    CHECK(nl_semantic_snapshot(p.context, &before));
+    size_t targets[13];
+    for (size_t i = 0; i < 8; ++i)
+        targets[i] = i;
+    targets[8] = total / 2;
+    for (size_t i = 0; i < 4; ++i)
+        targets[9 + i] = total - 4 + i;
+    for (size_t i = 0; i < 13; ++i) {
+        char *out = NULL;
+        size_t length = 98765;
+        wanted_offset = targets[i];
+        allocation_index = 0;
+        injected = false;
+        in_capture = true;
+        ok = resource_call(&p, emit, &out, &length, true);
+        in_capture = false;
+        CHECK(injected && ok && !out && length == 98765);
+        CHECK(nl_semantic_snapshot(p.context, &after) &&
+              !memcmp(&before, &after, sizeof(before)));
+        CHECK(resource_call(&p, emit, &out, &length, false));
+        if (emit)
+            CHECK(length == size && !memcmp(out, baseline, size + 1));
+        free(out);
+        printf("%s OOM actual allocator %zu/%zu: no-clobber/retry PASS\n",
+               emit ? "emitter" : "validator", targets[i], total);
+    }
+    free(baseline);
+    destroy(&p);
+    return true;
+}
 int main(int argc, char **argv)
 {
     if (argc != 3)
         return 2;
-    bool ok = !strcmp(argv[1], "oom")   ? oom(argv[2])
-              : !strcmp(argv[1], "six") ? check(argv[2], false)
-                                        : check(argv[2], true);
+    bool ok = !strcmp(argv[1], "emit-oom")       ? resource_oom(argv[2], true)
+              : !strcmp(argv[1], "validate-oom") ? resource_oom(argv[2], false)
+              : !strcmp(argv[1], "oom")          ? oom(argv[2])
+              : !strcmp(argv[1], "six")          ? check(argv[2], false)
+                                                 : check(argv[2], true);
     return ok ? 0 : 1;
 }
