@@ -1,0 +1,29 @@
+{
+  "authority": "Issue1393 C795; main7c1eab / Draft17.37",
+  "old_STOP_HEAD": "12e33115b391faa8cc2f85a950e067ec7480542e",
+  "old_FIRST_SHA256": "be95c26aa99ede9ce6e3359a7b56f067d165d657a09f2ca22c8e35d7524f8f81",
+  "scope": "only actual dereferenced read ptr/stability operand compatibility, inside the same captured access kernel; no public issuer/emitter change",
+  "predictions": {
+    "P1": "ordinary CHECK0, authentic current owned/custody, C17 accepted; postfree world preserved; same emitted bytes as C5",
+    "exact_old_A_operand_readable_false": "validator NL_CHECK_ANALYSIS_PRECISION_LIMIT; emitter NL_NODE_C_UNSUPPORTED; out NULL, length98765 unchanged; no poisoned native",
+    "other_actual_B_read": "same permission negative rejected; current readable pointer wrong-original/provenance, readable wrong-D, field fact, closed checkpoint loan and saved permission mismatch each reject on A/B; restore -> validatorOK/C17OK",
+    "N1": "P3-STALE-POINTER rejection",
+    "N2": "ALLOCATED-DOMAIN-MISMATCH rejection",
+    "N3": "P5-SCOPE-OBLIGATION rejection",
+    "old6_exact9": "existing source/owned/OOM pass; emitted bytes unchanged",
+    "OOM": "actual capture/validator/replay/emitter selected77 OOM with rollback/no-clobber/retry, in same3 hosts"
+  },
+  "prior_native_reuse": {
+    "guest_attempts": 26,
+    "P1_C_SHA256": "72e8db98f646fa6367997163c5ae4b784b0e0e7c9412872341e3d8591ba0bf07",
+    "new_guest_plan": 0,
+    "requirement": "new emitted C and unchanged source/observer bytes must match before any reuse claim; raw optimized dynamic loads remain NOT_OBSERVED"
+  },
+  "remaining_budget_before_execution": {
+    "candidate": 1,
+    "freeze": 1,
+    "new_full_host_configs": 0,
+    "additional_guests_max": 6,
+    "publication": "one existing-authorized DRAFT/HOLD after fresh safety pass; one natural Required6 set; manual0"
+  }
+}

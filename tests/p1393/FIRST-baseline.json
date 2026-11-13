@@ -1,0 +1,102 @@
+{
+  "baseline": "7c1eab33171d7f77ea5ff49eae38481ceaa54117",
+  "Production_changes": 0,
+  "source_profile": "Draft17.37 3.2b.7",
+  "results": {
+    "P1": {
+      "record": {
+        "time_JST": "2026-11-13T17:14:19.867647+09:00",
+        "command": [
+          "/workspace/p1387-c768/builds/gcc/newlangc",
+          "--check",
+          "/workspace/p1393-c786/P1-C-free-current-tail-read-v2.nl"
+        ],
+        "cwd": "/workspace/p1393-c792/repo",
+        "status": 3,
+        "seconds": 0.02161957399948733,
+        "stdout": {
+          "bytes": 0,
+          "SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 175,
+          "SHA256": "59a2118b02dfeee69c9c3c09f1b8dcc0f66d842068a4efa10d5ff40083e8f368"
+        }
+      },
+      "diagnostic": "/workspace/p1393-c786/P1-C-free-current-tail-read-v2.nl:115:37-257:38: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n"
+    },
+    "N1": {
+      "record": {
+        "time_JST": "2026-11-13T17:14:29.878381+09:00",
+        "command": [
+          "/workspace/p1387-c768/builds/gcc/newlangc",
+          "--check",
+          "/workspace/p1393-c786/N1-saved-old-C-pointer-v2.nl"
+        ],
+        "cwd": "/workspace/p1393-c792/repo",
+        "status": 3,
+        "seconds": 0.024298463999002706,
+        "stdout": {
+          "bytes": 0,
+          "SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 159,
+          "SHA256": "ebd03a728c2e64a901555864d4229363a4d475c9443b23f78b01b84b59f45615"
+        }
+      },
+      "diagnostic": "/workspace/p1393-c786/N1-saved-old-C-pointer-v2.nl:224:76-224:125: error(semantic)[P3-STALE-POINTER]: pointer/ref does not refer to a current live incarnation\n"
+    },
+    "N2": {
+      "record": {
+        "time_JST": "2026-11-13T17:14:29.903182+09:00",
+        "command": [
+          "/workspace/p1387-c768/builds/gcc/newlangc",
+          "--check",
+          "/workspace/p1393-c786/N2-wrong-tail-domain-v2.nl"
+        ],
+        "cwd": "/workspace/p1393-c792/repo",
+        "status": 3,
+        "seconds": 0.03647853700022097,
+        "stdout": {
+          "bytes": 0,
+          "SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 156,
+          "SHA256": "ef971a497e87b3bc6528d4b6206f720b1b5737d3e83f2fe010bc10adc2b38986"
+        }
+      },
+      "diagnostic": "/workspace/p1393-c786/N2-wrong-tail-domain-v2.nl:224:76-224:125: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain\n"
+    },
+    "N3": {
+      "record": {
+        "time_JST": "2026-11-13T17:14:29.878150+09:00",
+        "command": [
+          "/workspace/p1387-c768/builds/gcc/newlangc",
+          "--check",
+          "/workspace/p1393-c786/N3-missing-survivor-B-release-v2.nl"
+        ],
+        "cwd": "/workspace/p1393-c792/repo",
+        "status": 3,
+        "seconds": 0.021230805999948643,
+        "stdout": {
+          "bytes": 0,
+          "SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 165,
+          "SHA256": "3e46b05ee1095eec3d1837023eb10a3844963c3a001a76a827ec055ecacbb00e"
+        }
+      },
+      "diagnostic": "/workspace/p1393-c786/N3-missing-survivor-B-release-v2.nl:143:61-256:42: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n"
+    }
+  },
+  "reached": {
+    "P1": "SOURCE parsed; definition CHECK captured closure precision refusal",
+    "N1": "semantic stale incarnation refusal",
+    "N2": "semantic wrong Domain refusal",
+    "N3": "scope non-Discardable owner obligation refusal"
+  },
+  "owned_C17_native": "NOT_RUN: upstream rejection"
+}

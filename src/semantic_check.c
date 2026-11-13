@@ -2392,6 +2392,13 @@ static NLCheckedNodeId link_read(Check *check, const NLSyntaxView *s)
     if (expected == 0 || parameter_match(check, projected, expected) == 0)
         return 0;
     NLSemanticContext *c = check->context;
+    const bool capture = check->allocated_slice && c->region_count == 5 &&
+                         c->types[ref.field.nominal - 1].view.field_count == 4;
+    if (capture &&
+        !host(check,
+              nl_captured_read_begin(check->artifact, NL_CHECKED_LINK_READ, c),
+              s->span))
+        return 0;
     NLValueId copy = 0;
     if (!host(check, nl_sem_copy_value(c, ref.field.old_value, &copy), s->span))
         return 0;
@@ -2409,6 +2416,9 @@ static NLCheckedNodeId link_read(Check *check, const NLSyntaxView *s)
     if (id && ref.field.type == nl_semantic_core_type(c, NL_TYPE_U8) &&
         check->scalar_h_read)
         *check->scalar_h_read = true;
+    if (capture && id &&
+        !host(check, nl_captured_read_end(check->artifact, id, c), s->span))
+        return 0;
     return id;
 }
 
@@ -7230,9 +7240,9 @@ bool nl_node_value_same(NLSemanticValueView a, NLSemanticValueView b)
     return node_unit_value_same(a, b);
 }
 
-static bool node_unit_arm_frame(const NLSemanticContext *before,
-                                const NLSemanticContext *after, NLValueId input,
-                                const NLCheckedNodeView *result)
+bool nl_node_unit_arm_frame(const NLSemanticContext *before,
+                            const NLSemanticContext *after, NLValueId input,
+                            const NLCheckedNodeView *result)
 {
     if (result->terminates || result->type != 1 || result->result_count > 1 ||
         before->domain_count != after->domain_count ||
@@ -7349,7 +7359,7 @@ static bool node_u8_arm_frame(const NLSemanticContext *before,
             !after->types[after->values[i].type - 1].view.is_discardable)
             return false;
     const NLCheckedNodeView unit = {.type = 1};
-    return node_unit_arm_frame(before, after, input, &unit);
+    return nl_node_unit_arm_frame(before, after, input, &unit);
 }
 
 /* One original lexical Node link may differ across two normal unit arms.
@@ -7403,7 +7413,7 @@ NLCheckStatus nl_node_join_arm_check(const NLSemanticContext *before,
         }
     }
     if (write == NULL)
-        return node_unit_arm_frame(before, after, input, result)
+        return nl_node_unit_arm_frame(before, after, input, result)
                    ? NL_CHECK_OK
                    : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLCheckedField f = write->field;
@@ -7515,7 +7525,7 @@ NLCheckStatus nl_node_join_arm_check(const NLSemanticContext *before,
         p->current_value = original.current_value;
         p->current_fact = original.current_fact;
     }
-    const bool same = node_unit_arm_frame(before, comparison, input, result);
+    const bool same = nl_node_unit_arm_frame(before, comparison, input, result);
     nl_semantic_destroy(comparison);
     if (same)
         *changed = f.child;
@@ -7626,7 +7636,7 @@ bool nl_packet_same_entry(const NLSemanticContext *a,
     for (size_t i = 0; i < a->binding_count; ++i)
         if (strcmp(a->bindings[i].name, b->bindings[i].name) != 0)
             return false;
-    return node_unit_arm_frame(a, b, 0, &unit);
+    return nl_node_unit_arm_frame(a, b, 0, &unit);
 }
 
 /* Exact ancestor-prefix equivalence; suffix claims must all be closed.
@@ -7666,7 +7676,7 @@ bool nl_allocated_post_matches(const NLSemanticContext *expected,
     NLSemanticContext prefix = *arm;
     prefix.region_count = expected->region_count;
     prefix.domain_count = expected->domain_count;
-    return node_unit_arm_frame(expected, &prefix, 0, result);
+    return nl_node_unit_arm_frame(expected, &prefix, 0, result);
 }
 
 /* Keep the existing shared unit-only closure validator unchanged. The
@@ -7976,6 +7986,14 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
              "nested match joins are outside this bounded slice");
         return 0;
     }
+    const bool capture_read_match =
+        check->allocated_slice && check->context->region_count == 5;
+    if (capture_read_match &&
+        !host(check,
+              nl_captured_read_begin(check->artifact, NL_CHECKED_MATCH,
+                                     check->context),
+              syntax->span))
+        return 0;
     NLCheckedNodeId init = expression(check, syntax->data.match.scrutinee);
     if (init == 0 || check->terminated)
         return init;
@@ -8254,7 +8272,7 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             node_unit_join && !branch.terminated &&
             nl_control_exits_count(branch.artifact->exits) == 0 &&
             nl_control_exits_count(branch.artifact->loop_returns) == 0 &&
-            node_unit_arm_frame(c, branch.context, input, &result);
+            nl_node_unit_arm_frame(c, branch.context, input, &result);
         node_copy_join =
             node_copy_join && !branch.terminated &&
             (!normal_type || normal_type == result.type) &&
@@ -8356,6 +8374,10 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             view(check, id)->normal_arms = normal;
             view(check, id)->normal_frame_unchanged = true;
             view(check, id)->type = 1;
+            if (capture_read_match &&
+                !host(check, nl_captured_read_end(check->artifact, id, c),
+                      syntax->span))
+                return 0;
             return id;
         }
         if (node_copy_join) {

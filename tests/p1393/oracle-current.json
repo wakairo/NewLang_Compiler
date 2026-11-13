@@ -1,0 +1,49 @@
+{
+  "authority": "C792 / adopted main7c1eab / Draft17.37 3.2b.7",
+  "source_origin": "P1391 v1 + C786 v2 immutable originals",
+  "files": {
+    "N1-saved-old-C-pointer-v2.nl": {
+      "bytes": 17685,
+      "SHA256": "d07b8f532c590f8f9ef0850a6cbd4c3cf7aa2b5994bb53d384be4a15812f65ee"
+    },
+    "N2-wrong-tail-domain-v2.nl": {
+      "bytes": 17686,
+      "SHA256": "54ff7207e93eff6dd330798b1ec7ccb8d4633152e408b75864825f7a498a6245"
+    },
+    "N3-missing-survivor-B-release-v2.nl": {
+      "bytes": 17722,
+      "SHA256": "873a8cec852ac81de363d1b076f7963b51816f9804a5923cd63db7a788fdc352"
+    },
+    "P1-C-free-current-tail-read-v2.nl": {
+      "bytes": 17686,
+      "SHA256": "105fc934021586050ad875d05f251c65a30de70c34f330913bb1738022be11b4"
+    }
+  },
+  "Stage_A": {
+    "P1": "ordinary CHECK0; authentic main call body/custody; captured closure validator0; nine Change history; 0..5 release histogram each1; post-free A.prev current Some(actual B) -> real B/D_B next None",
+    "N1": "exit3 P3-STALE-POINTER",
+    "N2": "exit3 ALLOCATED-DOMAIN-MISMATCH",
+    "N3": "exit3 P5-SCOPE-OBLIGATION"
+  },
+  "Stage_B": {
+    "first_barrier": "Stage A CHECK0 and owned0 followed by baseline consumer exit4 unsupported; FIRST preserved",
+    "positive": "actual Option A.prev load -> lexical Copy -> Some binder -> B.next load; exactly once; no literal substitution",
+    "guests": "matrix26: strict GCC/Clang O0/O2 raw and passive; allocation failure1..5 with0..4 unique releases; success C,dst,B,A,src five releases; ASan+LSan and UBSan; raw dynamic loads NOT_OBSERVED; instrumented observer separately labelled",
+    "old_C_identity": "old6 and exact9 hashes must stay identical",
+    "negative": "all frozen N1/N2/N3 and temporal poison mutations reject/no-clobber before native",
+    "oom": "56 original selected points +12 temporal replay clone points +8 emitter-validation offsets +1 actual FIVE_BYTES buffer loss, true OOM/no-clobber/healthy retry"
+  },
+  "OOM": "real injection must report OOM, roll back/no-clobber, clean destruction and healthy retry; no oracle weakening",
+  "legacy": "old6/exact9 source/oracle unchanged; raw C byte identity required",
+  "Stage_A_faults": [
+    "C-live/all-dead checkpoint substitution",
+    "wrong current fact/field",
+    "false copied tag",
+    "wrong governing D",
+    "closed active stability scope",
+    "short read ledger",
+    "Some binder substitution",
+    "foreign A/B arm view: destroy A unrestored, B still valid"
+  ],
+  "Stage_A_OOM": "every actually observed temporal begin/end capture invocation, allocation offsets0..3, plus validator offsets0,1,2,3,7,15,31,63; true OOM status, atomic rollback, healthy retry; print actual reached invocation counts"
+}

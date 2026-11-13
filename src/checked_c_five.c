@@ -156,7 +156,8 @@ static bool covered(Five *e, const World *w)
              k == NL_CHECKED_INTO_SLOT || k == NL_CHECKED_ERASE_SLOT ||
              k == NL_CHECKED_DEALLOCATE || k == NL_CHECKED_DOMAIN_CREATE ||
              k == NL_CHECKED_DOMAIN_FINALIZE || k == NL_CHECKED_REPLACE ||
-             k == NL_CHECKED_FIELD_REF || k == NL_CHECKED_REF_FROM_PTR) &&
+             k == NL_CHECKED_FIELD_REF || k == NL_CHECKED_REF_FROM_PTR ||
+             k == NL_CHECKED_LINK_READ) &&
             w->visited[i] != 1)
             return no(e);
     }
@@ -262,6 +263,64 @@ static bool match(Five *e, World *w, NLCheckedNodeId id,
     out->type = e->unit;
     return true;
 }
+/* The enclosing captured closure already authenticated the post-free read,
+ * both UNIT owner frames, actual Some provenance and B's independent D.
+ * This adapter only preserves that real Copy carrier and lexical binder. */
+static bool copy_match(Five *e, World *w, NLCheckedNodeId id,
+                       const NLCheckedNodeView *v, Result *out)
+{
+    Result input;
+    if (v->type != e->unit || v->item_count != 2 || v->normal_arms != 2 ||
+        !v->normal_frame_unchanged || !expr(e, w, v->initializer, &input) ||
+        input.type != e->option || !input.temp ||
+        !put(e, "#ifndef NL_FIVE_SOME\n#define NL_FIVE_SOME(...) ((void)0)\n"
+                "#endif\n"))
+        return no(e);
+    unsigned variants = 0;
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedFragment *f = nl_checked_match_arm(w->fragment, id, a);
+        const NLCheckedNodeView *arm =
+            f == NULL ? NULL : nl_checked_node_view(f, nl_checked_root(f));
+        if (arm == NULL || arm->kind != NL_CHECKED_MATCH_ARM ||
+            arm->variant < 1 || arm->variant > 2 ||
+            (variants & (1u << arm->variant)) ||
+            nl_checked_node_count(f) >= FIVE_NODES)
+            return no(e);
+        variants |= 1u << arm->variant;
+        unsigned char seen[FIVE_NODES] = {0};
+        World branch = *w;
+        branch.fragment = f;
+        branch.frame = ++e->frame;
+        branch.depth = w->depth + 1;
+        branch.visited = seen;
+        if (!(a == 0 ? put(e, "if(nl_v_%zu.tag==%zu){\n", input.temp,
+                           arm->variant - 1)
+                     : put(e, "else{\n")))
+            return false;
+        if (arm->variant == 2) {
+            if (!bind(e, &branch, arm->symbol, e->ptr) ||
+                !put(e,
+                     "const nl_node *nl_b_%zu_%zu=nl_v_%zu.ptr;\n"
+                     "(void)nl_b_%zu_%zu;\n"
+                     "NL_FIVE_SOME(nl_b_%zu_%zu);\n",
+                     branch.frame, arm->symbol, input.temp, branch.frame,
+                     arm->symbol, branch.frame, arm->symbol))
+                return no(e);
+        } else if (arm->symbol != 0)
+            return no(e);
+        Result result;
+        if (!expr(e, &branch, arm->initializer, &result) ||
+            result.type != e->unit || !covered(e, &branch))
+            return no(e);
+        for (size_t i = 0; i < w->count; ++i)
+            if (branch.locals[i].available != w->locals[i].available)
+                return no(e);
+        if (!put(e, "}\n"))
+            return false;
+    }
+    out->type = e->unit;
+    return variants == 6 || no(e);
+}
 static bool expr(Five *e, World *w, NLCheckedNodeId id, Result *out)
 {
     if (id == 0 || id >= FIVE_NODES || ++e->steps > FIVE_STEPS ||
@@ -304,8 +363,12 @@ static bool expr(Five *e, World *w, NLCheckedNodeId id, Result *out)
         }
         return item == 0 && expr(e, w, v->tail, out);
     }
-    if (v->kind == NL_CHECKED_MATCH)
-        return match(e, w, id, v, out);
+    if (v->kind == NL_CHECKED_MATCH) {
+        const NLCheckedNodeView *init = node(w, v->initializer);
+        return init != NULL && init->kind == NL_CHECKED_TRY_ALLOCATE_ONE
+                   ? match(e, w, id, v, out)
+                   : copy_match(e, w, id, v, out);
+    }
     if (v->kind == NL_CHECKED_BINDING) {
         const NLCheckedNodeView *r = node(w, v->first_argument);
         Result value;
@@ -561,6 +624,17 @@ static bool expr(Five *e, World *w, NLCheckedNodeId id, Result *out)
                    out->temp, v->reference_result.writable ? 1u : 0u,
                    v->field.index, v->field.nominal, v->field.child,
                    v->field.child_incarnation, v->reference_result.scope);
+    if (v->kind == NL_CHECKED_LINK_READ)
+        return v->argument_count == 1 && v->type == e->option &&
+               v->field.present && v->field.access == NL_ACCESS_READ &&
+               put(e,
+                   "#ifndef NL_FIVE_READ\n#define NL_FIVE_READ(...) ((void)0)\n"
+                   "#endif\n"
+                   "nl_option nl_v_%zu=*nl_v_%zu;\n"
+                   "NL_FIVE_READ(nl_v_%zu,&nl_v_%zu,%zu,%zu,%zu,%zu);\n",
+                   out->temp, args[0].temp, args[0].temp, out->temp,
+                   v->field.parent, v->field.index, v->field.child_fact,
+                   v->field.payload_occurrence);
     if (v->kind == NL_CHECKED_REPLACE) {
         bool certified = false;
         for (size_t i = 0; i < nl_checked_captured_change_count(w->fragment);
