@@ -701,8 +701,12 @@ static bool read_phase(const NLSemanticContext *b, const Release *roots)
             return false;
         const NLSemanticPlaceView p = b->places[o.root - 1];
         if (p.live == ended || p.incarnation != o.incarnation ||
-            !p.independent_root || p.governing_domain != o.domain ||
-            !extent_same(p.placement, o.extent) ||
+            !p.independent_root ||
+            (ended ? (p.governing_domain != 0 || p.current_value != 0 ||
+                      p.current_fact != 0 || p.placement.region != 0 ||
+                      p.placement.start != 0 || p.placement.length != 0)
+                   : (p.governing_domain != o.domain ||
+                      !extent_same(p.placement, o.extent))) ||
             b->domains[o.domain - 1].live == ended ||
             b->domains[o.domain - 1].value != o.domain_value ||
             b->regions[o.extent.region - 1].view.live == ended ||
@@ -838,8 +842,16 @@ static NLCheckStatus read_match(const NLCheckedFragment *f, const ReadEvent *r,
         c->before->bindings[binding - 1].view.value !=
             nl_checked_node_view(f, first_read)->results[0].value)
         return INVALID;
+    NLCheckStatus s = nl_raw_validate(c->before);
+    if (s == NL_CHECK_OK)
+        s = nl_raw_validate(c->after);
+    if (s != NL_CHECK_OK)
+        return s == NL_CHECK_OUT_OF_MEMORY ? s : INVALID;
+    for (size_t scope = 0; scope < c->before->scope_count; ++scope)
+        if (c->before->scopes[scope].active)
+            return INVALID;
     NLSemanticContext *entry = NULL;
-    NLCheckStatus s = nl_sem_clone(c->before, &entry);
+    s = nl_sem_clone(c->before, &entry);
     NLValueId input = 0;
     if (s == NL_CHECK_OK)
         s = nl_sem_copy_value(entry, entry->bindings[binding - 1].view.value,
