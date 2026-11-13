@@ -1,6 +1,6 @@
 # NewLang v0 仕様書（Draft 17.36）
 
-> 状態: **PROPOSED / UNMERGED — CURRENT_SPEC が明示的に Draft17.36 を選択するまで NON-NORMATIVE**
+> 状態: **CURRENT_SPEC が Draft17.36 を選択した場合にのみ normative（main未採用の候補ブランチでは未選定）**
 >
 > この文書は、NewLang v0 コンパイラを実装し、設計をスクラップ・アンド・ビルドするための仕様書である。
 > ISO 規格相当の網羅性・厳密性・用語整備を目標としない。
@@ -10,20 +10,24 @@
 
 
 
-## Draft 17.36 の主変更（PROPOSED / UNMERGED）— Issue #1383 C748
+## Draft 17.36 の主変更（CURRENT_SPEC選択時の限定source採用）— Issue #1383 C748
 
-**Authority / not yet selected:**
+**Authority / selected only upon CURRENT_SPEC selection:**
 [M #1383 Gate A–C INITIAL](https://github.com/wakairo/NewLang_Compiler/issues/1383#issuecomment-6840924461)
-precedes this single source-only candidate. Compiler/main at proposal base is
-`bf4abd3e1b5a2eb4cfe9eb5eee194d893e58762d` , where `CURRENT_SPEC` still selects **Draft17.35**. This new
-Draft17.36 is **NOT normative** until separately reviewed/merged and the adopted main `CURRENT_SPEC`
-explicitly selects it. A DRAFT PR, natural CI or the author of this candidate cannot adopt its source
-rule. Previous Draft17.35 source/semantic choices are inherited unchanged; historical version-specific
-status notes remain historical and do not withdraw inherited selected rules.
+precedes the original source-only candidate. Historical proposal base main
+`bf4abd3e1b5a2eb4cfe9eb5eee194d893e58762d` selected Draft17.35; the candidate was independently
+reviewed by [F #1384 F1 FINAL](https://github.com/wakairo/NewLang_Compiler/issues/1384#issuecomment-6841628672),
+with its disclosed scenario-level prior exposure and one raw-Storage wording correction by C,
+then **[Coordination C760 Gate E](https://github.com/wakairo/NewLang_Compiler/pull/1385#pullrequestreview-5885095370) ACCEPTED the exact bounded source-only delta**.
+This Draft17.36 is normative **only for an adopted branch whose CURRENT_SPEC explicitly selects it**;
+unmerged PRs and candidate CI alone never establish canonical main adoption. Previous Draft17.35
+source/semantic choices are inherited unchanged; historical version-specific status notes remain
+historical and do not withdraw inherited selected rules. New nine-Change Production source/CHECK/owned/C17/native
+remain a future implementation/verification task, not a consequence of selecting the Draft.
 
 **Exactly one additive source-selection difference:**
-[§3.2b.6 below](#32b6-draft-1736-c748-proposed--five-live-originals-with-one-ordered-three-change-tail-unlink)
-would admit one alternative all-five-success continuation to the existing Draft17.30 §3.2b.3 *five
+[§3.2b.6 below](#32b6-draft-1736-c748--exact-all-live-last-c-unlink-by-three-further-changes)
+selects one alternative all-five-success continuation when CURRENT_SPEC points here to the existing Draft17.30 §3.2b.3 *five
 original heap H / three fixed link* closed witness. After the six already selected pre-detach Changes, **all five original typed H roots and their
 BackingRegions remain live, with original Allocation and LifetimeDomain authorities available; full raw
 Storage claims are recovered only through the existing destroy/erase_slot teardown**. Source then
@@ -2230,7 +2234,7 @@ none of §18.1a/b/c producer/recipient/LiveTail source routes is automatically
 generalized to the three-link/five-root H. No middle-B detach, owner adoption,
 recursive delete, delayed custody, extra function, concurrent publication
 or full cJSON North Star PASS is in this selection.
-Only the separately proposed later §3.2b.6 would admit a closed all-live C-tail unlink alternative after the original six-Change setup; this Draft17.30 paragraph remains a historical statement of its own limited adoption.
+Only the separately introduced later §3.2b.6, when selected by CURRENT_SPEC Draft17.36, admits a closed all-live C-tail unlink alternative after the original six-Change setup; this Draft17.30 paragraph remains a historical statement of its own limited adoption.
 
 ### 3.2b.1 Exact finite lexical/nominal source additions
 
@@ -2728,14 +2732,13 @@ B1–B8 corpus, human-obligation L/R/P/V/C and anti-gaming
 rules remain UNCHANGED. Source substrate acceptance alone
 is not five-root compiler/native execution or cJSON PASS.
 
-### 3.2b.6 Draft 17.36 C748 PROPOSED — exact all-live last-C unlink by three further Changes
+### 3.2b.6 Draft 17.36 C748 — exact all-live last-C unlink by three further Changes
 
-**PROPOSED / UNMERGED source admission only; no semantic memory-law replacement.** This is a second
+**ADOPTED / BOUNDED when CURRENT_SPEC selects Draft17.36; source admission only; no semantic memory-law replacement.** This is a second
 **closed positive source shape** within the same existing `§3.2b` one-unit/five-original/three-field H
 source family, preserving the earlier `§3.2b.3` six-Change source in full. It is *not* a general
 seventh-through-ninth `replace` budget, permission to update arbitrary graph links or a source assertion
-that list membership is a compiler-tracked owner relation. It is considered normative **only if** a future
-adopted `CURRENT_SPEC` explicitly selects Draft17.36.
+that list membership is a compiler-tracked owner relation. It is normative **only on an adopted branch whose `CURRENT_SPEC` explicitly selects Draft17.36**.
 
 **Exact shared prefix:** Reuse the whole syntactically complete source of `§3.2b.3` through the fifth
 `Some(bundle_dst)` : five static properly nested `try_allocate_one<Node>()` sites, five separate and
@@ -2812,7 +2815,7 @@ destroy/erase_slot/finalize_domain/deallocate source executes **unchanged**. The
 **nine** genuine link Changes before any original EndRoot and exactly **five** matching releases; no new
 allocation/recoverable-failure operation or additional ownership world. The original six-Change fully
 admitted source is still an independent alternative; any arbitrary seven/eight/new order/new target/new
-field/new root/early C free/append source is **not** admitted by this proposed bounded extension and is
+field/new root/early C free/append source is **not** admitted by this bounded source selection and is
 not declared intrinsically memory-unsafe solely for falling outside it. Each of the five allocation-None
 arms stays **byte-for-byte unchanged** and explicitly consumes exactly its original successful
 predecessors (0,1,2,3,4), with no extra Changes; no synthetic grant, hidden Drop, or relaxation of normal
@@ -2833,7 +2836,7 @@ branch nonCopy joins.
   root/child/field/incarnation/ValueFact/current, foreign world/node ID, duplicate or lost
   Allocation/Domain/Storage, changing an occupied slot's owner, H1–H4 missing teardown, cross-owner
   release, unexpected sixth original.
-- **Source-profile unsupported by this candidate (not necessarily unsafe by core):** seventh-only A.prev
+- **Source-profile unsupported by this bounded selection (not necessarily unsafe by core):** seventh-only A.prev
   idempotent Change, out-of-order/missing one of these three writes, interleaved arbitrary graph call,
   other field/name or root, five-root `@payload` scalar read, early C EndRoot, append dst, general
   scan/traversal, owner transfer/adopter and general library ABI. Do not silently widen the current five-H

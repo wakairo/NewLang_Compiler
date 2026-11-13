@@ -355,14 +355,17 @@ ledgerのstatusが古い・不明な場合は`main`のcanonical Draftへ戻っ�
 - **Negative/STOP/value:** wrong D/ended H/stale incarnation/read→write/loan escape/missing refund => semantic reject when actual violation; unknown provenance/current => precision fail closed; foreign field/ptr-base/general expression => source unsupported. A later P must separately prove a real source-owned/independently validating read-only ref/Copied current/branch/owner carrier and failure rollback before native. If >one broad trusted surface, wrong original, new issuer/ABI/heap semantics or unsafe publicity is needed, **STOP C**. Product Strategy §1.1 human UB-prevention audit/re-audit dependency closure vs matched well-factored C remains UNMEASURED, Product GO #624 PAUSED/H1 #268 HOLD.
 
 
-### DI-020 — five-H all-live last-C unlink: three source Changes (Issue #1383; **PROPOSED / UNMERGED**)
+### DI-020 — five-H all-live last-C unlink: three source Changes (Issue #1383; **ADOPTED / BOUNDED when CURRENT_SPEC selects Draft17.36**)
 
-- **Authority / classification:** **PROPOSED / UNMERGED**, not normative.
+- **Authority / classification:** **ADOPTED / BOUNDED only on branches whose CURRENT_SPEC selects Draft17.36**, after [C760 independent Gate E](https://github.com/wakairo/NewLang_Compiler/pull/1385#pullrequestreview-5885095370).
   [M #1383 C748 frozen Gates A–C INITIAL](https://github.com/wakairo/NewLang_Compiler/issues/1383#issuecomment-6840924461)
-  was posted before candidate authoring. Adopted Compiler/main is `bf4abd3e1b5a2eb4cfe9eb5eee194d893e58762d`,
-  `CURRENT_SPEC`→Draft17.35. Full source selection and controls are in **candidate Draft17.36 §3.2b.6**,
-  proposed in DRAFT/HOLD PR #1385; a future Coordination Gate E and explicit main spec selector change are
-  required. No compiler/native/owned test of this new source and no Product GO.
+  preceded its candidate. Historical proposal-base Compiler/main `bf4abd3e1b5a2eb4cfe9eb5eee194d893e58762d`
+  selected Draft17.35. The exact source selection is now in Draft17.36 §3.2b.6, and the explicit
+  CURRENT_SPEC selector is required for adoption; unmerged proposals and old compiler CI are not adoption.
+  [F1384 independent bounded F1](https://github.com/wakairo/NewLang_Compiler/issues/1384#issuecomment-6841628672)
+  identified no material source-law blocker, disclosed plan-level exposure, and requested the typed H/raw
+  Storage wording clarification, which C applied before selection. No new nine-Change compiler/owned/native
+  execution or Product GO was implied by Gate E.
 - **Gate A/B — current and historical KEEP:** Draft17.35 §3.2b/DI-014 already selects one completed
   five-original H with three independent `next/prev/child` fixed places, exactly six original setup Changes
   and 0–5 explicit releases. **KEEP** DI-009 original R/O/Allocation/Storage/Domain, DI-010 correct D-scoped
@@ -377,7 +380,7 @@ ledgerのstatusが古い・不明な場合は`main`のcanonical Draftへ戻っ�
   no-op/policy-wrong standalone variant.
   [P1382](https://github.com/wakairo/NewLang_Compiler/issues/1382#issuecomment-6840274114) found six-bound
   CHECK/captured-owned/C17 code; static evidence, not source-law authority or new-source execution.
-- **Gate C — INTENTIONALLY EXTEND SOURCE ONLY (candidate):** Preserve the old full six-Change source. Add one
+- **Gate C — INTENTIONALLY EXTEND SOURCE ONLY (when selected):** Preserve the old full six-Change source. Add one
   **separate exact all-five-success source variant**: while all original H roots and A/D remain live, after
   those six Changes and before any original EndRoot, source performs exactly three newly scoped genuine link
   Changes **in order**: `B.next Some(C)→None` (D_B), `A.prev Some(C)→Some(B)` (D_A), `C.prev Some(B)→None`
@@ -385,7 +388,7 @@ ledgerのstatusが古い・不明な場合は`main`のcanonical Draftへ戻っ�
   **correct live cached tail B**, original C is separately live but not a member, dst empty. Each
   source-issued parent/child, ProjectionId, old/current package, loan, Some occurrence Reset and original
   R/O/A/D responsibility is unchanged; nonCopy cleanup stays exactly 0/1/2/3/4/5 by allocation world. **No new
-  core/issuer/owner law** is proposed, and cached-tail correctness is a library policy oracle, not a compiler
+  core/issuer/owner law** is created, and cached-tail correctness is a library policy oracle, not a compiler
   membership theorem. See the exact source insertion and negative matrix in Draft17.36 §3.2b.6.
 - **Gate C — DEFER / no-foreclosure:** arbitrary additional/reordered graph Changes, early C EndRoot/free,
   append of existing dst, stale cached-link traversal/match, five-H LiveTail/adoption, general
