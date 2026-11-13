@@ -1,5 +1,6 @@
 #include "semantic_internal.h"
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -20,7 +21,7 @@ NLCheckStatus nl_captured_change_begin(NLCheckedFragment *f,
                                        NLCheckedNodeId node,
                                        const NLSemanticContext *world)
 {
-    if (f->field_change_count >= 6)
+    if (f->field_change_count >= NL_CAPTURED_CHANGE_CAPACITY)
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     NLCapturedChange *c = calloc(1, sizeof(*c));
     if (c == NULL)
@@ -49,7 +50,7 @@ bool nl_checked_captured_change_view(const NLCheckedFragment *f, size_t index,
                                      NLCapturedChangeView *out)
 {
     if (f == NULL || out == NULL || index >= f->field_change_count ||
-        index >= 6 || f->field_changes[index] == NULL)
+        index >= NL_CAPTURED_CHANGE_CAPACITY || f->field_changes[index] == NULL)
         return false;
     const NLCapturedChange *c = f->field_changes[index];
     *out = (NLCapturedChangeView){c->node, c->world, c->before, c->after};
@@ -570,12 +571,49 @@ static NLCheckStatus change_validate(const NLCheckedFragment *f,
 static NLCheckStatus validate(const NLCheckedFragment *, NLCheckedNodeId,
                               size_t *, size_t, bool);
 
+/* Admission of the one later source alternative, not a new proof or grant.
+ * The caller has already rederived this actual Change and authenticated all
+ * five live original A/D owners. Ordinals refer to those source-issued roots
+ * in this very world, never names, addresses or a foreign world's IDs. */
+static bool unlink_option(const NLSemanticContext *world, NLValueId id,
+                          const Release *originals, size_t target)
+{
+    if (id == 0 || id > world->value_count)
+        return false;
+    const NLSemanticValueView option = world->values[id - 1];
+    if (target == SIZE_MAX)
+        return option.variant == 1 && option.sum_payload == 0;
+    if (target >= NL_CAPTURED_MAX_RELEASES || option.variant != 2 ||
+        option.sum_payload == 0 || option.sum_payload > world->value_count)
+        return false;
+    const NLCapturedOriginal original = originals[target].original;
+    return pointer_to(world, world->values[option.sum_payload - 1],
+                      original.root, original.incarnation);
+}
+
+static bool unlink_step(const NLSemanticContext *world, const Release *roots,
+                        size_t step, size_t owner, NLCheckedField field)
+{
+    /* root ordinal, fixed field index, old target, new target. SIZE_MAX is
+     * the real checked None package, not a synthesized expected value. */
+    static const size_t source[NL_CAPTURED_UNLINK_CHANGES][4] = {
+        {0, 2, SIZE_MAX, 1}, {1, 1, SIZE_MAX, 3}, {1, 0, SIZE_MAX, 2},
+        {2, 1, SIZE_MAX, 1}, {2, 0, SIZE_MAX, 3}, {3, 1, SIZE_MAX, 2},
+        {2, 0, 3, SIZE_MAX}, {1, 1, 3, 2},        {3, 1, 2, SIZE_MAX}};
+    return step < NL_CAPTURED_UNLINK_CHANGES && owner == source[step][0] &&
+           field.index == source[step][1] &&
+           unlink_option(world, field.old_value, roots, source[step][2]) &&
+           unlink_option(world, field.new_value, roots, source[step][3]);
+}
+
 static NLCheckStatus trace(const NLCheckedFragment *f,
                            const NLCapturedClosure *certificate, size_t variant,
                            size_t *histogram, size_t depth)
 {
     const NLSemanticContext *world = f->context;
-    if (f->field_change_count > 6)
+    if (f->field_change_count > NL_CAPTURED_CHANGE_CAPACITY ||
+        (f->field_change_count > NL_CAPTURED_SETUP_CHANGES &&
+         f->field_change_count != NL_CAPTURED_UNLINK_CHANGES))
         return INVALID;
     Release releases[NL_CAPTURED_MAX_RELEASES] = {0};
     size_t count = certificate->view.count, grants = 0;
@@ -600,7 +638,8 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             return INVALID; /* finite lifecycle/field certificate profile */
         if (v->kind == NL_CHECKED_REPLACE) {
             if (nested || count != 5 || changes >= f->field_change_count ||
-                changes >= 6 || f->field_changes[changes] == NULL ||
+                changes >= NL_CAPTURED_CHANGE_CAPACITY ||
+                f->field_changes[changes] == NULL ||
                 f->field_changes[changes]->node != i)
                 return INVALID;
             const NLCapturedChange *change = f->field_changes[changes++];
@@ -652,6 +691,9 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             if (owner == count || v->field.index >= 3 ||
                 releases[owner].fields[v->field.index] != v->field.old_value)
                 return INVALID;
+            if (f->field_change_count == NL_CAPTURED_UNLINK_CHANGES &&
+                !unlink_step(b, releases, changes - 1, owner, v->field))
+                return INVALID;
             releases[owner].fields[v->field.index] = v->field.new_value;
             /* A copied Some pointer must retain one current original target;
              * it contributes no Allocation/Domain/Storage responsibility. */
@@ -675,7 +717,9 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
         if (v->kind == NL_CHECKED_REF_FROM_PTR ||
             v->kind == NL_CHECKED_FIELD_REF) {
             bool proved = false;
-            for (size_t j = 0; j < f->field_change_count && j < 6; ++j) {
+            for (size_t j = 0;
+                 j < f->field_change_count && j < NL_CAPTURED_CHANGE_CAPACITY;
+                 ++j) {
                 const NLCapturedChange *change = f->field_changes[j];
                 const NLCheckedNodeView *write =
                     change == NULL ? NULL

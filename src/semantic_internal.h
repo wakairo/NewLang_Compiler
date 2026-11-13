@@ -1,6 +1,7 @@
 #ifndef NEWLANG_SEMANTIC_INTERNAL_H
 #define NEWLANG_SEMANTIC_INTERNAL_H
 
+#include "captured_trace_internal.h"
 #include "control.h"
 #include "newlang/captured_closure.h"
 #include "newlang/checked.h"
@@ -157,7 +158,7 @@ struct NLCheckedFragment {
     const NLNodeJoinProof *node_join_parent; /* finite fork lineage only */
     NLNodeJoinProof *node_joins; /* owned finite source-issued checkpoints */
     void (*destroy_node_joins)(NLCheckedFragment *);
-    NLCapturedChange *field_changes[6];
+    NLCapturedChange *field_changes[NL_CAPTURED_CHANGE_CAPACITY];
     size_t field_change_count;
     void (*destroy_field_changes)(NLCheckedFragment *);
     NLCapturedClosure *captured_closure;
