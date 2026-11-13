@@ -286,7 +286,8 @@ static bool foreign_destroy(const char *path)
     return true;
 }
 static size_t capture_calls, wanted_call, wanted_offset, allocation_index;
-static bool armed, injection_window, injected;
+static bool armed, injection_window, injected, fail_buffer;
+static const NLSemanticContext *selected_world;
 void *__real_malloc(size_t);
 void *__real_calloc(size_t, size_t);
 void *__real_realloc(void *, size_t);
@@ -301,6 +302,10 @@ static bool lose(void)
 }
 void *__wrap_malloc(size_t n)
 {
+    if (armed && fail_buffer && n == 131072) {
+        injected = true;
+        return NULL;
+    }
     return lose() ? NULL : __real_malloc(n);
 }
 void *__wrap_calloc(size_t n, size_t s)
@@ -310,6 +315,20 @@ void *__wrap_calloc(size_t n, size_t s)
 void *__wrap_realloc(void *p, size_t n)
 {
     return lose() ? NULL : __real_realloc(p, n);
+}
+NLCheckStatus __real_nl_sem_clone(const NLSemanticContext *,
+                                  NLSemanticContext **);
+NLCheckStatus __wrap_nl_sem_clone(const NLSemanticContext *c,
+                                  NLSemanticContext **out)
+{
+    if (selected_world == NULL)
+        return __real_nl_sem_clone(c, out);
+    injection_window = c == selected_world;
+    if (injection_window)
+        allocation_index = 0;
+    NLCheckStatus status = __real_nl_sem_clone(c, out);
+    injection_window = false;
+    return status;
 }
 NLCheckStatus __real_nl_captured_read_begin(NLCheckedFragment *, NLCheckedKind,
                                             const NLSemanticContext *);
@@ -386,8 +405,68 @@ static bool oom(const char *path)
                "PASS\n",
                offsets[i]);
     }
+    NLCheckedFragment *leaf = leaf_of(top);
+    CHECK(leaf && leaf->captured_reads);
+    ReadEvent *fork = &leaf->captured_reads->events[1];
+    const NLCheckedFragment *some = NULL;
+    for (size_t i = 0; i < 2; ++i)
+        if (nl_checked_node_view(fork->arms[i], nl_checked_root(fork->arms[i]))
+                ->variant == 2)
+            some = fork->arms[i];
+    CHECK(some && some->captured_reads);
+    const NLSemanticContext *worlds[] = {
+        leaf->captured_reads->events[0].event.before, fork->event.before,
+        some->captured_reads->events[0].event.before};
+    for (size_t point = 0; point < 3; ++point)
+        for (size_t off = 0; off < 4; ++off) {
+            selected_world = worlds[point];
+            wanted_offset = off;
+            injected = false;
+            armed = true;
+            NLCheckStatus status =
+                nl_checked_captured_closure_validate(top, match(top));
+            armed = false;
+            selected_world = NULL;
+            CHECK(injected && status == NL_CHECK_OUT_OF_MEMORY);
+            CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+                  NL_CHECK_OK);
+            ++reached;
+            printf("OOM actual temporal rederive point=%zu offset=%zu "
+                   "OUT_OF_MEMORY retry PASS\n",
+                   point, off);
+        }
+    for (size_t i = 0; i < sizeof(offsets) / sizeof(offsets[0]); ++i) {
+        wanted_offset = offsets[i];
+        allocation_index = 0;
+        injected = false;
+        armed = injection_window = true;
+        char *out = NULL;
+        size_t length = 98765;
+        NLNodeCStatus status = nl_checked_c_node(top, &out, &length);
+        armed = injection_window = false;
+        CHECK(injected && status == NL_NODE_C_OUT_OF_MEMORY && out == NULL &&
+              length == 98765);
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_OK);
+        ++reached;
+        printf(
+            "OOM emitter validation offset=%zu OUT_OF_MEMORY no-clobber PASS\n",
+            offsets[i]);
+    }
+    injected = false;
+    fail_buffer = armed = true;
+    char *out = NULL;
+    size_t length = 98765;
+    NLNodeCStatus status = nl_checked_c_node(top, &out, &length);
+    armed = fail_buffer = false;
+    CHECK(injected && status == NL_NODE_C_OUT_OF_MEMORY && out == NULL &&
+          length == 98765);
+    ++reached;
+    CHECK(nl_checked_c_node(top, &out, &length) == NL_NODE_C_OK && out &&
+          length > 0);
+    free(out);
     destroy(&p);
-    printf("actual selected capture+validator OOM=%zu PASS\n", reached);
+    printf("actual selected capture+validator+emitter OOM=%zu PASS\n", reached);
     return true;
 }
 

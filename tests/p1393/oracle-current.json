@@ -25,7 +25,14 @@
     "N2": "exit3 ALLOCATED-DOMAIN-MISMATCH",
     "N3": "exit3 P5-SCOPE-OBLIGATION"
   },
-  "Stage_B": "NOT_RUN until genuine Stage A",
+  "Stage_B": {
+    "first_barrier": "Stage A CHECK0 and owned0 followed by baseline consumer exit4 unsupported; FIRST preserved",
+    "positive": "actual Option A.prev load -> lexical Copy -> Some binder -> B.next load; exactly once; no literal substitution",
+    "guests": "matrix26: strict GCC/Clang O0/O2 raw and passive; allocation failure1..5 with0..4 unique releases; success C,dst,B,A,src five releases; ASan+LSan and UBSan; raw dynamic loads NOT_OBSERVED; instrumented observer separately labelled",
+    "old_C_identity": "old6 and exact9 hashes must stay identical",
+    "negative": "all frozen N1/N2/N3 and temporal poison mutations reject/no-clobber before native",
+    "oom": "56 original selected points +12 temporal replay clone points +8 emitter-validation offsets +1 actual FIVE_BYTES buffer loss, true OOM/no-clobber/healthy retry"
+  },
   "OOM": "real injection must report OOM, roll back/no-clobber, clean destruction and healthy retry; no oracle weakening",
   "legacy": "old6/exact9 source/oracle unchanged; raw C byte identity required",
   "Stage_A_faults": [

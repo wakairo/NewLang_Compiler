@@ -15,10 +15,22 @@ CAPTURED_INCLUDE = b'#include "captured_trace_internal.h"\n'
 CAPTURED_HEADER = b'#define NEWLANG_SEMANTIC_INTERNAL_H\n\n' + CAPTURED_INCLUDE
 CAPTURED_FIELD = b'    NLCapturedChange *field_changes[NL_CAPTURED_CHANGE_CAPACITY];\n'
 CAPTURED_STORAGE = CAPTURED_FIELD + b'    size_t field_change_count;\n'
+# P1393's private temporal event attachment and internal-only declarations.
+READ_FIELD = b'    struct NLCapturedReads *captured_reads; /* owned temporal read events */\n'
+READ_DECLS = (b'NLCheckStatus nl_captured_read_begin(NLCheckedFragment *, NLCheckedKind,\n'
+              b'                                     const NLSemanticContext *);\n'
+              b'NLCheckStatus nl_captured_read_end(NLCheckedFragment *, NLCheckedNodeId,\n'
+              b'                                   const NLSemanticContext *);\n'
+              b'bool nl_node_unit_arm_frame(const NLSemanticContext *,\n'
+              b'                            const NLSemanticContext *, NLValueId,\n'
+              b'                            const NLCheckedNodeView *);\n')
 def project(data):
     # P1387 changes only private storage spelling here. This projection is
     # confined to old checksum fixtures, never CHECK or the live compiler.
     # Keep their original full-header digest and every old corruption gate.
+    assert data.count(READ_FIELD) == data.count(READ_DECLS) == 1
+    assert data.count(b'    void (*destroy_field_changes)(NLCheckedFragment *);\n' + READ_FIELD) == 1
+    data = data.replace(READ_FIELD, b'', 1).replace(READ_DECLS, b'', 1)
     assert data.count(CAPTURED_INCLUDE) == data.count(CAPTURED_HEADER) == 1
     assert data.count(CAPTURED_FIELD) == data.count(CAPTURED_STORAGE) == 1
     data = data.replace(CAPTURED_HEADER, CAPTURED_HEADER.replace(CAPTURED_INCLUDE, b''), 1)
@@ -40,6 +52,11 @@ def main():
         'misplaced': header.replace(FIELDS, b'', 1) + FIELDS,
         'wrong_type': header.replace(b'NLLinearBreakProof *linear_breaks', b'NLForeignProof *linear_breaks', 1),
         'wrong_destructor': header.replace(b'destroy_linear_breaks)', b'destroy_foreign)', 1),
+        'missing_read_attachment': header.replace(READ_FIELD, b'', 1),
+        'duplicate_read_attachment': header + READ_FIELD,
+        'misplaced_read_attachment': header.replace(READ_FIELD, b'', 1) + READ_FIELD,
+        'missing_read_declarations': header.replace(READ_DECLS, b'', 1),
+        'duplicate_read_declarations': header + READ_DECLS,
         'missing_capture_include': header.replace(CAPTURED_INCLUDE, b'', 1),
         'duplicate_capture_include': header + CAPTURED_INCLUDE,
         'misplaced_capture_include': header.replace(CAPTURED_INCLUDE, b'', 1) + CAPTURED_INCLUDE,
