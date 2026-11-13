@@ -1,3 +1,4 @@
+#include "newlang/captured_closure.h"
 #include "newlang/checked.h"
 #include "newlang/parser.h"
 #include "newlang/semantic.h"
