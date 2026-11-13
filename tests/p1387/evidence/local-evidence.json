@@ -1,0 +1,10 @@
+{
+  "execution_HEAD": "c8c8145000a996571db5c7bc45ec70813d6859e1",
+  "execution_tree": "7fdb08b208b09128e6ebfed7ff31a1c78c2cd47d",
+  "local_final_SHA256": "802d2ed3d94fe99058eb3cc4502cea99789ab618f6ea0b9cfcc00cf1f56bdee9",
+  "zip_SHA256": "b929a9bbd87afb6e4ef07a628585ee0ae935f881c35fd9852084163311923c79",
+  "zip_bytes": 524191,
+  "files": 379,
+  "scope": "P-owned FIRST/source-oracle receipts/rawC/native observations/actual OOM and preserved apparatus errors. Original adopted-main Required6 decoded logs included. Rebuildable ELF/build files stay local; binary/input SHA receipts included. No independent F/R material.",
+  "candidate_note": "Receipt-only successor; every compiler, CMake, source, oracle and test input is identical to successful C2. No repeat guests."
+}
