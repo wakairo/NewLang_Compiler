@@ -414,3 +414,56 @@ ledgerのstatusが古い・不明な場合は`main`のcanonical Draftへ戻っ�
   seventh, but no actual post-free append, ordinary-safe external API, ABI requirement or author/caller burden
   differential is proven. Product GO #624 PAUSED; H1 #268 HOLD.
 
+
+### DI-021 — H5 post-exact9 original-C early EndRoot and live cached-tail read (Issue #1390, **PROPOSED / UNMERGED ONLY**)
+
+- **Authority/status:** **PROPOSED / UNMERGED** on anchored main `feb8398e136949b765fcfd3abf086f9ccbf145d8` /
+  `CURRENT_SPEC` →normative **Draft17.36**. Source-law candidate **Draft17.37 §3.2b.7** is **NON-NORMATIVE**
+  until independently reviewed Coordination Gate E and explicit `CURRENT_SPEC` adoption; historical
+  [M #1390 frozen Gates A–C INITIAL](https://github.com/wakairo/NewLang_Compiler/issues/1390#issuecomment-6845196319)
+  precedes candidate writing. Do not treat candidate blob, DRAFT PR or CI as source selection, or this index as
+  a new public proof issuer.
+- **Gate A/B — KEEP adopted bounds:** DI-009: five real independent R/O/Allocation/Storage/D and exactly 0–5
+  failure-world discharge; DI-010: proper D-scoped original H ref and mode-preserving distinct field projection;
+  DI-011–013: selected **two-H-only** known owner/LiveTail/custody, not available for H5 general owner transfer;
+  DI-014: five original H, three fixed pointer fields, original six Changes; DI-020 **ADOPTED** exact nine
+  all-live last-C unlink on Draft17.36 with correct current A.prev=Some(B), B.next=None, isolated but still-live
+  C. Existing §10.1/§13.5a/§13.8/§17.4/§26.6–12/§27.3 core rules preserve liveness, hidden dependencies,
+  exhaustive Copy Option match and affine availability. DI-001/006/007 historical loan/punctuation/generic
+  projection concepts remain historical/Deferred.
+  [M393 HOLD](https://github.com/wakairo/NewLang_Compiler/issues/393#issuecomment-6138373666) five-root fourth
+  payload-u8 read is *not reopened*; DI-019's distinct two-H payload source confers no H5 privilege.
+- **Gate C — INTENTIONALLY EXTEND SOURCE ONLY, proposed:** Reuse the complete exact9 fifth-success arm, after
+  all nine legitimate Changes and all temporary loans closed. First early free **isolated original C** exactly
+  once with its own original `ptr_C/D_C/Allocation_C` through
+  `destroy→erase_slot/full raw→finalize_domain→deallocate` . Then with src/A/B/dst still alive read **the
+  current A.prev** (fresh proper D_A read loan, authentic field/Some occurrence) into an ordinary Copy
+  `Option<ptr<Node>>` ; exhaustively `match` its actual current value, and **only in Some**, ref_from_ptr(read,
+  copied actual ptr, original valid D_B) must separately identify the genuinely live original B and
+  `read(B_ref@next)` with current None. Both arms leave the four nonCopy survivors unchanged and join to the
+  existing terminal release `dst,B,A,src` , with C absent from terminal cleanup because freed earlier. Same
+  original five allocation sites; no new guest allocation, original 0/1/2/3/4 free on failure and 5 total frees
+  on success. Old six and exact nine source remain untouched. A copied pointer is never A/D/Storage, nor list
+  membership.
+- **Negative/safety boundary:** saved prior `Some(ptr_C)` after actual C EndRoot cannot reborrow C under §10.1
+  (liveness, same-D stability or actual freed Backing mismatch), even if pointer bits persist as a NewLang Copy
+  locator. Wrong D_B/D_A, false Some payload/root, opaque field/ProjectionId or current-value fact alias, active
+  C loan at EndRoot, lost/double original owner, stale conditional occurrence, forged source-bound read, missing
+  failure refund or unsafe observer read of freed C must fail closed. An alive-but-nonmember C cached pointer is
+  application **policy** error, not automatically UB. A future static negative's actual SOURCE/CHECK/owned/C17
+  first refusal must be reported honestly, not labeled UAF proof when rejected as unselected source.
+- **Gate C — DEFER/no-foreclosure and cost STOP:** No generic heap pointer graph, arbitrary borrowed match/owner
+  transfer, fifth-root LiveTail, extra allocation, append, cached membership solver, external ordinary-safe
+  API/module/ABI, callbacks/concurrency, H5 payload scalar, new public issuer/owner. The single closed
+  read-after-free continuation may require the existing captured five-original closure to authenticate
+  *read-only* field/current/Option-match B provenance beyond its currently write-bound certificate and strict
+  C17 H-only allocation match. This is a **separate implementation precision/cost risk**, not semantic
+  authorization: if independent trusted issuer/proof subsystems, unsafe scope/root/Domain derivation or
+  disproportionate maintenance appear, **DEFER/STOP C**. Do not bypass read/match completeness or issue Known
+  from host values. No source/native positive has been run under this proposal.
+- **VALUE-ALIGNMENT-RISK:** True original-C lifetime end followed by fresh current cached-tail use is meaningful
+  progress toward the historical upstream cJSON UAF, but still no delete→append, external ordinary-safe library
+  facade or measured UB-prevention audit/re-audit dependency closure improvement for library author +
+  ordinary-safe caller against well-factored C/natural sound Rust facade. Product GO #624 PAUSED, H1 #268 HOLD;
+  new source evidence and private trusted costs need independent Coordination judgment.
+
