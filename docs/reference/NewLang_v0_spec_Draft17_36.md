@@ -24,9 +24,10 @@ status notes remain historical and do not withdraw inherited selected rules.
 **Exactly one additive source-selection difference:**
 [§3.2b.6 below](#32b6-draft-1736-c748-proposed--five-live-originals-with-one-ordered-three-change-tail-unlink)
 would admit one alternative all-five-success continuation to the existing Draft17.30 §3.2b.3 *five
-original heap H / three fixed link* closed witness. After the six already selected pre-detach Changes,
-with **all five original roots, Allocation/Storage/Domain and owners still live**, source performs exactly
-three more **independently scoped** ordinary link `replace` operations, in order: `B.next Some(C)→None` ,
+original heap H / three fixed link* closed witness. After the six already selected pre-detach Changes, **all five original typed H roots and their
+BackingRegions remain live, with original Allocation and LifetimeDomain authorities available; full raw
+Storage claims are recovered only through the existing destroy/erase_slot teardown**. Source then
+performs exactly three more **independently scoped** ordinary link `replace` operations, in order: `B.next Some(C)→None` ,
 `A.prev Some(C)→Some(B)` , and `C.prev Some(B)→None` . No early root end, owner transfer, extra
 allocation, new issuer, new link field, function/loop, general graph/membership rule or ABI is selected.
 All original failure arms and exact five-owner teardown remain unchanged. The original six-Change profile
