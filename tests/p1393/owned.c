@@ -1,3 +1,4 @@
+#include "../../src/captured_read_internal.h"
 #include "../../src/h_origin_internal.h"
 #include "../support/semantic_check.h"
 #include "newlang/checked_c_node.h"
@@ -64,6 +65,10 @@ static NLCheckedNodeId match(const NLCheckedFragment *f)
     return 0;
 }
 
+static bool temporal(Program *, bool);
+static bool foreign_destroy(const char *);
+static bool oom(const char *);
+
 static bool verify(const char *path)
 {
     Program p = {0};
@@ -97,10 +102,299 @@ static bool verify(const char *path)
     printf("CHECK/owned/custody PASS; original release worlds 0..5 once; "
            "reads=%zu matches=%zu\n",
            reads, matches);
+    CHECK(temporal(&p, true));
     destroy(&p);
+    CHECK(foreign_destroy(path));
     return true;
 }
+static const NLCheckedFragment *top_of(Program *p)
+{
+    return nl_checked_call_body(p->entry, nl_checked_root(p->entry));
+}
+static NLCheckedFragment *leaf_of(const NLCheckedFragment *top)
+{
+    const NLCheckedFragment *f = top;
+    for (size_t i = 0; i < 5 && f; ++i)
+        f = nl_checked_match_arm(f, match(f), 1);
+    return (NLCheckedFragment *)f;
+}
+static bool denied(const NLCheckedFragment *top)
+{
+    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    char *out = NULL;
+    size_t n = 98765;
+    CHECK(nl_checked_c_node(top, &out, &n) == NL_NODE_C_UNSUPPORTED &&
+          out == NULL && n == 98765);
+    return true;
+}
+static bool temporal(Program *p, bool attack)
+{
+    const NLCheckedFragment *top = top_of(p);
+    NLCheckedFragment *leaf = leaf_of(top);
+    CHECK(leaf && leaf->captured_reads && leaf->captured_reads->count == 2);
+    NLCapturedChangeView last;
+    CHECK(nl_checked_captured_change_view(leaf, 8, &last));
+    NLCapturedClosureView ancestors;
+    const NLCheckedFragment *parent = top;
+    for (size_t i = 0; i < 4; ++i)
+        parent = nl_checked_match_arm(parent, match(parent), 1);
+    CHECK(nl_checked_captured_closure_view(parent, match(parent), &ancestors));
+    const NLPlaceId c_root = ancestors.originals[3].root;
+    CHECK(last.after->places[c_root - 1].live);
+    ReadEvent *first = &leaf->captured_reads->events[0];
+    ReadEvent *fork = &leaf->captured_reads->events[1];
+    CHECK(first->kind == NL_CHECKED_LINK_READ &&
+          fork->kind == NL_CHECKED_MATCH);
+    const NLCheckedFragment *some = NULL;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *arm =
+            nl_checked_match_arm(leaf, fork->event.node, i);
+        CHECK(arm && arm == fork->arms[i]);
+        if (nl_checked_node_view(arm, nl_checked_root(arm))->variant == 2)
+            some = arm;
+    }
+    CHECK(some && some->captured_reads && some->captured_reads->count == 1);
+    ReadEvent *second = &some->captured_reads->events[0];
+    ReadEvent *events[] = {first, second};
+    for (size_t i = 0; i < 2; ++i) {
+        const NLSemanticContext *b = events[i]->event.before;
+        const NLSemanticContext *a = events[i]->event.after;
+        const NLCheckedFragment *f = i == 0 ? leaf : some;
+        const NLCheckedNodeView *read =
+            nl_checked_node_view(f, events[i]->event.node);
+        CHECK(b && a && b != a && b != last.after &&
+              !b->places[c_root - 1].live);
+        CHECK(b->places[c_root - 1].governing_domain == 0 &&
+              !b->domains[ancestors.originals[3].domain - 1].live &&
+              !b->regions[3].view.live);
+        CHECK(read->field.parent == ancestors.originals[i == 0 ? 1 : 2].root &&
+              read->field.index == (i == 0 ? 1u : 0u));
+        CHECK(b->places[read->field.parent - 1].live &&
+              b->regions[i == 0 ? 1 : 2].view.live);
+        const NLSemanticValueView result =
+            a->values[read->results[0].value - 1];
+        CHECK(result.dependencies == NL_DEPENDENCY_FREE &&
+              result.value_dependency_count == 0);
+        CHECK(result.variant == (i == 0 ? 2u : 1u));
+        if (i == 0) {
+            CHECK(result.sum_payload &&
+                  a->values[result.sum_payload - 1].reference.place ==
+                      ancestors.originals[2].root);
+            CHECK(a->values[result.sum_payload - 1]
+                      .reference.occurrence_dependency == 0);
+        } else
+            CHECK(result.sum_payload == 0);
+        printf("READ %zu %zu %zu %zu %zu\n", read->field.parent,
+               read->field.index, read->field.child, read->field.child_fact,
+               result.variant);
+    }
+    if (!attack)
+        return true;
+    /* Point-in-time origin substitution cannot turn C-live or all-dead into
+     * the required post-free read state. Owned origin slots remain intact. */
+    NLSemanticContext *saved = first->event.before;
+    first->event.before = (NLSemanticContext *)last.after;
+    CHECK(denied(top));
+    first->event.before = saved;
+    first->event.before = leaf->context;
+    CHECK(denied(top));
+    first->event.before = saved;
+    NLCheckedNodeView *read = &leaf->nodes[first->event.node - 1];
+    NLCheckedField field = read->field;
+    ++read->field.child_fact;
+    CHECK(denied(top));
+    read->field = field;
+    read->field.index = 0;
+    CHECK(denied(top));
+    read->field = field;
+    NLSemanticValueView *copy =
+        &first->event.after->values[read->results[0].value - 1];
+    size_t variant = copy->variant;
+    copy->variant = 1;
+    CHECK(denied(top));
+    copy->variant = variant;
+    NLSemanticPlaceView *root = &first->event.before->places[field.parent - 1];
+    NLDomainId d = root->governing_domain;
+    root->governing_domain = ancestors.originals[2].domain;
+    CHECK(denied(top));
+    root->governing_domain = d;
+    NLSemanticScopeView *scope = NULL;
+    for (size_t i = 0; i < first->event.before->scope_count; ++i)
+        if (first->event.before->scopes[i].active)
+            scope = &first->event.before->scopes[i];
+    CHECK(scope);
+    scope->active = false;
+    CHECK(denied(top));
+    scope->active = true;
+    size_t count = leaf->captured_reads->count;
+    leaf->captured_reads->count = 1;
+    CHECK(denied(top));
+    leaf->captured_reads->count = count;
+    ReadEvent *sr = &((NLCheckedFragment *)some)->captured_reads->events[0];
+    const NLCheckedNodeView *sread = nl_checked_node_view(some, sr->event.node);
+    for (size_t i = 0; i < some->count; ++i) {
+        NLCheckedNodeView *node = &((NLCheckedFragment *)some)->nodes[i];
+        if (node->kind == NL_CHECKED_REF_FROM_PTR) {
+            NLCheckedNodeId arg = node->first_argument;
+            NLCheckedNodeView *operand =
+                &((NLCheckedFragment *)some)->nodes[arg - 1];
+            NLSymbolId sym = operand->symbol;
+            operand->symbol = 0;
+            CHECK(denied(top));
+            operand->symbol = sym;
+        }
+    }
+    CHECK(sread->kind == NL_CHECKED_LINK_READ);
+    CHECK(nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    printf("temporal origin/field/current/Copy/Domain/loan/coverage/binder "
+           "poison rejection PASS\n");
+    return true;
+}
+static bool foreign_destroy(const char *path)
+{
+    Program a = {0}, b = {0};
+    CHECK(prepare(path, &a) == NL_CHECK_OK && prepare(path, &b) == NL_CHECK_OK);
+    const NLCheckedFragment *at = top_of(&a), *bt = top_of(&b);
+    NLCheckedFragment *al = leaf_of(at), *bl = leaf_of(bt);
+    CHECK(al && bl);
+    NLCheckedNodeId am = al->captured_reads->events[1].event.node;
+    NLCheckedNodeId bm = bl->captured_reads->events[1].event.node;
+    for (size_t i = 0; i < al->arm_count; ++i)
+        if (al->arms[i].match == am) {
+            const NLCheckedNodeView *ar = nl_checked_node_view(
+                al->arms[i].artifact, nl_checked_root(al->arms[i].artifact));
+            if (ar->variant == 2) {
+                for (size_t j = 0; j < bl->arm_count; ++j)
+                    if (bl->arms[j].match == bm) {
+                        const NLCheckedNodeView *br = nl_checked_node_view(
+                            bl->arms[j].artifact,
+                            nl_checked_root(bl->arms[j].artifact));
+                        if (br->variant == 2)
+                            al->arms[i].artifact = bl->arms[j].artifact;
+                    }
+            }
+        }
+    CHECK(denied(at));
+    destroy(&a); /* deliberately unrestored foreign display view */
+    CHECK(nl_h_custody_validate(b.entry) &&
+          nl_checked_captured_closure_validate(bt, match(bt)) == NL_CHECK_OK);
+    CHECK(temporal(&b, false));
+    destroy(&b);
+    printf("A unrestored foreign Some view destroy; genuine B "
+           "survives/destroys PASS\n");
+    return true;
+}
+static size_t capture_calls, wanted_call, wanted_offset, allocation_index;
+static bool armed, injection_window, injected;
+void *__real_malloc(size_t);
+void *__real_calloc(size_t, size_t);
+void *__real_realloc(void *, size_t);
+static bool lose(void)
+{
+    if (!armed || !injection_window)
+        return false;
+    if (allocation_index++ != wanted_offset)
+        return false;
+    injected = true;
+    return true;
+}
+void *__wrap_malloc(size_t n)
+{
+    return lose() ? NULL : __real_malloc(n);
+}
+void *__wrap_calloc(size_t n, size_t s)
+{
+    return lose() ? NULL : __real_calloc(n, s);
+}
+void *__wrap_realloc(void *p, size_t n)
+{
+    return lose() ? NULL : __real_realloc(p, n);
+}
+NLCheckStatus __real_nl_captured_read_begin(NLCheckedFragment *, NLCheckedKind,
+                                            const NLSemanticContext *);
+NLCheckStatus __real_nl_captured_read_end(NLCheckedFragment *, NLCheckedNodeId,
+                                          const NLSemanticContext *);
+static void enter_capture(void)
+{
+    injection_window = ++capture_calls == wanted_call;
+    allocation_index = 0;
+}
+NLCheckStatus __wrap_nl_captured_read_begin(NLCheckedFragment *f,
+                                            NLCheckedKind kind,
+                                            const NLSemanticContext *c)
+{
+    enter_capture();
+    NLCheckStatus s = __real_nl_captured_read_begin(f, kind, c);
+    injection_window = false;
+    return s;
+}
+NLCheckStatus __wrap_nl_captured_read_end(NLCheckedFragment *f,
+                                          NLCheckedNodeId n,
+                                          const NLSemanticContext *c)
+{
+    enter_capture();
+    NLCheckStatus s = __real_nl_captured_read_end(f, n, c);
+    injection_window = false;
+    return s;
+}
+static bool oom(const char *path)
+{
+    Program good = {0};
+    capture_calls = 0;
+    CHECK(prepare(path, &good) == NL_CHECK_OK);
+    size_t total = capture_calls;
+    CHECK(total >= 6 && total <= 48);
+    destroy(&good);
+    size_t reached = 0;
+    for (size_t event = 1; event <= total; ++event)
+        for (size_t off = 0; off < 4; ++off) {
+            Program p = {0};
+            wanted_call = event;
+            wanted_offset = off;
+            injected = false;
+            capture_calls = 0;
+            armed = true;
+            NLCheckStatus s = prepare(path, &p);
+            armed = false;
+            CHECK(injected && s == NL_CHECK_OUT_OF_MEMORY && p.entry == NULL);
+            destroy(&p);
+            ++reached;
+            CHECK(prepare(path, &p) == NL_CHECK_OK);
+            destroy(&p);
+            printf("OOM capture call=%zu offset=%zu status=OUT_OF_MEMORY "
+                   "rollback/retry PASS\n",
+                   event, off);
+        }
+    Program p = {0};
+    CHECK(prepare(path, &p) == NL_CHECK_OK);
+    const NLCheckedFragment *top = top_of(&p);
+    const size_t offsets[] = {0, 1, 2, 3, 7, 15, 31, 63};
+    for (size_t i = 0; i < sizeof(offsets) / sizeof(offsets[0]); ++i) {
+        wanted_offset = offsets[i];
+        allocation_index = 0;
+        injected = false;
+        armed = true;
+        injection_window = true;
+        NLCheckStatus s = nl_checked_captured_closure_validate(top, match(top));
+        armed = injection_window = false;
+        CHECK(injected && s == NL_CHECK_OUT_OF_MEMORY);
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_OK);
+        ++reached;
+        printf("OOM validator offset=%zu status=OUT_OF_MEMORY healthy retry "
+               "PASS\n",
+               offsets[i]);
+    }
+    destroy(&p);
+    printf("actual selected capture+validator OOM=%zu PASS\n", reached);
+    return true;
+}
+
 int main(int argc, char **argv)
 {
-    return argc == 2 && verify(argv[1]) ? 0 : 1;
+    if (argc != 3)
+        return 1;
+    return (strcmp(argv[1], "oom") == 0 ? oom(argv[2]) : verify(argv[2])) ? 0
+                                                                          : 1;
 }

@@ -27,5 +27,16 @@
   },
   "Stage_B": "NOT_RUN until genuine Stage A",
   "OOM": "real injection must report OOM, roll back/no-clobber, clean destruction and healthy retry; no oracle weakening",
-  "legacy": "old6/exact9 source/oracle unchanged; raw C byte identity required"
+  "legacy": "old6/exact9 source/oracle unchanged; raw C byte identity required",
+  "Stage_A_faults": [
+    "C-live/all-dead checkpoint substitution",
+    "wrong current fact/field",
+    "false copied tag",
+    "wrong governing D",
+    "closed active stability scope",
+    "short read ledger",
+    "Some binder substitution",
+    "foreign A/B arm view: destroy A unrestored, B still valid"
+  ],
+  "Stage_A_OOM": "every actually observed temporal begin/end capture invocation, allocation offsets0..3, plus validator offsets0,1,2,3,7,15,31,63; true OOM status, atomic rollback, healthy retry; print actual reached invocation counts"
 }

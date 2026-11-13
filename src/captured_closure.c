@@ -1,4 +1,4 @@
-#include "semantic_internal.h"
+#include "captured_read_internal.h"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -9,16 +9,6 @@
 /* Part of the same captured closure, not an independent issuer. Each event
  * retains the actual point-in-time world; the final arm context has already
  * ended all originals and cannot license a past read. */
-typedef struct {
-    NLCapturedChange event;
-    NLCheckedKind kind;
-    const NLCheckedFragment *arms[2];
-    const NLSemanticContext *arm_worlds[2];
-} ReadEvent;
-struct NLCapturedReads {
-    ReadEvent events[2]; /* one read, then its exhaustive Copy match */
-    size_t count;
-};
 
 static void changes_destroy(NLCheckedFragment *f)
 {
