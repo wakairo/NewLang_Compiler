@@ -354,3 +354,63 @@ ledgerのstatusが古い・不明な場合は`main`のcanonical Draftへ戻っ�
 - **DEFER/no-foreclosure:** B genuine `front@link→Some(back_ptr)` must independently show live original back, correct own D_back/read ref; Some(ptr) grants no owner/lifetime/membership, so not a special source entitlement. Five-root fourth field, generalized ref/ptr or direct H local field source, write payload, owner mint, implicit pointer deref/graph traversal, arbitrary heap layout/ABI, unknown→known scalar, general CFG/RAII/modules remain excluded. Existing link change/Occurrence/C17 control unchanged.
 - **Negative/STOP/value:** wrong D/ended H/stale incarnation/read→write/loan escape/missing refund => semantic reject when actual violation; unknown provenance/current => precision fail closed; foreign field/ptr-base/general expression => source unsupported. A later P must separately prove a real source-owned/independently validating read-only ref/Copied current/branch/owner carrier and failure rollback before native. If >one broad trusted surface, wrong original, new issuer/ABI/heap semantics or unsafe publicity is needed, **STOP C**. Product Strategy §1.1 human UB-prevention audit/re-audit dependency closure vs matched well-factored C remains UNMEASURED, Product GO #624 PAUSED/H1 #268 HOLD.
 
+
+### DI-020 — five-H all-live last-C unlink: three source Changes (Issue #1383; **ADOPTED / BOUNDED when CURRENT_SPEC selects Draft17.36**)
+
+- **Authority / classification:** **ADOPTED / BOUNDED only on branches whose CURRENT_SPEC selects Draft17.36**, after [C760 independent Gate E](https://github.com/wakairo/NewLang_Compiler/pull/1385#pullrequestreview-5885095370).
+  [M #1383 C748 frozen Gates A–C INITIAL](https://github.com/wakairo/NewLang_Compiler/issues/1383#issuecomment-6840924461)
+  preceded its candidate. Historical proposal-base Compiler/main `bf4abd3e1b5a2eb4cfe9eb5eee194d893e58762d`
+  selected Draft17.35. The exact source selection is now in Draft17.36 §3.2b.6, and the explicit
+  CURRENT_SPEC selector is required for adoption; unmerged proposals and old compiler CI are not adoption.
+  [F1384 independent bounded F1](https://github.com/wakairo/NewLang_Compiler/issues/1384#issuecomment-6841628672)
+  identified no material source-law blocker, disclosed plan-level exposure, and requested the typed H/raw
+  Storage wording clarification, which C applied before selection. No new nine-Change compiler/owned/native
+  execution or Product GO was implied by Gate E.
+- **Gate A/B — current and historical KEEP:** Draft17.35 §3.2b/DI-014 already selects one completed
+  five-original H with three independent `next/prev/child` fixed places, exactly six original setup Changes
+  and 0–5 explicit releases. **KEEP** DI-009 original R/O/Allocation/Storage/Domain, DI-010 correct D-scoped
+  mode-preserving H ref/projection, §13.5/§17.4/§26.7 true per-field Change+Reset, DI-011–013 two-H-only known
+  owner/LiveTail/custody (not five-H), DI-001/006/007 punctuation/older experimental ref and Deferred final
+  loan. **KEEP HOLD**
+  [M393 five-H fourth-`@payload` read](https://github.com/wakairo/NewLang_Compiler/issues/393#issuecomment-6138373666);
+  DI-019's later two-H scalar read does not enable it.
+  [M1381](https://github.com/wakairo/NewLang_Compiler/issues/1381#issuecomment-6840372512) one extra all-live
+  Change was core-plausible, but
+  [C747](https://github.com/wakairo/NewLang_Compiler/issues/1381#issuecomment-6840489135) deferred its
+  no-op/policy-wrong standalone variant.
+  [P1382](https://github.com/wakairo/NewLang_Compiler/issues/1382#issuecomment-6840274114) found six-bound
+  CHECK/captured-owned/C17 code; static evidence, not source-law authority or new-source execution.
+- **Gate C — INTENTIONALLY EXTEND SOURCE ONLY (when selected):** Preserve the old full six-Change source. Add one
+  **separate exact all-five-success source variant**: while all original H roots and A/D remain live, after
+  those six Changes and before any original EndRoot, source performs exactly three newly scoped genuine link
+  Changes **in order**: `B.next Some(C)→None` (D_B), `A.prev Some(C)→Some(B)` (D_A), `C.prev Some(B)→None`
+  (D_C). Real old Option Copy values are `Some(C),Some(C),Some(B)`. Afterward src's list is `[A,B]` with
+  **correct live cached tail B**, original C is separately live but not a member, dst empty. Each
+  source-issued parent/child, ProjectionId, old/current package, loan, Some occurrence Reset and original
+  R/O/A/D responsibility is unchanged; nonCopy cleanup stays exactly 0/1/2/3/4/5 by allocation world. **No new
+  core/issuer/owner law** is created, and cached-tail correctness is a library policy oracle, not a compiler
+  membership theorem. See the exact source insertion and negative matrix in Draft17.36 §3.2b.6.
+- **Gate C — DEFER / no-foreclosure:** arbitrary additional/reordered graph Changes, early C EndRoot/free,
+  append of existing dst, stale cached-link traversal/match, five-H LiveTail/adoption, general
+  owner/graph/ABI/module safe caller, public issuer, concurrency/transaction. The selected all-live sequence
+  is not atomic; there is no reentrant observer in this closed source. A live-but-nonmember cached pointer is
+  a **policy error**, whereas stale freed-root reloan/wrong D/retained occurrence ref is a **semantic safety
+  error or fail-closed precision**. Wrong original, forged receipt, missed/duplicate A/D cleanup, or copied
+  ptr as owner must reject.
+- **Cost / C751 next-hop / STOP:** Existing same per-field Change certificate *may* extend from six to exactly
+  nine with coherent before/after original-world/loan/Reset/old-result validation and C17 emission; merely
+  deleting guards is unsafe. Size/OOM/negative/old-six regression and independent review costs are **not
+  measured**; P1382's 1–3 P-day single-event guess is not a reliable nine-event forecast.
+  [C751](https://github.com/wakairo/NewLang_Compiler/issues/1383#issuecomment-6840819296) requests a credible
+  next hop: isolated original C could, **under separate future source selection**, end/free early with its own
+  original A_C/D_C, then append already allocated dst using bounded B.next/dst.prev/A.prev Changes. A
+  genuinely cached stale-C dereference negative would additionally need a separately selected link read/reloan
+  path that rejects ended C. Neither future operation is admitted by this candidate and its cost remains
+  UNKNOWN. If it requires another issuer, general graph/owner/callback mechanism, unsafe R/O/D/current/loan,
+  or disproportionate trusted proof, **DEFER/STOP C** rather than expand fixture-only bounds.
+- **VALUE-ALIGNMENT-RISK:** V1380 supplies a real historical cJSON freed-tail UAF motive, not NewLang
+  correctness or measured incremental human UB-prevention audit/re-audit closure versus well-factored C and
+  sound Rust safe facade. This all-live `[A,B]` state is a more meaningful precursor than an idempotent
+  seventh, but no actual post-free append, ordinary-safe external API, ABI requirement or author/caller burden
+  differential is proven. Product GO #624 PAUSED; H1 #268 HOLD.
+
