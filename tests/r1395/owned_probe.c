@@ -41,13 +41,22 @@ static void inspect(const NLCheckedFragment *fragment, unsigned depth,
             stats->reads++;
         }
         if (view->kind == NL_CHECKED_MATCH) {
-            if (nl_checked_captured_closure_validate(fragment, id) ==
-                NL_CHECK_OK) {
-                stats->certified++;
-            }
+            bool postfree_arm = false;
             for (size_t arm = 0; arm < view->normal_arms && arm < 16; ++arm) {
+                size_t changes_before = stats->changes;
+                size_t reads_before = stats->reads;
                 inspect(nl_checked_match_arm(fragment, id, arm), depth + 1,
                         stats);
+                if (stats->changes - changes_before >= 9 &&
+                    stats->reads - reads_before >= 2) {
+                    postfree_arm = true;
+                }
+            }
+            if (postfree_arm) {
+                if (nl_checked_captured_closure_validate(fragment, id) ==
+                    NL_CHECK_OK) {
+                    stats->certified++;
+                }
             }
         }
         if (view->kind == NL_CHECKED_REGISTERED_CALL) {
@@ -141,6 +150,10 @@ int main(int argc, char **argv)
             stats.certified);
     if (stats.bodies < 2 || stats.changes < 9 || stats.reads < 2) {
         result = failure("ARTIFACT_COVERAGE_NOT_VERIFIED", 0);
+        goto cleanup;
+    }
+    if (stats.certified < 1) {
+        result = failure("POSTFREE_CAPTURED_CLOSURE_NOT_VERIFIED", 0);
         goto cleanup;
     }
     fprintf(stderr, "R1395_PUBLIC_OWNED_SOURCE_ARTIFACT_PRESENT\n");
