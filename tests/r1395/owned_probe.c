@@ -101,16 +101,15 @@ int main(int argc, char **argv)
         goto cleanup;
     }
     const NLSyntaxTree *unit_array[] = {unit};
-    check_status = nl_semantic_register_function_unit(
-        context, unit_array, 1, &unit_diagnostic);
+    check_status = nl_semantic_register_function_unit(context, unit_array, 1,
+                                                      &unit_diagnostic);
     if (check_status != NL_CHECK_OK) {
         result = failure("UNIT_REGISTER", check_status);
         goto cleanup;
     }
     static const char call_bytes[] = "main()";
     source_status = nl_source_create(call_bytes, sizeof(call_bytes) - 1,
-                                     "r1395-readonly-main-call",
-                                     &call_source);
+                                     "r1395-readonly-main-call", &call_source);
     if (source_status != NL_SOURCE_OK) {
         result = failure("CALL_SOURCE", source_status);
         goto cleanup;
@@ -120,14 +119,14 @@ int main(int argc, char **argv)
         result = failure("CALL_PARSER", parse_status);
         goto cleanup;
     }
-    parse_status = nl_parser_parse_expression_fragment(
-        call_parser, &call_tree, &parse_diagnostic);
+    parse_status = nl_parser_parse_expression_fragment(call_parser, &call_tree,
+                                                       &parse_diagnostic);
     if (parse_status != NL_PARSE_OK) {
         result = failure("CALL_PARSE", parse_status);
         goto cleanup;
     }
-    check_status = nl_semantic_check_expression(
-        context, call_tree, &artifact, &diagnostic);
+    check_status = nl_semantic_check_expression(context, call_tree, &artifact,
+                                                &diagnostic);
     if (check_status != NL_CHECK_OK || artifact == NULL) {
         result = failure("CALL_CHECK", check_status);
         goto cleanup;
@@ -144,8 +143,7 @@ int main(int argc, char **argv)
         goto cleanup;
     }
     fprintf(stderr, "R1395_PUBLIC_OWNED_SOURCE_ARTIFACT_PRESENT\n");
-    fprintf(stderr,
-            "R1395_PUBLIC_PROOF_REDERIVATION=%s\n",
+    fprintf(stderr, "R1395_PUBLIC_PROOF_REDERIVATION=%s\n",
             stats.certified > 0 ? "OBSERVED" : "NOT_VERIFIED");
     result = 0;
 cleanup:
