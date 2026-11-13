@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_36.md
+NewLang_v0_spec_Draft17_37.md
 ```
 
 Repository policy:
@@ -13,6 +13,8 @@ Repository policy:
 - Design-thread reports, FormalProof results, compiler findings, and review-resolution documents are inputs to specification work; they do not override the canonical Draft by themselves.
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
+
+Draft17.37 (**CANONICAL ONLY WHEN CURRENT_SPEC SELECTS THIS DRAFT; [Coordination C785 independent §4.2 Gate E ACCEPT](https://github.com/wakairo/NewLang_Compiler/pull/1394#pullrequestreview-5887475888)**) — SOURCE-ONLY optional third exact H5 success-arm alternative on top of adopted old6/exact9: retain all five authentic original allocations and the nine true scoped link Changes; after all loans close, completely end/deallocate only isolated original C once with its original R/O/D/Allocation/full Storage, then freshly read actual current A.prev from live A under D_A, exhaustively Copy-match its genuine Some(ptr_B), independently certify matched B as a currently live original under its own D_B, and read B.next before the four remaining original dst/B/A/src releases. All five failure worlds, current/Option occurrence and Change+Reset/loan rules, provenance, original owner conservation and nonescaping references remain unchanged. A copied Option retains value/pointer provenance but not old field conditional-occurrence borrowing identity; a ptr/Some tag plus D_B does not issue B ownership or liveness. No append, graph membership, new issuer/owner/ABI, general traversal, safe facade or H5 payload expansion is selected. At source adoption this new source's compiler SOURCE/CHECK/owned/C17/native is **NOT_RUN / NOT_IMPLEMENTED** and requires separate bounded P evidence and risk-proportional independent review. Product GO #624 PAUSED, H1 #268 HOLD; author+ordinary-safe caller audit-locality improvement vs well-factored C remains UNMEASURED.
 
 Draft17.36 (**CANONICAL ONLY WHEN CURRENT_SPEC SELECTS THIS DRAFT; [Coordination C760 independent §4.2 Gate E ACCEPT](https://github.com/wakairo/NewLang_Compiler/pull/1385#pullrequestreview-5885095370)**) — SOURCE-ONLY bounded alternative on top of Draft17.35: keep the exact five-original H, three-fixed-link, six pre-detach Changes and 0–5 explicit cleanup; in the all-five-success arm only, before any EndRoot, one separate exactly ordered three genuine scoped Changes B.next Some(C)→None, A.prev Some(C)→Some(B), C.prev Some(B)→None produces original list [A,B] with live cached tail B while C remains an independently live original. Retain correct per-original R/O/Allocation/Domain, nonescaping loans, current and Option occurrence Change/Reset, old Copy, and the original six-event source as another selected alternative. No general list-membership proof, freed-C UAF or append source, new issuer/owner/graph authority, ABI/visibility or general callback/transaction is selected. Compiler SOURCE/CHECK/owned/C17/native for this new nine-Change source is NOT_RUN/NOT_IMPLEMENTED at selection; P implementation requires independent bounded evidence and risk-proportional safety review. Product GO #624 PAUSED, H1 #268 HOLD; author+ordinary-safe-caller audit-locality benefit versus well-factored C is UNMEASURED.
 

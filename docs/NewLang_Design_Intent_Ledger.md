@@ -415,11 +415,10 @@ ledgerのstatusが古い・不明な場合は`main`のcanonical Draftへ戻っ�
   differential is proven. Product GO #624 PAUSED; H1 #268 HOLD.
 
 
-### DI-021 — H5 post-exact9 original-C early EndRoot and live cached-tail read (Issue #1390, **PROPOSED / UNMERGED ONLY**)
+### DI-021 — H5 post-exact9 original-C early EndRoot and live cached-tail read (Issue #1390, **ADOPTED / BOUNDED WHEN CURRENT_SPEC SELECTS Draft17.37**)
 
-- **Authority/status:** **PROPOSED / UNMERGED** on anchored main `feb8398e136949b765fcfd3abf086f9ccbf145d8` /
-  `CURRENT_SPEC` →normative **Draft17.36**. Source-law candidate **Draft17.37 §3.2b.7** is **NON-NORMATIVE**
-  until independently reviewed Coordination Gate E and explicit `CURRENT_SPEC` adoption; historical
+- **Authority/status:** **ADOPTED / BOUNDED only when the reviewed main `CURRENT_SPEC` selects Draft17.37 §3.2b.7**; prior anchored main `feb8398e136949b765fcfd3abf086f9ccbf145d8` selected Draft17.36 and did NOT admit postfree use.
+  [Coordination C785 independent Gate E ACCEPT](https://github.com/wakairo/NewLang_Compiler/pull/1394#pullrequestreview-5887475888) is restricted to this exact source-only addition; historical
   [M #1390 frozen Gates A–C INITIAL](https://github.com/wakairo/NewLang_Compiler/issues/1390#issuecomment-6845196319)
   precedes candidate writing. Do not treat candidate blob, DRAFT PR or CI as source selection, or this index as
   a new public proof issuer.
@@ -433,7 +432,7 @@ ledgerのstatusが古い・不明な場合は`main`のcanonical Draftへ戻っ�
   projection concepts remain historical/Deferred.
   [M393 HOLD](https://github.com/wakairo/NewLang_Compiler/issues/393#issuecomment-6138373666) five-root fourth
   payload-u8 read is *not reopened*; DI-019's distinct two-H payload source confers no H5 privilege.
-- **Gate C — INTENTIONALLY EXTEND SOURCE ONLY, proposed:** Reuse the complete exact9 fifth-success arm, after
+- **Gate C — INTENTIONALLY EXTEND SOURCE ONLY, selected only when CURRENT_SPEC→Draft17.37:** Reuse the complete exact9 fifth-success arm, after
   all nine legitimate Changes and all temporary loans closed. First early free **isolated original C** exactly
   once with its own original `ptr_C/D_C/Allocation_C` through
   `destroy→erase_slot/full raw→finalize_domain→deallocate` . Then with src/A/B/dst still alive read **the
