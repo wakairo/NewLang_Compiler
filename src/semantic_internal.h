@@ -161,6 +161,7 @@ struct NLCheckedFragment {
     NLCapturedChange *field_changes[NL_CAPTURED_CHANGE_CAPACITY];
     size_t field_change_count;
     void (*destroy_field_changes)(NLCheckedFragment *);
+    struct NLCapturedReads *captured_reads; /* owned temporal read events */
     NLCapturedClosure *captured_closure;
     void (*destroy_captured_closure)(NLCapturedClosure *);
     /* Parent owns entry/post; a child owns its pre-pattern entry and borrows
@@ -226,6 +227,13 @@ NLCheckStatus nl_captured_change_begin(NLCheckedFragment *, NLCheckedNodeId,
                                        const NLSemanticContext *);
 NLCheckStatus nl_captured_change_end(NLCheckedFragment *,
                                      const NLSemanticContext *);
+NLCheckStatus nl_captured_read_begin(NLCheckedFragment *, NLCheckedKind,
+                                     const NLSemanticContext *);
+NLCheckStatus nl_captured_read_end(NLCheckedFragment *, NLCheckedNodeId,
+                                   const NLSemanticContext *);
+bool nl_node_unit_arm_frame(const NLSemanticContext *,
+                            const NLSemanticContext *, NLValueId,
+                            const NLCheckedNodeView *);
 NLCheckStatus nl_captured_closure_create(const NLSemanticContext *,
                                          NLCapturedClosure **);
 void nl_captured_closure_destroy(NLCapturedClosure *);

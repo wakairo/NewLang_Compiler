@@ -6,6 +6,20 @@
 
 #define INVALID NL_CHECK_ANALYSIS_PRECISION_LIMIT
 
+/* Part of the same captured closure, not an independent issuer. Each event
+ * retains the actual point-in-time world; the final arm context has already
+ * ended all originals and cannot license a past read. */
+typedef struct {
+    NLCapturedChange event;
+    NLCheckedKind kind;
+    const NLCheckedFragment *arms[2];
+    const NLSemanticContext *arm_worlds[2];
+} ReadEvent;
+struct NLCapturedReads {
+    ReadEvent events[2]; /* one read, then its exhaustive Copy match */
+    size_t count;
+};
+
 static void changes_destroy(NLCheckedFragment *f)
 {
     for (size_t i = 0; i < f->field_change_count; ++i) {
@@ -16,6 +30,49 @@ static void changes_destroy(NLCheckedFragment *f)
             free(c);
         }
     }
+    if (f->captured_reads != NULL) {
+        for (size_t i = 0; i < f->captured_reads->count; ++i) {
+            const NLCapturedChange *c = &f->captured_reads->events[i].event;
+            nl_semantic_destroy((NLSemanticContext *)c->before_origin);
+            nl_semantic_destroy((NLSemanticContext *)c->after_origin);
+        }
+        free(f->captured_reads);
+    }
+}
+NLCheckStatus nl_captured_read_begin(NLCheckedFragment *f, NLCheckedKind kind,
+                                     const NLSemanticContext *world)
+{
+    if (f->captured_reads == NULL) {
+        f->captured_reads = calloc(1, sizeof(*f->captured_reads));
+        if (f->captured_reads == NULL)
+            return NL_CHECK_OUT_OF_MEMORY;
+        f->destroy_field_changes = changes_destroy;
+    }
+    struct NLCapturedReads *reads = f->captured_reads;
+    if (reads->count == 2)
+        return INVALID;
+    ReadEvent *r = &reads->events[reads->count++];
+    r->kind = kind;
+    r->event.world = f->context;
+    NLCheckStatus s = nl_sem_clone(world, &r->event.before);
+    r->event.before_origin = r->event.before;
+    return s;
+}
+NLCheckStatus nl_captured_read_end(NLCheckedFragment *f, NLCheckedNodeId id,
+                                   const NLSemanticContext *world)
+{
+    if (f->captured_reads == NULL || f->captured_reads->count == 0)
+        return INVALID;
+    ReadEvent *r = &f->captured_reads->events[f->captured_reads->count - 1];
+    r->event.node = id;
+    if (r->kind == NL_CHECKED_MATCH)
+        for (size_t i = 0; i < 2; ++i) {
+            r->arms[i] = nl_checked_match_arm(f, id, i);
+            r->arm_worlds[i] = r->arms[i] == NULL ? NULL : r->arms[i]->context;
+        }
+    NLCheckStatus s = nl_sem_clone(world, &r->event.after);
+    r->event.after_origin = r->event.after;
+    return s;
 }
 NLCheckStatus nl_captured_change_begin(NLCheckedFragment *f,
                                        NLCheckedNodeId node,
@@ -385,8 +442,8 @@ static bool same_ref(NLReferenceFacts a, NLReferenceFacts b)
 /* Recheck the actual root acquisition separately from field projection.
  * The saved world is prior to Change, while its D loan and both refs are live.
  * No C offsets or source spelling take part in this proof. */
-static NLCheckStatus change_validate(const NLCheckedFragment *f,
-                                     const NLCapturedChange *c)
+static NLCheckStatus access_validate(const NLCheckedFragment *f,
+                                     const NLCapturedChange *c, bool read)
 {
     if (c == NULL || c->world != f->context || c->before == NULL ||
         c->after == NULL || c->before == c->after ||
@@ -401,12 +458,14 @@ static NLCheckStatus change_validate(const NLCheckedFragment *f,
         return status == NL_CHECK_OUT_OF_MEMORY ? status : INVALID;
     const NLSemanticContext *b = c->before, *a = c->after;
     const NLCheckedNodeView *v = nl_checked_node_view(f, c->node);
-    if (v == NULL || v->kind != NL_CHECKED_REPLACE || !v->field.present ||
-        !v->field.dependency_compatible || v->field.parent == 0 ||
-        v->field.parent > b->place_count || v->field.child == 0 ||
-        v->field.child > b->place_count || v->field.base == 0 ||
-        v->field.base > b->binding_count || v->field.index >= 3 ||
-        v->field.access != NL_ACCESS_WRITE)
+    if (v == NULL ||
+        v->kind != (read ? NL_CHECKED_LINK_READ : NL_CHECKED_REPLACE) ||
+        !v->field.present || !v->field.dependency_compatible ||
+        v->field.parent == 0 || v->field.parent > b->place_count ||
+        v->field.child == 0 || v->field.child > b->place_count ||
+        v->field.base == 0 || v->field.base > b->binding_count ||
+        v->field.index >= 3 ||
+        v->field.access != (read ? NL_ACCESS_READ : NL_ACCESS_WRITE))
         return INVALID;
     const NLCheckedField e = v->field;
     const NLSemanticPlaceView root = b->places[e.parent - 1];
@@ -427,11 +486,12 @@ static NLCheckStatus change_validate(const NLCheckedFragment *f,
     const NLSemanticValueView *projected = input(f, v, 0);
     const NLSemanticValueView *incoming = input(f, v, 1);
     if (projection == NULL || projection->kind != NL_CHECKED_FIELD_REF ||
-        v->argument_count != 2 || projection->argument_count != 1 ||
-        projected == NULL || incoming == NULL ||
-        input_id(f, v, 0) > b->value_count ||
-        input_id(f, v, 1) > b->value_count || projected->type == 0 ||
-        projected->type > b->type_count || input_id(f, v, 1) != e.new_value ||
+        v->argument_count != (read ? 1u : 2u) ||
+        projection->argument_count != 1 || projected == NULL ||
+        (!read && incoming == NULL) || input_id(f, v, 0) > b->value_count ||
+        (!read && input_id(f, v, 1) > b->value_count) || projected->type == 0 ||
+        projected->type > b->type_count ||
+        (!read && input_id(f, v, 1) != e.new_value) ||
         projection->field.base != e.base ||
         projection->field.nominal != e.nominal ||
         projection->field.type != e.type ||
@@ -445,22 +505,25 @@ static NLCheckStatus change_validate(const NLCheckedFragment *f,
         projection->field.old_value != e.old_value ||
         projection->field.payload_occurrence != e.payload_occurrence ||
         !projection->field.dependency_compatible ||
-        projection->field.access != NL_ACCESS_WRITE ||
+        projection->field.access != e.access ||
         !projection->has_reference_result ||
         projected->type != projection->type ||
         projected->reference.place != e.child ||
         projected->reference.incarnation != e.child_incarnation ||
         !same_ref(projected->reference, projection->reference_result) ||
-        incoming->type != e.type || v->result_count != 1 ||
-        v->results[0].value != e.old_value || v->results[0].type != e.type)
+        (!read && incoming->type != e.type) || v->result_count != 1 ||
+        (!read && v->results[0].value != e.old_value) ||
+        v->results[0].type != e.type || v->results[0].value == 0 ||
+        v->results[0].value > a->value_count)
         return INVALID;
     const NLSemanticValueView saved_ref = b->values[input_id(f, v, 0) - 1];
-    const NLSemanticValueView saved_incoming = b->values[input_id(f, v, 1) - 1];
+    const NLSemanticValueView saved_incoming =
+        read ? (NLSemanticValueView){0} : b->values[input_id(f, v, 1) - 1];
     if (saved_ref.type != projected->type ||
         !same_ref(saved_ref.reference, projected->reference) ||
-        saved_incoming.type != incoming->type ||
-        saved_incoming.variant != incoming->variant ||
-        saved_incoming.sum_payload != incoming->sum_payload)
+        (!read && (saved_incoming.type != incoming->type ||
+                   saved_incoming.variant != incoming->variant ||
+                   saved_incoming.sum_payload != incoming->sum_payload)))
         return INVALID;
     const NLValueId root_value = b->bindings[e.base - 1].view.value;
     if (root_value == 0 || root_value > b->value_count)
@@ -477,11 +540,11 @@ static NLCheckStatus change_validate(const NLCheckedFragment *f,
         return INVALID;
     const NLSemanticTypeView rt = b->types[root_ref.type - 1].view;
     if (rt.kind != NL_TYPE_REF || rt.target != root.type || rt.is_exclusive ||
-        rt.access != NL_ACCESS_WRITE || root_ref.reference_count != 0 ||
+        rt.access != e.access || root_ref.reference_count != 0 ||
         root_ref.dependencies != NL_DEPENDENCY_FREE ||
         root_ref.reference.place != e.parent ||
         root_ref.reference.incarnation != e.parent_incarnation ||
-        !root_ref.reference.writable || !root_ref.reference.readable ||
+        root_ref.reference.writable != !read || !root_ref.reference.readable ||
         root_ref.reference.provenance != NL_PROVENANCE_VALID ||
         root_ref.reference.scope == 0 ||
         root_ref.reference.scope > b->scope_count ||
@@ -521,13 +584,14 @@ static NLCheckStatus change_validate(const NLCheckedFragment *f,
         pointer_operand->value_use != NL_VALUE_COPIED ||
         stable_operand->value_use != NL_VALUE_COPIED ||
         !pointer_to(b, *pointer, e.parent, e.parent_incarnation) ||
-        nl_allocated_write_access(b, input_id(f, acquired, 0)) != NL_CHECK_OK ||
+        (!read && nl_allocated_write_access(b, input_id(f, acquired, 0)) !=
+                      NL_CHECK_OK) ||
         !domain_ref(b, *stable, root.governing_domain, false) ||
         stable->reference.scope != root_ref.reference.scope ||
         stable->dependencies != NL_DEPENDENCY_FREE ||
         argument_node(f, v, 0)->value_use != NL_VALUE_USE_NONE ||
-        argument_node(f, v, 1)->value_use != NL_VALUE_USE_NONE ||
-        nl_fixed_change_dependencies(b, e.child, 0) != NL_CHECK_OK)
+        (!read && argument_node(f, v, 1)->value_use != NL_VALUE_USE_NONE) ||
+        (!read && nl_fixed_change_dependencies(b, e.child, 0) != NL_CHECK_OK))
         return INVALID;
     const NLCheckedNodeView *loan = NULL;
     for (size_t i = 1; i < c->node; ++i) {
@@ -554,15 +618,26 @@ static NLCheckStatus change_validate(const NLCheckedFragment *f,
         return INVALID;
     NLSemanticContext *expected = NULL;
     status = nl_sem_clone(b, &expected);
-    if (status == NL_CHECK_OK)
+    if (status == NL_CHECK_OK && read) {
+        NLValueId copied = 0;
+        status = nl_sem_copy_value(expected, e.old_value, &copied);
+        if (status == NL_CHECK_OK) {
+            nl_sem_end_value(expected, input_id(f, v, 0));
+            if (copied != v->results[0].value ||
+                v->value_use != NL_VALUE_COPIED || e.new_value != 0 ||
+                !nl_packet_same_entry(expected, a))
+                status = INVALID;
+        }
+    } else if (status == NL_CHECK_OK) {
         status = nl_fixed_change(expected, e.child, e.new_value, false);
-    if (status == NL_CHECK_OK &&
-        (!nl_packet_same_entry(expected, a) ||
-         a->places[e.parent - 1].current_fact != e.parent_post_fact ||
-         a->places[e.child - 1].current_fact != e.child_post_fact ||
-         a->places[e.child - 1].payload_occurrence !=
-             e.post_payload_occurrence))
-        status = INVALID;
+        if (status == NL_CHECK_OK &&
+            (!nl_packet_same_entry(expected, a) ||
+             a->places[e.parent - 1].current_fact != e.parent_post_fact ||
+             a->places[e.child - 1].current_fact != e.child_post_fact ||
+             a->places[e.child - 1].payload_occurrence !=
+                 e.post_payload_occurrence))
+            status = INVALID;
+    }
     nl_semantic_destroy(expected);
     return status == NL_CHECK_OK || status == NL_CHECK_OUT_OF_MEMORY ? status
                                                                      : INVALID;
@@ -606,6 +681,283 @@ static bool unlink_step(const NLSemanticContext *world, const Release *roots,
            unlink_option(world, field.new_value, roots, source[step][3]);
 }
 
+/* Temporal read worlds are checked against the SAME lifecycle ledger as the
+ * nine Changes. Pointer bits do not create an original or a Domain owner. */
+static bool read_phase(const NLSemanticContext *b, const Release *roots)
+{
+    if (b->region_count != 5 || b->domain_count != 5)
+        return false;
+    for (size_t r = 0; r < 5; ++r) {
+        const Release own = roots[r];
+        const NLCapturedOriginal o = own.original;
+        const bool ended = r == 3;
+        if (!own.initialized || own.ended != ended || own.erased != ended ||
+            own.finalized != ended || own.freed != ended || o.root == 0 ||
+            o.root > b->place_count || o.domain == 0 ||
+            o.domain > b->domain_count || o.extent.region == 0 ||
+            o.extent.region > b->region_count || o.allocation_value == 0 ||
+            o.allocation_value > b->value_count || o.domain_value == 0 ||
+            o.domain_value > b->value_count)
+            return false;
+        const NLSemanticPlaceView p = b->places[o.root - 1];
+        if (p.live == ended || p.incarnation != o.incarnation ||
+            !p.independent_root || p.governing_domain != o.domain ||
+            !extent_same(p.placement, o.extent) ||
+            b->domains[o.domain - 1].live == ended ||
+            b->domains[o.domain - 1].value != o.domain_value ||
+            b->regions[o.extent.region - 1].view.live == ended ||
+            b->values[o.allocation_value - 1].allocation_region !=
+                o.extent.region)
+            return false;
+        size_t allocations = 0, domains = 0;
+        for (size_t j = 0; j < b->binding_count; ++j) {
+            const NLSemanticBindingView binding = b->bindings[j].view;
+            if (binding.availability != NL_AVAILABLE)
+                continue;
+            if (binding.value == o.allocation_value ||
+                binding.value == o.domain_value) {
+                const NLSemanticValueView package =
+                    b->values[binding.value - 1];
+                if (package.carrier != NL_CARRIER_PLACE ||
+                    package.owner_place != binding.place)
+                    return false;
+                allocations += binding.value == o.allocation_value;
+                domains += binding.value == o.domain_value;
+            }
+        }
+        if (allocations != (ended ? 0u : 1u) || domains != (ended ? 0u : 1u))
+            return false;
+        if (!ended)
+            for (size_t j = 0; j < 3; ++j)
+                if (p.fixed_fields[j] == 0 ||
+                    p.fixed_fields[j] > b->place_count ||
+                    !b->places[p.fixed_fields[j] - 1].live ||
+                    b->places[p.fixed_fields[j] - 1].current_value !=
+                        own.fields[j])
+                    return false;
+    }
+    return true;
+}
+static const ReadEvent *read_event(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id)
+{
+    if (f->captured_reads == NULL || f->captured_reads->count > 2)
+        return NULL;
+    for (size_t i = 0; i < f->captured_reads->count; ++i)
+        if (f->captured_reads->events[i].event.node == id)
+            return &f->captured_reads->events[i];
+    return NULL;
+}
+static bool read_ref(const NLCheckedFragment *f, NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *v = nl_checked_node_view(f, id);
+    if (f->captured_reads == NULL || f->captured_reads->count > 2)
+        return false;
+    for (size_t j = 0; j < f->captured_reads->count; ++j) {
+        const ReadEvent *r = &f->captured_reads->events[j];
+        const NLCapturedChange *c = &r->event;
+        const NLCheckedNodeView *n = nl_checked_node_view(f, c->node);
+        if (r->kind != NL_CHECKED_LINK_READ || n == NULL || c->before == NULL ||
+            c->before != c->before_origin)
+            continue;
+        if (v->kind == NL_CHECKED_FIELD_REF && n->first_argument == id)
+            return true;
+        if (v->kind == NL_CHECKED_REF_FROM_PTR && v->result_count == 1 &&
+            n->field.base != 0 && n->field.base <= c->before->binding_count &&
+            c->before->bindings[n->field.base - 1].view.value ==
+                v->results[0].value)
+            return true;
+    }
+    return false;
+}
+static NLCheckStatus read_access(const NLCheckedFragment *f, const ReadEvent *r,
+                                 const Release *roots, size_t owner,
+                                 size_t field)
+{
+    if (r == NULL || r->kind != NL_CHECKED_LINK_READ)
+        return INVALID;
+    NLCheckStatus s = access_validate(f, &r->event, true);
+    if (s != NL_CHECK_OK)
+        return s;
+    const NLCheckedNodeView *n = nl_checked_node_view(f, r->event.node);
+    if (!read_phase(r->event.before, roots) ||
+        !read_phase(r->event.after, roots) ||
+        n->field.parent != roots[owner].original.root ||
+        n->field.index != field ||
+        n->field.old_value != roots[owner].fields[field])
+        return INVALID;
+    return NL_CHECK_OK;
+}
+/* The actual read must be the lexical loan's normal result and then the
+ * binding subsequently copied by match. An unrelated equal-valued local is
+ * not a source def-use edge. */
+static NLSymbolId read_binding(const NLCheckedFragment *f, NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *read = nl_checked_node_view(f, id);
+    for (size_t i = 1; i <= f->count; ++i) {
+        const NLCheckedNodeView *b = nl_checked_node_view(f, i);
+        if (b->kind != NL_CHECKED_BINDING)
+            continue;
+        const NLCheckedNodeView *loan = nl_checked_node_view(f, b->initializer);
+        const NLCheckedNodeView *receiver = argument_node(f, b, 0);
+        const NLCheckedNodeView *body =
+            loan == NULL ? NULL : nl_checked_node_view(f, loan->initializer);
+        if (loan != NULL && loan->kind == NL_CHECKED_LOAN_HEADER &&
+            loan->loan.normal_result_forwarded && loan->result_count == 1 &&
+            loan->results[0].value == read->results[0].value && body != NULL &&
+            body->kind == NL_CHECKED_BLOCK && body->tail == id &&
+            receiver != NULL && receiver->kind == NL_CHECKED_RECEIVER)
+            return receiver->symbol;
+    }
+    return 0;
+}
+static NLCheckStatus read_match(const NLCheckedFragment *f, const ReadEvent *r,
+                                const Release *roots,
+                                NLCheckedNodeId first_read)
+{
+    const NLCapturedChange *c = &r->event;
+    const NLCheckedNodeView *m = nl_checked_node_view(f, c->node);
+    if (r->kind != NL_CHECKED_MATCH || c->world != f->context ||
+        c->before == NULL || c->after == NULL || c->before == c->after ||
+        c->before != c->before_origin || c->after != c->after_origin ||
+        nl_sem_validate(c->before) != NL_CHECK_OK ||
+        nl_sem_validate(c->after) != NL_CHECK_OK ||
+        !read_phase(c->before, roots) || !read_phase(c->after, roots) ||
+        m == NULL || m->kind != NL_CHECKED_MATCH || m->normal_arms != 2 ||
+        m->item_count != 2 || !m->normal_frame_unchanged || m->terminates ||
+        m->type != 1 || m->result_count != 0 ||
+        m->match_binding_prefix != c->before->binding_count)
+        return INVALID;
+    const NLCheckedNodeView *init = nl_checked_node_view(f, m->initializer);
+    const NLSymbolId binding = read_binding(f, first_read);
+    if (init == NULL || init->kind != NL_CHECKED_IDENTIFIER ||
+        init->result_count != 1 || init->value_use != NL_VALUE_COPIED ||
+        binding == 0 || init->symbol != binding ||
+        binding > c->before->binding_count ||
+        c->before->bindings[binding - 1].view.availability != NL_AVAILABLE ||
+        c->before->bindings[binding - 1].view.value !=
+            nl_checked_node_view(f, first_read)->results[0].value)
+        return INVALID;
+    NLSemanticContext *entry = NULL;
+    NLCheckStatus s = nl_sem_clone(c->before, &entry);
+    NLValueId input = 0;
+    if (s == NL_CHECK_OK)
+        s = nl_sem_copy_value(entry, entry->bindings[binding - 1].view.value,
+                              &input);
+    if (s == NL_CHECK_OK && (input != init->results[0].value ||
+                             !unlink_option(entry, input, roots, 2)))
+        s = INVALID;
+    unsigned variants = 0;
+    for (size_t a = 0; s == NL_CHECK_OK && a < 2; ++a) {
+        const NLCheckedFragment *arm = nl_checked_match_arm(f, c->node, a);
+        const NLCheckedNodeView *root =
+            arm == NULL ? NULL : nl_checked_node_view(arm, arm->root);
+        if (arm == NULL || arm != r->arms[a] ||
+            arm->context != r->arm_worlds[a] || arm->source != f->source ||
+            root == NULL || root->kind != NL_CHECKED_MATCH_ARM ||
+            root->variant < 1 || root->variant > 2 ||
+            (variants & (1u << root->variant)) ||
+            arm->field_change_count != 0 || arm->context == NULL ||
+            arm->context->binding_count < entry->binding_count ||
+            arm->context->place_count < entry->place_count ||
+            arm->context->value_count < entry->value_count ||
+            arm->context->scope_count < entry->scope_count ||
+            arm->context->occurrence_count < entry->occurrence_count ||
+            !nl_node_unit_arm_frame(entry, arm->context, input, root)) {
+            s = INVALID;
+            break;
+        }
+        variants |= 1u << root->variant;
+        if (arm->context == NULL ||
+            arm->context->binding_count < entry->binding_count ||
+            arm->context->place_count < entry->place_count ||
+            arm->context->value_count < entry->value_count ||
+            arm->context->scope_count < entry->scope_count ||
+            arm->context->occurrence_count < entry->occurrence_count ||
+            nl_sem_validate(arm->context) != NL_CHECK_OK) {
+            s = INVALID;
+            break;
+        }
+        s = nl_raw_validate(arm->context);
+        if (s != NL_CHECK_OK) {
+            s = s == NL_CHECK_OUT_OF_MEMORY ? s : INVALID;
+            break;
+        }
+        const bool some = root->variant == 2;
+        if ((!some && (root->symbol != 0 || arm->captured_reads != NULL)) ||
+            (some && (root->symbol == 0 || arm->captured_reads == NULL ||
+                      arm->captured_reads->count != 1))) {
+            s = INVALID;
+            break;
+        }
+        size_t read_count = 0;
+        for (size_t i = 1; s == NL_CHECK_OK && i <= arm->count; ++i) {
+            const NLCheckedNodeView *v = nl_checked_node_view(arm, i);
+            switch (v->kind) {
+            case NL_CHECKED_LINK_READ: {
+                ++read_count;
+                const ReadEvent *event = read_event(arm, i);
+                s = read_access(arm, event, roots, 2, 0);
+                if (s != NL_CHECK_OK)
+                    break;
+                const NLSemanticContext *b = event->event.before;
+                if (root->symbol > b->binding_count ||
+                    b->bindings[root->symbol - 1].view.value !=
+                        entry->values[input - 1].sum_payload ||
+                    read_binding(arm, i) == 0)
+                    s = INVALID;
+                const NLValueId base =
+                    b->bindings[v->field.base - 1].view.value;
+                const NLCheckedNodeView *acquired = NULL;
+                for (size_t k = 1; k < i; ++k) {
+                    const NLCheckedNodeView *n = nl_checked_node_view(arm, k);
+                    if (n->kind == NL_CHECKED_REF_FROM_PTR &&
+                        n->result_count == 1 && n->results[0].value == base)
+                        acquired = n;
+                }
+                if (acquired == NULL ||
+                    argument_node(arm, acquired, 0) == NULL ||
+                    argument_node(arm, acquired, 0)->symbol != root->symbol)
+                    s = INVALID;
+                break;
+            }
+            case NL_CHECKED_REF_FROM_PTR:
+            case NL_CHECKED_FIELD_REF:
+                if (!read_ref(arm, i))
+                    s = INVALID;
+                break;
+            case NL_CHECKED_LOAN_HEADER:
+                if (v->loan.scope == 0 ||
+                    v->loan.scope > arm->context->scope_count ||
+                    arm->context->scopes[v->loan.scope - 1].active ||
+                    !v->loan.body_nonescape_proved)
+                    s = INVALID;
+                break;
+            case NL_CHECKED_UNIT:
+            case NL_CHECKED_STATEMENT:
+            case NL_CHECKED_BLOCK:
+            case NL_CHECKED_IDENTIFIER:
+            case NL_CHECKED_BINDING:
+            case NL_CHECKED_RECEIVER:
+            case NL_CHECKED_MATCH_ARM:
+                break;
+            default:
+                s = INVALID;
+                break;
+            }
+        }
+        if (s == NL_CHECK_OK && read_count != (some ? 1u : 0u))
+            s = INVALID;
+    }
+    if (s == NL_CHECK_OK) {
+        nl_sem_end_value(entry, input);
+        if (variants != 6 || !nl_packet_same_entry(entry, c->after))
+            s = INVALID;
+    }
+    nl_semantic_destroy(entry);
+    return s;
+}
+
 static NLCheckStatus trace(const NLCheckedFragment *f,
                            const NLCapturedClosure *certificate, size_t variant,
                            size_t *histogram, size_t depth)
@@ -629,7 +981,8 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                 sizeof(releases[r].fields));
     }
     bool nested = false;
-    size_t changes = 0;
+    size_t changes = 0, reads = 0;
+    NLCheckedNodeId first_read = 0;
     for (size_t i = 1; i <= f->count; ++i) {
         const NLCheckedNodeView *v = nl_checked_node_view(f, i);
         if (v->terminates || v->kind == NL_CHECKED_TAKE ||
@@ -643,7 +996,7 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                 f->field_changes[changes]->node != i)
                 return INVALID;
             const NLCapturedChange *change = f->field_changes[changes++];
-            NLCheckStatus s = change_validate(f, change);
+            NLCheckStatus s = access_validate(f, change, false);
             if (s != NL_CHECK_OK)
                 return s;
             const NLSemanticContext *b = change->before;
@@ -734,8 +1087,27 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                     proved |= change->before->bindings[write->field.base - 1]
                                   .view.value == v->results[0].value;
             }
-            if (!proved)
+            if (!proved && !read_ref(f, i))
                 return INVALID;
+        }
+        if (v->kind == NL_CHECKED_LINK_READ ||
+            (v->kind == NL_CHECKED_MATCH && read_event(f, i) != NULL)) {
+            if (nested || count != 5 || changes != NL_CAPTURED_UNLINK_CHANGES ||
+                f->field_change_count != NL_CAPTURED_UNLINK_CHANGES ||
+                f->captured_reads == NULL || f->captured_reads->count != 2 ||
+                reads >= 2 || f->captured_reads->events[reads].event.node != i)
+                return INVALID;
+            const ReadEvent *event = &f->captured_reads->events[reads];
+            NLCheckStatus s;
+            if (reads++ == 0) {
+                s = read_access(f, event, releases, 1, 1);
+                first_read = i;
+            } else {
+                s = read_match(f, event, releases, first_read);
+            }
+            if (s != NL_CHECK_OK)
+                return s;
+            continue;
         }
         if (v->kind == NL_CHECKED_LOAN_HEADER &&
             (!v->loan.body_nonescape_proved || v->loan.scope == 0 ||
@@ -949,7 +1321,8 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
         }
     }
     if (grants != 1 || count != certificate->view.count + (variant == 2) ||
-        changes != f->field_change_count)
+        changes != f->field_change_count ||
+        reads != (f->captured_reads == NULL ? 0 : f->captured_reads->count))
         return INVALID;
     if (nested)
         return NL_CHECK_OK;

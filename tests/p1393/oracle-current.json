@@ -1,0 +1,31 @@
+{
+  "authority": "C792 / adopted main7c1eab / Draft17.37 3.2b.7",
+  "source_origin": "P1391 v1 + C786 v2 immutable originals",
+  "files": {
+    "N1-saved-old-C-pointer-v2.nl": {
+      "bytes": 17685,
+      "SHA256": "d07b8f532c590f8f9ef0850a6cbd4c3cf7aa2b5994bb53d384be4a15812f65ee"
+    },
+    "N2-wrong-tail-domain-v2.nl": {
+      "bytes": 17686,
+      "SHA256": "54ff7207e93eff6dd330798b1ec7ccb8d4633152e408b75864825f7a498a6245"
+    },
+    "N3-missing-survivor-B-release-v2.nl": {
+      "bytes": 17722,
+      "SHA256": "873a8cec852ac81de363d1b076f7963b51816f9804a5923cd63db7a788fdc352"
+    },
+    "P1-C-free-current-tail-read-v2.nl": {
+      "bytes": 17686,
+      "SHA256": "105fc934021586050ad875d05f251c65a30de70c34f330913bb1738022be11b4"
+    }
+  },
+  "Stage_A": {
+    "P1": "ordinary CHECK0; authentic main call body/custody; captured closure validator0; nine Change history; 0..5 release histogram each1; post-free A.prev current Some(actual B) -> real B/D_B next None",
+    "N1": "exit3 P3-STALE-POINTER",
+    "N2": "exit3 ALLOCATED-DOMAIN-MISMATCH",
+    "N3": "exit3 P5-SCOPE-OBLIGATION"
+  },
+  "Stage_B": "NOT_RUN until genuine Stage A",
+  "OOM": "real injection must report OOM, roll back/no-clobber, clean destruction and healthy retry; no oracle weakening",
+  "legacy": "old6/exact9 source/oracle unchanged; raw C byte identity required"
+}

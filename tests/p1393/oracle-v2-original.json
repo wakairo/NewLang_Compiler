@@ -1,0 +1,154 @@
+{
+  "kind": "P1393/C786 provisional oracle-v2: lexical-block-only successor; no runtime evidence",
+  "authority": {
+    "main": "feb8398e136949b765fcfd3abf086f9ccbf145d8",
+    "tree": "5cc5428eec6e92d54a081e86e3dae7049bd7a6da",
+    "canonical": "Draft17.36; earlyfree+continuation NOT_SELECTED",
+    "C_release": "C786 TEXT-PREPARATION ONLY; Draft17.37 actual main selection AND separate explicit C release required for implementation"
+  },
+  "source_base": {
+    "U_SHA256": "63c53ae9c67653071c468f160232b24dab9f6efb1afa6386bf6357d224978f7f",
+    "P1387_repo_HEAD": "0bc912d1e57b3c1a3b13173136ab35bd1bcf577e",
+    "all_tree_bytes_equal_adopted_main": true,
+    "v1_oracle_SHA256": "340a97993bc3971cadb9d4da5bf5390e17cab4ed06ab4dd2db3e2b8f96152c69",
+    "v1_text_freeze_SHA256": "01083c7472ec78569c59aa779f460ea3df7f26a0a6d3f0500ede4412685a1d3e"
+  },
+  "cases": {
+    "P1-C-free-current-tail-read-v2.nl": {
+      "bytes": 17686,
+      "SHA256": "105fc934021586050ad875d05f251c65a30de70c34f330913bb1738022be11b4",
+      "source_eligibility_now": "UNSELECTED in Draft17.36; provisional only",
+      "observed": {
+        "parser": "NOT_RUN",
+        "CHECK_definition": "NOT_RUN",
+        "CHECK_actual": "NOT_RUN",
+        "owned": "NOT_RUN",
+        "C17": "NOT_RUN",
+        "native": "NOT_RUN",
+        "OOM": "NOT_RUN"
+      },
+      "expected_if_later_selected": {
+        "cache_read": "actual current A.prev, copied Option Some(ptr_B) after C full release",
+        "tail_ref": "actual Some binder p1391_tail_ptr with original D_B in fresh nonescaping loan; never substitute ptr_B",
+        "B_next_read": "actual current None from event7; Copy result in Some arm, UNIT join",
+        "old_values_retained": [
+          "Some(C) from unlink B.next",
+          "Some(C) from unlink A.prev",
+          "Some(B) from unlink C.prev"
+        ],
+        "after_C_release": "C R/field lifetimes ended; Allocation_C+Raw_C consumed; Domain_C finalized; src/A/B/dst original identities and rights still live",
+        "success_cleanup_order": [
+          "C",
+          "dst",
+          "B",
+          "A",
+          "src"
+        ],
+        "failure_worlds": "first allocation None1..5 unchanged:0,1,2,3,4 releases; no9 writes or continuation; success5 releases",
+        "expected_raw": "unit/exit0 only; no native value claim without passive read observation",
+        "current_main_static_barrier": "fresh read-only ref/field-ref not authenticated by existing Change-only captured trace; Option-MATCH and C17 LINK_READ also unsupported; exact first diagnostic NOT_OBSERVED"
+      },
+      "parent_v1": {
+        "file": "P1-C-free-current-tail-read.nl",
+        "bytes": 17682,
+        "SHA256": "a243312bec43dd81d55ffaf0ab4d5c94632f0364129884d5c3aa8113339802b2"
+      },
+      "grammar_prediction": "The identified bare-arm defect is corrected textually, NOT parser PASS or full source eligibility"
+    },
+    "N1-saved-old-C-pointer-v2.nl": {
+      "bytes": 17685,
+      "SHA256": "d07b8f532c590f8f9ef0850a6cbd4c3cf7aa2b5994bb53d384be4a15812f65ee",
+      "source_eligibility_now": "UNSELECTED in Draft17.36; provisional only",
+      "observed": {
+        "parser": "NOT_RUN",
+        "CHECK_definition": "NOT_RUN",
+        "CHECK_actual": "NOT_RUN",
+        "owned": "NOT_RUN",
+        "C17": "NOT_RUN",
+        "native": "NOT_RUN",
+        "OOM": "NOT_RUN"
+      },
+      "principal": "stale saved event8 old Some(C) cannot be reloaned after C EndRoot/full release",
+      "secondary": "D_B also cannot grant access to C; reference_live is checked before D matching. Domain_C is already consumed, so no live D_C loan is fabricated.",
+      "expected_if_later_selected": "semantic liveness refusal, likely P3-STALE-POINTER if this site is reached; currently profile precision may mask it",
+      "parent_v1": {
+        "file": "N1-saved-old-C-pointer.nl",
+        "bytes": 17681,
+        "SHA256": "8fd3d46e4a8c80a7f311a729f9416908a0e80b96e101bc6fe1459b44e1f6265e"
+      },
+      "grammar_prediction": "The identified bare-arm defect is corrected textually, NOT parser PASS or full source eligibility"
+    },
+    "N2-wrong-tail-domain-v2.nl": {
+      "bytes": 17686,
+      "SHA256": "54ff7207e93eff6dd330798b1ec7ccb8d4633152e408b75864825f7a498a6245",
+      "source_eligibility_now": "UNSELECTED in Draft17.36; provisional only",
+      "observed": {
+        "parser": "NOT_RUN",
+        "CHECK_definition": "NOT_RUN",
+        "CHECK_actual": "NOT_RUN",
+        "owned": "NOT_RUN",
+        "C17": "NOT_RUN",
+        "native": "NOT_RUN",
+        "OOM": "NOT_RUN"
+      },
+      "principal": "live ptr_B from actual current A.prev under D_A instead of D_B",
+      "expected_if_later_selected": "semantic wrong Domain refusal, likely ALLOCATED-DOMAIN-MISMATCH if reached; not source-profile safety evidence",
+      "parent_v1": {
+        "file": "N2-wrong-tail-domain.nl",
+        "bytes": 17682,
+        "SHA256": "f3e3a4e8661cf6d44ad534f6394120dbcf6b66596dcc1cc1926c54bdbf28f3a4"
+      },
+      "grammar_prediction": "The identified bare-arm defect is corrected textually, NOT parser PASS or full source eligibility"
+    },
+    "N3-missing-survivor-B-release-v2.nl": {
+      "bytes": 17722,
+      "SHA256": "873a8cec852ac81de363d1b076f7963b51816f9804a5923cd63db7a788fdc352",
+      "source_eligibility_now": "UNSELECTED in Draft17.36; provisional only",
+      "observed": {
+        "parser": "NOT_RUN",
+        "CHECK_definition": "NOT_RUN",
+        "CHECK_actual": "NOT_RUN",
+        "owned": "NOT_RUN",
+        "C17": "NOT_RUN",
+        "native": "NOT_RUN",
+        "OOM": "NOT_RUN"
+      },
+      "principal": "H5 success normal return retains original Allocation_B and full_B despite B root/domain end",
+      "expected_if_later_selected": "responsibility/closure refusal; no accepted leak or native execution. Earlier profile refusal may mask the obligation.",
+      "parent_v1": {
+        "file": "N3-missing-survivor-B-release.nl",
+        "bytes": 17718,
+        "SHA256": "465a3e57ddafe78ba6c8d792f1ed64ee42e0403635c91b6ab5f7676f2ef15262"
+      },
+      "grammar_prediction": "The identified bare-arm defect is corrected textually, NOT parser PASS or full source eligibility"
+    }
+  },
+  "observation_plan_only": {
+    "phase_checkpoint": "after C deallocate and before cached read: C ended/freed, survivors src/A/B/dst live; witness actual read A.prev -> Some B -> scoped B ref -> B.next None",
+    "physical": "no sixth allocation/reuse; root B address comes from loaded current Option payload, not name/host guess",
+    "observer": "never read C fields or load/compare stale pointer packages after C EndRoot/free. Capture C address as uintptr_t while live; afterwards track integer ID/counters only. Old LIFO observer unchanged; future distinct phase-aware observer",
+    "failures": "guest platform malloc failure1..5 distinct from host CHECK/validator/emitter OOM",
+    "OOM": "future actual source-issued read/custody snapshots+normal arm+consumer allocation failures; status/no artifact/out length/context no-clobber/retry. NOT_RUN"
+  },
+  "execution_counters": {
+    "compiler": 0,
+    "parser": 0,
+    "owned": 0,
+    "C17": 0,
+    "native": 0,
+    "Lean": 0,
+    "model": 0,
+    "build": 0,
+    "configure": 0,
+    "branch": 0,
+    "commit": 0,
+    "push": 0,
+    "PR": 0,
+    "Actions": 0,
+    "CI": 0
+  },
+  "stop": "source selection and execution/implementation require separate M/C authority; new owner/issuer/public ABI/second proof/generic graph solver or unsafe suspicion STOP C",
+  "C_information_exposure": "C786 supplied the bare-arm grammar defect attributed to independent F1392; no F/R original materials read",
+  "syntax_change": "canonical Draft17.36 section26.9 requires sum_pattern => lexical_block; replace one bare None arm by { unit } per file; block has no bindings/loans/effects",
+  "semantic_predictions": "Same intended values/owners/lifetimes/negative mutations as v1. Original v1 grammar and NOT_RUN history unchanged. First real v2 refusal remains UNKNOWN until separately authorized Gate0."
+}
