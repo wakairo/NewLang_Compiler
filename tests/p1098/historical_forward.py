@@ -11,7 +11,18 @@ FIELDS = (b'    struct NLLinearBreakProof *linear_breaks;\n'
 PRECEDING = (b'    struct NLIfFieldProof *if_fields;\n'
              b'    void (*destroy_if_fields)(NLCheckedFragment *);\n')
 FOLLOWING = b'    struct NLCopyBodyProof *copy_body;\n'
+CAPTURED_INCLUDE = b'#include "captured_trace_internal.h"\n'
+CAPTURED_HEADER = b'#define NEWLANG_SEMANTIC_INTERNAL_H\n\n' + CAPTURED_INCLUDE
+CAPTURED_FIELD = b'    NLCapturedChange *field_changes[NL_CAPTURED_CHANGE_CAPACITY];\n'
+CAPTURED_STORAGE = CAPTURED_FIELD + b'    size_t field_change_count;\n'
 def project(data):
+    # P1387 changes only private storage spelling here. This projection is
+    # confined to old checksum fixtures, never CHECK or the live compiler.
+    # Keep their original full-header digest and every old corruption gate.
+    assert data.count(CAPTURED_INCLUDE) == data.count(CAPTURED_HEADER) == 1
+    assert data.count(CAPTURED_FIELD) == data.count(CAPTURED_STORAGE) == 1
+    data = data.replace(CAPTURED_HEADER, CAPTURED_HEADER.replace(CAPTURED_INCLUDE, b''), 1)
+    data = data.replace(CAPTURED_FIELD, b'    NLCapturedChange *field_changes[6];\n', 1)
     assert data.count(FIELDS) == 1
     assert data.count(PRECEDING + FIELDS + FOLLOWING) == 1
     return data.replace(PRECEDING + FIELDS + FOLLOWING, PRECEDING + FOLLOWING, 1)
@@ -29,6 +40,13 @@ def main():
         'misplaced': header.replace(FIELDS, b'', 1) + FIELDS,
         'wrong_type': header.replace(b'NLLinearBreakProof *linear_breaks', b'NLForeignProof *linear_breaks', 1),
         'wrong_destructor': header.replace(b'destroy_linear_breaks)', b'destroy_foreign)', 1),
+        'missing_capture_include': header.replace(CAPTURED_INCLUDE, b'', 1),
+        'duplicate_capture_include': header + CAPTURED_INCLUDE,
+        'misplaced_capture_include': header.replace(CAPTURED_INCLUDE, b'', 1) + CAPTURED_INCLUDE,
+        'missing_capture_storage': header.replace(CAPTURED_FIELD, b'', 1),
+        'duplicate_capture_storage': header + CAPTURED_FIELD,
+        'misplaced_capture_storage': header.replace(CAPTURED_FIELD, b'', 1) + CAPTURED_FIELD,
+        'wrong_capture_capacity': header.replace(CAPTURED_FIELD, CAPTURED_FIELD.replace(b'NL_CAPTURED_CHANGE_CAPACITY', b'8'), 1),
     }.items():
         try:
             project(bad)
