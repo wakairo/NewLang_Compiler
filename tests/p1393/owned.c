@@ -118,10 +118,13 @@ static NLCheckedFragment *leaf_of(const NLCheckedFragment *top)
         f = nl_checked_match_arm(f, match(f), 1);
     return (NLCheckedFragment *)f;
 }
-static bool denied(const NLCheckedFragment *entry)
+static bool denied(const NLCheckedFragment *entry,
+                   const NLCheckedFragment *issued_top)
 {
-    const NLCheckedFragment *top =
-        nl_checked_call_body(entry, nl_checked_root(entry));
+    /* Capture this borrowed identity BEFORE poisoning display views. Current
+     * public getters may correctly refuse a foreign graph; both the original
+     * proof and the real entry-call consumer must independently reject it. */
+    const NLCheckedFragment *top = issued_top;
     CHECK(top);
     CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
           NL_CHECK_ANALYSIS_PRECISION_LIMIT);
@@ -198,29 +201,29 @@ static bool temporal(Program *p, bool attack)
      * the required post-free read state. Owned origin slots remain intact. */
     NLSemanticContext *saved = first->event.before;
     first->event.before = (NLSemanticContext *)last.after;
-    CHECK(denied(p->entry));
+    CHECK(denied(p->entry, top));
     first->event.before = saved;
     first->event.before = (NLSemanticContext *)leaf->context;
-    CHECK(denied(p->entry));
+    CHECK(denied(p->entry, top));
     first->event.before = saved;
     NLCheckedNodeView *read = &leaf->nodes[first->event.node - 1];
     NLCheckedField field = read->field;
     ++read->field.child_fact;
-    CHECK(denied(p->entry));
+    CHECK(denied(p->entry, top));
     read->field = field;
     read->field.index = 0;
-    CHECK(denied(p->entry));
+    CHECK(denied(p->entry, top));
     read->field = field;
     NLSemanticValueView *copy =
         &first->event.after->values[read->results[0].value - 1];
     size_t variant = copy->variant;
     copy->variant = 1;
-    CHECK(denied(p->entry));
+    CHECK(denied(p->entry, top));
     copy->variant = variant;
     NLSemanticPlaceView *root = &first->event.before->places[field.parent - 1];
     NLDomainId d = root->governing_domain;
     root->governing_domain = ancestors.originals[2].domain;
-    CHECK(denied(p->entry));
+    CHECK(denied(p->entry, top));
     root->governing_domain = d;
     NLSemanticScopeView *scope = NULL;
     for (size_t i = 0; i < first->event.before->scope_count; ++i)
@@ -228,11 +231,11 @@ static bool temporal(Program *p, bool attack)
             scope = &first->event.before->scopes[i];
     CHECK(scope);
     scope->active = false;
-    CHECK(denied(p->entry));
+    CHECK(denied(p->entry, top));
     scope->active = true;
     size_t count = leaf->captured_reads->count;
     leaf->captured_reads->count = 1;
-    CHECK(denied(p->entry));
+    CHECK(denied(p->entry, top));
     leaf->captured_reads->count = count;
     ReadEvent *sr = &((NLCheckedFragment *)some)->captured_reads->events[0];
     const NLCheckedNodeView *sread = nl_checked_node_view(some, sr->event.node);
@@ -244,7 +247,7 @@ static bool temporal(Program *p, bool attack)
                 &((NLCheckedFragment *)some)->nodes[arg - 1];
             NLSymbolId sym = operand->symbol;
             operand->symbol = 0;
-            CHECK(denied(p->entry));
+            CHECK(denied(p->entry, top));
             operand->symbol = sym;
         }
     }
@@ -278,7 +281,7 @@ static bool foreign_destroy(const char *path)
                     }
             }
         }
-    CHECK(denied(a.entry));
+    CHECK(denied(a.entry, at));
     destroy(&a); /* deliberately unrestored foreign display view */
     CHECK(nl_h_custody_validate(b.entry) &&
           nl_checked_captured_closure_validate(bt, match(bt)) == NL_CHECK_OK);
