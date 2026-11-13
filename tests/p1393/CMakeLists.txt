@@ -11,3 +11,4 @@ add_test(NAME p1393_source.integration COMMAND "${Python3_EXECUTABLE}"
 add_test(NAME p1393_native.integration COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1393/native.py" "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1393_probe>"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1393" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+add_test(NAME p1393_current_read_auth.unit COMMAND p1393_owned auth "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1393/sources/P1-C-free-current-tail-read-v2.nl")

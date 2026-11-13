@@ -37,3 +37,13 @@ Supported scope is this one selected finite continuation after exact9.
 Additional hops, arbitrary early original destruction, five-H payload reads,
 owner recovery, append, general graph/CFG and safe public facade are not
 provided. Capability success is neither general soundness nor Product PASS.
+
+C795 adds current-use conformance at that same captured access kernel. Only
+ptr/stability operands actually used by a read are compared with the saved
+source-time facts, and the dereferenced ptr must remain readable. This does
+not demand liveness or permissions from inert old Copy values of ended C.
+The focused `p1393_current_read_auth.unit` test requires the original A fault
+and independent B/identity/Domain/current/loan faults to reject without C17
+output mutation. It restores each fault before cleanup; no poisoned native
+runs. `C795-oracle.json` records this repair's predictions, and `evidence/`
+retains the original STOP packet unchanged rather than relabelling its RED.

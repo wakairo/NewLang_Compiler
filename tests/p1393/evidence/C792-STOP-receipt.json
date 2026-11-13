@@ -1,0 +1,16 @@
+{
+  "HEAD": "12e33115b391faa8cc2f85a950e067ec7480542e",
+  "tree": "06b1f189b54697f470c9456e363bd33a78ed9c8d",
+  "bundle": {
+    "path": "/workspace/p1393-c792/P1393-C792-STOP.bundle",
+    "bytes": 36264,
+    "SHA256": "e538ce2ea878ae6338ca09bee9dfce2a3047158fb27535f3e7bffea119f78aba"
+  },
+  "packet": {
+    "path": "/workspace/p1393-c792/P1393-C792-STOP-evidence.zip",
+    "bytes": 497541,
+    "SHA256": "f79fc904eb9b05164edf8d83c4be5c99ed57e22cbc20b549dddb17cabc67c18c"
+  },
+  "STOP_receipt_SHA256": "59f7d61938fa40aaabf8c73ce199597453e852ea49caa0554f608d24910669a6",
+  "manifest_SHA256": "a1038e2d7f3ef7442bd8bde5ac74ae74ec9d9ccdf1297523b1149fa3b479cf27"
+}

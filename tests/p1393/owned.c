@@ -476,10 +476,164 @@ static bool oom(const char *path)
     return true;
 }
 
+/* C795: a historical checkpoint does not license changed operands of an
+ * actual read. These are host artifact faults, never legal source negatives.
+ * No poisoned C is compiled or executed. */
+static bool current_read_denied(Program *p, const NLCheckedFragment *top,
+                                size_t point, const char *fault)
+{
+    NLCheckStatus proof = nl_checked_captured_closure_validate(top, match(top));
+    char *out = NULL;
+    size_t length = 98765;
+    NLNodeCStatus emitted = nl_checked_c_node(p->entry, &out, &length);
+    printf("C795 point=%zu fault=%s validator=%d emitted=%d out_NULL=%d "
+           "length=%zu\n",
+           point, fault, (int)proof, (int)emitted, out == NULL, length);
+    const bool rejected = proof == NL_CHECK_ANALYSIS_PRECISION_LIMIT &&
+                          emitted == NL_NODE_C_UNSUPPORTED && out == NULL &&
+                          length == 98765;
+    free(
+        out); /* retain no buffer even if the unexpected-success oracle fails */
+    return rejected;
+}
+static bool current_read_mutations(Program *p)
+{
+    CHECK(nl_h_custody_validate(p->entry));
+    const NLCheckedFragment *top = top_of(p);
+    CHECK(top &&
+          nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    NLCheckedFragment *leaf = leaf_of(top);
+    CHECK(leaf && leaf->captured_reads && leaf->captured_reads->count == 2);
+    ReadEvent *fork = &leaf->captured_reads->events[1];
+    NLCheckedFragment *some = NULL;
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedFragment *arm =
+            nl_checked_match_arm(leaf, fork->event.node, a);
+        CHECK(arm);
+        if (nl_checked_node_view(arm, nl_checked_root(arm))->variant == 2)
+            some = (NLCheckedFragment *)arm;
+    }
+    CHECK(some && some->captured_reads && some->captured_reads->count == 1);
+    NLCheckedFragment *fragments[2] = {leaf, some};
+    ReadEvent *events[2] = {&leaf->captured_reads->events[0],
+                            &some->captured_reads->events[0]};
+    for (size_t point = 0; point < 2; ++point) {
+        NLCheckedFragment *f = fragments[point];
+        ReadEvent *event = events[point];
+        NLCheckedNodeView *read = &f->nodes[event->event.node - 1];
+        NLSemanticContext *before = event->event.before;
+        const NLValueId root_ref =
+            before->bindings[read->field.base - 1].view.value;
+        const NLCheckedNodeView *acquired = NULL;
+        for (size_t i = 1; i < event->event.node; ++i) {
+            const NLCheckedNodeView *n = nl_checked_node_view(f, i);
+            if (n->kind == NL_CHECKED_REF_FROM_PTR && n->result_count == 1 &&
+                n->results[0].value == root_ref)
+                acquired = n;
+        }
+        CHECK(acquired);
+        const NLCheckedNodeView *arg =
+            nl_checked_node_view(f, acquired->first_argument);
+        const NLCheckedNodeView *darg =
+            arg ? nl_checked_node_view(f, arg->next_argument) : NULL;
+        CHECK(arg && darg && arg->result_count == 1 && darg->result_count == 1);
+        NLSemanticContext *current = (NLSemanticContext *)f->context;
+        NLSemanticValueView *ptr = &current->values[arg->results[0].value - 1];
+        NLSemanticValueView *domain =
+            &current->values[darg->results[0].value - 1];
+        const NLReferenceFacts pointer_saved = ptr->reference;
+        const NLReferenceFacts domain_saved = domain->reference;
+        CHECK(pointer_saved.readable && domain_saved.readable);
+        bool rejected;
+
+        /* Exact original FIRST mutation, at A then independently at B. */
+        ptr->reference.readable = false;
+        rejected =
+            current_read_denied(p, top, point, "current-ptr-readable=false");
+        ptr->reference = pointer_saved;
+        CHECK(rejected);
+
+        ptr->reference.place =
+            nl_checked_node_view(fragments[1 - point],
+                                 events[1 - point]->event.node)
+                ->field.parent;
+        CHECK(ptr->reference.readable &&
+              ptr->reference.place != pointer_saved.place);
+        rejected =
+            current_read_denied(p, top, point, "readable-ptr-other-original");
+        ptr->reference = pointer_saved;
+        CHECK(rejected);
+
+        ptr->reference.provenance = NL_PROVENANCE_UNKNOWN;
+        CHECK(ptr->reference.readable);
+        rejected = current_read_denied(p, top, point,
+                                       "readable-ptr-unknown-provenance");
+        ptr->reference = pointer_saved;
+        CHECK(rejected);
+
+        domain->reference.place = read->field.parent; /* Node is not D owner */
+        CHECK(domain->reference.readable);
+        rejected =
+            current_read_denied(p, top, point, "readable-wrong-domain-place");
+        domain->reference = domain_saved;
+        CHECK(rejected);
+
+        const NLCheckedField field_saved = read->field;
+        ++read->field.child_fact;
+        rejected =
+            current_read_denied(p, top, point, "changed-current-field-fact");
+        read->field = field_saved;
+        CHECK(rejected);
+
+        const NLScopeId scope = before->values[root_ref - 1].reference.scope;
+        CHECK(scope && scope <= before->scope_count &&
+              before->scopes[scope - 1].active);
+        before->scopes[scope - 1].active = false;
+        rejected = current_read_denied(p, top, point, "closed-checkpoint-loan");
+        before->scopes[scope - 1].active = true;
+        CHECK(rejected);
+
+        /* Still readable in current view, but permission no longer agrees
+         * with the actual saved operand. Never copy historical rights back. */
+        NLReferenceFacts *saved_operand =
+            &before->values[arg->results[0].value - 1].reference;
+        const NLReferenceFacts issued = *saved_operand;
+        saved_operand->readable = false;
+        CHECK(ptr->reference.readable);
+        rejected = current_read_denied(p, top, point,
+                                       "checkpoint-permission-mismatch");
+        *saved_operand = issued;
+        CHECK(rejected);
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_OK);
+    }
+    char *out = NULL;
+    size_t length = 98765;
+    CHECK(nl_checked_c_node(p->entry, &out, &length) == NL_NODE_C_OK && out &&
+          length > 0);
+    free(out);
+    puts("C795 current A/B read conformance: 14 independent faults rejected; "
+         "original authority/restored C17 PASS");
+    return true;
+}
+static bool current_auth(const char *path)
+{
+    Program p = {0};
+    if (prepare(path, &p) != NL_CHECK_OK) {
+        destroy(&p);
+        return false;
+    }
+    const bool ok = current_read_mutations(&p);
+    destroy(&p);
+    return ok;
+}
+
 int main(int argc, char **argv)
 {
     if (argc != 3)
         return 1;
-    return (strcmp(argv[1], "oom") == 0 ? oom(argv[2]) : verify(argv[2])) ? 0
-                                                                          : 1;
+    const bool ok = strcmp(argv[1], "auth") == 0  ? current_auth(argv[2])
+                    : strcmp(argv[1], "oom") == 0 ? oom(argv[2])
+                                                  : verify(argv[2]);
+    return ok ? 0 : 1;
 }

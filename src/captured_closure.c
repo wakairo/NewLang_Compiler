@@ -583,6 +583,23 @@ static NLCheckStatus access_validate(const NLCheckedFragment *f,
         (!read && argument_node(f, v, 1)->value_use != NL_VALUE_USE_NONE) ||
         (!read && nl_fixed_change_dependencies(b, e.child, 0) != NL_CHECK_OK))
         return INVALID;
+    if (read) {
+        /* Historical issuance is not current permission for a changed use.
+         * Compare only the operands actually used by this read acquisition;
+         * inert old Copy pointers (including ended C) grant nothing here. */
+        const NLValueId p = input_id(f, acquired, 0);
+        const NLValueId d = input_id(f, acquired, 1);
+        if (p == 0 || p > b->value_count || d == 0 || d > b->value_count ||
+            !pointer->reference.readable ||
+            pointer->type != b->values[p - 1].type ||
+            stable->type != b->values[d - 1].type ||
+            pointer->dependencies != NL_DEPENDENCY_FREE ||
+            pointer->value_dependency_count != 0 ||
+            stable->value_dependency_count != 0 ||
+            !same_ref(pointer->reference, b->values[p - 1].reference) ||
+            !same_ref(stable->reference, b->values[d - 1].reference))
+            return INVALID;
+    }
     const NLCheckedNodeView *loan = NULL;
     for (size_t i = 1; i < c->node; ++i) {
         const NLCheckedNodeView *n = nl_checked_node_view(f, i);
