@@ -1,0 +1,46 @@
+{
+  "meaning": "new C768 negative source-profile controls, not changes to P1386 sources; 7/8/reordered9 are unsupported even if memory-safe",
+  "files": {
+    "I-canonical-six.nl": {
+      "bytes": 15056,
+      "SHA256": "5145c955343a18d497c2f0568bc78cc0f31c54bdda4e0ff3a0734a6ea5b4fac4",
+      "expected_CHECK": 0
+    },
+    "N-profile-eight.nl": {
+      "bytes": 15910,
+      "SHA256": "02355876e4a3e1f42f461abc7bd91d52be1b6e75ab95b4888dde4cbc40ea494a",
+      "expected_CHECK": "REJECT (profile vs semantic distinguished)"
+    },
+    "N-profile-nine-reordered.nl": {
+      "bytes": 16319,
+      "SHA256": "1ea553ca6151d2325689184c0c8fb4cf6df18e571eecdae189d27ec773e0fec1",
+      "expected_CHECK": "REJECT (profile vs semantic distinguished)"
+    },
+    "N-profile-seven.nl": {
+      "bytes": 15539,
+      "SHA256": "b6c575f6e74cddcd204da3d17dcf50f553dfb7d39f6c6a8a160822fe213b9e0f",
+      "expected_CHECK": "REJECT (profile vs semantic distinguished)"
+    },
+    "N1-wrong-root-domain.nl": {
+      "bytes": 16319,
+      "SHA256": "29e28ab988dfd9bf92313a93ba72ae70b30d78e9152e3f7e2abadb07f7898cc2",
+      "expected_CHECK": "REJECT (profile vs semantic distinguished)"
+    },
+    "N2-ended-C-reloan.nl": {
+      "bytes": 16803,
+      "SHA256": "f92852792b9ae8d5ff6b7a329b90713fa6c8d9d8f21b62c771214127e5b36ea4",
+      "expected_CHECK": "REJECT (profile vs semantic distinguished)"
+    },
+    "N3-C-failure-missing-B-release.nl": {
+      "bytes": 16249,
+      "SHA256": "c69f8d3d60a28e6b38487dda7241760cfcf258df663de3bb9edbe7e29675a782",
+      "expected_CHECK": "REJECT (profile vs semantic distinguished)"
+    },
+    "U-proposed-nine.nl": {
+      "bytes": 16319,
+      "SHA256": "63c53ae9c67653071c468f160232b24dab9f6efb1afa6386bf6357d224978f7f",
+      "expected_CHECK": 0
+    }
+  },
+  "SOURCE_status": "Draft17.36 selected I and U; all negatives deliberate invalid/unselected; compiler tests not run yet"
+}
