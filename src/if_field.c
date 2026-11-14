@@ -1,4 +1,5 @@
 #include "if_field_internal.h"
+#include "unchecked_ref_internal.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -747,6 +748,8 @@ NLCheckStatus nl_checked_if_field_validate(const NLCheckedFragment *f,
                                            NLCheckedNodeId id,
                                            const NLIfFieldView *candidate)
 {
+    if (!nl_h_unchecked_machine_only(f))
+        return INVALID;
     const NLIfFieldProof *p = find(f, id);
     if (!p || p->one_normal || !p->sealed || !p->complete || !p->ready ||
         !same_view(&p->view, &p->issued) ||
@@ -816,6 +819,8 @@ NLCheckStatus nl_checked_if_field_event_validate(const NLCheckedFragment *f,
                                                  size_t i,
                                                  const NLIfFieldEvent *v)
 {
+    if (!nl_h_unchecked_machine_only(f))
+        return INVALID;
     const NLIfFieldProof *p = find(f, id);
     const NLIfFieldTrace *e = event_at(p, a, i);
     return !e || (v && !same_event(v, &e->issued))
@@ -1133,6 +1138,8 @@ NLCheckStatus nl_checked_if_return_validate(const NLCheckedFragment *f,
                                             NLCheckedNodeId id,
                                             const NLIfReturnView *candidate)
 {
+    if (!nl_h_unchecked_machine_only(f))
+        return INVALID;
     const NLIfFieldProof *p = find(f, id);
     if (!p || !p->one_normal || !p->ready || !p->complete || !p->sealed ||
         memcmp(&p->return_view, &p->return_issued, sizeof(p->return_view)) ||

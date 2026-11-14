@@ -1,0 +1,103 @@
+{
+  "base": "521a7b10e763e2ef75cd9d8d10b11e569dc2310d",
+  "tree": "87ec032d9c3bbb89c664ea9536f9684dad9c4af2",
+  "old_oracles": "UNCHANGED. U/P exact bytes copied; this is a forward target oracle, no retroactive PASS.",
+  "sources": [
+    {
+      "file": "tests/p1420/U.nl",
+      "bytes": 3342,
+      "sha256": "5b69b6f48eb1b11057a9cb8aaeaea1275318096835696105b58302668a558e95",
+      "prospective_expectation": "definition+actual AUTHOR_PREMISE; actual ptr relation UNKNOWN; loan closed; result Unknown Copy; C17 unsupported/no-clobber"
+    },
+    {
+      "file": "tests/p1420/P.nl",
+      "bytes": 3332,
+      "sha256": "4d93be829bb75c4197fe0dadc2e5ed020c0c2dfceaf8443c33407e77c1646552",
+      "prospective_expectation": "original P13-JOIN-PRECISION"
+    },
+    {
+      "file": "tests/p1420/Alias.nl",
+      "bytes": 3371,
+      "sha256": "76140eddaf582664f4945804ae32d873d9b1a4442e02c6f9407915e53dcf710c",
+      "prospective_expectation": "AUTHOR_PREMISE; ordinary function name unchecked + Copy alias lineage"
+    },
+    {
+      "file": "tests/p1420/wrong-domain.nl",
+      "bytes": 3217,
+      "sha256": "560b21e30a0bff5c5c93b8cdab4194bc3fce00ffea81f11a8ca89bd4f80e1539",
+      "prospective_expectation": "known wrong root/D semantic reject at ref operation"
+    },
+    {
+      "file": "tests/p1420/ended-domain.nl",
+      "bytes": 3218,
+      "sha256": "7756ce56a140756e906318bc96147fa58c23bbc6dcb5e1849af51b6301ff3269",
+      "prospective_expectation": "consumed ended Domain structural reject, no origin artifact"
+    },
+    {
+      "file": "tests/p1420/write.nl",
+      "bytes": 3343,
+      "sha256": "40c7549806965f3d812587abde96698eab0804a1a27e17429a10044f501f8c63",
+      "prospective_expectation": "SOURCE UNCHECKED-READ-MODE"
+    },
+    {
+      "file": "tests/p1420/missing-stable.nl",
+      "bytes": 3328,
+      "sha256": "4d83adeac1d4497c24f708c6d3ee707a7d574d174879f248f78248242c014396",
+      "prospective_expectation": "SOURCE ALLOCATED-CALL-ARITY"
+    },
+    {
+      "file": "tests/p1420/escape.nl",
+      "bytes": 3331,
+      "sha256": "1f011f90b029d48e8c6ef2b4ccffbbebf762b2f080ebad64afb76e247f151d85",
+      "prospective_expectation": "qualified ref use/escape rejected; do not claim later closure guard reached"
+    }
+  ],
+  "API_proposal": {
+    "class": "NLCheckedProofClass nl_checked_proof_class(const NLCheckedFragment*)",
+    "observation": "bool nl_checked_local_assumption_view(const NLCheckedFragment*, NLCheckedNodeId, NLCheckedLocalAssumptionView*)",
+    "origin": "NLCheckStatus nl_checked_local_assumption_origin(const NLCheckedFragment*, NLCheckedNodeId)",
+    "classification": [
+      "INVALID",
+      "MACHINE_PROVED",
+      "SOURCE_AUTHENTIC_WITH_AUTHOR_PREMISE"
+    ],
+    "view": "retained source identity+span, owner/op/ptr/stable/IF/read nodes, pointer/ref/read value IDs, real Domain/scope, conditional root/incarnation/range, assumed mask and at-event machine facts. Observation does not issue truth/access."
+  },
+  "host_tests": {
+    "positive": [
+      "U definition and real main actual call after original parser/source destruction",
+      "alias + ordinary unchecked function name",
+      "S/T MACHINE_PROVED and old N/P exact P13",
+      "actual Unknown ptr/ref/Copy, no scalarKnown/None substitution, all loans/root lifetimes closed at end"
+    ],
+    "faults": [
+      "missing record/marker/mask/operation/span",
+      "foreign Unknown/foreign call/world/arm/Copy edges",
+      "operation source bytes and retained AST qualifier tamper",
+      "readonly historical GET versus current origin rejection",
+      "C17 machine-only admission unsupported with out=NULL and length unchanged",
+      "known wrong/ended Domain and ref escape/malformed modifier",
+      "coarse-D uniqueness candidate-world negative using real guard; status not forged"
+    ],
+    "OOM": "6 selected allocation events per config, max18 initial + max18 affected retries =36; actual hit/status/rollback/out/retry recorded per case; no unbounded sweep"
+  },
+  "cohort": [
+    "new p1420 positive/API/fault/negative tests and 6 finite OOM modes",
+    "old p1408/p1412 unit tests only (no native integration)",
+    "old parser/function-body/Domain/IF/Copy affected unit tests to inventory before freeze"
+  ],
+  "limits": {
+    "local_candidates": 3,
+    "planned_commits": 2,
+    "configs": [
+      "GCC Release",
+      "Clang ASan+LSan",
+      "Clang UBSan"
+    ],
+    "new_CLI": 8,
+    "selected_OOM": 36,
+    "guest": 0,
+    "qualified_C17_implementation": 0
+  },
+  "pre_execution": true
+}

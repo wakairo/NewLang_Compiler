@@ -1,4 +1,5 @@
 #include "newlang/source.h"
+#include "source_internal.h"
 
 #include <assert.h>
 #include <stdint.h>
@@ -11,6 +12,13 @@ struct NLSource {
     size_t length;
     char *display_name;
 };
+
+NLSourceView nl_source_storage_view(const NLSource *source)
+{
+    return source ? (NLSourceView){.bytes = source->bytes,
+                                   .length = source->length}
+                  : (NLSourceView){0};
+}
 
 /* Takes ownership of bytes only on success. Caller cleans it up on failure. */
 static NLSourceStatus finish_source(unsigned char *bytes, size_t length,

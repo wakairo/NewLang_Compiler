@@ -4513,6 +4513,13 @@ static int compile_v0_to(const char *path, bool check_only,
         goto cleanup;
     }
 
+    if (nl_checked_proof_class(entry) == NL_CHECKED_AUTHOR_PREMISE) {
+        result = report_error("V1-BACKEND-UNSUPPORTED",
+                              "local author-premise evidence is CHECK-only",
+                              path, 4);
+        goto cleanup;
+    }
+
     /* Mixed registration alone is insufficient. Only the complete staged
      * H/Copy consumer below can accept this source; unsupported/failed proof
      * paths leave the output untouched. */
