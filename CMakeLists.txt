@@ -2320,3 +2320,22 @@ include(tests/p1368/CMakeLists.txt)
 include(tests/p1372/CMakeLists.txt)
 
 include(tests/p1375/CMakeLists.txt)
+
+# R1415 finite inherited-FIRST evidence; C875 provenance, never merge.
+if(BUILD_TESTING)
+    add_executable(r1415_public_harness tests/r1415/public_harness.c)
+    target_link_libraries(r1415_public_harness PRIVATE newlang_checked_c_node)
+    target_link_options(r1415_public_harness PRIVATE
+        "-Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc")
+    add_test(NAME r1415_cohort
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1415/run_cohort.py"
+            --harness $<TARGET_FILE:r1415_public_harness>
+            --compiler-cli $<TARGET_FILE:newlangc>
+            --compiler "${CMAKE_C_COMPILER}"
+            "--cflags=${CMAKE_C_FLAGS}"
+            --sanitizer "${NEWLANG_SANITIZER}"
+            --source-dir "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1415"
+            --output-dir "${CMAKE_CURRENT_BINARY_DIR}/r1415-evidence")
+    set_tests_properties(r1415_cohort PROPERTIES TIMEOUT 300)
+endif()

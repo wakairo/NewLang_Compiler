@@ -1,0 +1,164 @@
+R1415 C861 INDEPENDENT ORACLE V1
+Encoding: UTF-8 ASCII subset, LF, final LF. Frozen before target implementation,
+producer sources/oracles/results, or any compiler/native/CI execution.
+
+Authority:
+Compiler/main 26e21ddca3f5473e14fa954754d4aecfa706a065
+canonical tree 9e9c59b609933430ce97b29be28a910051466024
+CURRENT_SPEC -> NewLang_v0_spec_Draft17_38.md
+Expected target e30944a1491241adc219355db65b1f8eb9ec5303
+Expected target tree 3db95b3db4946ef3cb4184428a82fbf2d5eca0f1
+Expected target branch p1412-authenticated-ptr-if-result
+No target implementation capability or outcome is inferred from these names.
+
+Finite source cohort (three full programs, not fragments):
+A tests/r1415/amber_true.nl
+B tests/r1415/violet_false.nl
+N tests/r1415/wrong_domain.nl
+
+Question:
+Does ordinary IF Copy value flow preserve both original H allocations and their
+independent authority, then permit only correctly scoped original-root access?
+IF result identity must follow the executed arm. Copying its persistent pointer
+must not rewrite, lend, consume, merge or mint the original root/BackingRegion/
+Allocation/Domain identities or access permissions.
+
+Source eligibility and obligations:
+Each program has exactly one completed recursive H (Lantern), one declared
+Option<ptr<Lantern>> field peer and one u8 field mark; exactly two static fallible
+same-H allocation sites in nested exhaustive consuming matches; and main()->unit.
+This uses Draft17.38 sections 3.2 (inherited closed two-H profile), 4.2/4.3, 5.2,
+10/10.1, 11-14, 16.3, 17.1/17.4, 19.1, 26 and 27.3/27.4. Parentheses around IF
+condition are mandatory; each comparison is usize < usize with bool result.
+No payload read, mixed H+T exception, unchecked, general allocator, third root,
+graph membership, observer-issued owner, or implicit ptr-field projection is used.
+Both arm pointers are Copy/Discardable persistent tokens, not ownership values.
+All original nonCopy claims are discharged exactly once in each normal branch
+where they exist, and every reference stays inside its actual Domain loan.
+A and B are independently predicted language-valid under composition of these
+selected forms. N has the same lexical/type shape but deliberately false D.
+
+Genuine ambiguity / unsupported possibility:
+The canonical two-H mapping is explicitly closed, while ordinary IF composition
+and provenance may-sets are general bounded rules. An implementation may have
+insufficient source-profile, join precision or backend support for storing the
+IF-result ptr in the H link or reading the resulting Option. That possibility
+is preregistered as a source/precision/coverage limit, never unsoundness by itself.
+No assumption is made that constant conditions erase static checking of the
+other arm, that a may-set yields a single known target, or that native support
+follows CHECK success. If a true source-eligibility conflict remains, preserve the
+source and diagnostic and request canonical adjudication; do not silently edit
+operations or reinterpret an unsupported result as native PASS.
+
+Expected layers:
+A and B: SOURCE expected accepted; semantic success is the intended positive.
+A documented conservative SOURCE-UNSUPPORTED / ANALYSIS-PRECISION refusal is an
+expected possible finite limit and ends that case at its actual layer. A claim
+that this valid original-root access is intrinsically invalid needs review.
+On CHECK success, require a genuine source-issued owned entry/call body with both
+allocation success/failure worlds, the real IF and arm evidence, exact original
+root/Domain/permission and complete cleanup. No programmatic fixture seeding.
+Owned authentication/complete checked-C emission may still fail closed as
+unsupported; report that first barrier and do not compile partial output.
+N: expected semantic rejection at the amber_reader ref_from_ptr: amber_ptr is
+the first live original governed by amber_life, but amber_read_stable borrows
+violet_life, a distinct second original Domain. The preceding ordinary IF cannot
+change that relation. If an earlier unsupported/precision barrier prevents this
+check, label the intended wrong-D negative NOT_REACHED, not verified rejection.
+N must never yield usable genuine owned/C17/native acceptance. Do not execute N.
+Any unexpected semantic acceptance, wrong original/permission/currentness/loan,
+unsafe emission/native behavior or sanitizer outcome is first-safety STOP.
+
+Success-world semantic oracle for A and B:
+Let A be the original first successful allocation and B the original second.
+R_A != R_B, O_A != O_B, D_A != D_B, with disjoint concurrently live backing.
+A.mark = 47, B.mark = 193, both initial peer fields None.
+Only A.peer is changed once, under original D_A and original A write permission.
+displaced_none is the old None Copy, with no minted owner or persistent loan.
+A: 7 < 11 is true; selected_ptr has the original A pointer value.
+B: 11 < 7 is false; selected_ptr has the original B pointer value.
+After that Change, amber_reader must refer to original A under D_A in both
+programs, and amber_observed is Some(selected_ptr). The independent original B
+read under D_B observes None. Both exhaustive Option matches merely Copy the
+persistent pointer payload and must not create authority or extend any loan.
+The original A and B pointer bindings remain their original concrete tokens
+regardless of how a joined selected_ptr package is represented.
+The final release order is A then B, with exactly one destroy, exact slot/raw
+recovery, Domain finalization and same-backing full-range deallocation per root.
+Holding a nonowning copied/self/link ptr does not by itself block EndRoot.
+A.peer is not dereferenced after A ends; B.peer remains None throughout.
+No owner transfer, root substitution, runtime evaluator or host repair is allowed.
+
+Actual native allocation worlds, for each positive if emission is complete:
+W0: fail the first guest allocation request. One attempted request, zero successes,
+zero second attempt, zero root starts/finalizations/frees, normal unit return.
+W1: allow first guest allocation and fail second. Two attempts, one success;
+A retains mark 47 and peer None; A releases exactly once; no B root/Domain/free;
+normal unit return, no leak or hidden success grant on failure.
+W2: allow both. Two attempts/two actual allocations with distinct live addresses;
+A mark 47 and peer Some(A) for case A or Some(B) for case B; B mark 193, peer None;
+actual release order first A then B, exactly one matching release each, no leak.
+The observer may record real allocator events and read still-valid native carrier
+bytes at operation/free-entry boundaries. When comparing identities, capture
+address coordinates while their objects are live; never dereference a freed ptr
+or use undefined stale-pointer evaluation. Distinguish physical C carrier
+observation from guest liveness proof, which must come from checked authority.
+Only the generated source-owned program initializes, mutates and cleans guest
+objects. Fault injection may return NULL at the selected real allocation request;
+it may not fabricate successful guest memory, owner/Domain/provenance or cleanup.
+
+Public authentication negative probes (same source cohort, no extra programs):
+Use only a genuinely issued applicable public IF view and its original live owner.
+If a typed ptr-IF public authentication interface is absent/not applicable, report
+that probe NOT_REACHED; do not substitute a field-only view or a fabricated proof.
+An untouched genuine candidate must authenticate when supported.
+Copies of that candidate with (1) wrong IF node identity, (2) opposite original
+pointer result identity, or (3) a world/artifact pointer from an independently
+source-checked identical program must fail authentication. Equal numeric IDs or
+identical source bytes are not cross-world/source-owner proof.
+Source-derived separately checked contexts may supply foreign identities only as
+negative candidates. Mutate copies of borrowed views, never live owned contexts.
+The validator is read-only; context snapshots and caller output sentinels must
+remain unchanged on failure. Null/missing candidates must fail closed.
+Exact public function names/struct field spelling are mechanical harness details
+to resolve from fixed public declarations after this freeze, with no producer body,
+fixture, oracle or result exposure. A different semantic probe needs a new oracle.
+
+Finite host-allocation/OOM observations, only after normal supported baseline:
+In a fresh fixture for each probe, use real public source-create, parser,
+function-unit registration and source entry-check APIs. main() dispatch is a
+harness invocation of this same registered program, not a fourth workload.
+No nl_semantic_seed_*, invented layout/owner/root or authority setters are allowed.
+At each of these four API stages separately, fail its first attempted host
+allocation once; do not exhaustively enumerate malloc indices. Record whether the
+injection actually fired. On reached OOM, require its declared OOM result, no
+partial owning output, unchanged initialized output slot and unchanged public
+semantic snapshot where applicable. Destroy only successful host-owned resources.
+For the applicable genuine public IF validator, separately fail its first host
+scratch allocation once: if fired, require OOM or declared fail-closed status,
+unchanged source/owned context and no manufactured certificate.
+For checked-C emission, separately fail its first host allocation once: if fired,
+require OOM/fail-closed, unchanged NULL output and sentinel length, no partial C.
+If a stage makes no allocation or is blocked earlier, mark this observation
+NOT_TRIGGERED/NOT_REACHED, not OOM PASS. ASan/UBSan cover reached paths only.
+Any unexpected OOM acceptance, state clobber, partial grant, leak or cleanup
+dependence is preserved and returned as first-safety STOP.
+
+Evidence and operational bounds:
+GitHub-only branch r-fast/r1415-ptr-if-auth-blind, no local compiler/native/CI.
+Target/main/branch identities must be verified unchanged before execution.
+FIRST source/oracle bytes and SHA256 must be posted and GET-verified first.
+Create complete R test+minimal registration commit object without a ref, parented
+directly by the full fixed P SHA; first dedicated ref points to that R commit.
+FAST natural push budget 6 including ref creation; all attempts/heads counted;
+checkpoint after fourth before fifth. FAST is format/build/registration with
+CTest0, never source or native validation. Only genuine fixed-head FAST success
+permits one DRAFT NEVERMERGE PR against the unchanged published P branch.
+Separate natural FULL5 plus NO-LLVM PARTIAL cohort budget is one. No manual
+rerun/dispatch/rebase or second cohort. Keep every run, diagnostic, original source,
+oracle and first failure; mechanical repair only within Process 7.6, new hash and
+pre-run expectation without changing identity/negative/safety requirements.
+Publication absent: PREPARATION COMPLETE / WAIT_PUBLICATION / execution NOT_RUN.
+Unreached source/CHECK/owned/C17/native/OOM/sanitizer stages are never PASS.
+Finite evidence cannot establish general soundness, ordinary-safe API audit
+locality, Product GO or H1. Product GO PAUSED / H1 HOLD remains unchanged.

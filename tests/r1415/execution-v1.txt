@@ -1,0 +1,56 @@
+R1415 EXECUTION HARNESS V1 - C875
+Independent frozen input origin: Issue1415 comment6872389857.
+This successor is not strict BLIND: FIRST is inherited unchanged, and existing
+CI-configuration exposure was recorded in STOP6873328034, adjudicated by C875
+comment6873343547, and resumed in comment6873373549.
+No P target implementation, fixture body, oracle or actual result was read.
+Execution target ad05ee742be845edd89b8464dc750a20e4f3c58c
+Target tree 87ec032d9c3bbb89c664ea9536f9684dad9c4af2
+Target branch p1412-authenticated-ptr-if-result
+Canonical main 26e21ddca3f5473e14fa954754d4aecfa706a065 / Draft17.38
+Original oracle retains its original preparation target and all bytes.
+C872/C875 retarget execution without rewriting the original record.
+
+run_cohort.py verifies the four frozen SHA256 values and combined hash first.
+main() is only public API dispatch of the same registered full program.
+No seed, layout, owner, root or authority setter is used.
+Real source create -> parser function unit -> transactional registration ->
+main dispatch -> genuine owned body -> complete checked-C emission.
+Raw status/code/span/diagnostics are retained. Conservative refusal is a finite
+limit; unexecuted downstream stages are NOT_REACHED, never native PASS.
+Wrong-Domain source is never emitted/natively run. Semantic acceptance is STOP.
+Its rejection counts only if original-source location and Domain diagnostic
+identify the intended operation; earlier/unclassified refusal is NOT_REACHED.
+
+Fixed public headers expose IF arms and field-only IF views, but no applicable
+typed ptr-IF candidate authentication API. Original hostile candidate probes
+and validator scratch-OOM are NOT_REACHED; no field-only substitute is used.
+Owned structural observations do not themselves prove current live authority.
+
+After the first supported positive baseline, fresh fixtures separately fail
+one first nonzero allocation in source_create, parse_function_unit,
+register_function_unit, source entry-check and C17 emission. Output/snapshot
+atomicity and declared OOM or emission fail-closed are recorded separately.
+Only owners acquired on successful calls are destroyed. No allocation is
+NOT_TRIGGERED; unexpected acceptance, clobber or safety difference is STOP.
+
+Only complete C output can reach native. A conservative parser recognizes a
+two-field H plus tag/pointer Option carrier from this source's own emitted C.
+Unknown carrier shape is observer coverage failure, never native PASS.
+The None tag is observed from the same source's real one-success failure world.
+The two-success world requires a different tag and selected A/B pointer for A,
+and the original None tag for B. The observer reads actual live storage at
+free-entry, marks 47/193, pointer coordinates captured while live, exact request/
+success/failure counts, and A-then-B release. It never repairs guest memory,
+fabricates successful memory, evaluates saved freed pointers or supplies proof.
+Fault injection returns NULL only at real request 1 or 2. Strict C17 warnings
+and the current job sanitizer are retained.
+
+r1415_cohort requires both positive native cohorts and intended negative
+rejection to return success; finite/refusal/observer limits return incomplete.
+Unavailable typed IF authentication is explicitly NOT_REACHED even on success.
+FAST performs formatting/build/registration only; CTest execution remains zero.
+Build evidence directory contains commands, stdout/stderr, C and final summary.
+Dedicated GitHub Actions only. FAST<=6 including first ref, checkpoint after4.
+One natural FULL5+PARTIAL after exact-head/ref FAST. DRAFT NEVERMERGE.
+No manual rerun/dispatch/rebase/merge. Product GO PAUSED / H1 HOLD.
