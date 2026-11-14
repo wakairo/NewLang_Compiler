@@ -2321,3 +2321,25 @@ include(tests/p1368/CMakeLists.txt)
 include(tests/p1372/CMakeLists.txt)
 
 include(tests/p1375/CMakeLists.txt)
+# C902 R1421 independent public CHECK/owned observer. The R-FAST workflow
+# compiles/inventories this target but deliberately never runs these CTests.
+if(BUILD_TESTING)
+    add_executable(r1421_public_observer tests/r1421/observe.c)
+    target_link_libraries(r1421_public_observer PRIVATE newlang_parser newlang_semantic)
+    foreach(case IN ITEMS author_route wrong_domain ended_original)
+        if(case STREQUAL "author_route")
+            set(r1421_mode positive)
+        elseif(case STREQUAL "wrong_domain")
+            set(r1421_mode wrong)
+        else()
+            set(r1421_mode ended)
+        endif()
+        add_test(NAME r1421_${case}_public_check.unit
+            COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1421/run.py"
+            "${r1421_mode}" "$<TARGET_FILE:r1421_public_observer>"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1421/sources/r1421_${case}_v1.nl")
+        set_tests_properties(r1421_${case}_public_check.unit
+            PROPERTIES TIMEOUT 120)
+    endforeach()
+endif()
