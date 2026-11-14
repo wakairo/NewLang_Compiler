@@ -138,3 +138,13 @@ jobs:
           test ! -s "$RUNNER_TEMP/newlang-check-stdout"
           test ! -s "$RUNNER_TEMP/newlang-check-stderr"
           echo "NO LLVM / PARTIAL: Production source/checker exit 0, zero stdout/stderr"
+      - name: R1421 C907 preserved LastTest receipt (no replay)
+        if: ${{ always() && github.event_name == 'pull_request' && github.head_ref == 'r-fast/r1421-local-unchecked-check' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test ! -f tests/r1421/print_receipt.py; then
+            echo 'R1421_RECEIPT FAIL stage=CHECKOUT_NOT_REACHED script_missing'
+            exit 1
+          fi
+          python3 tests/r1421/print_receipt.py build-frontend
