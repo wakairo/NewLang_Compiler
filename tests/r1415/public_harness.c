@@ -120,8 +120,7 @@ static bool mentions_domain(const char *text)
     for (; *text; ++text) {
         const char *word = "domain";
         size_t i = 0;
-        while (word[i] && text[i] &&
-               tolower((unsigned char)text[i]) == word[i])
+        while (word[i] && text[i] && tolower((unsigned char)text[i]) == word[i])
             ++i;
         if (!word[i])
             return true;
@@ -131,12 +130,12 @@ static bool mentions_domain(const char *text)
 
 static bool wrong_domain_location(const char *text, NLSourceSpan span)
 {
-    const char *begin = strstr(
-        text, "let amber_observed = loan_read(violet_life)");
+    const char *begin =
+        strstr(text, "let amber_observed = loan_read(violet_life)");
     const char *end = begin ? strstr(begin, "read(amber_reader@peer)") : NULL;
     return begin && end && span.start_byte >= (size_t)(begin - text) &&
-           span.end_byte <= (size_t)(end - text) +
-                                strlen("read(amber_reader@peer)") &&
+           span.end_byte <=
+               (size_t)(end - text) + strlen("read(amber_reader@peer)") &&
            span.end_byte >= span.start_byte;
 }
 
@@ -178,8 +177,7 @@ typedef struct {
 static bool inspect_owned(const NLCheckedFragment *f, unsigned depth,
                           Inventory *out)
 {
-    if (!f || depth > 64 || !nl_checked_context(f) ||
-        !nl_checked_source(f))
+    if (!f || depth > 64 || !nl_checked_context(f) || !nl_checked_source(f))
         return false;
     ++out->fragments;
     size_t count = nl_checked_node_count(f);
@@ -189,8 +187,8 @@ static bool inspect_owned(const NLCheckedFragment *f, unsigned depth,
             return false;
         if (v->kind == NL_CHECKED_IF) {
             ++out->conditionals;
-            printf("R1415 OWNED IF depth=%u node=%zu result_count=%zu\n",
-                   depth, i, v->result_count);
+            printf("R1415 OWNED IF depth=%u node=%zu result_count=%zu\n", depth,
+                   i, v->result_count);
             for (size_t a = 0; a < 2; ++a) {
                 const NLCheckedFragment *child = nl_checked_if_arm(f, i, a);
                 if (!inspect_owned(child, depth + 1, out))
@@ -202,8 +200,7 @@ static bool inspect_owned(const NLCheckedFragment *f, unsigned depth,
             if (nl_checked_match_arm(f, i, 2))
                 return false;
             for (size_t a = 0; a < 2; ++a) {
-                const NLCheckedFragment *child =
-                    nl_checked_match_arm(f, i, a);
+                const NLCheckedFragment *child = nl_checked_match_arm(f, i, a);
                 if (!child || !inspect_owned(child, depth + 1, out))
                     return false;
             }
@@ -265,8 +262,7 @@ static int run(const char *path, const char *mode, const char *output)
         nl_parser_parse_function_unit(f.parser, &f.tree, &parse);
     inject = false;
     f.tree_ok = parse_status == NL_PARSE_OK;
-    printf("R1415 PARSE status=%d code=%s span=%zu:%zu\n",
-           (int)parse_status,
+    printf("R1415 PARSE status=%d code=%s span=%zu:%zu\n", (int)parse_status,
            parse.diagnostic.code ? parse.diagnostic.code : "(none)",
            parse.span.start_byte, parse.span.end_byte);
     if (strcmp(mode, "parser") == 0) {
@@ -312,14 +308,13 @@ static int run(const char *path, const char *mode, const char *output)
     if (status != NL_CHECK_OK) {
         if (!same_snapshot(&before, &after))
             goto done;
-        result = check_refusal("register", status, &unit.diagnostic,
-                               f.source, text, negative);
+        result = check_refusal("register", status, &unit.diagnostic, f.source,
+                               text, negative);
         goto done;
     }
 
-    f.dispatch_ok =
-        nl_source_create("main()", 6, "R1415 public main dispatch",
-                         &f.dispatch) == NL_SOURCE_OK;
+    f.dispatch_ok = nl_source_create("main()", 6, "R1415 public main dispatch",
+                                     &f.dispatch) == NL_SOURCE_OK;
     if (!f.dispatch_ok)
         goto done;
     f.dispatch_parser_ok =
@@ -328,32 +323,31 @@ static int run(const char *path, const char *mode, const char *output)
         goto done;
     f.dispatch_tree_ok =
         nl_parser_parse_source_fragment(f.dispatch_parser, &f.dispatch_tree,
-                                         &parse) == NL_PARSE_OK;
+                                        &parse) == NL_PARSE_OK;
     if (!f.dispatch_tree_ok)
         goto done;
     NLCheckDiagnostic diagnostic = {0};
     if (!nl_semantic_snapshot(f.context, &before))
         goto done;
     arm(mode, "entry");
-    status = nl_semantic_check_source_fragment(
-        f.context, f.dispatch_tree, &f.entry, &diagnostic);
+    status = nl_semantic_check_source_fragment(f.context, f.dispatch_tree,
+                                               &f.entry, &diagnostic);
     inject = false;
     f.entry_ok = status == NL_CHECK_OK;
     if (!nl_semantic_snapshot(f.context, &after))
         goto done;
-    printf("R1415 ENTRY status=%d owned=%d\n", (int)status,
-           f.entry != NULL);
+    printf("R1415 ENTRY status=%d owned=%d\n", (int)status, f.entry != NULL);
     if (strcmp(mode, "entry") == 0) {
-        result = oom_result(f.entry == NULL, same_snapshot(&before, &after),
-                            status == NL_CHECK_OUT_OF_MEMORY,
-                            "check_source_entry");
+        result =
+            oom_result(f.entry == NULL, same_snapshot(&before, &after),
+                       status == NL_CHECK_OUT_OF_MEMORY, "check_source_entry");
         goto done;
     }
     if (status != NL_CHECK_OK) {
         if (f.entry || !same_snapshot(&before, &after))
             goto done;
-        result = check_refusal("entry", status, &diagnostic, NULL,
-                               text, negative);
+        result =
+            check_refusal("entry", status, &diagnostic, NULL, text, negative);
         goto done;
     }
     if (negative) {
