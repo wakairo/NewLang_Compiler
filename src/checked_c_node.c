@@ -61,6 +61,21 @@ typedef struct {
     bool owner_read;
     bool scalar_issued; /* existing sealed CHECK body, no new issuer */
     size_t ptr_ifs, ptr_roundtrips, ptr_reads; /* emitted observations only */
+    /* One whole-root-authenticated local author premise.  This is an
+     * emitter admission plan, never a reference/owner proof and never a new
+     * issuer.  Every pointer used by C still comes from the selected runtime
+     * arm; the conditional target below only checks the already sealed local
+     * read event. */
+    bool qualified_unchecked;
+    const NLCheckedFragment *qualified_owner, *qualified_body;
+    const NLUncheckedProof *qualified_recipe;
+    NLCheckedLocalAssumptionView qualified_read;
+    NLCheckedNodeId qualified_binding, qualified_call, qualified_condition,
+        qualified_if;
+    NLCheckedKind qualified_predicate;
+    NLTypeId qualified_bool, qualified_usize;
+    size_t qualified_calls, qualified_conditions, qualified_refs,
+        qualified_projections, qualified_loads;
     /* Backend admission only: the exact already-issued local producer call
      * licensing the no-pre-read lane; never a new owner/Domain authority. */
     bool no_pre_read;
@@ -300,6 +315,10 @@ static const char *ctype(const Emit *e, const Env *env, NLTypeId type)
         return "const nl_node *";
     if (type == e->u8)
         return "uint8_t";
+    if (e->qualified_unchecked && type == e->qualified_bool)
+        return "uint8_t";
+    if (e->qualified_unchecked && type == e->qualified_usize)
+        return "size_t";
     if (e->allocated) {
         NLSemanticTypeView t;
         if (!nl_semantic_type_view(nl_checked_context(env->artifact), type, &t))
@@ -467,7 +486,11 @@ static bool match_store_result(Emit *e, const NLCheckedFragment *f,
 #include "checked_c_copy_if_internal.h"
 static bool selected_reference(const Env *, const NLCheckedNodeView *,
                                NLSemanticValueView *);
+static const Env *domain_heap(const Env *, NLDomainId);
+static bool qualified_ptr_if(Emit *, Env *, NLCheckedNodeId,
+                             const NLCheckedNodeView *, Value *);
 #include "checked_c_ptr_if_internal.h"
+#include "checked_c_qualified_internal.h"
 
 #include "checked_c_copy_internal.h"
 /* Uses the Copy carrier helpers above. */
@@ -1096,8 +1119,11 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
                    l->frame, l->symbol, v->field.index);
     }
     if (v->kind == NL_CHECKED_REGISTERED_CALL)
-        return v->producer.entry_proved ? producer_call(e, env, id, v, out)
-                                        : owner_call(e, env, id, v, out);
+        return e->qualified_unchecked && env->artifact == e->qualified_owner &&
+                       id == e->qualified_call
+                   ? qualified_bool_call(e, env, id, v, out)
+               : v->producer.entry_proved ? producer_call(e, env, id, v, out)
+                                          : owner_call(e, env, id, v, out);
     if (v->kind == NL_CHECKED_AGGREGATE_BINDING) {
         const NLCheckedNodeView *init = get(env, v->initializer);
         if (init != NULL && e->live_tail != 0 && init->type == e->live_tail)
@@ -1553,6 +1579,12 @@ static bool heap_projection(Emit *e, const Env *env, const NLCheckedNodeView *v)
 static bool heap_link_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
                            Value *out)
 {
+    if (e->qualified_unchecked && env->artifact == e->qualified_owner) {
+        if (v == get(env, e->qualified_read.projection))
+            return qualified_projection(e, env, v, out);
+        if (v == get(env, e->qualified_read.read))
+            return qualified_load(e, env, v, out);
+    }
     const NLSemanticContext *c = nl_checked_context(env->artifact);
     const bool scalar = v->field.type == e->u8;
     const bool observed = env->ptr_observation && v->field.type == e->option;
@@ -2200,6 +2232,9 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
     if (a == NULL || a->kind != NL_CHECKED_IDENTIFIER || a->symbol == 0)
         return reject(e);
     if (v->kind == NL_CHECKED_REF_FROM_PTR) {
+        if (e->qualified_unchecked && env->artifact == e->qualified_owner &&
+            v == get(env, e->qualified_read.operation))
+            return qualified_ref(e, env, v, out);
         const NLCheckedNodeView *st = get(env, a->next_argument);
         Value p = {0}, stable = {0};
         NLSemanticTypeView t;
@@ -3536,9 +3571,12 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         return NL_NODE_C_UNSUPPORTED;
     if (entry->h_origin && !nl_h_custody_validate(entry))
         return NL_NODE_C_UNSUPPORTED;
-    /* This release implements qualified CHECK evidence only. No existing
-     * machine-only emitter may silently consume a declared local premise. */
-    if (nl_h_unchecked_present(entry))
+    const NLCheckedProofClass proof_class = nl_checked_proof_class(entry);
+    /* Machine-only consumers keep their established routes.  A local author
+     * premise is admitted only after qualified_prepare authenticates the one
+     * finite source graph below. */
+    if (nl_h_unchecked_present(entry) &&
+        proof_class != NL_CHECKED_AUTHOR_PREMISE)
         return NL_NODE_C_UNSUPPORTED;
     if (nl_h_origin_has_sites(entry) && !nl_h_origin_validate(entry))
         return NL_NODE_C_UNSUPPORTED;
@@ -3596,6 +3634,11 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
                 return e.status;
             }
         }
+    }
+    if (proof_class == NL_CHECKED_AUTHOR_PREMISE &&
+        !qualified_prepare(&e, entry)) {
+        free(e.text);
+        return NL_NODE_C_UNSUPPORTED;
     }
     NLPhysicalCurrent current = {0};
     for (NLCheckedNodeId id = 1; id <= nl_checked_node_count(body); ++id) {
@@ -3719,6 +3762,10 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             "#define NL_CUSTODY_POLICY(...) ((void)0)\n"
             "#define NL_CUSTODY_LOAN(...) ((void)0)\n#endif\n");
     }
+    if (!qualified_preamble(&e)) {
+        free(e.text);
+        return e.status;
+    }
     if (e.copy_type && !put(&e,
                             "typedef struct {uint8_t f0,f1;} nl_copy_record;\n"
                             "#ifndef NL_MIXED_OWNER_LOCAL\n#define "
@@ -3773,8 +3820,10 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     Value result = {0};
     if (!block(&e, &env, nl_checked_root(body), &result) || e.pending_live ||
         ((e.ptr_ifs || e.ptr_roundtrips || e.ptr_reads) &&
-         (!ptr_copy_enabled(&e) || e.ptr_ifs != 1 || e.ptr_roundtrips != 1 ||
+         (!ptr_copy_enabled(&e) || e.ptr_ifs != 1 ||
+          e.ptr_roundtrips != (e.qualified_unchecked ? 0u : 1u) ||
           e.ptr_reads != 1)) ||
+        !qualified_complete(&e) ||
         (e.current && (!e.current_h_closed || !e.current_emitted ||
                        e.current_post_used != e.current->post_count)) ||
         e.roots != (e.three_lexical_links ? 3u : 2u) || result.type != e.unit ||

@@ -4514,9 +4514,32 @@ static int compile_v0_to(const char *path, bool check_only,
     }
 
     if (nl_checked_proof_class(entry) == NL_CHECKED_AUTHOR_PREMISE) {
-        result = report_error("V1-BACKEND-UNSUPPORTED",
-                              "local author-premise evidence is CHECK-only",
-                              path, 4);
+        /* No ordinary V0 route may consume an author premise.  The node
+         * emitter contains the sole private whole-root-qualified consumer and
+         * fails closed for every other author-premise graph. */
+        char *qualified_c = NULL;
+        size_t qualified_length = 0;
+        const NLNodeCStatus status =
+            nl_checked_c_node(entry, &qualified_c, &qualified_length);
+        if (status == NL_NODE_C_OK) {
+            result = fwrite(qualified_c, 1, qualified_length, output) ==
+                                 qualified_length &&
+                             fflush(output) == 0
+                         ? 0
+                         : report_error("V0-C-OUTPUT",
+                                        "failed to emit Checked-C", path, 1);
+        } else if (status == NL_NODE_C_OUT_OF_MEMORY ||
+                   status == NL_NODE_C_RESOURCE_LIMIT) {
+            result =
+                report_error("NODE-C-RESOURCE",
+                             "qualified emission resource failure", path, 1);
+        } else {
+            result = report_error("V1-BACKEND-UNSUPPORTED",
+                                  "local author-premise evidence has no "
+                                  "qualified C17 consumer",
+                                  path, 4);
+        }
+        free(qualified_c);
         goto cleanup;
     }
 

@@ -114,6 +114,16 @@ void *__wrap_malloc(size_t n)
     }
     return __real_malloc(n);
 }
+void *__real_calloc(size_t, size_t);
+void *__wrap_calloc(size_t count, size_t size)
+{
+    if (fail_malloc) {
+        fail_malloc = false;
+        hit = true;
+        return NULL;
+    }
+    return __real_calloc(count, size);
+}
 void *__real_realloc(void *, size_t);
 void *__wrap_realloc(void *p, size_t n)
 {
@@ -270,11 +280,12 @@ static bool authentic(const char *path)
     CHECK(observed_machine_rejects > 0);
     char *out = NULL;
     size_t length = 98765;
-    CHECK(nl_checked_c_node(p.artifact, &out, &length) ==
-          NL_NODE_C_UNSUPPORTED);
-    CHECK(!out && length == 98765);
+    CHECK(nl_checked_c_node(p.artifact, &out, &length) == NL_NODE_C_OK);
+    CHECK(out && length > 1000 && strstr(out, "nl_qualified_predicate") &&
+          strstr(out, "NL_QUALIFIED_CONDITION"));
+    free(out);
     printf("AUTHOR_PREMISE actual ptr relation UNKNOWN; Copy edges=%zu; "
-           "temporal loan closed, original ended; C17 NOT_RUN/unsupported\n",
+           "temporal loan closed, original ended; exact private C17 admitted\n",
            q->copy_count);
     destroy(&p);
     return true;

@@ -1,6 +1,7 @@
 add_executable(p1420_check tests/p1420/check.c)
 target_link_libraries(p1420_check PRIVATE newlang_checked_c_node newlang_semantic newlang_parser)
-target_link_options(p1420_check PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc
+target_link_options(p1420_check PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc
+    -Wl,--wrap=realloc
     -Wl,--wrap=nl_h_unchecked_prepare -Wl,--wrap=nl_sem_new_value
     -Wl,--wrap=nl_sem_copy_value -Wl,--wrap=nl_h_custody_seal_result
     -Wl,--wrap=nl_h_unchecked_machine_only -Wl,--wrap=nl_unchecked_domain_target)
