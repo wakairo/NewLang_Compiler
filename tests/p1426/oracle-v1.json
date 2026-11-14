@@ -1,0 +1,60 @@
+{
+  "authority": {
+    "main": "6930e91abe40a99b868b3970403ad30c16f27ce3",
+    "tree": "1de259d9c8b3e2ba4200b1851bc43451064c439c",
+    "canonical": "Draft17.38"
+  },
+  "immutable_inputs": {
+    "U": {
+      "path": "tests/p1420/U.nl",
+      "bytes": 3342,
+      "sha256": "5b69b6f48eb1b11057a9cb8aaeaea1275318096835696105b58302668a558e95",
+      "condition": true,
+      "selected_original": "right",
+      "read_next_tag": 1
+    },
+    "Alias": {
+      "path": "tests/p1420/Alias.nl",
+      "bytes": 3371,
+      "sha256": "76140eddaf582664f4945804ae32d873d9b1a4442e02c6f9407915e53dcf710c",
+      "condition": true,
+      "selected_original": "right",
+      "read_next_tag": 1
+    }
+  },
+  "prospective_control": {
+    "False": {
+      "path": "tests/p1426/False.nl",
+      "bytes": 3323,
+      "sha256": "b9e0f5edfe08ffb7fe02c88fa2ae42e0f6f01951a1f338fc47c98ec30e73ab6f",
+      "condition": false,
+      "selected_original": "left",
+      "read_next_tag": 2,
+      "read_next_points_to": "right"
+    }
+  },
+  "first_prediction": {
+    "check": 0,
+    "owned_class": "NL_CHECKED_AUTHOR_PREMISE",
+    "baseline_c17": 4,
+    "baseline_code": "V1-BACKEND-UNSUPPORTED",
+    "baseline_reason": "local author-premise evidence is CHECK-only"
+  },
+  "supported_envelope": {
+    "ordinary_helper": "one usize formal, bool result, one pure equality or less-than body",
+    "call_count": 1,
+    "ptr_if_arms": 2,
+    "ptr_copy_edges_max": 2,
+    "qualified_read_count": 1,
+    "qualified_field": "Cell.next",
+    "heap_originals": 2,
+    "premise_class": "author premise remains author premise"
+  },
+  "runtime_requirements": [
+    "evaluate the actual Bool helper exactly once",
+    "use the actual Bool result for the ptr selection",
+    "read through the selected actual ptr under its matching real Domain loan",
+    "preserve exactly-once H cleanup for zero, one, and two allocation successes",
+    "publish no partial named output on rejection or OOM"
+  ]
+}

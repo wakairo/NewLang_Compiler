@@ -31,6 +31,14 @@ ptr_copy_observation(const Emit *e, const Env *env, NLCheckedNodeId id)
     const NLCheckedNodeView *r = n ? get(env, n->first_argument) : NULL;
     const NLCheckedNodeView *ref = n ? get(env, n->initializer) : NULL;
     const NLCheckedNodeView *tail = b ? get(env, b->tail) : NULL;
+    if (e->qualified_unchecked && env->artifact == e->qualified_owner && b &&
+        b->kind == NL_CHECKED_BLOCK && !b->terminates && b->item_count == 1 &&
+        b->result_count == 1 && n && n->kind == NL_CHECKED_BINDING &&
+        !n->next_item && n->argument_count == 1 && r &&
+        r->kind == NL_CHECKED_RECEIVER && r->symbol == n->symbol &&
+        !r->next_argument && ref == get(env, e->qualified_read.operation) &&
+        tail == get(env, e->qualified_read.read))
+        return ref;
     if (!ptr_copy_enabled(e) || !b || b->kind != NL_CHECKED_BLOCK ||
         b->terminates || b->item_count != 1 || b->result_count != 1 || !n ||
         n->kind != NL_CHECKED_BINDING || n->next_item ||
@@ -84,9 +92,12 @@ static bool ptr_copy_from_ref(Emit *e, Env *env, const NLCheckedNodeView *v,
     return put(e, "const nl_node *nl_v_%zu = nl_v_%zu;\n", out->temp,
                actual.temp);
 }
-static bool ptr_copy_if(Emit *e, const Env *env, NLCheckedNodeId id,
+static bool ptr_copy_if(Emit *e, Env *env, NLCheckedNodeId id,
                         const NLCheckedNodeView *v, Value *out)
 {
+    if (e->qualified_unchecked && env->artifact == e->qualified_owner &&
+        id == e->qualified_if)
+        return qualified_ptr_if(e, env, id, v, out);
     const NLCheckedFragment *f = env->artifact;
     const NLSemanticContext *c = nl_checked_context(f);
     const NLTypeId usize = nl_semantic_core_type(c, NL_TYPE_USIZE),
