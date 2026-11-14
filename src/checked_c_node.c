@@ -487,6 +487,8 @@ static bool match_store_result(Emit *e, const NLCheckedFragment *f,
 static bool selected_reference(const Env *, const NLCheckedNodeView *,
                                NLSemanticValueView *);
 static const Env *domain_heap(const Env *, NLDomainId);
+static bool qualified_ptr_if(Emit *, Env *, NLCheckedNodeId,
+                             const NLCheckedNodeView *, Value *);
 #include "checked_c_ptr_if_internal.h"
 #include "checked_c_qualified_internal.h"
 
