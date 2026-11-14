@@ -2338,4 +2338,8 @@ if(BUILD_TESTING)
             --source-dir "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1415"
             --output-dir "${CMAKE_CURRENT_BINARY_DIR}/r1415-evidence")
     set_tests_properties(r1415_cohort PROPERTIES TIMEOUT 300)
+    add_custom_command(TARGET r1415_public_harness POST_BUILD
+        COMMAND "${CMAKE_CTEST_COMMAND}"
+            --test-dir "${CMAKE_CURRENT_BINARY_DIR}" -N -R "^r1415_"
+        VERBATIM)
 endif()
