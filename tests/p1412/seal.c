@@ -14,12 +14,14 @@ void *__wrap_malloc(size_t n)
     }
     return __real_malloc(n);
 }
-NLCheckStatus __real_nl_h_custody_seal_result(
-    NLCheckedFragment *, NLCheckedFragment *, NLCheckedNodeId,
-    const NLSemanticContext *);
-NLCheckStatus __wrap_nl_h_custody_seal_result(
-    NLCheckedFragment *p, NLCheckedFragment *child, NLCheckedNodeId call,
-    const NLSemanticContext *world)
+NLCheckStatus __real_nl_h_custody_seal_result(NLCheckedFragment *,
+                                              NLCheckedFragment *,
+                                              NLCheckedNodeId,
+                                              const NLSemanticContext *);
+NLCheckStatus __wrap_nl_h_custody_seal_result(NLCheckedFragment *p,
+                                              NLCheckedFragment *child,
+                                              NLCheckedNodeId call,
+                                              const NLSemanticContext *world)
 {
     in_seal = world != NULL;
     if (in_seal)
@@ -46,11 +48,12 @@ static bool prepare(const char *path, Program *p)
 static bool actual(Program *p)
 {
     NLCheckDiagnostic d = {0};
-    NLCheckStatus status = nl_semantic_check_expression(
-        p->context, p->call, &p->artifact, &d);
+    NLCheckStatus status =
+        nl_semantic_check_expression(p->context, p->call, &p->artifact, &d);
     if (status != NL_CHECK_OK)
-        fprintf(stderr, "actual status=%d seal_allocations=%zu code=%s message=%s\n", (int)status,
-                seal_allocations,
+        fprintf(stderr,
+                "actual status=%d seal_allocations=%zu code=%s message=%s\n",
+                (int)status, seal_allocations,
                 d.diagnostic.code ? d.diagnostic.code : "(none)",
                 d.diagnostic.message ? d.diagnostic.message : "(none)");
     CHECK(status == NL_CHECK_OK);
@@ -99,7 +102,8 @@ static bool authentic(const char *path)
     size_t choices = 0;
     CHECK(walk(top(&p), &choices) && choices == 1);
     printf("S actual-call result_valid=1, CHECK/owned/ptr facts PASS; "
-           "seal allocations=%zu\n", seal_allocations);
+           "seal allocations=%zu\n",
+           seal_allocations);
     destroy(&p);
     return true;
 }
@@ -123,12 +127,12 @@ static bool faults(const char *path)
           !nl_h_custody_result_valid(&replay, call));
 #define DAMAGE(target, value, label)                                           \
     do {                                                                       \
-        unsigned char saved[sizeof(target)];                                  \
+        unsigned char saved[sizeof(target)];                                   \
         memcpy(saved, &(target), sizeof(target));                              \
         (target) = (value);                                                    \
         bool denied = rejects(&p, label);                                      \
         memcpy(&(target), saved, sizeof(target));                              \
-        CHECK(denied && nl_h_custody_result_valid(p.artifact, call));            \
+        CHECK(denied && nl_h_custody_result_valid(p.artifact, call));          \
     } while (0)
     DAMAGE(f->nodes[id - 1].results[0].value, 0, "IF result node");
     DAMAGE(f->nodes[id - 1].initializer, 0, "IF condition node");
@@ -214,8 +218,8 @@ static bool seal_oom(const char *path, size_t point)
     fail_at = point;
     oom_hit = false;
     oom_armed = true;
-    NLCheckStatus s = nl_semantic_check_expression(p.context, p.call,
-                                                   &p.artifact, NULL);
+    NLCheckStatus s =
+        nl_semantic_check_expression(p.context, p.call, &p.artifact, NULL);
     oom_armed = false;
     CHECK(oom_hit && s == NL_CHECK_OUT_OF_MEMORY && p.artifact == NULL &&
           nl_semantic_snapshot(p.context, &after) &&
@@ -232,11 +236,11 @@ int main(int argc, char **argv)
 {
     if (argc < 3)
         return 2;
-    bool ok = !strcmp(argv[1], "positive") ? authentic(argv[2])
-              : !strcmp(argv[1], "faults") ? faults(argv[2])
+    bool ok = !strcmp(argv[1], "positive")   ? authentic(argv[2])
+              : !strcmp(argv[1], "faults")   ? faults(argv[2])
               : !strcmp(argv[1], "negative") ? negative(argv[2])
               : !strcmp(argv[1], "oom") && argc == 4
-                    ? seal_oom(argv[2], (size_t)strtoull(argv[3], NULL, 10))
-                    : false;
+                  ? seal_oom(argv[2], (size_t)strtoull(argv[3], NULL, 10))
+                  : false;
     return ok ? 0 : 1;
 }

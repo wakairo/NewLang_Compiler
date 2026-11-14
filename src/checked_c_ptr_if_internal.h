@@ -11,7 +11,7 @@ static bool ptr_copy_enabled(const Emit *e)
            !e->live_tail && !e->custody && !e->current;
 }
 static bool ptr_copy_value(const NLSemanticContext *c, NLValueId id,
-                            NLTypeId type, NLSemanticValueView *v)
+                           NLTypeId type, NLSemanticValueView *v)
 {
     return nl_semantic_value_view(c, id, v) && v->type == type &&
            v->dependencies == NL_DEPENDENCY_FREE &&
@@ -44,12 +44,11 @@ ptr_copy_observation(const Emit *e, const Env *env, NLCheckedNodeId id)
     if (tail->kind == NL_CHECKED_LINK_READ) {
         if (tail->type != e->option || tail->argument_count != 1 ||
             tail->field.index || tail->field.access != NL_ACCESS_READ ||
-            tail->field.base != n->symbol ||
-            ref->reference_result.writable || !operand ||
-            operand->kind != NL_CHECKED_FIELD_REF)
+            tail->field.base != n->symbol || ref->reference_result.writable ||
+            !operand || operand->kind != NL_CHECKED_FIELD_REF)
             return NULL;
-    } else if (tail->kind != NL_CHECKED_PTR_FROM_REF ||
-               tail->type != e->ptr || tail->argument_count != 1 || !operand ||
+    } else if (tail->kind != NL_CHECKED_PTR_FROM_REF || tail->type != e->ptr ||
+               tail->argument_count != 1 || !operand ||
                operand->kind != NL_CHECKED_IDENTIFIER ||
                operand->symbol != n->symbol || operand->next_argument) {
         return NULL;
@@ -57,7 +56,7 @@ ptr_copy_observation(const Emit *e, const Env *env, NLCheckedNodeId id)
     return ref;
 }
 static bool ptr_copy_from_ref(Emit *e, Env *env, const NLCheckedNodeView *v,
-                               Value *out)
+                              Value *out)
 {
     const NLSemanticContext *c = nl_checked_context(env->artifact);
     const NLCheckedNodeView *arg = get(env, v->first_argument);
@@ -69,8 +68,8 @@ static bool ptr_copy_from_ref(Emit *e, Env *env, const NLCheckedNodeView *v,
         v->argument_count != 1 || v->result_count != 1 || !arg ||
         arg->next_argument || !v->has_reference_result ||
         !nl_semantic_type_view(c, arg->type, &type) ||
-        type.kind != NL_TYPE_REF || type.target != e->node || type.is_exclusive ||
-        !selected_reference(env, arg, &r) ||
+        type.kind != NL_TYPE_REF || type.target != e->node ||
+        type.is_exclusive || !selected_reference(env, arg, &r) ||
         r.reference.scope != env->stability_scope ||
         !same_reference(r.reference, env->ptr_observation->reference_result) ||
         !ptr_copy_value(c, v->results[0].value, e->ptr, &p) ||
@@ -82,11 +81,11 @@ static bool ptr_copy_from_ref(Emit *e, Env *env, const NLCheckedNodeView *v,
         !expr(e, env, v->first_argument, &actual))
         return reject(e);
     out->temp = ++e->temp;
-    return put(e, "const nl_node *nl_v_%zu = nl_v_%zu;\n",
-               out->temp, actual.temp);
+    return put(e, "const nl_node *nl_v_%zu = nl_v_%zu;\n", out->temp,
+               actual.temp);
 }
 static bool ptr_copy_if(Emit *e, const Env *env, NLCheckedNodeId id,
-                         const NLCheckedNodeView *v, Value *out)
+                        const NLCheckedNodeView *v, Value *out)
 {
     const NLCheckedFragment *f = env->artifact;
     const NLSemanticContext *c = nl_checked_context(f);
@@ -102,7 +101,8 @@ static bool ptr_copy_if(Emit *e, const Env *env, NLCheckedNodeId id,
         condition->result_count != 1 || condition->terminates)
         return reject(e);
     const NLCheckedNodeView *left = get(env, condition->first_argument),
-                            *right = left ? get(env, left->next_argument) : NULL;
+                            *right =
+                                left ? get(env, left->next_argument) : NULL;
     size_t lhs, rhs;
     NLSemanticValueView result;
     if (!left || !right || left->kind != NL_CHECKED_USIZE_LITERAL ||
@@ -127,10 +127,10 @@ static bool ptr_copy_if(Emit *e, const Env *env, NLCheckedNodeId id,
             root->kind != NL_CHECKED_IF_ARM || root->terminates ||
             root->result_count != 1 || !block ||
             block->kind != NL_CHECKED_BLOCK || block->item_count ||
-            block->first_item || block->terminates || block->result_count != 1 ||
-            !value || value->kind != NL_CHECKED_IDENTIFIER ||
-            value->type != e->ptr || value->value_use != NL_VALUE_COPIED ||
-            value->result_count != 1 ||
+            block->first_item || block->terminates ||
+            block->result_count != 1 || !value ||
+            value->kind != NL_CHECKED_IDENTIFIER || value->type != e->ptr ||
+            value->value_use != NL_VALUE_COPIED || value->result_count != 1 ||
             root->results[0].value != value->results[0].value ||
             block->results[0].value != value->results[0].value ||
             !ptr_copy_value(nl_checked_context(arm), value->results[0].value,

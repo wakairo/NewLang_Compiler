@@ -33,7 +33,7 @@ static bool result_bytes(HResultBytes *s, const void *data, size_t size)
 }
 
 static bool result_array(HResultBytes *s, const void *data, size_t count,
-                          size_t width)
+                         size_t width)
 {
     return (!count || width <= SIZE_MAX / count) &&
            result_bytes(s, data, count * width);
@@ -59,7 +59,7 @@ static bool result_string(HResultBytes *s, const char *text)
 }
 
 static bool result_state(HResultBytes *s, const NLCheckedFragment *f,
-                          const NLSemanticContext *c)
+                         const NLSemanticContext *c)
 {
 #define PART(x)                                                                \
     do {                                                                       \
@@ -75,7 +75,7 @@ static bool result_state(HResultBytes *s, const NLCheckedFragment *f,
         return false;
 #define ARRAY(member, count)                                                   \
     do {                                                                       \
-        if (!result_array(s, c->member, c->count, sizeof(*c->member)))          \
+        if (!result_array(s, c->member, c->count, sizeof(*c->member)))         \
             return false;                                                      \
     } while (0)
     /* Their bases/counts are authenticated by the context header above.
@@ -92,7 +92,7 @@ static bool result_state(HResultBytes *s, const NLCheckedFragment *f,
 #undef ARRAY
     for (size_t i = 0; i < c->region_count; ++i)
         if (!result_array(s, c->regions[i].intervals, c->regions[i].count,
-                           sizeof(*c->regions[i].intervals)))
+                          sizeof(*c->regions[i].intervals)))
             return false;
     for (size_t i = 0; i < c->type_count; ++i) {
         const NLTypeEntry *t = &c->types[i];
@@ -111,15 +111,14 @@ static bool result_state(HResultBytes *s, const NLCheckedFragment *f,
     for (size_t i = 0; i < c->function_count; ++i) {
         const NLFunctionEntry *fn = &c->functions[i];
         if (!result_string(s, fn->name) ||
-            (fn->parameters &&
-             !result_array(s, fn->parameters, fn->count,
-                            sizeof(*fn->parameters))))
+            (fn->parameters && !result_array(s, fn->parameters, fn->count,
+                                             sizeof(*fn->parameters))))
             return false;
         if (fn->body) {
             const NLFunctionBody *body = fn->body;
             const size_t start = offsetof(NLFunctionBody, source);
             if (!result_bytes(s, (const unsigned char *)body + start,
-                                sizeof(*body) - start))
+                              sizeof(*body) - start))
                 return false;
             for (size_t j = 0; j < NL_SEMANTIC_MAX_PARAMETERS; ++j)
                 if (!result_string(s, body->parameter_names[j]))

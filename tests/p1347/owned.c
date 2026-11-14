@@ -43,14 +43,16 @@ NLCheckStatus __wrap_nl_copy_body_current(NLCheckedFragment *f,
 }
 NLCheckStatus __real_nl_h_custody_seal_result(NLCheckedFragment *,
                                               NLCheckedFragment *,
-                                              NLCheckedNodeId);
+                                              NLCheckedNodeId,
+                                              const NLSemanticContext *);
 NLCheckStatus __wrap_nl_h_custody_seal_result(NLCheckedFragment *p,
                                               NLCheckedFragment *c,
-                                              NLCheckedNodeId id)
+                                              NLCheckedNodeId id,
+                                              const NLSemanticContext *world)
 {
     if (armed && !ordinal && seal_count < 3)
         seals[seal_count++] = events + 1;
-    return __real_nl_h_custody_seal_result(p, c, id);
+    return __real_nl_h_custody_seal_result(p, c, id, world);
 }
 
 NLCheckStatus __real_nl_copy_body_event(NLCheckedFragment *, NLCheckedNodeId,

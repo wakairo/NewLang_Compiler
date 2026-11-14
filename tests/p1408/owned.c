@@ -78,7 +78,7 @@ NLCheckStatus __wrap_nl_sem_copy_value(NLSemanticContext *c, NLValueId value,
 }
 
 static bool ptr_value(const NLSemanticContext *c, NLValueId id,
-                       NLReferenceFacts expected)
+                      NLReferenceFacts expected)
 {
     NLSemanticValueView v;
     NLSemanticTypeView t;
@@ -93,8 +93,8 @@ static bool ptr_value(const NLSemanticContext *c, NLValueId id,
           v.reference.readable == expected.readable &&
           v.reference.writable == expected.writable && v.domain == 0 &&
           v.slot_place == 0 && v.allocation_region == 0 &&
-          v.occupancy.region == 0 && v.field_count == 0 &&
-          v.sum_payload == 0 && !v.scalar_known);
+          v.occupancy.region == 0 && v.field_count == 0 && v.sum_payload == 0 &&
+          !v.scalar_known);
     return true;
 }
 static bool walk(const NLCheckedFragment *f, size_t *choices)
@@ -114,22 +114,23 @@ static bool walk(const NLCheckedFragment *f, size_t *choices)
                             original));
             for (size_t a = 0; a < 2; ++a) {
                 const NLCheckedFragment *arm = nl_checked_if_arm(f, i, a);
-                CHECK(arm && arm->if_parent == f &&
-                      arm->if_parent_node == i && arm->if_arm_index == a);
+                CHECK(arm && arm->if_parent == f && arm->if_parent_node == i &&
+                      arm->if_arm_index == a);
                 const NLCheckedNodeView *root =
                     nl_checked_node_view(arm, nl_checked_root(arm));
                 CHECK(root && root->result_count == 1 && !root->terminates);
-                CHECK(ptr_value(nl_checked_context(arm),
-                                root->results[0].value, original));
+                CHECK(ptr_value(nl_checked_context(arm), root->results[0].value,
+                                original));
                 NLSemanticPlaceView place;
                 NLSemanticDomainView d;
                 CHECK(nl_semantic_place_view(nl_checked_context(arm),
-                                              original.place, &place) &&
+                                             original.place, &place) &&
                       place.live && place.independent_root &&
                       place.incarnation == original.incarnation &&
                       place.governing_domain == domain);
                 CHECK(nl_semantic_domain_view(nl_checked_context(arm), domain,
-                                               &d) && d.live);
+                                              &d) &&
+                      d.live);
             }
             ++*choices;
         }
@@ -193,10 +194,9 @@ static bool oom(const char *path)
             wanted = point;
             injected = false;
             counting = true;
-            NLCheckStatus s =
-                phase ? nl_semantic_check_expression(p.context, p.call,
-                                                       &p.artifact, NULL)
-                      : define(&p, NULL);
+            NLCheckStatus s = phase ? nl_semantic_check_expression(
+                                          p.context, p.call, &p.artifact, NULL)
+                                    : define(&p, NULL);
             counting = false;
             CHECK(injected && !fail_next && selected == point &&
                   s == NL_CHECK_OUT_OF_MEMORY && p.artifact == NULL &&
@@ -205,12 +205,13 @@ static bool oom(const char *path)
             if (!phase)
                 CHECK(define(&p, NULL) == NL_CHECK_OK);
             CHECK(nl_semantic_check_expression(p.context, p.call, &p.artifact,
-                                                NULL) == NL_CHECK_OK);
+                                               NULL) == NL_CHECK_OK);
             CHECK(nl_h_custody_validate(p.artifact) &&
                   nl_h_origin_validate(p.artifact));
             destroy(&p);
             printf("OOM phase=%zu ptr-copy=%zu: OUT_OF_MEMORY, unchanged "
-                   "world/out, rollback/retry PASS\n", phase, point);
+                   "world/out, rollback/retry PASS\n",
+                   phase, point);
         }
     }
     return true;
@@ -219,9 +220,9 @@ int main(int argc, char **argv)
 {
     if (argc != 3)
         return 2;
-    bool ok = !strcmp(argv[1], "owned") ? owned(argv[2])
+    bool ok = !strcmp(argv[1], "owned")      ? owned(argv[2])
               : !strcmp(argv[1], "negative") ? negative(argv[2])
-              : !strcmp(argv[1], "oom") ? oom(argv[2])
-                                         : false;
+              : !strcmp(argv[1], "oom")      ? oom(argv[2])
+                                             : false;
     return ok ? 0 : 1;
 }

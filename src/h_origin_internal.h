@@ -36,7 +36,7 @@ bool nl_h_custody_validate(const NLCheckedFragment *root);
 /* Only the unpublished CHECK transaction may validate its commit candidate.
  * Published validation always follows the canonical recorded world. */
 bool nl_h_custody_validate_candidate(const NLCheckedFragment *root,
-                                      const NLSemanticContext *candidate);
+                                     const NLSemanticContext *candidate);
 /* Borrowed structural views only; never an owner/source-authority receipt. */
 bool nl_h_custody_borrow_valid(const NLCheckedFragment *fragment);
 bool nl_h_origin_has_sites(const NLCheckedFragment *root);

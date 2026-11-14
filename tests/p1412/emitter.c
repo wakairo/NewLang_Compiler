@@ -19,7 +19,7 @@ static bool checked(const char *path, Program *p)
 {
     CHECK(load(path, p) && define(p, NULL) == NL_CHECK_OK);
     CHECK(nl_semantic_check_expression(p->context, p->call, &p->artifact,
-                                        NULL) == NL_CHECK_OK);
+                                       NULL) == NL_CHECK_OK);
     CHECK(nl_h_custody_result_valid(p->artifact, nl_checked_root(p->artifact)));
     return true;
 }
@@ -29,8 +29,7 @@ static bool emitted(Program *p, char **out, size_t *length)
     if (s != NL_NODE_C_OK)
         fprintf(stderr, "emit status=%d out=%s length=%zu\n", (int)s,
                 *out ? "nonNULL" : "NULL", *length);
-    CHECK(s == NL_NODE_C_OK && *out && *length &&
-          strlen(*out) == *length);
+    CHECK(s == NL_NODE_C_OK && *out && *length && strlen(*out) == *length);
     return true;
 }
 static bool run(const char *path, const char *output, bool legacy)
@@ -41,8 +40,9 @@ static bool run(const char *path, const char *output, bool legacy)
          * they do not claim the new same-original ptr IF result seal. */
         CHECK(load(path, &p) && define(&p, NULL) == NL_CHECK_OK);
         CHECK(nl_semantic_check_expression(p.context, p.call, &p.artifact,
-                                            NULL) == NL_CHECK_OK);
-        CHECK(nl_h_custody_validate(p.artifact) && nl_h_origin_validate(p.artifact));
+                                           NULL) == NL_CHECK_OK);
+        CHECK(nl_h_custody_validate(p.artifact) &&
+              nl_h_origin_validate(p.artifact));
     } else {
         CHECK(checked(path, &p));
     }
@@ -78,7 +78,8 @@ static bool faults(const char *path)
     p.artifact->nodes[call - 1].type = 0;
     CHECK(rejected(&p));
     p.artifact->nodes[call - 1] = saved;
-    NLCheckedFragment *body = (NLCheckedFragment *)nl_checked_call_body(p.artifact, call);
+    NLCheckedFragment *body =
+        (NLCheckedFragment *)nl_checked_call_body(p.artifact, call);
     const NLSemanticContext *world = body->context;
     body->context = NULL;
     CHECK(rejected(&p));
@@ -91,13 +92,14 @@ static bool faults(const char *path)
     char sentinel = 'x', *out = &sentinel;
     size_t length = 98765;
     CHECK(nl_checked_c_node(p.artifact, &out, &length) ==
-              NL_NODE_C_UNSUPPORTED && out == &sentinel && sentinel == 'x' &&
-          length == 98765);
+              NL_NODE_C_UNSUPPORTED &&
+          out == &sentinel && sentinel == 'x' && length == 98765);
     char *text = NULL;
     CHECK(emitted(&p, &text, &length));
     free(text);
     destroy(&p);
-    puts("damaged-call/world/short-array/nonempty-out rejected, no-clobber/restore PASS");
+    puts("damaged-call/world/short-array/nonempty-out rejected, "
+         "no-clobber/restore PASS");
     return true;
 }
 static bool emit_oom(const char *path)
@@ -131,10 +133,12 @@ int main(int argc, char **argv)
 {
     if (argc < 3)
         return 2;
-    const bool ok = !strcmp(argv[1], "emit") ? run(argv[2], argc == 4 ? argv[3] : NULL, false)
-                    : !strcmp(argv[1], "compat") ? run(argv[2], argc == 4 ? argv[3] : NULL, true)
+    const bool ok = !strcmp(argv[1], "emit")
+                        ? run(argv[2], argc == 4 ? argv[3] : NULL, false)
+                    : !strcmp(argv[1], "compat")
+                        ? run(argv[2], argc == 4 ? argv[3] : NULL, true)
                     : !strcmp(argv[1], "faults") ? faults(argv[2])
-                    : !strcmp(argv[1], "oom") ? emit_oom(argv[2])
-                    : false;
+                    : !strcmp(argv[1], "oom")    ? emit_oom(argv[2])
+                                                 : false;
     return ok ? 0 : 1;
 }

@@ -4147,12 +4147,12 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         current_result = body.artifact->bodies[i]->copy_body &&
                          (body.artifact->bodies[i]->copy_body->current_loop ||
                           body.artifact->bodies[i]->copy_body->current_call);
-    if ((predicate_result || scalar_h_read || current_result || ptr_if_result) &&
-        !host(
-            &body,
-            nl_h_custody_seal_result(caller->artifact, body.artifact, call_id,
-                                      ptr_if_result ? c : NULL),
-            call_span))
+    if ((predicate_result || scalar_h_read || current_result ||
+         ptr_if_result) &&
+        !host(&body,
+              nl_h_custody_seal_result(caller->artifact, body.artifact, call_id,
+                                       ptr_if_result ? c : NULL),
+              call_span))
         goto failure;
     if (body.artifact->copy_body && body.artifact->copy_body->current_loop &&
         caller->capture_copy_body && caller->artifact->copy_body &&
@@ -4671,8 +4671,7 @@ static NLValueId same_prefix_ptr(const NLSemanticContext *before,
 {
     NLSemanticValueView incoming[2];
     for (size_t a = 0; a < 2; ++a) {
-        if (results[a].value == 0 ||
-            results[a].value > after[a]->value_count ||
+        if (results[a].value == 0 || results[a].value > after[a]->value_count ||
             after[a]->place_count < before->place_count ||
             after[a]->scope_count < before->scope_count ||
             after[a]->binding_count < before->binding_count)
@@ -5037,7 +5036,8 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
     }
     NLValueId output = identity;
     if (pointer_prefix != 0 &&
-        !host(check, nl_sem_copy_value(c, pointer_prefix, &output), syntax->span))
+        !host(check, nl_sem_copy_value(c, pointer_prefix, &output),
+              syntax->span))
         return 0;
     if (counts[0] != 0 && output == 0) {
         output = new_value(check,

@@ -18,3 +18,18 @@ add_test(NAME p1412_C17_true.unit COMMAND p1412_emitter emit
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1412/T-v1-true-arm.nl")
 add_test(NAME p1412_C17_faults.unit COMMAND p1412_emitter faults
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1408/S-v1-same-original-two-paths.nl")
+
+# Finite CHECK-issued seal/output allocations, with the original OOM,
+# rollback/no-clobber/retry assertions. No open-ended malloc sweep.
+foreach(ordinal 1 2 3 4 9 10 13 14)
+    add_test(NAME p1412_seal_malloc_${ordinal}_oom.unit COMMAND p1412_seal oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1408/S-v1-same-original-two-paths.nl"
+        ${ordinal})
+endforeach()
+add_test(NAME p1412_output_malloc_oom.unit COMMAND p1412_emitter oom
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1408/S-v1-same-original-two-paths.nl")
+add_test(NAME p1412_cli_native.integration COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1412/native_ci.py" "$<TARGET_FILE:newlangc>"
+    "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+    "${CMAKE_CURRENT_BINARY_DIR}/p1412-ci-native")
+set_tests_properties(p1412_cli_native.integration PROPERTIES TIMEOUT 120)

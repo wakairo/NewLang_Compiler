@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "h_result_state_internal.h"
 
 typedef struct {
@@ -217,15 +218,14 @@ static bool issued_nodes_valid(const CustodyParent *p)
                      p->issued_node_count * sizeof(*p->issued_nodes))));
 }
 static bool issued_state_valid(const CustodyParent *p,
-                                const NLSemanticContext *world)
+                               const NLSemanticContext *world)
 {
     if (!p->issued_state)
         return true;
     HResultBytes state = {.bytes = p->issued_state,
                           .size = p->issued_state_size,
                           .compare = true};
-    return result_state(&state, p->fragment, world) &&
-           state.used == state.size;
+    return result_state(&state, p->fragment, world) && state.used == state.size;
 }
 static bool call_nodes_valid(const NLCheckedFragment *f, const CustodyEdge *e)
 {
@@ -282,8 +282,7 @@ static NLCheckStatus seal_nodes(struct NLHOriginOwner *o, NLCheckedFragment *f,
     for (CustodyEdge *e = p->edges; e; e = e->next) {
         if (e->state != COMMITTED)
             return NL_CHECK_INTERNAL_ERROR;
-        const NLCheckStatus status =
-            seal_nodes(o, e->child, published, actual);
+        const NLCheckStatus status = seal_nodes(o, e->child, published, actual);
         if (status != NL_CHECK_OK)
             return status;
     }
@@ -305,8 +304,8 @@ NLCheckStatus nl_h_custody_seal_result(NLCheckedFragment *parent,
         if (e->state != PENDING || e->role != NL_CUSTODY_BODY ||
             e->child != child || e->site != call || e->result_sealed)
             continue;
-        const NLCheckStatus status = seal_nodes(
-            parent->h_origin, child, child->context, ptr_if_world);
+        const NLCheckStatus status =
+            seal_nodes(parent->h_origin, child, child->context, ptr_if_world);
         if (status != NL_CHECK_OK)
             return status;
         e->call_view = *call_view;
@@ -460,10 +459,11 @@ bool nl_h_custody_validate(const NLCheckedFragment *root)
     return validate_custody(root, false, NULL);
 }
 bool nl_h_custody_validate_candidate(const NLCheckedFragment *root,
-                                      const NLSemanticContext *candidate)
+                                     const NLSemanticContext *candidate)
 {
     /* CHECK's final precommit validation uses the real unpublished candidate.
-     * Published consumers cannot substitute a world through this entry point. */
+     * Published consumers cannot substitute a world through this entry point.
+     */
     return candidate && validate_custody(root, false, candidate);
 }
 bool nl_h_origin_has_sites(const NLCheckedFragment *root)
