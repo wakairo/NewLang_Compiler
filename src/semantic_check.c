@@ -4658,6 +4658,74 @@ static void if_precision(Check *check, NLSourceSpan span)
          "representable");
 }
 
+/* A Copy use gets a fresh package in each fork. Import only a complete ptr
+ * value already issued in their common prefix, never an equal numeric value
+ * ID from two hypothetical worlds. This is ordinary Copy of one existing
+ * original, not a pointer may-set or a join of ownership/memory effects. */
+static NLValueId same_prefix_ptr(const NLSemanticContext *before,
+                                 const NLSemanticContext *const after[2],
+                                 const NLCheckedResult results[2])
+{
+    NLSemanticValueView incoming[2];
+    for (size_t a = 0; a < 2; ++a) {
+        if (results[a].value == 0 ||
+            results[a].value > after[a]->value_count ||
+            after[a]->place_count < before->place_count ||
+            after[a]->scope_count < before->scope_count ||
+            after[a]->binding_count < before->binding_count)
+            return 0;
+        incoming[a] = after[a]->values[results[a].value - 1];
+        if (incoming[a].type != results[a].type ||
+            incoming[a].carrier != NL_CARRIER_LOOSE ||
+            incoming[a].dependencies != NL_DEPENDENCY_FREE ||
+            incoming[a].reference_count != 0 ||
+            incoming[a].reference.scope != 0 ||
+            incoming[a].reference.occurrence_dependency != 0)
+            return 0;
+        for (size_t i = 0; i < before->place_count; ++i) {
+            const NLSemanticPlaceView p = before->places[i],
+                                      q = after[a]->places[i];
+            if (!same_place_frame(p, q) || p.current_fact != q.current_fact ||
+                p.current_value != q.current_value ||
+                p.payload_occurrence != q.payload_occurrence)
+                return 0;
+        }
+        for (size_t i = 0; i < before->scope_count; ++i)
+            if (!same_scope(before->scopes[i], after[a]->scopes[i]))
+                return 0;
+        for (size_t i = 0; i < before->binding_count; ++i)
+            if (before->bindings[i].view.availability !=
+                after[a]->bindings[i].view.availability)
+                return 0;
+    }
+    if (!nl_node_value_same(incoming[0], incoming[1]))
+        return 0;
+    const NLReferenceFacts f = incoming[0].reference;
+    if (f.place == 0 || f.place > before->place_count ||
+        f.provenance != NL_PROVENANCE_VALID || !f.readable)
+        return 0;
+    const NLSemanticPlaceView root = before->places[f.place - 1];
+    if (!root.live || !root.independent_root ||
+        root.incarnation != f.incarnation ||
+        root.type != before->types[incoming[0].type - 1].view.target ||
+        root.governing_domain == 0 ||
+        root.governing_domain > before->domain_count ||
+        !before->domains[root.governing_domain - 1].live)
+        return 0;
+    for (size_t i = 0; i < before->value_count; ++i) {
+        NLSemanticValueView old = before->values[i];
+        if (old.carrier == NL_CARRIER_ENDED)
+            continue;
+        /* Exactly the carrier normalization performed by nl_sem_new_value
+         * for an ordinary Copy. Referent/access/dependencies stay intact. */
+        old.carrier = NL_CARRIER_LOOSE;
+        old.owner_place = old.aggregate_owner = old.sum_owner = 0;
+        if (nl_node_value_same(old, incoming[0]))
+            return i + 1;
+    }
+    return 0;
+}
+
 static bool widen_place(Check *check, size_t index, NLSourceSpan span)
 {
     NLSemanticContext *c = check->context;
@@ -4885,8 +4953,17 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
     NLSemanticValueView joined_ref = {.type = types[0]};
     const bool reference = c->types[types[0] - 1].view.kind == NL_TYPE_REF;
     const bool copying = flat_copy(c, types[0]);
+    const bool pointer = c->types[types[0] - 1].view.kind == NL_TYPE_PTR;
+    NLValueId pointer_prefix = 0;
+    if (counts[0] != 0 && pointer) {
+        pointer_prefix = same_prefix_ptr(c, post, results);
+        if (pointer_prefix == 0) {
+            if_precision(check, syntax->span);
+            return 0;
+        }
+    }
     NLValueId identity = 0;
-    if (counts[0] != 0 && !copying && !reference) {
+    if (counts[0] != 0 && !copying && !reference && !pointer) {
         if (results[0].value == 0 || results[0].value != results[1].value ||
             results[0].value > c->value_count ||
             post[0]->values[results[0].value - 1].dependencies !=
@@ -4956,6 +5033,9 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
         refresh_bindings(check, field_join_root);
     }
     NLValueId output = identity;
+    if (pointer_prefix != 0 &&
+        !host(check, nl_sem_copy_value(c, pointer_prefix, &output), syntax->span))
+        return 0;
     if (counts[0] != 0 && output == 0) {
         output = new_value(check,
                            reference ? joined_ref
