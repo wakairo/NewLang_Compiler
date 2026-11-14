@@ -1,6 +1,6 @@
 # NewLang v0 仕様書（Draft 17.38）
 
-> 状態: **Draft17.38 SOURCE-ONLY PROPOSED / UNMERGED。独立審査・review済みmerge後、protected main の CURRENT_SPEC が Draft17.38 を選んだ場合にのみ CANONICAL。候補branchのCURRENT_SPECでは未採用。**
+> 状態: **CURRENT_SPEC が Draft17.38 を明示的に選択する review済み protected main 採用branchでのみ CANONICAL。選択前および他branchでは PROPOSED / UNMERGED 候補。**
 >
 > この文書は、NewLang v0 コンパイラを実装し、設計をスクラップ・アンド・ビルドするための仕様書である。
 > ISO 規格相当の網羅性・厳密性・用語整備を目標としない。
@@ -10,7 +10,7 @@
 
 
 
-## Draft 17.38 の主変更（C832 / Issue #1407 — SOURCE-ONLY PROPOSED / UNMERGED）
+## Draft 17.38 の主変更（C832 / Issue #1407 — CURRENT_SPEC選択時の限定SOURCE採用）
 
 **Authority and adoption fence:** Anchored adopted Compiler/main `6e351e76ee8ef03cb77717375431462166e3b21a` / `CURRENT_SPEC`→Draft17.37. [M1405 Gates A–C / C827 FINAL](https://github.com/wakairo/NewLang_Compiler/issues/1405#issuecomment-6854203411) and [Coordination C831 docs-candidate release](https://github.com/wakairo/NewLang_Compiler/issues/1405#issuecomment-6868259551) authorize exactly a *candidate* contextual source spelling, **not** a new memory law or an adopted compiler facility. This Draft is normative **only if** independently reviewed and selected by protected `main` `CURRENT_SPEC`; an unmerged PR branch's own selector is not adoption.
 
@@ -22,9 +22,9 @@ unchecked ref_from_ptr(read, p, stable)
 
 Here `p` and `stable` are actual existing appropriately typed bindings from an **already selected** bounded H source profile, and `stable` is a live `ref<read,LifetimeDomain>` to the real current target-governing Domain. `unchecked` is a **contextual prefix** for this exact core source expression, not a new globally reserved word: ordinary `fn unchecked(...)`, `let unchecked = ...` and `unchecked(x)` keep their preexisting ordinary lookup/binding semantics wherever otherwise admissible. The older conceptual `unchecked ref_from_ptr(p,stable)` in §10.1 is not a second two-operand actual H source form.
 
-**Only the already selected semantic obligation is used:** §8.2's one **actually true, not proven** human/author precondition may be explicitly assumed at this operation; if false it is UB in Debug and Release. The source operation cannot mint a root/Allocation/Backing/Storage/Domain, omit `stable` or its live loan, upgrade read→write, escape ref scope, erase Change/Reset/branch-state obligations, or manufacture checked provenance/owner proof. A downstream certified artifact must keep the distinction between *human-assumed* and *compiler-proved* facts; this Draft/source proposal does not prove Production can implement that representation. §20.4 keeps ordinary-safe caller free from hidden human proof.
+**Only the already selected semantic obligation is used:** §8.2's one **actually true, not proven** human/author precondition may be explicitly assumed at this operation; if false it is UB in Debug and Release. The source operation cannot mint a root/Allocation/Backing/Storage/Domain, omit `stable` or its live loan, upgrade read→write, escape ref scope, erase Change/Reset/branch-state obligations, or manufacture checked provenance/owner proof. A downstream certified artifact must keep the distinction between *human-assumed* and *compiler-proved* facts; selection of this Draft/source rule does not prove Production can implement that representation. §20.4 keeps ordinary-safe caller free from hidden human proof.
 
-**Explicit non-adoptions:** NO operation-local `unchecked` on arbitrary calls, no `unchecked ref_from_ptr(write,...)`, unchecked block, ambient function permission, general `requires fn` source, generic graph/owner/issuer, ABI/FFI, public safe wrapper, or new H5 append Change law. [M1401's earlier, unmerged *text-only* Draft17.38 §3.2b.8 / DI-022 append](https://github.com/wakairo/NewLang_Compiler/issues/1401#issuecomment-6852306779) is **NOT** copied into this Draft. Ledger's different history is recorded as **DI-023 PROPOSED**. The complete Draft17.37 selected old6 / exact9 / postfree read-only source and all other inherited rules remain unchanged.
+**Explicit non-adoptions:** NO operation-local `unchecked` on arbitrary calls, no `unchecked ref_from_ptr(write,...)`, unchecked block, ambient function permission, general `requires fn` source, generic graph/owner/issuer, ABI/FFI, public safe wrapper, or new H5 append Change law. [M1401's earlier, unmerged *text-only* Draft17.38 §3.2b.8 / DI-022 append](https://github.com/wakairo/NewLang_Compiler/issues/1401#issuecomment-6852306779) is **NOT** copied into this Draft. Ledger's different history is indexed at **DI-023**, selected only when reviewed protected main `CURRENT_SPEC` names Draft17.38; before that selection it remains **PROPOSED / UNMERGED**. The complete Draft17.37 selected old6 / exact9 / postfree read-only source and all other inherited rules remain unchanged.
 
 ---
 
@@ -4030,11 +4030,11 @@ Debug build がすべての UB を検出することは保証しない。
 
 Release build では check を省略でき、compiler は precondition 成立を optimization に利用してよい。
 
-### Draft 17.38 C832 — one contextual H read-root unchecked source (PROPOSED / UNMERGED)
+### Draft 17.38 C832 — one contextual H read-root unchecked source (CURRENT_SPEC選択時の限定SOURCE採用)
 
 既にsource-admittedなexact completed allocated H rootの
 `ref_from_ptr(read,p,stable)` operationに限り、次の一つの
-**operation-local contextual** source formを提案する。
+**operation-local contextual** source formを、CURRENT_SPECが本Draftを選択したbranchに限って認める。
 
 ~~~text
 operation_local_unchecked_h_read_root :=
@@ -4086,7 +4086,7 @@ obligationを消してordinary safe provenanceとして洗い替えてはなら�
 現在のchecker/owned/validator/C17がこれを正当に表せないなら
 実装はfail closedし、別途source/TCB reviewへ戻す。
 §20.3/.4のrequires body/ordinary safe API責任は不変。
-本節は一つのSOURCE文法選択候補であり、
+本節はCURRENT_SPECが本Draftを選択したbranchに限るSOURCE文法であり、
 true-but-unproved sourceの実CHECK/native成功や一般soundnessを宣言しない。
 
 ## 8.3 total checked API
@@ -4357,14 +4357,14 @@ unchecked ref_from_ptr(p, stable)
 
 上記の二引数形は、programmer-visible `LifetimeDomain` を用いる場合の代表形である。
 
-**Draft 17.38 C832 contextual H read-root source (PROPOSED / UNMERGED):**
+**Draft 17.38 C832 contextual H read-root source (CURRENT_SPEC選択時の限定SOURCE):**
 前記`unchecked ref_from_ptr(p, stable)` はstabilityが必須であることを
 示した**概念例**であり、selected H sourceでの新しい
 二引数`ref_from_ptr` overload/source productionを作らない。
 modeを明示するactual H read-root sourceは従来どおり
 `ref_from_ptr(read, p, stable)`であり、これを単一operation-localに
 author-qualifiedとする構文だけを§8.2に
-`unchecked ref_from_ptr(read, p, stable)`として提案する。
+`unchecked ref_from_ptr(read, p, stable)`として、CURRENT_SPECが本Draftを選択したbranchに限って認める。
 一般`ref_from_ptr(write,...)`へのunchecked拡張、stable省略、
 未発行`ptr/Domain/owner`の生成を認めない。
 target current lifetime/provenanceと本物のgoverning Dの関係を
@@ -4372,7 +4372,7 @@ compilerが証明できず実際に真なら、その**局所preconditionの証�
 authorが引き受けられる。ただし実在のcorrect-D stability loanと
 scope/permission/original ownerの必要条件は残り、author-assumed factを
 machine-proved factとして無印の公開証拠へ流してはならない。
-候補が未mergeの間、この文言は選定済み実sourceを拡大しない。
+本Draftがreview済みmergeでprotected mainのCURRENT_SPECに選択されるまでは、この限定SOURCE規則は未採用である。
 
 対象が§13.7のcompiler-managed implicit local governing identityに属することをcompilerが証明できる場合は、
 そのlocalのimplicit lifetime-stability loanを、同じ意味の **hidden stability evidence** として用いてよい。
@@ -9895,7 +9895,7 @@ core singleton type/valueを直接表すdistinguished core spellingであり、r
 例えばcurrent frontendでtype/loan syntaxに現れる `ptr` / `ref` / `read` / `write` / `exclusive` / `using` 等は、
 それぞれのclosed grammatical positionのruleに従い、本structural setへ自動追加しない。
 
-### Draft 17.38 C832 — contextual `unchecked` without global name reservation (PROPOSED / UNMERGED)
+### Draft 17.38 C832 — contextual `unchecked` without global name reservation (CURRENT_SPEC選択時の限定SOURCE採用)
 
 `unchecked` は上記small structural reserved setに追加しない。
 §8.2の一つの`unchecked ref_from_ptr(read,p,stable)`だけを、
