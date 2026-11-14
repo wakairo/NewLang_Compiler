@@ -1,0 +1,13 @@
+{
+  "release": "C943",
+  "base": "44c3d501309765c5e0aed3dc7b35c2afc503b6fe",
+  "category_control": "C-mixed-payload.nl actual unmodified main CHECK0/C170; same H/T declarations, real T effect and closed cleanup reused",
+  "cases": {
+    "N-wrong-domain.nl": "Before the T call, a Some payload known as original back is reborrowed under front Domain. Require semantic rejection; predicted ALLOCATED-DOMAIN-MISMATCH. No downstream C/native.",
+    "N-active-loan-end.nl": "During correct back read loan, attempt terminal owner transfer/release_cell of that same original. Require semantic rejection for active loan/lifetime/ownership conflict. Do not accept later use-after-free as execution; native NEVER_RUN."
+  },
+  "host_oracle": "Rejected registration leaves full incoming context/registry anchor unchanged; no artifact; retry with frozen valid control succeeds. Keep actual diagnostic/status even if less precise; no relabeling P3-INTERNAL as a precise loan error.",
+  "old_P3_INTERNAL": "Old P1433 source/oracle/FIRST unchanged. These new inputs do not alter or upgrade it.",
+  "source_count": "5/6 complete new sources; one remaining for a genuine prospective correction",
+  "safety": "No intentionally false assumption, malformed host memory or guest native is executed"
+}

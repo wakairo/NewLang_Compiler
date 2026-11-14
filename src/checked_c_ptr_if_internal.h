@@ -39,14 +39,14 @@ ptr_copy_observation(const Emit *e, const Env *env, NLCheckedNodeId id)
         !r->next_argument && ref == get(env, e->qualified_read.operation) &&
         tail == get(env, e->qualified_read.read))
         return ref;
-    if (!ptr_copy_enabled(e) || !b || b->kind != NL_CHECKED_BLOCK ||
-        b->terminates || b->item_count != 1 || b->result_count != 1 || !n ||
-        n->kind != NL_CHECKED_BINDING || n->next_item ||
-        n->argument_count != 1 || !r || r->kind != NL_CHECKED_RECEIVER ||
-        r->symbol != n->symbol || r->next_argument || !ref ||
-        ref->kind != NL_CHECKED_REF_FROM_PTR || !ref->has_reference_result ||
-        !tail || tail->terminates || tail->result_count != 1 ||
-        tail->type != b->type)
+    if ((!ptr_copy_enabled(e) && !e->scalar_control) || !b ||
+        b->kind != NL_CHECKED_BLOCK || b->terminates || b->item_count != 1 ||
+        b->result_count != 1 || !n || n->kind != NL_CHECKED_BINDING ||
+        n->next_item || n->argument_count != 1 || !r ||
+        r->kind != NL_CHECKED_RECEIVER || r->symbol != n->symbol ||
+        r->next_argument || !ref || ref->kind != NL_CHECKED_REF_FROM_PTR ||
+        !ref->has_reference_result || !tail || tail->terminates ||
+        tail->result_count != 1 || tail->type != b->type)
         return NULL;
     const NLCheckedNodeView *operand = get(env, tail->first_argument);
     if (tail->kind == NL_CHECKED_LINK_READ) {
@@ -55,6 +55,15 @@ ptr_copy_observation(const Emit *e, const Env *env, NLCheckedNodeId id)
             tail->field.base != n->symbol || ref->reference_result.writable ||
             !operand || operand->kind != NL_CHECKED_FIELD_REF)
             return NULL;
+        if (e->scalar_control) {
+            NLSemanticValueView current;
+            if (!tail->field.present ||
+                !nl_semantic_value_view(nl_checked_context(env->artifact),
+                                        tail->field.old_value, &current) ||
+                current.type != e->option || current.variant != 1 ||
+                current.sum_payload)
+                return NULL;
+        }
     } else if (tail->kind != NL_CHECKED_PTR_FROM_REF || tail->type != e->ptr ||
                tail->argument_count != 1 || !operand ||
                operand->kind != NL_CHECKED_IDENTIFIER ||

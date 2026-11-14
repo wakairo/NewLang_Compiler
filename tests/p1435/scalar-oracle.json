@@ -1,0 +1,64 @@
+{
+  "release": "C943",
+  "base": "44c3d501309765c5e0aed3dc7b35c2afc503b6fe",
+  "stage_a_control": "C-mixed-payload.nl CHECK0/C170 observed on unchanged main before any Production edits",
+  "source_relation": "same H/T nominal pair, same genuine helper T Change and old/current/sibling, same two H allocation sites and original A/D/LiveTail teardown",
+  "new_sources": {
+    "P-some-bool.nl": {
+      "H2": {
+        "option": "front.next actual Some(back), before unlink",
+        "Bool": 0,
+        "ordinary_IF_arm": 1,
+        "result_u8": 227,
+        "T": {
+          "old": 31,
+          "current": 197,
+          "sibling": 251
+        },
+        "release_H": 2
+      },
+      "H1": {
+        "Bool": 1,
+        "result_u8": 83,
+        "release_H": 1
+      },
+      "H0": {
+        "Bool": 0,
+        "result_u8": 227,
+        "release_H": 0
+      },
+      "first_prediction": "P9 Bool normal MATCH precision"
+    },
+    "P-none-bool-copy.nl": {
+      "H2": {
+        "option": "front.next actual None after certified producer unlink, front still live",
+        "Bool": 1,
+        "ordinary_IF_arm": 0,
+        "result_u8": 83,
+        "T": {
+          "old": 31,
+          "current": 197,
+          "sibling": 251
+        },
+        "release_H": 2
+      },
+      "H1": {
+        "Bool": 1,
+        "result_u8": 83,
+        "release_H": 1
+      },
+      "H0": {
+        "Bool": 0,
+        "result_u8": 227,
+        "release_H": 0
+      },
+      "second_shape": "T runs in a u8 MATCH first; then real post-unlink Option read -> Bool MATCH with reversed arm order -> two ordinary Bool Copy bindings -> same scalar IF carrier",
+      "first_prediction": "P9 Bool normal MATCH precision"
+    }
+  },
+  "semantics": "Some/None H2 both have real original field state at actual read; no fake Known or author-premise pointer. H0/H1 are explicit failure Boolean fallbacks, not claimed as observed H2 Option reads.",
+  "target": "CHECK0, public MACHINE_PROVED and actual root seal/Copy/current/closed loan; real unmodified emitted C17 plus GCC/Clang O0/O2; 16 max raw/passive/H0/H1 traces. No new graph/issuer/API.",
+  "source_count": "3/6 including the control; no edits to earlier control or any predecessor source/oracle",
+  "local_oom": "new selected host fault injections <=20 actual traces, report allocator hits/status/out/rollback independently",
+  "limits": "Any unsafe/authority/source-law divergence STOP C; do not infer downstream PASS from early CHECK precision"
+}

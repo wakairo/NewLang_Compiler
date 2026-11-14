@@ -7761,12 +7761,13 @@ bool nl_node_unit_arm_frame(const NLSemanticContext *before,
 /* Only a plain primitive result may leave these completed source arms.
  * Its package belongs to the arm world; callers create a fresh parent value
  * instead of treating equal post-fork numeric IDs as an identity mapping. */
-static bool normal_u8_result(const NLSemanticContext *c,
-                             const NLCheckedNodeView *result)
+static bool normal_scalar_result(const NLSemanticContext *c,
+                                 const NLCheckedNodeView *result,
+                                 NLSemanticTypeKind kind)
 {
     if (result->terminates || result->result_count != 1 || result->type == 0 ||
         result->type > c->type_count ||
-        c->types[result->type - 1].view.kind != NL_TYPE_U8 ||
+        c->types[result->type - 1].view.kind != kind ||
         !c->types[result->type - 1].view.is_copy ||
         !c->types[result->type - 1].view.is_discardable ||
         result->results[0].type != result->type ||
@@ -7783,11 +7784,26 @@ static bool normal_u8_result(const NLSemanticContext *c,
            !v.field_count && !v.variant && !v.sum_payload && !v.sum_owner;
 }
 
+static bool normal_u8_result(const NLSemanticContext *c,
+                             const NLCheckedNodeView *result)
+{
+    return normal_scalar_result(c, result, NL_TYPE_U8);
+}
+
+static bool normal_control_result(const NLSemanticContext *c,
+                                  const NLCheckedNodeView *result)
+{
+    return normal_u8_result(c, result) ||
+           normal_scalar_result(c, result, NL_TYPE_BOOL);
+}
+
 static bool node_u8_arm_frame(const NLSemanticContext *before,
                               const NLSemanticContext *after, NLValueId input,
                               const NLCheckedNodeView *result)
 {
-    if (!normal_u8_result(after, result) ||
+    /* A Bool carries no original or hidden authority. Keep the same complete
+     * inherited frame and closed suffix; the parent gets a fresh Unknown. */
+    if (!normal_control_result(after, result) ||
         after->place_count < before->place_count ||
         after->scope_count < before->scope_count ||
         after->value_count < before->value_count ||
@@ -8130,12 +8146,12 @@ bool nl_allocated_post_matches(const NLSemanticContext *expected,
  * primitive result has no owner or hidden dependency to import; the exact
  * source arm must still close every suffix responsibility and prove the
  * same ancestor-derived post-frame as the unit lane. */
-static bool allocated_u8_post_matches(const NLSemanticContext *expected,
-                                      const NLSemanticContext *arm,
-                                      const NLCheckedNodeView *result)
+static bool allocated_scalar_post_matches(const NLSemanticContext *expected,
+                                          const NLSemanticContext *arm,
+                                          const NLCheckedNodeView *result)
 {
     const NLCheckedNodeView unit = {.type = 1};
-    if (!normal_u8_result(arm, result) ||
+    if (!normal_control_result(arm, result) ||
         arm->scope_count < expected->scope_count)
         return false;
     for (size_t i = expected->scope_count; i < arm->scope_count; ++i)
@@ -8315,7 +8331,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
             closed_prefix != NULL ? closed_prefix : c;
         const bool scalar =
             !certified &&
-            allocated_u8_post_matches(expected, branch.context, &result);
+            allocated_scalar_post_matches(expected, branch.context, &result);
         if (branch.terminated || (normal_type && normal_type != result.type) ||
             (!scalar &&
              !nl_allocated_post_matches(expected, branch.context, &result))) {

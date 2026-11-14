@@ -1,0 +1,39 @@
+{
+  "release": "C943",
+  "base": "44c3d501309765c5e0aed3dc7b35c2afc503b6fe",
+  "canonical": "Draft17.38",
+  "source": "C-mixed-payload.nl",
+  "stage": "A/source-law before Production modification",
+  "category": "exact one recursive one-link H plus one actual two-u8 T; T is instantiated and updated through a real known-direct helper, not merely declared",
+  "prediction": {
+    "SOURCE": "eligible under 16.3.8 and 17.1 C332",
+    "definition_CHECK": "0; any HEAP-LINK-FIELD-PROFILE is a first falsifier",
+    "actual_owned": "not yet observed; later must be MACHINE_PROVED with genuine existing custody/result seal and closed loans",
+    "C17": "observe only after CHECK0; a downstream coverage refusal is distinct from source-law failure"
+  },
+  "h2": {
+    "original_H": 2,
+    "link": "Some(back) then unlink None",
+    "payload_original": "original back",
+    "payload": 197,
+    "T": {
+      "old": 31,
+      "current": 197,
+      "sibling": 251
+    },
+    "returned": 31,
+    "releases": 2
+  },
+  "h1": {
+    "original_H": 1,
+    "returned": 11,
+    "releases": 1
+  },
+  "h0": {
+    "original_H": 0,
+    "returned": 7,
+    "releases": 0
+  },
+  "negative": "no false-author-premise or unsafe host graph is executed",
+  "budget": "source1/6 so far; reserve five complete units; no Production change"
+}
