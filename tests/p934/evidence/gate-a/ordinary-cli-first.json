@@ -1,0 +1,182 @@
+[
+  {
+    "source": "budget_true.nl",
+    "sha256": "febac1afa9d58bb166740df1c47d640d2baeda8acae5f89a4b5b12dd691d3687",
+    "mode": "check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "budget_true.nl",
+    "sha256": "febac1afa9d58bb166740df1c47d640d2baeda8acae5f89a4b5b12dd691d3687",
+    "mode": "stdout-c17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934-gate-a/source/tests/p930/sources/budget_true.nl\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "budget_true.nl",
+    "sha256": "febac1afa9d58bb166740df1c47d640d2baeda8acae5f89a4b5b12dd691d3687",
+    "mode": "named-c17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934-gate-a/source/tests/p930/sources/budget_true.nl\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "budget_false.nl",
+    "sha256": "b4738981b36bf450a77cb1f593b2d8c8f8fd6f0c8703a6d6e8e66cc390a2deb1",
+    "mode": "check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "budget_false.nl",
+    "sha256": "b4738981b36bf450a77cb1f593b2d8c8f8fd6f0c8703a6d6e8e66cc390a2deb1",
+    "mode": "stdout-c17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934-gate-a/source/tests/p930/sources/budget_false.nl\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "budget_false.nl",
+    "sha256": "b4738981b36bf450a77cb1f593b2d8c8f8fd6f0c8703a6d6e8e66cc390a2deb1",
+    "mode": "named-c17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934-gate-a/source/tests/p930/sources/budget_false.nl\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "order_only.nl",
+    "sha256": "62b1113c821fd6f7bc629ca6db8f4146a263d92c1b3a1ba1a933bf157f8854b8",
+    "mode": "check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "order_only.nl",
+    "sha256": "62b1113c821fd6f7bc629ca6db8f4146a263d92c1b3a1ba1a933bf157f8854b8",
+    "mode": "stdout-c17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934-gate-a/source/tests/p930/sources/order_only.nl\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "order_only.nl",
+    "sha256": "62b1113c821fd6f7bc629ca6db8f4146a263d92c1b3a1ba1a933bf157f8854b8",
+    "mode": "named-c17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934-gate-a/source/tests/p930/sources/order_only.nl\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "root_values_swapped.nl",
+    "sha256": "687519610b6fb7a800c0557152774ca76c15150b651d14a7967fb25e206c1aee",
+    "mode": "check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "root_values_swapped.nl",
+    "sha256": "687519610b6fb7a800c0557152774ca76c15150b651d14a7967fb25e206c1aee",
+    "mode": "stdout-c17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934-gate-a/source/tests/p930/sources/root_values_swapped.nl\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "root_values_swapped.nl",
+    "sha256": "687519610b6fb7a800c0557152774ca76c15150b651d14a7967fb25e206c1aee",
+    "mode": "named-c17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934-gate-a/source/tests/p930/sources/root_values_swapped.nl\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "missing_field.nl",
+    "sha256": "7066df8897d102cc0d9612453671e4a14e16253af3f14d7727c0b64559f79671",
+    "mode": "check",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934-gate-a/source/tests/p930/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "missing_field.nl",
+    "sha256": "7066df8897d102cc0d9612453671e4a14e16253af3f14d7727c0b64559f79671",
+    "mode": "stdout-c17",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934-gate-a/source/tests/p930/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "missing_field.nl",
+    "sha256": "7066df8897d102cc0d9612453671e4a14e16253af3f14d7727c0b64559f79671",
+    "mode": "named-c17",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934-gate-a/source/tests/p930/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "wrong_condition.nl",
+    "sha256": "f0d96d2972fd0fc0667e0cab146e389e8d58cc6db08f0db3f424bec471b1dd03",
+    "mode": "check",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934-gate-a/source/tests/p930/sources/wrong_condition.nl:5:8-5:13: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "wrong_condition.nl",
+    "sha256": "f0d96d2972fd0fc0667e0cab146e389e8d58cc6db08f0db3f424bec471b1dd03",
+    "mode": "stdout-c17",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934-gate-a/source/tests/p930/sources/wrong_condition.nl:5:8-5:13: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  },
+  {
+    "source": "wrong_condition.nl",
+    "sha256": "f0d96d2972fd0fc0667e0cab146e389e8d58cc6db08f0db3f424bec471b1dd03",
+    "mode": "named-c17",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934-gate-a/source/tests/p930/sources/wrong_condition.nl:5:8-5:13: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+    "sentinel_unchanged": true,
+    "temporary_count": 0
+  }
+]

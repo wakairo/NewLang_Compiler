@@ -1,0 +1,4 @@
+Debian clang version 23.1.2 (++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/lib/llvm-23/bin

@@ -1,0 +1,336 @@
+{
+  "exit": 4,
+  "records": [
+    {
+      "function": "avs_shape",
+      "return": 1,
+      "fragment": "0x563c56f3d430",
+      "type": 10
+    },
+    {
+      "function": "avs_shape",
+      "return": 1,
+      "fragment": "0x563c56f3d430",
+      "type": 10
+    },
+    {
+      "function": "avs_construction",
+      "return": 1,
+      "fragment": "0x563c56f3d430",
+      "node": 2,
+      "kind": "NL_CHECKED_AGGREGATE"
+    },
+    {
+      "function": "v0_validate_node",
+      "return": 1,
+      "fragment": "0x563c56f3d430",
+      "node": 7,
+      "kind": "NL_CHECKED_BINDING"
+    },
+    {
+      "function": "avs_shape",
+      "return": 1,
+      "fragment": "0x563c56f3d430",
+      "type": 10
+    },
+    {
+      "function": "avs_shape",
+      "return": 1,
+      "fragment": "0x563c56f3d430",
+      "type": 10
+    },
+    {
+      "function": "avs_construction",
+      "return": 1,
+      "fragment": "0x563c56f3d430",
+      "node": 9,
+      "kind": "NL_CHECKED_AGGREGATE"
+    },
+    {
+      "function": "v0_validate_node",
+      "return": 1,
+      "fragment": "0x563c56f3d430",
+      "node": 14,
+      "kind": "NL_CHECKED_BINDING"
+    },
+    {
+      "function": "nl_checked_if_return_view",
+      "return": 0,
+      "fragment": "0x563c56f3d430",
+      "node": 19
+    },
+    {
+      "function": "nl_checked_if_field_view",
+      "return": 0,
+      "fragment": "0x563c56f3d430",
+      "node": 19
+    },
+    {
+      "function": "if_field_selection",
+      "return": 0,
+      "fragment": "0x563c56f3d430",
+      "node": 19,
+      "actual_graph": {
+        "fragment": "0x563c56f3d430",
+        "world": "0x563c56f0dcc0",
+        "node": 19,
+        "kind": "NL_CHECKED_IF",
+        "normal_arms": 2,
+        "type": 1,
+        "result_count": 0,
+        "terminates": false,
+        "arm_count": 2,
+        "body_owner": "0x563c56f11c70",
+        "function_target": "0x563c56f1cfa0",
+        "declarations": [
+          {
+            "symbol": 1,
+            "initializer_kind": "NL_CHECKED_AGGREGATE",
+            "initializer_type": 10,
+            "initializer_result": 3
+          },
+          {
+            "symbol": 2,
+            "initializer_kind": "NL_CHECKED_AGGREGATE",
+            "initializer_type": 10,
+            "initializer_result": 6
+          }
+        ],
+        "arms": [
+          {
+            "artifact": "0x563c56f1c100",
+            "world": "0x563c56f10c90",
+            "context_origin": "0x563c56f10c90",
+            "parent": "0x563c56f3d430",
+            "parent_node": 19,
+            "index": 0,
+            "source": "0x563c56f13050",
+            "branch_value_prefix": 9,
+            "branch_fact_prefix": 6,
+            "scope_count": 0,
+            "domain_count": 0,
+            "region_count": 0,
+            "nodes": [
+              {
+                "kind": "NL_CHECKED_BLOCK",
+                "type": 1,
+                "result_count": 0,
+                "terminates": false
+              },
+              {
+                "kind": "NL_CHECKED_UNIT",
+                "type": 1,
+                "result_count": 0,
+                "terminates": false
+              },
+              {
+                "kind": "NL_CHECKED_IF_ARM",
+                "type": 1,
+                "result_count": 0,
+                "terminates": false
+              }
+            ],
+            "originals": [
+              {
+                "symbol": 1,
+                "place": 1,
+                "type": 10,
+                "incarnation": 1,
+                "fact": 1,
+                "live": true,
+                "value": 3,
+                "carrier": "NL_CARRIER_PLACE",
+                "owner_place": 1,
+                "fields": [
+                  {
+                    "place": 2,
+                    "fact": 2,
+                    "value": 2,
+                    "scalar": 186,
+                    "aggregate_owner_VALUE": 3
+                  },
+                  {
+                    "place": 3,
+                    "fact": 3,
+                    "value": 1,
+                    "scalar": 9,
+                    "aggregate_owner_VALUE": 3
+                  }
+                ]
+              },
+              {
+                "symbol": 2,
+                "place": 4,
+                "type": 10,
+                "incarnation": 4,
+                "fact": 4,
+                "live": true,
+                "value": 6,
+                "carrier": "NL_CARRIER_PLACE",
+                "owner_place": 4,
+                "fields": [
+                  {
+                    "place": 5,
+                    "fact": 5,
+                    "value": 4,
+                    "scalar": 72,
+                    "aggregate_owner_VALUE": 6
+                  },
+                  {
+                    "place": 6,
+                    "fact": 6,
+                    "value": 5,
+                    "scalar": 224,
+                    "aggregate_owner_VALUE": 6
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "artifact": "0x563c56f0f670",
+            "world": "0x563c56f10880",
+            "context_origin": "0x563c56f10880",
+            "parent": "0x563c56f3d430",
+            "parent_node": 19,
+            "index": 1,
+            "source": "0x563c56f13050",
+            "branch_value_prefix": 9,
+            "branch_fact_prefix": 6,
+            "scope_count": 0,
+            "domain_count": 0,
+            "region_count": 0,
+            "nodes": [
+              {
+                "kind": "NL_CHECKED_BLOCK",
+                "type": 1,
+                "result_count": 0,
+                "terminates": false
+              },
+              {
+                "kind": "NL_CHECKED_UNIT",
+                "type": 1,
+                "result_count": 0,
+                "terminates": false
+              },
+              {
+                "kind": "NL_CHECKED_IF_ARM",
+                "type": 1,
+                "result_count": 0,
+                "terminates": false
+              }
+            ],
+            "originals": [
+              {
+                "symbol": 1,
+                "place": 1,
+                "type": 10,
+                "incarnation": 1,
+                "fact": 1,
+                "live": true,
+                "value": 3,
+                "carrier": "NL_CARRIER_PLACE",
+                "owner_place": 1,
+                "fields": [
+                  {
+                    "place": 2,
+                    "fact": 2,
+                    "value": 2,
+                    "scalar": 186,
+                    "aggregate_owner_VALUE": 3
+                  },
+                  {
+                    "place": 3,
+                    "fact": 3,
+                    "value": 1,
+                    "scalar": 9,
+                    "aggregate_owner_VALUE": 3
+                  }
+                ]
+              },
+              {
+                "symbol": 2,
+                "place": 4,
+                "type": 10,
+                "incarnation": 4,
+                "fact": 4,
+                "live": true,
+                "value": 6,
+                "carrier": "NL_CARRIER_PLACE",
+                "owner_place": 4,
+                "fields": [
+                  {
+                    "place": 5,
+                    "fact": 5,
+                    "value": 4,
+                    "scalar": 72,
+                    "aggregate_owner_VALUE": 6
+                  },
+                  {
+                    "place": 6,
+                    "fact": 6,
+                    "value": 5,
+                    "scalar": 224,
+                    "aggregate_owner_VALUE": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "private_field_receipt": {
+          "ready": false,
+          "complete": false,
+          "sealed": false,
+          "root": 0,
+          "entry": "0x563c56f1c380",
+          "events": [
+            0,
+            0
+          ],
+          "changes": [
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "function": "v0_validate_node",
+      "return": 0,
+      "fragment": "0x563c56f3d430",
+      "node": 19,
+      "kind": "NL_CHECKED_IF"
+    },
+    {
+      "function": "v0_validate_node",
+      "return": 0,
+      "fragment": "0x563c56f3d430",
+      "node": 20,
+      "kind": "NL_CHECKED_STATEMENT"
+    },
+    {
+      "function": "v0_validate_node",
+      "return": 0,
+      "fragment": "0x563c56f3d430",
+      "node": 1,
+      "kind": "NL_CHECKED_BLOCK"
+    },
+    {
+      "function": "v0_validate_call",
+      "return": 0,
+      "fragment": "0x563c56f0ff70",
+      "node": 1,
+      "kind": "NL_CHECKED_REGISTERED_CALL"
+    },
+    {
+      "function": "nl_checked_array4_c17",
+      "return": 2
+    },
+    {
+      "function": "nl_checked_c_node",
+      "return": 1
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,201 @@
+{
+  "compiler": "Debian clang version 23.1.2 (++20260920034005+85ac56026243-1~exp1~20260920034024.76)",
+  "sanitizer": "undefined",
+  "positives": [
+    {
+      "source": "tests/p930/sources/budget_true.nl",
+      "source_sha256": "febac1afa9d58bb166740df1c47d640d2baeda8acae5f89a4b5b12dd691d3687",
+      "unmodified_c17_sha256": "7c05e858eeaefdcf19c99c6a1c4ad184e2349a4b14d55b5b1b74094e0a509a4d",
+      "passive_c17_sha256": "6189d0d91fe84075096285d19d5e10751545f612bea6c34b837595dbc4b2667c",
+      "native": [
+        {
+          "mode": "unmodified",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "unmodified",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": "P934 roots=0x7ffdfd8340ae/0x7ffdfd8340ac values=186,9/72,224 arm=0 size=2 offset=1\n"
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": "P934 roots=0x7ffe1bd28356/0x7ffe1bd28354 values=186,9/72,224 arm=0 size=2 offset=1\n"
+        }
+      ]
+    },
+    {
+      "source": "tests/p930/sources/budget_false.nl",
+      "source_sha256": "b4738981b36bf450a77cb1f593b2d8c8f8fd6f0c8703a6d6e8e66cc390a2deb1",
+      "unmodified_c17_sha256": "eb4a8c2acfefa07d3253399a10d36a33358485c0be608be15d0c81834baf6da8",
+      "passive_c17_sha256": "c2344179708b3d04e5e8f68d5abf6032beae73db7bb6c47e3d7d73ed83762385",
+      "native": [
+        {
+          "mode": "unmodified",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "unmodified",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": "P934 roots=0x7ffdb9384cbe/0x7ffdb9384cbc values=17,232/64,105 arm=1 size=2 offset=1\n"
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": "P934 roots=0x7ffe3632beb6/0x7ffe3632beb4 values=17,232/64,105 arm=1 size=2 offset=1\n"
+        }
+      ]
+    },
+    {
+      "source": "tests/p930/sources/order_only.nl",
+      "source_sha256": "62b1113c821fd6f7bc629ca6db8f4146a263d92c1b3a1ba1a933bf157f8854b8",
+      "unmodified_c17_sha256": "2421f0b88db6a521f9d60c7c0bb0d2e273ebacc345c1170f65d3f8e80722fca5",
+      "passive_c17_sha256": "041bd93b5082d67cc2251c216ef1cce1be50a0d30b00e7d1488a62a49e0c3ae6",
+      "native": [
+        {
+          "mode": "unmodified",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "unmodified",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": "P934 roots=0x7ffd95cbc5ee/0x7ffd95cbc5ec values=186,9/72,224 arm=0 size=2 offset=1\n"
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": "P934 roots=0x7fffaa6933a6/0x7fffaa6933a4 values=186,9/72,224 arm=0 size=2 offset=1\n"
+        }
+      ]
+    },
+    {
+      "source": "tests/p930/sources/root_values_swapped.nl",
+      "source_sha256": "687519610b6fb7a800c0557152774ca76c15150b651d14a7967fb25e206c1aee",
+      "unmodified_c17_sha256": "025c3eb5385de06c546ecc9d282989bbd0244676104ef31692c470004a39a38c",
+      "passive_c17_sha256": "383b72a6a729b65876d20f91bb7a678bea53e3ab4728ee2e6a807c97f7912322",
+      "native": [
+        {
+          "mode": "unmodified",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "unmodified",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": "P934 roots=0x7ffee6d5565e/0x7ffee6d5565c values=72,224/186,9 arm=0 size=2 offset=1\n"
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": "P934 roots=0x7fffbac263d6/0x7fffbac263d4 values=72,224/186,9 arm=0 size=2 offset=1\n"
+        }
+      ]
+    },
+    {
+      "source": "tests/p934/sources/quota_equal.nl",
+      "source_sha256": "4993ce35be8ca946f8a504017bf63268004d3b278eb2dd846366592531650fb1",
+      "unmodified_c17_sha256": "78c8190b37d0386c4c6eb47adc83f97ae447f8e1624c619b17896e65960dc497",
+      "passive_c17_sha256": "9400198b328b2df5e2c6b7e2b80a53a67fa90c97d3f960ce5dd49ca87bddc762",
+      "native": [
+        {
+          "mode": "unmodified",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "unmodified",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": "P934 roots=0x7ffe53046fee/0x7ffe53046fec values=255,0/203,41 arm=0 size=2 offset=1\n"
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": "P934 roots=0x7ffce3672db6/0x7ffce3672db4 values=255,0/203,41 arm=0 size=2 offset=1\n"
+        }
+      ]
+    },
+    {
+      "source": "tests/p934/sources/band_less.nl",
+      "source_sha256": "1527e0663966245ff5dca0c10c4fdbb02b4d792f29ca2587bf65e71bbd085704",
+      "unmodified_c17_sha256": "adb258cc794cea2c6a8a8d7ca55a641668379c47675eb4b3326c8cbe28aea1ca",
+      "passive_c17_sha256": "aad14241ae71073471acf189bcd9c57686c528ffe78501e1885f6d9597e64a91",
+      "native": [
+        {
+          "mode": "unmodified",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "unmodified",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": ""
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O0",
+          "exit": 0,
+          "stdout": "P934 roots=0x7ffc9a7dc47e/0x7ffc9a7dc47c values=1,128/254,250 arm=1 size=2 offset=1\n"
+        },
+        {
+          "mode": "passive",
+          "optimization": "-O2",
+          "exit": 0,
+          "stdout": "P934 roots=0x7ffe3d7bb726/0x7ffe3d7bb724 values=1,128/254,250 arm=1 size=2 offset=1\n"
+        }
+      ]
+    }
+  ],
+  "negative_controls": 6,
+  "real_named_output_faults": "fault=1 old artifact preserved; temporary removed\nfault=2 old artifact preserved; temporary removed\nfault=3 old artifact preserved; temporary removed\nwrapped allocation failures=382 preserved/cleanup; recovery=PASS\n",
+  "raw_and_instrumented_distinguished": true
+}
