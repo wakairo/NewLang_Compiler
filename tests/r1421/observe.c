@@ -35,7 +35,8 @@ static void snapshot(const NLSemanticContext *context, const char *phase)
     printf("R1421 phase=%s bindings=%zu functions=%zu values=%zu places=%zu "
            "domains=%zu scopes=%zu regions=%zu occurrences=%zu\n",
            phase, state.bindings, state.functions, state.values, state.places,
-           state.domains, state.scopes, state.backing_regions, state.occurrences);
+           state.domains, state.scopes, state.backing_regions,
+           state.occurrences);
 }
 
 static void observe(const NLCheckedFragment *fragment, unsigned depth,
@@ -44,9 +45,10 @@ static void observe(const NLCheckedFragment *fragment, unsigned depth,
     if (!fragment || depth > 16 || *seen > 16384) {
         return;
     }
-    printf("R1421 owned_depth=%u class=%d nodes=%zu source_present=%d\n",
-           depth, (int)nl_checked_proof_class(fragment),
-           nl_checked_node_count(fragment), nl_checked_source(fragment) != NULL);
+    printf("R1421 owned_depth=%u class=%d nodes=%zu source_present=%d\n", depth,
+           (int)nl_checked_proof_class(fragment),
+           nl_checked_node_count(fragment),
+           nl_checked_source(fragment) != NULL);
     size_t count = nl_checked_node_count(fragment);
     for (size_t id = 1; id <= count && *seen < 16384; ++id) {
         const NLCheckedNodeView *node = nl_checked_node_view(fragment, id);
@@ -91,8 +93,8 @@ static void observe(const NLCheckedFragment *fragment, unsigned depth,
                    record.pointer_argument, record.stability_argument,
                    record.pointer_if, record.projection, record.read,
                    record.conditional_target, record.conditional_incarnation,
-                   record.conditional_range.region, record.domain,
-                   record.scope, record.stable_at_operation,
+                   record.conditional_range.region, record.domain, record.scope,
+                   record.stable_at_operation,
                    record.original_live_at_operation, record.loan_closed,
                    (int)origin);
             if (origin != NL_CHECK_OK) {
@@ -182,8 +184,8 @@ int main(int argc, char **argv)
     NLSyntaxTree *call = NULL;
     NLCheckedFragment *owned = NULL;
     NLSourceStatus ss = nl_source_create(input, length, argv[2], &source);
-    printf("R1421 phase=source_create status=%d bytes=%zu owner=%d\n",
-           (int)ss, length, source != NULL);
+    printf("R1421 phase=source_create status=%d bytes=%zu owner=%d\n", (int)ss,
+           length, source != NULL);
     if (ss != NL_SOURCE_OK) {
         result = 4;
         goto cleanup;
@@ -238,7 +240,8 @@ int main(int argc, char **argv)
         result = 4;
         goto cleanup;
     }
-    ss = nl_source_create(call_text, (size_t)written, "r1421-call", &call_source);
+    ss = nl_source_create(call_text, (size_t)written, "r1421-call",
+                          &call_source);
     if (ss != NL_SOURCE_OK) {
         result = 4;
         goto cleanup;
