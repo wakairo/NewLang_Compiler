@@ -53,6 +53,7 @@ typedef struct Check {
     NLSemanticBindingView readonly_binding;
     NLSemanticPlaceView readonly_place;
     bool *scalar_h_read; /* borrowed synchronous enclosing body CHECK */
+    bool *ptr_if_result; /* success-only C1 proof, not a new authority */
     NLTypeId function_result;
     size_t function_binding_floor, function_scope_floor, function_place_floor;
     size_t function_value_prefix;
@@ -3811,9 +3812,10 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     const size_t binding_floor = c->binding_count, scope_floor = c->scope_count,
                  place_floor = c->place_count;
     const NLSourceSpan call_span = view(caller, call_id)->span;
-    bool scalar_h_read = false;
+    bool scalar_h_read = false, ptr_if_result = false;
     Check body = {.caller = caller,
                   .scalar_h_read = &scalar_h_read,
+                  .ptr_if_result = &ptr_if_result,
                   .body_budget = caller->body_budget,
                   .branch_budget = caller->branch_budget,
                   .depth = caller->depth,
@@ -4145,10 +4147,11 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         current_result = body.artifact->bodies[i]->copy_body &&
                          (body.artifact->bodies[i]->copy_body->current_loop ||
                           body.artifact->bodies[i]->copy_body->current_call);
-    if ((predicate_result || scalar_h_read || current_result) &&
+    if ((predicate_result || scalar_h_read || current_result || ptr_if_result) &&
         !host(
             &body,
-            nl_h_custody_seal_result(caller->artifact, body.artifact, call_id),
+            nl_h_custody_seal_result(caller->artifact, body.artifact, call_id,
+                                      ptr_if_result ? c : NULL),
             call_span))
         goto failure;
     if (body.artifact->copy_body && body.artifact->copy_body->current_loop &&
@@ -5063,6 +5066,10 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
     }
     if (!host(check, nl_if_field_finish(check->artifact, id, c), syntax->span))
         return 0;
+    /* Only the completed same-original C1 proof opts this actual call into
+     * the existing result seal, including its already-issued arm worlds. */
+    if (!returning && pointer_prefix && check->ptr_if_result)
+        *check->ptr_if_result = true;
     return id;
 }
 
@@ -6512,8 +6519,9 @@ static NLCheckStatus seal_linear_tree(NLCheckedFragment *root,
 static NLCheckStatus seal_linear_breaks(NLCheckedFragment *root,
                                         const NLSemanticContext *final)
 {
-    return nl_h_custody_validate(root) ? seal_linear_tree(root, root, final, 0)
-                                       : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    return nl_h_custody_validate_candidate(root, final)
+               ? seal_linear_tree(root, root, final, 0)
+               : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
 }
 
 static bool linear_graph_matches(const NLCheckedFragment *f,
@@ -9445,6 +9453,7 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
             c->types[type - 1].variant_types[variant - 1];
         Check branch = {.source = check->source,
                         .scalar_h_read = check->scalar_h_read,
+                        .ptr_if_result = check->ptr_if_result,
                         .origin_root = check->origin_root,
                         .origin_invocation = check->origin_invocation,
                         .origin_call = check->origin_call,
