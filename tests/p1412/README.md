@@ -18,3 +18,20 @@ explicitly under the Issue's finite cumulative OOM budget, not an open sweep.
 
 Stage1 is not C17/native success. The conditional physical consumer is a
 separate subsequent gate and commit. No unchecked grammar is implemented.
+
+The prospective C17 consumer uses the actual checked condition and each arm's
+parent-qualified runtime variable. Effect-free ref-to-ptr and initial None
+observations retain all common original/Domain/range/scope/permission checks.
+They do not execute the older committed-link mutation protocol. Its old paths
+remain unchanged and selected old native C is compared byte for byte.
+
+P1408's original `owned.c` keeps its historical C17-unsupported assertion.
+Its CHECK/owned coverage continues in `p1412_result_seal.unit`, and the current
+backend expectation is checked in `p1412_C17_false/true.unit`. This prospective
+registration replaces that obsolete coverage assertion; original S/N, their
+oracles, old source, C1 commit and RED evidence are unchanged. The semantic
+negative and original ptr-copy OOM registrations remain active.
+
+`native.py PACKET` performs exactly eight process runs (one raw, seven passive),
+without modifying generated C: GCC/Clang O0/O2, true/false IF, H0/H1/H2 cleanup.
+Clang observations also use ASan/UBSan/LSan. It refuses to repeat a saved ledger.
