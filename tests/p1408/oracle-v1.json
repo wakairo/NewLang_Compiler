@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "baseline_main": "6e351e76ee8ef03cb77717375431462166e3b21a",
+  "tree": "c1a4b8a00b1585806c8830409bede485f3933e03",
+  "canonical": "Draft17.37",
+  "sources": {
+    "S-v1-same-original-two-paths.nl": {
+      "bytes": 3488,
+      "sha256": "52160257c3527cabf8a321211fa876e77075002e1d4d04236e0236871f549852"
+    },
+    "N-v1-divergent-originals.nl": {
+      "bytes": 3486,
+      "sha256": "273f78983557a48fb65d5c2dfd12f5806d80171236849d3b3429991576dfedf1"
+    }
+  },
+  "S": {
+    "source_eligibility": "selected IF / Copy / nonexclusive ref->ptr / nested two-H, subject to actual first diagnostic",
+    "prediction_baseline": "CHECK exit3 P13-JOIN-PRECISION at IF; if an earlier profile/source rejection is observed, STOP there, no candidate",
+    "semantic_expected": "both arms preserve the genuine same back original; a repair must prove this from both issued operands and the shared prefix, not the false literal condition",
+    "fixed_check_expected": "OK only with same genuine back ptr reference facts, FREE dependencies, no Allocation/owner/Domain result",
+    "consumer": "back own Domain read of next returns None; frontend must not substitute front, guess original, or retain scoped ref",
+    "native_if_safely_reached": {
+      "condition": false,
+      "selected_original": "back",
+      "front_payload": 41,
+      "back_payload": 99,
+      "front_next": "Some(back)",
+      "back_next": "None"
+    }
+  },
+  "N": {
+    "classification": "precision/permission control, not a claim that returning a ptr to distinct live originals is an illegal producer",
+    "operands": [
+      "front original",
+      "back original via actual ref->ptr"
+    ],
+    "expected": "conservative P13 precision refusal retained by a same-origin-only repair; never fabricate a concrete back root from condition/host",
+    "native": "NOT_RUN"
+  },
+  "H_worlds": {
+    "0": {
+      "successes": 0,
+      "destroy": 0,
+      "erase": 0,
+      "finalize": 0,
+      "deallocate": 0
+    },
+    "1": {
+      "successes": 1,
+      "destroy": [
+        "front"
+      ],
+      "erase": 1,
+      "finalize": 1,
+      "deallocate": 1
+    },
+    "2": {
+      "successes": 2,
+      "destroy": [
+        "back",
+        "front"
+      ],
+      "erase": 2,
+      "finalize": 2,
+      "deallocate": 2
+    }
+  },
+  "authority": {
+    "no_new_owners": true,
+    "same_actual_domain_for_each_ref": true,
+    "all_loans_closed_before_end": true,
+    "if_owner_frame_unchanged": true,
+    "pointer_copy_is_not_owner": true,
+    "no_unchecked_syntax": true
+  },
+  "budget": {
+    "stage0_cli_max": 2,
+    "meaningful_private_commits_max": 2,
+    "source_freeze_entries_max": 3,
+    "safe_guest_max": 8,
+    "remote_push_pr_ci": 0
+  },
+  "prior_P1406_G0": "immutable historical negative RED reused without rerun",
+  "downstream_rule": "upstream rejection => downstream NOT_REACHED / native NOT_RUN, never PASS"
+}

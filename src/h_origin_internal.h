@@ -19,10 +19,13 @@ void nl_h_custody_commit(NLCheckedFragment *parent, NLCheckedFragment *child,
                          NLCustodyRole role, size_t slot);
 /* CHECK-only result lineage. Seal records the actual call plus its complete
  * owned callee subtree before publication. Validation authenticates those
- * issued bytes; it never mints a value, owner, or source permission. */
+ * issued bytes; it never mints a value, owner, or source permission. A ptr IF
+ * supplies its genuine commit-pending candidate to freeze the same receipt's
+ * semantic storage; NULL retains the existing node-only seal. */
 NLCheckStatus nl_h_custody_seal_result(NLCheckedFragment *parent,
                                        NLCheckedFragment *child,
-                                       NLCheckedNodeId call);
+                                       NLCheckedNodeId call,
+                                       const NLSemanticContext *ptr_if_world);
 bool nl_h_custody_result_valid(const NLCheckedFragment *parent,
                                NLCheckedNodeId call);
 /* Historical observation only. The actual parent and recorded call select a
@@ -30,6 +33,10 @@ bool nl_h_custody_result_valid(const NLCheckedFragment *parent,
 const NLCheckedFragment *nl_h_custody_observe_body(const NLCheckedFragment *,
                                                    NLCheckedNodeId);
 bool nl_h_custody_validate(const NLCheckedFragment *root);
+/* Only the unpublished CHECK transaction may validate its commit candidate.
+ * Published validation always follows the canonical recorded world. */
+bool nl_h_custody_validate_candidate(const NLCheckedFragment *root,
+                                     const NLSemanticContext *candidate);
 /* Borrowed structural views only; never an owner/source-authority receipt. */
 bool nl_h_custody_borrow_valid(const NLCheckedFragment *fragment);
 bool nl_h_origin_has_sites(const NLCheckedFragment *root);

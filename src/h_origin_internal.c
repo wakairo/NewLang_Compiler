@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "h_result_state_internal.h"
+
 typedef struct {
     NLCheckedFragment *child;
     const NLSemanticContext *world;
@@ -41,6 +43,8 @@ typedef struct CustodyEdge {
     CustodyState state;
     NLCheckedNodeView call_view;
     bool result_sealed;
+    const NLCheckedNodeView *call_nodes;
+    size_t call_count, call_capacity;
 } CustodyEdge;
 typedef struct CustodyParent {
     struct CustodyParent *next;
@@ -58,6 +62,8 @@ typedef struct CustodyParent {
     size_t issued_node_count, issued_node_capacity;
     NLCheckedNodeId issued_root;
     bool nodes_sealed;
+    unsigned char *issued_state; /* same result receipt, CHECK-issued bytes */
+    size_t issued_state_size;
 } CustodyParent;
 struct NLHOriginOwner {
     NLCheckedFragment *root, *invocation;
@@ -211,7 +217,25 @@ static bool issued_nodes_valid(const CustodyParent *p)
              !memcmp(f->nodes, p->issued_nodes,
                      p->issued_node_count * sizeof(*p->issued_nodes))));
 }
-static NLCheckStatus seal_nodes(struct NLHOriginOwner *o, NLCheckedFragment *f)
+static bool issued_state_valid(const CustodyParent *p,
+                               const NLSemanticContext *world)
+{
+    if (!p->issued_state)
+        return true;
+    HResultBytes state = {.bytes = p->issued_state,
+                          .size = p->issued_state_size,
+                          .compare = true};
+    return result_state(&state, p->fragment, world) && state.used == state.size;
+}
+static bool call_nodes_valid(const NLCheckedFragment *f, const CustodyEdge *e)
+{
+    return !e->call_nodes ||
+           (f->nodes == e->call_nodes && f->count == e->call_count &&
+            f->capacity == e->call_capacity);
+}
+static NLCheckStatus seal_nodes(struct NLHOriginOwner *o, NLCheckedFragment *f,
+                                const NLSemanticContext *published,
+                                const NLSemanticContext *actual)
 {
     CustodyParent *p = custody_parent(o, f);
     if (!p)
@@ -238,10 +262,27 @@ static NLCheckStatus seal_nodes(struct NLHOriginOwner *o, NLCheckedFragment *f)
         p->issued_root = f->root;
         p->nodes_sealed = true;
     }
+    if (actual && !p->issued_state) {
+        /* The root body borrows the destination context. Its genuine CHECK
+         * candidate is committed only after this call; owned arm worlds are
+         * already independent. Capture the data that will be published. */
+        const NLSemanticContext *world =
+            f->context == published ? actual : f->context;
+        HResultBytes count = {0};
+        if (!result_state(&count, f, world))
+            return NL_CHECK_RESOURCE_LIMIT;
+        p->issued_state = malloc(count.used);
+        if (!p->issued_state)
+            return NL_CHECK_OUT_OF_MEMORY;
+        p->issued_state_size = count.used;
+        HResultBytes state = {.bytes = p->issued_state, .size = count.used};
+        if (!result_state(&state, f, world) || state.used != state.size)
+            return NL_CHECK_INTERNAL_ERROR;
+    }
     for (CustodyEdge *e = p->edges; e; e = e->next) {
         if (e->state != COMMITTED)
             return NL_CHECK_INTERNAL_ERROR;
-        const NLCheckStatus status = seal_nodes(o, e->child);
+        const NLCheckStatus status = seal_nodes(o, e->child, published, actual);
         if (status != NL_CHECK_OK)
             return status;
     }
@@ -249,7 +290,8 @@ static NLCheckStatus seal_nodes(struct NLHOriginOwner *o, NLCheckedFragment *f)
 }
 NLCheckStatus nl_h_custody_seal_result(NLCheckedFragment *parent,
                                        NLCheckedFragment *child,
-                                       NLCheckedNodeId call)
+                                       NLCheckedNodeId call,
+                                       const NLSemanticContext *ptr_if_world)
 {
     if (!parent || !child || !call || !parent->h_origin ||
         child->h_origin != parent->h_origin)
@@ -262,11 +304,17 @@ NLCheckStatus nl_h_custody_seal_result(NLCheckedFragment *parent,
         if (e->state != PENDING || e->role != NL_CUSTODY_BODY ||
             e->child != child || e->site != call || e->result_sealed)
             continue;
-        const NLCheckStatus status = seal_nodes(parent->h_origin, child);
+        const NLCheckStatus status =
+            seal_nodes(parent->h_origin, child, child->context, ptr_if_world);
         if (status != NL_CHECK_OK)
             return status;
         e->call_view = *call_view;
         e->result_sealed = true;
+        if (ptr_if_world) {
+            e->call_nodes = parent->nodes;
+            e->call_count = parent->count;
+            e->call_capacity = parent->capacity;
+        }
         return NL_CHECK_OK;
     }
     return NL_CHECK_INTERNAL_ERROR;
@@ -275,7 +323,7 @@ static bool sealed_tree_valid(const struct NLHOriginOwner *o,
                               const NLCheckedFragment *f)
 {
     const CustodyParent *p = custody_parent(o, f);
-    if (!issued_nodes_valid(p))
+    if (!issued_nodes_valid(p) || !issued_state_valid(p, p->world))
         return false;
     for (const CustodyEdge *e = p->edges; e; e = e->next)
         if (e->state != COMMITTED || !sealed_tree_valid(o, e->child))
@@ -295,6 +343,7 @@ bool nl_h_custody_result_valid(const NLCheckedFragment *parent,
     for (const CustodyEdge *e = p->edges; e; e = e->next)
         if (e->state == COMMITTED && e->role == NL_CUSTODY_BODY &&
             e->site == call && e->result_sealed &&
+            call_nodes_valid(parent, e) &&
             same_node(parent, call, &e->call_view))
             return sealed_tree_valid(o, e->child);
     return false;
@@ -329,10 +378,12 @@ static bool observed_arm(const struct NLHOriginOwner *o, const CustodyEdge *e,
             return false;
     return true;
 }
-static bool validate_custody(const NLCheckedFragment *root, bool observation)
+static bool validate_custody(const NLCheckedFragment *root, bool observation,
+                             const NLSemanticContext *candidate)
 {
     const struct NLHOriginOwner *o = root ? root->h_origin : NULL;
-    if (!o || o->root != root || !custody_parent(o, root))
+    if (!o || o->root != root || !custody_parent(o, root) ||
+        (candidate && o->published))
         return false;
     for (const CustodyParent *p = o->parents; p; p = p->next) {
         const NLCheckedFragment *f = p->fragment;
@@ -357,7 +408,10 @@ static bool validate_custody(const NLCheckedFragment *root, bool observation)
          * profile when its displayed nodes are changed. Historical getters
          * still observe through the separate observation path. Count/base
          * authentication in issued_nodes_valid precedes any node read. */
-        if (!observation && p->nodes_sealed && !issued_nodes_valid(p))
+        const NLSemanticContext *world =
+            candidate && p->world == root->context ? candidate : p->world;
+        if (!observation && p->nodes_sealed &&
+            (!issued_nodes_valid(p) || !issued_state_valid(p, world)))
             return false;
         size_t arms = 0, bodies = 0;
         bool continuation[2] = {false, false};
@@ -377,7 +431,8 @@ static bool validate_custody(const NLCheckedFragment *root, bool observation)
             } else if (e->role == NL_CUSTODY_BODY) {
                 if (e->slot >= p->body_count ||
                     p->bodies[e->slot] != e->child ||
-                    p->calls[e->slot] != e->site)
+                    p->calls[e->slot] != e->site ||
+                    (!observation && !call_nodes_valid(f, e)))
                     return false;
                 ++bodies;
             } else {
@@ -401,7 +456,15 @@ bool nl_h_custody_validate(const NLCheckedFragment *root)
 {
     /* Emission/source authority always requires actual canonical membership,
      * including zero-H-site entries. Observations never satisfy this check. */
-    return validate_custody(root, false);
+    return validate_custody(root, false, NULL);
+}
+bool nl_h_custody_validate_candidate(const NLCheckedFragment *root,
+                                     const NLSemanticContext *candidate)
+{
+    /* CHECK's final precommit validation uses the real unpublished candidate.
+     * Published consumers cannot substitute a world through this entry point.
+     */
+    return candidate && validate_custody(root, false, candidate);
 }
 bool nl_h_origin_has_sites(const NLCheckedFragment *root)
 {
@@ -417,7 +480,7 @@ bool nl_h_custody_borrow_valid(const NLCheckedFragment *f)
     if (!f || !f->h_origin || !f->h_origin->published)
         return true;
     const struct NLHOriginOwner *o = f->h_origin;
-    if (!validate_custody(o->root, true))
+    if (!validate_custody(o->root, true, NULL))
         return false;
     if (custody_parent(o, f))
         return true;
@@ -659,6 +722,7 @@ void nl_h_origin_release_fragment(NLCheckedFragment *f)
             free(e);
         }
         free(p->issued_nodes);
+        free(p->issued_state);
         free(p);
     }
     /* No dereferences of child/world/parent endpoints during bookkeeping:

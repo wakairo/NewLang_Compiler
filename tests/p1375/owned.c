@@ -62,16 +62,18 @@ NLCheckStatus __wrap_nl_body_create_span(const NLSource *s, NLSourceSpan span,
 }
 NLCheckStatus __real_nl_h_custody_seal_result(NLCheckedFragment *,
                                               NLCheckedFragment *,
-                                              NLCheckedNodeId);
+                                              NLCheckedNodeId,
+                                              const NLSemanticContext *);
 NLCheckStatus __wrap_nl_h_custody_seal_result(NLCheckedFragment *p,
                                               NLCheckedFragment *c,
-                                              NLCheckedNodeId id)
+                                              NLCheckedNodeId id,
+                                              const NLSemanticContext *world)
 {
     if (armed && !ordinal) {
         assert(seals < 32);
         seal_at[seals++] = events + 1;
     }
-    return __real_nl_h_custody_seal_result(p, c, id);
+    return __real_nl_h_custody_seal_result(p, c, id, world);
 }
 
 typedef struct {
