@@ -4530,9 +4530,9 @@ static int compile_v0_to(const char *path, bool check_only,
                                         "failed to emit Checked-C", path, 1);
         } else if (status == NL_NODE_C_OUT_OF_MEMORY ||
                    status == NL_NODE_C_RESOURCE_LIMIT) {
-            result = report_error("NODE-C-RESOURCE",
-                                  "qualified emission resource failure", path,
-                                  1);
+            result =
+                report_error("NODE-C-RESOURCE",
+                             "qualified emission resource failure", path, 1);
         } else {
             result = report_error("V1-BACKEND-UNSUPPORTED",
                                   "local author-premise evidence has no "

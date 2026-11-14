@@ -52,8 +52,8 @@ static bool qualified_find(const NLCheckedFragment *f, size_t depth,
         if (!n)
             return false;
         const NLCheckedFragment *body = nl_checked_call_body(f, id);
-        if (body && !qualified_find(body, depth + 1, budget, owner, record,
-                                    found))
+        if (body &&
+            !qualified_find(body, depth + 1, budget, owner, record, found))
             return false;
         if (n->kind == NL_CHECKED_IF || n->kind == NL_CHECKED_MATCH) {
             for (size_t a = 0; a < n->item_count; ++a) {
@@ -101,15 +101,13 @@ static bool qualified_pointer_lineage(const NLCheckedFragment *owner,
         if (selected == p->copy_count)
             return false;
         const NLUncheckedCopy copy = p->copies[selected];
-        const NLCheckedNodeView *node =
-            nl_checked_node_view(owner, copy.node);
+        const NLCheckedNodeView *node = nl_checked_node_view(owner, copy.node);
         NLSemanticBindingView binding;
         NLSemanticValueView from, to;
         if (!node || node->kind != NL_CHECKED_IDENTIFIER ||
             node->symbol != copy.binding || node->type != ptr ||
             node->value_use != NL_VALUE_COPIED || node->result_count != 1 ||
-            node->results[0].type != ptr ||
-            node->results[0].value != copy.to ||
+            node->results[0].type != ptr || node->results[0].value != copy.to ||
             !nl_semantic_binding_view(c, copy.binding, &binding) ||
             binding.type != ptr || binding.value != copy.from ||
             !qualified_plain_value(c, copy.from, ptr, &from) ||
@@ -130,8 +128,8 @@ static bool qualified_prepare(Emit *e, const NLCheckedFragment *entry)
     const NLCheckedFragment *owner = NULL;
     NLCheckedLocalAssumptionView read = {0};
     size_t budget = 4096, found = 0;
-    if (!e || !entry || nl_checked_proof_class(entry) !=
-                            NL_CHECKED_AUTHOR_PREMISE ||
+    if (!e || !entry ||
+        nl_checked_proof_class(entry) != NL_CHECKED_AUTHOR_PREMISE ||
         !nl_h_unchecked_present(entry) ||
         !qualified_find(entry, 0, &budget, &owner, &read, &found) ||
         found != 1 || !owner || read.owner != owner ||
@@ -157,24 +155,8 @@ static bool qualified_prepare(Emit *e, const NLCheckedFragment *entry)
     const NLSemanticContext *c = nl_checked_context(owner);
     const NLTypeId boolean = nl_semantic_core_type(c, NL_TYPE_BOOL);
     const NLTypeId usize = nl_semantic_core_type(c, NL_TYPE_USIZE);
-    NLSemanticPlaceView target;
-    NLSemanticDomainView domain;
-    NLSemanticBackingView backing;
-    NLPlaceId unique = 0;
     if (!boolean || !usize || read.target_type != e->node ||
-        nl_unchecked_domain_target(c, e->node, read.domain, &unique) !=
-            NL_CHECK_OK ||
-        unique != read.conditional_target ||
-        !nl_semantic_place_view(c, unique, &target) || !target.live ||
-        !target.independent_root || target.type != e->node ||
-        target.incarnation != read.conditional_incarnation ||
-        target.governing_domain != read.domain ||
-        target.placement.region != read.conditional_range.region ||
-        target.placement.start != read.conditional_range.start ||
-        target.placement.length != read.conditional_range.length ||
-        !nl_semantic_domain_view(c, read.domain, &domain) || !domain.live ||
-        !nl_semantic_backing_view(c, target.placement.region, &backing) ||
-        !backing.live || !backing.ordinary_read || backing.size != 24)
+        !read.conditional_range.region || read.conditional_range.start != 0)
         return false;
 
     const NLCheckedNodeView *operation =
@@ -206,8 +188,7 @@ static bool qualified_prepare(Emit *e, const NLCheckedFragment *entry)
         operation_type.kind != NL_TYPE_REF || operation_type.is_exclusive ||
         operation_type.access != NL_ACCESS_READ ||
         operation_type.target != e->node ||
-        !qualified_plain_value(c, read.pointer_value, e->ptr,
-                               &pointer_value) ||
+        !qualified_plain_value(c, read.pointer_value, e->ptr, &pointer_value) ||
         pointer_value.reference.provenance != NL_PROVENANCE_UNKNOWN ||
         pointer_value.reference.place || pointer_value.reference.scope ||
         !qualified_plain_value(c, read.reference_value, operation->type,
@@ -256,8 +237,7 @@ static bool qualified_prepare(Emit *e, const NLCheckedFragment *entry)
         choice->results[0].value != p->pointer_result)
         return false;
     NLSemanticValueView pointer_result;
-    if (!qualified_plain_value(c, p->pointer_result, e->ptr,
-                               &pointer_result) ||
+    if (!qualified_plain_value(c, p->pointer_result, e->ptr, &pointer_result) ||
         pointer_result.reference.provenance != NL_PROVENANCE_UNKNOWN ||
         pointer_result.reference.place || pointer_result.reference.scope)
         return false;
@@ -300,8 +280,7 @@ static bool qualified_prepare(Emit *e, const NLCheckedFragment *entry)
         function->custody_recipient || !function->body ||
         function->body->count != 1 || !function->body->parameter_names[0] ||
         body->body_owner != function->body ||
-        body->source != function->body->source ||
-        !function->body->syntax ||
+        body->source != function->body->source || !function->body->syntax ||
         nl_syntax_tree_source(function->body->syntax) != body->source)
         return false;
     const NLCheckedNodeView *body_root =
@@ -348,17 +327,31 @@ static bool qualified_prepare(Emit *e, const NLCheckedFragment *entry)
             (tail->kind == NL_CHECKED_USIZE_EQUALITY ? 1u : 0u))
         return false;
 
-    const size_t selected =
-        tail->kind == NL_CHECKED_USIZE_EQUALITY ? 0u : 1u;
+    const size_t selected = tail->kind == NL_CHECKED_USIZE_EQUALITY ? 0u : 1u;
     for (size_t a = 0; a < 2; ++a) {
-        const NLCheckedFragment *arm = nl_checked_if_arm(owner, p->pointer_if, a);
+        const NLCheckedFragment *arm =
+            nl_checked_if_arm(owner, p->pointer_if, a);
         const NLCheckedNodeView *root =
             arm ? nl_checked_node_view(arm, nl_checked_root(arm)) : NULL;
         const NLCheckedNodeView *block =
             root ? nl_checked_node_view(arm, root->initializer) : NULL;
         const NLCheckedNodeView *value =
             block ? nl_checked_node_view(arm, block->tail) : NULL;
-        NLSemanticValueView prefix, copied;
+        NLSemanticValueView prefix = {0}, copied = {0};
+        const bool prefix_ok =
+            arm &&
+            nl_semantic_value_view(nl_checked_context(arm), p->prefix_values[a],
+                                   &prefix) &&
+            prefix.type == e->ptr &&
+            prefix.dependencies == NL_DEPENDENCY_FREE &&
+            !prefix.value_dependency_count && !prefix.reference_count;
+        const bool copied_ok =
+            arm && value &&
+            nl_semantic_value_view(nl_checked_context(arm),
+                                   value->results[0].value, &copied) &&
+            copied.type == e->ptr &&
+            copied.dependencies == NL_DEPENDENCY_FREE &&
+            !copied.value_dependency_count && !copied.reference_count;
         if (!arm || p->arms[a] != arm || !root ||
             root->kind != NL_CHECKED_IF_ARM || root->terminates ||
             root->result_count != 1 || !block ||
@@ -368,20 +361,15 @@ static bool qualified_prepare(Emit *e, const NLCheckedFragment *entry)
             value->kind != NL_CHECKED_IDENTIFIER || value->type != e->ptr ||
             value->value_use != NL_VALUE_COPIED || value->result_count != 1 ||
             root->results[0].value != value->results[0].value ||
-            block->results[0].value != value->results[0].value ||
-            !qualified_plain_value(nl_checked_context(arm),
-                                   p->prefix_values[a], e->ptr, &prefix) ||
-            !qualified_plain_value(nl_checked_context(arm),
-                                   value->results[0].value, e->ptr, &copied) ||
-            prefix.reference.provenance != NL_PROVENANCE_VALID ||
+            block->results[0].value != value->results[0].value || !prefix_ok ||
+            !copied_ok || prefix.reference.provenance != NL_PROVENANCE_VALID ||
             copied.reference.provenance != NL_PROVENANCE_VALID ||
             prefix.reference.place != copied.reference.place ||
             prefix.reference.incarnation != copied.reference.incarnation ||
             !prefix.reference.readable || !copied.reference.readable ||
             (a == selected &&
              (prefix.reference.place != read.conditional_target ||
-              prefix.reference.incarnation !=
-                  read.conditional_incarnation)))
+              prefix.reference.incarnation != read.conditional_incarnation)))
             return false;
     }
 
@@ -427,8 +415,8 @@ static bool qualified_ptr_if(Emit *e, Env *env, NLCheckedNodeId id,
                              const NLCheckedNodeView *choice, Value *out)
 {
     if (!e->qualified_unchecked || env->artifact != e->qualified_owner ||
-        id != e->qualified_if || choice != get(env, id) ||
-        ++e->ptr_ifs != 1 || ++e->qualified_conditions != 1)
+        id != e->qualified_if || choice != get(env, id) || ++e->ptr_ifs != 1 ||
+        ++e->qualified_conditions != 1)
         return reject(e);
     Value condition = {0};
     if (!expr(e, env, choice->initializer, &condition) ||
@@ -436,8 +424,7 @@ static bool qualified_ptr_if(Emit *e, Env *env, NLCheckedNodeId id,
         return reject(e);
     const Local *carriers[2] = {0};
     for (size_t a = 0; a < 2; ++a) {
-        const NLCheckedFragment *arm =
-            nl_checked_if_arm(env->artifact, id, a);
+        const NLCheckedFragment *arm = nl_checked_if_arm(env->artifact, id, a);
         const NLCheckedNodeView *root =
             arm ? nl_checked_node_view(arm, nl_checked_root(arm)) : NULL;
         const NLCheckedNodeView *block =
@@ -477,8 +464,7 @@ static bool qualified_ref(Emit *e, Env *env, const NLCheckedNodeView *op,
         stable != get(env, e->qualified_read.stability_argument) || !target ||
         target->region_slot >= 2 ||
         target->heap_place != e->qualified_read.conditional_target ||
-        target->heap_incarnation !=
-            e->qualified_read.conditional_incarnation ||
+        target->heap_incarnation != e->qualified_read.conditional_incarnation ||
         target->backing != e->qualified_read.conditional_range.region ||
         e->lifecycle[target->region_slot].stage != 4 ||
         env->stability_scope != e->qualified_read.scope ||
@@ -525,8 +511,8 @@ static bool qualified_load(Emit *e, Env *env, const NLCheckedNodeView *load,
                            Value *out)
 {
     if (!e->qualified_unchecked || env->artifact != e->qualified_owner ||
-        load != get(env, e->qualified_read.read) ||
-        ++e->qualified_loads != 1 || ++e->ptr_reads != 1)
+        load != get(env, e->qualified_read.read) || ++e->qualified_loads != 1 ||
+        ++e->ptr_reads != 1)
         return reject(e);
     Value projected = {0};
     if (!expr(e, env, load->first_argument, &projected) || !projected.temp)
@@ -550,7 +536,7 @@ static bool qualified_preamble(Emit *e)
                "#ifndef NL_QUALIFIED_CONDITION\n"
                "#define NL_QUALIFIED_CONDITION(...) ((void)0)\n#endif\n"
                "static uint8_t nl_qualified_predicate(size_t n){"
-               "return (uint8_t)(n%s n);}\n",
+               "volatile const size_t rhs=n;return (uint8_t)(n%s rhs);}\n",
                SIZE_MAX, operator_text);
 }
 

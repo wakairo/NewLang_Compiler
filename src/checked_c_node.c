@@ -487,8 +487,8 @@ static bool match_store_result(Emit *e, const NLCheckedFragment *f,
 static bool selected_reference(const Env *, const NLCheckedNodeView *,
                                NLSemanticValueView *);
 static const Env *domain_heap(const Env *, NLDomainId);
-#include "checked_c_qualified_internal.h"
 #include "checked_c_ptr_if_internal.h"
+#include "checked_c_qualified_internal.h"
 
 #include "checked_c_copy_internal.h"
 /* Uses the Copy carrier helpers above. */
@@ -1120,9 +1120,8 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         return e->qualified_unchecked && env->artifact == e->qualified_owner &&
                        id == e->qualified_call
                    ? qualified_bool_call(e, env, id, v, out)
-               : v->producer.entry_proved
-                   ? producer_call(e, env, id, v, out)
-                   : owner_call(e, env, id, v, out);
+               : v->producer.entry_proved ? producer_call(e, env, id, v, out)
+                                          : owner_call(e, env, id, v, out);
     if (v->kind == NL_CHECKED_AGGREGATE_BINDING) {
         const NLCheckedNodeView *init = get(env, v->initializer);
         if (init != NULL && e->live_tail != 0 && init->type == e->live_tail)
