@@ -1,5 +1,7 @@
 #ifndef NEWLANG_H_RESULT_STATE_INTERNAL_H
 #define NEWLANG_H_RESULT_STATE_INTERNAL_H
+#include "source_internal.h"
+#include "syntax_internal.h"
 
 /* The existing custody result seal also freezes the CHECK-issued storage
  * consumed by a ptr IF. This is byte authentication, not another semantic
@@ -58,6 +60,34 @@ static bool result_string(HResultBytes *s, const char *text)
     return result_bytes(s, text, size);
 }
 
+static bool result_source(HResultBytes *s, const NLSource *source)
+{
+    if (!result_bytes(s, &source, sizeof(source)))
+        return false;
+    if (!source)
+        return true;
+    const NLSourceView storage = nl_source_storage_view(source);
+    /* Allocation base/extent precede all reads of source bytes. */
+    return result_bytes(s, &storage, sizeof(storage)) &&
+           result_array(s, storage.bytes, storage.length, 1);
+}
+static bool result_syntax(HResultBytes *s, const NLSyntaxTree *tree)
+{
+    if (!result_bytes(s, &tree, sizeof(tree)))
+        return false;
+    if (!tree)
+        return true;
+    if (!result_bytes(s, tree, sizeof(*tree)))
+        return false;
+    const NLSyntaxNode *n = tree->nodes;
+    for (size_t i = 0; i < tree->node_count; ++i) {
+        if (!n || !result_bytes(s, n, sizeof(*n)))
+            return false;
+        n = n->owned_next; /* preceding authenticated header owns this edge */
+    }
+    return n == NULL;
+}
+
 static bool result_state(HResultBytes *s, const NLCheckedFragment *f,
                          const NLSemanticContext *c)
 {
@@ -71,6 +101,8 @@ static bool result_state(HResultBytes *s, const NLCheckedFragment *f,
     PART(f->if_arm_index);
     PART(f->branch_value_prefix);
     PART(f->branch_fact_prefix);
+    if (!result_source(s, f->source))
+        return false;
     if (!c || !result_bytes(s, c, sizeof(*c)))
         return false;
 #define ARRAY(member, count)                                                   \
@@ -119,6 +151,9 @@ static bool result_state(HResultBytes *s, const NLCheckedFragment *f,
             const size_t start = offsetof(NLFunctionBody, source);
             if (!result_bytes(s, (const unsigned char *)body + start,
                               sizeof(*body) - start))
+                return false;
+            if (!result_source(s, body->source) ||
+                !result_syntax(s, body->syntax))
                 return false;
             for (size_t j = 0; j < NL_SEMANTIC_MAX_PARAMETERS; ++j)
                 if (!result_string(s, body->parameter_names[j]))

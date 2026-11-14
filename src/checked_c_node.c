@@ -9,6 +9,7 @@
 #include "newlang/node_links.h"
 #include "newlang/raw_storage.h"
 #include "producer_status_internal.h"
+#include "unchecked_ref_internal.h"
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -3534,6 +3535,10 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     if (entry == NULL || out == NULL || length == NULL || *out != NULL)
         return NL_NODE_C_UNSUPPORTED;
     if (entry->h_origin && !nl_h_custody_validate(entry))
+        return NL_NODE_C_UNSUPPORTED;
+    /* This release implements qualified CHECK evidence only. No existing
+     * machine-only emitter may silently consume a declared local premise. */
+    if (nl_h_unchecked_present(entry))
         return NL_NODE_C_UNSUPPORTED;
     if (nl_h_origin_has_sites(entry) && !nl_h_origin_validate(entry))
         return NL_NODE_C_UNSUPPORTED;

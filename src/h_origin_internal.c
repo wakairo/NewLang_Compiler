@@ -1,4 +1,5 @@
 #include "h_origin_internal.h"
+#include "unchecked_ref_internal.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -64,6 +65,10 @@ typedef struct CustodyParent {
     bool nodes_sealed;
     unsigned char *issued_state; /* same result receipt, CHECK-issued bytes */
     size_t issued_state_size;
+    NLUncheckedProof *unchecked;
+    const NLUncheckedProof *issued_unchecked_base;
+    NLUncheckedProof issued_unchecked;
+    bool issued_unchecked_present;
 } CustodyParent;
 struct NLHOriginOwner {
     NLCheckedFragment *root, *invocation;
@@ -207,8 +212,13 @@ void nl_h_custody_commit(NLCheckedFragment *parent, NLCheckedFragment *child,
 static bool issued_nodes_valid(const CustodyParent *p)
 {
     const NLCheckedFragment *f = p ? p->fragment : NULL;
-    return p && p->nodes_sealed && f && f->context == p->world &&
-           f->source == p->source && f->nodes == p->issued_node_base &&
+    return p && p->nodes_sealed && f &&
+           p->unchecked == p->issued_unchecked_base &&
+           ((p->unchecked != NULL) == p->issued_unchecked_present) &&
+           (!p->unchecked || !memcmp(p->unchecked, &p->issued_unchecked,
+                                     sizeof(*p->unchecked))) &&
+           f->context == p->world && f->source == p->source &&
+           f->nodes == p->issued_node_base &&
            f->count == p->issued_node_count &&
            f->capacity == p->issued_node_capacity &&
            f->root == p->issued_root && f->body_owner == p->issued_body_owner &&
@@ -260,6 +270,14 @@ static NLCheckStatus seal_nodes(struct NLHOriginOwner *o, NLCheckedFragment *f,
         p->issued_node_count = f->count;
         p->issued_node_capacity = f->capacity;
         p->issued_root = f->root;
+        if (p->unchecked && p->unchecked->has_read &&
+            !p->unchecked->read.loan_closed)
+            return NL_CHECK_INTERNAL_ERROR;
+        p->issued_unchecked_base = p->unchecked;
+        p->issued_unchecked_present = p->unchecked != NULL;
+        if (p->unchecked)
+            memcpy(&p->issued_unchecked, p->unchecked,
+                   sizeof(p->issued_unchecked));
         p->nodes_sealed = true;
     }
     if (actual && !p->issued_state) {
@@ -723,6 +741,7 @@ void nl_h_origin_release_fragment(NLCheckedFragment *f)
         }
         free(p->issued_nodes);
         free(p->issued_state);
+        free(p->unchecked);
         free(p);
     }
     /* No dereferences of child/world/parent endpoints during bookkeeping:
@@ -738,4 +757,84 @@ void nl_h_origin_release_fragment(NLCheckedFragment *f)
         o->aborted = true;
     }
     f->h_origin = NULL;
+}
+
+NLCheckStatus nl_h_unchecked_prepare(NLCheckedFragment *f)
+{
+    CustodyParent *p = f ? custody_parent(f->h_origin, f) : NULL;
+    if (!p || p->nodes_sealed || f->h_origin->published)
+        return NL_CHECK_INTERNAL_ERROR;
+    if (!p->unchecked) {
+        p->unchecked = malloc(sizeof(*p->unchecked));
+        if (!p->unchecked)
+            return NL_CHECK_OUT_OF_MEMORY;
+        memset(p->unchecked, 0, sizeof(*p->unchecked));
+    }
+    return NL_CHECK_OK;
+}
+NLUncheckedProof *nl_h_unchecked_build(NLCheckedFragment *f)
+{
+    CustodyParent *p = f ? custody_parent(f->h_origin, f) : NULL;
+    return p && !p->nodes_sealed ? p->unchecked : NULL;
+}
+const NLUncheckedProof *nl_h_unchecked_data(const NLCheckedFragment *f)
+{
+    const CustodyParent *p = f ? custody_parent(f->h_origin, f) : NULL;
+    return p ? p->unchecked : NULL;
+}
+static bool unchecked_any(const NLCheckedFragment *f, bool assumed_only)
+{
+    const struct NLHOriginOwner *o = f ? f->h_origin : NULL;
+    if (!custody_parent(o, f))
+        return false;
+    for (const CustodyParent *p = o->parents; p; p = p->next) {
+        const NLUncheckedProof *records[] = {
+            p->unchecked,
+            p->issued_unchecked_present ? &p->issued_unchecked : NULL};
+        for (size_t i = 0; i < 2; ++i)
+            if (records[i] && records[i]->has_read &&
+                (!assumed_only || records[i]->read.assumed_conditions))
+                return true;
+    }
+    return false;
+}
+bool nl_h_unchecked_machine_only(const NLCheckedFragment *f)
+{
+    return !unchecked_any(f, true);
+}
+bool nl_h_unchecked_present(const NLCheckedFragment *f)
+{
+    return unchecked_any(f, false);
+}
+bool nl_checked_local_assumption_view(const NLCheckedFragment *f,
+                                      NLCheckedNodeId operation,
+                                      NLCheckedLocalAssumptionView *out)
+{
+    /* Historical observation reads the canonical sealed copy, not challenged
+     * nodes/world/record storage. It never grants current validity or truth. */
+    const CustodyParent *p = f ? custody_parent(f->h_origin, f) : NULL;
+    if (!out || !p || !p->nodes_sealed || !p->issued_unchecked_present ||
+        !p->issued_unchecked.has_read ||
+        p->issued_unchecked.read.operation != operation)
+        return false;
+    memcpy(out, &p->issued_unchecked.read, sizeof(*out));
+    return true;
+}
+NLCheckedProofClass nl_checked_proof_class(const NLCheckedFragment *f)
+{
+    const struct NLHOriginOwner *o = f ? f->h_origin : NULL;
+    if (!custody_parent(o, f) || !nl_h_custody_validate(o->root) ||
+        !nl_h_custody_result_valid(o->root, nl_checked_root(o->root)))
+        return NL_CHECKED_PROOF_INVALID;
+    return nl_h_unchecked_machine_only(f) ? NL_CHECKED_MACHINE_PROVED
+                                          : NL_CHECKED_AUTHOR_PREMISE;
+}
+NLCheckStatus nl_checked_local_assumption_origin(const NLCheckedFragment *f,
+                                                 NLCheckedNodeId operation)
+{
+    NLCheckedLocalAssumptionView record;
+    return nl_checked_local_assumption_view(f, operation, &record) &&
+                   nl_checked_proof_class(f) != NL_CHECKED_PROOF_INVALID
+               ? NL_CHECK_OK
+               : NL_CHECK_SEMANTIC_ERROR;
 }

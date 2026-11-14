@@ -235,6 +235,46 @@ typedef struct {
     NLReferenceFacts reference_result; /* checked ptr_from_ref facts */
 } NLCheckedNodeView;
 
+/* Source authentication is not proof of an author's true premise. These
+ * additive observations issue neither reference/owner rights nor truth.
+ * Existing public structures and ordinary checked reference facts are intact.
+ */
+typedef enum {
+    NL_CHECKED_PROOF_INVALID,
+    NL_CHECKED_MACHINE_PROVED,
+    NL_CHECKED_AUTHOR_PREMISE
+} NLCheckedProofClass;
+enum {
+    NL_AUTHOR_PTR_TARGET_DOMAIN = 1
+};
+typedef struct {
+    const NLSource *source; /* retained body Source, not just a filename */
+    const NLCheckedFragment *owner;
+    NLSourceSpan span;
+    NLCheckedNodeId operation, pointer_argument, stability_argument;
+    NLCheckedNodeId pointer_if, projection, read;
+    NLTypeId target_type;
+    NLValueId pointer_value, reference_value, read_value;
+    NLDomainId domain;
+    NLScopeId scope;
+    /* Conditional anchor under assumed_conditions, NEVER NLReferenceFacts. */
+    NLPlaceId conditional_target;
+    NLIncarnationId conditional_incarnation;
+    NLBackingRange conditional_range;
+    unsigned assumed_conditions;
+    bool stable_at_operation, original_live_at_operation, loan_closed;
+} NLCheckedLocalAssumptionView;
+/* Historical GET of a sealed record. Current caller/world integrity and the
+ * human premise are not certified by observation. out is untouched on false. */
+bool nl_checked_local_assumption_view(const NLCheckedFragment *,
+                                      NLCheckedNodeId,
+                                      NLCheckedLocalAssumptionView *out);
+/* Current source/call/record integrity only. NL_CHECK_OK does not prove the
+ * author premise. The class is INVALID on an unauthenticated result graph. */
+NLCheckStatus nl_checked_local_assumption_origin(const NLCheckedFragment *,
+                                                 NLCheckedNodeId);
+NLCheckedProofClass nl_checked_proof_class(const NLCheckedFragment *);
+
 /* Owned artifact, immutable after success. Nodes borrow artifact until destroy.
  * Copy views if retaining them across destruction. No syntax pointers, LLVM
  * objects, tuples or semantic ownership transfer on destruction. Result values

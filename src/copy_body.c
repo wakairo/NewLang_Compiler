@@ -1,6 +1,7 @@
 #include "newlang/copy_body.h"
 #include "h_origin_internal.h"
 #include "semantic_internal.h"
+#include "unchecked_ref_internal.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1710,6 +1711,8 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
                                             NLCheckedNodeId id,
                                             const NLCopyBodyView *candidate)
 {
+    if (!nl_h_unchecked_machine_only(caller))
+        return INVALID;
     const NLCopyBodyProof *p = proof_for_validation(caller, id);
     if (!p || !caller->nodes ||
         (candidate && !same_body_view(candidate, &p->view)))
@@ -2105,6 +2108,8 @@ NLCheckStatus nl_checked_copy_unit_validate(const NLCheckedFragment *caller,
                                             NLCheckedNodeId id,
                                             const NLCopyUnitView *candidate)
 {
+    if (!nl_h_unchecked_machine_only(caller))
+        return INVALID;
     const NLCopyBodyProof *p = proof_for_validation(caller, id);
     if (!p || !p->unit_call)
         return INVALID;

@@ -6,6 +6,9 @@
 /* Private construction state shared only by parser/syntax implementations. */
 struct NLSyntaxNode {
     NLSyntaxView view;
+    /* Exact contextual read modifier, reconstructed on retained-body parse.
+     * Not an ambient permission and not a public syntax/value ABI field. */
+    bool unchecked_read;
     struct NLSyntaxNode *owned_next;
     struct NLSyntaxNode *argument_next;
 };

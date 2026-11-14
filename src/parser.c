@@ -1136,6 +1136,29 @@ static NLSyntaxNode *source_primary(NLParser *parser, bool flat_atom)
         return NULL;
     const bool saved_array = parser->array4_initializer;
     NLSyntaxNode *result = NULL;
+    bool ordinary_unchecked = false;
+    NLSourceSpan unchecked_name = {0};
+    if (word(parser, "unchecked")) {
+        unchecked_name = parser->token.span;
+        consume(parser);
+        if (word(parser, "ref_from_ptr")) {
+            consume(parser);
+            result =
+                allocated_call(parser, unchecked_name, NL_SYNTAX_ALLOCATED_REF);
+            if (result && result->view.data.call.access != NL_ACCESS_READ) {
+                fail(parser, NL_PARSE_SYNTAX_ERROR, result->view.span,
+                     "UNCHECKED-READ-MODE",
+                     "contextual unchecked permits only explicit read mode");
+                result = NULL;
+            }
+            if (result)
+                result->unchecked_read = true;
+            goto done;
+        }
+        ordinary_unchecked = true;
+    }
+    if (ordinary_unchecked)
+        goto ordinary_name;
     if (word(parser, "loop")) {
         result = source_loop(parser);
         goto done;
@@ -1174,7 +1197,8 @@ static NLSyntaxNode *source_primary(NLParser *parser, bool flat_atom)
         result = source_block(parser);
         goto done;
     }
-    if (parser->token.kind != NL_TOKEN_WORD) {
+ordinary_name:
+    if (!ordinary_unchecked && parser->token.kind != NL_TOKEN_WORD) {
         fail(parser,
              expression_extension(parser) ? NL_PARSE_SYNTAX_UNSUPPORTED
                                           : NL_PARSE_SYNTAX_ERROR,
@@ -1182,20 +1206,24 @@ static NLSyntaxNode *source_primary(NLParser *parser, bool flat_atom)
              "expected name, call, registered aggregate or lexical block");
         goto done;
     }
-    const bool exact_array = word(parser, "Array");
-    const bool exact_option = word(parser, "Option");
-    const bool u8_literal = word(parser, "u8");
-    const bool usize_literal = word(parser, "usize");
-    const bool read_loan = word(parser, "loan_read");
-    const bool ending_loan = word(parser, "loan_exclusive_read");
-    const bool allocate = word(parser, "try_allocate_one");
-    const bool into = word(parser, "into_slot");
-    const bool erase = word(parser, "erase_slot");
-    const bool reloan = word(parser, "ref_from_ptr");
-    const bool ptr_loan = word(parser, "loan_read_ptr");
-    const bool write_loan = word(parser, "loan_write");
-    const NLSourceSpan name = parser->token.span;
-    consume(parser);
+    const bool exact_array = !ordinary_unchecked && word(parser, "Array");
+    const bool exact_option = !ordinary_unchecked && word(parser, "Option");
+    const bool u8_literal = !ordinary_unchecked && word(parser, "u8");
+    const bool usize_literal = !ordinary_unchecked && word(parser, "usize");
+    const bool read_loan = !ordinary_unchecked && word(parser, "loan_read");
+    const bool ending_loan =
+        !ordinary_unchecked && word(parser, "loan_exclusive_read");
+    const bool allocate =
+        !ordinary_unchecked && word(parser, "try_allocate_one");
+    const bool into = !ordinary_unchecked && word(parser, "into_slot");
+    const bool erase = !ordinary_unchecked && word(parser, "erase_slot");
+    const bool reloan = !ordinary_unchecked && word(parser, "ref_from_ptr");
+    const bool ptr_loan = !ordinary_unchecked && word(parser, "loan_read_ptr");
+    const bool write_loan = !ordinary_unchecked && word(parser, "loan_write");
+    const NLSourceSpan name =
+        ordinary_unchecked ? unchecked_name : parser->token.span;
+    if (!ordinary_unchecked)
+        consume(parser);
     if (exact_array && punct(parser, '<')) {
         parser->array4_initializer = true;
         NLSyntaxNode *t = array4_type(parser, name);

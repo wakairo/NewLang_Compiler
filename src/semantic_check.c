@@ -8,6 +8,8 @@
 #include "pure_u8_internal.h"
 #include "semantic_internal.h"
 #include "stutter_control_internal.h"
+#include "syntax_internal.h"
+#include "unchecked_ref_internal.h"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -54,6 +56,8 @@ typedef struct Check {
     NLSemanticPlaceView readonly_place;
     bool *scalar_h_read; /* borrowed synchronous enclosing body CHECK */
     bool *ptr_if_result; /* success-only C1 proof, not a new authority */
+    const NLSyntaxView
+        *ptr_value_demand; /* one exact initializer, not permission */
     NLTypeId function_result;
     size_t function_binding_floor, function_scope_floor, function_place_floor;
     size_t function_value_prefix;
@@ -516,6 +520,28 @@ static NLSymbolId available(Check *check, NLSourceSpan name)
     return symbol;
 }
 
+static bool opaque_value(const NLUncheckedProof *p, NLValueId value)
+{
+    if (!p || !p->has_pointer || p->copy_count > NL_UNCHECKED_COPY_LIMIT)
+        return false;
+    if (p->pointer_result == value)
+        return true;
+    for (size_t i = 0; i < p->copy_count; ++i)
+        if (p->copies[i].to == value)
+            return true;
+    return false;
+}
+static bool qualified_active(const Check *check)
+{
+    const NLUncheckedProof *p = nl_h_unchecked_data(check->artifact);
+    return p && p->has_read && p->read.assumed_conditions && p->read.scope &&
+           scope_active(check->context, p->read.scope) &&
+           p->read.reference_value &&
+           p->read.reference_value <= check->context->value_count &&
+           check->context->values[p->read.reference_value - 1].carrier !=
+               NL_CARRIER_ENDED;
+}
+
 static NLCheckedNodeId binding_use(Check *check, NLSymbolId symbol,
                                    NLSourceSpan span, NLSourceSpan name)
 {
@@ -530,6 +556,14 @@ static NLCheckedNodeId binding_use(Check *check, NLSymbolId symbol,
     }
     const NLSemanticBindingView binding = c->bindings[symbol - 1].view;
     const NLSemanticTypeView type = c->types[binding.type - 1].view;
+    const NLUncheckedProof *qualified = nl_h_unchecked_data(check->artifact);
+    if (type.kind == NL_TYPE_REF && qualified && qualified->has_read &&
+        qualified->read.assumed_conditions &&
+        qualified->read.reference_value == binding.value) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, span, "UNCHECKED-REF-USE",
+             "qualified read-ref is confined to its selected scoped read");
+        return 0;
+    }
     if (type.kind == NL_TYPE_REF &&
         !reference_live(check, binding.value, span)) {
         return 0;
@@ -563,7 +597,7 @@ static NLCheckedNodeId binding_use(Check *check, NLSymbolId symbol,
         c->values[value - 1].carrier = NL_CARRIER_LOOSE;
         c->values[value - 1].owner_place = 0;
     }
-    return add(
+    const NLCheckedNodeId id = add(
         check,
         (NLCheckedNodeView){
             .kind = NL_CHECKED_IDENTIFIER,
@@ -575,8 +609,21 @@ static NLCheckedNodeId binding_use(Check *check, NLSymbolId symbol,
             .result_count = 1,
             .results = {{binding.type, value}},
             .has_reference_result = type.kind == NL_TYPE_PTR &&
-                                    c->values[value - 1].reference_count == 0,
+                                    c->values[value - 1].reference_count == 0 &&
+                                    c->values[value - 1].reference.provenance ==
+                                        NL_PROVENANCE_VALID,
             .reference_result = c->values[value - 1].reference});
+    NLUncheckedProof *p = nl_h_unchecked_build(check->artifact);
+    if (id && type.kind == NL_TYPE_PTR && opaque_value(p, binding.value)) {
+        if (p->copy_count == NL_UNCHECKED_COPY_LIMIT) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                 "UNCHECKED-COPY-PRECISION", "finite Copy lineage exhausted");
+            return 0;
+        }
+        p->copies[p->copy_count++] =
+            (NLUncheckedCopy){binding.value, value, id, symbol};
+    }
+    return id;
 }
 
 static NLCheckedNodeId identifier(Check *check, const NLSyntaxView *syntax)
@@ -1454,7 +1501,7 @@ static bool run_body(Check *, NLCheckedNodeId, const NLFunctionEntry *,
 
 static NLCheckedNodeId allocated_raw(Check *, const NLSyntaxView *,
                                      NLRawOperationKind);
-static NLCheckedNodeId allocated_ref(Check *, const NLSyntaxView *);
+static NLCheckedNodeId allocated_ref(Check *, const NLSyntaxNode *);
 static NLCheckedNodeId link_read(Check *, const NLSyntaxView *);
 
 /* §18.1a admission is read-only. Arguments have undergone ordinary Copy/move
@@ -1841,6 +1888,13 @@ static bool custody_preflight(Check *check, const NLSyntaxView *syntax,
 
 static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
 {
+    if (qualified_active(check) &&
+        !equal_name(check, syntax->data.call.callee, "read")) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "UNCHECKED-LOAN-CONFLICT",
+             "unknown active referent cannot certify a mutating/call effect");
+        return 0;
+    }
     NLSemanticContext *const c = check->context;
     if (equal_name(check, syntax->data.call.callee, "deallocate"))
         return allocated_raw(check, syntax, NL_RAW_DEALLOCATE);
@@ -2375,6 +2429,123 @@ static NLCheckedNodeId field_ref(Check *check, const NLSyntaxView *s,
                           .results = {{projected.type, value}}});
 }
 
+static NLCheckedNodeId unchecked_link_read(Check *check, const NLSyntaxView *s,
+                                           const NLSyntaxView *operand)
+{
+    NLUncheckedProof *p = nl_h_unchecked_build(check->artifact);
+    if (!p || !p->has_read || !p->read.assumed_conditions)
+        return 0;
+    const NLSymbolId symbol =
+        available(check, operand->data.field_designator.base);
+    if (!symbol)
+        return 0;
+    NLSemanticContext *c = check->context;
+    const NLValueId ref = c->bindings[symbol - 1].view.value;
+    if (ref != p->read.reference_value)
+        return 0;
+    if (!qualified_active(check) || p->read.read ||
+        !scope_active(c, p->read.scope)) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "UNCHECKED-READ-SCOPE",
+             "qualified read needs its real live loan");
+        return 0;
+    }
+    NLPlaceId target = 0;
+    const NLCheckStatus event = nl_unchecked_domain_target(
+        c, p->read.target_type, p->read.domain, &target);
+    if (event != NL_CHECK_OK || target != p->read.conditional_target ||
+        c->places[target - 1].incarnation != p->read.conditional_incarnation) {
+        fail(check, event == NL_CHECK_OK ? NL_CHECK_SEMANTIC_ERROR : event,
+             s->span, "UNCHECKED-READ-EVENT", "conditional anchor changed");
+        return 0;
+    }
+    const NLTypeEntry *type = &c->types[p->read.target_type - 1];
+    size_t index = type->view.field_count;
+    for (size_t i = 0; i < type->view.field_count; ++i)
+        if (equal_name(check, operand->data.field_designator.field,
+                       type->field_names[i]))
+            index = i;
+    if (index >= type->view.field_count ||
+        (index != 0 &&
+         !(index == 1 && scalar_h_source(c, p->read.target_type)))) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, operand->span,
+             "UNCHECKED-READ-FIELD", "only selected H read projections");
+        return 0;
+    }
+    const NLTypeId field_type = type->field_types[index];
+    if (!c->types[field_type - 1].view.is_copy ||
+        !c->types[field_type - 1].view.is_discardable) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, operand->span,
+             "UNCHECKED-READ-COPY", "read result must be a selected free Copy");
+        return 0;
+    }
+    NLValueId actual_copy = 0;
+    if (!host(check, nl_sem_copy_value(c, ref, &actual_copy), operand->span))
+        return 0;
+    const NLCheckedNodeId arg =
+        add(check, (NLCheckedNodeView){
+                       .kind = NL_CHECKED_IDENTIFIER,
+                       .span = operand->data.field_designator.base,
+                       .type = c->values[ref - 1].type,
+                       .symbol = symbol,
+                       .value_use = NL_VALUE_COPIED,
+                       .result_count = 1,
+                       .results = {{c->values[ref - 1].type, actual_copy}}});
+    if (!arg)
+        return 0;
+    const NLTypeId projected_type = compound(check, NL_TYPE_REF, field_type,
+                                             NL_ACCESS_READ, false, s->span);
+    if (!projected_type)
+        return 0;
+    const NLValueId projection =
+        new_value(check,
+                  (NLSemanticValueView){.type = projected_type,
+                                        .reference = {.scope = p->read.scope}},
+                  operand->span);
+    if (!projection)
+        return 0;
+    /* Only type/index/access shape is public here. present/parent/old_value
+     * remain absent: conditional target is NOT a normal checked field fact. */
+    const NLCheckedField shape = {.base = symbol,
+                                  .nominal = p->read.target_type,
+                                  .type = field_type,
+                                  .index = index,
+                                  .access = NL_ACCESS_READ};
+    const NLCheckedNodeId projected = add(
+        check, (NLCheckedNodeView){.kind = NL_CHECKED_FIELD_REF,
+                                   .span = operand->span,
+                                   .type = projected_type,
+                                   .symbol = symbol,
+                                   .field = shape,
+                                   .first_argument = arg,
+                                   .argument_count = 1,
+                                   .result_count = 1,
+                                   .results = {{projected_type, projection}}});
+    if (!projected)
+        return 0;
+    const NLValueId value =
+        new_value(check, (NLSemanticValueView){.type = field_type}, s->span);
+    if (!value)
+        return 0;
+    end_temporary(check, actual_copy);
+    end_temporary(check, projection);
+    const NLCheckedNodeId id =
+        add(check, (NLCheckedNodeView){.kind = NL_CHECKED_LINK_READ,
+                                       .span = s->span,
+                                       .type = field_type,
+                                       .field = shape,
+                                       .first_argument = projected,
+                                       .argument_count = 1,
+                                       .value_use = NL_VALUE_COPIED,
+                                       .result_count = 1,
+                                       .results = {{field_type, value}}});
+    if (id) {
+        p->read.projection = projected;
+        p->read.read = id;
+        p->read.read_value = value;
+    }
+    return id;
+}
+
 static NLCheckedNodeId link_read(Check *check, const NLSyntaxView *s)
 {
     const NLSyntaxView *operand = nl_syntax_node_view(s->data.call.arguments);
@@ -2384,6 +2555,9 @@ static NLCheckedNodeId link_read(Check *check, const NLSyntaxView *s)
              "HEAP-LINK-READ-PROFILE", "read requires the bounded ref@link");
         return 0;
     }
+    const NLCheckedNodeId qualified = unchecked_link_read(check, s, operand);
+    if (qualified || check->status != NL_CHECK_OK)
+        return qualified;
     const NLCheckedNodeId projected = field_ref(check, operand, true);
     if (projected == 0)
         return 0;
@@ -2763,7 +2937,7 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
                                    ? NL_RAW_INTO_SLOT
                                    : NL_RAW_ERASE_SLOT);
     } else if (node->kind == NL_SYNTAX_ALLOCATED_REF) {
-        result = allocated_ref(check, node);
+        result = allocated_ref(check, syntax);
     } else if (node->kind == NL_SYNTAX_ALLOCATED_TRY) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, node->span,
              "ALLOCATED-OUTCOME-PRECISION",
@@ -3317,6 +3491,57 @@ static NLCheckedNodeId source_statement(Check *check,
 static bool end_bindings(Check *check, size_t floor, NLSourceSpan span)
 {
     NLSemanticContext *c = check->context;
+    const NLUncheckedProof *qualified = nl_h_unchecked_data(check->artifact);
+    if (check->in_source_loan && qualified && qualified->has_read &&
+        qualified->read.assumed_conditions) {
+        /* Release the confined borrow package before its stability carrier.
+         * This ends only a local ref value, NEVER its conditional H target.
+         * No surviving unknown ref may escape this lexical teardown. */
+        for (size_t i = floor; i < c->binding_count; ++i) {
+            NLBindingEntry *entry = &c->bindings[i];
+            if (entry->hidden || entry->view.availability != NL_AVAILABLE ||
+                entry->view.value != qualified->read.reference_value)
+                continue;
+            const NLSemanticValueView borrow = c->values[entry->view.value - 1];
+            const NLSemanticTypeView borrow_type =
+                c->types[entry->view.type - 1].view;
+            if (borrow_type.kind != NL_TYPE_REF || borrow_type.is_exclusive ||
+                borrow_type.access != NL_ACCESS_READ ||
+                borrow.reference.provenance != NL_PROVENANCE_UNKNOWN ||
+                borrow.reference.place ||
+                borrow.reference.scope != qualified->read.scope) {
+                fail(check, NL_CHECK_INTERNAL_ERROR, span,
+                     "UNCHECKED-BORROW-STORAGE",
+                     "invalid qualified local package");
+                return false;
+            }
+            for (size_t j = 0; j < c->value_count; ++j) {
+                const NLSemanticValueView v = c->values[j];
+                if (j + 1 != entry->view.value &&
+                    v.carrier != NL_CARRIER_ENDED &&
+                    c->types[v.type - 1].view.kind == NL_TYPE_REF &&
+                    v.reference.provenance == NL_PROVENANCE_UNKNOWN &&
+                    v.reference.scope == qualified->read.scope) {
+                    fail(check, NL_CHECK_SEMANTIC_ERROR, span,
+                         "UNCHECKED-SCOPE-ESCAPE",
+                         "qualified child outlives borrow");
+                    return false;
+                }
+            }
+            const NLCheckStatus ending =
+                nl_fixed_end_dependencies(c, entry->view.place, floor);
+            if (!host(check, ending, span) ||
+                conflicts(check, entry->view.place, false, true,
+                          entry->view.value, span))
+                return false;
+            end_temporary(check, entry->view.value);
+            c->places[entry->view.place - 1].live = false;
+            c->places[entry->view.place - 1].current_value = 0;
+            c->places[entry->view.place - 1].current_fact = 0;
+            c->places[entry->view.place - 1].governing_domain = 0;
+            entry->view.availability = NL_CONSUMED;
+        }
+    }
     for (size_t i = floor; i < c->binding_count; ++i) {
         NLBindingEntry *entry = &c->bindings[i];
         if (entry->hidden)
@@ -3436,6 +3661,88 @@ static NLCheckedNodeId source_return(Check *check, const NLSyntaxView *syntax)
 static bool custody_continue_block(Check *, const NLSyntaxView *,
                                    const NLSyntaxNode *, size_t,
                                    NLCheckedNodeId);
+static bool unchecked_name_equal(Check *check, NLSourceSpan a, NLSourceSpan b)
+{
+    NLSourceView x, y;
+    return nl_source_view(check->source, a, &x) &&
+           nl_source_view(check->source, b, &y) && x.length == y.length &&
+           !memcmp(x.bytes, y.bytes, x.length);
+}
+static bool unchecked_demand(Check *, const NLSyntaxNode *,
+                             const NLSourceSpan *, size_t, size_t);
+static bool unchecked_demand_items(Check *check, const NLSyntaxNode *items,
+                                   const NLSyntaxNode *tail,
+                                   const NLSourceSpan *names, size_t count,
+                                   size_t depth)
+{
+    if (depth > NL_UNCHECKED_COPY_LIMIT || count > NL_UNCHECKED_COPY_LIMIT)
+        return false;
+    NLSourceSpan aliases[NL_UNCHECKED_COPY_LIMIT];
+    memcpy(aliases, names, count * sizeof(*names));
+    for (const NLSyntaxNode *n = items; n; n = nl_syntax_next_argument(n)) {
+        const NLSyntaxView *v = nl_syntax_node_view(n);
+        if (unchecked_demand(check, n, aliases, count, depth + 1))
+            return true;
+        if (v->kind == NL_SYNTAX_BINDING) {
+            const NLSyntaxView *init =
+                nl_syntax_node_view(v->data.binding.initializer);
+            bool copy = false;
+            for (size_t i = 0; i < count; ++i)
+                copy |= init && init->kind == NL_SYNTAX_EXPR_NAME &&
+                        unchecked_name_equal(check, aliases[i], init->span);
+            for (size_t i = 0; i < count;)
+                if (unchecked_name_equal(check, aliases[i],
+                                         v->data.binding.name))
+                    aliases[i] = aliases[--count];
+                else
+                    ++i;
+            if (copy) {
+                if (count == NL_UNCHECKED_COPY_LIMIT)
+                    return false;
+                aliases[count++] = v->data.binding.name;
+            }
+        }
+    }
+    return unchecked_demand(check, tail, aliases, count, depth + 1);
+}
+/* This bounded lexical demand controls value precision only. The actual
+ * operand must later resolve to the issued Copy lineage; spelling is never
+ * proof of a pointer, Domain, authority, or branch reachability. */
+static bool unchecked_demand(Check *check, const NLSyntaxNode *node,
+                             const NLSourceSpan *names, size_t count,
+                             size_t depth)
+{
+    if (!node || depth > NL_UNCHECKED_COPY_LIMIT)
+        return false;
+    const NLSyntaxView *v = nl_syntax_node_view(node);
+    if (v->kind == NL_SYNTAX_ALLOCATED_REF && node->unchecked_read) {
+        const NLSyntaxView *ptr = nl_syntax_node_view(v->data.call.arguments);
+        for (size_t i = 0; ptr && i < count; ++i)
+            if (unchecked_name_equal(check, names[i], ptr->span))
+                return true;
+    } else if (v->kind == NL_SYNTAX_BINDING) {
+        return unchecked_demand(check, v->data.binding.initializer, names,
+                                count, depth + 1);
+    } else if (v->kind == NL_SYNTAX_STATEMENT) {
+        return unchecked_demand(check, v->data.statement.expression, names,
+                                count, depth + 1);
+    } else if (v->kind == NL_SYNTAX_BLOCK) {
+        return unchecked_demand_items(check, v->data.block.items,
+                                      v->data.block.tail, names, count,
+                                      depth + 1);
+    } else if (v->kind == NL_SYNTAX_LOCAL_READ_LOAN ||
+               v->kind == NL_SYNTAX_LOAN) {
+        NLSourceSpan aliases[NL_UNCHECKED_COPY_LIMIT];
+        size_t kept = 0;
+        for (size_t i = 0; i < count; ++i)
+            if (!unchecked_name_equal(check, names[i], v->data.loan.binding))
+                aliases[kept++] = names[i];
+        return unchecked_demand(check, v->data.loan.body, aliases, kept,
+                                depth + 1);
+    }
+    return false;
+}
+
 static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
 {
     NLSemanticContext *c = check->context;
@@ -3462,12 +3769,22 @@ static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
                  "body receiving pattern needs richer relative analysis");
             goto cleanup;
         }
+        const NLSyntaxView *saved_demand = check->ptr_value_demand;
+        if (v->kind == NL_SYNTAX_BINDING &&
+            nl_syntax_node_view(v->data.binding.initializer)->kind ==
+                NL_SYNTAX_IF &&
+            unchecked_demand_items(check, nl_syntax_next_argument(item),
+                                   syntax->data.block.tail,
+                                   &v->data.binding.name, 1, 0))
+            check->ptr_value_demand =
+                nl_syntax_node_view(v->data.binding.initializer);
         const NLCheckedNodeId child =
             v->kind == NL_SYNTAX_CONTINUE || v->kind == NL_SYNTAX_BREAK
                 ? source_control(check, v)
             : v->kind == NL_SYNTAX_RETURN    ? source_return(check, v)
             : v->kind == NL_SYNTAX_STATEMENT ? source_statement(check, v)
                                              : source_binding(check, v);
+        check->ptr_value_demand = saved_demand;
         if (child == 0)
             goto cleanup;
         if (previous == 0)
@@ -4957,11 +5274,30 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
     const bool copying = flat_copy(c, types[0]);
     const bool pointer = c->types[types[0] - 1].view.kind == NL_TYPE_PTR;
     NLValueId pointer_prefix = 0;
+    NLValueId opaque_prefix[2] = {0};
+    bool opaque = false;
     if (counts[0] != 0 && pointer) {
         pointer_prefix = same_prefix_ptr(c, post, results);
         if (pointer_prefix == 0) {
-            if_precision(check, syntax->span);
-            return 0;
+            if (returning || check->ptr_value_demand != syntax ||
+                !check->allocated_slice ||
+                !nl_recursive_local_type(c,
+                                         c->types[types[0] - 1].view.target) ||
+                c->types[c->types[types[0] - 1].view.target - 1]
+                        .view.field_count != 2) {
+                if_precision(check, syntax->span);
+                return 0;
+            }
+            for (size_t a = 0; a < 2; ++a) {
+                const NLSemanticContext *single[2] = {post[a], post[a]};
+                const NLCheckedResult same[2] = {results[a], results[a]};
+                opaque_prefix[a] = same_prefix_ptr(c, single, same);
+                if (!opaque_prefix[a]) {
+                    if_precision(check, syntax->span);
+                    return 0;
+                }
+            }
+            opaque = true;
         }
     }
     NLValueId identity = 0;
@@ -5047,6 +5383,29 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
         if (output == 0)
             return 0;
     }
+    if (opaque) {
+        if (!host(check, nl_h_unchecked_prepare(check->artifact), syntax->span))
+            return 0;
+        NLUncheckedProof *p = nl_h_unchecked_build(check->artifact);
+        if (!p || p->has_pointer) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "UNCHECKED-VALUE-PRECISION", "one value-only IF per fragment");
+            return 0;
+        }
+        p->has_pointer = true;
+        p->pointer_type = types[0];
+        p->pointer_if = id;
+        p->condition = condition;
+        p->pointer_result = output;
+        for (size_t a = 0; a < 2; ++a) {
+            p->prefix_values[a] = opaque_prefix[a];
+            p->arms[a] = evidence[a];
+            const NLCheckedNodeView *arm =
+                nl_checked_node_view(evidence[a], evidence[a]->root);
+            p->tails[a] =
+                nl_checked_node_view(evidence[a], arm->initializer)->tail;
+        }
+    }
     if (returning) {
         if (!end_bindings(check, check->function_binding_floor, syntax->span) ||
             !host(check,
@@ -5068,7 +5427,7 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
         return 0;
     /* Only the completed same-original C1 proof opts this actual call into
      * the existing result seal, including its already-issued arm worlds. */
-    if (!returning && pointer_prefix && check->ptr_if_result)
+    if (!returning && (pointer_prefix || opaque) && check->ptr_if_result)
         *check->ptr_if_result = true;
     return id;
 }
@@ -10092,7 +10451,8 @@ static NLCheckedNodeId allocated_raw(Check *check, const NLSyntaxView *syntax,
     return id;
 }
 
-static NLCheckedNodeId allocated_ref(Check *check, const NLSyntaxView *syntax)
+static NLCheckedNodeId checked_allocated_ref(Check *check,
+                                             const NLSyntaxView *syntax)
 {
     if (!check->allocated_slice || syntax->data.call.argument_count != 2) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
@@ -10197,6 +10557,164 @@ static NLCheckedNodeId allocated_ref(Check *check, const NLSyntaxView *syntax)
                                        c->places[facts.place - 1].placement});
 }
 
+static NLCheckedNodeId allocated_ref(Check *check, const NLSyntaxNode *node)
+{
+    const NLSyntaxView *syntax = nl_syntax_node_view(node);
+    if (!node->unchecked_read)
+        return checked_allocated_ref(check, syntax);
+    NLSourceView spelling;
+    if (!check->allocated_slice || !check->in_source_loan ||
+        syntax->data.call.access != NL_ACCESS_READ ||
+        syntax->data.call.argument_count != 2 ||
+        !nl_source_view(check->source, syntax->span, &spelling) ||
+        spelling.length < 9 || memcmp(spelling.bytes, "unchecked", 9)) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+             "UNCHECKED-SOURCE-ORIGIN",
+             "requires the exact source-issued local read operation");
+        return 0;
+    }
+    const NLSyntaxNode *pn = syntax->data.call.arguments;
+    const NLSyntaxNode *sn = nl_syntax_next_argument(pn);
+    const NLSymbolId ps = available(check, nl_syntax_node_view(pn)->span);
+    const NLSymbolId ss = available(check, nl_syntax_node_view(sn)->span);
+    if (!ps || !ss)
+        return 0;
+    NLSemanticContext *c = check->context;
+    const NLValueId pv = c->bindings[ps - 1].view.value,
+                    sv = c->bindings[ss - 1].view.value;
+    const NLSemanticValueView pointer = c->values[pv - 1],
+                              stable = c->values[sv - 1];
+    const NLSemanticTypeView pt = c->types[pointer.type - 1].view,
+                             st = c->types[stable.type - 1].view;
+    if (pt.kind != NL_TYPE_PTR || !nl_recursive_local_type(c, pt.target) ||
+        st.kind != NL_TYPE_REF || st.target != nl_semantic_domain_type(c) ||
+        st.access != NL_ACCESS_READ || st.is_exclusive ||
+        pointer.dependencies != NL_DEPENDENCY_FREE ||
+        stable.dependencies != NL_DEPENDENCY_FREE ||
+        pointer.value_dependency_count || stable.value_dependency_count) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span, "UNCHECKED-OPERANDS",
+             "typed ptr and real ordinary stable required");
+        return 0;
+    }
+    NLDomainId domain = domain_reference(check, sv, false, syntax->span);
+    if (!domain)
+        return 0;
+    const NLScopeId scope = stable.reference.scope;
+    unsigned assumed = 0;
+    NLPlaceId target = 0;
+    NLCheckedNodeId id = 0;
+    if (pointer.reference.provenance != NL_PROVENANCE_UNKNOWN ||
+        pointer.reference.place || pointer.reference_count) {
+        /* Known-false is never converted to assumed. Ordinary checked
+         * acquisition keeps all of its existing checks and diagnostics. */
+        id = checked_allocated_ref(check, syntax);
+        if (!id)
+            return 0;
+        target = view(check, id)->lifetime_place;
+    } else {
+        const NLUncheckedProof *recipe = nl_h_unchecked_data(check->artifact);
+        if (!opaque_value(recipe, pv) || recipe->pointer_type != pointer.type ||
+            pointer.domain || pointer.allocation_region || pointer.slot_place ||
+            pointer.occupancy.region || pointer.field_count ||
+            pointer.sum_payload || pointer.reference.scope) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "UNCHECKED-PTR-LINEAGE", "no actual value-only Copy lineage");
+            return 0;
+        }
+        const NLCheckStatus event =
+            nl_unchecked_domain_target(c, pt.target, domain, &target);
+        if (event != NL_CHECK_OK) {
+            fail(check, event, syntax->span,
+                 event == NL_CHECK_ANALYSIS_PRECISION_LIMIT
+                     ? "UNCHECKED-DOMAIN-ROOT-PRECISION"
+                     : "UNCHECKED-LIVE-ORIGINAL",
+                 "event needs one genuine live original with its real owner");
+            return 0;
+        }
+        bool possible = false;
+        for (size_t a = 0; a < 2; ++a) {
+            const NLValueId v = recipe->prefix_values[a];
+            if (v && v <= c->value_count) {
+                const NLReferenceFacts f = c->values[v - 1].reference;
+                possible |= f.provenance == NL_PROVENANCE_VALID && f.readable &&
+                            f.place == target &&
+                            f.incarnation == c->places[target - 1].incarnation;
+            }
+        }
+        if (!possible) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+                 "UNCHECKED-KNOWN-TARGET-MISMATCH",
+                 "neither actual source operand can name this incarnation");
+            return 0;
+        }
+        if (conflicts(check, target, false, false, 0, syntax->span))
+            return 0;
+        const NLTypeId type = compound(check, NL_TYPE_REF, pt.target,
+                                       NL_ACCESS_READ, false, syntax->span);
+        if (!type)
+            return 0;
+        const NLCheckedNodeId pa = argument(check, pn, pointer.type);
+        if (!pa)
+            return 0;
+        const NLCheckedNodeId sa = argument(check, sn, stable.type);
+        if (!sa)
+            return 0;
+        view(check, pa)->next_argument = sa;
+        const NLValueId reference = new_value(
+            check,
+            (NLSemanticValueView){.type = type, .reference = {.scope = scope}},
+            syntax->span);
+        if (!reference)
+            return 0;
+        end_temporary(check, one_result(check, pa));
+        end_temporary(check, one_result(check, sa));
+        id = add(check, (NLCheckedNodeView){.kind = NL_CHECKED_REF_FROM_PTR,
+                                            .span = syntax->span,
+                                            .type = type,
+                                            .first_argument = pa,
+                                            .argument_count = 2,
+                                            .result_count = 1,
+                                            .results = {{type, reference}}});
+        if (!id)
+            return 0;
+        assumed = NL_AUTHOR_PTR_TARGET_DOMAIN;
+    }
+    if (!host(check, nl_h_unchecked_prepare(check->artifact), syntax->span))
+        return 0;
+    NLUncheckedProof *p = nl_h_unchecked_build(check->artifact);
+    if (!p || p->has_read) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "UNCHECKED-READ-PRECISION", "one lexical operation per fragment");
+        return 0;
+    }
+    const NLCheckedNodeView op = *view(check, id);
+    const NLCheckedNodeView pa = *view(check, op.first_argument);
+    const NLSemanticPlaceView anchor = c->places[target - 1];
+    p->has_read = true;
+    p->read = (NLCheckedLocalAssumptionView){
+        .source = check->source,
+        .owner = check->artifact,
+        .span = syntax->span,
+        .operation = id,
+        .pointer_argument = op.first_argument,
+        .stability_argument = pa.next_argument,
+        .pointer_if = assumed ? p->pointer_if : 0,
+        .target_type = pt.target,
+        .pointer_value = pa.results[0].value,
+        .reference_value = op.results[0].value,
+        .domain = domain,
+        .scope = scope,
+        .conditional_target = target,
+        .conditional_incarnation = anchor.incarnation,
+        .conditional_range = anchor.placement,
+        .assumed_conditions = assumed,
+        .stable_at_operation = true,
+        .original_live_at_operation = true};
+    if (check->ptr_if_result)
+        *check->ptr_if_result = true;
+    return id;
+}
+
 static NLCheckedNodeId allocated_domain_loan(Check *check,
                                              const NLSyntaxView *s)
 {
@@ -10283,6 +10801,9 @@ static NLCheckedNodeId allocated_domain_loan(Check *check,
     memcpy(view(check, id)->results, result.results, sizeof(result.results));
     view(check, id)->loan.body_nonescape_proved = true;
     view(check, id)->loan.normal_result_forwarded = true;
+    NLUncheckedProof *p = nl_h_unchecked_build(check->artifact);
+    if (p && p->has_read && p->read.scope == header.loan.scope)
+        p->read.loan_closed = true;
     return id;
 }
 
