@@ -73,6 +73,22 @@ static bool scalar_plain(const NLSemanticContext *c, NLValueId id,
            !v.sum_payload && !v.sum_owner;
 }
 
+static bool scalar_read_body(const Emit *e, const NLCheckedFragment *f,
+                             const NLCheckedNodeView *b)
+{
+    const NLCheckedNodeView *l = b ? nl_checked_node_view(f, b->tail) : NULL;
+    const NLSemanticContext *c = nl_checked_context(f);
+    NLSemanticScopeView scope;
+    return b && b->item_count == 0 && b->type == e->u8 && l &&
+           l->kind == NL_CHECKED_LOAN_HEADER && l->type == e->u8 &&
+           l->result_count == 1 && !l->terminates && !l->loan.implicit_local &&
+           !l->loan.is_exclusive && l->loan.access == NL_ACCESS_READ &&
+           l->loan.prevent_lifetime_end && l->loan.body_nonescape_proved &&
+           l->loan.normal_result_forwarded &&
+           nl_semantic_scope_view(c, l->loan.scope, &scope) && !scope.active &&
+           scalar_observation(e, &(Env){.artifact = f}, l->initializer);
+}
+
 static bool scalar_if_body(const Emit *e, const NLCheckedFragment *f,
                            const NLCheckedNodeView *arm, NLCheckedNodeId id)
 {
@@ -84,6 +100,8 @@ static bool scalar_if_body(const Emit *e, const NLCheckedFragment *f,
         arm->results[0].value != b->results[0].value ||
         !scalar_plain(nl_checked_context(f), b->results[0].value, b->type))
         return false;
+    const bool read = scalar_read_body(e, f, b);
+    size_t loans = 0, refs = 0, fields = 0, loads = 0;
     for (NLCheckedNodeId j = 1; j <= nl_checked_node_count(f); ++j) {
         const NLCheckedNodeView *n = nl_checked_node_view(f, j);
         if (!n || n->terminates)
@@ -101,18 +119,49 @@ static bool scalar_if_body(const Emit *e, const NLCheckedFragment *f,
         case NL_CHECKED_USIZE_EQUALITY:
             break;
         case NL_CHECKED_IDENTIFIER:
-            if (n->value_use != NL_VALUE_COPIED || n->result_count != 1 ||
-                (n->type != e->u8 && n->type != e->boolean &&
-                 n->type != e->usize) ||
-                !scalar_plain(nl_checked_context(f), n->results[0].value,
-                              n->type))
+            if (n->value_use != NL_VALUE_COPIED || n->result_count != 1)
+                return false;
+            if (n->type == e->u8 || n->type == e->boolean ||
+                n->type == e->usize) {
+                if (!scalar_plain(nl_checked_context(f), n->results[0].value,
+                                  n->type))
+                    return false;
+            } else {
+                NLSemanticTypeView t;
+                if (!read ||
+                    !nl_semantic_type_view(nl_checked_context(f), n->type,
+                                           &t) ||
+                    (n->type != e->ptr &&
+                     !(t.kind == NL_TYPE_REF && !t.is_exclusive &&
+                       t.access == NL_ACCESS_READ &&
+                       (t.target == e->node ||
+                        t.target ==
+                            nl_semantic_domain_type(nl_checked_context(f))))))
+                    return false;
+            }
+            break;
+        case NL_CHECKED_LOAN_HEADER:
+            if (!read || ++loans != 1)
+                return false;
+            break;
+        case NL_CHECKED_REF_FROM_PTR:
+            if (!read || ++refs != 1 || !n->has_reference_result ||
+                !n->reference_result.readable || n->reference_result.writable)
+                return false;
+            break;
+        case NL_CHECKED_FIELD_REF:
+        case NL_CHECKED_LINK_READ:
+            if (!read || !n->field.present || n->field.nominal != e->node ||
+                n->field.index != 1 || n->field.type != e->u8 ||
+                n->field.access != NL_ACCESS_READ ||
+                (n->kind == NL_CHECKED_FIELD_REF ? ++fields : ++loads) != 1)
                 return false;
             break;
         default:
             return false;
         }
     }
-    return true;
+    return !read || (loans == 1 && refs == 1 && fields == 1 && loads == 1);
 }
 
 static bool scalar_if(Emit *e, Env *env, NLCheckedNodeId id,
@@ -155,6 +204,8 @@ static bool scalar_if(Emit *e, Env *env, NLCheckedNodeId id,
                       .parent = env,
                       .prefix = SIZE_MAX,
                       .scalar_prefix = arm->branch_value_prefix,
+                      .scalar_read_arm = scalar_read_body(
+                          e, arm, nl_checked_node_view(arm, root->initializer)),
                       .frame = ++e->frames,
                       .depth = env->depth + 1};
         if (!(a == 0 ? put(e, "if(nl_v_%zu){\n", actual.temp)
