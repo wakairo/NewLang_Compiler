@@ -9,6 +9,7 @@
 #include "newlang/node_links.h"
 #include "newlang/raw_storage.h"
 #include "producer_status_internal.h"
+#include "readonly_u8_consumer_internal.h"
 #include "unchecked_ref_internal.h"
 #include <stdarg.h>
 #include <stdint.h>
@@ -63,6 +64,7 @@ typedef struct {
     bool scalar_control; /* primitive normal result, existing whole-root seal */
     NLTypeId boolean, usize;
     size_t scalar_none_expected;
+    size_t scalar_readonly_calls; /* one bounded source scalar call */
     size_t ptr_ifs, ptr_roundtrips, ptr_reads; /* emitted observations only */
     /* One whole-root-authenticated local author premise.  This is an
      * emitter admission plan, never a reference/owner proof and never a new
@@ -1172,6 +1174,9 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         return put(e, "uint8_t nl_v_%zu=nl_b_%zu_%zu.f%zu;\n", out->temp,
                    l->frame, l->symbol, v->field.index);
     }
+    if (v->kind == NL_CHECKED_REGISTERED_CALL && e->scalar_control &&
+        e->copy_type && v->type == e->u8)
+        return scalar_readonly_call(e, env, id, v, out);
     if (v->kind == NL_CHECKED_REGISTERED_CALL)
         return e->qualified_unchecked && env->artifact == e->qualified_owner &&
                        id == e->qualified_call

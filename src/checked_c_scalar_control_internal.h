@@ -73,6 +73,31 @@ static bool scalar_plain(const NLSemanticContext *c, NLValueId id,
            !v.sum_payload && !v.sum_owner;
 }
 
+/* The existing readonly-u8 walk admits only a fresh formal and its normal
+ * Copy-local chains. Inline that chain using the once-evaluated runtime
+ * actual, never a Known summary. T admission still needs its separate actual
+ * stateful entry; no H authority enters this callee or escapes an IF arm. */
+static bool scalar_readonly_call(Emit *e, Env *env, NLCheckedNodeId id,
+                                 const NLCheckedNodeView *call, Value *out)
+{
+    if (!e->scalar_issued || !e->scalar_control || !e->copy_type ||
+        env->scalar_read_arm || ++e->scalar_readonly_calls != 1 ||
+        !nl_readonly_u8_consumer(env->artifact, id))
+        return reject(e);
+    const NLCheckedNodeView *argument = get(env, call->first_argument);
+    const NLSemanticContext *c = nl_checked_context(env->artifact);
+    if (!argument || !scalar_plain(c, argument->results[0].value, e->u8) ||
+        !scalar_plain(c, call->results[0].value, e->u8))
+        return reject(e);
+    Value actual = {0};
+    if (!expr(e, env, call->first_argument, &actual) || actual.type != e->u8 ||
+        !actual.temp)
+        return reject(e);
+    out->type = e->u8;
+    out->temp = ++e->temp;
+    return put(e, "const uint8_t nl_v_%zu=nl_v_%zu;\n", out->temp, actual.temp);
+}
+
 static bool scalar_read_body(const Emit *e, const NLCheckedFragment *f,
                              const NLCheckedNodeView *b)
 {

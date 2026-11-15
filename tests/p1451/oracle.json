@@ -1,0 +1,106 @@
+{
+  "authority": {
+    "main": "c5f0f5800ee33bf32376b55a1a4e539bf84a1cb2",
+    "tree": "3d5606967e8d9efdc2022f16dce8884ea1fb5f33",
+    "spec": "Draft17.38",
+    "release": "C979"
+  },
+  "source_gate": "KEEP: exact one-link H plus separate exact-two-u8 T, same unit, two H allocation sites; actual correct-D ref read/closed loan; pure one-u8 Copy formal/body/tail; real ref-write T installer called on original T child; no H/ref/ptr/D/owner through pure call",
+  "sources": {
+    "A-front-install.nl": {
+      "bytes": 5758,
+      "sha256": "76f8b108342148774259d2c4e33052a97bad760dc9472a781bcdcfa3a30b09b0"
+    },
+    "B-back-alias-install.nl": {
+      "bytes": 5779,
+      "sha256": "20940828d03ee6d46d011d6491b761b4a686324b01cb022f96c3f0b7088050c6"
+    },
+    "L-literal-install.nl": {
+      "bytes": 5759,
+      "sha256": "d330572bdfffa1977ccc56a28278a9d67f93c31ef4f340b5fb99f6cf2a1117f2"
+    }
+  },
+  "control": {
+    "path": "tests/p1441/P-some-read.nl",
+    "bytes": 5528,
+    "sha256": "3aec86a937a74237a01d888bcc22818ee15993638714e124477e332af0908551",
+    "reused": true,
+    "expected_raw_C_SHA256": "4e45981c33257e1e0b4cfb6183d1d32ff8a03b14b90851444a3ce4059b6d836f"
+  },
+  "layer_expectation": {
+    "SOURCE_definition": 0,
+    "actual_CHECK": 0,
+    "public_proof_class": "MACHINE_PROVED",
+    "real_T_installer": "Copy body/parameters/event validators OK with genuine entry/field/loan",
+    "C17_CLI": 0,
+    "native_exit": 0
+  },
+  "first_falsifier": "Baseline likely rejects readonly u8 REGISTERED_CALL in owner consumer. This is a prediction only; if SOURCE/CHECK or genuine T admission fails, STOP before Production. Preserve first actual refusal, downstream NOT_RUN; do not rewrite success oracle.",
+  "worlds": {
+    "H0": {
+      "attempts": 1,
+      "successes": 0,
+      "cleanup": 0,
+      "T_updates": 0,
+      "relay_calls": 0,
+      "caller_Copy": 5
+    },
+    "H1": {
+      "attempts": 2,
+      "successes": 1,
+      "cleanup": 1,
+      "T_updates": 0,
+      "relay_calls": 0,
+      "caller_Copy": 17
+    },
+    "H2_A": {
+      "selected": "front",
+      "front": 59,
+      "back": 173,
+      "relay_actual": 59,
+      "relay_result": 59,
+      "old": 23,
+      "current": 59,
+      "sibling": 229,
+      "T_updates": 1,
+      "cleanup": 2
+    },
+    "H2_B": {
+      "selected": "back",
+      "front": 101,
+      "back": 207,
+      "relay_actual": 207,
+      "relay_result": 207,
+      "old": 47,
+      "current": 207,
+      "sibling": 241,
+      "T_updates": 1,
+      "cleanup": 2
+    },
+    "H2_L": {
+      "selected": "front",
+      "relay_actual": 59,
+      "relay_result": 59,
+      "old": 23,
+      "current": 59,
+      "sibling": 229,
+      "T_updates": 1,
+      "cleanup": 2
+    }
+  },
+  "proof_expectation": "A/B actual and pure result remain Unknown; L literal is Known. Pure Copy-body view N/A; installer Copy body/parameters/one CHANGE event genuine and valid. Matching bits/package IDs are not new authority.",
+  "negatives": "Reuse own adopted P1441 wrong Domain/loan escape/owner consumed; new private mutations of true A/B callable/body/source/world/arm/formal/actual/forged Known, all reject INVALID and emission no-clobber, restore/retry healthy. No tampered guest.",
+  "native_plan": "raw A/B x GCC/Clang x O0/O2=8; passive A/B H2 plus A H0/H1=4; unchanged C; total12",
+  "limits": {
+    "new_source": 3,
+    "feature_candidates": 2,
+    "mechanical_reserve": 1,
+    "commits": 3,
+    "CLI": 14,
+    "native": 12,
+    "selected_OOM": 12,
+    "host_profiles": 3,
+    "unique_CTests_per_host": 75,
+    "manual_CI": 0
+  }
+}
