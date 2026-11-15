@@ -22,8 +22,7 @@ static const char *optional(const char *s)
     return s != NULL ? s : "(none)";
 }
 
-static void parse_diagnostic(const NLSource *source,
-                             const NLParseDiagnostic *d)
+static void parse_diagnostic(const NLSource *source, const NLParseDiagnostic *d)
 {
     printf("R1440_PARSE_DIAG code=%s category=%s span=%zu:%zu message=%s\n",
            optional(d->diagnostic.code), optional(d->diagnostic.category),
@@ -32,8 +31,7 @@ static void parse_diagnostic(const NLSource *source,
     (void)nl_parse_diagnostic_render(stdout, source, d);
 }
 
-static void check_diagnostic(const NLSource *source,
-                             const NLCheckDiagnostic *d)
+static void check_diagnostic(const NLSource *source, const NLCheckDiagnostic *d)
 {
     printf("R1440_CHECK_DIAG code=%s category=%s span=%zu:%zu message=%s\n",
            optional(d->diagnostic.code), optional(d->diagnostic.category),
@@ -45,8 +43,7 @@ static void check_diagnostic(const NLSource *source,
 static const NLSyntaxNode *actual_main(const NLSyntaxTree *tree,
                                        const NLSource *source)
 {
-    const NLSyntaxView *root =
-        nl_syntax_node_view(nl_syntax_tree_root(tree));
+    const NLSyntaxView *root = nl_syntax_node_view(nl_syntax_tree_root(tree));
     if (root == NULL || root->kind != NL_SYNTAX_FUNCTION_UNIT) {
         return NULL;
     }
@@ -86,9 +83,9 @@ static void scan_owned(const NLCheckedFragment *f, unsigned depth,
             printf("R1440_LOCAL_ASSUMPTION node=%zu span=%zu:%zu "
                    "conditions=%u domain=%zu scope=%zu origin=%d "
                    "stable=%d original_live=%d loan_closed=%d\n",
-                   i, a.span.start_byte, a.span.end_byte,
-                   a.assumed_conditions, (size_t)a.domain, (size_t)a.scope,
-                   (int)origin, (int)a.stable_at_operation,
+                   i, a.span.start_byte, a.span.end_byte, a.assumed_conditions,
+                   (size_t)a.domain, (size_t)a.scope, (int)origin,
+                   (int)a.stable_at_operation,
                    (int)a.original_live_at_operation, (int)a.loan_closed);
             if (origin != NL_CHECK_OK) {
                 scan->invalid_origin = true;
