@@ -55,7 +55,7 @@ typedef struct Check {
     NLSemanticBindingView readonly_binding;
     NLSemanticPlaceView readonly_place;
     bool *scalar_h_read; /* borrowed synchronous enclosing body CHECK */
-    bool *ptr_if_result; /* success-only C1 proof, not a new authority */
+    bool *result_world;  /* completed ptr IF / scalar control, not authority */
     const NLSyntaxView
         *ptr_value_demand; /* one exact initializer, not permission */
     NLTypeId function_result;
@@ -4129,10 +4129,10 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     const size_t binding_floor = c->binding_count, scope_floor = c->scope_count,
                  place_floor = c->place_count;
     const NLSourceSpan call_span = view(caller, call_id)->span;
-    bool scalar_h_read = false, ptr_if_result = false;
+    bool scalar_h_read = false, result_world = false;
     Check body = {.caller = caller,
                   .scalar_h_read = &scalar_h_read,
-                  .ptr_if_result = &ptr_if_result,
+                  .result_world = &result_world,
                   .body_budget = caller->body_budget,
                   .branch_budget = caller->branch_budget,
                   .depth = caller->depth,
@@ -4464,11 +4464,10 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         current_result = body.artifact->bodies[i]->copy_body &&
                          (body.artifact->bodies[i]->copy_body->current_loop ||
                           body.artifact->bodies[i]->copy_body->current_call);
-    if ((predicate_result || scalar_h_read || current_result ||
-         ptr_if_result) &&
+    if ((predicate_result || scalar_h_read || current_result || result_world) &&
         !host(&body,
               nl_h_custody_seal_result(caller->artifact, body.artifact, call_id,
-                                       ptr_if_result ? c : NULL),
+                                       result_world ? c : NULL),
               call_span))
         goto failure;
     if (body.artifact->copy_body && body.artifact->copy_body->current_loop &&
@@ -5427,8 +5426,8 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
         return 0;
     /* Only the completed same-original C1 proof opts this actual call into
      * the existing result seal, including its already-issued arm worlds. */
-    if (!returning && (pointer_prefix || opaque) && check->ptr_if_result)
-        *check->ptr_if_result = true;
+    if (!returning && (pointer_prefix || opaque) && check->result_world)
+        *check->result_world = true;
     return id;
 }
 
@@ -7761,12 +7760,13 @@ bool nl_node_unit_arm_frame(const NLSemanticContext *before,
 /* Only a plain primitive result may leave these completed source arms.
  * Its package belongs to the arm world; callers create a fresh parent value
  * instead of treating equal post-fork numeric IDs as an identity mapping. */
-static bool normal_u8_result(const NLSemanticContext *c,
-                             const NLCheckedNodeView *result)
+static bool normal_scalar_result(const NLSemanticContext *c,
+                                 const NLCheckedNodeView *result,
+                                 NLSemanticTypeKind kind)
 {
     if (result->terminates || result->result_count != 1 || result->type == 0 ||
         result->type > c->type_count ||
-        c->types[result->type - 1].view.kind != NL_TYPE_U8 ||
+        c->types[result->type - 1].view.kind != kind ||
         !c->types[result->type - 1].view.is_copy ||
         !c->types[result->type - 1].view.is_discardable ||
         result->results[0].type != result->type ||
@@ -7783,11 +7783,26 @@ static bool normal_u8_result(const NLSemanticContext *c,
            !v.field_count && !v.variant && !v.sum_payload && !v.sum_owner;
 }
 
+static bool normal_u8_result(const NLSemanticContext *c,
+                             const NLCheckedNodeView *result)
+{
+    return normal_scalar_result(c, result, NL_TYPE_U8);
+}
+
+static bool normal_control_result(const NLSemanticContext *c,
+                                  const NLCheckedNodeView *result)
+{
+    return normal_u8_result(c, result) ||
+           normal_scalar_result(c, result, NL_TYPE_BOOL);
+}
+
 static bool node_u8_arm_frame(const NLSemanticContext *before,
                               const NLSemanticContext *after, NLValueId input,
                               const NLCheckedNodeView *result)
 {
-    if (!normal_u8_result(after, result) ||
+    /* A Bool carries no original or hidden authority. Keep the same complete
+     * inherited frame and closed suffix; the parent gets a fresh Unknown. */
+    if (!normal_control_result(after, result) ||
         after->place_count < before->place_count ||
         after->scope_count < before->scope_count ||
         after->value_count < before->value_count ||
@@ -8130,12 +8145,12 @@ bool nl_allocated_post_matches(const NLSemanticContext *expected,
  * primitive result has no owner or hidden dependency to import; the exact
  * source arm must still close every suffix responsibility and prove the
  * same ancestor-derived post-frame as the unit lane. */
-static bool allocated_u8_post_matches(const NLSemanticContext *expected,
-                                      const NLSemanticContext *arm,
-                                      const NLCheckedNodeView *result)
+static bool allocated_scalar_post_matches(const NLSemanticContext *expected,
+                                          const NLSemanticContext *arm,
+                                          const NLCheckedNodeView *result)
 {
     const NLCheckedNodeView unit = {.type = 1};
-    if (!normal_u8_result(arm, result) ||
+    if (!normal_control_result(arm, result) ||
         arm->scope_count < expected->scope_count)
         return false;
     for (size_t i = expected->scope_count; i < arm->scope_count; ++i)
@@ -8315,7 +8330,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
             closed_prefix != NULL ? closed_prefix : c;
         const bool scalar =
             !certified &&
-            allocated_u8_post_matches(expected, branch.context, &result);
+            allocated_scalar_post_matches(expected, branch.context, &result);
         if (branch.terminated || (normal_type && normal_type != result.type) ||
             (!scalar &&
              !nl_allocated_post_matches(expected, branch.context, &result))) {
@@ -8417,6 +8432,9 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         view(check, id)->result_count = 1;
         view(check, id)->results[0] =
             (NLCheckedResult){.type = normal_type, .value = value};
+        if (normal_type == nl_semantic_core_type(c, NL_TYPE_BOOL) &&
+            check->result_world)
+            *check->result_world = true;
     }
     nl_h_origin_finish_site(check->artifact, id);
     return id;
@@ -8840,6 +8858,9 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             view(check, id)->result_count = 1;
             view(check, id)->results[0] =
                 (NLCheckedResult){.type = normal_type, .value = value};
+            if (normal_type == nl_semantic_core_type(c, NL_TYPE_BOOL) &&
+                check->result_world)
+                *check->result_world = true;
             return id;
         }
         if (count == 2 && node_memory_join(check, id, input, syntax->span))
@@ -9812,7 +9833,7 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
             c->types[type - 1].variant_types[variant - 1];
         Check branch = {.source = check->source,
                         .scalar_h_read = check->scalar_h_read,
-                        .ptr_if_result = check->ptr_if_result,
+                        .result_world = check->result_world,
                         .origin_root = check->origin_root,
                         .origin_invocation = check->origin_invocation,
                         .origin_call = check->origin_call,
@@ -10710,8 +10731,8 @@ static NLCheckedNodeId allocated_ref(Check *check, const NLSyntaxNode *node)
         .assumed_conditions = assumed,
         .stable_at_operation = true,
         .original_live_at_operation = true};
-    if (check->ptr_if_result)
-        *check->ptr_if_result = true;
+    if (check->result_world)
+        *check->result_world = true;
     return id;
 }
 

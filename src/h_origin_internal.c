@@ -309,7 +309,7 @@ static NLCheckStatus seal_nodes(struct NLHOriginOwner *o, NLCheckedFragment *f,
 NLCheckStatus nl_h_custody_seal_result(NLCheckedFragment *parent,
                                        NLCheckedFragment *child,
                                        NLCheckedNodeId call,
-                                       const NLSemanticContext *ptr_if_world)
+                                       const NLSemanticContext *result_world)
 {
     if (!parent || !child || !call || !parent->h_origin ||
         child->h_origin != parent->h_origin)
@@ -323,12 +323,12 @@ NLCheckStatus nl_h_custody_seal_result(NLCheckedFragment *parent,
             e->child != child || e->site != call || e->result_sealed)
             continue;
         const NLCheckStatus status =
-            seal_nodes(parent->h_origin, child, child->context, ptr_if_world);
+            seal_nodes(parent->h_origin, child, child->context, result_world);
         if (status != NL_CHECK_OK)
             return status;
         e->call_view = *call_view;
         e->result_sealed = true;
-        if (ptr_if_world) {
+        if (result_world) {
             e->call_nodes = parent->nodes;
             e->call_count = parent->count;
             e->call_capacity = parent->capacity;
@@ -364,6 +364,32 @@ bool nl_h_custody_result_valid(const NLCheckedFragment *parent,
             call_nodes_valid(parent, e) &&
             same_node(parent, call, &e->call_view))
             return sealed_tree_valid(o, e->child);
+    return false;
+}
+static bool world_bytes_present(const struct NLHOriginOwner *o,
+                                const NLCheckedFragment *f)
+{
+    const CustodyParent *p = custody_parent(o, f);
+    if (!p || !p->issued_state || !p->issued_state_size)
+        return false;
+    for (const CustodyEdge *e = p->edges; e; e = e->next)
+        if (e->state != COMMITTED || !world_bytes_present(o, e->child))
+            return false;
+    return true;
+}
+bool nl_h_custody_result_world_present(const NLCheckedFragment *parent,
+                                       NLCheckedNodeId call)
+{
+    const struct NLHOriginOwner *o = parent ? parent->h_origin : NULL;
+    const CustodyParent *p = custody_parent(o, parent);
+    if (!p)
+        return false;
+    /* Inspect only canonical coverage, not mutable worlds or display tables.
+     * Authentication still belongs to nl_h_custody_result_valid. */
+    for (const CustodyEdge *e = p->edges; e; e = e->next)
+        if (e->state == COMMITTED && e->role == NL_CUSTODY_BODY &&
+            e->site == call && e->result_sealed && e->call_nodes)
+            return world_bytes_present(o, e->child);
     return false;
 }
 static bool observed_arm(const struct NLHOriginOwner *o, const CustodyEdge *e,

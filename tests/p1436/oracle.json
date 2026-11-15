@@ -1,0 +1,29 @@
+{
+  "authority": "Compiler main44c3d501309765c5e0aed3dc7b35c2afc503b6fe / Draft17.38",
+  "predecessor": "P1435 C1, all five original sources and three original oracles unchanged",
+  "security": {
+    "healthy": "actual main() public class1 MACHINE_PROVED and existing result_valid; both Bool sources have full canonical subtree world coverage",
+    "original_falsifier": "fresh Unknown Bool scalar_known false -> true gives numeric class0 INVALID; C17 API status1 UNSUPPORTED, outputNULL, length98765 unchanged (ordinary CLI C17 unsupported maps to exit4)",
+    "all_normal_worlds": "each distinct real root/arm/callee world primitive mutation, Domain and loan-state mutation, foreign world/owner and genuine foreign IF arm all reject; restore then MACHINE_PROVED",
+    "no_guest_tamper": true
+  },
+  "oom": {
+    "points": ["actual CHECK first realloc", "two-H state fork clone malloc", "C_BYTES131072 emitter buffer", "same result_state snapshot malloc measured at genuine world-seal call"],
+    "host_traces_maximum": 12,
+    "acceptance": "real wrap hit; precise OUT_OF_MEMORY; NULL output/artifact; full context snapshot and call anchor rollback; healthy retry; no partial public proof"
+  },
+  "cli": "real newlangc emits original control/Some/None, two semantic negatives cannot clobber existing named output",
+  "legacy_control_raw_sha256": "e42422d7c0a85fc051ab1e0b4281f127cd5b6561ccfe7add0c1e25a738c9a896",
+  "native": {
+    "maximum_local_guests": 12,
+    "raw": "Some and None unmodified C x GCC/Clang O0/O2 = 8",
+    "passive": "Some H2 GCC, None H2 Clang ASan/UBSan, Some H0/H1 GCC = 4; observer never supplies source result or branch condition",
+    "H2_Some": "actual A.next Some(original B) under real D; Bool0 -> IFarm1 ->227 after both releases",
+    "H2_None": "actual A.next None after original unlink under real D; Bool1 -> IFarm0 ->83 after both releases",
+    "H0": "first allocation fails, zero roots/cleanup, Bool0 -> arm1 ->227",
+    "H1": "second allocation fails, only A initialized/freed once, Bool1 -> arm0 ->83",
+    "T": "H2 only: one real two-u8 original level31/spare251, payload197 read from B, same field pointer actual Change31->197, caller old31/Copy31/current197/sibling251; no access after lexical lifetime",
+    "cleanup": "same real allocation handles and H addresses, nonzero actual Domain tokens, original A/B, exact0/1/2 EndRoot/releases, no observer mutation of program data"
+  },
+  "limits": "new source0/1, C2 functional candidate1/2, forward commit at final freeze, CLI12/native12/OOM12/host3; no remote before all local safety"
+}

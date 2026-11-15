@@ -59,7 +59,10 @@ typedef struct {
     bool taking_live;
     size_t receiver_used, owner_calls;
     bool owner_read;
-    bool scalar_issued; /* existing sealed CHECK body, no new issuer */
+    bool scalar_issued;  /* existing sealed CHECK body, no new issuer */
+    bool scalar_control; /* primitive normal result, existing whole-root seal */
+    NLTypeId boolean, usize;
+    size_t scalar_none_expected;
     size_t ptr_ifs, ptr_roundtrips, ptr_reads; /* emitted observations only */
     /* One whole-root-authenticated local author premise.  This is an
      * emitter admission plan, never a reference/owner proof and never a new
@@ -142,6 +145,7 @@ typedef struct {
 typedef struct Env {
     Local locals[C_LOCALS];
     size_t count, frame, depth, prefix;
+    NLValueId scalar_prefix; /* readonly IF's authenticated original values */
     NLBackingRegionId backing;
     size_t region_slot;
     NLPlaceId heap_place;
@@ -213,6 +217,19 @@ static bool inherited(const Env *env, NLSymbolId symbol, NLTypeId type)
 {
     if (env->parent == NULL || symbol == 0 || symbol > env->prefix)
         return false;
+    if (env->scalar_prefix) {
+        NLSemanticBindingView a, b;
+        const NLSemanticContext *c = nl_checked_context(env->artifact);
+        const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8),
+                       boolean = nl_semantic_core_type(c, NL_TYPE_BOOL),
+                       usize = nl_semantic_core_type(c, NL_TYPE_USIZE);
+        return (type == u8 || type == boolean || type == usize) &&
+               nl_semantic_binding_view(
+                   nl_checked_context(env->parent->artifact), symbol, &a) &&
+               nl_semantic_binding_view(c, symbol, &b) && a.type == type &&
+               b.type == type && a.value && a.value == b.value &&
+               a.value <= env->scalar_prefix && a.place == b.place;
+    }
     if (env->node_join == NULL)
         return true;
     NLSemanticBindingView a, b;
@@ -315,6 +332,10 @@ static const char *ctype(const Emit *e, const Env *env, NLTypeId type)
         return "const nl_node *";
     if (type == e->u8)
         return "uint8_t";
+    if (e->scalar_control && type == e->boolean)
+        return "uint8_t";
+    if (e->scalar_control && type == e->usize)
+        return "size_t";
     if (e->qualified_unchecked && type == e->qualified_bool)
         return "uint8_t";
     if (e->qualified_unchecked && type == e->qualified_usize)
@@ -437,6 +458,10 @@ static bool final_unit_return(const NLCheckedFragment *body, NLCheckedNodeId id,
 /* Typed results borrow the existing sealed CHECK graph. They do not carry a
  * root, owner or source authority: only a dependency-free primitive package
  * can become a C scalar in the parent scope. */
+static bool scalar_result_type(const Emit *e, NLTypeId type)
+{
+    return type == e->u8 || (e->scalar_control && type == e->boolean);
+}
 static bool match_result_shape(const Emit *e, const NLCheckedFragment *f,
                                const NLCheckedNodeView *v)
 {
@@ -447,11 +472,11 @@ static bool match_result_shape(const Emit *e, const NLCheckedFragment *f,
     NLSemanticValueView value;
     return e->scalar_issued && e->allocated && e->two_heap &&
            (!e->current || physical_current_heap_result(e->current, f, v)) &&
-           !e->custody && v->type == e->u8 && v->result_count == 1 &&
-           v->results[0].type == e->u8 &&
+           !e->custody && scalar_result_type(e, v->type) &&
+           v->result_count == 1 && v->results[0].type == v->type &&
            nl_semantic_value_view(nl_checked_context(f), v->results[0].value,
                                   &value) &&
-           value.type == e->u8 && value.dependencies == NL_DEPENDENCY_FREE &&
+           value.type == v->type && value.dependencies == NL_DEPENDENCY_FREE &&
            !value.value_dependency_count && !value.reference_count &&
            !value.reference.place && !value.reference.scope &&
            !value.reference.occurrence_dependency && !value.owner_place &&
@@ -478,7 +503,7 @@ static bool match_store_result(Emit *e, const NLCheckedFragment *f,
 {
     if (!destination)
         return arm->type == e->unit;
-    if (!match_arm_body(e, f, arm, body) || result.type != e->u8 ||
+    if (!match_arm_body(e, f, arm, body) || result.type != arm->type ||
         !result.temp)
         return reject(e);
     return put(e, "nl_v_%zu = nl_v_%zu;\n", destination, result.temp);
@@ -491,6 +516,8 @@ static bool qualified_ptr_if(Emit *, Env *, NLCheckedNodeId,
                              const NLCheckedNodeView *, Value *);
 #include "checked_c_ptr_if_internal.h"
 #include "checked_c_qualified_internal.h"
+static bool block(Emit *, Env *, NLCheckedNodeId, Value *);
+#include "checked_c_scalar_control_internal.h"
 
 #include "checked_c_copy_internal.h"
 /* Uses the Copy carrier helpers above. */
@@ -688,9 +715,11 @@ static bool block(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
 {
     const NLCheckedNodeView *v = get(env, id);
     const NLCheckedNodeView *arm = get(env, nl_checked_root(env->artifact));
-    const bool scalar_arm = v && v->type == e->u8 && env->parent && arm &&
+    const bool scalar_arm = v && scalar_result_type(e, v->type) &&
+                            env->parent && arm &&
                             (arm->tail ? arm->tail : arm->initializer) == id &&
-                            match_arm_body(e, env->artifact, arm, id);
+                            (match_arm_body(e, env->artifact, arm, id) ||
+                             scalar_if_body(e, env->artifact, arm, id));
     const bool unit_return = v && v == env->unit_function_body &&
                              final_unit_return(env->artifact, id, e->unit);
     if (v == NULL || v->kind != NL_CHECKED_BLOCK ||
@@ -960,7 +989,7 @@ static bool match_runtime(Emit *e, Env *env, NLCheckedNodeId id,
     if (!expr(e, env, v->initializer, &scrutinee) ||
         scrutinee.type != e->option)
         return reject(e);
-    const size_t result_temp = v->type == e->u8 ? ++e->temp : 0;
+    const size_t result_temp = scalar_result_type(e, v->type) ? ++e->temp : 0;
     if ((result_temp && !put(e, "uint8_t nl_v_%zu;\n", result_temp)) ||
         !put(e, "switch (nl_v_%zu.tag) {\n", scrutinee.temp))
         return false;
@@ -1012,7 +1041,9 @@ static bool match_runtime(Emit *e, Env *env, NLCheckedNodeId id,
         return false;
     out->type = v->type;
     out->temp = result_temp;
-    return put(e, "}\n");
+    return put(e, "}\n") &&
+           (!e->scalar_control || v->type != e->boolean ||
+            put(e, "NL_SCALAR_BOOL_RESULT(nl_v_%zu,0);\n", result_temp));
 }
 static bool changed_match(Emit *e, Env *env, NLCheckedNodeId id,
                           const NLCheckedNodeView *v, Value *out)
@@ -1090,8 +1121,19 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         NLIfFieldView field;
         if (nl_checked_if_field_view(env->artifact, id, &field))
             return copy_field_if(e, env, id, v, &field, out);
+        if (e->scalar_control && scalar_result_type(e, v->type) &&
+            get(env, v->initializer) &&
+            get(env, v->initializer)->kind == NL_CHECKED_IDENTIFIER)
+            return scalar_if(e, env, id, v, out);
         return copy_value_if(e, env, id, v, out);
     }
+    if (e->scalar_control && v->kind == NL_CHECKED_IF &&
+        scalar_result_type(e, v->type))
+        return scalar_if(e, env, id, v, out);
+    if (e->scalar_control && (v->kind == NL_CHECKED_USIZE_LESS_THAN ||
+                              v->kind == NL_CHECKED_USIZE_EQUALITY ||
+                              v->kind == NL_CHECKED_USIZE_LITERAL))
+        return scalar_comparison(e, env, v, out);
     if (v->kind == NL_CHECKED_IF && v->type == e->ptr)
         return ptr_copy_if(e, env, id, v, out);
     if (v->kind == NL_CHECKED_PTR_FROM_REF && env->ptr_observation)
@@ -1631,9 +1673,9 @@ static bool heap_link_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
     if (v->kind == NL_CHECKED_LINK_READ) {
         NLSemanticValueView original, copy, p, q;
         if (observed) {
-            if (!ptr_copy_enabled(e) || ++e->ptr_reads != 1 ||
-                v->argument_count != 1 || ref->next_argument ||
-                v->value_use != NL_VALUE_COPIED ||
+            if ((!ptr_copy_enabled(e) && !e->scalar_control) ||
+                ++e->ptr_reads != 1 || v->argument_count != 1 ||
+                ref->next_argument || v->value_use != NL_VALUE_COPIED ||
                 v->field.access != NL_ACCESS_READ || v->field.index ||
                 v->field.payload_occurrence ||
                 !nl_semantic_value_view(c, v->field.old_value, &original) ||
@@ -1782,7 +1824,7 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
         !match_result_shape(e, env->artifact, v))
         return reject(e);
     const size_t site = e->allocations++;
-    const size_t result_temp = v->type == e->u8 ? ++e->temp : 0;
+    const size_t result_temp = scalar_result_type(e, v->type) ? ++e->temp : 0;
     if (result_temp && !put(e, "uint8_t nl_v_%zu;\n", result_temp))
         return false;
     HeapLifecycle incoming[2] = {e->lifecycle[0], e->lifecycle[1]};
@@ -1916,7 +1958,8 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
     }
     out->type = v->type;
     out->temp = result_temp;
-    return true;
+    return !e->scalar_control || v->type != e->boolean ||
+           put(e, "NL_SCALAR_BOOL_RESULT(nl_v_%zu,1);\n", result_temp);
 }
 /* Omitting a target reloan/Some arm requires actual source-issued link/owner
  * evidence, not fewer counters. An optional effect-free link Copy is counted
@@ -3613,6 +3656,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     Emit e = {.origin_root = entry,
               .scalar_issued = nl_h_custody_result_valid(entry, call),
               .unit = nl_semantic_unit_type(c),
+              .boolean = nl_semantic_core_type(c, NL_TYPE_BOOL),
+              .usize = nl_semantic_core_type(c, NL_TYPE_USIZE),
               .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
     if (v->type != e.unit)
         return NL_NODE_C_UNSUPPORTED;
@@ -3640,6 +3685,11 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         free(e.text);
         return NL_NODE_C_UNSUPPORTED;
     }
+    if (proof_class == NL_CHECKED_MACHINE_PROVED && e.scalar_issued &&
+        !scalar_control_prepare(&e, body)) {
+        free(e.text);
+        return e.status;
+    }
     NLPhysicalCurrent current = {0};
     for (NLCheckedNodeId id = 1; id <= nl_checked_node_count(body); ++id) {
         const NLCheckedNodeView *op = nl_checked_node_view(body, id);
@@ -3657,6 +3707,10 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         }
         e.current = &current;
         break;
+    }
+    if (e.scalar_control && e.current) {
+        free(e.text);
+        return NL_NODE_C_UNSUPPORTED;
     }
     if (!copy_prepare(&e, body)) {
         free(e.text);
@@ -3762,7 +3816,7 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             "#define NL_CUSTODY_POLICY(...) ((void)0)\n"
             "#define NL_CUSTODY_LOAN(...) ((void)0)\n#endif\n");
     }
-    if (!qualified_preamble(&e)) {
+    if (!qualified_preamble(&e) || !scalar_control_preamble(&e)) {
         free(e.text);
         return e.status;
     }
@@ -3819,10 +3873,13 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     (void)put(&e, "int main(void) {\n");
     Value result = {0};
     if (!block(&e, &env, nl_checked_root(body), &result) || e.pending_live ||
-        ((e.ptr_ifs || e.ptr_roundtrips || e.ptr_reads) &&
+        ((!e.scalar_control || e.ptr_ifs || e.ptr_roundtrips) &&
+         (e.ptr_ifs || e.ptr_roundtrips || e.ptr_reads) &&
          (!ptr_copy_enabled(&e) || e.ptr_ifs != 1 ||
           e.ptr_roundtrips != (e.qualified_unchecked ? 0u : 1u) ||
           e.ptr_reads != 1)) ||
+        (e.scalar_control && (e.ptr_ifs || e.ptr_roundtrips ||
+                              e.ptr_reads != e.scalar_none_expected)) ||
         !qualified_complete(&e) ||
         (e.current && (!e.current_h_closed || !e.current_emitted ||
                        e.current_post_used != e.current->post_count)) ||
@@ -3878,7 +3935,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
           e.option_bindings !=
               (e.ptr_ifs          ? 2u
                : e.live_tail != 0 ? (e.no_pre_read ? 1u + e.no_read_copies : 2u)
-                                  : 3u) ||
+                                  : 3u) +
+                  (e.scalar_control ? e.ptr_reads : 0u) ||
           e.link_updates != (e.ptr_ifs ? 1u : 2u))) ||
         !put(&e, e.allocated ? "NL_HEAP_FINISH();\nreturn 0;\n}\n"
                              : "NL_NODE_FINISH();\nreturn 0;\n}\n")) {
