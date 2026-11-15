@@ -1,0 +1,64 @@
+{
+  "authority": "4c14452618dc1ad27ed41cf564ec32c72d7f9c3e",
+  "tree": "960c31dcb42780368fe402e1ceed3b7978740fc9",
+  "canonical": "Draft17.38",
+  "sources": {
+    "negative": {
+      "path": "tests/p1441/N-loan-escape.nl",
+      "bytes": 5559,
+      "sha256": "6716d3fb86f7541f878ab000e5b2a6f1adfe5ba7400d756cd647000ae972f617"
+    },
+    "control": {
+      "path": "tests/p1441/C-direct.nl",
+      "bytes": 4897,
+      "sha256": "7da6c80ff5eb5b390df504d48acb9f19358527c4e94192220ec041378b769ce7"
+    }
+  },
+  "before": {
+    "registration_status": 1,
+    "status_name": "NL_CHECK_SEMANTIC_ERROR",
+    "severity": 2,
+    "category": "semantic",
+    "code": "P3-INTERNAL",
+    "span": {
+      "start_byte": 3581,
+      "end_byte": 3790,
+      "start_line": 76,
+      "start_column": 47,
+      "end_line": 79,
+      "end_column": 34
+    },
+    "prediction": "first non-OK nl_sem_function_exit is semantic1 from a surviving ref with scope5 greater than scope_floor4; observe real status before mapping; no replacement/injection"
+  },
+  "prospective": {
+    "registration_status": 1,
+    "status_name": "NL_CHECK_SEMANTIC_ERROR",
+    "severity": 2,
+    "category": "semantic",
+    "code": "P8-EXIT-DEPENDENCY",
+    "message": "surviving state depends on the ending loan scope",
+    "span_unchanged": true,
+    "host_other_statuses": "unchanged"
+  },
+  "recovery": {
+    "artifact": "NULL on refused actual call after failed registration",
+    "snapshot": "byte-equal before/after failed registration",
+    "anchor": "full state equal",
+    "retry": "same context accepts unchanged control; actual main() MACHINE_PROVED and authentic result seal"
+  },
+  "CLI": {
+    "negative_exit": 3,
+    "control_exit": 0,
+    "named_negative_output": "existing bytes unchanged"
+  },
+  "limits": {
+    "candidates": 2,
+    "commits": 2,
+    "new_complete_sources": 2,
+    "CLI": 10,
+    "hosts": 3,
+    "new_guest_scenarios": 0,
+    "new_OOM_points": 0,
+    "Lean": 0
+  }
+}

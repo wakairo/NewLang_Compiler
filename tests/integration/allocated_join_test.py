@@ -45,7 +45,7 @@ cases = [
     ("joined-stale-ptr", continuation.replace("            unit\n        },", "            let other=lifetime_domain(); loan_read(other){|stable|let r=ref_from_ptr(read,ptr_h,stable);unit}; finalize_domain(other); unit\n        },"), 3, "P3-STALE-POINTER"),
     ("tail-claim-escape", continuation.replace("            unit\n        },", "            allocation_t; unit\n        },"), 3, "P3-UNKNOWN-BINDING"),
     ("some-owner-use-after", source.replace("deallocate(allocation_t, full_t);", "deallocate(allocation_t,full_t); allocation_t;"), 3, "P3-USE-AFTER-CONSUME"),
-    ("escaped-tail-ref", source.replace("                    let empty_t =", "                    let escaped=loan_read(life_t){|s|ref_from_ptr(read,ptr_t,s)}; let empty_t ="), 3, "P3-INTERNAL"),
+    ("escaped-tail-ref", source.replace("                    let empty_t =", "                    let escaped=loan_read(life_t){|s|ref_from_ptr(read,ptr_t,s)}; let empty_t ="), 3, "P8-EXIT-DEPENDENCY"),
     ("extra-captured-domain", source.replace("            match try_allocate_one<Node>()", "            let extra=lifetime_domain(); match try_allocate_one<Node>()", 1), 3, "ALLOCATED-CAPTURE-PRECISION"),
     ("none-nested-trial", source.replace("None => { unit }", "None => {match try_allocate_one<Node>(){None=>{unit},Some(unexpected)=>{unit}}}", 1), 3, "ALLOCATED-CARDINALITY-PROFILE"),
     ("third-site", source.replace("                    let empty_t =", "                    match try_allocate_one<Node>(){None=>{unit},Some(third)=>{unit}}; let empty_t ="), 3, "ALLOCATED-CARDINALITY-PROFILE"),

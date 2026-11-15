@@ -10811,7 +10811,13 @@ static NLCheckedNodeId allocated_domain_loan(Check *check,
     check->loop = saved_loop;
     if (body == 0)
         return 0;
-    if (!host(check, nl_sem_function_exit(c, scopes, c->place_count), s->span))
+    status = nl_sem_function_exit(c, scopes, c->place_count);
+    if (status == NL_CHECK_SEMANTIC_ERROR) {
+        fail(check, status, s->span, "P8-EXIT-DEPENDENCY",
+             "surviving state depends on the ending loan scope");
+        return 0;
+    }
+    if (!host(check, status, s->span))
         return 0;
     for (size_t i = scopes; i < c->scope_count; ++i)
         c->scopes[i].active = false;
