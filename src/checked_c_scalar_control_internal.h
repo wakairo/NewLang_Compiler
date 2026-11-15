@@ -52,7 +52,9 @@ static bool scalar_control_prepare(Emit *e, const NLCheckedFragment *body)
         return true;
     /* Keep the existing two-original producer/receiver route. An optional
      * effect-free None read is counted independently of its write protocol. */
-    return e->allocated && e->two_heap && e->live_tail && !e->custody &&
+    return nl_h_custody_result_world_present(e->origin_root,
+                                             nl_checked_root(e->origin_root)) &&
+                   e->allocated && e->two_heap && e->live_tail && !e->custody &&
                    !e->qualified_unchecked && e->scalar_none_expected <= 1
                ? true
                : reject(e);

@@ -20,14 +20,20 @@ void nl_h_custody_commit(NLCheckedFragment *parent, NLCheckedFragment *child,
 /* CHECK-only result lineage. Seal records the actual call plus its complete
  * owned callee subtree before publication. Validation authenticates those
  * issued bytes; it never mints a value, owner, or source permission. A ptr IF
- * supplies its genuine commit-pending candidate to freeze the same receipt's
- * semantic storage; NULL retains the existing node-only seal. */
+ * or normal Bool control supplies its genuine commit-pending candidate to
+ * freeze the same receipt's semantic storage; NULL retains the existing
+ * node-only seal. */
 NLCheckStatus nl_h_custody_seal_result(NLCheckedFragment *parent,
                                        NLCheckedFragment *child,
                                        NLCheckedNodeId call,
-                                       const NLSemanticContext *ptr_if_world);
+                                       const NLSemanticContext *result_world);
 bool nl_h_custody_result_valid(const NLCheckedFragment *parent,
                                NLCheckedNodeId call);
+/* Coverage observation of this same canonical receipt, not validation or a
+ * truth/owner grant. Consumers needing world bytes require this AND the
+ * existing result validator; a legacy node-only receipt is insufficient. */
+bool nl_h_custody_result_world_present(const NLCheckedFragment *parent,
+                                       NLCheckedNodeId call);
 /* Historical observation only. The actual parent and recorded call select a
  * live COMMITTED BODY; current world/view integrity is not authenticated. */
 const NLCheckedFragment *nl_h_custody_observe_body(const NLCheckedFragment *,
