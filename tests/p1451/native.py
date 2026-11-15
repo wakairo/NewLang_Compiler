@@ -40,7 +40,15 @@ sources = {"A": tests / "A-front-install.nl",
            "B": tests / "B-back-alias-install.nl",
            "L": tests / "L-literal-install.nl",
            "C": root / "tests/p1441/P-some-read.nl"}
-for name, source in sources.items():
+reuse = os.environ.get("P1451_GENERATED")
+if reuse:
+    prior = Path(reuse)
+    manifest = json.loads((prior / "generated.json").read_text())
+    for name in sources:
+        target = prior / (name + ".raw.c")
+        assert hashlib.sha256(target.read_bytes()).hexdigest() == manifest[name]
+        generated[name] = target
+for name, source in (() if reuse else sources.items()):
     target = output / (name + ".raw.c")
     run([compiler, "--emit-c17-to", str(target), str(source)], "emit-" + name)
     generated[name] = target
@@ -49,7 +57,7 @@ for name, source in sources.items():
     if name == "C":
         assert digest == "4e45981c33257e1e0b4cfb6183d1d32ff8a03b14b90851444a3ce4059b6d836f"
 
-for source in ("N-wrong-domain.nl", "N-loan-escape.nl"):
+for source in (() if reuse else ("N-wrong-domain.nl", "N-loan-escape.nl")):
     target = output / (source + ".sentinel")
     sentinel = b"P1451 existing named output\n"
     target.write_bytes(sentinel)
@@ -57,6 +65,14 @@ for source in ("N-wrong-domain.nl", "N-loan-escape.nl"):
         source, expected=3)
     assert target.read_bytes() == sentinel
     rows[-1]["named_no_clobber"] = True
+
+if not reuse:
+    (output / "generated.json").write_text(json.dumps({
+        name: hashlib.sha256(path.read_bytes()).hexdigest()
+        for name, path in generated.items()}, indent=2) + "\n")
+if os.environ.get("P1451_PREPARE_ONLY"):
+    print("PREPARED (guest NOT_RUN)", output)
+    raise SystemExit(0)
 
 compilers = [cc]
 extra = os.environ.get("P1451_EXTRA_CC")

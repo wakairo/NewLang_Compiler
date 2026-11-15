@@ -14,6 +14,7 @@
 #endif
 #define NEXT (P1451_CASE_BACK ? BACK : FRONT)
 static size_t p1451_call_values, p1451_completed;
+static _Bool p1451_T_bound;
 
 static const nl_node *p1451_h[2];
 static size_t p1451_domain[2];
@@ -34,7 +35,7 @@ static unsigned p1451_values[4];
     } while (0)
 #define NL_NODE_BIND(frame, symbol, kind, address)                             \
     do {                                                                       \
-        if (!p1451_level && p1451_results && (kind) == 4) {                    \
+        if (!p1451_T_bound && p1451_results && (kind) == 4) {                  \
             REQUIRE(*(const unsigned char *)(address) == NEXT);                \
             ++p1451_call_values;                                               \
         }                                                                      \
@@ -61,7 +62,8 @@ static unsigned p1451_values[4];
 
 #define NL_MIXED_COPY_BIND(frame, symbol, first, second)                       \
     do {                                                                       \
-        REQUIRE(!p1451_level && *(first) == OLD && *(second) == SPARE);        \
+        REQUIRE(!p1451_T_bound && *(first) == OLD && *(second) == SPARE);      \
+        p1451_T_bound = 1;                                                     \
         p1451_level = (first);                                                 \
         p1451_spare = (second);                                                \
         p1451_frame = (frame);                                                 \
