@@ -1,0 +1,44 @@
+C953 R ORIGINAL INDEPENDENT ORACLE v1 (ASCII UTF-8, final LF)
+Authority: Compiler/main 44c3d501309765c5e0aed3dc7b35c2afc503b6fe;
+CURRENT_SPEC = Draft17.38. Source cohort: R1/R2/R3 below.
+This is an independent pre-execution prediction, not a measured result.
+No fixture, implementation, P/F/B report, PR1438, earlier R source/oracle or CI result informed this cohort.
+Existing project-level historical summaries and the normative Draft's historical sketches were visible. Not pristine BLIND.
+
+Common semantic universe:
+- One completed Cell H nominal, exactly 2 static nested fallible H allocation sites, 0/1/2 success worlds.
+- Exactly one independent complete Meter T nominal with two distinct core-u8 fields; two actual lexical Meter originals.
+- Head H O_h/R_h/A_h/D_h and tail H O_t/R_t/A_t/D_t must be real, disjoint, source-issued and still current at their operations. No H/T authority or current fact is created by unit co-registration, equal integer IDs, Copy pointer contents, observer values, a checked-owned type string or an unchecked annotation.
+- Current head.jump starts None, changes to Some(actual ptr_tail) using head D_h write access, and is read under D_h as an actual current Option Copy. Its match returns a Bool value from TWO normal arms: None => false (0==1), Some => true (3==3). Both arms must be semantically analyzed; selected runtime Some uses true. Ordinary IF must evaluate exactly one arm and join equal u8 result types and full hidden state, with no owner/loan divergence.
+- On actual two-success normal path, choice = gauge.peak = u8(84); retune(gauge.floor,u8(84)) returns old u8(12); journal.peak gets u8(12) and returns old u8(4); gauge.peak stays 84, journal.floor stays 96. All original T root/field identities are distinct and no scalar Copy proves H owner or domain.
+- On first None: 0 H originals, 0 H frees, no second attempt. On second None: 1 H original and exactly 1 original EndRoot/raw full-range recovery/finalize/deallocate; no tail or invented owner. On both Some: 2 H originals, 1 genuine detach_tail Some->None Change/Reset while both H remain live, LiveTail returned exactly once with the ORIGINAL tail ptr/Allocation/Domain (not minted), release_tail ends/frees tail exactly once, main ends/frees head exactly once. No loan crosses either corresponding EndRoot.
+- Some(found) is an Option Copy of the real current head jump; it is a location/provenance value, NOT liveness/owner/Domain/graph-membership proof. A source-backed target reloan must use current O_t and D_t (not D_h), original backing/provenance and a live scoped stability loan. The positive operation-local 'unchecked ref_from_ptr(read, found, stable_tail)' assumes only its actually TRUE remaining precondition. If accepted, any proof trace/public owned validator must mark exact span and AUTHOR_ASSUMED obligation distinctly from MACHINE_PROVED; never launder it into an unconditional ordinary-safe/caller guarantee. A proof representation incapable of this must fail closed.
+
+R1 / normative intended positive:
+SOURCE/registration: closed H+T syntax is prima facie selected under 16.3.8/8.2/17.1/18.1a-b/26/27; actual acceptance and combined helper/control precision NOT_RUN, and no parser diagnostic is predicted as a fact. If this new cross-composition proves unsupported in actual source law, freeze SOURCE_ELIGIBILITY_UNCERTAIN/NOT_REACHED, not semantic PASS.
+CHECK: positive ONLY conditional on exact original issuers, true local human premise, current link, matching D_t, nonescaping refs, call applicability and every 0/1/2 normal cleanup obligation; machine proof must never include an unconditional synthetic issuance for the unchecked read. A conservative precision rejection is not a safety PASS or necessarily a semantic unsoundness finding.
+PUBLIC owned: independently verify fresh H_h and H_t root/Backing/Allocation/Domain identity and the original Meter field PlaceId/index, source Effect Change/Reset, matched old u8 Copy, join edges, author-assumption classification, scoped loan and total owner consumption. No host-issued ownership or injected runtime value.
+STRICT C17: ONLY after authentic accepted owned/validation. Expect actual source-driven two static allocation sites, distinct live regions, true link read/match/IF, only matching original deallocation; zero emitted C if upstream rejected; never accept a partial fragment of an ineligible source.
+NATIVE/NORMAL/FAILURE: only if independently released later; 0/1/2 original H frees as described, Some branch Bool true, IF true arm, T u8 expected 84/12/4/96, no UAF/leak/double-free/sanitizer error. Ordinary main returns unit and has no value-output API: if exact intermediate scalar runtime values are not available through an authorized read-only observer, mark them NOT_OBSERVED rather than inject values or claim observed PASS.
+
+R2 / invalid governing Domain:
+SOURCE: same full mixed-unit syntax; wrong-domain call in Some(found) is a syntactically valid contextual unchecked read-root form but semantically FALSE, because found originates in O_t under D_t while stable_head_wrong is borrowed from D_h.
+CHECK: MUST REJECT as known wrong target-governing Domain or fail closed on inability to establish true precondition. 'unchecked' cannot turn a known false root/Domain assertion into Known/MACHINE_PROVED, nor create a tail stability loan from D_h.
+OWNED/C17/NATIVE: NOT_REACHED; especially NO native execution of false human premise. If source/parser rejects earlier, record exact first rejection; do not count a semantic or sanitizer PASS.
+
+R3 / escaped stability loan:
+SOURCE: same full mixed-unit source; after true Option MATCH and ordinary IF, escaped_head is returned from the loan_read(domain_head) body as a ref depending on the now-expired stable_head loan.
+CHECK: MUST REJECT at loan-result scope-exit compatibility or at first escaped_head@jump use (if a future checker defers rejection), without allowing ordinary Copy of the resulting Option to repair expired stability. Both IF normal arms retain consistent H owners and cannot excuse the separate invalid loan.
+OWNED/C17/NATIVE: NOT_REACHED; no semantic or native safety PASS may be manufactured from an upstream rejection.
+
+First falsifiers / stop:
+1. A supposedly accepted R1 source/owned artifact not grounded in both genuine original H issuers, correct H/T nominal/field identities, real unmodified head.jump, matched T old Copy and all live-world cleanup, or which treats an author-assumed unchecked precondition as unconditional machine fact => SAFETY STOP.
+2. R2 wrong D_h accepted as current D_t or granted a C17/native path from a knowingly false assumption => SAFETY STOP; no unsafe guest execution.
+3. R3 escaping ref accepted as live past its loan or translated to C17/native => SAFETY STOP.
+4. R1 measured incorrect semantic value, wrong runtime branch, release mismatch, UB/sanitizer finding or an observer that writes/mocks pointer/Bool/owner/Domain, repairs head.jump or injects expected values => STOP and preserve first evidence.
+5. Missing SOURCE/registration, unsupported proof/C17, or apparatus failure => mark exact first failing layer and all later layers NOT_REACHED, never call it a semantic safety PASS.
+6. Unapproved candidate visibility, non-GitHub execution, CI/branch creation or source/oracle recalibration to observed GREEN => process STOP.
+
+Observation concept for any separately authorized later R: use only R-owned GitHub branch + GitHub Actions, full immutable original source via normal compiler entry and public checked-owned verifier, strict C17, bounded native/sanitizer if source accepted; read-only captured public evidence and, if authorized, tracing of source-caused ordinary operations. The observer may inspect but cannot create/modify a source root, link value, Bool, T scalar, original Allocation/Domain, checked proof or guest control flow. Compare native values only if genuinely observed, otherwise NOT_OBSERVED. Record first failure and 0/1/2-world reachability separately. No future runner/push permission exists now.
+
+Value interpretation: source/CHECK/native status is separate from the still-UNMEASURED library-author + ordinary-safe caller UB-prevention audit/re-audit dependency-closure advantage over well-factored C, with equivalent original topology, cleanup and failure policy. Product GO #624 PAUSED / H1 #268 HOLD. R PREP cannot authorize a Product GO.
