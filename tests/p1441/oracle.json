@@ -1,0 +1,73 @@
+{
+  "authority": "0310a13045eaca0c77e6306136a0eb7c3b2b40a7",
+  "tree": "54a755cf794a0c04ebe51fc17e25287d2c8862dd",
+  "canonical": "Draft17.38",
+  "source_law": [
+    "16.3.8",
+    "17.1 C332",
+    "10.1",
+    "13.5a",
+    "13.8",
+    "26.24",
+    "27.3",
+    "27.4"
+  ],
+  "prediction": {
+    "control": "SOURCE/CHECK/owned/C17 should succeed",
+    "positive": "SOURCE/CHECK eligible; expected first rejection: private scalar IF pure-arm consumer; do not patch before FIRST",
+    "negatives": "wrong-D, ref escape, consumed owner/Domain reject SOURCE/CHECK; no native"
+  },
+  "actual": {
+    "h0": {
+      "allocations": 0,
+      "cleanup": 0,
+      "result": 7,
+      "T": "not reached"
+    },
+    "h1": {
+      "allocations": 1,
+      "cleanup": 1,
+      "result": 11,
+      "T": "not reached"
+    },
+    "h2": {
+      "allocations": 2,
+      "cleanup": 2,
+      "old": 31,
+      "sibling": 251,
+      "Some": {
+        "condition": 1,
+        "selected_original": "front",
+        "new_value": 41,
+        "unselected_payload_reads": 0
+      },
+      "None": {
+        "condition": 0,
+        "selected_original": "back",
+        "new_value": 197,
+        "unselected_payload_reads": 0
+      }
+    }
+  },
+  "contract": "exact two original H; branch-local correct Domain/loan closes; only dependency-compatible u8 Copy joins fresh Unknown; original T Change and H producer/receiver cleanup preserved; no conditional ptr/Domain/owner join",
+  "falsifiers": [
+    "wrong Domain",
+    "escaped/expired loan",
+    "consumed owner",
+    "world/scalar/proof/foreign arm tamper public INVALID and C17 unsupported/no-clobber",
+    "snapshot/CHECK/C17 output allocation OOM exact status rollback retry"
+  ],
+  "budget": {
+    "source": 6,
+    "CLI": 20,
+    "native": 12,
+    "selected_host_OOM": 16,
+    "candidates": 3,
+    "commits": 3,
+    "hosts": [
+      "GCC Release",
+      "Clang ASan+LSan",
+      "Clang UBSan"
+    ]
+  }
+}

@@ -146,6 +146,7 @@ typedef struct Env {
     Local locals[C_LOCALS];
     size_t count, frame, depth, prefix;
     NLValueId scalar_prefix; /* readonly IF's authenticated original values */
+    bool scalar_read_arm;    /* one closed original-H read, no owner transfer */
     NLBackingRegionId backing;
     size_t region_slot;
     NLPlaceId heap_place;
@@ -223,7 +224,16 @@ static bool inherited(const Env *env, NLSymbolId symbol, NLTypeId type)
         const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8),
                        boolean = nl_semantic_core_type(c, NL_TYPE_BOOL),
                        usize = nl_semantic_core_type(c, NL_TYPE_USIZE);
-        return (type == u8 || type == boolean || type == usize) &&
+        NLSemanticTypeView t;
+        const bool read_carrier =
+            env->scalar_read_arm &&
+            (type == nl_semantic_domain_type(c) ||
+             (nl_semantic_type_view(c, type, &t) && t.kind == NL_TYPE_PTR));
+        /* Only map a source fork's unchanged prefix binding to its existing
+         * C carrier. The whole-world seal and ordinary H read consumer still
+         * authenticate the actual original/Domain/loan at the operation. */
+        return (type == u8 || type == boolean || type == usize ||
+                read_carrier) &&
                nl_semantic_binding_view(
                    nl_checked_context(env->parent->artifact), symbol, &a) &&
                nl_semantic_binding_view(c, symbol, &b) && a.type == type &&
@@ -511,6 +521,8 @@ static bool match_store_result(Emit *e, const NLCheckedFragment *f,
 #include "checked_c_copy_if_internal.h"
 static bool selected_reference(const Env *, const NLCheckedNodeView *,
                                NLSemanticValueView *);
+static const NLCheckedNodeView *scalar_observation(const Emit *, const Env *,
+                                                   NLCheckedNodeId);
 static const Env *domain_heap(const Env *, NLDomainId);
 static bool qualified_ptr_if(Emit *, Env *, NLCheckedNodeId,
                              const NLCheckedNodeView *, Value *);
@@ -1414,17 +1426,21 @@ static bool range_value(const Env *env, NLBackingRegionId backing,
            v.occupancy.region == backing && v.occupancy.start == 0 &&
            v.occupancy.length == 24;
 }
+static bool heap_prefix(const Env *env)
+{
+    return env->parent && (env->artifact == env->parent->artifact ||
+                           (env->scalar_read_arm && env->scalar_prefix &&
+                            env->prefix == SIZE_MAX) ||
+                           (env->parent->heap_symbol &&
+                            env->parent->heap_symbol <= env->prefix));
+}
 static const Env *heap(const Env *env, const NLCheckedNodeView *v)
 {
     if (env->heap_place == v->lifetime_place &&
         env->heap_incarnation == v->lifetime_incarnation &&
         env->heap_domain == v->lifetime_domain)
         return env;
-    if (env->parent == NULL)
-        return NULL;
-    if (env->artifact != env->parent->artifact &&
-        (env->parent->heap_symbol == 0 ||
-         env->parent->heap_symbol > env->prefix))
+    if (!heap_prefix(env))
         return NULL;
     return heap(env->parent, v);
 }
@@ -1434,9 +1450,7 @@ static const Env *region(const Env *env, NLBackingRegionId backing)
 {
     if (backing != 0 && env->backing == backing)
         return env;
-    if (env->parent == NULL || (env->artifact != env->parent->artifact &&
-                                (env->parent->heap_symbol == 0 ||
-                                 env->parent->heap_symbol > env->prefix)))
+    if (!heap_prefix(env))
         return NULL;
     return region(env->parent, backing);
 }
@@ -1444,9 +1458,7 @@ static const Env *domain_heap(const Env *env, NLDomainId domain)
 {
     if (domain != 0 && env->heap_domain == domain)
         return env;
-    if (env->parent == NULL || (env->artifact != env->parent->artifact &&
-                                (env->parent->heap_symbol == 0 ||
-                                 env->parent->heap_symbol > env->prefix)))
+    if (!heap_prefix(env))
         return NULL;
     return domain_heap(env->parent, domain);
 }
