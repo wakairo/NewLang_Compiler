@@ -39,8 +39,9 @@ static unsigned p1451_values[4];
             REQUIRE(*(const unsigned char *)(address) == NEXT);                \
             ++p1451_call_values;                                               \
         }                                                                      \
-        if (p1451_trials && p1451_frees == p1451_inits && (kind) == 4) {       \
-            REQUIRE(p1451_completed++ == 0);                                   \
+        if (p1451_trials && p1451_frees == p1451_inits && (frame) == 0 &&      \
+            (kind) == 4) {                                                     \
+            REQUIRE(p1451_completed++ < 2);                                    \
             REQUIRE(*(const unsigned char *)(address) ==                       \
                     (P1451_FAIL_AT == 1   ? 5u                                 \
                      : P1451_FAIL_AT == 2 ? 17u                                \
@@ -186,7 +187,7 @@ static unsigned p1451_values[4];
         REQUIRE(p1451_copies == (P1451_FAIL_AT ? 0u : 1u));                    \
         REQUIRE(p1451_bindings == (P1451_FAIL_AT ? 0u : 4u));                  \
         REQUIRE(p1451_payloads == (P1451_FAIL_AT ? 0u : 1u));                  \
-        REQUIRE(p1451_completed == 1);                                         \
+        REQUIRE(p1451_completed == 2);                                         \
         REQUIRE(p1451_call_values == (P1451_FAIL_AT     ? 0u                   \
                                       : P1451_CASE_BACK ? 3u                   \
                                                         : 2u));                \
