@@ -25,7 +25,7 @@ cases = [
     ("none-is-checked", source.replace("    None => {\n        unit", "    None => {\n        unknown_callee(); unit"), 3, "P3-UNKNOWN-CALLEE"),
     ("wrong-ptr-type", source.replace("ref_from_ptr(read, q, stable)", "ref_from_ptr(read, head, stable)"), 3, "ALLOCATED-REF-TYPE"),
     ("wrong-stability-type", source.replace("ref_from_ptr(read, q, stable)", "ref_from_ptr(read, q, head)"), 3, "ALLOCATED-REF-TYPE"),
-    ("scoped-ref-escape", source.replace("let access = ref_from_ptr(read, q, stable);\n                    unit", "ref_from_ptr(read,q,stable)"), 3, "P3-INTERNAL"),
+    ("scoped-ref-escape", source.replace("let access = ref_from_ptr(read, q, stable);\n                    unit", "ref_from_ptr(read,q,stable)"), 3, "P8-EXIT-DEPENDENCY"),
     ("extra-domain-backend", source.replace("let life = lifetime_domain();", "let extra=lifetime_domain(); finalize_domain(extra); let life=lifetime_domain();"), 4, "V1-BACKEND-UNSUPPORTED"),
     ("retained-link-backend", source.replace("replace(w, Option<ptr<Node>>::None)", "replace(w, Option<ptr<Node>>::Some(tail))"), 4, "V1-BACKEND-UNSUPPORTED"),
     ("missing-none", source.replace("    None => {\n        unit\n    },", ""), 3, "ALLOCATED-EXHAUSTIVENESS"),

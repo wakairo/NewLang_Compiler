@@ -48,7 +48,7 @@ for name, changed, code in [
     ("double-late-release", consume + "receive_and_release_tail(owned_ptr,owned_allocation,owned_domain);", "P3-USE-AFTER-CONSUME"),
     ("stale-reloan", consume + "loan_read(life_h){|s|let r=ref_from_ptr(read,owned_ptr,s);unit};", "P3-STALE-POINTER"),
     ("live-dependent-ref", consume.replace("receive_and_release_tail(owned_ptr,owned_allocation,owned_domain);", "loan_read(owned_domain){|s|let r=ref_from_ptr(read,owned_ptr,s);receive_and_release_tail(owned_ptr,owned_allocation,owned_domain);unit};"), "P3-REF-CONFLICT"),
-    ("scope-escape", consume.replace("receive_and_release_tail", "let escaped=loan_read(owned_domain){|s|ref_from_ptr(read,owned_ptr,s)};receive_and_release_tail"), "P3-INTERNAL"),
+    ("scope-escape", consume.replace("receive_and_release_tail", "let escaped=loan_read(owned_domain){|s|ref_from_ptr(read,owned_ptr,s)};receive_and_release_tail"), "P8-EXIT-DEPENDENCY"),
 ]:
     assert consume in source
     negatives[name] = (source.replace(consume, changed), code)

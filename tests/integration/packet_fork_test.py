@@ -60,7 +60,7 @@ expected = {
     "live-dependent-ref": "P3-REF-CONFLICT",
     # Current allocated-loan escape path conservatively fails at its semantic
     # module invariant, not a precise escape diagnostic. Report this limit.
-    "leaked-scope-ref": "P3-INTERNAL",
+    "leaked-scope-ref": "P8-EXIT-DEPENDENCY",
     "unknown-policy-payload": "P3-UNKNOWN-PROVENANCE",
     "post-join-reconsume": "P3-USE-AFTER-CONSUME",
 }

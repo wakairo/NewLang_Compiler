@@ -68,10 +68,10 @@ ending = re.search(r"let empty_A = loan_exclusive_read\(life_A\) \{.*?\};", sour
 assert ending in source
 cases.append(("active-loan", source.replace(ending,
     "let empty_A = loan_read(life_A) { |held|loan_exclusive_read(life_A) { |ending_A| destroy(ptr_A,ending_A)}};", 1), 3, "P3-REF-CONFLICT"))
-# Existing allocated-domain exit rejects scope escape as semantic error under
-# its historical P3-INTERNAL diagnostic code; record rather than redesign it.
+# C967 gives this existing semantic rejection the exit-dependency diagnostic.
+# The original P3-INTERNAL expectation and CI RED remain in Git history.
 cases.append(("scope-escape", source.replace("let vacant_src = into_slot<Node>(raw);", "let vacant_src = into_slot<Node>(raw);", 1).replace(
-    "            match try_allocate_one<Node>()", "            let escape=loan_read(life_src){|stable|ref_from_ptr(read,ptr_src,stable)};\n            match try_allocate_one<Node>()", 1), 3, "P3-INTERNAL"))
+    "            match try_allocate_one<Node>()", "            let escape=loan_read(life_src){|stable|ref_from_ptr(read,ptr_src,stable)};\n            match try_allocate_one<Node>()", 1), 3, "P8-EXIT-DEPENDENCY"))
 cases.append(("sixth", source.replace("                                            unit\n", "                                            match try_allocate_one<Node>() {None=>{unit},Some(extra)=>{unit}}\n", 1), 3, "ALLOCATED-CARDINALITY-PROFILE"))
 
 observations = []
