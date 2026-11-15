@@ -1426,17 +1426,21 @@ static bool range_value(const Env *env, NLBackingRegionId backing,
            v.occupancy.region == backing && v.occupancy.start == 0 &&
            v.occupancy.length == 24;
 }
+static bool heap_prefix(const Env *env)
+{
+    return env->parent && (env->artifact == env->parent->artifact ||
+                           (env->scalar_read_arm && env->scalar_prefix &&
+                            env->prefix == SIZE_MAX) ||
+                           (env->parent->heap_symbol &&
+                            env->parent->heap_symbol <= env->prefix));
+}
 static const Env *heap(const Env *env, const NLCheckedNodeView *v)
 {
     if (env->heap_place == v->lifetime_place &&
         env->heap_incarnation == v->lifetime_incarnation &&
         env->heap_domain == v->lifetime_domain)
         return env;
-    if (env->parent == NULL)
-        return NULL;
-    if (env->artifact != env->parent->artifact &&
-        (env->parent->heap_symbol == 0 ||
-         env->parent->heap_symbol > env->prefix))
+    if (!heap_prefix(env))
         return NULL;
     return heap(env->parent, v);
 }
@@ -1446,9 +1450,7 @@ static const Env *region(const Env *env, NLBackingRegionId backing)
 {
     if (backing != 0 && env->backing == backing)
         return env;
-    if (env->parent == NULL || (env->artifact != env->parent->artifact &&
-                                (env->parent->heap_symbol == 0 ||
-                                 env->parent->heap_symbol > env->prefix)))
+    if (!heap_prefix(env))
         return NULL;
     return region(env->parent, backing);
 }
@@ -1456,9 +1458,7 @@ static const Env *domain_heap(const Env *env, NLDomainId domain)
 {
     if (domain != 0 && env->heap_domain == domain)
         return env;
-    if (env->parent == NULL || (env->artifact != env->parent->artifact &&
-                                (env->parent->heap_symbol == 0 ||
-                                 env->parent->heap_symbol > env->prefix)))
+    if (!heap_prefix(env))
         return NULL;
     return domain_heap(env->parent, domain);
 }
