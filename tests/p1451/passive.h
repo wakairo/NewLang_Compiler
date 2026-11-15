@@ -156,7 +156,9 @@ static unsigned p1451_values[4];
 #define NL_SCALAR_BOOL_RESULT(value, allocation)                               \
     do {                                                                       \
         if (!(allocation)) {                                                   \
-            REQUIRE(p1451_reads && (value) == p1451_last_tag);                 \
+            REQUIRE(p1451_reads &&                                             \
+                    (value) ==                                                 \
+                        (P1451_CASE_BACK ? !p1451_last_tag : p1451_last_tag)); \
         }                                                                      \
         p1451_decision = (value);                                              \
         ++p1451_bools;                                                         \
