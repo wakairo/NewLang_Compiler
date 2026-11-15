@@ -5,6 +5,8 @@
 #include "../p1435/probe.c"
 #undef __wrap_malloc
 #undef main
+#include <stdint.h>
+
 #include "../../src/h_result_state_internal.h"
 
 static bool in_result_seal;
