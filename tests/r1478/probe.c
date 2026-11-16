@@ -46,8 +46,8 @@ static bool read_source(const char *path, RProgram *p)
            nl_parser_parse_function_unit(p->parser, &p->unit, NULL) ==
                NL_PARSE_OK &&
            nl_semantic_create(&p->context) == NL_CHECK_OK &&
-           nl_source_create("main()", 6, "r1478-actual",
-                            &p->call_source) == NL_SOURCE_OK &&
+           nl_source_create("main()", 6, "r1478-actual", &p->call_source) ==
+               NL_SOURCE_OK &&
            nl_parser_create(p->call_source, &p->call_parser) == NL_PARSE_OK &&
            nl_parser_parse_expression_fragment(p->call_parser, &p->call,
                                                NULL) == NL_PARSE_OK;
@@ -58,8 +58,7 @@ static bool has_code(const char *actual, const char *expected)
     return actual != NULL && strcmp(actual, expected) == 0;
 }
 
-static bool inspect(const NLCheckedFragment *f, RCounts *count,
-                    unsigned depth)
+static bool inspect(const NLCheckedFragment *f, RCounts *count, unsigned depth)
 {
     if (f == NULL || depth > 24)
         return false;
@@ -79,14 +78,12 @@ static bool inspect(const NLCheckedFragment *f, RCounts *count,
             const NLCheckedNodeView *trial =
                 nl_checked_node_view(f, n->initializer);
             if (trial != NULL && trial->kind == NL_CHECKED_TRY_ALLOCATE_ONE) {
-                const NLCheckedFragment *arm =
-                    nl_checked_match_arm(f, id, 0);
+                const NLCheckedFragment *arm = nl_checked_match_arm(f, id, 0);
                 const NLCheckedNodeView *end =
                     arm == NULL
                         ? NULL
                         : nl_checked_node_view(arm, nl_checked_root(arm));
-                if (end == NULL || !end->terminates ||
-                    end->result_count != 0)
+                if (end == NULL || !end->terminates || end->result_count != 0)
                     return false;
                 ++count->terminals;
             }
@@ -95,8 +92,7 @@ static bool inspect(const NLCheckedFragment *f, RCounts *count,
             if (n->function == 0 || n->function > context->function_count ||
                 context->functions == NULL)
                 return false;
-            const NLFunctionEntry *fn =
-                &context->functions[n->function - 1];
+            const NLFunctionEntry *fn = &context->functions[n->function - 1];
             if (strcmp(fn->name, "install_metric") == 0) {
                 NLCopyBodyView view = {0};
                 NLCopyBodyParameters p = {0};
@@ -112,15 +108,12 @@ static bool inspect(const NLCheckedFragment *f, RCounts *count,
                         NL_CHECK_OK ||
                     view.event_count != 1 ||
                     event.kind != NL_COPY_BODY_CHANGE || !p.field.present ||
-                    p.field.index != 0 ||
-                    p.field.access != NL_ACCESS_WRITE ||
+                    p.field.index != 0 || p.field.access != NL_ACCESS_WRITE ||
                     p.field.parent == 0 || p.field.child == 0)
                     return false;
                 NLSemanticPlaceView before = {0}, after = {0};
-                if (!nl_semantic_place_view(p.entry, p.field.child,
-                                            &before) ||
-                    !nl_semantic_place_view(p.handoff, p.field.child,
-                                            &after) ||
+                if (!nl_semantic_place_view(p.entry, p.field.child, &before) ||
+                    !nl_semantic_place_view(p.handoff, p.field.child, &after) ||
                     !before.live || !after.live ||
                     before.incarnation != after.incarnation ||
                     before.current_fact == after.current_fact)
@@ -134,9 +127,8 @@ static bool inspect(const NLCheckedFragment *f, RCounts *count,
         if (n->kind == NL_CHECKED_MATCH || n->kind == NL_CHECKED_IF) {
             for (size_t i = 0; i < n->item_count; ++i) {
                 const NLCheckedFragment *arm =
-                    n->kind == NL_CHECKED_MATCH
-                        ? nl_checked_match_arm(f, id, i)
-                        : nl_checked_if_arm(f, id, i);
+                    n->kind == NL_CHECKED_MATCH ? nl_checked_match_arm(f, id, i)
+                                                : nl_checked_if_arm(f, id, i);
                 if (arm == NULL || !inspect(arm, count, depth + 1))
                     return false;
             }
@@ -157,8 +149,7 @@ static int inspect_source(const char *kind, const char *path)
     NLFunctionUnitDiagnostic definition = {0};
     const NLSyntaxTree *units[] = {p.unit};
     NLCheckStatus status =
-        nl_semantic_register_function_unit(p.context, units, 1,
-                                            &definition);
+        nl_semantic_register_function_unit(p.context, units, 1, &definition);
     const char *definition_code = definition.diagnostic.diagnostic.code;
     printf("R1478 source registration=%d diagnostic=%s\n", (int)status,
            definition_code ? definition_code : "none");
@@ -172,8 +163,8 @@ static int inspect_source(const char *kind, const char *path)
     }
 
     NLCheckDiagnostic diagnostic = {0};
-    status = nl_semantic_check_expression(p.context, p.call, &p.owned,
-                                          &diagnostic);
+    status =
+        nl_semantic_check_expression(p.context, p.call, &p.owned, &diagnostic);
     printf("R1478 actual CHECK=%d diagnostic=%s\n", (int)status,
            diagnostic.diagnostic.code ? diagnostic.diagnostic.code : "none");
     if (negative) {
@@ -214,8 +205,7 @@ static int inspect_source(const char *kind, const char *path)
     char *text = NULL;
     size_t length = 0;
     NLNodeCStatus emitted = nl_checked_c_node(p.owned, &text, &length);
-    if (emitted != NL_NODE_C_OK || text == NULL ||
-        length != strlen(text)) {
+    if (emitted != NL_NODE_C_OK || text == NULL || length != strlen(text)) {
         printf("R1478 C17_NOT_REACHED status=%d\n", (int)emitted);
         result = 125;
     } else {
@@ -235,8 +225,7 @@ done:
 int main(int argc, char **argv)
 {
     if (argc != 3 ||
-        (strcmp(argv[1], "positive") != 0 &&
-         strcmp(argv[1], "negative") != 0))
+        (strcmp(argv[1], "positive") != 0 && strcmp(argv[1], "negative") != 0))
         return 2;
     return inspect_source(argv[1], argv[2]);
 }
