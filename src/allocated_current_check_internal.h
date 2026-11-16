@@ -200,9 +200,10 @@ static NLCheckStatus allocated_current_frame(const NLSemanticContext *entry,
                 valid = false;
             comparison->bindings[i].view.value = entry->bindings[i].view.value;
         }
-    comparison->region_count = entry->region_count;
-    comparison->domain_count = entry->domain_count;
-    valid = valid && nl_node_unit_arm_frame(entry, comparison, 0, &unit);
+    NLSemanticContext prefix = *comparison;
+    prefix.region_count = entry->region_count;
+    prefix.domain_count = entry->domain_count;
+    valid = valid && nl_node_unit_arm_frame(entry, &prefix, 0, &unit);
     nl_semantic_destroy(comparison);
     return valid ? NL_CHECK_OK : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
 }
