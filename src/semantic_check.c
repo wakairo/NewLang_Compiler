@@ -4290,7 +4290,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     const bool allocated_definition_copy =
         body.definition && caller->allocated_slice &&
         caller->allocation_depth == 2 && caller->in_source_loan &&
-        caller->has_arm_floor && !caller->loop;
+        caller->binding_floor == caller->arm_floor && !caller->loop;
     if (function->count == 2 &&
         (((!body.definition || allocated_definition_copy) &&
           function->result == nl_semantic_core_type(c, NL_TYPE_U8)) ||
