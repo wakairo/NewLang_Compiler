@@ -4283,8 +4283,16 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                                                  body.readonly_u8_parameter, c),
               call_span))
         goto failure;
+    /* A concrete lexical T in a nested allocation definition has the same
+     * real scoped actual/formal call as its later entry check. Record it with
+     * the existing factory; do not turn the definition into an actual world
+     * or infer a formal_write capability from the signature alone. */
+    const bool allocated_definition_copy =
+        body.definition && caller->allocated_slice &&
+        caller->allocation_depth == 2 && caller->in_source_loan &&
+        caller->has_arm_floor && !caller->loop;
     if (function->count == 2 &&
-        ((!body.definition &&
+        (((!body.definition || allocated_definition_copy) &&
           function->result == nl_semantic_core_type(c, NL_TYPE_U8)) ||
          function->result == 1)) {
         if (!host(&body,
