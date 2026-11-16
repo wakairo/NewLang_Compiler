@@ -1,0 +1,606 @@
+[
+  {
+    "label": "c1-A-passive-gcc-O0-H0-none",
+    "command": [
+      "cc",
+      "-std=c17",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=1",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H0-none"
+    ],
+    "elf_sha256": "098e24a143003ffcf3a58bfe0851c265cd8a29fdda64fbbadfc46906e9dae726",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H0-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-passive-gcc-O0-H1-none",
+    "command": [
+      "cc",
+      "-std=c17",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=2",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H1-none"
+    ],
+    "elf_sha256": "e56ad09a18e1a7e0eae1748eeb3235c51f2c212d7c889cfb5448c35bfa913a25",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H1-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-passive-gcc-O0-H2-none",
+    "command": [
+      "cc",
+      "-std=c17",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=0",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H2-none"
+    ],
+    "elf_sha256": "ad90a5964d50f0545952bcf07809382da7ecff2147144818e3f734fb8335091a",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H2-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-passive-gcc-O2-H0-none",
+    "command": [
+      "cc",
+      "-std=c17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=1",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O2-H0-none"
+    ],
+    "elf_sha256": "e53557044a5dbadac42556830897ad912e00287bf0d0f0d600943c224020d337",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O2-H0-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-passive-gcc-O2-H1-none",
+    "command": [
+      "cc",
+      "-std=c17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=2",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O2-H1-none"
+    ],
+    "elf_sha256": "ba3b2bfdf1af44bacc6eeb7c7f5a97e43d96ea787788549de9689bf4ac1a9f91",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O2-H1-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-passive-clang-O0-H0-none",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=1",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H0-none"
+    ],
+    "elf_sha256": "67993ed3dad8251d663de3eb5e08c76302af25f8059d27b230e3dd2255dd7c16",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H0-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-passive-clang-O0-H1-none",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=2",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H1-none"
+    ],
+    "elf_sha256": "b472c3209f6c9d9614b5c5592dd184659eda1a93794b4d1e573542512235e6d2",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H1-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-passive-clang-O0-H2-none",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=0",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H2-none"
+    ],
+    "elf_sha256": "b208d8fba6f595ff75240dd4be9f63dec21048d291ac77bcad924cad09347050",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H2-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-passive-clang-O2-H0-none",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=1",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H0-none"
+    ],
+    "elf_sha256": "025847f373b9552fc3b88880273c9cedab07261bdf292f727fb8f4b020240d3c",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H0-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-passive-clang-O2-H1-none",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=2",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H1-none"
+    ],
+    "elf_sha256": "cb2a0cc059f7f57639709173f110f64fdd55460a66e2a2689ed4ed84f6d75686",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H1-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-passive-clang-O2-H2-none",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=0",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H2-none"
+    ],
+    "elf_sha256": "8e11a30bcbd43dc923bf11bfb1a5c8d59879868c4d525379ffb3a70d8d48342a",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H2-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-raw-gcc-O0-H2-none",
+    "command": [
+      "cc",
+      "-std=c17",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-raw-gcc-O0-H2-none"
+    ],
+    "elf_sha256": "939b2d1eb125771db7b94c02c368f645a165116f1bb62a537f99a60aacf7450d",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-raw-gcc-O0-H2-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-raw-clang-O0-H2-none",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-raw-clang-O0-H2-none"
+    ],
+    "elf_sha256": "c463b2a39dcd308f15c967ea1cc45f90b87faf222a4c52a5441f5773f2e51efc",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-raw-clang-O0-H2-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-raw-clang-O2-H2-none",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-raw-clang-O2-H2-none"
+    ],
+    "elf_sha256": "32f673a2ea14e5e17db4220e41b70b1d8d012770346c3e5e168335f0842e56b5",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-raw-clang-O2-H2-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-B-passive-gcc-O2-H2-none",
+    "command": [
+      "cc",
+      "-std=c17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=0",
+      "-DP1463_FIELD_INDEX=1",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/B.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-B-passive-gcc-O2-H2-none"
+    ],
+    "elf_sha256": "47b971f90fa5cedf15b8a3732cf5efb27f314b0689201a44ef7ff91726bc8c8a",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-B-passive-gcc-O2-H2-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-B-passive-clang-O2-H2-none",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=0",
+      "-DP1463_FIELD_INDEX=1",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/B.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-B-passive-clang-O2-H2-none"
+    ],
+    "elf_sha256": "7638e483463a13c646df60741dcef0d881621d356863872006240f5dfbbd7048",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-B-passive-clang-O2-H2-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-C-passive-gcc-O2-H2-none",
+    "command": [
+      "cc",
+      "-std=c17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=0",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=1",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/C.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-C-passive-gcc-O2-H2-none"
+    ],
+    "elf_sha256": "4ae543ce8173067fb6bb576a6411cfe7b9f822e06608fd143e88b4431b2f57d6",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-C-passive-gcc-O2-H2-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-C-passive-clang-O2-H2-none",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-DP1463_FAIL_AT=0",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=1",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/C.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-C-passive-clang-O2-H2-none"
+    ],
+    "elf_sha256": "5a3be7f9b2af2de2a70f1644659cebcb18066bf75547820fc8675dd03c60e62d",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-C-passive-clang-O2-H2-none"
+    ],
+    "sanitizer": "none"
+  },
+  {
+    "label": "c1-A-passive-clang-O1-H0-address",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O1",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fsanitize=address",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-DP1463_FAIL_AT=1",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H0-address"
+    ],
+    "elf_sha256": "d9dc83b59b4d129b8305cc9152d4bf8632261fb875b8e2cdbe6ae4571fe0a2e0",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H0-address"
+    ],
+    "sanitizer": "address"
+  },
+  {
+    "label": "c1-A-passive-clang-O1-H1-address",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O1",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fsanitize=address",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-DP1463_FAIL_AT=2",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H1-address"
+    ],
+    "elf_sha256": "20660b7dab832caaa25c7a16886ee1d6d58f9d23f7f5a3b48cf3b733e13e1981",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H1-address"
+    ],
+    "sanitizer": "address"
+  },
+  {
+    "label": "c1-A-passive-clang-O1-H2-address",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O1",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fsanitize=address",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-DP1463_FAIL_AT=0",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H2-address"
+    ],
+    "elf_sha256": "200c8a495f9215c3648686bd11de3a3e26de78756079f53ff31f7e2e54347e77",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H2-address"
+    ],
+    "sanitizer": "address"
+  },
+  {
+    "label": "c1-A-passive-clang-O1-H2-undefined",
+    "command": [
+      "/workspace/p1236-c291/sdk/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang",
+      "-std=c17",
+      "-O1",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-DP1463_FAIL_AT=0",
+      "-DP1463_FIELD_INDEX=0",
+      "-DP1463_BOOL_TRUE=0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/p1463-c1025/apparatus/passive.h\"",
+      "/workspace/p1463-c1025/outputs/A.c1.c",
+      "/workspace/p1463-c1025/apparatus/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H2-undefined"
+    ],
+    "elf_sha256": "b55dd637fa1a7ff1fca9873b5eef9db06494b7be0011dca2b556eef9c2d451ed",
+    "run": [
+      "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H2-undefined"
+    ],
+    "sanitizer": "undefined"
+  }
+]

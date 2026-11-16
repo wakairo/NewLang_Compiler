@@ -1,0 +1,105 @@
+{
+  "release": "C1025",
+  "base": "a4b9cfbc10c46b3c05b277606f4d00d84e4cca21",
+  "tree": "cf1fa6293a83d4b09c58e062208389cac466c21d",
+  "spec": "Draft17.38",
+  "original_Phase_A_oracle_sha256": "d9fb5b85981fe55545e584bdefa650c5d92f8d0043f0061309240b7de066314e",
+  "family": "One caller two-u8 original, same named installer before and after fully closed two-H scalar match. Exact Source/whole-root/Copy/current/loan/owner proofs, same field index0 or1. No in-H publication equivalence claim.",
+  "positive_expectations": {
+    "A": {
+      "field_index": 0,
+      "has_next_H2": false,
+      "delivery_H0_H1_H2": [
+        0,
+        0,
+        181
+      ]
+    },
+    "B": {
+      "field_index": 1,
+      "has_next_H2": false,
+      "delivery_H0_H1_H2": [
+        0,
+        0,
+        181
+      ]
+    },
+    "C": {
+      "field_index": 0,
+      "has_next_H2": true,
+      "delivery_H0_H1_H2": [
+        0,
+        0,
+        0
+      ],
+      "why": "Real read Option None selects the true Bool arm of the source MATCH, so the real selector IF takes its zero arm; no guest input or Known injected."
+    }
+  },
+  "common": {
+    "T_initial": [
+      87,
+      13
+    ],
+    "startup_old": 87,
+    "startup_new": 0,
+    "post_old": 0,
+    "sibling": 13,
+    "same_physical_T_and_field_across_calls": true,
+    "H_original_samples": [
+      76,
+      181
+    ],
+    "H_link": "None -> Some(original newest) -> None",
+    "H0_H1_H2_cleanup": [
+      0,
+      1,
+      2
+    ],
+    "all_H_roots_freed_before_second_call": true,
+    "live_tail_ownership": "original tail Allocation/Domain transferred once and freed by actual receiver once",
+    "qualified_source": "No callback/FFI requiring pre-teardown publication; failure-world final installer0->0 intentional"
+  },
+  "negative_expected": {
+    "N-wrong-domain.nl": "SOURCE valid; CHECK SEMANTIC_ERROR / ALLOCATED-DOMAIN-MISMATCH, no-clobber",
+    "N-escaped-write-loan.nl": "SOURCE valid; CHECK SEMANTIC_ERROR / P8-EXIT-DEPENDENCY, no-clobber",
+    "N-missing-cleanup.nl": "SOURCE valid; CHECK SEMANTIC_ERROR / P5-SCOPE-OBLIGATION, no-clobber",
+    "auth-host": "wrong original/field/call/world/issuer/forged Known and missing cleanup receipts fail existing validators/whole-root/C17, untouched out and length. Restore genuine owners before destruction. Never native."
+  },
+  "actual_before_implementation": "baseline diagnostic first copy_loan1160 because copy_carrier_world false; calls1/2, roots1, alloc2/prod1/owner1, no closed schedule. Old source/FIRST not changed.",
+  "execution_plan": {
+    "host_cap": 24,
+    "native_cap": 24,
+    "oom_cap": 12,
+    "positive_cap": 3,
+    "semantic_negative_source_count": 3,
+    "guest_schedule": "Primary A raw GCC/Clang O0/O2=4; passive A H0/H1/H2 each2 compilers x2 opt=12; B index1 and C true branch H2 GCC/Clang O2=4; primary ASan H0/H1/H2=3 and UBSan H2=1, total24. Compile emitted C bytes unchanged, passive macros only and real malloc failure boundary.",
+    "oom": "At most12 selected actual hits in existing Copy proof replay / serializer text staging / H producer / final buffers; OUT_OF_MEMORY, outNULL and length sentinel/caller snapshot unchanged + retry. No huge sweep."
+  },
+  "STOP": "Any source-law/authority/unsafe C/native/old-current-sibling/cleanup/rollback anomaly or new trusted mechanism -> C. Max2 implementation commits.",
+  "inputs": {
+    "A-post-cleanup.nl": {
+      "bytes": 5174,
+      "sha256": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+    },
+    "B-field-index-one.nl": {
+      "bytes": 5174,
+      "sha256": "f519f0798fdafe840448ab5040513563cdfd94d7e6b7025f4159206b57e3446d"
+    },
+    "C-option-bool-true.nl": {
+      "bytes": 5174,
+      "sha256": "a6072d5a3c9199a5dd500726654bafa4fedbf86c221d05228470810d4aae5a91"
+    },
+    "N-wrong-domain.nl": {
+      "bytes": 5175,
+      "sha256": "35dbcaca38c86bf2f32884bca365ce8442ab69c09dfecb675145a19a96be51ee"
+    },
+    "N-escaped-write-loan.nl": {
+      "bytes": 5235,
+      "sha256": "2299aaa37dc7c90f7f98c175c5ddb7005acbfc1c95f5f9a5bbfe079a2cf80b5b"
+    },
+    "N-missing-cleanup.nl": {
+      "bytes": 5177,
+      "sha256": "f6bc6cf399e5b8ded3062b0901d56eb662c019798894570fcd7376d85f18322f"
+    }
+  }
+}

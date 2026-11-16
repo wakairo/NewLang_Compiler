@@ -1,0 +1,931 @@
+{
+  "host": [
+    {
+      "kind": "host",
+      "label": "baseline-first-internal",
+      "head": "a4b9cfbc10c46b3c05b277606f4d00d84e4cca21",
+      "command": [
+        "/workspace/p1463-c1025/diagnostic/newlangc-diagnostic",
+        "--emit-c17-to",
+        "/workspace/p1463-c1025/outputs/diagnostic.named.c",
+        "/workspace/p1460-c1012/phase-a/prep/post_cleanup_display.nl"
+      ],
+      "input_hashes": {
+        "/workspace/p1463-c1025/diagnostic/newlangc-diagnostic": "7a75ffbe28294d18117f3bbe5968fd421c28895c6acca6eed82f4c70d958e3a5",
+        "/workspace/p1463-c1025/outputs/diagnostic.named.c": "f610b800020df29e27bc3ddbb020df2bed05f7ef571ac7a678fd925efcab6a20",
+        "/workspace/p1460-c1012/phase-a/prep/post_cleanup_display.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:09:44.916246+00:00",
+      "sanitizer_options": {},
+      "exit": 4,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5ad666c8428881c22848c4a24205c18bbff068a97f4dec837367e12269bacc40"
+    },
+    {
+      "kind": "host",
+      "label": "c1-A-emit",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/workspace/p1463-c1025/bin/newlangc-c1",
+        "--emit-c17-to",
+        "/workspace/p1463-c1025/outputs/A.c1.c",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/workspace/p1463-c1025/bin/newlangc-c1": "d8c91fce091729a1b89ce7726aecea06e4157ff7a2984bf4176372f9fd735683",
+        "/workspace/p1463-c1025/outputs/A.c1.c": "194d2a3bf91f297072733110d42738a4caf8d4764a6887bf564f797135dea2f4",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:19:43.531611+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "host",
+      "label": "c1-owned-auth-negatives-gcc",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-gcc",
+        "suite",
+        "/workspace/p1463-c1025/repo/tests/p1463"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-gcc": "c6104f1855704f3d23a843b8a28b6223e2c277473d6f576a47fba0d0edc71a11"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:26:22.668347+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "aea941e5f20533c163a3df935614f8a07fc57b70944218db3bad5ea2a7d48831",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "host",
+      "label": "c1-B-emit",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/workspace/p1463-c1025/bin/newlangc-c1",
+        "--emit-c17-to",
+        "/workspace/p1463-c1025/outputs/B.c1.c",
+        "/workspace/p1463-c1025/repo/tests/p1463/B-field-index-one.nl"
+      ],
+      "input_hashes": {
+        "/workspace/p1463-c1025/bin/newlangc-c1": "d8c91fce091729a1b89ce7726aecea06e4157ff7a2984bf4176372f9fd735683",
+        "/workspace/p1463-c1025/outputs/B.c1.c": "194d2a3bf91f297072733110d42738a4caf8d4764a6887bf564f797135dea2f4",
+        "/workspace/p1463-c1025/repo/tests/p1463/B-field-index-one.nl": "f519f0798fdafe840448ab5040513563cdfd94d7e6b7025f4159206b57e3446d"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:28:48.278891+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "host",
+      "label": "c1-C-emit",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/workspace/p1463-c1025/bin/newlangc-c1",
+        "--emit-c17-to",
+        "/workspace/p1463-c1025/outputs/C.c1.c",
+        "/workspace/p1463-c1025/repo/tests/p1463/C-option-bool-true.nl"
+      ],
+      "input_hashes": {
+        "/workspace/p1463-c1025/bin/newlangc-c1": "d8c91fce091729a1b89ce7726aecea06e4157ff7a2984bf4176372f9fd735683",
+        "/workspace/p1463-c1025/outputs/C.c1.c": "194d2a3bf91f297072733110d42738a4caf8d4764a6887bf564f797135dea2f4",
+        "/workspace/p1463-c1025/repo/tests/p1463/C-option-bool-true.nl": "a6072d5a3c9199a5dd500726654bafa4fedbf86c221d05228470810d4aae5a91"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:28:48.341674+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "host",
+      "label": "c1-cli-N-wrong-domain",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/workspace/p1463-c1025/bin/newlangc-c1",
+        "--emit-c17-to",
+        "/workspace/p1463-c1025/outputs/N-wrong-domain.nl.named.c",
+        "/workspace/p1463-c1025/repo/tests/p1463/N-wrong-domain.nl"
+      ],
+      "input_hashes": {
+        "/workspace/p1463-c1025/bin/newlangc-c1": "d8c91fce091729a1b89ce7726aecea06e4157ff7a2984bf4176372f9fd735683",
+        "/workspace/p1463-c1025/outputs/N-wrong-domain.nl.named.c": "c21b7af5e1e2fa5e2eeab8542ca3aefbd9938877439ec1db84e41d47318397dc",
+        "/workspace/p1463-c1025/repo/tests/p1463/N-wrong-domain.nl": "35dbcaca38c86bf2f32884bca365ce8442ab69c09dfecb675145a19a96be51ee"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:28:48.392825+00:00",
+      "sanitizer_options": {},
+      "exit": 3,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "11fa5d7ab43e90b3a310bb2ea6fd7f45e3abc074eee7fa8fc209d8788d4c7f17"
+    },
+    {
+      "kind": "host",
+      "label": "c1-cli-N-escaped-write-loan",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/workspace/p1463-c1025/bin/newlangc-c1",
+        "--emit-c17-to",
+        "/workspace/p1463-c1025/outputs/N-escaped-write-loan.nl.named.c",
+        "/workspace/p1463-c1025/repo/tests/p1463/N-escaped-write-loan.nl"
+      ],
+      "input_hashes": {
+        "/workspace/p1463-c1025/bin/newlangc-c1": "d8c91fce091729a1b89ce7726aecea06e4157ff7a2984bf4176372f9fd735683",
+        "/workspace/p1463-c1025/outputs/N-escaped-write-loan.nl.named.c": "c21b7af5e1e2fa5e2eeab8542ca3aefbd9938877439ec1db84e41d47318397dc",
+        "/workspace/p1463-c1025/repo/tests/p1463/N-escaped-write-loan.nl": "2299aaa37dc7c90f7f98c175c5ddb7005acbfc1c95f5f9a5bbfe079a2cf80b5b"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:28:48.435891+00:00",
+      "sanitizer_options": {},
+      "exit": 3,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "27d338883e4fe06b0d97e848abb596aea884a173c558b5baed0675eba7345c4c"
+    },
+    {
+      "kind": "host",
+      "label": "c1-cli-N-missing-cleanup",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/workspace/p1463-c1025/bin/newlangc-c1",
+        "--emit-c17-to",
+        "/workspace/p1463-c1025/outputs/N-missing-cleanup.nl.named.c",
+        "/workspace/p1463-c1025/repo/tests/p1463/N-missing-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/workspace/p1463-c1025/bin/newlangc-c1": "d8c91fce091729a1b89ce7726aecea06e4157ff7a2984bf4176372f9fd735683",
+        "/workspace/p1463-c1025/outputs/N-missing-cleanup.nl.named.c": "c21b7af5e1e2fa5e2eeab8542ca3aefbd9938877439ec1db84e41d47318397dc",
+        "/workspace/p1463-c1025/repo/tests/p1463/N-missing-cleanup.nl": "f6bc6cf399e5b8ded3062b0901d56eb662c019798894570fcd7376d85f18322f"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:28:48.480122+00:00",
+      "sanitizer_options": {},
+      "exit": 3,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "3ae713119d51500599faf58a4663f9e2d754daedd2c66da5e40e3f9968beb021"
+    },
+    {
+      "kind": "host",
+      "label": "c1-owned-auth-negatives-asan",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-asan-v2",
+        "suite",
+        "/workspace/p1463-c1025/repo/tests/p1463"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-asan-v2": "ad8cd59e4308b2d09b7ee097b2d3f9907a07f52ab2eff07c583f58f286ec2701"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:46.826413+00:00",
+      "sanitizer_options": {
+        "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "aea941e5f20533c163a3df935614f8a07fc57b70944218db3bad5ea2a7d48831",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "host",
+      "label": "c1-owned-auth-negatives-ubsan",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-ubsan-v2",
+        "suite",
+        "/workspace/p1463-c1025/repo/tests/p1463"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-ubsan-v2": "4abf5b74dcb048f23c4fb5d21c3a4e67776aa3a1f199d101fb943c408e3721ab"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:47.642010+00:00",
+      "sanitizer_options": {
+        "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "aea941e5f20533c163a3df935614f8a07fc57b70944218db3bad5ea2a7d48831",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "host",
+      "label": "c1-compat-baseline",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/compat-baseline",
+        "/workspace/p1463-c1025/repo",
+        "/workspace/p1463-c1025/compat/baseline"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/compat-baseline": "b18589840951ab929c2aa87e85dcca69c6e53e05ea85ae4c7355087bb9a6e73d"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:33:29.749359+00:00",
+      "sanitizer_options": {},
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "host",
+      "label": "c1-compat-paired",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/compat-paired",
+        "/workspace/p1463-c1025/repo",
+        "/workspace/p1463-c1025/compat/paired"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/compat-paired": "2d5ef5e701fbfb7e3edb13b98936ce61430230fa2543c191242b2c4f7d40c38c"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:35:27.922177+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "a223c57d2c6e8c2b3756e3345ae34187325385ed1124960a982729466141cc27",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "native": [
+    {
+      "kind": "native",
+      "label": "c1-A-passive-gcc-O2-H2",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/A.gcc-O2.H2"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/A.gcc-O2.H2": "8f8aefa268968ef7cf3503059e117d8bb243b07af960e2b0190d9b705a98b7f6"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:26:39.041196+00:00",
+      "sanitizer_options": {},
+      "exit": -6,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "2cd7fbe444e8f2d09aeb0b336c8c4c104ed198cc817a1f5376817014e1c10298"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-gcc-O2-H2-v2",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/A.gcc-O2.H2.v2"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/A.gcc-O2.H2.v2": "fa154d194171c7861fb42c5f89aef06a5d4432d017d6120f8b8e319d47d24b1d"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:28:28.497135+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "9a0c6ac6011668dea5451ef96fc54aecfbdb354e3e02029b417af40a60c96237",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-gcc-O0-H0-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H0-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H0-none": "098e24a143003ffcf3a58bfe0851c265cd8a29fdda64fbbadfc46906e9dae726"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.383292+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "7d1fbf2d7c9fe850a6c5087521c217275be28d0ec37461df90fc05ec49d730cd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-gcc-O0-H1-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H1-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H1-none": "e56ad09a18e1a7e0eae1748eeb3235c51f2c212d7c889cfb5448c35bfa913a25"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.447704+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "4a9a9c6baa9eb0fdcafd7034efcc1503667603f5d67a9dcb3f1515d6364528f1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-gcc-O0-H2-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H2-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O0-H2-none": "ad90a5964d50f0545952bcf07809382da7ecff2147144818e3f734fb8335091a"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.491895+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "9a0c6ac6011668dea5451ef96fc54aecfbdb354e3e02029b417af40a60c96237",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-gcc-O2-H0-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O2-H0-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O2-H0-none": "e53557044a5dbadac42556830897ad912e00287bf0d0f0d600943c224020d337"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.535420+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "7d1fbf2d7c9fe850a6c5087521c217275be28d0ec37461df90fc05ec49d730cd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-gcc-O2-H1-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O2-H1-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-gcc-O2-H1-none": "ba3b2bfdf1af44bacc6eeb7c7f5a97e43d96ea787788549de9689bf4ac1a9f91"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.583364+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "4a9a9c6baa9eb0fdcafd7034efcc1503667603f5d67a9dcb3f1515d6364528f1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-clang-O0-H0-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H0-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H0-none": "67993ed3dad8251d663de3eb5e08c76302af25f8059d27b230e3dd2255dd7c16"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.625048+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "7d1fbf2d7c9fe850a6c5087521c217275be28d0ec37461df90fc05ec49d730cd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-clang-O0-H1-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H1-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H1-none": "b472c3209f6c9d9614b5c5592dd184659eda1a93794b4d1e573542512235e6d2"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.666208+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "4a9a9c6baa9eb0fdcafd7034efcc1503667603f5d67a9dcb3f1515d6364528f1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-clang-O0-H2-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H2-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O0-H2-none": "b208d8fba6f595ff75240dd4be9f63dec21048d291ac77bcad924cad09347050"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.705612+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "9a0c6ac6011668dea5451ef96fc54aecfbdb354e3e02029b417af40a60c96237",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-clang-O2-H0-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H0-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H0-none": "025847f373b9552fc3b88880273c9cedab07261bdf292f727fb8f4b020240d3c"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.745393+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "7d1fbf2d7c9fe850a6c5087521c217275be28d0ec37461df90fc05ec49d730cd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-clang-O2-H1-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H1-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H1-none": "cb2a0cc059f7f57639709173f110f64fdd55460a66e2a2689ed4ed84f6d75686"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.790520+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "4a9a9c6baa9eb0fdcafd7034efcc1503667603f5d67a9dcb3f1515d6364528f1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-clang-O2-H2-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H2-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O2-H2-none": "8e11a30bcbd43dc923bf11bfb1a5c8d59879868c4d525379ffb3a70d8d48342a"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.830803+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "9a0c6ac6011668dea5451ef96fc54aecfbdb354e3e02029b417af40a60c96237",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-raw-gcc-O0-H2-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-raw-gcc-O0-H2-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-raw-gcc-O0-H2-none": "939b2d1eb125771db7b94c02c368f645a165116f1bb62a537f99a60aacf7450d"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.873347+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-raw-clang-O0-H2-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-raw-clang-O0-H2-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-raw-clang-O0-H2-none": "c463b2a39dcd308f15c967ea1cc45f90b87faf222a4c52a5441f5773f2e51efc"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.915654+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-raw-clang-O2-H2-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-raw-clang-O2-H2-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-raw-clang-O2-H2-none": "32f673a2ea14e5e17db4220e41b70b1d8d012770346c3e5e168335f0842e56b5"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.956667+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-B-passive-gcc-O2-H2-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-B-passive-gcc-O2-H2-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-B-passive-gcc-O2-H2-none": "47b971f90fa5cedf15b8a3732cf5efb27f314b0689201a44ef7ff91726bc8c8a"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:45.998594+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "e7a292433417dc5fe6693645019c4ac2d956cb9804bc8b89ea04eb00b428a457",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-B-passive-clang-O2-H2-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-B-passive-clang-O2-H2-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-B-passive-clang-O2-H2-none": "7638e483463a13c646df60741dcef0d881621d356863872006240f5dfbbd7048"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:46.039391+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "e7a292433417dc5fe6693645019c4ac2d956cb9804bc8b89ea04eb00b428a457",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-C-passive-gcc-O2-H2-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-C-passive-gcc-O2-H2-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-C-passive-gcc-O2-H2-none": "4ae543ce8173067fb6bb576a6411cfe7b9f822e06608fd143e88b4431b2f57d6"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:46.080481+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "3b9676ac97bed01645e3c713834fbaf866e0d631d929a37925248fed9208953a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-C-passive-clang-O2-H2-none",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-C-passive-clang-O2-H2-none"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-C-passive-clang-O2-H2-none": "5a3be7f9b2af2de2a70f1644659cebcb18066bf75547820fc8675dd03c60e62d"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:46.122117+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "3b9676ac97bed01645e3c713834fbaf866e0d631d929a37925248fed9208953a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-clang-O1-H0-address",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H0-address"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H0-address": "d9dc83b59b4d129b8305cc9152d4bf8632261fb875b8e2cdbe6ae4571fe0a2e0"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:46.179227+00:00",
+      "sanitizer_options": {
+        "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "7d1fbf2d7c9fe850a6c5087521c217275be28d0ec37461df90fc05ec49d730cd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-clang-O1-H1-address",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H1-address"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H1-address": "20660b7dab832caaa25c7a16886ee1d6d58f9d23f7f5a3b48cf3b733e13e1981"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:46.240512+00:00",
+      "sanitizer_options": {
+        "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "4a9a9c6baa9eb0fdcafd7034efcc1503667603f5d67a9dcb3f1515d6364528f1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-clang-O1-H2-address",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H2-address"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H2-address": "200c8a495f9215c3648686bd11de3a3e26de78756079f53ff31f7e2e54347e77"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:46.300703+00:00",
+      "sanitizer_options": {
+        "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "9a0c6ac6011668dea5451ef96fc54aecfbdb354e3e02029b417af40a60c96237",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "native",
+      "label": "c1-A-passive-clang-O1-H2-undefined",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H2-undefined"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/guests/c1-A-passive-clang-O1-H2-undefined": "b55dd637fa1a7ff1fca9873b5eef9db06494b7be0011dca2b556eef9c2d451ed"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:46.355115+00:00",
+      "sanitizer_options": {
+        "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "9a0c6ac6011668dea5451ef96fc54aecfbdb354e3e02029b417af40a60c96237",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "oom": [
+    {
+      "kind": "oom",
+      "label": "c1-oom1-gcc",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-gcc-v2",
+        "oom1",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-gcc-v2": "8f1f146407463aefcdf77cfa237edec8c96190fe82ff1b2a1da91ff022f60566",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:56.208934+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "b30623cd2b0c5ece54220884a20587e3e91d8198b67d3e0b038c23786495b260",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "oom",
+      "label": "c1-oom2-gcc",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-gcc-v2",
+        "oom2",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-gcc-v2": "8f1f146407463aefcdf77cfa237edec8c96190fe82ff1b2a1da91ff022f60566",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:30:56.260332+00:00",
+      "sanitizer_options": {},
+      "exit": 1,
+      "stdout_sha256": "2355a5a0572087e41bfe2793a4ba7430e5b0eeb74966fa781d5e45038c65f3b7",
+      "stderr_sha256": "db400735bcc72cae3767717d82132c499f395d5edf978facce88aef0c3c41d09"
+    },
+    {
+      "kind": "oom",
+      "label": "c1-oom2-gcc-v3",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-gcc-v3",
+        "oom2",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-gcc-v3": "8330d8a078274edb2bddb284e376a81ca21910c3e95648d633b19d559f976bb9",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:32:17.520784+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "fa45565dec39203f680c941ea43034f9e18f1321895e775334ba9b41e0190b65",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "oom",
+      "label": "c1-oom3-gcc-v3",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-gcc-v3",
+        "oom3",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-gcc-v3": "8330d8a078274edb2bddb284e376a81ca21910c3e95648d633b19d559f976bb9",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:32:17.578871+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "fa22d5be81a95295c47dca2ba1f25a58b3411c83e2041de4ad82e01ad23a8fbf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "oom",
+      "label": "c1-oom4-gcc-v3",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-gcc-v3",
+        "oom4",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-gcc-v3": "8330d8a078274edb2bddb284e376a81ca21910c3e95648d633b19d559f976bb9",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:32:17.630061+00:00",
+      "sanitizer_options": {},
+      "exit": 0,
+      "stdout_sha256": "55d37e0db97d4ebf209a1f2469f997cc75b139a43232e43eda913feb5c8802a1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "oom",
+      "label": "c1-oom1-asan-v3",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-asan-v3",
+        "oom1",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-asan-v3": "bf6740fe96f775b3bd78254779e8e47d91f80172d1f72c7d919e7e68f0d9a672",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:32:17.716291+00:00",
+      "sanitizer_options": {
+        "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "b30623cd2b0c5ece54220884a20587e3e91d8198b67d3e0b038c23786495b260",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "oom",
+      "label": "c1-oom2-asan-v3",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-asan-v3",
+        "oom2",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-asan-v3": "bf6740fe96f775b3bd78254779e8e47d91f80172d1f72c7d919e7e68f0d9a672",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:32:17.910341+00:00",
+      "sanitizer_options": {
+        "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "fa45565dec39203f680c941ea43034f9e18f1321895e775334ba9b41e0190b65",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "oom",
+      "label": "c1-oom3-asan-v3",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-asan-v3",
+        "oom3",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-asan-v3": "bf6740fe96f775b3bd78254779e8e47d91f80172d1f72c7d919e7e68f0d9a672",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:32:18.043964+00:00",
+      "sanitizer_options": {
+        "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "fa22d5be81a95295c47dca2ba1f25a58b3411c83e2041de4ad82e01ad23a8fbf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "oom",
+      "label": "c1-oom4-asan-v3",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-asan-v3",
+        "oom4",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-asan-v3": "bf6740fe96f775b3bd78254779e8e47d91f80172d1f72c7d919e7e68f0d9a672",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:32:18.225072+00:00",
+      "sanitizer_options": {
+        "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "55d37e0db97d4ebf209a1f2469f997cc75b139a43232e43eda913feb5c8802a1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "oom",
+      "label": "c1-oom1-ubsan-v3",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-ubsan-v3",
+        "oom1",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-ubsan-v3": "6491f5d48f9baa2dc1b69ede1814da0d91abbfccd75d8207f6c52682ffef1053",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:32:18.429473+00:00",
+      "sanitizer_options": {
+        "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "b30623cd2b0c5ece54220884a20587e3e91d8198b67d3e0b038c23786495b260",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "oom",
+      "label": "c1-oom2-ubsan-v3",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-ubsan-v3",
+        "oom2",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-ubsan-v3": "6491f5d48f9baa2dc1b69ede1814da0d91abbfccd75d8207f6c52682ffef1053",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:32:18.514872+00:00",
+      "sanitizer_options": {
+        "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "fa45565dec39203f680c941ea43034f9e18f1321895e775334ba9b41e0190b65",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "oom",
+      "label": "c1-oom3-ubsan-v3",
+      "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+      "command": [
+        "/tmp/p1463-c1025/probe-ubsan-v3",
+        "oom3",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl"
+      ],
+      "input_hashes": {
+        "/tmp/p1463-c1025/probe-ubsan-v3": "6491f5d48f9baa2dc1b69ede1814da0d91abbfccd75d8207f6c52682ffef1053",
+        "/workspace/p1463-c1025/repo/tests/p1463/A-post-cleanup.nl": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+      },
+      "state": "completed",
+      "utc": "2026-11-16T05:32:18.611594+00:00",
+      "sanitizer_options": {
+        "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+      },
+      "exit": 0,
+      "stdout_sha256": "fa22d5be81a95295c47dca2ba1f25a58b3411c83e2041de4ad82e01ad23a8fbf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

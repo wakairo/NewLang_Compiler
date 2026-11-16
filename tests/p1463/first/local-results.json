@@ -1,0 +1,32 @@
+{
+  "authority": {
+    "main": "a4b9cfbc10c46b3c05b277606f4d00d84e4cca21",
+    "main_tree": "cf1fa6293a83d4b09c58e062208389cac466c21d",
+    "canonical": "Draft17.38"
+  },
+  "tested_C1": {
+    "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+    "tree": "f9389504f01492bdb80b8cb47ba12fbe8be9abd8",
+    "ordinary_elf_sha256": "d8c91fce091729a1b89ce7726aecea06e4157ff7a2984bf4176372f9fd735683"
+  },
+  "results": {
+    "public_owned_current_Copy_authentication": "GCC/ClangASanLSan/ClangUBSan success; positiveA/B/C; all real scalar results Unknown; same two original field incarnations; 11 closed loans; foreign field/call/world/issuer/Known/signature refused; exact3 semantic negatives + same-context retry",
+    "native": "23 success +1 preserved observer apparatus abort=24 total. GCC/ClangO0/O2 H0/1/2; actual free0/1/2; sameT two calls; field0/1; actual Bool false/true selects181/0; ASanLSanH0/1/2,UBSanH2 clean",
+    "selected_OOM": "11 success +1 preserved pre-vs-postCHECK snapshot apparatus RED=12 total. Reachable CHECKrealloc, post-HCopy replaymalloc, C17text1/text2. GCC/ASanall4; UBSanfirst3; hit1 originalstatus, outNULL length98765, relevant snapshot/anchor unchanged+retry",
+    "legacy": "1 preserved blanket-MACHINE legacy-apparatus failure; final paired six old artifacts exact baseline/C1 statuses and Cbytes: accepted5, same_original_calls stillunsupported; oldestunit lacks later optional root resultseal, not retroactive MACHINE",
+    "budgets": {
+      "host": 12,
+      "native": 24,
+      "oom": 12
+    },
+    "conservative_host_plus_oom": 24
+  },
+  "limits": [
+    "No additional local CLI/host/OOM/native after caps",
+    "No arbitrary extra calls/records/fields/CFG/source law/new issuer",
+    "Some Option payload branch not dynamically selected in native; actual None read with both source Bool mappings is covered",
+    "Post-H publication with idempotent failure writes; in-H publication is separate",
+    "No general soundness, F/R independent audit, ordinary-safe export or comparative audit-locality Product PASS"
+  ],
+  "VALUE-ALIGNMENT-RISK": "Adds bounded backend scheduling+tests; support contract intentionally narrow. C-rational physical topology/free maintained but author audit/re-audit closure vs well-factored C not measured. NOT YET COMPARABLE; Product GO PAUSED/H1 HOLD."
+}

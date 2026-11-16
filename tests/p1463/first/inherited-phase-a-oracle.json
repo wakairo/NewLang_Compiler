@@ -1,0 +1,109 @@
+{
+  "authority": {
+    "main": "a4b9cfbc10c46b3c05b277606f4d00d84e4cca21",
+    "tree": "cf1fa6293a83d4b09c58e062208389cac466c21d",
+    "draft": "17.38"
+  },
+  "phase": "A",
+  "positive": {
+    "source": "post_cleanup_display.nl",
+    "bytes": 5174,
+    "sha256": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+  },
+  "negative": {
+    "source": "N-wrong-domain.nl",
+    "bytes": 5175,
+    "sha256": "35dbcaca38c86bf2f32884bca365ce8442ab69c09dfecb675145a19a96be51ee",
+    "only_error": "sample loan uses first_life for actual original last_ptr; both roots still live; no native negative",
+    "first_expected": "semantic allocated Domain mismatch at ref_from_ptr if prior upstream stages are reached"
+  },
+  "contract": {
+    "startup": {
+      "before": [
+        87,
+        13
+      ],
+      "old": 87,
+      "after": [
+        0,
+        13
+      ]
+    },
+    "H0": {
+      "allocated": 0,
+      "destroyed": 0,
+      "finalized": 0,
+      "deallocated": 0,
+      "delivery": 0,
+      "post_install_old": 0,
+      "final_display": [
+        0,
+        13
+      ]
+    },
+    "H1": {
+      "allocated": 1,
+      "destroyed": 1,
+      "finalized": 1,
+      "deallocated": 1,
+      "delivery": 0,
+      "post_install_old": 0,
+      "final_display": [
+        0,
+        13
+      ]
+    },
+    "H2": {
+      "allocated": 2,
+      "first_sample": 76,
+      "last_sample": 181,
+      "actual_last_next": "None",
+      "has_next": false,
+      "helper_result": 181,
+      "delivery_after_cleanup": 181,
+      "post_install_old": 0,
+      "retained_previous": 0,
+      "final_display": [
+        181,
+        13
+      ],
+      "destroyed": 2,
+      "finalized": 2,
+      "deallocated": 2,
+      "link": "None -> Some(original last_ptr) -> None",
+      "owner": "one original last ptr/Allocation/Domain transferred through LiveTail once; first freed by caller, last by original terminal receiver"
+    }
+  },
+  "equivalence_conditions": [
+    "Same original Display persists and original field/index/sibling identities are retained.",
+    "All H refs/loans end before original H destruction; scalar result carries no root/ref/owner/Domain.",
+    "Only end-of-operation Display/old Copy/sibling, original H identity and exact failure cleanup are specified externally here. There is no FFI/callback/reentrant reader, escaping T loan or value dependency spanning the H phase."
+  ],
+  "explicit_trace_differences": [
+    "v3 publishes inside H2 before teardown; A publishes after complete H cleanup.",
+    "A calls the installer once after every H world, including idempotent 0->0 on H0/H1; v3 skips that second call on failures.",
+    "Not equivalent for a stronger contract requiring no failure-world Change, observable pre-teardown publication, or callbacks/retained current-value dependencies. No such stronger contract is claimed or silently removed."
+  ],
+  "source_law": [
+    "16.3.8 exact one H + two-u8 T mixed unit",
+    "17.1 fixed field loan/read and H payload under original matching D",
+    "17.4 old Copy / preserved original field incarnation",
+    "18.1a/b original affine owner return + terminal receiver",
+    "26.24 normal scalar match result with closed resources",
+    "27 ordinary binding and scalar normal flow"
+  ],
+  "prediction": {
+    "CHECK": "Expected to remove in-H T mutation from strict captured prefix and use existing free-u8 result lane; actual first refusal is to be measured.",
+    "owned": "Use existing source-issued public validators if reached; no fabricated artifact.",
+    "C17": "May still be unsupported independently; do not assume source-only success.",
+    "native": "Only if output safely admitted; strict GCC/Clang O0/O2, real data and cleanup, no host injection."
+  },
+  "budget": {
+    "complete_alternate_positive_max": 2,
+    "matching_negative_max": 1,
+    "CLI_max": 6,
+    "native_max": 8,
+    "OOM_max": 2
+  },
+  "old_v3": "UNCHANGED regression with its original precision FIRST, never regraded as this alternative"
+}

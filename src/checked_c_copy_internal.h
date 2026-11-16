@@ -390,10 +390,178 @@ static bool copy_surviving_plan(Emit *e, const NLCheckedFragment *body)
     e->copy_surviving_match = result->initializer;
     return true;
 }
+/* This observes only the original trio in a source-authenticated ancestor
+ * prefix. The world pair is selected below by actual call/None-arm custody;
+ * arbitrary arm-local IDs never provide a mapping or an owner. */
+static bool copy_original_prefix(const NLSemanticContext *a,
+                                 const NLSemanticContext *b,
+                                 const NLCheckedField *f)
+{
+    NLSemanticPlaceView ar, br;
+    NLSemanticBindingView av, bv;
+    if (!a || !b || f->index > 1 ||
+        !nl_semantic_binding_view(a, f->base, &av) ||
+        !nl_semantic_binding_view(b, f->base, &bv) ||
+        av.availability != NL_AVAILABLE || bv.availability != NL_AVAILABLE ||
+        av.place != f->parent || bv.place != f->parent ||
+        av.type != f->nominal || bv.type != f->nominal ||
+        !nl_semantic_place_view(a, f->parent, &ar) ||
+        !nl_semantic_place_view(b, f->parent, &br) || !ar.live || !br.live ||
+        !ar.independent_root || !br.independent_root || !ar.implicit_local ||
+        !br.implicit_local || ar.governing_domain || br.governing_domain ||
+        ar.placement.region || br.placement.region || ar.type != f->nominal ||
+        br.type != f->nominal || ar.incarnation != f->parent_incarnation ||
+        br.incarnation != ar.incarnation || ar.fixed_field_count != 2 ||
+        br.fixed_field_count != 2 || ar.current_fact != br.current_fact ||
+        ar.current_value != br.current_value ||
+        ar.fixed_fields[f->index] != f->child)
+        return false;
+    for (size_t i = 0; i < 2; ++i) {
+        NLSemanticPlaceView ac, bc;
+        if (ar.fixed_fields[i] != br.fixed_fields[i] ||
+            !nl_semantic_place_view(a, ar.fixed_fields[i], &ac) ||
+            !nl_semantic_place_view(b, br.fixed_fields[i], &bc) || !ac.live ||
+            !bc.live || ac.incarnation != bc.incarnation ||
+            ac.parent_aggregate != f->parent ||
+            bc.parent_aggregate != f->parent ||
+            ac.parent_incarnation != ar.incarnation ||
+            bc.parent_incarnation != ar.incarnation ||
+            ac.parent_field_index != i || bc.parent_field_index != i ||
+            ac.current_fact != bc.current_fact ||
+            ac.current_value != bc.current_value ||
+            (i == f->index && ac.incarnation != f->child_incarnation))
+            return false;
+    }
+    return true;
+}
+
+/* One lexical original and the same named installer before/after a typed H
+ * result. This is a borrowed serializer schedule, not another CHECK proof.
+ * Other existing shapes keep the old admission path unchanged. */
+static bool copy_around_h_plan(Emit *e, const NLCheckedFragment *body)
+{
+    if (e->copy_issuer != body || e->copy_expected_calls != 2 ||
+        e->copy_second_function)
+        return true;
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(body, nl_checked_root(body));
+    const NLCheckedNodeView *binding =
+        root ? nl_checked_node_view(body, root->first_item) : NULL;
+    const NLCheckedNodeView *prefix =
+        binding ? nl_checked_node_view(body, binding->next_item) : NULL;
+    const NLCheckedNodeView *delivery =
+        prefix ? nl_checked_node_view(body, prefix->next_item) : NULL;
+    const NLCheckedNodeView *match =
+        delivery ? nl_checked_node_view(body, delivery->initializer) : NULL;
+    const NLCheckedNodeView *trial =
+        match ? nl_checked_node_view(body, match->initializer) : NULL;
+    if (!match || match->kind != NL_CHECKED_MATCH || !trial ||
+        trial->kind != NL_CHECKED_TRY_ALLOCATE_ONE)
+        return true; /* Not the new around-H source family. */
+    const NLCheckedNodeView *post =
+        nl_checked_node_view(body, delivery->next_item);
+    const NLCheckedNodeView *constructor =
+        nl_checked_node_view(body, binding->initializer);
+    if (!e->scalar_issued || !e->two_heap || !e->live_tail || e->custody ||
+        e->copy_after_match || e->copy_surviving_call ||
+        !nl_h_custody_result_world_present(e->origin_root,
+                                           nl_checked_root(e->origin_root)) ||
+        body != nl_checked_call_body(e->origin_root,
+                                     nl_checked_root(e->origin_root)) ||
+        !root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
+        binding->kind != NL_CHECKED_BINDING || !constructor ||
+        constructor->kind != NL_CHECKED_AGGREGATE ||
+        constructor->type != e->copy_type ||
+        prefix->kind != NL_CHECKED_BINDING ||
+        delivery->kind != NL_CHECKED_BINDING || !post ||
+        post->kind != NL_CHECKED_BINDING || match->type != e->u8 ||
+        !match_result_shape(e, body, match) || !match->normal_frame_unchanged ||
+        match->captured_frame_closed || match->terminates ||
+        match->normal_arms != 2 || match->item_count != 2 ||
+        binding->symbol > match->match_binding_prefix)
+        return reject(e);
+    const NLCheckedNodeView *loans[2] = {
+        nl_checked_node_view(body, prefix->initializer),
+        nl_checked_node_view(body, post->initializer)};
+    NLCopyBodyParameters p[2];
+    NLCheckedNodeId calls[2] = {0};
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedNodeView *loan = loans[i];
+        const NLCheckedNodeView *block =
+            loan ? nl_checked_node_view(body, loan->initializer) : NULL;
+        const NLCheckedNodeView *call =
+            block ? nl_checked_node_view(body, block->tail) : NULL;
+        if (!loan || loan->kind != NL_CHECKED_LOAN_HEADER ||
+            !loan->loan.implicit_local || !loan->loan.body_nonescape_proved ||
+            !loan->loan.normal_result_forwarded || !block ||
+            block->kind != NL_CHECKED_BLOCK || block->item_count || !call ||
+            call->kind != NL_CHECKED_REGISTERED_CALL ||
+            call->function != e->copy_function ||
+            !copy_call_proof(e, body, block->tail, &p[i]) ||
+            nl_checked_node_view(body, p[i].loan) != loan ||
+            p[i].field.base != binding->symbol || p[i].field.index > 1)
+            return reject(e);
+        calls[i] = block->tail;
+    }
+    const NLCheckedNodeView *first_call = nl_checked_node_view(body, calls[0]);
+    const NLCheckedNodeView *last_call = nl_checked_node_view(body, calls[1]);
+    const NLCheckedNodeView *incoming =
+        nl_checked_node_view(body, p[1].arguments[1]);
+    NLSemanticSnapshot before, after;
+    if (calls[0] == calls[1] || p[0].loan == p[1].loan ||
+        first_call->span.end_byte >= match->span.start_byte ||
+        last_call->span.start_byte <= match->span.end_byte ||
+        p[0].field.parent != p[1].field.parent ||
+        p[0].field.index != p[1].field.index ||
+        p[0].field.child != p[1].field.child ||
+        p[0].field.parent_incarnation != p[1].field.parent_incarnation ||
+        p[0].field.child_incarnation != p[1].field.child_incarnation ||
+        !incoming || incoming->kind != NL_CHECKED_IDENTIFIER ||
+        incoming->symbol != delivery->symbol || incoming->type != e->u8 ||
+        incoming->result_count != 1 ||
+        !nl_semantic_snapshot(p[0].entry, &before) || before.backing_regions ||
+        before.domains || before.raw_intervals ||
+        !nl_semantic_snapshot(p[1].entry, &after) || after.backing_regions ||
+        after.domains || after.raw_intervals)
+        return reject(e);
+    const NLSemanticContext *anchor = NULL;
+    bool seen[2] = {0};
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *arm =
+            nl_checked_match_arm(body, delivery->initializer, i);
+        const NLCheckedNodeView *a =
+            arm ? nl_checked_node_view(arm, nl_checked_root(arm)) : NULL;
+        if (!a || a->kind != NL_CHECKED_MATCH_ARM || a->variant < 1 ||
+            a->variant > 2 || seen[a->variant - 1] || a->terminates ||
+            !a->normal_frame_unchanged || !match_result_shape(e, arm, a) ||
+            !nl_h_origin_edge(e->origin_root, body, delivery->initializer, i,
+                              arm))
+            return reject(e);
+        seen[a->variant - 1] = true;
+        if (a->variant == 1)
+            anchor = nl_checked_context(arm);
+    }
+    if (!anchor || !copy_original_prefix(p[0].handoff, anchor, &p[0].field) ||
+        !copy_original_prefix(anchor, p[1].entry, &p[1].field))
+        return reject(e);
+    e->copy_prefix_call = calls[0];
+    e->copy_surviving_call = calls[1];
+    e->copy_surviving_issuer = body;
+    e->copy_surviving_anchor = anchor;
+    e->copy_surviving_constructor = binding->initializer;
+    e->copy_surviving_match = delivery->initializer;
+    e->copy_expected_roots = 1;
+    return true;
+}
+
 static bool copy_prepare(Emit *e, const NLCheckedFragment *body)
 {
     if (!copy_prepare_at(e, body, 0))
         return false;
+    if (!copy_around_h_plan(e, body))
+        return false;
+    if (e->copy_prefix_call)
+        return true;
     if (e->copy_surviving_call)
         return copy_surviving_plan(e, body) &&
                (e->copy_surviving_issuer == body || reject(e));
@@ -905,9 +1073,10 @@ static bool copy_carrier_world(Emit *e, const Env *env)
 static bool copy_bind(Emit *e, Env *env, Local *l, NLCheckedNodeId constructor)
 {
     const NLSemanticContext *c = nl_checked_context(env->artifact);
-    const NLSemanticContext *anchor = env->artifact == e->copy_surviving_issuer
-                                          ? e->copy_surviving_anchor
-                                          : e->copy_anchor;
+    const NLSemanticContext *anchor =
+        !e->copy_prefix_call && env->artifact == e->copy_surviving_issuer
+            ? e->copy_surviving_anchor
+            : e->copy_anchor;
     NLSemanticBindingView b;
     NLSemanticPlaceView root;
     const NLCheckedNodeView *init = get(env, constructor);

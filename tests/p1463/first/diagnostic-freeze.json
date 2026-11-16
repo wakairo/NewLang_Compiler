@@ -1,0 +1,19 @@
+{
+  "main": "a4b9cfbc10c46b3c05b277606f4d00d84e4cca21",
+  "tree": "cf1fa6293a83d4b09c58e062208389cac466c21d",
+  "original": {
+    "checked_c_node.c": "b361b2c02360878c469a60e30166d41616b129792ba96ad1b2a406d4b353cedf",
+    "checked_c_copy_internal.h": "9583327526184aff901073c544e85674eccd0bb4e34d9855660389388c087a7d",
+    "semantic_check.c": "2d13c3aac234b39dbb3b3783d85eb56c0eed4633a358019df8b47e449eb0e0df"
+  },
+  "diagnostic": {
+    "checked_c_node.c": "08ef0d81c560fcf797daa77c3dd928a610843250b3a2a4a5a28f3a3e5526f3a4",
+    "checked_c_copy_internal.h": "5ceb76eb804f457bc78c0fbe58b016b681a701e39a1b7aac2d00632b766e54bf",
+    "p1463_trace.h": "e8e895b6444a60eaea3acaecc734e6c1c2df7b524ababd921438ff85a7550fd4",
+    "driver.c": "f008a372d7f389976d28d7412b368bd25edac5334ddb330df9f794f3e49092d1"
+  },
+  "expectation": "original unsupported4 and unchanged sentinel; actual first reject and carrier-world observation UNKNOWN until run; no guessing failure from static plan",
+  "semantics": "Only fixed volatile stores at original reject and one Boolean-return observation; exact original expression called once, no allocation before/during emitter introduced; report after original main returns; original status/C output preserved",
+  "flags": "same GCC Release -O3 -DNDEBUG plus -g; exact main libraries from new baseline build; diagnostic CLI main renamed at compile, not rewritten",
+  "source_sha256": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+}

@@ -1,0 +1,45 @@
+{
+  "first": "Compare exact statuses/lengths and emitted byte strings for six preexisting P-owned legacy cases from independent baseline/C1 links; preserve legacy unsupported same-original-calls, positive accepted count>=4. No native.",
+  "files": {
+    "/workspace/p1463-c1025/repo/tests/p1058/sources/closed_then_two.nl": {
+      "bytes": 5085,
+      "sha256": "234c331fde90dcb38d181418e47ba59ad0bd6635f0d19dde04f59087ef680952"
+    },
+    "/workspace/p1463-c1025/repo/tests/p1058/sources/same_original_calls.nl": {
+      "bytes": 5084,
+      "sha256": "352497a60e86689f9294c569052aaf0987bc8de56c2a2198efaacc891a649e3f"
+    },
+    "/workspace/p1463-c1025/repo/tests/p1062/sources/terminal_explicit_return.nl": {
+      "bytes": 5068,
+      "sha256": "f38d6f437ba6589acac3e053dc05b1e728d32e1ae34603388983d338ffb579b5"
+    },
+    "/workspace/p1463-c1025/repo/tests/p1312/positive.nl": {
+      "bytes": 4348,
+      "sha256": "960d4fd1e85b9a09dc98ca8ea844fa4df8b10c98cd7db6329f0eb3d193cc77c6"
+    },
+    "/workspace/p1463-c1025/repo/tests/p1455/A-enabled.nl": {
+      "bytes": 5819,
+      "sha256": "7063eb49d796fbddf58adef67fe2c355432c0fa42d33e6c0e4cd0536e83eb1ec"
+    },
+    "/workspace/p1463-c1025/repo/tests/p1455/c996/D-noncoincident-prefix.nl": {
+      "bytes": 5871,
+      "sha256": "4facc85218cd020e03de30503a6ba86621dc31141643bc0e3c9ad3e5633c44c9"
+    },
+    "/workspace/p1463-c1025/apparatus/compat.c": {
+      "bytes": 1760,
+      "sha256": "264113b07165cc8d5d676b583afb5db77e84d33db2e8ac01386cb247f5fb6a97"
+    },
+    "/workspace/p1463-c1025/apparatus/probe.c": {
+      "bytes": 18122,
+      "sha256": "ec5530e1f727153237ff7ceb0761ea0ed491c8cb4a1298d8b50f826c14edcc9c"
+    },
+    "/tmp/p1463-c1025/compat-baseline": {
+      "bytes": 3416280,
+      "sha256": "b18589840951ab929c2aa87e85dcca69c6e53e05ea85ae4c7355087bb9a6e73d"
+    },
+    "/tmp/p1463-c1025/compat-c1-gcc": {
+      "bytes": 1016872,
+      "sha256": "f112ef7744b78d5e81d0db8523946ed60ba2b7a61efa6c9f550175b1454a93ae"
+    }
+  }
+}

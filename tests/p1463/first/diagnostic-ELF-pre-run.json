@@ -1,0 +1,7 @@
+{
+  "diagnostic_elf_sha256": "7a75ffbe28294d18117f3bbe5968fd421c28895c6acca6eed82f4c70d958e3a5",
+  "baseline_elf_sha256": "fceb4d769e1e4b05d5a45dd50a48e1483522ef3ac2c424ac5857e1388b5e529f",
+  "output_sentinel_sha256": "f610b800020df29e27bc3ddbb020df2bed05f7ef571ac7a678fd925efcab6a20",
+  "host_before": 0,
+  "source_sha256": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+}

@@ -1,0 +1,33 @@
+{
+  "head": "a7f6c7c360936c0df7350b7895a7a218fc15dd0f",
+  "tree": "f9389504f01492bdb80b8cb47ba12fbe8be9abd8",
+  "files": {
+    "/workspace/p1463-c1025/apparatus/probe.c": {
+      "bytes": 17879,
+      "sha256": "ca5e9df7a748e6f43fa5a89e0595805d0867272cbd7f74c581e9d75d1f4dcf3c"
+    },
+    "/workspace/p1463-c1025/apparatus/passive.h": {
+      "bytes": 9040,
+      "sha256": "a9ff0f8388f5fce6e52d1b4d8dce86e2414cd009cee235d4c84d8de2f83dbe90"
+    },
+    "/workspace/p1463-c1025/apparatus/guest_wrap.c": {
+      "bytes": 406,
+      "sha256": "42feb5894677c85d425a3584f75857687a157ae67282e282740e22fb6d332821"
+    },
+    "/tmp/p1463-c1025/probe-gcc": {
+      "bytes": 1016832,
+      "sha256": "c6104f1855704f3d23a843b8a28b6223e2c277473d6f576a47fba0d0edc71a11"
+    },
+    "/tmp/p1463-c1025/A.gcc-O2.H2": {
+      "bytes": 25776,
+      "sha256": "8f8aefa268968ef7cf3503059e117d8bb243b07af960e2b0190d9b705a98b7f6"
+    },
+    "/workspace/p1463-c1025/outputs/A.c1.c": {
+      "bytes": 16576,
+      "sha256": "975b9471fcb6d2469b86880146c4d1c39b0b34b8130219b770bf2584564f4711"
+    }
+  },
+  "expectation": "Host public MACHINE+same original two installer Copy/parameters/event; entry87 then0, poststaticUnknown, sibling13, closed loans; actual Bool/result Unknown; all3 semantic negatives exact status and retry; foreign field/call/world/issuer/seal rejects unsupported/no-clobber. Native observer actual allocation/free0/1/2 and real member pointers, same T initial87 sibling13, startup87->0, cleanup then delivery0/0/181 (C0), old0; real source Bool false/true and IFvalue, no raw C rewrite. Twelve selected OOM at CHECK realloc, post-H event replay malloc, C17 first and second 131072 staging, each on3host configurations; real hit/status/out/length and retry.",
+  "native_budget_plan": "A unchanged raw4; passiveA12, B/C4; ASanA3 UBSanA1 =24",
+  "no_execution_before_this_freeze": true
+}

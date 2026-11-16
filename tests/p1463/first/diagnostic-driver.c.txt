@@ -1,0 +1,26 @@
+#include "p1463_trace.h"
+#include <stdio.h>
+#include <unistd.h>
+volatile P1463Trace nl_p1463_trace;
+int nl_p1463_cli_main(int, char **);
+int main(int argc, char **argv)
+{
+    const int result = nl_p1463_cli_main(argc, argv);
+    char buffer[2048];
+    const int n = snprintf(buffer, sizeof(buffer),
+        "P1463 after-original-main exit=%d first-reject=%s:%u world-false=%s:%u "
+        "calls=%zu expected=%zu roots=%zu alloc=%zu producer=%zu owner=%zu "
+        "closed=%u surviving=%u after-match=%u same-issuer=%u\n",
+        result, nl_p1463_trace.reject_file ? nl_p1463_trace.reject_file : "none",
+        nl_p1463_trace.reject_line,
+        nl_p1463_trace.world_file ? nl_p1463_trace.world_file : "none",
+        nl_p1463_trace.world_line, nl_p1463_trace.calls,
+        nl_p1463_trace.expected_calls, nl_p1463_trace.roots,
+        nl_p1463_trace.allocations, nl_p1463_trace.producers,
+        nl_p1463_trace.owners, nl_p1463_trace.closed,
+        nl_p1463_trace.surviving, nl_p1463_trace.after_match,
+        nl_p1463_trace.same_issuer);
+    if (n > 0 && (size_t)n < sizeof(buffer))
+        (void)write(2, buffer, (size_t)n);
+    return result;
+}

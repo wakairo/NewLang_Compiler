@@ -1,0 +1,22 @@
+{
+  "why": "Byte-exact immutable historical C/H and emitted C snapshots are text artifacts; live compiled/tested successors are tests/p1463/*.c/h. No formatter exemption/guard changed.",
+  "path_map": {
+    "C.raw.c": "C.raw.c.txt",
+    "B.raw.c": "B.raw.c.txt",
+    "diagnostic-p1463_trace.h": "diagnostic-p1463_trace.h.txt",
+    "A.raw.c": "A.raw.c.txt",
+    "diagnostic-driver.c": "diagnostic-driver.c.txt",
+    "apparatus/compat.c": "apparatus/compat.c.txt",
+    "apparatus/successful-passive.h": "apparatus/successful-passive.h.txt",
+    "apparatus/successful-guest_wrap.c": "apparatus/successful-guest_wrap.c.txt",
+    "apparatus/successful-probe.c": "apparatus/successful-probe.c.txt",
+    "apparatus/compat-paired.c": "apparatus/compat-paired.c.txt",
+    "baseline-C1-compat/3.c": "baseline-C1-compat/3.c.txt",
+    "baseline-C1-compat/4.c": "baseline-C1-compat/4.c.txt",
+    "baseline-C1-compat/0.c": "baseline-C1-compat/0.c.txt",
+    "baseline-C1-compat/5.c": "baseline-C1-compat/5.c.txt",
+    "baseline-C1-compat/2.c": "baseline-C1-compat/2.c.txt",
+    "apparatus/v1/passive.h": "apparatus/v1/passive.h.txt",
+    "apparatus/v2/probe.c": "apparatus/v2/probe.c.txt"
+  }
+}

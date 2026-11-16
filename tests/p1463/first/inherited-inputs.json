@@ -1,0 +1,14 @@
+{
+  "post_cleanup_display.nl": {
+    "bytes": 5174,
+    "sha256": "186cede0b420ea4740ce680e581dcb2921e8b024d5174d60597c3f7eeb008304"
+  },
+  "N-wrong-domain.nl": {
+    "bytes": 5175,
+    "sha256": "35dbcaca38c86bf2f32884bca365ce8442ab69c09dfecb675145a19a96be51ee"
+  },
+  "oracle.json": {
+    "bytes": 3985,
+    "sha256": "d9fb5b85981fe55545e584bdefa650c5d92f8d0043f0061309240b7de066314e"
+  }
+}
