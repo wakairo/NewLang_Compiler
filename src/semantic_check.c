@@ -8430,7 +8430,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         bool current_arm = false, caller_sealed = false;
         NLCheckedField delta = {0};
         if (!terminal && !branch.terminated && !certified && i == 1 &&
-            normal == 1 && result.type == 1 && !result.result_count &&
+            normal == 1 && result.type == 1 && result.result_count <= 1 &&
             (!normal_type || normal_type == 1) &&
             !nl_allocated_post_matches(expected, branch.context, &result) &&
             allocated_current_candidate(expected, branch.context, &delta)) {
