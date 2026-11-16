@@ -114,12 +114,26 @@ static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
         if (!e->two_heap || !e->live_tail || !copy_call_proof(e, body, id, &p))
             return reject(e);
         if (e->copy_issuer && e->copy_issuer != body) {
-            if (depth || e->copy_surviving_call ||
-                e->copy_expected_calls != 1 ||
-                body != nl_checked_call_body(e->origin_root,
+            const NLCheckedNodeView *r =
+                nl_checked_node_view(body, nl_checked_root(body));
+            if (depth == 2 && !e->copy_conditional_call &&
+                !e->copy_surviving_call && e->copy_expected_calls == 1 &&
+                e->copy_issuer ==
+                    nl_checked_call_body(e->origin_root,
+                                         nl_checked_root(e->origin_root)) &&
+                r && r->kind == NL_CHECKED_MATCH_ARM && r->variant == 2 &&
+                r->field.present && !r->terminates) {
+                e->copy_conditional_issuer = body;
+                e->copy_conditional_call = id;
+            } else {
+                if (depth || e->copy_surviving_call ||
+                    e->copy_expected_calls != 1 ||
+                    body !=
+                        nl_checked_call_body(e->origin_root,
                                              nl_checked_root(e->origin_root)))
-                return reject(e);
-            e->copy_surviving_call = id;
+                    return reject(e);
+                e->copy_surviving_call = id;
+            }
         } else if (!e->copy_anchor) {
             e->copy_anchor = p.entry;
             e->copy_issuer = body;
@@ -569,10 +583,14 @@ static bool copy_around_h_plan(Emit *e, const NLCheckedFragment *body)
     return true;
 }
 
+#include "checked_c_allocated_current_internal.h"
+
 static bool copy_prepare(Emit *e, const NLCheckedFragment *body)
 {
     if (!copy_prepare_at(e, body, 0))
         return false;
+    if (e->copy_conditional_call)
+        return copy_conditional_plan(e, body);
     if (!copy_around_h_plan(e, body))
         return false;
     if (e->copy_prefix_call)
@@ -1063,6 +1081,26 @@ static bool copy_closed_world(const Emit *e, const Env *env)
 }
 static bool copy_carrier_world(Emit *e, const Env *env)
 {
+    if (e->copy_conditional_call &&
+        env->artifact == e->copy_conditional_issuer) {
+        NLCopyBodyParameters p;
+        if (e->allocations != 2 || e->producer_calls != 1 ||
+            e->owner_calls != 1 || e->pending_live || e->active_owner_call ||
+            e->active_owner_body ||
+            !copy_call_proof(e, env->artifact, e->copy_conditional_call, &p))
+            return false;
+        for (size_t i = 0; i < 2; ++i)
+            if (e->lifecycle[i].stage != 8 || e->lifecycle[i].owner_symbol ||
+                e->lifecycle[i].domain_symbol)
+                return false;
+        return true;
+    }
+    if (e->copy_conditional_call && env->artifact == e->copy_issuer &&
+        !env->parent && e->copy_h_closed)
+        return !e->pending_live && !e->active_owner_call &&
+               !e->active_owner_body && e->allocations == 2 &&
+               e->producer_calls == 1 && e->owner_calls == 1 &&
+               !e->lifecycle[0].stage && !e->lifecycle[1].stage;
     if (e->copy_surviving_issuer && env->artifact == e->copy_surviving_issuer &&
         !env->parent && !env->backing && !env->heap_place &&
         !env->heap_domain) {

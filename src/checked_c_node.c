@@ -135,6 +135,12 @@ typedef struct {
     /* Optional startup call on that SAME main original, authenticated with
      * its post-H call by the existing Copy proofs and unchanged H prefix. */
     NLCheckedNodeId copy_prefix_call;
+    /* One actual H2-only named Change of the existing main original. These
+     * borrow the same authenticated H tree and Copy records, never authority.
+     */
+    const NLCheckedFragment *copy_conditional_issuer, *copy_conditional_inner;
+    NLCheckedNodeId copy_conditional_call, copy_conditional_match,
+        copy_conditional_inner_match;
     /* Borrowed admission ledger, never a semantic capability. */
     const NLCheckedFragment *pre_copy_issuer;
     NLCheckedNodeId pre_copy_constructors[2];
@@ -1850,6 +1856,16 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
                             const NLCheckedNodeView *v, Value *out)
 {
     const NLCheckedNodeView *trial = get(env, v->initializer);
+    const bool conditional = copy_conditional_at(e, env, id);
+    Local *carrier = NULL;
+    Local incoming_current = {0};
+    if (conditional) {
+        if (!copy_conditional_join(e, env->artifact, id) ||
+            !(carrier = copy_conditional_local(env, &v->field)))
+            return reject(e);
+        incoming_current = *carrier;
+    } else if (v->field.present)
+        return reject(e);
     if (!e->allocated || e->allocations >= (e->two_heap ? 2u : 1u) ||
         trial == NULL || !trial->allocation_trial || trial->result_count != 0 ||
         trial->backing != 0 || trial->allocation_authority != 0 ||
@@ -1860,7 +1876,8 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
         (e->two_heap && e->allocations == 1
              ? !closed_capture(e, env, v,
                                nl_checked_captured_post(env->artifact, id))
-             : (!v->normal_frame_unchanged || v->captured_frame_closed)) ||
+             : ((!v->normal_frame_unchanged && !conditional) ||
+                v->captured_frame_closed)) ||
         !match_result_shape(e, env->artifact, v))
         return reject(e);
     const size_t site = e->allocations++;
@@ -1876,7 +1893,8 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
         (e->copy_after_match == id && env->artifact == e->copy_issuer &&
          !env->parent) ||
         (e->copy_surviving_match == id &&
-         env->artifact == e->copy_surviving_issuer && !env->parent);
+         env->artifact == e->copy_surviving_issuer && !env->parent) ||
+        (conditional && env->artifact == e->copy_issuer && !env->parent);
     if (closing && (site || e->copy_h_closed || e->current_h_closed ||
                     env->backing || env->heap_place || env->heap_domain))
         return reject(e);
@@ -1899,15 +1917,26 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
         if (!nl_h_origin_edge(e->origin_root, env->artifact, id, i, arm))
             return reject(e);
         const bool terminal = allocated_unit_return_arm(e, arm, a);
+        const bool conditional_arm =
+            conditional && a && !a->terminates && v->normal_arms == 2 &&
+            a->field.present == (a->variant == 2) &&
+            (a->variant == 2
+                 ? (!a->normal_frame_unchanged &&
+                    copy_conditional_field(&a->field, &v->field))
+                 : (a->normal_frame_unchanged == !v->captured_frame_closed)) &&
+            (!v->captured_frame_closed ||
+             closed_arm(v, nl_checked_context(arm)));
         if (a == NULL || a->kind != NL_CHECKED_MATCH_ARM || a->variant < 1 ||
             a->variant > 2 || seen[a->variant - 1] ||
             (a->terminates
                  ? (!terminal || v->normal_arms != 1)
                  : (a->type != v->type || !match_result_shape(e, arm, a) ||
-                    (v->normal_frame_unchanged
-                         ? !a->normal_frame_unchanged
-                         : (a->normal_frame_unchanged ||
-                            !closed_arm(v, nl_checked_context(arm)))))))
+                    (conditional
+                         ? !conditional_arm
+                         : (v->normal_frame_unchanged
+                                ? !a->normal_frame_unchanged
+                                : (a->normal_frame_unchanged ||
+                                   !closed_arm(v, nl_checked_context(arm))))))))
             return reject(e);
         seen[a->variant - 1] = true;
         const NLCheckedNodeView *grant =
@@ -1931,6 +1960,14 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
                           terminal ? nl_checked_node_view(arm, a->tail) : NULL,
                       .backing =
                           a->variant == 2 ? grant->backing : env->backing};
+        /* Fork serializer facts, not storage: frame/symbol still name the
+         * same physical main-local T. Only the authenticated join's new
+         * Unknown facts are projected back after both arms are emitted. */
+        if (conditional) {
+            if (branch.count == C_LOCALS)
+                return reject(e);
+            branch.locals[branch.count++] = incoming_current;
+        }
         /* The authenticated terminal alternative has no normal result. Keep
          * its complement structurally exclusive so every continuing C path
          * initializes the sole-normal result, without a dummy value or a
@@ -2003,6 +2040,11 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
      * common ancestor carrier lifecycle. No branch-local IDs escape. */
     e->lifecycle[0] = site == 1 ? (HeapLifecycle){.stage = 8} : incoming[0];
     e->lifecycle[1] = incoming[1];
+    if (conditional) {
+        carrier->copy_fact = v->field.parent_post_fact;
+        carrier->copy_fact_child[v->field.index] = v->field.child_post_fact;
+        carrier->copy_value[v->field.index] = v->field.new_value;
+    }
     if (closing) {
         if (!seen[0] || !seen[1] || e->allocations != 2 ||
             e->producer_calls != 1 || e->owner_calls != 1)

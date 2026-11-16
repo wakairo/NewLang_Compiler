@@ -1,6 +1,35 @@
 #define main p1463_retained_main
+#define __wrap_nl_sem_clone retained_clone_wrapper
 #include "../p1463/probe.c"
 #undef main
+#undef __wrap_nl_sem_clone
+
+static bool join_fault;
+static size_t join_hits;
+NLCheckStatus __wrap_nl_sem_clone(const NLSemanticContext *c,
+                                  NLSemanticContext **out)
+{
+    if (join_fault && !join_hits && c->region_count == 1 &&
+        !c->regions[0].view.live && c->domain_count == 1 &&
+        !c->domains[0].live) {
+        bool closed = true;
+        for (size_t i = 0; i < c->scope_count; ++i)
+            closed = closed && !c->scopes[i].active;
+        if (closed) {
+            ++join_hits;
+            clone_target = c;
+            fault = 2;
+            NLCheckStatus s = retained_clone_wrapper(c, out);
+            fault = 0;
+            clone_target = NULL;
+            printf("closed-H ancestor clone OOM: regions=%zu domains=%zu "
+                   "status=%d hits=%zu\n",
+                   c->region_count, c->domain_count, (int)s, hits);
+            return s;
+        }
+    }
+    return retained_clone_wrapper(c, out);
+}
 
 typedef struct {
     size_t joins, calls, loans;
@@ -113,8 +142,163 @@ static bool owned1481(const char *path, size_t index, unsigned sample)
     destroy(&p);
     return true;
 }
+
+static bool path1481(char *out, size_t cap, const char *dir, const char *name)
+{
+    int n = snprintf(out, cap, "%s/%s", dir, name);
+    return n > 0 && (size_t)n < cap;
+}
+
+static bool rejected1481(const char *bad, const char *control)
+{
+    Program p = {0}, valid = {0};
+    NLCopyCallAnchor anchor = {0};
+    NLSemanticSnapshot before, after;
+    CHECK(load(bad, &p) && load(control, &valid) &&
+          nl_copy_state_anchor(p.context, &anchor) == NL_CHECK_OK &&
+          nl_semantic_snapshot(p.context, &before));
+    NLFunctionUnitDiagnostic d = {0};
+    NLCheckStatus status = define(&p, &d);
+    printf("negative %s status=%d code=%s\n", bad, (int)status,
+           d.diagnostic.diagnostic.code ? d.diagnostic.diagnostic.code
+                                        : "none");
+    CHECK((status == NL_CHECK_SEMANTIC_ERROR ||
+           status == NL_CHECK_ANALYSIS_PRECISION_LIMIT) &&
+          !p.artifact && nl_copy_state_matches(p.context, &anchor) &&
+          nl_semantic_snapshot(p.context, &after) &&
+          !memcmp(&before, &after, sizeof(before)));
+    const NLSyntaxTree *units[] = {valid.unit};
+    CHECK(nl_semantic_register_function_unit(p.context, units, 1, &d) ==
+              NL_CHECK_OK &&
+          actual(&p) && emit(&p, NL_NODE_C_OK));
+    nl_copy_state_destroy(&anchor);
+    destroy(&p);
+    destroy(&valid);
+    return true;
+}
+
+static bool tamper1481(const char *path)
+{
+    Program p = {0}, other = {0};
+    CHECK(ready(path, &p) && actual(&p) && ready(path, &other) &&
+          actual(&other));
+    NLCheckedFragment *body = (NLCheckedFragment *)nl_checked_call_body(
+        p.artifact, nl_checked_root(p.artifact));
+    NLCheckedFragment *foreign_body = (NLCheckedFragment *)nl_checked_call_body(
+        other.artifact, nl_checked_root(other.artifact));
+    CHECK(body && foreign_body);
+    NLCheckedNodeView *join = NULL;
+    size_t match = 0;
+    for (size_t i = 1; i <= body->count; ++i)
+        if (body->nodes[i - 1].kind == NL_CHECKED_MATCH &&
+            body->nodes[i - 1].field.present) {
+            CHECK(!join);
+            join = &body->nodes[i - 1];
+            match = i;
+        }
+    CHECK(join);
+    NLCheckedNodeView original = *join;
+    join->field.index = 1 - join->field.index;
+    CHECK(refused(&p, "join wrong field"));
+    *join = original;
+    join->field.child_post_fact = join->field.child_fact;
+    CHECK(refused(&p, "join stale current"));
+    *join = original;
+    join->normal_frame_unchanged = true;
+    CHECK(refused(&p, "join false unchanged frame"));
+    *join = original;
+    NLSemanticValueView value =
+        body->context->values[join->field.new_value - 1];
+    body->context->values[join->field.new_value - 1].scalar_known = true;
+    body->context->values[join->field.new_value - 1].scalar_value = 181;
+    CHECK(refused(&p, "join forged Known"));
+    body->context->values[join->field.new_value - 1] = value;
+    NLCheckedArm *edge = NULL;
+    size_t count = 0;
+    for (size_t i = 0; i < body->arm_count; ++i)
+        if (body->arms[i].match == match && ++count == 2)
+            edge = &body->arms[i];
+    CHECK(edge && count == 2);
+    NLCheckedFragment *saved = edge->artifact;
+    edge->artifact =
+        (NLCheckedFragment *)nl_checked_match_arm(foreign_body, match, 1);
+    CHECK(edge->artifact && refused(&p, "foreign genuine Some arm"));
+    edge->artifact = saved;
+    CHECK(nl_checked_proof_class(p.artifact) == NL_CHECKED_MACHINE_PROVED &&
+          emit(&p, NL_NODE_C_OK) && emit(&other, NL_NODE_C_OK));
+    destroy(&p);
+    destroy(&other);
+    return true;
+}
+
+static bool oom1481(const char *path, unsigned point)
+{
+    Program p = {0};
+    CHECK(ready(path, &p));
+    NLCopyCallAnchor anchor = {0};
+    NLSemanticSnapshot before, after;
+    CHECK(nl_copy_state_anchor(p.context, &anchor) == NL_CHECK_OK &&
+          nl_semantic_snapshot(p.context, &before));
+    hits = text_allocs = join_hits = 0;
+    if (point <= 2) {
+        fault = point == 1 ? 1 : 0;
+        join_fault = point == 2;
+        NLCheckStatus s =
+            nl_semantic_check_expression(p.context, p.call, &p.artifact, NULL);
+        fault = 0;
+        join_fault = false;
+        printf("CHECK OOM point=%u hit=%zu join=%zu status=%d out=%p\n", point,
+               hits, join_hits, (int)s, (void *)p.artifact);
+        CHECK(hits == 1 && (point != 2 || join_hits == 1) &&
+              s == NL_CHECK_OUT_OF_MEMORY && !p.artifact &&
+              nl_copy_state_matches(p.context, &anchor) &&
+              nl_semantic_snapshot(p.context, &after) &&
+              !memcmp(&before, &after, sizeof(before)) && actual(&p));
+    } else {
+        CHECK(actual(&p));
+        nl_copy_state_destroy(&anchor);
+        CHECK(nl_copy_state_anchor(p.context, &anchor) == NL_CHECK_OK &&
+              nl_semantic_snapshot(p.context, &before));
+        fault = point;
+        bool ok = emit(&p, NL_NODE_C_OUT_OF_MEMORY);
+        fault = 0;
+        printf("emitter text ordinal=%u hits=%zu\n", point - 2, hits);
+        CHECK(ok && hits == 1 && nl_copy_state_matches(p.context, &anchor) &&
+              nl_semantic_snapshot(p.context, &after) &&
+              !memcmp(&before, &after, sizeof(before)));
+    }
+    CHECK(emit(&p, NL_NODE_C_OK));
+    nl_copy_state_destroy(&anchor);
+    destroy(&p);
+    return true;
+}
+
+static bool suite1481(const char *dir, const char *old)
+{
+    char paths[6][1024];
+    const char *names[] = {"P1468-B2-after-cleanup-in-success-arm.nl",
+                           "Z-success-zero.nl",
+                           "I-field-index-one.nl",
+                           "N-wrong-domain.nl",
+                           "N-missing-cleanup.nl",
+                           "N-loan-escape.nl"};
+    for (size_t i = 0; i < 6; ++i)
+        CHECK(path1481(paths[i], sizeof paths[i], dir, names[i]));
+    for (size_t i = 0; i < 3; ++i)
+        CHECK(owned1481(paths[i], i == 2 ? 1 : 0, i == 1 ? 0 : 181));
+    for (size_t i = 3; i < 6; ++i)
+        CHECK(rejected1481(paths[i], paths[0]));
+    CHECK(tamper1481(paths[0]) && suite(old));
+    for (unsigned point = 1; point <= 4; ++point)
+        CHECK(oom1481(paths[0], point));
+    puts(
+        "P1481 actual owned/current/negative/tamper/rollback + old A/B/C PASS");
+    return true;
+}
 int main(int argc, char **argv)
 {
+    if (argc == 4 && !strcmp(argv[1], "suite"))
+        return suite1481(argv[2], argv[3]) ? 0 : 1;
     if (argc == 5 && !strcmp(argv[1], "owned"))
         return owned1481(argv[2], strtoul(argv[3], NULL, 10),
                          (unsigned)strtoul(argv[4], NULL, 10))
