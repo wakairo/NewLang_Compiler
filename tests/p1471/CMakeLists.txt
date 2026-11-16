@@ -12,11 +12,6 @@ foreach(point 1 2 3 4)
     add_test(NAME p1471_oom_${point}.unit COMMAND p1471_probe oom
         "${p1471_base}/P1468-B1-failure-return.nl" "${point}")
 endforeach()
-add_test(NAME p1471_cli_native.integration
-    COMMAND "${Python3_EXECUTABLE}" "${p1471_base}/native.py"
-    "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${p1471_base}"
-    "${CMAKE_CURRENT_BINARY_DIR}/p1471-native" "${NEWLANG_SANITIZER}")
-set_tests_properties(p1471_cli_native.integration PROPERTIES TIMEOUT 180)
 add_test(NAME p1471_cli_native.integration COMMAND "${Python3_EXECUTABLE}"
     "${p1471_base}/native.py" "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}"
     "${p1471_base}" "${CMAKE_CURRENT_BINARY_DIR}/p1471-native" "${NEWLANG_SANITIZER}")

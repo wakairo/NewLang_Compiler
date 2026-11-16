@@ -1187,7 +1187,9 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         v->field.nominal == e->copy_type)
         return copy_loan(e, env, v, out);
     if (e->copy_type && v->kind == NL_CHECKED_FIELD_READ) {
-        Local *l = copy_field(e, env, &v->field);
+        const Local *l = copy_field(e, env, &v->field);
+        if (!l)
+            l = copy_terminal_read_field(e, env, v);
         if (!l || v->type != e->u8 || v->field.access != NL_ACCESS_READ ||
             v->result_count != 1)
             return reject(e);
