@@ -1,0 +1,44 @@
+{
+  "stage": "PREP text only, no compiler/native run",
+  "base": "03e43650620afcdbe545d44b160c8651dd39196f",
+  "spec": "Draft17.38",
+  "chosen_family": "one ordinary pure (bool,u8)->u8 gate selection with Copy alias, two normal arms; no arithmetic",
+  "predicted_first": "SOURCE and CHECK likely OK; existing one-u8 Copy-only finished-result/consumer rejects two-scalar selecting body at owned receipt/C17; NOT_OBSERVED",
+  "cases": {
+    "A-enabled": {
+      "H2": {
+        "bool": true,
+        "payload": 59,
+        "result": 59,
+        "T_old": 23,
+        "T_current": 59,
+        "T_sibling": 229,
+        "cleanup": 2
+      },
+      "H0": {
+        "copy": 5,
+        "cleanup": 0,
+        "T": "NOT_REACHED"
+      },
+      "H1": {
+        "copy": 17,
+        "cleanup": 1,
+        "T": "NOT_REACHED"
+      }
+    },
+    "B-disabled-alias": {
+      "H2": {
+        "bool": false,
+        "payload": 207,
+        "result": 0,
+        "T_old": 47,
+        "T_current": 0,
+        "T_sibling": 241,
+        "cleanup": 2
+      }
+    },
+    "N-wrong-domain": {
+      "expect": "semantic rejection / ALLOCATED-DOMAIN-MISMATCH; no artifact/output; rollback and retry"
+    }
+  }
+}
