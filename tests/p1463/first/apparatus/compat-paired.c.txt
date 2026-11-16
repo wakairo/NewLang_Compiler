@@ -1,0 +1,43 @@
+#define main p1463_suite_main
+#include "probe.c"
+#undef main
+NLNodeCStatus nl_p1463_baseline_node(const NLCheckedFragment *,char **,size_t *);
+int main(int argc,char **argv)
+{
+    if(argc!=3) return 2;
+    const char *paths[]={"tests/p1058/sources/closed_then_two.nl",
+        "tests/p1058/sources/same_original_calls.nl",
+        "tests/p1062/sources/terminal_explicit_return.nl",
+        "tests/p1312/positive.nl","tests/p1455/A-enabled.nl",
+        "tests/p1455/c996/D-noncoincident-prefix.nl"};
+    size_t accepted=0;
+    for(size_t i=0;i<sizeof(paths)/sizeof(*paths);++i){
+        char path[2048],outpath[2048];
+        if(snprintf(path,sizeof(path),"%s/%s",argv[1],paths[i])<0 ||
+           snprintf(outpath,sizeof(outpath),"%s/%zu.c",argv[2],i)<0) return 2;
+        Program p={0};if(!load(path,&p)) return 1;
+        NLFunctionUnitDiagnostic d={0};NLCheckStatus s=define(&p,&d);
+        if(s!=NL_CHECK_OK) return 1;
+        s=nl_semantic_check_expression(p.context,p.call,&p.artifact,NULL);
+        if(s!=NL_CHECK_OK || !p.artifact) return 1;
+        if(!nl_h_custody_validate(p.artifact) || !nl_h_origin_validate(p.artifact)) return 1;
+        NLCheckedProofClass classification=nl_checked_proof_class(p.artifact);
+        /* Old unit profiles need their existing source/producer authentication;
+         * they do not all carry the later optional whole-root result seal. */
+        bool sealed=nl_h_custody_result_valid(p.artifact,nl_checked_root(p.artifact));
+        if(classification==NL_CHECKED_PROOF_INVALID && sealed) return 1;
+        char *a=NULL,*b=NULL;size_t alen=98765,blen=98765;
+        NLNodeCStatus old=nl_p1463_baseline_node(p.artifact,&a,&alen);
+        NLNodeCStatus current=nl_checked_c_node(p.artifact,&b,&blen);
+        printf("%zu %s public-class=%d whole-root-result-seal=%d old=%d new=%d bytes=%zu/%zu\n",
+               i,paths[i],(int)classification,sealed,(int)old,(int)current,alen,blen);
+        if(old!=current || alen!=blen || (a==NULL)!=(b==NULL)) return 1;
+        if(a){
+            if(strlen(a)!=alen || strlen(b)!=blen || memcmp(a,b,alen)) return 1;
+            FILE *f=fopen(outpath,"wb");if(!f || fwrite(a,1,alen,f)!=alen || fclose(f))return 1;
+            ++accepted;
+        } else if(alen!=98765 || blen!=98765) return 1;
+        free(a);free(b);destroy(&p);
+    }
+    return accepted>=4?0:1;
+}

@@ -1,0 +1,13 @@
+#ifndef P1463_TRACE_H
+#define P1463_TRACE_H
+#include <stddef.h>
+typedef struct {
+    const char *reject_file;
+    unsigned reject_line;
+    const char *world_file;
+    unsigned world_line;
+    size_t calls, expected_calls, allocations, producers, owners, roots;
+    unsigned closed, surviving, after_match, same_issuer;
+} P1463Trace;
+extern volatile P1463Trace nl_p1463_trace;
+#endif

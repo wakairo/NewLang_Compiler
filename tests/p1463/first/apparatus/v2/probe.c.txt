@@ -1,0 +1,335 @@
+#include "copy_body_internal.h"
+#include "h_origin_internal.h"
+#include "newlang/checked_c_node.h"
+#include "newlang/parser.h"
+#include <inttypes.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define CHECK(x) do { if (!(x)) { fprintf(stderr,"%s:%d: %s\n",__FILE__,__LINE__,#x); return false; } } while (0)
+typedef struct {
+    NLSource *source, *call_source;
+    NLParser *parser, *call_parser;
+    NLSyntaxTree *unit, *call;
+    NLSemanticContext *context;
+    NLCheckedFragment *artifact;
+} Program;
+static unsigned fault;
+static size_t hits, text_allocs;
+static const NLSemanticContext *clone_target;
+static bool selected_clone;
+void *__real_malloc(size_t);
+void *__real_realloc(void *, size_t);
+NLCheckStatus __real_nl_sem_clone(const NLSemanticContext *, NLSemanticContext **);
+void *__wrap_malloc(size_t size)
+{
+    if (fault == 2 && selected_clone && !hits) { ++hits; return NULL; }
+    if (fault >= 3 && size == 131072 && ++text_allocs == fault - 2) {
+        ++hits;
+        return NULL;
+    }
+    return __real_malloc(size);
+}
+void *__wrap_realloc(void *p, size_t size)
+{
+    if (fault == 1 && !hits) { ++hits; return NULL; }
+    return __real_realloc(p, size);
+}
+NLCheckStatus __wrap_nl_sem_clone(const NLSemanticContext *c, NLSemanticContext **out)
+{
+    bool saved = selected_clone;
+    selected_clone = fault == 2 && c == clone_target;
+    NLCheckStatus status = __real_nl_sem_clone(c, out);
+    selected_clone = saved;
+    return status;
+}
+static void destroy(Program *p)
+{
+    nl_checked_destroy(p->artifact);
+    nl_syntax_tree_destroy(p->call);
+    nl_parser_destroy(p->call_parser);
+    nl_source_destroy(p->call_source);
+    nl_semantic_destroy(p->context);
+    nl_syntax_tree_destroy(p->unit);
+    nl_parser_destroy(p->parser);
+    nl_source_destroy(p->source);
+    *p = (Program){0};
+}
+static bool load(const char *path, Program *p)
+{
+    CHECK(nl_source_load(path, &p->source) == NL_SOURCE_OK);
+    CHECK(nl_parser_create(p->source, &p->parser) == NL_PARSE_OK);
+    CHECK(nl_parser_parse_function_unit(p->parser, &p->unit, NULL) == NL_PARSE_OK);
+    CHECK(nl_semantic_create(&p->context) == NL_CHECK_OK);
+    CHECK(nl_source_create("main()",6,"p1463-actual",&p->call_source) == NL_SOURCE_OK);
+    CHECK(nl_parser_create(p->call_source,&p->call_parser) == NL_PARSE_OK);
+    CHECK(nl_parser_parse_expression_fragment(p->call_parser,&p->call,NULL) == NL_PARSE_OK);
+    return true;
+}
+static NLCheckStatus define(Program *p, NLFunctionUnitDiagnostic *d)
+{
+    const NLSyntaxTree *units[] = {p->unit};
+    return nl_semantic_register_function_unit(p->context, units, 1, d);
+}
+static bool ready(const char *path, Program *p)
+{
+    CHECK(load(path,p));
+    NLFunctionUnitDiagnostic d = {0};
+    NLCheckStatus s = define(p,&d);
+    printf("definition status=%d code=%s\n",(int)s,d.diagnostic.diagnostic.code ? d.diagnostic.diagnostic.code : "none");
+    CHECK(s == NL_CHECK_OK);
+    return true;
+}
+static bool actual(Program *p)
+{
+    NLCheckDiagnostic d = {0};
+    NLCheckStatus s = nl_semantic_check_expression(p->context,p->call,&p->artifact,&d);
+    printf("actual status=%d code=%s\n",(int)s,d.diagnostic.code ? d.diagnostic.code : "none");
+    CHECK(s == NL_CHECK_OK && p->artifact);
+    CHECK(nl_checked_proof_class(p->artifact) == NL_CHECKED_MACHINE_PROVED);
+    CHECK(nl_h_custody_result_valid(p->artifact,nl_checked_root(p->artifact)));
+    CHECK(nl_h_origin_validate(p->artifact));
+    return true;
+}
+typedef struct {
+    NLCheckedFragment *installer_owner, *selector_owner;
+    NLCheckedNodeId calls[2], selector;
+    NLCopyBodyParameters parameters[2];
+    NLCopyBodyEventView events[2];
+    NLCopyBodyView views[2];
+    size_t installers, selectors, payloads, loans;
+} Trace;
+static bool inspect(NLCheckedFragment *f, Trace *t, size_t field, size_t depth)
+{
+    CHECK(f && depth < 24);
+    const NLSemanticContext *c = nl_checked_context(f);
+    NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    for (NLCheckedNodeId id = 1; id <= nl_checked_node_count(f); ++id) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f,id);
+        CHECK(n);
+        if (n->kind == NL_CHECKED_REGISTERED_CALL && n->type == u8) {
+            CHECK(c->functions && n->function && n->function <= c->function_count);
+            const NLFunctionEntry *fn = &c->functions[n->function-1];
+            if (!strcmp(fn->name,"install_reading")) {
+                CHECK(t->installers < 2);
+                size_t k = t->installers++;
+                if (!k) t->installer_owner = f;
+                CHECK(f == t->installer_owner);
+                t->calls[k] = id;
+                NLCopyBodyParameters *p = &t->parameters[k];
+                NLCopyBodyEventView *e = &t->events[k];
+                NLCopyBodyView *v = &t->views[k];
+                CHECK(nl_checked_copy_body_view(f,id,v) &&
+                      nl_checked_copy_body_parameters(f,id,p) &&
+                      nl_checked_copy_body_event(f,id,0,e));
+                CHECK(nl_checked_copy_body_validate(f,id,v) == NL_CHECK_OK &&
+                      nl_checked_copy_body_parameters_validate(f,id,p) == NL_CHECK_OK &&
+                      nl_checked_copy_body_event_validate(f,id,0,e) == NL_CHECK_OK);
+                CHECK(v->event_count == 1 && e->kind == NL_COPY_BODY_CHANGE &&
+                      p->field.present && p->field.access == NL_ACCESS_WRITE &&
+                      p->field.index == field && e->field.index == field &&
+                      p->parameters[0] && p->parameters[1] &&
+                      p->parameters[0] != p->parameters[1] &&
+                      p->arguments[0] && p->arguments[1] && p->loan &&
+                      v->result.value == n->results[0].value);
+                NLSemanticPlaceView before, after, sibling;
+                NLSemanticValueView old, next, other;
+                CHECK(nl_semantic_place_view(p->entry,p->field.child,&before) &&
+                      nl_semantic_place_view(p->handoff,p->field.child,&after) &&
+                      before.live && after.live && before.incarnation == after.incarnation &&
+                      before.current_fact != after.current_fact &&
+                      nl_semantic_value_view(p->entry,before.current_value,&old) &&
+                      nl_semantic_value_view(p->handoff,after.current_value,&next));
+                NLSemanticPlaceView root;
+                CHECK(nl_semantic_place_view(p->handoff,p->field.parent,&root) &&
+                      root.independent_root && root.implicit_local && !root.governing_domain &&
+                      !root.placement.region && root.fixed_field_count == 2 &&
+                      nl_semantic_place_view(p->handoff,root.fixed_fields[1-field],&sibling) &&
+                      nl_semantic_value_view(p->handoff,sibling.current_value,&other));
+                CHECK(old.scalar_known && old.scalar_value == (k ? 0u : 87u) &&
+                      (k ? !next.scalar_known : next.scalar_known && !next.scalar_value) &&
+                      other.scalar_known && other.scalar_value == 13 &&
+                      old.dependencies == NL_DEPENDENCY_FREE && next.dependencies == NL_DEPENDENCY_FREE);
+                const NLCheckedNodeView *loan = nl_checked_node_view(f,p->loan);
+                CHECK(loan && loan->kind == NL_CHECKED_LOAN_HEADER &&
+                      loan->loan.body_nonescape_proved && loan->loan.normal_result_forwarded &&
+                      loan->loan.scope && !c->scopes[loan->loan.scope-1].active);
+                printf("installer[%zu] call=%zu field=%zu parent=%zu incarnation=%zu old=%ju next-known=%d sibling=%ju public Copy/body/parameters/event OK\n",
+                       k,id,field,p->field.parent,p->field.parent_incarnation,(uintmax_t)old.scalar_value,
+                       next.scalar_known,(uintmax_t)other.scalar_value);
+            } else if (!strcmp(fn->name,"newest_only")) {
+                CHECK(nl_h_custody_result_valid(f,id));
+                NLSemanticValueView v;
+                CHECK(n->result_count == 1 && nl_semantic_value_view(c,n->results[0].value,&v) &&
+                      !v.scalar_known && v.dependencies == NL_DEPENDENCY_FREE &&
+                      !v.owner_place && !v.domain && !v.reference_count);
+                t->selector_owner = f; t->selector = id; ++t->selectors;
+                printf("real Bool/u8 selector result Unknown; genuine result seal OK\n");
+            }
+        }
+        if (n->kind == NL_CHECKED_LINK_READ && n->type == u8) {
+            CHECK(n->field.present && n->field.access == NL_ACCESS_READ && n->field.index == 1);
+            ++t->payloads;
+        }
+        if (n->kind == NL_CHECKED_LOAN_HEADER) {
+            CHECK(n->loan.body_nonescape_proved && n->loan.normal_result_forwarded &&
+                  n->loan.scope && n->loan.scope <= c->scope_count && !c->scopes[n->loan.scope-1].active);
+            ++t->loans;
+        }
+        const NLCheckedFragment *body = nl_checked_call_body(f,id);
+        if (body) CHECK(inspect((NLCheckedFragment *)body,t,field,depth+1));
+        if (n->kind == NL_CHECKED_MATCH || n->kind == NL_CHECKED_IF)
+            for (size_t a = 0; a < n->item_count; ++a) {
+                const NLCheckedFragment *arm = n->kind == NL_CHECKED_MATCH ?
+                    nl_checked_match_arm(f,id,a) : nl_checked_if_arm(f,id,a);
+                CHECK(inspect((NLCheckedFragment *)arm,t,field,depth+1));
+            }
+    }
+    return true;
+}
+static bool observe(Program *p, size_t field, Trace *t)
+{
+    CHECK(inspect(p->artifact,t,field,0));
+    CHECK(t->installers == 2 && t->selectors == 1 && t->payloads == 1 && t->loans >= 6);
+    CHECK(t->calls[0] != t->calls[1] && t->parameters[0].loan != t->parameters[1].loan &&
+          t->parameters[0].field.parent == t->parameters[1].field.parent &&
+          t->parameters[0].field.child == t->parameters[1].field.child &&
+          t->parameters[0].field.parent_incarnation == t->parameters[1].field.parent_incarnation &&
+          t->parameters[0].field.child_incarnation == t->parameters[1].field.child_incarnation);
+    printf("MACHINE: same original/incarnations, two exact closed loans, two Copy seals; scalar Unknown; payload1; closed loans=%zu\n",t->loans);
+    return true;
+}
+static bool emit(Program *p, NLNodeCStatus expected)
+{
+    char *out = NULL;
+    size_t length = 98765;
+    NLNodeCStatus status = nl_checked_c_node(p->artifact,&out,&length);
+    printf("emitter status=%d out=%s length=%zu\n",(int)status,out ? "text" : "NULL",length);
+    bool ok = status == expected && (expected == NL_NODE_C_OK ? out && length == strlen(out) : !out && length == 98765);
+    free(out);
+    CHECK(ok);
+    return true;
+}
+static bool refused(Program *p,const char *label)
+{
+    NLCheckedProofClass kind = nl_checked_proof_class(p->artifact);
+    printf("tamper %s public-proof=%d\n",label,(int)kind);
+    CHECK(kind == NL_CHECKED_PROOF_INVALID && emit(p,NL_NODE_C_UNSUPPORTED));
+    return true;
+}
+static bool authentication(Program *p, Trace *t, Program *other, Trace *foreign)
+{
+    NLCheckedFragment *owner = t->installer_owner;
+    NLCheckedNodeView *last = (NLCheckedNodeView *)nl_checked_node_view(owner,t->calls[1]);
+    NLSemanticContext *c = (NLSemanticContext *)nl_checked_context(owner);
+#define DAMAGE(target,replacement,label) do { unsigned char saved[sizeof(target)]; \
+    memcpy(saved,&(target),sizeof(target)); (target)=(replacement); \
+    bool rejected=refused(p,label); memcpy(&(target),saved,sizeof(target)); \
+    CHECK(rejected && nl_checked_proof_class(p->artifact)==NL_CHECKED_MACHINE_PROVED); } while(0)
+    NLCheckedNodeView *loan = (NLCheckedNodeView *)nl_checked_node_view(owner,t->parameters[1].loan);
+    DAMAGE(last->function,0,"wrong actual call");
+    DAMAGE(last->first_argument,0,"missing actual field argument");
+    DAMAGE(loan->loan.body_nonescape_proved,false,"missing closed loan");
+    NLCheckedNodeView *arg = (NLCheckedNodeView *)nl_checked_node_view(owner,t->parameters[1].arguments[0]);
+    DAMAGE(arg->field.index,1-t->parameters[1].field.index,"wrong field");
+    DAMAGE(owner->context,foreign->installer_owner->context,"foreign caller world");
+    DAMAGE(p->artifact->h_origin,other->artifact->h_origin,"foreign original issuer");
+    NLSemanticContext *sc = (NLSemanticContext *)nl_checked_context(t->selector_owner);
+    const NLCheckedNodeView *selector = nl_checked_node_view(t->selector_owner,t->selector);
+    NLSemanticValueView *v = &sc->values[selector->results[0].value-1];
+    CHECK(!v->scalar_known);
+    DAMAGE(v->scalar_known,true,"forged Known result");
+    CHECK(c->functions && last->function && last->function <= c->function_count);
+    NLFunctionEntry *fn = &c->functions[last->function-1];
+    DAMAGE(fn->parameters,NULL,"missing current signature allocation");
+#undef DAMAGE
+    NLCopyBodyParameters candidate = t->parameters[1];
+    candidate.field.index ^= 1;
+    CHECK(nl_checked_copy_body_parameters_validate(owner,t->calls[1],&candidate) == NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    candidate = foreign->parameters[1];
+    CHECK(nl_checked_copy_body_parameters_validate(owner,t->calls[1],&candidate) == NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(nl_checked_copy_body_validate(owner,t->calls[1],&foreign->views[1]) == NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(nl_checked_copy_body_event_validate(owner,t->calls[1],0,&foreign->events[1]) == NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(nl_checked_copy_body_parameters_validate(owner,t->calls[1],&t->parameters[0]) == NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(nl_checked_proof_class(p->artifact) == NL_CHECKED_MACHINE_PROVED && emit(p,NL_NODE_C_OK));
+    printf("cross-call/foreign view/entry/event candidates rejected; restored original valid\n");
+    return true;
+}
+static bool negative(const char *bad,const char *control,const char *code)
+{
+    Program p={0}, valid={0};
+    CHECK(load(bad,&p) && load(control,&valid));
+    NLCopyCallAnchor anchor={0};
+    NLSemanticSnapshot before,after;
+    CHECK(nl_copy_state_anchor(p.context,&anchor)==NL_CHECK_OK && nl_semantic_snapshot(p.context,&before));
+    NLFunctionUnitDiagnostic d={0};
+    NLCheckStatus s=define(&p,&d);
+    printf("negative %s status=%d code=%s\n",bad,(int)s,d.diagnostic.diagnostic.code ? d.diagnostic.diagnostic.code : "none");
+    CHECK(s==NL_CHECK_SEMANTIC_ERROR && !p.artifact && d.diagnostic.diagnostic.code &&
+          !strcmp(d.diagnostic.diagnostic.code,code) && nl_copy_state_matches(p.context,&anchor) &&
+          nl_semantic_snapshot(p.context,&after) && !memcmp(&before,&after,sizeof(before)));
+    const NLSyntaxTree *units[]={valid.unit};
+    CHECK(nl_semantic_register_function_unit(p.context,units,1,&d)==NL_CHECK_OK && actual(&p) && emit(&p,NL_NODE_C_OK));
+    nl_copy_state_destroy(&anchor); destroy(&p); destroy(&valid);
+    printf("negative snapshot/no-clobber; same-context positive retry OK\n");
+    return true;
+}
+static bool oom(const char *path,unsigned point)
+{
+    Program p={0}; CHECK(ready(path,&p));
+    NLCopyCallAnchor anchor={0}; NLSemanticSnapshot before,after;
+    CHECK(nl_copy_state_anchor(p.context,&anchor)==NL_CHECK_OK && nl_semantic_snapshot(p.context,&before));
+    if (point==1) {
+        fault=1; NLCheckStatus s=nl_semantic_check_expression(p.context,p.call,&p.artifact,NULL); fault=0;
+        printf("CHECK realloc fault hit=%zu status=%d out=%p\n",hits,(int)s,(void *)p.artifact);
+        CHECK(hits==1 && s==NL_CHECK_OUT_OF_MEMORY && !p.artifact && nl_copy_state_matches(p.context,&anchor) &&
+              nl_semantic_snapshot(p.context,&after) && !memcmp(&before,&after,sizeof(before)) && actual(&p));
+    } else {
+        CHECK(actual(&p));
+        if (point==2) {
+            Trace t={0}; CHECK(observe(&p,0,&t));
+            clone_target=t.events[1].before;
+            fault=2;
+            bool ok=emit(&p,NL_NODE_C_OUT_OF_MEMORY);
+            fault=0;
+            printf("emitter post-H Copy replay allocation hits=%zu\n",hits);
+            CHECK(ok && hits==1 &&
+                  nl_checked_copy_body_validate(t.installer_owner,t.calls[1],&t.views[1])==NL_CHECK_OK);
+        } else {
+            fault=point; bool ok=emit(&p,NL_NODE_C_OUT_OF_MEMORY); fault=0;
+            printf("C17 text allocation ordinal=%u hits=%zu\n",point-2,hits);
+            CHECK(ok && hits==1);
+        }
+        CHECK(nl_copy_state_matches(p.context,&anchor) && nl_semantic_snapshot(p.context,&after) &&
+              !memcmp(&before,&after,sizeof(before)));
+    }
+    CHECK(emit(&p,NL_NODE_C_OK));
+    nl_copy_state_destroy(&anchor); destroy(&p);
+    return true;
+}
+static bool suite(const char *dir)
+{
+    char paths[6][1024];
+    const char *names[]={"A-post-cleanup.nl","B-field-index-one.nl","C-option-bool-true.nl",
+                         "N-wrong-domain.nl","N-escaped-write-loan.nl","N-missing-cleanup.nl"};
+    for(size_t i=0;i<6;++i) CHECK(snprintf(paths[i],sizeof(paths[i]),"%s/%s",dir,names[i])>0);
+    Program programs[3]={{0}}; Trace traces[3]={{0}};
+    for(size_t i=0;i<3;++i) CHECK(ready(paths[i],&programs[i]) && actual(&programs[i]) &&
+                                observe(&programs[i],i==1?1:0,&traces[i]) && emit(&programs[i],NL_NODE_C_OK));
+    CHECK(authentication(&programs[0],&traces[0],&programs[1],&traces[1]));
+    for(size_t i=0;i<3;++i) destroy(&programs[i]);
+    CHECK(negative(paths[3],paths[0],"ALLOCATED-DOMAIN-MISMATCH"));
+    CHECK(negative(paths[4],paths[0],"P8-EXIT-DEPENDENCY"));
+    CHECK(negative(paths[5],paths[0],"P5-SCOPE-OBLIGATION"));
+    puts("P1463 public owned/current/Copy, authentication, semantic-negative rollback/retry PASS");
+    return true;
+}
+int main(int argc,char **argv)
+{
+    if(argc!=3) return 2;
+    bool ok=false;
+    if(!strcmp(argv[1],"suite")) ok=suite(argv[2]);
+    else if(!strncmp(argv[1],"oom",3)) ok=oom(argv[2],(unsigned)strtoul(argv[1]+3,NULL,10));
+    return ok?0:1;
+}
