@@ -460,6 +460,17 @@ static bool copy_around_h_plan(Emit *e, const NLCheckedFragment *body)
         return true; /* Not the new around-H source family. */
     const NLCheckedNodeView *post =
         nl_checked_node_view(body, delivery->next_item);
+    /* A dependency-free Copy of the startup result has no H/T effect. Keep
+     * it in the emitted source order; only the borrowed schedule scans past
+     * this exact same-fragment declaration/use before the second loan. */
+    if (post && post->kind == NL_CHECKED_BINDING) {
+        const NLCheckedNodeView *alias =
+            nl_checked_node_view(body, post->initializer);
+        if (alias && alias->kind == NL_CHECKED_IDENTIFIER &&
+            alias->symbol == prefix->symbol && alias->type == e->u8 &&
+            alias->result_count == 1)
+            post = nl_checked_node_view(body, post->next_item);
+    }
     const NLCheckedNodeView *constructor =
         nl_checked_node_view(body, binding->initializer);
     if (!e->scalar_issued || !e->two_heap || !e->live_tail || e->custody ||
@@ -477,8 +488,8 @@ static bool copy_around_h_plan(Emit *e, const NLCheckedFragment *body)
         post->kind != NL_CHECKED_BINDING || match->type != e->u8 ||
         !match_result_shape(e, body, match) || !match->normal_frame_unchanged ||
         match->captured_frame_closed || match->terminates ||
-        match->normal_arms != 2 || match->item_count != 2 ||
-        binding->symbol > match->match_binding_prefix)
+        (match->normal_arms != 2 && match->normal_arms != 1) ||
+        match->item_count != 2 || binding->symbol > match->match_binding_prefix)
         return reject(e);
     const NLCheckedNodeView *loans[2] = {
         nl_checked_node_view(body, prefix->initializer),
@@ -531,14 +542,18 @@ static bool copy_around_h_plan(Emit *e, const NLCheckedFragment *body)
             nl_checked_match_arm(body, delivery->initializer, i);
         const NLCheckedNodeView *a =
             arm ? nl_checked_node_view(arm, nl_checked_root(arm)) : NULL;
+        const bool terminal = allocated_unit_return_arm(e, arm, a);
         if (!a || a->kind != NL_CHECKED_MATCH_ARM || a->variant < 1 ||
-            a->variant > 2 || seen[a->variant - 1] || a->terminates ||
-            !a->normal_frame_unchanged || !match_result_shape(e, arm, a) ||
+            a->variant > 2 || seen[a->variant - 1] ||
+            (a->terminates ? (!terminal || match->normal_arms != 1)
+                           : (!a->normal_frame_unchanged ||
+                              !match_result_shape(e, arm, a))) ||
             !nl_h_origin_edge(e->origin_root, body, delivery->initializer, i,
                               arm))
             return reject(e);
         seen[a->variant - 1] = true;
-        if (a->variant == 1)
+        if ((!terminal && match->normal_arms == 1) ||
+            (a->variant == 1 && match->normal_arms == 2))
             anchor = nl_checked_context(arm);
     }
     if (!anchor || !copy_original_prefix(p[0].handoff, anchor, &p[0].field) ||
