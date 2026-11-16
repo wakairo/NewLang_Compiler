@@ -132,6 +132,9 @@ typedef struct {
     /* Optional exact main-caller call, separate from the nested Copy issuer.
      * Admission still needs the unchanged-prefix/closed-H plan below. */
     NLCheckedNodeId copy_surviving_call;
+    /* Optional startup call on that SAME main original, authenticated with
+     * its post-H call by the existing Copy proofs and unchanged H prefix. */
+    NLCheckedNodeId copy_prefix_call;
     /* Borrowed admission ledger, never a semantic capability. */
     const NLCheckedFragment *pre_copy_issuer;
     NLCheckedNodeId pre_copy_constructors[2];
@@ -3904,7 +3907,9 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         (e.copy_type && (!e.copy_roots || e.copy_roots > 2 ||
                          e.copy_calls != e.copy_expected_calls)) ||
         (e.copy_second_function && e.copy_roots != e.copy_expected_roots) ||
-        (e.copy_surviving_issuer && (!e.copy_h_closed || e.copy_roots != 2)) ||
+        (e.copy_surviving_issuer &&
+         (!e.copy_h_closed ||
+          e.copy_roots != (e.copy_prefix_call ? 1u : 2u))) ||
         (e.post_copy_issuer && e.copy_roots != 2) ||
         (e.no_pre_read && e.producer_calls != 1) ||
         (e.custody && (!e.custody_authorized || e.recipient_calls != 1)) ||
