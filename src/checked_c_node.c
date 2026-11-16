@@ -511,6 +511,24 @@ static bool match_arm_body(const Emit *e, const NLCheckedFragment *f,
            b->results[0].type == arm->results[0].type &&
            b->results[0].value == arm->results[0].value;
 }
+
+/* Borrow the completed source graph and its existing target-qualified exit.
+ * This classifier grants no normal result and never replays a cleanup. */
+static bool allocated_unit_return_arm(const Emit *e, const NLCheckedFragment *f,
+                                      const NLCheckedNodeView *arm)
+{
+    const NLCheckedFragment *main_body =
+        nl_checked_call_body(e->origin_root, nl_checked_root(e->origin_root));
+    return main_body && main_body->function_target && arm &&
+           arm->kind == NL_CHECKED_MATCH_ARM && arm->variant == 1 &&
+           arm->terminates && !arm->type && !arm->result_count &&
+           !arm->normal_frame_unchanged && arm->returned.type == e->unit &&
+           !arm->returned.value && final_unit_return(f, arm->tail, e->unit) &&
+           nl_control_exits_count(f->exits) == 1 &&
+           nl_control_exits_only_return(f->exits, main_body->function_target) &&
+           nl_control_function_boundary(f->exits, main_body->function_target,
+                                        e->unit, 0, 0) == NL_CHECK_OK;
+}
 static bool match_store_result(Emit *e, const NLCheckedFragment *f,
                                const NLCheckedNodeView *arm,
                                NLCheckedNodeId body, Value result,
@@ -1169,7 +1187,9 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         v->field.nominal == e->copy_type)
         return copy_loan(e, env, v, out);
     if (e->copy_type && v->kind == NL_CHECKED_FIELD_READ) {
-        Local *l = copy_field(e, env, &v->field);
+        const Local *l = copy_field(e, env, &v->field);
+        if (!l)
+            l = copy_terminal_read_field(e, env, v);
         if (!l || v->type != e->u8 || v->field.access != NL_ACCESS_READ ||
             v->result_count != 1)
             return reject(e);
@@ -1836,7 +1856,7 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
         trial->storage_authority != 0 || trial->allocation_size != 24 ||
         trial->allocation_alignment != 8 ||
         !shape(e, env, trial->allocation_target) || v->item_count != 2 ||
-        v->normal_arms != 2 ||
+        (v->normal_arms != 2 && v->normal_arms != 1) ||
         (e->two_heap && e->allocations == 1
              ? !closed_capture(e, env, v,
                                nl_checked_captured_post(env->artifact, id))
@@ -1878,13 +1898,16 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
             nl_checked_node_view(arm, nl_checked_root(arm));
         if (!nl_h_origin_edge(e->origin_root, env->artifact, id, i, arm))
             return reject(e);
+        const bool terminal = allocated_unit_return_arm(e, arm, a);
         if (a == NULL || a->kind != NL_CHECKED_MATCH_ARM || a->variant < 1 ||
-            a->variant > 2 || seen[a->variant - 1] || a->terminates ||
-            a->type != v->type || !match_result_shape(e, arm, a) ||
-            (v->normal_frame_unchanged
-                 ? !a->normal_frame_unchanged
-                 : (a->normal_frame_unchanged ||
-                    !closed_arm(v, nl_checked_context(arm)))))
+            a->variant > 2 || seen[a->variant - 1] ||
+            (a->terminates
+                 ? (!terminal || v->normal_arms != 1)
+                 : (a->type != v->type || !match_result_shape(e, arm, a) ||
+                    (v->normal_frame_unchanged
+                         ? !a->normal_frame_unchanged
+                         : (a->normal_frame_unchanged ||
+                            !closed_arm(v, nl_checked_context(arm)))))))
             return reject(e);
         seen[a->variant - 1] = true;
         const NLCheckedNodeView *grant =
@@ -1904,10 +1927,18 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
                       .parent = env,
                       .prefix = v->match_binding_prefix,
                       .depth = env->depth + 1,
+                      .unit_function_body =
+                          terminal ? nl_checked_node_view(arm, a->tail) : NULL,
                       .backing =
                           a->variant == 2 ? grant->backing : env->backing};
-        if (!put(e, "if (nl_heap_%zu %s NULL) {\nNL_HEAP_ARM(%zu);\n",
-                 allocation, a->variant == 2 ? "!=" : "==", a->variant))
+        /* The authenticated terminal alternative has no normal result. Keep
+         * its complement structurally exclusive so every continuing C path
+         * initializes the sole-normal result, without a dummy value or a
+         * second evaluation. The two-normal lane retains its existing C. */
+        if (v->normal_arms == 1 && i == 1
+                ? !put(e, "else {\nNL_HEAP_ARM(%zu);\n", a->variant)
+                : !put(e, "if (nl_heap_%zu %s NULL) {\nNL_HEAP_ARM(%zu);\n",
+                       allocation, a->variant == 2 ? "!=" : "==", a->variant))
             return false;
         if (a->variant == 2) {
             NLSemanticBindingView binder;
@@ -1952,7 +1983,12 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
             (e->two_heap &&
              ((site == 1 && e->lifecycle[0].stage != 8) ||
               (a->variant == 2 && e->lifecycle[site].stage != 8))) ||
-            !match_store_result(e, arm, a, a->tail, result, result_temp) ||
+            (!terminal &&
+             !match_store_result(e, arm, a, a->tail, result, result_temp)) ||
+            (terminal && (e->lifecycle[0].stage != (site ? 8u : 0u) ||
+                          e->lifecycle[1].stage || e->pending_live ||
+                          e->active_owner_call || e->active_owner_body ||
+                          !put(e, "NL_HEAP_FINISH();\nreturn 0;\n"))) ||
             !put(e, "}\n"))
             return reject(e);
         if (closing &&

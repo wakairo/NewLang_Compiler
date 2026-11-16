@@ -1,0 +1,33 @@
+{
+  "baseline": "9860984ad8ca1ea71ed241c7202b919be3cf4edf",
+  "canonical_main": "4787e1a2838a2e6d2bc40144f91a556159cc0fe2",
+  "inherit": "B1/N1/Z, original oracle and all FIRST/raw unchanged",
+  "production_boundary": "readonly inherited T field at real None-arm RETURN; actual startup handoff, exact source-owned fork chain, original C Local ledger; no live ended-world, no normal/writing fallback",
+  "positive": {
+    "B1": "CHECK/MACHINE/whole-root/Copy/RETURN/C17; H0/H1/H2 calls1/1/2, cleanup0/1/2, old87/current0/0/181, second old0 H2-only, sibling13, same physical original",
+    "Z": "actual selected0 on H2 still executes second source Change/call"
+  },
+  "negative": {
+    "N-terminal-missing-deallocate.nl": {
+      "bytes": 5604,
+      "sha256": "63d601431feacb8523b99ee77a29547c1587051486239f7e9aa93341bccaad00",
+      "expected_status": "NL_CHECK_SEMANTIC_ERROR",
+      "expected_code": "P5-SCOPE-OBLIGATION",
+      "expected_effect": "outNULL; registry unchanged; original-B1 same-context MACHINE/C17 retry"
+    },
+    "inherited N1": "true ALLOCATED-DOMAIN-MISMATCH",
+    "inherited P1463 loan negative": "P8-EXIT-DEPENDENCY; old acceptance/refusal and generated C unchanged",
+    "tamper": "foreign source/world/canonical arm/original/current/incarnation/loan/signature/Copy/Known must be public INVALID, C17 UNSUPPORTED with outNULL/length unchanged; restoration recovers MACHINE"
+  },
+  "OOM": "selected actual wrap hit, OUT_OF_MEMORY/outNULL/unchanged context and length, original retry; unhit point is not PASS",
+  "limits": {
+    "cli_host": 20,
+    "native": 16,
+    "selected_oom": 10,
+    "new_commits": 2,
+    "new_branch": 0,
+    "draft_pr": 1,
+    "natural_required_pairs": 1,
+    "manual_ci": 0
+  }
+}

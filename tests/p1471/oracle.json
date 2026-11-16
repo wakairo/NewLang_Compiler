@@ -1,0 +1,46 @@
+{
+  "main": "4787e1a2838a2e6d2bc40144f91a556159cc0fe2",
+  "B1_expected": {
+    "CHECK": 0,
+    "public": "MACHINE",
+    "C17": 0,
+    "H0": {
+      "calls": 1,
+      "old": 87,
+      "reading": 0,
+      "sibling": 13,
+      "cleanup": 0
+    },
+    "H1": {
+      "calls": 1,
+      "old": 87,
+      "reading": 0,
+      "sibling": 13,
+      "cleanup": 1
+    },
+    "H2": {
+      "calls": 2,
+      "first_old": 87,
+      "second_old": 0,
+      "reading": 181,
+      "sibling": 13,
+      "cleanup": 2
+    }
+  },
+  "zero_falsifier": "actual selected u8 zero on H2 must still execute second call/change; no zero/failure sentinel",
+  "negative": "wrong live Domain: SEMANTIC_ERROR ALLOCATED-DOMAIN-MISMATCH, unchanged registry, positive retry",
+  "inputs": {
+    "P1468-B1-failure-return.nl": {
+      "bytes": 5667,
+      "sha256": "295535ddd1349689d82d18357440c0127a9c2269ecfa14a980e9a239f4df1f4d"
+    },
+    "P1468-N1-wrong-live-domain.nl": {
+      "bytes": 5666,
+      "sha256": "0727666d427fbbd384cc680b84f6358b672762b88ff7b7015ef57b14c12c22cd"
+    },
+    "Z-selected-zero.nl": {
+      "bytes": 5665,
+      "sha256": "f463215852e37e094d9949a138424c354d951e9bbb9f2d0d3c31d33ea5fe7eab"
+    }
+  }
+}

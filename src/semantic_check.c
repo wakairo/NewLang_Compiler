@@ -8179,6 +8179,65 @@ static bool allocated_scalar_post_matches(const NLSemanticContext *expected,
     return nl_allocated_post_matches(expected, arm, &unit);
 }
 
+/* A terminal edge is not a normal arm. Reuse the function-exit kernel on
+ * the ancestor-derived closed-H goal, then compare the actual ended world.
+ * This lane has no caller-visible prefix or result package to transfer. */
+static bool allocated_unit_return(Check *branch,
+                                  const NLSemanticContext *expected,
+                                  NLCheckedNodeId body)
+{
+    const NLCheckedNodeView *b = view(branch, body);
+    if (!branch->in_function_body || branch->in_source_loan || branch->loop ||
+        branch->function_result != 1 || branch->function_binding_floor ||
+        branch->function_place_floor || branch->function_scope_floor ||
+        !branch->terminated || !b || !b->terminates || b->type ||
+        b->result_count || b->returned.type != 1 || b->returned.value ||
+        b->kind != NL_CHECKED_BLOCK || b->tail || !b->item_count ||
+        nl_control_exits_count(branch->artifact->exits) != 1 ||
+        !nl_control_exits_only_return(branch->artifact->exits,
+                                      branch->function_target))
+        return false;
+    NLCheckedNodeId last = b->first_item;
+    for (size_t i = 1; i < b->item_count; ++i) {
+        const NLCheckedNodeView *n = view(branch, last);
+        if (!n || n->terminates || !n->next_item)
+            return false;
+        last = n->next_item;
+    }
+    const NLCheckedNodeView *ret = view(branch, last);
+    const NLCheckedNodeView *operand =
+        ret ? view(branch, ret->initializer) : NULL;
+    const NLControlExitView *edge =
+        nl_control_exit_view(branch->artifact->exits, 0);
+    if (!ret || ret->kind != NL_CHECKED_RETURN || !ret->terminates ||
+        ret->next_item || ret->returned.type != 1 || ret->returned.value ||
+        !operand || operand->kind != NL_CHECKED_UNIT || operand->type != 1 ||
+        operand->result_count || !edge || edge->count != 1 ||
+        edge->values[0].type != 1 || edge->values[0].value ||
+        !nl_packet_same_entry(
+            branch->context,
+            nl_control_state_context((NLControlState *)edge->state)))
+        return false;
+    Check goal = *branch;
+    goal.context = NULL;
+    if (!host(branch, nl_sem_clone(expected, &goal.context), b->span))
+        return false;
+    const bool ended =
+        end_bindings(&goal, 0, b->span) &&
+        host(&goal, nl_sem_function_exit(goal.context, 0, 0), b->span);
+    /* Unit denotes absence of a package for this comparison only. No unit
+     * normal result is issued for the terminal arm. */
+    const NLCheckedNodeView unit = {.type = 1};
+    const bool same = ended && nl_allocated_post_matches(
+                                   goal.context, branch->context, &unit);
+    nl_semantic_destroy(goal.context);
+    if (goal.status != NL_CHECK_OK) {
+        branch->status = goal.status;
+        branch->diagnostic = goal.diagnostic;
+    }
+    return same;
+}
+
 static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
 {
     const NLSyntaxView *trial =
@@ -8298,6 +8357,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         }
     }
     NLTypeId normal_type = 0;
+    size_t normal = 0;
     for (size_t i = 0; i < 2; ++i) {
         Check branch = *check;
         branch.context = NULL;
@@ -8351,9 +8411,15 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         const bool scalar =
             !certified &&
             allocated_scalar_post_matches(expected, branch.context, &result);
-        if (branch.terminated || (normal_type && normal_type != result.type) ||
-            (!scalar &&
-             !nl_allocated_post_matches(expected, branch.context, &result))) {
+        const bool terminal = branch.terminated && i == 0 && !certified &&
+                              allocated_unit_return(&branch, expected, body);
+        if (branch.status != NL_CHECK_OK)
+            goto failure;
+        if ((branch.terminated && !terminal) ||
+            (!terminal &&
+             ((normal_type && normal_type != result.type) ||
+              (!scalar && !nl_allocated_post_matches(expected, branch.context,
+                                                     &result))))) {
             fail(&branch, NL_CHECK_ANALYSIS_PRECISION_LIMIT, arms[i]->span,
                  closed_prefix != NULL ? "ALLOCATED-CAPTURED-JOIN-PRECISION"
                                        : "ALLOCATED-CLOSED-WORLD-PRECISION",
@@ -8361,17 +8427,23 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
                  "and prove the exact captured-prefix post-state");
             goto failure;
         }
-        normal_type = result.type;
+        if (!terminal) {
+            normal_type = result.type;
+            ++normal;
+        }
         branch.artifact->root =
-            add(&branch, (NLCheckedNodeView){.kind = NL_CHECKED_MATCH_ARM,
-                                             .span = arms[i]->span,
-                                             .variant = i + 1,
-                                             .symbol = binder,
-                                             .initializer = event,
-                                             .tail = body,
-                                             .type = 1,
-                                             .normal_frame_unchanged =
-                                                 closed_prefix == NULL});
+            add(&branch,
+                (NLCheckedNodeView){.kind = NL_CHECKED_MATCH_ARM,
+                                    .span = arms[i]->span,
+                                    .variant = i + 1,
+                                    .symbol = binder,
+                                    .initializer = event,
+                                    .tail = body,
+                                    .type = terminal ? 0 : 1,
+                                    .terminates = terminal,
+                                    .returned = branch.returned,
+                                    .normal_frame_unchanged =
+                                        !terminal && closed_prefix == NULL});
         if (scalar && branch.artifact->root) {
             NLCheckedNodeView *arm = view(&branch, branch.artifact->root);
             arm->type = result.type;
@@ -8383,6 +8455,10 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
          * a failure leaves parent/closure ownership on the old cleanup path. */
         if (branch.artifact->root == 0 ||
             !host(&branch, nl_copy_body_seal_calls(branch.artifact),
+                  arms[i]->span) ||
+            !host(&branch,
+                  nl_control_exits_union(&check->artifact->exits,
+                                         branch.artifact->exits),
                   arms[i]->span))
             goto failure;
         if (closure != NULL) {
@@ -8409,7 +8485,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         return 0;
     }
     view(check, id)->type = 1;
-    view(check, id)->normal_arms = 2;
+    view(check, id)->normal_arms = normal;
     view(check, id)->normal_frame_unchanged = closed_prefix == NULL;
     view(check, id)->captured_frame_closed = closed_prefix != NULL;
     if (closure != NULL &&
@@ -8440,7 +8516,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         v->captured_domain_binding = certificate.captured_domain_binding;
     }
     view(check, id)->type = 1;
-    view(check, id)->normal_arms = 2;
+    view(check, id)->normal_arms = normal;
     view(check, id)->normal_frame_unchanged =
         !certificate.captured_frame_closed;
     if (normal_type != 1) {

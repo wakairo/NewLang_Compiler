@@ -141,6 +141,8 @@ if(BUILD_TESTING)
     include(tests/p1451/CMakeLists.txt)
 include(tests/p1455/CMakeLists.txt)
     include(tests/p1463/CMakeLists.txt)
+    include(tests/p1471/CMakeLists.txt)
+    include(tests/p1472/CMakeLists.txt)
     # P930 diagnostic-only wrappers: production libraries/CLI remain unchanged.
     add_executable(p930_observe tests/p930/observe.c)
     add_executable(p930_oom tests/p930/observe.c)

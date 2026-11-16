@@ -1,0 +1,284 @@
+#ifndef P1463_PASSIVE_H
+#define P1463_PASSIVE_H
+#ifndef P1471_SAMPLE
+#define P1471_SAMPLE P1471_SAMPLE
+#endif
+#include <stdio.h>
+#ifndef P1463_FIELD_INDEX
+#define P1463_FIELD_INDEX 0
+#endif
+#ifndef P1463_BOOL_TRUE
+#define P1463_BOOL_TRUE 0
+#endif
+#ifndef P1463_FAIL_AT
+#define P1463_FAIL_AT 0
+#endif
+#define REQUIRE(x)                                                             \
+    do {                                                                       \
+        if (!(x)) {                                                            \
+            fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, #x);            \
+            abort();                                                           \
+        }                                                                      \
+    } while (0)
+static volatile size_t frees;
+static size_t trials, inits, calls, roots, payloads, reads, changes;
+static size_t ends, finals, conditions, results, bools, bindings,
+    startup_copies, delivery_copies;
+static size_t scope_ends, sends, receives, entries, returns_, receiver_entries,
+    receiver_exits;
+static const nl_node *volatile originals[2];
+static volatile size_t domains[2];
+static unsigned ended[2], finalized[2];
+static void *volatile pending_free;
+static uint8_t *reading, *sibling;
+static size_t t_frame, t_symbol;
+static unsigned observed_delivery, decision, selected;
+static unsigned expected_cleanup(void)
+{
+    return P1463_FAIL_AT == 1 ? 0u : P1463_FAIL_AT == 2 ? 1u : 2u;
+}
+static unsigned expected_delivery(void)
+{
+    return expected_cleanup() == 2 && !P1463_BOOL_TRUE ? P1471_SAMPLE : 0u;
+}
+static size_t identity(const nl_node *p)
+{
+    REQUIRE(p && (p == originals[0] || p == originals[1]));
+    return p == originals[0] ? 0u : 1u;
+}
+static void p1463_real_free(void *p)
+{
+    REQUIRE(p && p == pending_free);
+    size_t i = identity((const nl_node *)p);
+    REQUIRE(ended[i] && finalized[i]);
+    /* Clear while the allocation is still live. No dangling-pointer read. */
+    originals[i] = NULL;
+    domains[i] = 0;
+    pending_free = NULL;
+    ++frees;
+}
+void p1463_observe_free(void *p)
+{
+    p1463_real_free(p);
+}
+#define NL_NODE_BIND(frame, symbol, kind, address)                             \
+    do {                                                                       \
+        if (reading && (kind) == 4) {                                          \
+            unsigned value = *(const unsigned char *)(address);                \
+            if (!trials && (frame) == t_frame && (symbol) > t_symbol) {        \
+                REQUIRE(calls == 1 && startup_copies++ == 0 && value == 87);   \
+            } else if (trials && value == 87) {                                \
+                ++bindings;                                                    \
+            } else if ((frame) == t_frame && calls == 1 && frees == 2) {       \
+                REQUIRE(!delivery_copies++ && value == expected_delivery());   \
+                observed_delivery = value;                                     \
+            }                                                                  \
+        }                                                                      \
+    } while (0)
+#define NL_NODE_REPLACE(...) ((void)0)
+#define NL_NODE_RELOAN(...) ((void)0)
+#define NL_NODE_ARM(variant, ptr)                                              \
+    do {                                                                       \
+        REQUIRE((variant) == 1 && !(ptr));                                     \
+    } while (0)
+#define NL_NODE_FINISH() ((void)0)
+#define NL_MIXED_COPY_BIND(frame, symbol, first, second)                       \
+    do {                                                                       \
+        REQUIRE(!reading);                                                     \
+        reading = P1463_FIELD_INDEX ? (second) : (first);                      \
+        sibling = P1463_FIELD_INDEX ? (first) : (second);                      \
+        REQUIRE(*reading == 87 && *sibling == 13 && reading != sibling);       \
+        t_frame = (frame);                                                     \
+        t_symbol = (symbol);                                                   \
+    } while (0)
+#define NL_MIXED_COPY_CALL(target, old, next)                                  \
+    do {                                                                       \
+        REQUIRE(calls < 2 && (target) == reading && *sibling == 13);           \
+        if (!calls)                                                            \
+            REQUIRE(!trials && (old) == 87 && !(next));                        \
+        else                                                                   \
+            REQUIRE(delivery_copies == 1 && (old) == 0 &&                      \
+                    (next) == observed_delivery &&                             \
+                    frees == expected_cleanup() && !pending_free);             \
+        REQUIRE(*(target) == (next));                                          \
+        ++calls;                                                               \
+    } while (0)
+#define NL_MIXED_COPY_STORE(...) REQUIRE(0)
+#define NL_MIXED_OWNER_LOCAL(...) ((void)0)
+#define NL_HEAP_TRIAL(pointer, bytes, alignment)                               \
+    do {                                                                       \
+        ++trials;                                                              \
+        REQUIRE(calls == 1 && trials <= 2 && (bytes) == 24 &&                  \
+                (alignment) == 8);                                             \
+        REQUIRE(((pointer) == NULL) ==                                         \
+                (P1463_FAIL_AT && trials == P1463_FAIL_AT));                   \
+    } while (0)
+#define NL_HEAP_ARM(...) ((void)0)
+#define NL_HEAP_DOMAIN(...) ((void)0)
+#define NL_HEAP_SLOT(...) ((void)0)
+#define NL_HEAP_INITIALIZE(pointer, token)                                     \
+    do {                                                                       \
+        REQUIRE(inits < 2 && (pointer) && (token) && (pointer)->f0.tag == 0 && \
+                !(pointer)->f0.ptr);                                           \
+        REQUIRE((pointer)->f1 == (inits ? P1471_SAMPLE : 76));                 \
+        if (inits)                                                             \
+            REQUIRE((pointer) != originals[0] && (token) != domains[0]);       \
+        originals[inits] = (pointer);                                          \
+        domains[inits++] = (token);                                            \
+    } while (0)
+#define NL_HEAP_RELOAN(...) ((void)0)
+#define NL_HEAP_ROOT(pointer, token, write, place, incarnation, scope)         \
+    do {                                                                       \
+        size_t i = identity(pointer);                                          \
+        REQUIRE((token) == domains[i] && !ended[i] && (place) &&               \
+                (incarnation) && (scope));                                     \
+        REQUIRE((write) ? i == 0 : i == 1);                                    \
+        ++roots;                                                               \
+    } while (0)
+#define NL_HEAP_FIELD(pointer, field, write, nominal, index, child, inc,       \
+                      scope)                                                   \
+    do {                                                                       \
+        size_t i = identity(pointer);                                          \
+        REQUIRE((nominal) && (child) && (inc) && (scope) && (index) < 2 &&     \
+                !ended[i]);                                                    \
+        if ((index) == 1) {                                                    \
+            REQUIRE(i == 1 && !(write) &&                                      \
+                    (const void *)(field) == (const void *)&(pointer)->f1 &&   \
+                    (pointer)->f1 == P1471_SAMPLE && payloads++ == 0);         \
+        } else                                                                 \
+            REQUIRE((const void *)(field) == (const void *)&(pointer)->f0 &&   \
+                    ((write) ? i == 0 : i == 1));                              \
+    } while (0)
+#define NL_HEAP_COPY(source, destination)                                      \
+    do {                                                                       \
+        REQUIRE(originals[1] && (source) == &originals[1]->f0 &&               \
+                reads++ == 0);                                                 \
+        REQUIRE(!(source)->tag && !(source)->ptr && !(destination)->tag &&     \
+                !(destination)->ptr);                                          \
+    } while (0)
+#define NL_HEAP_CHANGE(field, old, ordinal)                                    \
+    do {                                                                       \
+        REQUIRE(originals[0] && originals[1] &&                                \
+                (field) == &originals[0]->f0 && (ordinal) == ++changes);       \
+        REQUIRE((ordinal) <= 2 && (old)->tag == ((ordinal) == 1 ? 0u : 1u));   \
+        REQUIRE((old)->ptr == ((ordinal) == 1 ? NULL : originals[1]));         \
+        REQUIRE((field)->tag == ((ordinal) == 1 ? 1u : 0u) &&                  \
+                (field)->ptr == ((ordinal) == 1 ? originals[1] : NULL));       \
+    } while (0)
+#define NL_HEAP_SCOPE_END(...) (++scope_ends)
+#define NL_HEAP_END(pointer, token)                                            \
+    do {                                                                       \
+        size_t i = identity(pointer);                                          \
+        REQUIRE(!ended[i]++ && (token) == domains[i] && !(pointer)->f0.tag &&  \
+                !(pointer)->f0.ptr);                                           \
+        ++ends;                                                                \
+    } while (0)
+#define NL_HEAP_RAW(bytes, length) REQUIRE((bytes) && (length) == 24)
+#define NL_HEAP_FINALIZE(token)                                                \
+    do {                                                                       \
+        size_t i = (token) == domains[0] ? 0 : 1;                              \
+        REQUIRE((token) && (token) == domains[i] && ended[i] &&                \
+                !finalized[i]++);                                              \
+        ++finals;                                                              \
+    } while (0)
+#define NL_HEAP_RELEASE(handle, bytes, length)                                 \
+    do {                                                                       \
+        size_t i = identity((const nl_node *)(handle));                        \
+        REQUIRE(!pending_free && (handle) == (void *)(bytes) &&                \
+                (length) == 24 && ended[i] && finalized[i]);                   \
+        pending_free = (handle);                                               \
+    } while (0)
+#define NL_LIVE_SEND(pointer, allocation, domain_token, ap, dp)                \
+    do {                                                                       \
+        REQUIRE((pointer) == originals[1] &&                                   \
+                (allocation) == (void *)originals[1] &&                        \
+                (domain_token) == domains[1] && !sends++ && !frees);           \
+        REQUIRE(!(ap)->handle && !(dp)->token);                                \
+    } while (0)
+#define NL_LIVE_ENTER(field, pointer, allocation, token)                       \
+    do {                                                                       \
+        REQUIRE((field) == &originals[0]->f0 && (pointer) == originals[1] &&   \
+                (allocation) == (void *)originals[1] &&                        \
+                (token) == domains[1] && !entries++);                          \
+    } while (0)
+#define NL_LIVE_RETURN(packet)                                                 \
+    do {                                                                       \
+        REQUIRE((packet).ptr == originals[1] &&                                \
+                (packet).allocation.handle == (void *)originals[1] &&          \
+                (packet).domain.token == domains[1] && changes == 2 &&         \
+                !returns_++);                                                  \
+    } while (0)
+#define NL_LIVE_RECEIVE(packet, ap, dp)                                        \
+    do {                                                                       \
+        REQUIRE((packet).ptr == originals[1] &&                                \
+                (packet).allocation.handle == (void *)originals[1] &&          \
+                (packet).domain.token == domains[1] && !(ap)->handle &&        \
+                !(dp)->token && !receives++);                                  \
+    } while (0)
+#define NL_HEAP_HANDOFF(pointer, allocation, domain_token, ap, dp)             \
+    do {                                                                       \
+        REQUIRE((pointer) == originals[1] &&                                   \
+                (allocation) == (void *)originals[1] &&                        \
+                (domain_token) == domains[1] && frees == 1 && !(ap)->handle && \
+                !(dp)->token);                                                 \
+    } while (0)
+#define NL_HEAP_RECEIVER_ENTER(pointer, allocation, domain_token, frame, ps,   \
+                               as, ds, ap, dp)                                 \
+    do {                                                                       \
+        REQUIRE((pointer) == originals[1] &&                                   \
+                (allocation) == (void *)originals[1] &&                        \
+                (domain_token) == domains[1] &&                                \
+                (ap)->handle == (allocation) &&                                \
+                (dp)->token == (domain_token) && !receiver_entries++);         \
+    } while (0)
+#define NL_HEAP_RECEIVER_EXIT()                                                \
+    do {                                                                       \
+        REQUIRE(frees == 2 && !receiver_exits++);                              \
+    } while (0)
+#define NL_HEAP_RETURNED(ap, dp)                                               \
+    REQUIRE(!(ap)->handle && !(dp)->token && frees == 2)
+#define NL_SCALAR_BOOL_RESULT(value, allocation)                               \
+    do {                                                                       \
+        REQUIRE(!(allocation) && reads == 1 && !bools++ &&                     \
+                (value) == P1463_BOOL_TRUE);                                   \
+        decision = (value);                                                    \
+    } while (0)
+#define NL_SCALAR_IF_CONDITION(value)                                          \
+    do {                                                                       \
+        REQUIRE(!conditions++ && bools == 1 && (value) == decision &&          \
+                !frees && originals[0] && originals[1]);                       \
+    } while (0)
+#define NL_SCALAR_IF_RESULT(arm, value)                                        \
+    do {                                                                       \
+        REQUIRE(!results++ && conditions == 1 &&                               \
+                (arm) == (decision ? 0u : 1u) &&                               \
+                (value) == (decision ? 0u : P1471_SAMPLE));                    \
+        selected = (value);                                                    \
+    } while (0)
+#define NL_HEAP_FINISH()                                                       \
+    do {                                                                       \
+        unsigned n = expected_cleanup();                                       \
+        REQUIRE(reading && sibling && reading != sibling &&                    \
+                calls == (n == 2 ? 2u : 1u) && startup_copies == 1 &&          \
+                bindings == 1 && *reading == expected_delivery() &&            \
+                *sibling == 13);                                               \
+        REQUIRE(delivery_copies == (n == 2 ? 1u : 0u));                        \
+        REQUIRE(trials == (n ? 2u : 1u) && inits == n && ends == n &&          \
+                finals == n && frees == n && !pending_free && !originals[0] && \
+                !originals[1]);                                                \
+        REQUIRE(changes == (n == 2 ? 2u : 0u) &&                               \
+                payloads == (n == 2 ? 1u : 0u) &&                              \
+                reads == (n == 2 ? 1u : 0u) && roots == (n == 2 ? 4u : 0u) &&  \
+                scope_ends == (n == 2 ? 4u : 0u));                             \
+        REQUIRE(bools == (n == 2 ? 1u : 0u) && conditions == bools &&          \
+                results == bools);                                             \
+        REQUIRE(sends == (n == 2 ? 1u : 0u) && receives == sends &&            \
+                entries == sends && returns_ == sends &&                       \
+                receiver_entries == sends && receiver_exits == sends);         \
+        REQUIRE(n != 2 || (selected == expected_delivery() &&                  \
+                           observed_delivery == selected));                    \
+        printf("P1471 H%u same T old87/current0, second calls%zu, final%u "    \
+               "sibling13 cleanup%zu PASS\n",                                  \
+               n, calls - 1, *reading, frees);                                 \
+    } while (0)
+#endif

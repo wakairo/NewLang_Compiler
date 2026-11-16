@@ -460,6 +460,17 @@ static bool copy_around_h_plan(Emit *e, const NLCheckedFragment *body)
         return true; /* Not the new around-H source family. */
     const NLCheckedNodeView *post =
         nl_checked_node_view(body, delivery->next_item);
+    /* A dependency-free Copy of the startup result has no H/T effect. Keep
+     * it in the emitted source order; only the borrowed schedule scans past
+     * this exact same-fragment declaration/use before the second loan. */
+    if (post && post->kind == NL_CHECKED_BINDING) {
+        const NLCheckedNodeView *alias =
+            nl_checked_node_view(body, post->initializer);
+        if (alias && alias->kind == NL_CHECKED_IDENTIFIER &&
+            alias->symbol == prefix->symbol && alias->type == e->u8 &&
+            alias->result_count == 1)
+            post = nl_checked_node_view(body, post->next_item);
+    }
     const NLCheckedNodeView *constructor =
         nl_checked_node_view(body, binding->initializer);
     if (!e->scalar_issued || !e->two_heap || !e->live_tail || e->custody ||
@@ -477,8 +488,8 @@ static bool copy_around_h_plan(Emit *e, const NLCheckedFragment *body)
         post->kind != NL_CHECKED_BINDING || match->type != e->u8 ||
         !match_result_shape(e, body, match) || !match->normal_frame_unchanged ||
         match->captured_frame_closed || match->terminates ||
-        match->normal_arms != 2 || match->item_count != 2 ||
-        binding->symbol > match->match_binding_prefix)
+        (match->normal_arms != 2 && match->normal_arms != 1) ||
+        match->item_count != 2 || binding->symbol > match->match_binding_prefix)
         return reject(e);
     const NLCheckedNodeView *loans[2] = {
         nl_checked_node_view(body, prefix->initializer),
@@ -531,14 +542,18 @@ static bool copy_around_h_plan(Emit *e, const NLCheckedFragment *body)
             nl_checked_match_arm(body, delivery->initializer, i);
         const NLCheckedNodeView *a =
             arm ? nl_checked_node_view(arm, nl_checked_root(arm)) : NULL;
+        const bool terminal = allocated_unit_return_arm(e, arm, a);
         if (!a || a->kind != NL_CHECKED_MATCH_ARM || a->variant < 1 ||
-            a->variant > 2 || seen[a->variant - 1] || a->terminates ||
-            !a->normal_frame_unchanged || !match_result_shape(e, arm, a) ||
+            a->variant > 2 || seen[a->variant - 1] ||
+            (a->terminates ? (!terminal || match->normal_arms != 1)
+                           : (!a->normal_frame_unchanged ||
+                              !match_result_shape(e, arm, a))) ||
             !nl_h_origin_edge(e->origin_root, body, delivery->initializer, i,
                               arm))
             return reject(e);
         seen[a->variant - 1] = true;
-        if (a->variant == 1)
+        if ((!terminal && match->normal_arms == 1) ||
+            (a->variant == 1 && match->normal_arms == 2))
             anchor = nl_checked_context(arm);
     }
     if (!anchor || !copy_original_prefix(p[0].handoff, anchor, &p[0].field) ||
@@ -1139,6 +1154,137 @@ static Local *copy_field(Emit *e, Env *env, const NLCheckedField *f)
             l->copy_child[f->index] == f->child &&
             l->copy_inc[f->index] == f->child_incarnation &&
             l->copy_fact_child[f->index] == f->child_fact)
+            return l;
+    }
+    return NULL;
+}
+
+/* Read a source-issued inherited field before the real unit RETURN. The
+ * completed arm world has ended its locals, so it is never used as a live
+ * world. Only the actual startup call's handoff and the existing runtime
+ * Local can select this nonowning C carrier. Normal/writing lanes are intact.
+ */
+static const Local *copy_terminal_read_field(Emit *e, const Env *env,
+                                             const NLCheckedNodeView *v)
+{
+    const NLCheckedField *f = &v->field;
+    const NLCheckedNodeView *arm =
+        nl_checked_node_view(env->artifact, nl_checked_root(env->artifact));
+    if (e->status != NL_NODE_C_OK || !e->copy_prefix_call ||
+        e->copy_surviving_issuer != e->copy_issuer ||
+        e->copy_expected_calls != 2 || e->copy_calls != 1 || !e->allocations ||
+        e->allocations > 2 || e->copy_h_closed || e->current || e->custody ||
+        !env->parent || env->artifact == e->copy_issuer ||
+        !allocated_unit_return_arm(e, env->artifact, arm) ||
+        env->unit_function_body !=
+            nl_checked_node_view(env->artifact, arm->tail) ||
+        v->kind != NL_CHECKED_FIELD_READ || v->value_use != NL_VALUE_COPIED ||
+        v->type != e->u8 || v->result_count != 1 ||
+        v->results[0].type != e->u8 || !f->present ||
+        !f->dependency_compatible || f->access != NL_ACCESS_READ ||
+        f->nominal != e->copy_type || f->type != e->u8 || f->index > 1)
+        return NULL;
+
+    /* Each exact arm attachment qualifies only its inherited binding prefix.
+     * The chain ends at the constructor's actual source-owned main body;
+     * same-number post-fork symbols/facts cannot select a different Local. */
+    const Env *owner = env;
+    size_t depth = 0;
+    while (owner->artifact != e->copy_issuer) {
+        const Env *parent = owner->parent;
+        if (!parent || ++depth > 2 || !f->base || f->base > owner->prefix ||
+            nl_checked_source(owner->artifact) !=
+                nl_checked_source(parent->artifact))
+            return NULL;
+        size_t matches = 0;
+        for (NLCheckedNodeId id = 1;
+             id <= nl_checked_node_count(parent->artifact); ++id) {
+            const NLCheckedNodeView *m =
+                nl_checked_node_view(parent->artifact, id);
+            if (m->kind != NL_CHECKED_MATCH)
+                continue;
+            const NLCheckedNodeView *trial =
+                nl_checked_node_view(parent->artifact, m->initializer);
+            if (!trial || trial->kind != NL_CHECKED_TRY_ALLOCATE_ONE)
+                continue;
+            for (size_t i = 0; i < 2; ++i)
+                if (nl_checked_match_arm(parent->artifact, id, i) ==
+                    owner->artifact) {
+                    if (++matches != 1 ||
+                        m->match_binding_prefix != owner->prefix ||
+                        !nl_h_origin_edge(e->origin_root, parent->artifact, id,
+                                          i, owner->artifact))
+                        return NULL;
+                }
+        }
+        if (matches != 1)
+            return NULL;
+        owner = parent;
+    }
+    if (owner->parent ||
+        owner->artifact != nl_checked_call_body(
+                               e->origin_root, nl_checked_root(e->origin_root)))
+        return NULL;
+
+    NLCopyBodyParameters p;
+    if (!copy_call_proof(e, e->copy_issuer, e->copy_prefix_call, &p) ||
+        p.field.base != f->base || p.field.parent != f->parent ||
+        p.field.parent_incarnation != f->parent_incarnation)
+        return NULL;
+    NLSemanticBindingView binding;
+    NLSemanticPlaceView original, child, sibling;
+    NLSemanticValueView aggregate, current;
+    if (!nl_semantic_binding_view(p.handoff, f->base, &binding) ||
+        binding.availability != NL_AVAILABLE || binding.type != e->copy_type ||
+        binding.place != f->parent ||
+        !nl_semantic_place_view(p.handoff, f->parent, &original) ||
+        !original.live || !original.independent_root ||
+        !original.implicit_local || original.type != e->copy_type ||
+        original.governing_domain || original.placement.region ||
+        original.fixed_field_count != 2 ||
+        original.incarnation != f->parent_incarnation ||
+        original.current_fact != f->parent_fact ||
+        original.fixed_fields[f->index] != f->child ||
+        !nl_semantic_place_view(p.handoff, f->child, &child) || !child.live ||
+        child.parent_aggregate != f->parent ||
+        child.parent_incarnation != original.incarnation ||
+        child.parent_field_index != f->index ||
+        child.incarnation != f->child_incarnation ||
+        child.current_fact != f->child_fact ||
+        child.current_value != f->old_value ||
+        !nl_semantic_value_view(p.handoff, original.current_value,
+                                &aggregate) ||
+        aggregate.type != e->copy_type ||
+        aggregate.carrier != NL_CARRIER_PLACE ||
+        aggregate.owner_place != f->parent || aggregate.field_count != 2 ||
+        aggregate.fields[f->index] != child.current_value ||
+        !copy_plain(p.handoff, child.current_value, e->u8, &current) ||
+        current.carrier != NL_CARRIER_AGGREGATE || current.owner_place ||
+        current.aggregate_owner != original.current_value ||
+        current.sum_owner ||
+        !scalar_plain(nl_checked_context(env->artifact), v->results[0].value,
+                      e->u8) ||
+        !nl_semantic_place_view(p.handoff, original.fixed_fields[1 - f->index],
+                                &sibling) ||
+        !sibling.live || sibling.parent_aggregate != f->parent ||
+        sibling.parent_incarnation != original.incarnation ||
+        sibling.parent_field_index != 1 - f->index ||
+        aggregate.fields[1 - f->index] != sibling.current_value)
+        return NULL;
+    for (size_t i = 0; i < owner->count; ++i) {
+        const Local *l = &owner->locals[i];
+        if (l->symbol == f->base && l->type == e->copy_type &&
+            l->place == f->parent && l->incarnation == f->parent_incarnation &&
+            l->copy_fact == f->parent_fact &&
+            l->copy_child[f->index] == f->child &&
+            l->copy_inc[f->index] == f->child_incarnation &&
+            l->copy_fact_child[f->index] == f->child_fact &&
+            l->copy_value[f->index] == child.current_value &&
+            l->copy_child[1 - f->index] ==
+                original.fixed_fields[1 - f->index] &&
+            l->copy_inc[1 - f->index] == sibling.incarnation &&
+            l->copy_fact_child[1 - f->index] == sibling.current_fact &&
+            l->copy_value[1 - f->index] == sibling.current_value)
             return l;
     }
     return NULL;
