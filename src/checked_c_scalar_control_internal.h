@@ -79,7 +79,8 @@ static bool scalar_selection_call(Emit *e, Env *env, NLCheckedNodeId id,
                                   const NLCheckedNodeView *call, Value *out)
 {
     NLReadonlySelection plan = {0};
-    if (!nl_readonly_selection_consumer(env->artifact, id, &plan) ||
+    if (!nl_readonly_selection_consumer(e->origin_root, env->artifact, id,
+                                        &plan) ||
         env->depth + 1 >= C_DEPTH)
         return reject(e);
     const NLTypeId types[2] = {e->boolean, e->u8};

@@ -636,12 +636,19 @@ static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
  * Public consumers require the mature whole-world bytes before touching
  * current signatures or formal/Copy metadata. */
 static inline bool
-nl_readonly_selection_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
+nl_readonly_selection_contents(const NLCheckedFragment *origin,
+                               const NLCheckedFragment *f, NLCheckedNodeId id,
                                const NLCheckedFragment **body_out,
                                NLSymbolId formals[2])
 {
-    if (!nl_h_custody_result_valid(f, id) ||
-        !nl_h_custody_result_world_present(f, id))
+    /* The actual enclosing original-H invocation freezes every owned child
+     * at final completion. A nested scalar receipt need not freeze its
+     * caller at the earlier call point. Authenticate that real root first. */
+    if (!origin || !f ||
+        nl_checked_proof_class(origin) != NL_CHECKED_MACHINE_PROVED ||
+        !nl_h_custody_result_world_present(origin, nl_checked_root(origin)) ||
+        !nl_h_origin_validate(origin) || origin->h_origin != f->h_origin ||
+        !nl_h_custody_result_valid(f, id))
         return false;
     const NLSemanticContext *c = nl_checked_context(f);
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);

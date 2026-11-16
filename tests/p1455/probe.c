@@ -56,6 +56,7 @@ NLCheckStatus __wrap_nl_h_custody_seal_result(NLCheckedFragment *p,
 
 typedef struct {
     size_t relay, installer, payload, closed_loans, changes;
+    const NLCheckedFragment *origin;
     NLCheckedFragment *relay_owner;
     NLCheckedNodeId relay_call;
     NLCheckedFragment *installer_owner;
@@ -66,6 +67,10 @@ static bool composition(const NLCheckedFragment *f, CompositionTrace *t,
                         size_t depth)
 {
     CHECK(f && depth < 32);
+    if (!t->origin) {
+        CHECK(depth == 0);
+        t->origin = f;
+    }
     const NLSemanticContext *c = nl_checked_context(f);
     const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
     for (NLCheckedNodeId id = 1; id <= nl_checked_node_count(f); ++id) {
@@ -103,7 +108,8 @@ static bool composition(const NLCheckedFragment *f, CompositionTrace *t,
                       !result.reference_count && !result.owner_place &&
                       !result.domain);
                 NLReadonlySelection selection = {0};
-                CHECK(nl_readonly_selection_consumer(f, id, &selection) &&
+                CHECK(nl_readonly_selection_consumer(t->origin, f, id,
+                                                     &selection) &&
                       selection.body == body && selection.parameters[0] &&
                       selection.parameters[1] &&
                       selection.parameters[0] != selection.parameters[1]);

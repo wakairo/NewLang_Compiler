@@ -10,7 +10,8 @@ typedef struct {
     const NLCheckedFragment *body;
     NLSymbolId parameters[2];
 } NLReadonlySelection;
-bool nl_readonly_selection_consumer(const NLCheckedFragment *, NLCheckedNodeId,
+bool nl_readonly_selection_consumer(const NLCheckedFragment *origin,
+                                    const NLCheckedFragment *, NLCheckedNodeId,
                                     NLReadonlySelection *);
 
 #endif
