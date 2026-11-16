@@ -1,0 +1,47 @@
+{
+  "release": "C996",
+  "base": "03e43650620afcdbe545d44b160c8651dd39196f",
+  "input_parent_C2": "f214ca2c8c08e8dc828e4fd077900ea63ca1f44d",
+  "new_complete_sources": 1,
+  "new_law": false,
+  "source_rules": "Draft17.38 \u00a7\u00a74,16.3.8,17.1,18.1/18.2/18.5,27.4",
+  "D": {
+    "SOURCE_CHECK": 0,
+    "owned": "MACHINE, real original H/T/current/closed loans, helper actual/formals/result Unknown",
+    "noncoincident": "second prefix declaration initializer >=5, exact child arm count3, child lookup absent; original parent initializer is copied first_copy identifier",
+    "C2_emit": "unsupported4; pre-existing named output unchanged",
+    "C3_emit": "0, genuine same root/call/arm/world/seal",
+    "H2": {
+      "H_input": 59,
+      "Bool": true,
+      "helper_result": 59,
+      "T_old": 23,
+      "T_current": 59,
+      "sibling": 229,
+      "cleanup": 2,
+      "physical_original": "same T before/after installer"
+    }
+  },
+  "control": "unchanged original B-disabled-alias.nl; H input207, Bool false, helper0, same T old47/current0/sibling241/cleanup2",
+  "negative": {
+    "wrong_initializer": "alter parent initializer to the numerically equal child tail ID: first refusal public NL_CHECKED_PROOF_INVALID before consumer; emitter unsupported/outNULL/length98765; restore MACHINE/retry",
+    "wrong_fragment_arm": "foreign or self parent pointer; public INVALID, no C17 publication",
+    "wrong_world": "foreign live owned world; public INVALID",
+    "Unknown_Known": "set Unknown result known=true; public INVALID"
+  },
+  "native_profiles": [
+    "D GCC O2 passive",
+    "D Clang23.1.3 O2 ASan/UBSan passive",
+    "B GCC O2 passive control",
+    "B Clang23.1.3 O2 ASan/UBSan passive control"
+  ],
+  "guest_max": 4,
+  "CLI_max": 6,
+  "OOM_existing_points": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "OOM_max": 12
+}

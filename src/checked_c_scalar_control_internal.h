@@ -73,6 +73,53 @@ static bool scalar_plain(const NLSemanticContext *c, NLValueId id,
            !v.sum_payload && !v.sum_owner;
 }
 
+/* The same checked scalar body is inlined with fresh C carriers. All
+ * actuals are evaluated once in source order; no caller locals are imported. */
+static bool scalar_selection_call(Emit *e, Env *env, NLCheckedNodeId id,
+                                  const NLCheckedNodeView *call, Value *out)
+{
+    NLReadonlySelection plan = {0};
+    if (!nl_readonly_selection_consumer(e->origin_root, env->artifact, id,
+                                        &plan) ||
+        env->depth + 1 >= C_DEPTH)
+        return reject(e);
+    const NLTypeId types[2] = {e->boolean, e->u8};
+    Value actuals[2] = {{0}};
+    NLCheckedNodeId argument = call->first_argument;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedNodeView *arg = get(env, argument);
+        if (!arg || !expr(e, env, argument, &actuals[i]) ||
+            actuals[i].type != types[i] || !actuals[i].temp)
+            return reject(e);
+        argument = arg->next_argument;
+    }
+    Env body = {
+        .artifact = plan.body, .frame = ++e->frames, .depth = env->depth + 1};
+    out->type = e->u8;
+    out->temp = ++e->temp;
+    if (!put(e, "uint8_t nl_v_%zu;\n{\n", out->temp))
+        return false;
+    for (size_t i = 0; i < 2; ++i)
+        if (!add_local(e, &body, plan.parameters[i], types[i], false) ||
+            !put(e, "const uint8_t nl_b_%zu_%zu=nl_v_%zu;\n", body.frame,
+                 plan.parameters[i], actuals[i].temp))
+            return reject(e);
+    const NLCheckedNodeView *root = get(&body, nl_checked_root(plan.body));
+    NLCheckedNodeId item = root->first_item;
+    for (size_t i = 0; i < root->item_count; ++i) {
+        const NLCheckedNodeView *n = get(&body, item);
+        Value ignored = {0};
+        if (!n || !expr(e, &body, item, &ignored) || ignored.temp)
+            return reject(e);
+        item = n->next_item;
+    }
+    Value result = {0};
+    if (item || !expr(e, &body, root->tail, &result) || result.type != e->u8 ||
+        !result.temp)
+        return reject(e);
+    return put(e, "nl_v_%zu=nl_v_%zu;\n}\n", out->temp, result.temp);
+}
+
 /* The existing readonly-u8 walk admits only a fresh formal and its normal
  * Copy-local chains. Inline that chain using the once-evaluated runtime
  * actual, never a Known summary. T admission still needs its separate actual
@@ -81,8 +128,11 @@ static bool scalar_readonly_call(Emit *e, Env *env, NLCheckedNodeId id,
                                  const NLCheckedNodeView *call, Value *out)
 {
     if (!e->scalar_issued || !e->scalar_control || !e->copy_type ||
-        env->scalar_read_arm || ++e->scalar_readonly_calls != 1 ||
-        !nl_readonly_u8_consumer(env->artifact, id))
+        env->scalar_read_arm || ++e->scalar_readonly_calls != 1)
+        return reject(e);
+    if (call->argument_count == 2)
+        return scalar_selection_call(e, env, id, call, out);
+    if (!nl_readonly_u8_consumer(env->artifact, id))
         return reject(e);
     const NLCheckedNodeView *argument = get(env, call->first_argument);
     const NLSemanticContext *c = nl_checked_context(env->artifact);

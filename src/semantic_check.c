@@ -4071,6 +4071,25 @@ static bool readonly_copy_body(const NLFunctionEntry *fn,
     return true;
 }
 
+/* Constructor classification only; the existing result seal and common
+ * scalar walk authenticate actual formals, both normal arms and final value. */
+static bool readonly_selection_body(const NLFunctionEntry *fn,
+                                    const NLSemanticContext *c)
+{
+    if (fn->count != 2 || !fn->parameters ||
+        fn->parameters[0] != nl_semantic_core_type(c, NL_TYPE_BOOL) ||
+        fn->parameters[1] != nl_semantic_core_type(c, NL_TYPE_U8) ||
+        fn->result != nl_semantic_core_type(c, NL_TYPE_U8) || !fn->body ||
+        !fn->body->syntax)
+        return false;
+    const NLSyntaxView *root =
+        nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
+    const NLSyntaxView *tail = root && root->kind == NL_SYNTAX_BLOCK
+                                   ? nl_syntax_node_view(root->data.block.tail)
+                                   : NULL;
+    return tail && tail->kind == NL_SYNTAX_IF;
+}
+
 /* Constructor filter only. The existing Copy event replay, not this syntax
  * classification, proves the local original, Change, old tail and endings. */
 static bool readonly_local_body(const NLFunctionEntry *fn,
@@ -4197,9 +4216,10 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
      */
     const bool predicate_result =
         !body.definition && function->kind == NL_CHECKED_REGISTERED_CALL &&
-        function->count == 1 && function->parameters &&
-        (function->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) ||
-         readonly_copy_body(function, c)) &&
+        ((function->count == 1 && function->parameters &&
+          (function->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) ||
+           readonly_copy_body(function, c))) ||
+         readonly_selection_body(function, c)) &&
         function->result == nl_semantic_core_type(c, NL_TYPE_U8) &&
         !function->caller_effects && !function->hidden_dependencies &&
         !function->owner_receiver && !function->owner_producer &&

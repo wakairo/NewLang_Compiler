@@ -6,4 +6,12 @@
  * issuer, semantic state or allocation is created by this private adapter. */
 bool nl_readonly_u8_consumer(const NLCheckedFragment *, NLCheckedNodeId);
 
+typedef struct {
+    const NLCheckedFragment *body;
+    NLSymbolId parameters[2];
+} NLReadonlySelection;
+bool nl_readonly_selection_consumer(const NLCheckedFragment *origin,
+                                    const NLCheckedFragment *, NLCheckedNodeId,
+                                    NLReadonlySelection *);
+
 #endif
