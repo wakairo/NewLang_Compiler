@@ -1,0 +1,41 @@
+R1474-C1055-ORACLE-V1
+Selected authority: main 4787e1a2838a2e6d2bc40144f91a556159cc0fe2, CURRENT_SPEC Draft17.38.
+This is an independent BEFORE-RUN prediction, not an observed result.
+Stages: SOURCE/definition-registration -> semantic CHECK -> genuine source-issued PUBLIC_OWNED -> strict C17 -> safe strict guest/native. All actual stages are NOT_RUN.
+SOURCE_ELIGIBILITY_UNCERTAIN: the bounded H+T two-allocation, H payload read, early-return and two-call composition is not verified as a complete selected accepted program. Do not replace this warning with observed parser or P calibration results.
+
+Shared source facts S1/S2/S3:
+- Exactly one completed self-recursive HeapSample nominal (link at index 0, datum:u8 at index 1), one distinct two-u8 Copy AuditPair nominal (metric index 0, guard index 1), and exactly two static same-H fallible allocation sites.
+- The only lexical T original is target; first and second calls of the same non-generic named install_metric have actual ref target@metric of that exact original, not a fresh T or its sibling. The formal place is an ordinary scoped nonexclusive ref<write,u8>. Every call returns actual prior current Copy, while Change(metric) preserves the T root incarnation, guard child and their legitimate current facts. Caller loan boundaries must not erase current state.
+- Initial target: metric=84 and guard=211. First named install_metric(31) is before H allocation: first_previous=84, metric=31, guard=211. Neither H allocation nor cleanup has authority to modify target. Do not roll back the *intentional first* install on failure.
+- Both H sites instantiate the SAME H nominal but each successful site creates separate actual physical original O_front/O_back, distinct live R_front/R_back, Allocation_front/Allocation_back, and D_front/D_back. H roots are never T roots. No equality is inferred from matching numerical internal IDs across world, fragment, issuer, call or declaration.
+- Every fresh OneBacking exactly transfers the actual full Storage and matching Allocation into the correct typed placement/domain. Each live owner is released exactly once via destroy -> erase_slot full Storage -> finalize_domain -> same-R deallocate. Missing or crossed cleanup, source-owned identity forgery, incomplete raw or live loan must reject.
+- Head next is first changed None -> Some(ptr_back) from an actual front ref with D_front, then observed through actual front current link. The Some(chosen_ptr) provenance equals the currently live BACK root in the success world; it gives no separate ownership or Domain. Back payload is read ONLY through ref_from_ptr(read, chosen_ptr, stable_back) under the correct live D_back and a genuine ref<read,HeapSample> field projection. Old copied link values cannot resurrect a destroyed root.
+- H0 (first try_allocate=None): no H original, no H owner or release, no second allocation. Early return unit before second install; metric=31, guard=211; second_previous ABSENT; no second write.
+- H1 (first Some, second None): one actual front root with its R/Allocation/D; fully destroy/erase/finalize/deallocate front once, then real early return unit; second grant NONE, no back cleanup; metric=31, guard=211, second_previous ABSENT.
+- H2 (both Some): two distinct actual heap originals. Current link read selects true Some(ptr_back) (not an integer, text parse or host-selected ptr), reads back datum while it is live, then resets front.next to None. Ends all back and front loans before corresponding exclusive ending, releases back once and front once, and ONLY AFTER both true releases makes second named install on the very same target@metric.
+- S1 H2 selected datum is real u8(0), not None/failure sentinel: from_heap=0; second_previous=31; final metric=0, guard=211; first_previous=84; exactly two named install calls on H2, one on H0/H1.
+- S3 is the nonzero control, identical except back datum is real u8(173): H2 from_heap=173, second_previous=31, final metric=173, guard=211; H0/H1 unchanged.
+- The extra selected_link None arm is statically covered, despite being unreachable after a valid just-committed Some in a correct execution: it releases BOTH live original owners and early-returns without any second install. A false None from the current-value system is not a legitimate way to claim a normal H2 success.
+- S2 differs from S1 only at the actual chosen_ptr read: stable_front is wrongly used as stability evidence for ptr_back while correct stable_back is separately available. These are same-typed but physically different governing Domains. Predict definition-time CHECK REJECT (or earlier SOURCE unsupported/precision refusal). No public owned, C17, guest/native for S2. Never use unchecked to excuse this known-false premise.
+
+Predicted stage outcomes:
+S1 and S3:
+  SOURCE = SOURCE_ELIGIBILITY_UNCERTAIN, not measured; selected constituent spellings alone are insufficient to assert complete SOURCE acceptance.
+  CHECK = conditional expected safe for correct source/issuer/world/loan/return/current semantics; if source unsupported or analysis cannot prove the required relation, conservative REJECT with exact first layer, no PASS.
+  PUBLIC_OWNED = conditional requirement for *actual* H and T roots, real current child, actual vs formal/result state propagation, loan and world identities; forged/partial fragment-origin evidence is FAIL/STOP, not a proof shortcut.
+  C17 = conditional only after true CHECK + public-owned, with full native ownership and no implicit cleanup, strict backend verification. Otherwise NOT_REACHED.
+  STRICT_NATIVE = conditional only if earlier stages safely reach it and a sanctioned source-backed observer can report values and real allocator/free/field events; else NOT_OBSERVED/NOT_REACHED, never PASS.
+S2:
+  SOURCE = same SOURCE_ELIGIBILITY_UNCERTAIN.
+  CHECK = expected REJECT for mismatched front stability/domain on live back original; earlier unsupported/precision refusal is distinct from proving the intended negative.
+  PUBLIC_OWNED/C17/STRICT_NATIVE = NOT_REACHED; deliberately invalid source MUST NOT execute native.
+
+Failure and instrumentation guards:
+- No dummy H allocation, memory seeding, observer-generated owner/Domain/current fact, ABI/FFI, implicit rollback, source-to-expected-text pass, or proof from equal values or numeric IDs.
+- H allocation fail worlds are predictions, not automatically runnable: only actually controllable, legitimate allocation outcomes count. If the future sanctioned executor cannot force H0/H1 or observe local values without changing program/authority, record NOT_OBSERVED.
+- OOM/failed registration must not publish partial H/T issuer/owner or clobber source-backed state. Absence of any actual run means no measured OOM or no-clobber PASS.
+- Every source correction must preserve this original V1 text/SHA and outcome, use new identity/SHA and independently predeclare revised predictions. Prior first-pass evidence cannot be overwritten.
+- A mismatch in source registration/semantic proof/issuer or ownership must STOP before native; distinguish a coverage/precision rejection from an unsafe CHECK=0.
+Future R execution mode GitHub dedicated branch + Actions ONLY, candidate full SHA/tree plus separate Coordination RELEASE required. Current R-FAST, FULL5, PARTIAL, branch, PR, Actions, build, compiler, native, Lean, source execution ALL ZERO.
+Product GO624 PAUSED; H1 #268 HOLD; finite R evidence cannot establish UB-prevention audit locality vs well-factored C.
