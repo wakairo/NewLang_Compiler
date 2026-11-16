@@ -1931,8 +1931,14 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
                           terminal ? nl_checked_node_view(arm, a->tail) : NULL,
                       .backing =
                           a->variant == 2 ? grant->backing : env->backing};
-        if (!put(e, "if (nl_heap_%zu %s NULL) {\nNL_HEAP_ARM(%zu);\n",
-                 allocation, a->variant == 2 ? "!=" : "==", a->variant))
+        /* The authenticated terminal alternative has no normal result. Keep
+         * its complement structurally exclusive so every continuing C path
+         * initializes the sole-normal result, without a dummy value or a
+         * second evaluation. The two-normal lane retains its existing C. */
+        if (v->normal_arms == 1 && i == 1
+                ? !put(e, "else {\nNL_HEAP_ARM(%zu);\n", a->variant)
+                : !put(e, "if (nl_heap_%zu %s NULL) {\nNL_HEAP_ARM(%zu);\n",
+                       allocation, a->variant == 2 ? "!=" : "==", a->variant))
             return false;
         if (a->variant == 2) {
             NLSemanticBindingView binder;
