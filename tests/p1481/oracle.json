@@ -1,0 +1,80 @@
+{
+  "authority": "C1069",
+  "base": "94b149d8aaa9f2afbf70204fc3740a414003eb89",
+  "canonical": "Draft17.38",
+  "inputs": {
+    "P1468-B2-after-cleanup-in-success-arm.nl": {
+      "bytes": 5335,
+      "sha256": "8c53cdde3fe5233a20ff781d4ed8e4174dcb91dcd0cdcb7b4bcea37b7085695e",
+      "expected": "CHECK0/MACHINE"
+    },
+    "Z-success-zero.nl": {
+      "bytes": 5333,
+      "sha256": "849916a28971a5603be09125d8a6a328b9cb88ea21e0c42c61a01037ed7602eb",
+      "expected": "CHECK0/MACHINE"
+    },
+    "I-field-index-one.nl": {
+      "bytes": 5317,
+      "sha256": "96ef767f59d0afeefd028bcd53e6d424c4d89ace88b5b2c3acfec9030e51f635",
+      "expected": "CHECK0/MACHINE"
+    },
+    "N-wrong-domain.nl": {
+      "bytes": 5336,
+      "sha256": "bdb6da78af87b85e00269aeb50b9cd38d240fe78861f2ee71740413649795a9d",
+      "expected": "REJECT"
+    },
+    "N-missing-cleanup.nl": {
+      "bytes": 5272,
+      "sha256": "529fc92a125090276fed666f6c8210e26a4000125b88211b5422c2e6bccc9342",
+      "expected": "REJECT"
+    },
+    "N-loan-escape.nl": {
+      "bytes": 5374,
+      "sha256": "e2f6dd31df7c71adf8d22b929a0682442c1a5969befa4e54a53df77fa0f08ec5",
+      "expected": "REJECT"
+    }
+  },
+  "contract": {
+    "H0": {
+      "normal": true,
+      "second_calls": 0,
+      "old": "ABSENT",
+      "current": 0,
+      "sibling": 13,
+      "frees": 0
+    },
+    "H1": {
+      "normal": true,
+      "second_calls": 0,
+      "old": "ABSENT",
+      "current": 0,
+      "sibling": 13,
+      "frees": 1
+    },
+    "H2": {
+      "normal": true,
+      "second_calls": 1,
+      "old": 0,
+      "current": 181,
+      "sibling": 13,
+      "frees": 2
+    },
+    "zero_H2": {
+      "normal": true,
+      "second_calls": 1,
+      "old": 0,
+      "current": 0,
+      "sibling": 13,
+      "frees": 2
+    },
+    "original": "one unchanged physical T and two genuine H originals; no fake success tag",
+    "startup_old": 87,
+    "structural_joins": 2,
+    "world_qualified_calls": 2,
+    "source_loans_closed": 11,
+    "negative": "wrong Domain/unterminated responsibility/escaping loan must reject before unsafe C/native",
+    "Stage_A": "definition/actual CHECK0, genuine public MACHINE and Copy validators, two fresh Unknown current joins",
+    "Stage_B": "actual ordinary CLI C17 + raw/passive strict GCC/Clang O0/O2 + sanitizer; old/current/sibling/cleanup/no-clobber",
+    "preserve": "original B2/oracle/FIRST/RED immutable; this is a prospective separate oracle"
+  }
+}
