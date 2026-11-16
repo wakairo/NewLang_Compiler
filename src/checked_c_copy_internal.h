@@ -1233,6 +1233,7 @@ static const Local *copy_terminal_read_field(Emit *e, const Env *env,
         return NULL;
     NLSemanticBindingView binding;
     NLSemanticPlaceView original, child, sibling;
+    NLSemanticValueView aggregate, current;
     if (!nl_semantic_binding_view(p.handoff, f->base, &binding) ||
         binding.availability != NL_AVAILABLE || binding.type != e->copy_type ||
         binding.place != f->parent ||
@@ -1251,14 +1252,24 @@ static const Local *copy_terminal_read_field(Emit *e, const Env *env,
         child.incarnation != f->child_incarnation ||
         child.current_fact != f->child_fact ||
         child.current_value != f->old_value ||
-        !scalar_plain(p.handoff, child.current_value, e->u8) ||
+        !nl_semantic_value_view(p.handoff, original.current_value,
+                                &aggregate) ||
+        aggregate.type != e->copy_type ||
+        aggregate.carrier != NL_CARRIER_PLACE ||
+        aggregate.owner_place != f->parent || aggregate.field_count != 2 ||
+        aggregate.fields[f->index] != child.current_value ||
+        !copy_plain(p.handoff, child.current_value, e->u8, &current) ||
+        current.carrier != NL_CARRIER_AGGREGATE || current.owner_place ||
+        current.aggregate_owner != original.current_value ||
+        current.sum_owner ||
         !scalar_plain(nl_checked_context(env->artifact), v->results[0].value,
                       e->u8) ||
         !nl_semantic_place_view(p.handoff, original.fixed_fields[1 - f->index],
                                 &sibling) ||
         !sibling.live || sibling.parent_aggregate != f->parent ||
         sibling.parent_incarnation != original.incarnation ||
-        sibling.parent_field_index != 1 - f->index)
+        sibling.parent_field_index != 1 - f->index ||
+        aggregate.fields[1 - f->index] != sibling.current_value)
         return NULL;
     for (size_t i = 0; i < owner->count; ++i) {
         const Local *l = &owner->locals[i];
