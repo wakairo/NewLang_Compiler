@@ -294,15 +294,35 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
             (w->incoming && n->symbol == w->incoming && n->type == w->u8))
             origin = c->bindings[n->symbol - 1].view.value;
         else {
+            const NLCheckedFragment *declaration_owner =
+                w->declarations ? w->declarations : w->body;
             const NLCheckedNodeView *declaration = nl_checked_node_view(
-                w->declarations ? w->declarations : w->body,
-                w->bindings[n->symbol - 1]);
+                declaration_owner, w->bindings[n->symbol - 1]);
             const NLCheckedNodeView *init =
-                declaration
-                    ? nl_checked_node_view(w->body, declaration->initializer)
-                    : NULL;
-            if (!init || init->type != n->type ||
-                declaration->span.end_byte > n->span.start_byte)
+                declaration ? nl_checked_node_view(declaration_owner,
+                                                   declaration->initializer)
+                            : NULL;
+            const bool scalar_initializer =
+                init && (init->kind == NL_CHECKED_IDENTIFIER ||
+                         init->kind == NL_CHECKED_U8_LITERAL ||
+                         init->kind == NL_CHECKED_USIZE_LITERAL ||
+                         init->kind == NL_CHECKED_USIZE_EQUALITY ||
+                         init->kind == NL_CHECKED_USIZE_LESS_THAN ||
+                         init->kind == NL_CHECKED_IF);
+            if (!declaration || declaration->kind != NL_CHECKED_BINDING ||
+                declaration->symbol != n->symbol || declaration->terminates ||
+                declaration->result_count ||
+                declaration->type != nl_semantic_unit_type(c) ||
+                !scalar_initializer || init->terminates ||
+                init->result_count != 1 || init->type != n->type ||
+                init->results[0].type != n->type ||
+                nl_checked_source(declaration_owner) !=
+                    nl_checked_source(w->body) ||
+                declaration->span.end_byte != init->span.end_byte ||
+                declaration->span.end_byte > n->span.start_byte ||
+                (declaration_owner != w->body &&
+                 (w->body->if_parent != declaration_owner ||
+                  init->results[0].value > w->body->branch_value_prefix)))
                 break;
             origin = init->results[0].value;
         }
