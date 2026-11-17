@@ -254,7 +254,7 @@ static bool tamper(const char *path)
     MUTATE(body->nodes[body->root - 1].results[0].value, 1);
     MUTATE(
         ((NLCheckedFragment *)main.body)->nodes[main.call - 1].first_argument,
-        1);
+        0);
 #undef MUTATE
     CHECK(nl_checked_proof_class(p.artifact) == NL_CHECKED_MACHINE_PROVED);
     /* Mutable display children never transfer B's actual ownership to A.

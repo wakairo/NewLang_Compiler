@@ -8,6 +8,15 @@ foreach(case Q-next-occupancy B-batch-advance M-max-bound)
     add_test(NAME p1492_${case}_owned.unit COMMAND p1492_probe owned
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1492/${case}.nl")
 endforeach()
+if(BUILD_TESTING)
+    find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    add_test(NAME p1492_guarded_usize_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1492/native.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1492"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1492-native" "${NEWLANG_SANITIZER}")
+    set_tests_properties(p1492_guarded_usize_native.integration PROPERTIES TIMEOUT 180 RUN_SERIAL TRUE)
+endif()
 add_test(NAME p1492_current_result_tamper.unit COMMAND p1492_probe tamper
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1492/Q-next-occupancy.nl")
 add_test(NAME p1492_selected_oom.unit COMMAND p1492_probe oom
