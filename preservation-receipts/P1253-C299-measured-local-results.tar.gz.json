@@ -1,0 +1,15 @@
+{
+  "file": "P1253-C299-measured-local-results.tar.gz",
+  "original_root": "/workspace/p1253-c299/durable-local-results",
+  "original_bytes": 183697405,
+  "bytes": 32808895,
+  "sha256": "b05c58223a2c150cd6e6106a6b07ed65ec29112982991fbb339c8811a0641754",
+  "files": 7974,
+  "remote_branch": "archive/track-p-evidence-20261117",
+  "remote_commit": "7787e791af2db308d48616a1469a270e3898dac1",
+  "fresh_download_verified": true,
+  "all_remote_members_verified": 7974,
+  "all_original_members_rechecked": 7974,
+  "original_directory_removed": true,
+  "verified_utc": "2026-11-17T04:41:16Z"
+}

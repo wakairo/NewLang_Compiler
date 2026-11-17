@@ -1,0 +1,15 @@
+{
+  "file": "P1260-C314-measured-binaries-and-raw.tar.gz",
+  "original_root": "/workspace/p1260-c314/actual-local-binaries-and-raw",
+  "original_bytes": 288835596,
+  "bytes": 61032276,
+  "sha256": "95864f474282f9401003f4cac12309499f93cb436ed5d74b41732d25f64a9730",
+  "files": 13419,
+  "remote_branch": "archive/track-p-evidence-20261117",
+  "remote_commit": "7787e791af2db308d48616a1469a270e3898dac1",
+  "fresh_download_verified": true,
+  "all_remote_members_verified": 13419,
+  "all_original_members_rechecked": 13419,
+  "original_directory_removed": true,
+  "verified_utc": "2026-11-17T04:41:14Z"
+}

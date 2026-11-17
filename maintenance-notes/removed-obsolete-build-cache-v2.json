@@ -1,0 +1,203 @@
+{
+  "created_utc": "2026-11-17T04:33:56Z",
+  "files": [
+    {
+      "path": "/workspace/p1387-c768/builds/gcc/p605_public_probe",
+      "bytes": 755592,
+      "sha256": "321de2304df5e4170a215421fc22b9f75d6bdb95906f07b43a6b27a3a891c799",
+      "reason": "obsolete inherited dependency-test executable; own-issue compiler/probe kept"
+    },
+    {
+      "path": "/workspace/p1387-c768/builds/ubsan/p605_public_probe",
+      "bytes": 10699824,
+      "sha256": "6621c33ff682748dc1f4331ca123d065f3fa7af0efbce036031600d5332bafd5",
+      "reason": "obsolete inherited dependency-test executable; own-issue compiler/probe kept"
+    },
+    {
+      "path": "/workspace/p1387-c768/builds/asan/p605_public_probe",
+      "bytes": 5215752,
+      "sha256": "5e3e6738381539cb9ba2cf9faf6b1a39e026c07d29bb165c636bb438252eb4fd",
+      "reason": "obsolete inherited dependency-test executable; own-issue compiler/probe kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlangc.dir/src/main.c.o",
+      "bytes": 159696,
+      "sha256": "cdf82a41828a304723b2dbf85a12c8404b9905581d088fa151e8af1b8a2f9bd9",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_checked.dir/src/checked.c.o",
+      "bytes": 5608,
+      "sha256": "d76aec541f11068bd117b331633ead7df49db89a47438e9b1fc91ceb440b0cae",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_syntax.dir/src/syntax.c.o",
+      "bytes": 2248,
+      "sha256": "6f251db6da49750a3aca1291ae7fddaf294866367c5f7056bc297db2f33b6c83",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_parser.dir/src/parser.c.o",
+      "bytes": 95232,
+      "sha256": "dc089672a34eabbc2e30aad3893820178d77c19070499940c34830a6d4d60457",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_lexer.dir/src/lexer.c.o",
+      "bytes": 2328,
+      "sha256": "f381f0fa3e437b15c71c36b6040292eebcba9bc81ebf72382355b837e0cd337a",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_checked_c_node.dir/src/checked_c_five.c.o",
+      "bytes": 24216,
+      "sha256": "ad0e14a1266f0560bac718efc3df51ea68767fac76006eb0a3b0d18a06a4f262",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_checked_c_node.dir/src/checked_c_node.c.o",
+      "bytes": 176368,
+      "sha256": "56d093477736e3e9cf41be1d247898cb2684bf5e193a123b8e2d06faa1f152b5",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/copy_body.c.o",
+      "bytes": 51528,
+      "sha256": "ef86042dd344c0c49119293821638c85a0b52e3e835220ab5240e259431d61f5",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/raw_storage.c.o",
+      "bytes": 21768,
+      "sha256": "c9fa54e60f39825c47431f92f4eb4543dfb7644fa5fae63a1af97272c6b17089",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/usize_addition.c.o",
+      "bytes": 8120,
+      "sha256": "ed191406c71d9e14c98ac2676c489a9e342bf84436b5b5430a08ef14a0d8d7ae",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/captured_closure.c.o",
+      "bytes": 27920,
+      "sha256": "0b6e9bca9d2b1bb2e2af14b71a77712a0b290cbef76aa267447749e6ffcaca03",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/packet_fork.c.o",
+      "bytes": 15720,
+      "sha256": "13ccf780c3a12e8c8153ca0c0e8ad4696ddc46fe557b9803b546e89deea5fa0b",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/custody.c.o",
+      "bytes": 7344,
+      "sha256": "076530a03cf7c061f63d4b8169054651e3d35794463db056ab734ecaffb6aee1",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/sum.c.o",
+      "bytes": 5208,
+      "sha256": "414287bd3b20b2d100395b1d9b161fc2dbc2843c377777423f42a4283beec13a",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/array4.c.o",
+      "bytes": 20712,
+      "sha256": "3775c0d132c2f5a834e5a49b2b5ea434732152fb7c1e8c4e2f8f8096cdea096c",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/semantic.c.o",
+      "bytes": 38256,
+      "sha256": "bca91c6a613c0d1636ab86f00e7c471cfc795cb1018a0df54ffe5644a2b13c29",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/control.c.o",
+      "bytes": 24392,
+      "sha256": "ad13f1d484e397b3f66b687ce7dbd96b74894959d8968fc864f4f71bc3e9d00d",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/typed_owner.c.o",
+      "bytes": 35168,
+      "sha256": "df9725c744cc78b146b4f8d34ba2efd91b97c4c193542bd91351e02670592592",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/if_field.c.o",
+      "bytes": 36504,
+      "sha256": "0245c9dfc9a2b19b4d3aa71e55c6d142aee3bb0fee75594899279e90bc8226ca",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/recursive_type.c.o",
+      "bytes": 8768,
+      "sha256": "3e8076754e34586747d3473145cb6c57fc544ddb2e2d228894de3783a095760a",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/allocated_join.c.o",
+      "bytes": 1584,
+      "sha256": "e0f1ca71b733e45e897e5e6ee05f1a93b3f7d823d4052e312085dea07c388633",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/allocated_node.c.o",
+      "bytes": 7464,
+      "sha256": "55ed99453be89ca5948027a7b6ca6ce8eb76002c8536a6f6301470dfa429e48c",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/node_links.c.o",
+      "bytes": 11040,
+      "sha256": "be0c494f863d464b3e0404d7c76b4a492725afde6b697cbbefe0bd2eca2151b2",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/h_origin_internal.c.o",
+      "bytes": 14136,
+      "sha256": "d4ffb5e0eb32ddaafdc5a056e78b9935a5032535228cebdb6d0d4af3ca52e557",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/node_join.c.o",
+      "bytes": 11544,
+      "sha256": "22400a72b3511d4bd2cc528cfb12cef430771ee6a07bac029498abae5f4c97c5",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/function_body.c.o",
+      "bytes": 4448,
+      "sha256": "f8067545cca88262ecf8a4c8691cf2fc2a9dc57bcef7b3e63b75a26baa873914",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/fixed_field.c.o",
+      "bytes": 14640,
+      "sha256": "f74794f63b0348dda2a6575ace37c08c90c815c226a1aa025febd815a6dcd350",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o",
+      "bytes": 524568,
+      "sha256": "77107f0b8388e9c58b4a41e430becbe2e6516b8d074b776d77a0bcdf80b2ad5c",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_source.dir/src/source.c.o",
+      "bytes": 3936,
+      "sha256": "37dc49003fbb2f3ce0c14de42521438145cd4d67a265fb0ba2155ec0ce1e830d",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    },
+    {
+      "path": "/workspace/p1354-c636/build/CMakeFiles/newlang_diagnostic.dir/src/diagnostic.c.o",
+      "bytes": 3088,
+      "sha256": "982618e2f0e7ddbd3208ccf00c2f0aa4071fe9c55145054b5393524b4f36ef65",
+      "reason": "reproducible old CMake object; original binaries and logs kept"
+    }
+  ]
+}

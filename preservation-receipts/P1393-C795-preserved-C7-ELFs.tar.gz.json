@@ -1,0 +1,15 @@
+{
+  "file": "P1393-C795-preserved-C7-ELFs.tar.gz",
+  "original_root": "/workspace/p1393-c795/preserved-C7-ELFs",
+  "original_bytes": 181251936,
+  "bytes": 52016196,
+  "sha256": "cd536a8d80a347f6e4095ecece76eb0ba27e20b16738635a73774a0f240a3a05",
+  "files": 27,
+  "remote_branch": "archive/track-p-evidence-20261117",
+  "remote_commit": "7787e791af2db308d48616a1469a270e3898dac1",
+  "fresh_download_verified": true,
+  "all_remote_members_verified": 27,
+  "all_original_members_rechecked": 27,
+  "original_directory_removed": true,
+  "verified_utc": "2026-11-17T04:41:12Z"
+}

@@ -1,0 +1,818 @@
+[
+  {
+    "path": "/workspace/p1364-c670/builds/gcc/libnewlang_source.a",
+    "bytes": 4214,
+    "sha256": "c1dbd763a0590a249f3b214e35f7b294208c588ade2545abc148c2bdc80b5409",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/gcc/libnewlang_checked_c_node.a",
+    "bytes": 200920,
+    "sha256": "892a1511ed2cf485a6d32189f94190ffd5edd031cfc26e614c3d25b5a32b7cf8",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/gcc/libnewlang_diagnostic.a",
+    "bytes": 3246,
+    "sha256": "bec046892cfb0730faec922785dd7d30e17b22d5f71154a4e0f2e2b495b4b24d",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/gcc/libnewlang_syntax.a",
+    "bytes": 2562,
+    "sha256": "b8021a23beebd37f587b461601fe680abce8f5c06ef7e48848d321c1f8858ad6",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/gcc/libnewlang_semantic.a",
+    "bytes": 914400,
+    "sha256": "8a9a029d4d982c45a926efe74931a732f42e27f447a6ca59cc2b1490c5c4f835",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/gcc/libnewlang_lexer.a",
+    "bytes": 2522,
+    "sha256": "39fa613469d85548aac48df90616981f745981fc12afde18557e19c277ab3283",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/gcc/libnewlang_parser.a",
+    "bytes": 95654,
+    "sha256": "503844d54fc780fe2bb0670a78a1007f5592421e1367e08579644b1ebac88978",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/gcc/libnewlang_checked.a",
+    "bytes": 6142,
+    "sha256": "8fd67a8b6b9a2b7d282cd3533a677a2c6ca6dd1890f20a5a8d878ea229af8e22",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/ubsan/libnewlang_source.a",
+    "bytes": 21174,
+    "sha256": "3c9cb176271a6d469dfd58d60d13b770499dc9a7081be790c19b9b2ce776b49b",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/ubsan/libnewlang_checked_c_node.a",
+    "bytes": 3288800,
+    "sha256": "ea45e32b010ad16b6c236743e909fad30a860343fe6f47578ad92c7b44a87f94",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/ubsan/libnewlang_diagnostic.a",
+    "bytes": 28934,
+    "sha256": "be723301f6504b39019f49d2743b9776af41187321eca476425b54930c526d74",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/ubsan/libnewlang_syntax.a",
+    "bytes": 17802,
+    "sha256": "7e47553891e890d8c84c9b0b1bb2a6105a815aaaf93ee757965767e7e31f56f0",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/ubsan/libnewlang_semantic.a",
+    "bytes": 13131904,
+    "sha256": "8f26c8b473257d1762666b4706bd4b15736d59133a3c62582dfc8dd9ad029467",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/ubsan/libnewlang_lexer.a",
+    "bytes": 21898,
+    "sha256": "e250f25e56e3ef292bcfa69337364c4caf13ba25e98167ba6812da9249cae463",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/ubsan/libnewlang_parser.a",
+    "bytes": 442334,
+    "sha256": "62a539d28a6b0e52e4c192b96c4a11ce3a128a4f3283858926baff664efe6188",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/ubsan/libnewlang_checked.a",
+    "bytes": 95502,
+    "sha256": "5168d10ce0db3dc2f13dc2920260a77250662e12d251df1bdd0c4f0d2cbad414",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/asan/libnewlang_source.a",
+    "bytes": 20870,
+    "sha256": "ab093347d2562e93381465b897a8be44a8a1437aa651708bd6a04bef49db6599",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/asan/libnewlang_checked_c_node.a",
+    "bytes": 1184246,
+    "sha256": "2f40fa1feca090e68bb7d4149ec10926025e2d23393b582c677149f68df3efae",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/asan/libnewlang_diagnostic.a",
+    "bytes": 21036,
+    "sha256": "1126f89d085700d2c581ca56907e38f02e5df4cf96d8eecf32830ef34dd03ceb",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/asan/libnewlang_syntax.a",
+    "bytes": 15448,
+    "sha256": "257c33262cc852873a23a98e8652573ef74a349e6d57d98c33473b3c26dbe291",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/asan/libnewlang_semantic.a",
+    "bytes": 4922458,
+    "sha256": "8496eeee1113b92ea7f859fe3cda02ab99804507786a4ccee53ccc01d7a38fae",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/asan/libnewlang_lexer.a",
+    "bytes": 16464,
+    "sha256": "ebdc1bc18104868690f8cefeee81d6f8177930803d29bde087ffad16fe69c558",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/asan/libnewlang_parser.a",
+    "bytes": 353068,
+    "sha256": "4b0ab71772b85e4c1b67a4837d488aa034e231cf8565db361be20a222eb65ad7",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1364-c670/builds/asan/libnewlang_checked.a",
+    "bytes": 54916,
+    "sha256": "b00aa06c23a750eb1c48f4643f3b9f8a46808bffacfac863a64a225dab31c2ab",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/gcc/libnewlang_source.a",
+    "bytes": 4214,
+    "sha256": "c1dbd763a0590a249f3b214e35f7b294208c588ade2545abc148c2bdc80b5409",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/gcc/libnewlang_checked_c_node.a",
+    "bytes": 200920,
+    "sha256": "892a1511ed2cf485a6d32189f94190ffd5edd031cfc26e614c3d25b5a32b7cf8",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/gcc/libnewlang_diagnostic.a",
+    "bytes": 3246,
+    "sha256": "bec046892cfb0730faec922785dd7d30e17b22d5f71154a4e0f2e2b495b4b24d",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/gcc/libnewlang_syntax.a",
+    "bytes": 2562,
+    "sha256": "b8021a23beebd37f587b461601fe680abce8f5c06ef7e48848d321c1f8858ad6",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/gcc/libnewlang_semantic.a",
+    "bytes": 917088,
+    "sha256": "1f80089a31178cae5abc6895767830dfc106ce5bd5552c19073eaa284ce01b49",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/gcc/libnewlang_lexer.a",
+    "bytes": 2522,
+    "sha256": "39fa613469d85548aac48df90616981f745981fc12afde18557e19c277ab3283",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/gcc/libnewlang_parser.a",
+    "bytes": 95654,
+    "sha256": "503844d54fc780fe2bb0670a78a1007f5592421e1367e08579644b1ebac88978",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/gcc/libnewlang_checked.a",
+    "bytes": 6142,
+    "sha256": "8fd67a8b6b9a2b7d282cd3533a677a2c6ca6dd1890f20a5a8d878ea229af8e22",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/ubsan/libnewlang_source.a",
+    "bytes": 21174,
+    "sha256": "8bd7e8244894c2751246198ded178394776ea014be5027f225d7e47e30dbb72d",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/ubsan/libnewlang_checked_c_node.a",
+    "bytes": 3288800,
+    "sha256": "c56a8963d5c67b88416f213500e418841ef230eb91ad727501d0f3b1bf226d47",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/ubsan/libnewlang_diagnostic.a",
+    "bytes": 28934,
+    "sha256": "8e1f66eae4253bfdee804a5a41c0587dfbcc607706b1c73dbfc22dd31e59b470",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/ubsan/libnewlang_syntax.a",
+    "bytes": 17802,
+    "sha256": "3958638b9015c88a676e530d6ba59fb0346de5a0018e502f4136803f802d1893",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/ubsan/libnewlang_semantic.a",
+    "bytes": 13186720,
+    "sha256": "b5f3c630b505e1560e6912e787494b0c3e69a7b7e76fada0fb89776c3be50df5",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/ubsan/libnewlang_lexer.a",
+    "bytes": 21898,
+    "sha256": "93fc1b206cba6c917f78d3afad5ed9211b487287914ee38d4e4b76ae71976144",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/ubsan/libnewlang_parser.a",
+    "bytes": 442334,
+    "sha256": "a7158ae1c0acecb6a283591d7615e51d10c7a4eccda46c0792466ec192cfc39c",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/ubsan/libnewlang_checked.a",
+    "bytes": 95502,
+    "sha256": "dcd17b3146c6a8e486c96504efe57817c15c98055ad8b353934ca7c385d407bd",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/asan/libnewlang_source.a",
+    "bytes": 20870,
+    "sha256": "cce89a0f4782ca0a94652b643d102f9e1f651d8c29b71cb0070182bf20b956c9",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/asan/libnewlang_checked_c_node.a",
+    "bytes": 1184246,
+    "sha256": "21e5acabd54cf1834beae7f510f76d9cf68a5b53e0a750172f47c1a302282b86",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/asan/libnewlang_diagnostic.a",
+    "bytes": 21036,
+    "sha256": "495ef869bc1ed8b4f3e2faec01d117de81ed4359f1114174be8d0c96254530ab",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/asan/libnewlang_syntax.a",
+    "bytes": 15448,
+    "sha256": "030999ae494a0743c67035403b2a57273948a1a178ac4239196353dbe11a2838",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/asan/libnewlang_semantic.a",
+    "bytes": 4937298,
+    "sha256": "691fcd99916a05e826cbcfb8e0438e4412152ebd9d5926c7229e78a20dd6f962",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/asan/libnewlang_lexer.a",
+    "bytes": 16464,
+    "sha256": "2c2c6d82ca7e7f253b796f1a2b3ef1eefdd51f851f7b76862e545198c66a6922",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/asan/libnewlang_parser.a",
+    "bytes": 353068,
+    "sha256": "5f1040294ba09c205c744e3c6527904ee4721544c50a4af0226fd863b18debb7",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1368-c688/builds/asan/libnewlang_checked.a",
+    "bytes": 54916,
+    "sha256": "5f69c221a43cb85e6bcf7ad035fa6cac1778614a933178eee6a97e7cc159ad61",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1372-c701/builds/gcc/libnewlang_source.a",
+    "bytes": 4214,
+    "sha256": "c1dbd763a0590a249f3b214e35f7b294208c588ade2545abc148c2bdc80b5409",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1372-c701/builds/gcc/libnewlang_checked_c_node.a",
+    "bytes": 200920,
+    "sha256": "892a1511ed2cf485a6d32189f94190ffd5edd031cfc26e614c3d25b5a32b7cf8",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1372-c701/builds/gcc/libnewlang_diagnostic.a",
+    "bytes": 3246,
+    "sha256": "bec046892cfb0730faec922785dd7d30e17b22d5f71154a4e0f2e2b495b4b24d",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1372-c701/builds/gcc/libnewlang_syntax.a",
+    "bytes": 2562,
+    "sha256": "b8021a23beebd37f587b461601fe680abce8f5c06ef7e48848d321c1f8858ad6",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1372-c701/builds/gcc/libnewlang_semantic.a",
+    "bytes": 927292,
+    "sha256": "cc64aa9d94c734bbe86edcb53059e3769460456b441f1d3f1ee02b2d73b95e27",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1372-c701/builds/gcc/libnewlang_lexer.a",
+    "bytes": 2522,
+    "sha256": "39fa613469d85548aac48df90616981f745981fc12afde18557e19c277ab3283",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1372-c701/builds/gcc/libnewlang_parser.a",
+    "bytes": 95654,
+    "sha256": "503844d54fc780fe2bb0670a78a1007f5592421e1367e08579644b1ebac88978",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1372-c701/builds/gcc/libnewlang_checked.a",
+    "bytes": 6142,
+    "sha256": "8fd67a8b6b9a2b7d282cd3533a677a2c6ca6dd1890f20a5a8d878ea229af8e22",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/gcc/libnewlang_source.a",
+    "bytes": 4214,
+    "sha256": "c1dbd763a0590a249f3b214e35f7b294208c588ade2545abc148c2bdc80b5409",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/gcc/libnewlang_checked_c_node.a",
+    "bytes": 200928,
+    "sha256": "68a0256cde05f60f03edb49f03a6beee875982ea1dfc8139e7fe02495e22d0c5",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/gcc/libnewlang_diagnostic.a",
+    "bytes": 3246,
+    "sha256": "bec046892cfb0730faec922785dd7d30e17b22d5f71154a4e0f2e2b495b4b24d",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/gcc/libnewlang_syntax.a",
+    "bytes": 2562,
+    "sha256": "b8021a23beebd37f587b461601fe680abce8f5c06ef7e48848d321c1f8858ad6",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/gcc/libnewlang_semantic.a",
+    "bytes": 929500,
+    "sha256": "e0c48367836f0f0dfb0765f3b414383401c1ab4b91c3d57e2707d5fda7078e1c",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/gcc/libnewlang_lexer.a",
+    "bytes": 2522,
+    "sha256": "39fa613469d85548aac48df90616981f745981fc12afde18557e19c277ab3283",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/gcc/libnewlang_parser.a",
+    "bytes": 95654,
+    "sha256": "503844d54fc780fe2bb0670a78a1007f5592421e1367e08579644b1ebac88978",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/gcc/libnewlang_checked.a",
+    "bytes": 6142,
+    "sha256": "1537df7133d4d10131b78eb671818977e414336363bb97aabc79cb88377ccb67",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/ubsan/libnewlang_source.a",
+    "bytes": 21174,
+    "sha256": "37a88fc1d6850465909cdf037f241e24cfc27ae8b5e9f3fb2dfe7bdc76a7f1e3",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/ubsan/libnewlang_checked_c_node.a",
+    "bytes": 3290384,
+    "sha256": "3edd5087e4e6f6f86b4a77685ad36e0729d6c979240655d3830550ae6c50bbd1",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/ubsan/libnewlang_diagnostic.a",
+    "bytes": 28934,
+    "sha256": "62bb5e75da8ca44c6001fda7673a6a84f742500e2906f0c52248b701fbdb7c6f",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/ubsan/libnewlang_syntax.a",
+    "bytes": 17802,
+    "sha256": "54e50858d88a692a4c499f6ad57ebfd23b8f6b626210cc391c19828d36d3e64c",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/ubsan/libnewlang_semantic.a",
+    "bytes": 13374084,
+    "sha256": "529b03e7f2b4846e5ae7ba1273d79a2d95f0aef3ad3238dd2acc866ca07badf5",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/ubsan/libnewlang_lexer.a",
+    "bytes": 21898,
+    "sha256": "55d5345dd4efefca1d7e0c59b3e99804072d266cda35abba26c1de996f6189ba",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/ubsan/libnewlang_parser.a",
+    "bytes": 442334,
+    "sha256": "2886017a4aa1802b3d9afc861c5df741548fd9ab93dc3733ec959f168321b7eb",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/ubsan/libnewlang_checked.a",
+    "bytes": 95502,
+    "sha256": "4ca9eafb189e5fad16ed763228d5b7a827a897854395686c9c9530a9e8f7e331",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/asan/libnewlang_source.a",
+    "bytes": 20870,
+    "sha256": "6c7c649e3217d253d5f8b1cf2c4021f30d3467280cb1f13f0c1992b415296750",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/asan/libnewlang_checked_c_node.a",
+    "bytes": 1185654,
+    "sha256": "4607779112d976bb94ee98a7b11d92ff70c787a209b47a74a14df8e01ca70da0",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/asan/libnewlang_diagnostic.a",
+    "bytes": 21036,
+    "sha256": "b689dccd225be928407c6451c4e07c0ae8ba4793be192b002f40547327d53657",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/asan/libnewlang_syntax.a",
+    "bytes": 15448,
+    "sha256": "1434150a9d267b21e5ff634fba164408e31cbaaf25394f733c0e5eaecbc2b76e",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/asan/libnewlang_semantic.a",
+    "bytes": 4998184,
+    "sha256": "04688b74aedc4f28a8985df814d1dc6640f5800648ec9c1c805009f60faeea86",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/asan/libnewlang_lexer.a",
+    "bytes": 16464,
+    "sha256": "0eabe49eb1bd63009f4b2a99ef38869cb1d4b2657cdcda53ccd3e73662cf9b01",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/asan/libnewlang_parser.a",
+    "bytes": 353068,
+    "sha256": "6822aa00a4fc22cf4ed8e4a247bc3f4f8dc3096dda158e845fec5e3853b5e558",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1387-c768/builds/asan/libnewlang_checked.a",
+    "bytes": 54916,
+    "sha256": "e1040368a656085671ed3c38ad691d26a20758521381a10eeafb8c007e8e286e",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/gcc/libnewlang_source.a",
+    "bytes": 4214,
+    "sha256": "c1dbd763a0590a249f3b214e35f7b294208c588ade2545abc148c2bdc80b5409",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/gcc/libnewlang_checked_c_node.a",
+    "bytes": 200920,
+    "sha256": "892a1511ed2cf485a6d32189f94190ffd5edd031cfc26e614c3d25b5a32b7cf8",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/gcc/libnewlang_diagnostic.a",
+    "bytes": 3246,
+    "sha256": "bec046892cfb0730faec922785dd7d30e17b22d5f71154a4e0f2e2b495b4b24d",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/gcc/libnewlang_syntax.a",
+    "bytes": 2562,
+    "sha256": "b8021a23beebd37f587b461601fe680abce8f5c06ef7e48848d321c1f8858ad6",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/gcc/libnewlang_semantic.a",
+    "bytes": 908528,
+    "sha256": "536cc603256879a3629c56d01f1e7fc73917a530acc9c95d3a57e175d3df5ed3",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/gcc/libnewlang_lexer.a",
+    "bytes": 2522,
+    "sha256": "39fa613469d85548aac48df90616981f745981fc12afde18557e19c277ab3283",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/gcc/libnewlang_parser.a",
+    "bytes": 95654,
+    "sha256": "503844d54fc780fe2bb0670a78a1007f5592421e1367e08579644b1ebac88978",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/gcc/libnewlang_checked.a",
+    "bytes": 6142,
+    "sha256": "8fd67a8b6b9a2b7d282cd3533a677a2c6ca6dd1890f20a5a8d878ea229af8e22",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/ubsan/libnewlang_source.a",
+    "bytes": 21174,
+    "sha256": "7aa7aec6cc628a9e6568789d04bcc08aca4d609d06c69502619b2ced1ae415cd",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/ubsan/libnewlang_checked_c_node.a",
+    "bytes": 3288800,
+    "sha256": "6a685c448a78ff56c8c151ee43a60967e2f7fdccb868f9ae24c5f316c0d5969a",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/ubsan/libnewlang_diagnostic.a",
+    "bytes": 28934,
+    "sha256": "2471109b68c1cd5ed2dd84ea5fd6ee5c9b3c34bad12d39b88ac379851f75cd02",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/ubsan/libnewlang_syntax.a",
+    "bytes": 17802,
+    "sha256": "d9e00a0951dc60f8a17034f8dd5db0e6d9ccbb5f9eac0a45261629fde98d1cf6",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/ubsan/libnewlang_semantic.a",
+    "bytes": 13036832,
+    "sha256": "2b61fbb3bfd5529c5bd674953d8ad124a66894de33dba543eaf24c49153ee52e",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/ubsan/libnewlang_lexer.a",
+    "bytes": 21898,
+    "sha256": "2bb8f2fd14fcfdf96e8c631080b2023ecf7331e20acc4df5c4e7dc9f0b6e4281",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/ubsan/libnewlang_parser.a",
+    "bytes": 442334,
+    "sha256": "020782e548276ad16b0fdd178b9ba2968a734cea4e1fc031c3b58c3ca4b39c6b",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/ubsan/libnewlang_checked.a",
+    "bytes": 95502,
+    "sha256": "b0ceb006ddda6793b47295e07fed016890b3e347c7935e7f373d155be3cc47d6",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/asan/libnewlang_source.a",
+    "bytes": 20870,
+    "sha256": "f14381a43e60d1b69a57e923e5501e8b072a0215793cb408d05dbf5bfe004cd5",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/asan/libnewlang_checked_c_node.a",
+    "bytes": 1184246,
+    "sha256": "5978b074e68bc1f1797005b9fc3bdd9332b448aff8176fa631fffb8909a480ca",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/asan/libnewlang_diagnostic.a",
+    "bytes": 21036,
+    "sha256": "304e4a130cec157d62699bff0d9083014dbe485635f21c3cd4e037e58b05feee",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/asan/libnewlang_syntax.a",
+    "bytes": 15448,
+    "sha256": "93c929dcbef7a8334090eb2a8dd32415590f0a52fde9ef8a6a7fc9245891faf0",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/asan/libnewlang_semantic.a",
+    "bytes": 4897578,
+    "sha256": "060778651a2e2e27148e6228486b58c2dd10d8ff8b5bdc2f2f1b0eb5cd383aa5",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/asan/libnewlang_lexer.a",
+    "bytes": 16464,
+    "sha256": "5caa535dc6842d0f41390420bc3b452e64ce8a79043955ef1e8149239440a1c0",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/asan/libnewlang_parser.a",
+    "bytes": 353068,
+    "sha256": "041232912be5456533671e40ffaf6af46575c33a7af6f9ccb6c0ab37a783cffb",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1359-c653/builds/asan/libnewlang_checked.a",
+    "bytes": 54916,
+    "sha256": "cd7295faa2732890b34270d61427ae1ab175e5319ed700da50915799687d992b",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/gcc/libnewlang_source.a",
+    "bytes": 4214,
+    "sha256": "c1dbd763a0590a249f3b214e35f7b294208c588ade2545abc148c2bdc80b5409",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/gcc/libnewlang_checked_c_node.a",
+    "bytes": 200920,
+    "sha256": "892a1511ed2cf485a6d32189f94190ffd5edd031cfc26e614c3d25b5a32b7cf8",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/gcc/libnewlang_diagnostic.a",
+    "bytes": 3246,
+    "sha256": "bec046892cfb0730faec922785dd7d30e17b22d5f71154a4e0f2e2b495b4b24d",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/gcc/libnewlang_syntax.a",
+    "bytes": 2562,
+    "sha256": "b8021a23beebd37f587b461601fe680abce8f5c06ef7e48848d321c1f8858ad6",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/gcc/libnewlang_semantic.a",
+    "bytes": 928468,
+    "sha256": "fa554423a38d209ba9397e2298989f2281b2b5559423c9becf6d5ba4be94d330",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/gcc/libnewlang_lexer.a",
+    "bytes": 2522,
+    "sha256": "39fa613469d85548aac48df90616981f745981fc12afde18557e19c277ab3283",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/gcc/libnewlang_parser.a",
+    "bytes": 95654,
+    "sha256": "503844d54fc780fe2bb0670a78a1007f5592421e1367e08579644b1ebac88978",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/gcc/libnewlang_checked.a",
+    "bytes": 6142,
+    "sha256": "8fd67a8b6b9a2b7d282cd3533a677a2c6ca6dd1890f20a5a8d878ea229af8e22",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/ubsan/libnewlang_source.a",
+    "bytes": 21174,
+    "sha256": "94a224c96debbc03a2f7d9e45242694496675870a7ca883fe41a560fc238fb06",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/ubsan/libnewlang_checked_c_node.a",
+    "bytes": 3289880,
+    "sha256": "ccf67f19750c1d4b4b0a09f513f718a1acd7a78d0715e70c2fe0a91b7c4ec4d0",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/ubsan/libnewlang_diagnostic.a",
+    "bytes": 28934,
+    "sha256": "9b319c0e500888f241e8479896ac77e56e78c90cb1dbb09e3ec17299da334a2f",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/ubsan/libnewlang_syntax.a",
+    "bytes": 17802,
+    "sha256": "a108a9da57e8f838db68cd01aace552f53393c7ce88b7237f85a098c70981184",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/ubsan/libnewlang_semantic.a",
+    "bytes": 13360892,
+    "sha256": "1bfe4249a945bb3be8bf1d2e2fc4acd1f9e3fd4e272d0167b7cc512d43a79046",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/ubsan/libnewlang_lexer.a",
+    "bytes": 21898,
+    "sha256": "8c0cb5975640fc9ed1a106b718605cc9d3a542b09268f2a99e684d7fe0b96391",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/ubsan/libnewlang_parser.a",
+    "bytes": 442334,
+    "sha256": "90b05f5d001d1e934061df14cd42589bffb39ab93cdcd3cbca014dfbf2bfd2ff",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/ubsan/libnewlang_checked.a",
+    "bytes": 95502,
+    "sha256": "605818d4dce29ab173d02406d481a5b2e693bb6064a4241032245ccdc33fc024",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/asan/libnewlang_source.a",
+    "bytes": 20870,
+    "sha256": "eb310e94d2c3a020cf0720eabf65269826a6068d5becd15af9fc494174d4ee66",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/asan/libnewlang_checked_c_node.a",
+    "bytes": 1185334,
+    "sha256": "ad54565d61a3bd9ae5a31cc952fda73865c2d8cad566c48d0e863ef9edb35138",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/asan/libnewlang_diagnostic.a",
+    "bytes": 21036,
+    "sha256": "ba81aea9b56551a43228874847bedd16901691d0aaff7558d5efdf4da96d01da",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/asan/libnewlang_syntax.a",
+    "bytes": 15448,
+    "sha256": "ff11dfbc3e13c6f4616ff2f4b90315f6ad0de3f544021fa7a8e80df54a3c7df5",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/asan/libnewlang_semantic.a",
+    "bytes": 4991496,
+    "sha256": "71c52991878697a48d8deb786f8ce047818f17fb73e8bc09b3d519dc197d4e0e",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/asan/libnewlang_lexer.a",
+    "bytes": 16464,
+    "sha256": "f15c9344d76a1cb73403ecd1cf1ec5208eeb92fa3af813df7c5878ea0016db2c",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/asan/libnewlang_parser.a",
+    "bytes": 353068,
+    "sha256": "f7e7343719ba4da7f9f86e0ba5d23c738e4d6c212ea73ed72053a3b2727e159d",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1375-c725/builds/asan/libnewlang_checked.a",
+    "bytes": 54916,
+    "sha256": "4837ec327b1db6bdbcb4619688daf087de50e171aa9c58ea6ebf47e7f855c1be",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1354-c636/build/libnewlang_source.a",
+    "bytes": 4214,
+    "sha256": "c1dbd763a0590a249f3b214e35f7b294208c588ade2545abc148c2bdc80b5409",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1354-c636/build/libnewlang_checked_c_node.a",
+    "bytes": 200920,
+    "sha256": "892a1511ed2cf485a6d32189f94190ffd5edd031cfc26e614c3d25b5a32b7cf8",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1354-c636/build/libnewlang_diagnostic.a",
+    "bytes": 3246,
+    "sha256": "bec046892cfb0730faec922785dd7d30e17b22d5f71154a4e0f2e2b495b4b24d",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1354-c636/build/libnewlang_syntax.a",
+    "bytes": 2562,
+    "sha256": "b8021a23beebd37f587b461601fe680abce8f5c06ef7e48848d321c1f8858ad6",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1354-c636/build/libnewlang_semantic.a",
+    "bytes": 899896,
+    "sha256": "1c7ba8f8ff097af81335a4ffc66d49a26e26b1f2d69c35e90f37121ff495a513",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1354-c636/build/libnewlang_lexer.a",
+    "bytes": 2522,
+    "sha256": "39fa613469d85548aac48df90616981f745981fc12afde18557e19c277ab3283",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1354-c636/build/libnewlang_parser.a",
+    "bytes": 95654,
+    "sha256": "503844d54fc780fe2bb0670a78a1007f5592421e1367e08579644b1ebac88978",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  },
+  {
+    "path": "/workspace/p1354-c636/build/libnewlang_checked.a",
+    "bytes": 6142,
+    "sha256": "8fd67a8b6b9a2b7d282cd3533a677a2c6ca6dd1890f20a5a8d878ea229af8e22",
+    "reason": "reproducible obsolete static archive; measured ELF/source/oracle/log/config retained"
+  }
+]
