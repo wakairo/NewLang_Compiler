@@ -1,5 +1,6 @@
 #include "copy_body_internal.h"
 #include "copy_old_result_internal.h"
+#include "guarded_usize_internal.h"
 #include "h_origin_internal.h"
 #include "if_field_internal.h"
 #include "linear_break_internal.h"
@@ -43,6 +44,7 @@ typedef struct Check {
     NLSemanticContext *context;
     NLCheckedFragment *artifact;
     const NLSource *source;
+    const NLSemanticContext *guard_entry; /* synchronous actual IF prefix */
     size_t depth;
     size_t binding_floor, namespace_floor;
     size_t body_function, body_steps;
@@ -2797,11 +2799,20 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
     }
     const NLSemanticValueView a = c->values[lhs.results[0].value - 1];
     const NLSemanticValueView b = c->values[rhs.results[0].value - 1];
-    const bool known = a.scalar_known && b.scalar_known;
+    /* A bound proves a conditional operation for every input, not a concrete
+     * successor. Keep even concrete replays conservative: CHECK visits both
+     * arms, including the unselected x==MAX true arm. */
+    const NLSymbolId formal = check->function_binding_floor + 1;
+    const bool guarded =
+        !subtraction && !check->loop && check->in_function_body &&
+        nl_guarded_usize_permitted(check->artifact, c, check->guard_entry,
+                                   check->body_function, formal, source, left,
+                                   right);
+    const bool known = !guarded && a.scalar_known && b.scalar_known;
     if (a.dependencies != NL_DEPENDENCY_FREE ||
         b.dependencies != NL_DEPENDENCY_FREE || a.value_dependency_count != 0 ||
         b.value_dependency_count != 0 ||
-        (!known && !stutter_quantity(check, source, left, right) &&
+        (!known && !guarded && !stutter_quantity(check, source, left, right) &&
          !current_quantity(check, source, left, right))) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
              syntax->data.equality.operator_span,
@@ -2856,7 +2867,14 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
               nl_usize_arithmetic_capture(check->artifact, id, source, c),
               syntax->span))
         return 0;
-    if (id && !known) {
+    if (id && guarded &&
+        !host(check,
+              nl_guarded_usize_capture(check->artifact, id, source, c,
+                                       check->guard_entry, check->body_function,
+                                       formal),
+              syntax->span))
+        return 0;
+    if (id && !known && !guarded) {
         if (check->loop && check->loop->current)
             current_quantity_record(check, id);
         else
@@ -4492,10 +4510,17 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         current_result = body.artifact->bodies[i]->copy_body &&
                          (body.artifact->bodies[i]->copy_body->current_loop ||
                           body.artifact->bodies[i]->copy_body->current_call);
-    if ((predicate_result || scalar_h_read || current_result || result_world) &&
+    NLGuardedUsizePlan quantity_plan;
+    const bool quantity_result =
+        !body.definition &&
+        nl_guarded_usize_body_at(body.artifact, c, body.body_function,
+                                 &quantity_plan);
+    if ((predicate_result || scalar_h_read || current_result || result_world ||
+         quantity_result) &&
         !host(&body,
               nl_h_custody_seal_result(caller->artifact, body.artifact, call_id,
-                                       result_world ? c : NULL),
+                                       result_world || quantity_result ? c
+                                                                       : NULL),
               call_span))
         goto failure;
     if (body.artifact->copy_body && body.artifact->copy_body->current_loop &&
@@ -5132,6 +5157,7 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
     size_t normal = 0, sole = 0;
     for (size_t i = 0; i < 2; ++i) {
         Check branch = *check;
+        branch.guard_entry = c;
         branch.context = NULL;
         branch.artifact = NULL;
         if (!host(&branch, nl_sem_clone(c, &branch.context), syntax->span))
