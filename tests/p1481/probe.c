@@ -36,6 +36,9 @@ typedef struct {
     NLPlaceId root, child;
     NLIncarnationId incarnation;
     const NLCheckedFragment *owners[2];
+    NLCheckedNodeId call_ids[2];
+    NLCopyBodyParameters parameters[2];
+    NLCopyBodyEventView events[2];
 } CurrentTrace;
 
 static bool current_walk(NLCheckedFragment *f, CurrentTrace *t, size_t index,
@@ -114,7 +117,10 @@ static bool current_walk(NLCheckedFragment *f, CurrentTrace *t, size_t index,
                       t->incarnation == p.field.parent_incarnation &&
                       t->owners[0] != f);
             }
-            t->owners[t->calls++] = f;
+            t->owners[t->calls] = f;
+            t->call_ids[t->calls] = i;
+            t->parameters[t->calls] = p;
+            t->events[t->calls++] = e;
         }
         const NLCheckedFragment *body = nl_checked_call_body(f, i);
         if (body)
@@ -224,10 +230,82 @@ static bool tamper1481(const char *path)
         (NLCheckedFragment *)nl_checked_match_arm(foreign_body, match, 1);
     CHECK(edge->artifact && refused(&p, "foreign genuine Some arm"));
     edge->artifact = saved;
+    CurrentTrace t = {0}, foreign = {0};
+    CHECK(current_walk(p.artifact, &t, 0, 181, 0) &&
+          current_walk(other.artifact, &foreign, 0, 181, 0) && t.calls == 2 &&
+          foreign.calls == 2);
+    NLCheckedFragment *owner = (NLCheckedFragment *)t.owners[1];
+    NLCheckedNodeView *last =
+        (NLCheckedNodeView *)nl_checked_node_view(owner, t.call_ids[1]);
+    NLCheckedNodeView *loan =
+        (NLCheckedNodeView *)nl_checked_node_view(owner, t.parameters[1].loan);
+    CHECK(last && loan && owner->context->functions && last->function &&
+          last->function <= owner->context->function_count);
+#define DAMAGE1481(target, replacement, label)                                 \
+    do {                                                                       \
+        unsigned char bytes[sizeof(target)];                                   \
+        memcpy(bytes, &(target), sizeof(target));                              \
+        (target) = (replacement);                                              \
+        bool invalid = refused(&p, label);                                     \
+        memcpy(&(target), bytes, sizeof(target));                              \
+        CHECK(invalid && nl_checked_proof_class(p.artifact) ==                 \
+                             NL_CHECKED_MACHINE_PROVED);                       \
+    } while (0)
+    DAMAGE1481(last->function, 0, "H2 wrong actual function");
+    DAMAGE1481(last->first_argument, 0, "H2 fragment-local argument");
+    DAMAGE1481(last->results[0].value, 0, "H2 missing actual old result");
+    DAMAGE1481(loan->loan.body_nonescape_proved, false, "H2 open loan");
+    DAMAGE1481(owner->context, foreign.owners[1]->context, "H2 foreign world");
+    DAMAGE1481(owner->source, foreign.owners[1]->source, "H2 foreign source");
+    DAMAGE1481(p.artifact->h_origin, other.artifact->h_origin,
+               "H2 foreign issuer");
+    NLFunctionEntry *fn = &owner->context->functions[last->function - 1];
+    DAMAGE1481(fn->parameters, NULL, "H2 missing authentic signature");
+#undef DAMAGE1481
+    NLCopyBodyParameters wrong = t.parameters[1];
+    wrong.field.parent = wrong.field.child;
+    CHECK(nl_checked_copy_body_parameters_validate(owner, t.call_ids[1],
+                                                   &wrong) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT &&
+          nl_checked_copy_body_parameters_validate(owner, t.call_ids[1],
+                                                   &foreign.parameters[1]) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT &&
+          nl_checked_copy_body_event_validate(owner, t.call_ids[1], 0,
+                                              &foreign.events[1]) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
     CHECK(nl_checked_proof_class(p.artifact) == NL_CHECKED_MACHINE_PROVED &&
           emit(&p, NL_NODE_C_OK) && emit(&other, NL_NODE_C_OK));
     destroy(&p);
     destroy(&other);
+    return true;
+}
+
+static bool replay_oom1481(const char *path)
+{
+    Program p = {0};
+    CurrentTrace t = {0};
+    NLCopyCallAnchor anchor = {0};
+    NLSemanticSnapshot before, after;
+    CHECK(ready(path, &p) && actual(&p) &&
+          current_walk(p.artifact, &t, 0, 181, 0) && t.calls == 2 &&
+          nl_copy_state_anchor(p.context, &anchor) == NL_CHECK_OK &&
+          nl_semantic_snapshot(p.context, &before));
+    clone_target = t.events[1].before;
+    CHECK(clone_target);
+    hits = 0;
+    fault = 2;
+    bool ok = emit(&p, NL_NODE_C_OUT_OF_MEMORY);
+    fault = 0;
+    clone_target = NULL;
+    printf("actual H2 Copy replay clone OOM hit=%zu\n", hits);
+    CHECK(ok && hits == 1 && nl_copy_state_matches(p.context, &anchor) &&
+          nl_semantic_snapshot(p.context, &after) &&
+          !memcmp(&before, &after, sizeof(before)) &&
+          nl_checked_copy_body_event_validate(t.owners[1], t.call_ids[1], 0,
+                                              &t.events[1]) == NL_CHECK_OK &&
+          emit(&p, NL_NODE_C_OK));
+    nl_copy_state_destroy(&anchor);
+    destroy(&p);
     return true;
 }
 
@@ -273,7 +351,7 @@ static bool oom1481(const char *path, unsigned point)
     return true;
 }
 
-static bool suite1481(const char *dir, const char *old)
+static bool suite1481(const char *dir, const char *old, bool original_oom)
 {
     char paths[6][1024];
     const char *names[] = {"P1468-B2-after-cleanup-in-success-arm.nl",
@@ -289,8 +367,10 @@ static bool suite1481(const char *dir, const char *old)
     for (size_t i = 3; i < 6; ++i)
         CHECK(rejected1481(paths[i], paths[0]));
     CHECK(tamper1481(paths[0]) && suite(old));
-    for (unsigned point = 1; point <= 4; ++point)
-        CHECK(oom1481(paths[0], point));
+    if (original_oom)
+        for (unsigned point = 1; point <= 4; ++point)
+            CHECK(oom1481(paths[0], point));
+    CHECK(replay_oom1481(paths[0]));
     puts(
         "P1481 actual owned/current/negative/tamper/rollback + old A/B/C PASS");
     return true;
@@ -298,7 +378,9 @@ static bool suite1481(const char *dir, const char *old)
 int main(int argc, char **argv)
 {
     if (argc == 4 && !strcmp(argv[1], "suite"))
-        return suite1481(argv[2], argv[3]) ? 0 : 1;
+        return suite1481(argv[2], argv[3], true) ? 0 : 1;
+    if (argc == 4 && !strcmp(argv[1], "focused"))
+        return suite1481(argv[2], argv[3], false) ? 0 : 1;
     if (argc == 5 && !strcmp(argv[1], "owned"))
         return owned1481(argv[2], strtoul(argv[3], NULL, 10),
                          (unsigned)strtoul(argv[4], NULL, 10))
