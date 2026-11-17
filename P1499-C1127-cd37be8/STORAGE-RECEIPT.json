@@ -1,0 +1,18 @@
+{
+  "scope": "C1127 P-only storage fallback; NEVERMERGE data-only branch",
+  "production_base": "7ea4dc1a2d72e4274433572b7bff3c1dacfd7434",
+  "production_HEAD": "cd37be844a2ea4b1b41cdd7332927ff72f314d4a",
+  "production_tree": "18961738c15972f9590004bb5648ad9eea7f8244",
+  "storage_parent": "96b67f9c865800063dac432df03e3564e8af5dbb",
+  "archive": "P1499-C1122-cd37be8-evidence.tar.gz",
+  "bytes": 292528339,
+  "sha256": "79d158bc3ecc677474d738383878702627217c7b29accf737b7b5f3c60567a8c",
+  "members": 23814,
+  "original_FIRST_RED": "preserved without relabel; includes inherited baseline binary limitation, harness REDs and local retained26 RED",
+  "Release_attempt": "synthetic42B201; real first48MiB URLError; cohort stopped, no retry/publication",
+  "permission_preflight": "current PAT loginwakairo/push true; Git LFS batch200 upload+verify authorized/no quota error; no new subscription",
+  "status_at_commit": "remote push and fresh restoration NOT_RUN; actual verification result will be durably reported in Issue1499 before deletion",
+  "restore": "Fresh independent clone of this data-only branch with empty isolated .git/lfs; fetch only this path. Verify full292528339 bytes/SHA256, read manifest.json, verify all23814 members with safe regular-file extraction, restore raw/base + raw/change.patch and compare raw/sources. Do not execute archived ELFs/compilers/tests. Retain originals on any mismatch.",
+  "budgets": "compiler40/40, selected OOM16/16 NOT RESET; no new compiler/native/build/CI/Lean work",
+  "custody": "P-owned exact archive only; no new F/R/V original material or old verified LFS migration/deletion"
+}
