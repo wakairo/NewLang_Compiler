@@ -819,7 +819,7 @@ bool nl_guarded_usize_body_at(const NLCheckedFragment *f,
                 size_t actual;
                 NLValueId result, inner;
                 if (!target || !body || body->body_owner != target->body ||
-                    body->source != f->source ||
+                    body->source != target->body->source ||
                     !helper_body(body, c, target, &nested) || !arg ||
                     arg->next_argument ||
                     !literal(f, c, arg, call->data.call.arguments, &actual) ||
@@ -850,7 +850,7 @@ bool nl_guarded_usize_body_at(const NLCheckedFragment *f,
 bool nl_guarded_usize_call_valid(const NLCheckedFragment *f,
                                  NLCheckedNodeId call, NLGuardedUsizePlan *out)
 {
-    if (nl_checked_proof_class(f) != NL_CHECKED_MACHINE_PROVED ||
+    if (!out || nl_checked_proof_class(f) != NL_CHECKED_MACHINE_PROVED ||
         !nl_h_custody_result_valid(f, call))
         return false;
     const NLCheckedNodeView *n = nl_checked_node_view(f, call);
