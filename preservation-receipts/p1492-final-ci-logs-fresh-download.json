@@ -1,0 +1,23 @@
+[
+  {
+    "name": "EARLY2-44048660237.zip",
+    "bytes": 110398,
+    "sha256": "b3e1033f6d81f3099cb76220fb9e5b477b6d42d4921a8170145cb25c458b0dcd",
+    "remote_data_commit": "81abed7112d7e4d54290237e9d5a4e2e4d286597",
+    "fresh_download_verified": true
+  },
+  {
+    "name": "FULL5-44048660214.zip",
+    "bytes": 600445,
+    "sha256": "21c3499ed0cb326d764cc377ca5c2d068e15bda3632edf27e43ac892860f4b8d",
+    "remote_data_commit": "81abed7112d7e4d54290237e9d5a4e2e4d286597",
+    "fresh_download_verified": true
+  },
+  {
+    "name": "PARTIAL-44048660255.zip",
+    "bytes": 146799,
+    "sha256": "c271c1cf95ef54244b5d1f86b860ce7dc842ab27209c40c6d7628376593bac51",
+    "remote_data_commit": "81abed7112d7e4d54290237e9d5a4e2e4d286597",
+    "fresh_download_verified": true
+  }
+]

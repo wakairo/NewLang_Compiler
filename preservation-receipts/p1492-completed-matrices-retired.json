@@ -1,0 +1,230 @@
+{
+  "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+  "remote_data_commit": "81abed7112d7e4d54290237e9d5a4e2e4d286597",
+  "archive_sha256": "2f5f87b7374b1eac687b6f116f25331241bd2391d42f8a7a98fd46320f34ee5e",
+  "all121_remote_and_original_members_verified": true,
+  "retired_builds": [
+    {
+      "path": "/workspace/p1492-c1109/build-clang",
+      "label": "clang",
+      "verified_feature_hosts_and_configs": [
+        {
+          "name": "CTestTestfile.cmake",
+          "bytes": 665201,
+          "sha256": "6ce8adaab5b9784effbb4efdecef9cf42a07bbd9f1b8d6b69c7d9b6b4aa2ca15"
+        },
+        {
+          "name": "newlangc",
+          "bytes": 1180816,
+          "sha256": "44542c0a80c15699b169abc9346f5b303004015ae76ba60852a4d939b43d8a1f"
+        },
+        {
+          "name": "p605_public_probe",
+          "bytes": 799600,
+          "sha256": "d2c9d1a65f704692dfd2f1411394b551e9d0a0b7f5b090e72941ec50a623aa7c"
+        },
+        {
+          "name": "compile_commands.json",
+          "bytes": 164386,
+          "sha256": "569035c1b7083096d7c5477b358c3ad8f807830b8c75a9a570f048134e31b09f"
+        },
+        {
+          "name": "p1481_probe",
+          "bytes": 1090640,
+          "sha256": "25ddc5e6a60e43343ec8f54ec5a6c14c6c4db50a96068cf2e165104fee8617ab"
+        },
+        {
+          "name": "CMakeCache.txt",
+          "bytes": 17037,
+          "sha256": "ce61b43d899b657e697279da334944107a284896036abe3f21b758d2d81131a2"
+        },
+        {
+          "name": "p1492_probe",
+          "bytes": 1194056,
+          "sha256": "48e20adb1898d8c53e37e09805208e6d572c194abe9ef5e71615c76f01987ba8"
+        }
+      ],
+      "files": 14,
+      "bytes": 31706505
+    },
+    {
+      "path": "/workspace/p1492-c1109/build-clang23",
+      "label": "clang23",
+      "verified_feature_hosts_and_configs": [
+        {
+          "name": "CTestTestfile.cmake",
+          "bytes": 679452,
+          "sha256": "6ca922c87e7f3b7059dc26334231dbbccc29ec7127d5475f805f40c44beda6a2"
+        },
+        {
+          "name": "newlangc",
+          "bytes": 1184960,
+          "sha256": "85dfa8ba249ea561c9d08b8a43ae06306fdc239f748f872d938a1a3bbf9357e2"
+        },
+        {
+          "name": "p605_public_probe",
+          "bytes": 803744,
+          "sha256": "b4cc779cf07e0f322591d26e105eac3666972882eb92fbda6a0bbeca41014be8"
+        },
+        {
+          "name": "compile_commands.json",
+          "bytes": 186829,
+          "sha256": "4ea22ddbf5116e030b16c7edb092fb36a676d12fe8573a4e9994f6c12fdfb554"
+        },
+        {
+          "name": "p1481_probe",
+          "bytes": 1094784,
+          "sha256": "75921a2182fab69cb1633cb4e35451b5ee843eed7d063c8a6cb0d8f9273beba9"
+        },
+        {
+          "name": "CMakeCache.txt",
+          "bytes": 18159,
+          "sha256": "2eb79e1fb9439608c3be47b5fdbbc36b75392707acb7f9278953e20d4bcec271"
+        },
+        {
+          "name": "p1492_probe",
+          "bytes": 1198200,
+          "sha256": "9301514fb9e26cd9ef46d2c90cd02e2916c9bd9a422ed0687f0ad0a1139228f2"
+        }
+      ],
+      "files": 13,
+      "bytes": 31810391
+    },
+    {
+      "path": "/workspace/p1492-c1109/build-asan",
+      "label": "asan-retry",
+      "verified_feature_hosts_and_configs": [
+        {
+          "name": "CTestTestfile.cmake",
+          "bytes": 675594,
+          "sha256": "9de4048f5c306204cab6cc8b196ad39254294559a99bcac66fcdc818c11837cc"
+        },
+        {
+          "name": "newlangc",
+          "bytes": 5454976,
+          "sha256": "c4cfe0e722a9d2b678fad3e602dca0b85ca4679aac1766d5040908551a5d19fb"
+        },
+        {
+          "name": "p605_public_probe",
+          "bytes": 4270216,
+          "sha256": "f1458ee37da12e8dfe790dd90d6b9c3dd22e31820435ba4e5fdc19658146afc3"
+        },
+        {
+          "name": "compile_commands.json",
+          "bytes": 209572,
+          "sha256": "cda332a306b15e41a75c931e59e8470723948423babd97a85056a9bd13a4b6d0"
+        },
+        {
+          "name": "p1481_probe",
+          "bytes": 5193824,
+          "sha256": "d3d49b9c507fb7f02a92a861c4164dbcac02646fbb12d5ff7bd216203354725b"
+        },
+        {
+          "name": "CMakeCache.txt",
+          "bytes": 18150,
+          "sha256": "f3aae6d3761af2a77b58f3d6ad1e629ac96c4f19b40893ed2b5a315230cafb61"
+        },
+        {
+          "name": "p1492_probe",
+          "bytes": 5494120,
+          "sha256": "baa3e244840c219dbccb746bc1b691b1003e71c3892633de20f4e99c0b42d48f"
+        }
+      ],
+      "files": 13,
+      "bytes": 47951391
+    },
+    {
+      "path": "/workspace/p1492-c1109/build-ubsan",
+      "label": "ubsan-retry",
+      "verified_feature_hosts_and_configs": [
+        {
+          "name": "CTestTestfile.cmake",
+          "bytes": 677294,
+          "sha256": "c734ec6cae4513f378323a82097fc227789c761c5862995ae1727371b5a08922"
+        },
+        {
+          "name": "newlangc",
+          "bytes": 13820216,
+          "sha256": "e528bcdf5f3e1f214e347624be70745438f5ea4790c6bd5b6ebc5c6711392604"
+        },
+        {
+          "name": "p605_public_probe",
+          "bytes": 9612528,
+          "sha256": "ea50be8cd7c1c0966f78550b83306bfeb7c5208bfd73df70bd3f0541739be4d3"
+        },
+        {
+          "name": "compile_commands.json",
+          "bytes": 210616,
+          "sha256": "fe266a4fda73acec37768c65b8a712ed93ab7213f7295f52f59fa6a206d78212"
+        },
+        {
+          "name": "p1481_probe",
+          "bytes": 12827792,
+          "sha256": "6d4049ca32c2b3dad881306dc05579500b87b0068e15d20c22344945d0a24070"
+        },
+        {
+          "name": "CMakeCache.txt",
+          "bytes": 18201,
+          "sha256": "99441d21104fcb2b21b8bfb94c659068218a3b83bceee08c6890a6664fafc4db"
+        },
+        {
+          "name": "p1492_probe",
+          "bytes": 13904696,
+          "sha256": "647f8e3902757ee25a32e6a1e0ccb21d0b25c4be6bc8e005fced2b9f3b76cc0f"
+        }
+      ],
+      "files": 13,
+      "bytes": 77710050
+    },
+    {
+      "path": "/workspace/p1492-c1109/build-no-llvm",
+      "label": "no-llvm",
+      "verified_feature_hosts_and_configs": [
+        {
+          "name": "CTestTestfile.cmake",
+          "bytes": 662800,
+          "sha256": "1b09060e75546b51d7311525ab8b3e0ecb9fccdab76ab0dfe2922581738dbf27"
+        },
+        {
+          "name": "newlangc",
+          "bytes": 1369192,
+          "sha256": "afbe370002ad5ba192f7c281e065206ea2e8958d86d6080a8d6398a0e9da05cc"
+        },
+        {
+          "name": "p605_public_probe",
+          "bytes": 951136,
+          "sha256": "6308181f4e5eaa3fa4652a223159eebffcd880f6193135bb2ffc16b7ca60fd00"
+        },
+        {
+          "name": "compile_commands.json",
+          "bytes": 155089,
+          "sha256": "b4d6b9c3837b5c4868436f26c26c5682aa9027bc469629d06de7faa4609f3461"
+        },
+        {
+          "name": "p1481_probe",
+          "bytes": 1266800,
+          "sha256": "0da4f7482aa1867a6412cd29f1d446071692760bb787d37ecf16c151b3262fa1"
+        },
+        {
+          "name": "CMakeCache.txt",
+          "bytes": 16884,
+          "sha256": "59d17c0d221e1448a404965d9ef1f5ca4f5d2ff8e1fe5b099f4b949af1c88732"
+        },
+        {
+          "name": "p1492_probe",
+          "bytes": 1382432,
+          "sha256": "56bb0dd8173ea216a205fee1a6e18453eef8bd16bb4b1ad54efcd9e26c421c9f"
+        }
+      ],
+      "files": 13,
+      "bytes": 32396222
+    }
+  ],
+  "archived_output_files_retired": 98,
+  "archived_output_bytes": 386426592,
+  "active_source_worktree_retained": "/workspace/p1492-c1103/repo",
+  "active_gcc_compiler_and_probes_retained": "/workspace/p1492-c1103/build-gcc",
+  "common_git_and_sdk_retained": true,
+  "retirement_complete": true,
+  "time_utc": "2026-11-17T09:34:11Z"
+}

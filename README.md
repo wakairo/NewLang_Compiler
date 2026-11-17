@@ -80,7 +80,7 @@ It supplements the complete-local archive without changing that frozen asset.
 `ci-raw/p1492-c1109/` preserves the completed natural original log ZIPs and
 API/test-count receipts for fixed c4997882f981db5ba89dfeb475fe6fc283db2cfb.
 FULL5 44048660214 genuinely passed1125/1125 tests in each of5 jobs including
-LLVM23.1.3 smoke; PARTIAL44048660255 passed1124/1124; EARLY244048660237
+LLVM23.1.3 smoke; PARTIAL44048660255 passed1124/1124; EARLY2 run44048660237
 passed84/84 in each non-Required job. All are first natural attempt1. No manual
 rerun, subsequent Production push, READY, merge or Product GO follows this data.
 
@@ -88,3 +88,10 @@ Archive-destination policy remains undecided: Issue1496 was accepted as a real
 tooling investigation and C1114 assigned Track T1498. Existing verified assets
 remain intact while Release assets/Git LFS/other storage are compared. These
 case-specific receipts do not adopt a new storage backend or migrate archives.
+
+After all8 natural jobs passed, the existing complete-local archive was freshly
+retrieved again and every one of its121 original members matched. Closed Clang,
+ASan/LSan, UBSan and NO-LLVM matrix outputs/configs/feature hosts were matched
+against their archived member manifests before local retirement. The persistent
+active source/common Git and reusable GCC compiler/probes/SDK remain. Restoration
+receipts and final same-head handoff are in `preservation-receipts/p1492-*`.

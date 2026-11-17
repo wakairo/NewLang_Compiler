@@ -1,0 +1,124 @@
+{
+  "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+  "tree": "432c88701cb3cef799c8d6cc9518af2fdd836aa1",
+  "parent": "ad476afaf329bbdadbd49385a612c6fdfb5cc434",
+  "base": "f7c277af59a4c4281c07fd6d3cc1d98f8bf88f48",
+  "canonical": "Draft17.38",
+  "draft_pr": 1495,
+  "required": "6/6 SUCCESS",
+  "natural_early": "2/2 SUCCESS",
+  "ci": [
+    {
+      "id": 44048660214,
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/44048660214",
+      "name": "Compiler validation",
+      "head_sha": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+      "head_branch": "p1492-guarded-usize-result",
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-17T08:39:52Z",
+      "updated_at": "2026-11-17T09:18:35Z",
+      "jobs": [
+        {
+          "id": 133920621599,
+          "name": "GCC Release",
+          "conclusion": "success"
+        },
+        {
+          "id": 133920622057,
+          "name": "UBSan",
+          "conclusion": "success"
+        },
+        {
+          "id": 133920622156,
+          "name": "GCC",
+          "conclusion": "success"
+        },
+        {
+          "id": 133920622181,
+          "name": "Clang",
+          "conclusion": "success"
+        },
+        {
+          "id": 133920622244,
+          "name": "ASan",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 44048660255,
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/44048660255",
+      "name": "Compiler frontend/C17 reference (NO LLVM; PARTIAL)",
+      "head_sha": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+      "head_branch": "p1492-guarded-usize-result",
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-17T08:39:52Z",
+      "updated_at": "2026-11-17T08:48:06Z",
+      "jobs": [
+        {
+          "id": 133920622279,
+          "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 44048660237,
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/44048660237",
+      "name": "Compiler early coding GO (NON-REQUIRED)",
+      "head_sha": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+      "head_branch": "p1492-guarded-usize-result",
+      "run_attempt": 1,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-17T08:39:52Z",
+      "updated_at": "2026-11-17T08:44:43Z",
+      "jobs": [
+        {
+          "id": 133920622114,
+          "name": "Early coding GO ASan (NON-REQUIRED)",
+          "conclusion": "success"
+        },
+        {
+          "id": 133920622399,
+          "name": "Early coding GO UBSan (NON-REQUIRED)",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "old_usage": {
+    "host": 36,
+    "native": 28,
+    "selected_oom": 16
+  },
+  "recovery_usage": {
+    "host": 13,
+    "native": 0,
+    "selected_oom": 0
+  },
+  "required_pairs": 1,
+  "manual": 0,
+  "code_changes_after_first_green": 0,
+  "remaining_p_local_work": "none; return to Coordination for independent review and adoption",
+  "self_ready": false,
+  "self_merge": false,
+  "product_go": "PAUSED",
+  "h1": "HOLD",
+  "archive_backend": "undecided; C1114 accepted Issue1496 and assigned T1498",
+  "verified_archive": "P1492-C1109-complete-local-evidence.tar.gz",
+  "verified_archive_sha256": "2f5f87b7374b1eac687b6f116f25331241bd2391d42f8a7a98fd46320f34ee5e",
+  "immutable_old_hashes": {
+    "tests/p605/frozen.json": "406285052ff13ea9e816f798ca494f2f915a22d8fd080d9deb319974691b561d",
+    "tests/p1492/oracle.json": "850ca33b22fe88ae55897fa15941bc780f772248b2d5909fa1d24092689feb4d",
+    "/workspace/p1492-c1103/ledger.json": "a3a6348943fd34c700b6b81331d112dbce5c1095ca2e88200156ba655e00903c",
+    "/workspace/p1492-c1103/native-ledger.json": "1b3ad4045cc442ca703e0fb02da2e0c04dccf2270a6a1b203b8d514c9a0c52f4"
+  }
+}

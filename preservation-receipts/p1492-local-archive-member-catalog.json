@@ -1,0 +1,491 @@
+{
+  "candidate": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+  "tree": "432c88701cb3cef799c8d6cc9518af2fdd836aa1",
+  "note": "All old REDs retained. No compiler or test result regenerated.",
+  "files": {
+    "candidate-files/CMakeLists.txt": {
+      "bytes": 155804,
+      "sha256": "7dd9d52ccbc7255e26cdfd2ecc0214bed664dc0a434a9a138f87c469ecebd8c3"
+    },
+    "candidate-files/src/c17_guarded_usize_internal.h": {
+      "bytes": 3751,
+      "sha256": "ba135c35bfe18648cf2a5c49234032861a1483d4dd0342590d649ea6ae54d58d"
+    },
+    "candidate-files/src/guarded_usize_internal.h": {
+      "bytes": 1570,
+      "sha256": "62fb846510e385f5d6aa55d4b6ad75b4863b50ef897e8c30a31a82f88b20252d"
+    },
+    "candidate-files/src/main.c": {
+      "bytes": 226948,
+      "sha256": "ea712db68dc58a68f96deeab767fca9d72127111b183feb4be359291cfb82127"
+    },
+    "candidate-files/src/semantic_check.c": {
+      "bytes": 569120,
+      "sha256": "dd59ed21b0410b1e35da1fdac30fd980abf5cfeb74c62ac9b8c3637f9bc14192"
+    },
+    "candidate-files/src/usize_addition.c": {
+      "bytes": 41355,
+      "sha256": "1c6d4319825c43e55fc3d1ad30d42b0868ca1045243b51e00cd87c02c162ba11"
+    },
+    "candidate-files/tests/p1098/historical_forward.py": {
+      "bytes": 7504,
+      "sha256": "58105aeeab30dce103560f5462630b34376a8eeb1b4e133d12857c952d87f338"
+    },
+    "candidate-files/tests/p1492/B-batch-advance.nl": {
+      "bytes": 273,
+      "sha256": "7b8a556aaecabd58a6b76f910720e83e0a53945e6c9131715a61e88cda7deca7"
+    },
+    "candidate-files/tests/p1492/CMakeLists.txt": {
+      "bytes": 1908,
+      "sha256": "c22a7ac211a661081346d37d9496fac110bb7df86e50d77f6ddb268cfb4e7fab"
+    },
+    "candidate-files/tests/p1492/M-max-bound.nl": {
+      "bytes": 293,
+      "sha256": "cb60dc7b31f8b0b72ccd909abf22eeaecfdb8c337b0f461d4842babfcdeb0d07"
+    },
+    "candidate-files/tests/p1492/N-decoy-guard.nl": {
+      "bytes": 246,
+      "sha256": "ff463d9771cec02fa994fea3712bc1a27c45e027aed571b60c6f615fc4e02a54"
+    },
+    "candidate-files/tests/p1492/N-overflow-bound.nl": {
+      "bytes": 224,
+      "sha256": "4482399202571536b28f9ebd0c0d733e8102a0c87a3ab7e95336043d7dae36ea"
+    },
+    "candidate-files/tests/p1492/Q-next-occupancy.nl": {
+      "bytes": 267,
+      "sha256": "033c2b340708ca2a50ad07613819669232bea385a9ddf0f4992b52d099235922"
+    },
+    "candidate-files/tests/p1492/README.md": {
+      "bytes": 2912,
+      "sha256": "f59f314ee1e25c5813e9cbae1f059322d2f76025063cc04eb49f3030d755082b"
+    },
+    "candidate-files/tests/p1492/history/README.md": {
+      "bytes": 958,
+      "sha256": "d7dc55d1ed7ed121c7b429b2f3b81af49673998f3cca44680f09b9721bf49595"
+    },
+    "candidate-files/tests/p1492/history/usize_addition-p605.c": {
+      "bytes": 16811,
+      "sha256": "31e1b76beaae03471fc2243e0a1c8402b95a8ccbd42e2c10a68235f496cfbbc7"
+    },
+    "candidate-files/tests/p1492/native.py": {
+      "bytes": 4013,
+      "sha256": "c0d2ee6ca8b40a289ba42c1e30be4507c72754f8d5c237446b7a3ffe57924e95"
+    },
+    "candidate-files/tests/p1492/oracle.json": {
+      "bytes": 2361,
+      "sha256": "850ca33b22fe88ae55897fa15941bc780f772248b2d5909fa1d24092689feb4d"
+    },
+    "candidate-files/tests/p1492/probe.c": {
+      "bytes": 14191,
+      "sha256": "a99abf584ec59a81a11486d92ac24203091c0e595ce8d4a9dba73279e50bd892"
+    },
+    "original-C1103/ledger.json": {
+      "bytes": 28466,
+      "sha256": "a3a6348943fd34c700b6b81331d112dbce5c1095ca2e88200156ba655e00903c"
+    },
+    "original-C1103/native-ledger.json": {
+      "bytes": 15373,
+      "sha256": "1b3ad4045cc442ca703e0fb02da2e0c04dccf2270a6a1b203b8d514c9a0c52f4"
+    },
+    "recovery/asan-aborted-output.tar.gz": {
+      "bytes": 3816,
+      "sha256": "a3be3f07d9af80cf41d12a749cc95f92861c433d36dac8643a5e365f0115ab3c"
+    },
+    "recovery/asan-reproducible-objects-cleanup.json": {
+      "bytes": 74891,
+      "sha256": "e7366d9741fc06ba451f95619609a68d9b4584d094b1b40031f0741cc0ba43d7"
+    },
+    "recovery/completed-host-reproducible-objects-removed.json": {
+      "bytes": 230279,
+      "sha256": "b85f1a23ef1a1079bc5289b4126003dd5ac969a93b7cbac8d4e568f7e2560da8"
+    },
+    "recovery/final_checks.py": {
+      "bytes": 4585,
+      "sha256": "76ea882d4b432d30fabe1146bb30736de09b667d5dd8bb4a4c565b00aeb1be56"
+    },
+    "recovery/full_suite.py": {
+      "bytes": 2932,
+      "sha256": "d21f8c6ef4b7afc06ef10afa70a442d10c2027f484d57f7deab4a3316e634ca0"
+    },
+    "recovery/full_suite_before_object_cleanup.py": {
+      "bytes": 2225,
+      "sha256": "c1588d0da46cda6127813f227d13000a1b46daf52b6a6756151712cfbd1ca44f"
+    },
+    "recovery/ledger.json": {
+      "bytes": 12330,
+      "sha256": "4f0048b285ae929f55d75e6cc8d99ef567f2d461594ffa2b6688eea79994a729"
+    },
+    "recovery/local-final-issue.md": {
+      "bytes": 4355,
+      "sha256": "3757d73d833bf4d49ad5170f144cf598c8aae334903ca89a05e6381a36acf091"
+    },
+    "recovery/local-final-receipt.json": {
+      "bytes": 4514,
+      "sha256": "2c0173295919b03165a884f10d75bedd347e1f260b272450a88548f56951c57b"
+    },
+    "recovery/pr-body.md": {
+      "bytes": 3669,
+      "sha256": "4109923a6cf6492e9ca00418bf59ce4e38a42edfdfbb6a0b64cb00080b28e2a9"
+    },
+    "recovery/preexisting-gcc-outputs-receipt.json": {
+      "bytes": 17475,
+      "sha256": "fe9e06eb9d6ca5f5083e50d3c80440900c76b1a92d265b0286a7edd79f991598"
+    },
+    "recovery/preexisting-gcc-outputs.archive-receipt.json": {
+      "bytes": 326,
+      "sha256": "03fad6ae101db13dab5cfb05204f6e34abdbe1ef335bf19aa24ff5d4f4c4ad02"
+    },
+    "recovery/preexisting-gcc-outputs.tar.gz": {
+      "bytes": 6637642,
+      "sha256": "d77252f3020f9239756d971675f16f36948b38c756c9e1f55b353158d37d9cc3"
+    },
+    "recovery/preserve_suite.py": {
+      "bytes": 3536,
+      "sha256": "62bd6daa0abc21b2862d4d44e2e269e8414ebfe22c01cdf697200b5920c5c003"
+    },
+    "recovery/results/asan-retry/CMakeCache.txt": {
+      "bytes": 18150,
+      "sha256": "f3aae6d3761af2a77b58f3d6ad1e629ac96c4f19b40893ed2b5a315230cafb61"
+    },
+    "recovery/results/asan-retry/CTestTestfile.cmake": {
+      "bytes": 675594,
+      "sha256": "9de4048f5c306204cab6cc8b196ad39254294559a99bcac66fcdc818c11837cc"
+    },
+    "recovery/results/asan-retry/compile_commands.json": {
+      "bytes": 209572,
+      "sha256": "cda332a306b15e41a75c931e59e8470723948423babd97a85056a9bd13a4b6d0"
+    },
+    "recovery/results/asan-retry/ctest.xml": {
+      "bytes": 755268,
+      "sha256": "bcb8e371a414efc88e0df10f8806254359e9ae4385cce60a77e2fa0d09c62bd5"
+    },
+    "recovery/results/asan-retry/measured-output-and-feature-hosts.tar.gz": {
+      "bytes": 116074834,
+      "sha256": "fdcf65a7d009a6db0419f3c97f23d8294b37b2cd64b34e3f370401e8a2dd7874"
+    },
+    "recovery/results/asan-retry/storage-receipt.json": {
+      "bytes": 57750,
+      "sha256": "449ff18d3d0460852efd295a9be6d09ba10540997b5146fe4b9d3d19b59565fc"
+    },
+    "recovery/results/asan/CMakeCache.txt": {
+      "bytes": 18150,
+      "sha256": "f3aae6d3761af2a77b58f3d6ad1e629ac96c4f19b40893ed2b5a315230cafb61"
+    },
+    "recovery/results/asan/CTestTestfile.cmake": {
+      "bytes": 675594,
+      "sha256": "9de4048f5c306204cab6cc8b196ad39254294559a99bcac66fcdc818c11837cc"
+    },
+    "recovery/results/asan/compile_commands.json": {
+      "bytes": 209572,
+      "sha256": "cda332a306b15e41a75c931e59e8470723948423babd97a85056a9bd13a4b6d0"
+    },
+    "recovery/results/clang/CMakeCache.txt": {
+      "bytes": 17037,
+      "sha256": "ce61b43d899b657e697279da334944107a284896036abe3f21b758d2d81131a2"
+    },
+    "recovery/results/clang/CTestTestfile.cmake": {
+      "bytes": 665201,
+      "sha256": "6ce8adaab5b9784effbb4efdecef9cf42a07bbd9f1b8d6b69c7d9b6b4aa2ca15"
+    },
+    "recovery/results/clang/Testing/Temporary/LastTest.log": {
+      "bytes": 25994216,
+      "sha256": "b43817e88cd4c81ed9d9e175f41dcf64b2c5cdc714d5b15bf9801741596f631a"
+    },
+    "recovery/results/clang/Testing/Temporary/LastTestsFailed.log": {
+      "bytes": 58,
+      "sha256": "2683c609bd3ee513e86a8068a454dc772fb0812afffa8cc46aa49e9ae7d46c6a"
+    },
+    "recovery/results/clang/compile_commands.json": {
+      "bytes": 164386,
+      "sha256": "569035c1b7083096d7c5477b358c3ad8f807830b8c75a9a570f048134e31b09f"
+    },
+    "recovery/results/clang/ctest.xml": {
+      "bytes": 756562,
+      "sha256": "a1aed8b405e46f652032582e395277ff228c8d7644ef39bbdf2cf4000addb266"
+    },
+    "recovery/results/clang/measured-output-and-feature-hosts.tar.gz": {
+      "bytes": 12572476,
+      "sha256": "a8acf68ae0cf6ce7444b398cbdb341ef3f9c37088128c00501d81f0648b7bac7"
+    },
+    "recovery/results/clang/storage-receipt.json": {
+      "bytes": 57921,
+      "sha256": "f7cafb4bfcdc33fbb71624b34882a45877cc7ede5cba2f810f839503aa87dab4"
+    },
+    "recovery/results/clang23/CMakeCache.txt": {
+      "bytes": 18159,
+      "sha256": "2eb79e1fb9439608c3be47b5fdbbc36b75392707acb7f9278953e20d4bcec271"
+    },
+    "recovery/results/clang23/CTestTestfile.cmake": {
+      "bytes": 679452,
+      "sha256": "6ca922c87e7f3b7059dc26334231dbbccc29ec7127d5475f805f40c44beda6a2"
+    },
+    "recovery/results/clang23/Testing/Temporary/LastTest.log": {
+      "bytes": 26043702,
+      "sha256": "ceadf186a900b643d66dc6c38bf5391d9b86a81859a3523e3d7b851f118f34d2"
+    },
+    "recovery/results/clang23/compile_commands.json": {
+      "bytes": 186829,
+      "sha256": "4ea22ddbf5116e030b16c7edb092fb36a676d12fe8573a4e9994f6c12fdfb554"
+    },
+    "recovery/results/clang23/ctest.xml": {
+      "bytes": 757989,
+      "sha256": "a6fb0314c840bc12f2910163a5d8278023fe232e283a42002ca91c4d17ae308a"
+    },
+    "recovery/results/clang23/measured-output-and-feature-hosts.tar.gz": {
+      "bytes": 12842178,
+      "sha256": "c69a5d7901d67d77bf864f5ae52be87cea496fe3c31b770d84cf79bf126a7cb4"
+    },
+    "recovery/results/clang23/storage-receipt.json": {
+      "bytes": 58539,
+      "sha256": "5310cb70be2aeb7334de9fb41684d0db9266962a4b4899e24b451fdb548ff6ed"
+    },
+    "recovery/results/gcc-release-clean2/CMakeCache.txt": {
+      "bytes": 16910,
+      "sha256": "4a8b30d25738b4e401472805dec22f08d1dfb7d925a2eb140699a9c8631f7ab7"
+    },
+    "recovery/results/gcc-release-clean2/CTestTestfile.cmake": {
+      "bytes": 657104,
+      "sha256": "26dd466be87f451d25ca406e9f29aeb5b790cf7d6ee809ccd1297a758cd020b2"
+    },
+    "recovery/results/gcc-release-clean2/Testing/Temporary/LastTest.log": {
+      "bytes": 25983640,
+      "sha256": "8fc50ee854a917cb033d7ac2c1484dc9aec903f0bb2e5df7b335ccdfbcc88a97"
+    },
+    "recovery/results/gcc-release-clean2/Testing/Temporary/LastTestsFailed.log": {
+      "bytes": 556,
+      "sha256": "6d703c5e35e2b1263524d6985328852345711d4c3fa506e40e7c32fc69ef819e"
+    },
+    "recovery/results/gcc-release-clean2/compile_commands.json": {
+      "bytes": 155398,
+      "sha256": "bba7257fe6c7a5adda589bfda3aa9cd4aadfa45c8992ae25ad3d031fee0d1056"
+    },
+    "recovery/results/gcc-release-clean2/ctest.xml": {
+      "bytes": 757735,
+      "sha256": "d85a73e64d2da45a6ad91b9d5b0efe8eec664473ba9b26964cf2982fad61c35a"
+    },
+    "recovery/results/gcc-release-clean2/measured-output-and-feature-hosts.tar.gz": {
+      "bytes": 9187417,
+      "sha256": "8036af444d7f7f7becd8b207ca34664a2ef3b59ef262909f8e7d6fa498000f7c"
+    },
+    "recovery/results/gcc-release-clean2/storage-receipt.json": {
+      "bytes": 57332,
+      "sha256": "ae7b6a7b34bd936d9bd5ea2264ce3be97d1b6d26d23b9a4879e2e46fd1f116a8"
+    },
+    "recovery/results/gcc-release/CMakeCache.txt": {
+      "bytes": 16910,
+      "sha256": "4a8b30d25738b4e401472805dec22f08d1dfb7d925a2eb140699a9c8631f7ab7"
+    },
+    "recovery/results/gcc-release/CTestTestfile.cmake": {
+      "bytes": 657104,
+      "sha256": "26dd466be87f451d25ca406e9f29aeb5b790cf7d6ee809ccd1297a758cd020b2"
+    },
+    "recovery/results/gcc-release/Testing/Temporary/LastTest.log": {
+      "bytes": 25944218,
+      "sha256": "fda158f34edd0616c6dd6314596267269e3981db5e92348ee1d8289b8a954a7b"
+    },
+    "recovery/results/gcc-release/Testing/Temporary/LastTestsFailed.log": {
+      "bytes": 556,
+      "sha256": "6d703c5e35e2b1263524d6985328852345711d4c3fa506e40e7c32fc69ef819e"
+    },
+    "recovery/results/gcc-release/compile_commands.json": {
+      "bytes": 155398,
+      "sha256": "bba7257fe6c7a5adda589bfda3aa9cd4aadfa45c8992ae25ad3d031fee0d1056"
+    },
+    "recovery/results/no-llvm/CMakeCache.txt": {
+      "bytes": 16884,
+      "sha256": "59d17c0d221e1448a404965d9ef1f5ca4f5d2ff8e1fe5b099f4b949af1c88732"
+    },
+    "recovery/results/no-llvm/CTestTestfile.cmake": {
+      "bytes": 662800,
+      "sha256": "1b09060e75546b51d7311525ab8b3e0ecb9fccdab76ab0dfe2922581738dbf27"
+    },
+    "recovery/results/no-llvm/Testing/Temporary/LastTest.log": {
+      "bytes": 25991380,
+      "sha256": "ad1cd76e70f3ebb71d78eb2f5714085b3cd8ccd0d54c14cfea2052fea0f8da18"
+    },
+    "recovery/results/no-llvm/compile_commands.json": {
+      "bytes": 155089,
+      "sha256": "b4d6b9c3837b5c4868436f26c26c5682aa9027bc469629d06de7faa4609f3461"
+    },
+    "recovery/results/no-llvm/ctest.xml": {
+      "bytes": 758219,
+      "sha256": "f0286b13b81c899d5ac8c544197a870d082d30ce1d1231ee2ceab3d8e43083bf"
+    },
+    "recovery/results/no-llvm/measured-output-and-feature-hosts.tar.gz": {
+      "bytes": 8446639,
+      "sha256": "a55247e803298db7da2f2b1b26b116a851cf3a0f799d310c58f53326a8f35d83"
+    },
+    "recovery/results/no-llvm/reproducible-objects-removed.json": {
+      "bytes": 75810,
+      "sha256": "8f268d48d9e9ef3cfe9b5121efe5c85c33b1d84dadc6aca4e3c86c10c45660e4"
+    },
+    "recovery/results/no-llvm/storage-receipt.json": {
+      "bytes": 58543,
+      "sha256": "293b535f145c6ee9af63100e9ad11c303058c32ba4bdf2729c3d180d7bb06edc"
+    },
+    "recovery/results/ubsan-retry/CMakeCache.txt": {
+      "bytes": 18201,
+      "sha256": "99441d21104fcb2b21b8bfb94c659068218a3b83bceee08c6890a6664fafc4db"
+    },
+    "recovery/results/ubsan-retry/CTestTestfile.cmake": {
+      "bytes": 677294,
+      "sha256": "c734ec6cae4513f378323a82097fc227789c761c5862995ae1727371b5a08922"
+    },
+    "recovery/results/ubsan-retry/Testing/Temporary/LastTest.log": {
+      "bytes": 26038367,
+      "sha256": "51689ec94d12628c1cfdbc488efbd6174b1feb806890d1b14197607aca7e899b"
+    },
+    "recovery/results/ubsan-retry/compile_commands.json": {
+      "bytes": 210616,
+      "sha256": "fe266a4fda73acec37768c65b8a712ed93ab7213f7295f52f59fa6a206d78212"
+    },
+    "recovery/results/ubsan-retry/ctest.xml": {
+      "bytes": 755904,
+      "sha256": "494e15697d013927247b058b7cfea873f4fc02d29ca23c96c819fd80475a6483"
+    },
+    "recovery/results/ubsan-retry/measured-output-and-feature-hosts.tar.gz": {
+      "bytes": 49675935,
+      "sha256": "6d0cc3455f4972a1e8fa5c139c3cc2ac6b45d5475c7c9b5bd92d54525bb728e1"
+    },
+    "recovery/results/ubsan-retry/reproducible-objects-removed.json": {
+      "bytes": 75392,
+      "sha256": "1c195cbb45e5cb61c99e6100defcf73a3f7c95ce86da27f24d280bb01e39cf78"
+    },
+    "recovery/results/ubsan-retry/storage-receipt.json": {
+      "bytes": 58211,
+      "sha256": "c89acb52ead1a6a68c97cc6cf35c749b8b9af93c80a7a406861084b626cd238f"
+    },
+    "recovery/results/ubsan/CMakeCache.txt": {
+      "bytes": 18156,
+      "sha256": "9f2657bc3033bdfdae4cdfea6ccaa53a6593af99c23742be5512d836ec28f09b"
+    },
+    "recovery/results/ubsan/CTestTestfile.cmake": {
+      "bytes": 677294,
+      "sha256": "c734ec6cae4513f378323a82097fc227789c761c5862995ae1727371b5a08922"
+    },
+    "recovery/results/ubsan/compile_commands.json": {
+      "bytes": 210616,
+      "sha256": "fe266a4fda73acec37768c65b8a712ed93ab7213f7295f52f59fa6a206d78212"
+    },
+    "recovery/review.py": {
+      "bytes": 1653,
+      "sha256": "097d49c74a3f730af57555d7b7a0fe80279d7644d2ffa48c54ac5e7dcba18231"
+    },
+    "recovery/run.py": {
+      "bytes": 1545,
+      "sha256": "67ee82eb356579d24ee518c8c3987b7ed75c79ec78dc67860aa247af15201b1d"
+    },
+    "recovery/runs/01-R1-historical-and-current-contract/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recovery/runs/01-R1-historical-and-current-contract/stdout": {
+      "bytes": 1316,
+      "sha256": "c28ee7c0e5ad4c7d173038e7e16af45abb0682543f156f772689f5a6d5bc101b"
+    },
+    "recovery/runs/02-R1-gcc-complete-suite/stderr": {
+      "bytes": 27,
+      "sha256": "18e00877dc1071c85cd4f479d451bebeef8309022e46cf8c63b0bed5151984a4"
+    },
+    "recovery/runs/02-R1-gcc-complete-suite/stdout": {
+      "bytes": 182755,
+      "sha256": "613590507349434762066be67f89f968a49f85d0daf509e02e40dd87db209983"
+    },
+    "recovery/runs/03-R1-gcc-complete-fresh/stderr": {
+      "bytes": 659,
+      "sha256": "1f7f7894490b7b28a9a3116188dbae0eb2fed57e981cdab0d50ac908e5e539f4"
+    },
+    "recovery/runs/03-R1-gcc-complete-fresh/stdout": {
+      "bytes": 67590,
+      "sha256": "228a00fc14c851bc90b9032efec6ea80cde83066452a381de8d6756ab72ab841"
+    },
+    "recovery/runs/04-R1-gcc-complete-inode-recovered/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recovery/runs/04-R1-gcc-complete-inode-recovered/stdout": {
+      "bytes": 181494,
+      "sha256": "0a0c076252a0741495e80323f641c2efe18a45f3fa7adf3db671f50af8398eca"
+    },
+    "recovery/runs/05-R1-clang-complete/stderr": {
+      "bytes": 682,
+      "sha256": "ecdedb8ab91d6fdb3e7f7dcf03c6499594f74658b2f68ad1124ff9e667a6e2a9"
+    },
+    "recovery/runs/05-R1-clang-complete/stdout": {
+      "bytes": 224919,
+      "sha256": "766dc4fd1391b2e268cc29c6eb182b3ce9a1cdb69cb570aa2b6606465315cb1d"
+    },
+    "recovery/runs/06-R1-clang23-complete/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recovery/runs/06-R1-clang23-complete/stdout": {
+      "bytes": 224079,
+      "sha256": "606b9491b6683029e90346275e64ad31ba702d4ea34462beb5af0850a02c4f11"
+    },
+    "recovery/runs/07-R1-pinned-format-and-immutability/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recovery/runs/07-R1-pinned-format-and-immutability/stdout": {
+      "bytes": 113,
+      "sha256": "fff234a21780b793f4d7585f674e68695e63a711516d8ef694132e46b7d98f75"
+    },
+    "recovery/runs/08-R1-asan-complete/stderr": {
+      "bytes": 653,
+      "sha256": "a484ee29e6e992b6bf813f53f450186d1fe246f6a7a27f90e354081963d49be3"
+    },
+    "recovery/runs/08-R1-asan-complete/stdout": {
+      "bytes": 173633,
+      "sha256": "91700858f7f9d82b49f011d26b64fa5ca38ca61b710061cb85d5b5bc1df3844e"
+    },
+    "recovery/runs/09-R1-asan-complete-retry/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recovery/runs/09-R1-asan-complete-retry/stdout": {
+      "bytes": 168137,
+      "sha256": "a33afc5c2d5d2e3ecb15f845b89281006991b8decd376db551d3a57bce66824c"
+    },
+    "recovery/runs/10-R1-ubsan-complete/stderr": {
+      "bytes": 1196,
+      "sha256": "8adfae7e111a63c4659712ac2f7a9793c7f389fb727f7df8ef0f83548cb107b9"
+    },
+    "recovery/runs/10-R1-ubsan-complete/stdout": {
+      "bytes": 41415,
+      "sha256": "cecb931edb5105d5983b2e964584658339f3a7f38a881333c7510347b54774fe"
+    },
+    "recovery/runs/11-R1-ubsan-complete-capacity-recovered/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recovery/runs/11-R1-ubsan-complete-capacity-recovered/stdout": {
+      "bytes": 202190,
+      "sha256": "b019ab9daf6bf1349e7bc2f345e4ab6a7a0b08fcaec5e972405d6e73d007497d"
+    },
+    "recovery/runs/12-R1-no-llvm-complete/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recovery/runs/12-R1-no-llvm-complete/stdout": {
+      "bytes": 223943,
+      "sha256": "a7c5717dfe3edfe077146b6ff51397ead3e6c4484cd902d6f1f56de995c3c727"
+    },
+    "recovery/runs/13-R1-final-cli-and-receipts/stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recovery/runs/13-R1-final-cli-and-receipts/stdout": {
+      "bytes": 4514,
+      "sha256": "2c0173295919b03165a884f10d75bedd347e1f260b272450a88548f56951c57b"
+    },
+    "recovery/self-review.md": {
+      "bytes": 2318,
+      "sha256": "5d07ee6dbf7e53036c62479e262194e91effba7d195587db76e9fb4b68082bc8"
+    },
+    "recovery/ubsan-unexecuted-cache-removed.json": {
+      "bytes": 55213,
+      "sha256": "03e3dc5a9efea374fcffad6c8d830fd9a2e05a367275d610bf20ae439993a1e8"
+    }
+  }
+}
