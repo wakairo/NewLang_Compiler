@@ -1,6 +1,7 @@
 #include "newlang/usize_addition.h"
 #include "guarded_usize_internal.h"
 #include "h_origin_internal.h"
+#include "newlang/parser.h"
 #include "newlang/usize_subtraction.h"
 #include "semantic_internal.h"
 #include "syntax_internal.h"
