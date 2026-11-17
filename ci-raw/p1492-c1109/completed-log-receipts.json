@@ -1,0 +1,68 @@
+[
+  {
+    "kind": "PARTIAL",
+    "run": 44048660255,
+    "file": "/workspace/p1492-c1109/ci/PARTIAL-44048660255.zip",
+    "bytes": 146799,
+    "sha256": "c271c1cf95ef54244b5d1f86b860ce7dc842ab27209c40c6d7628376593bac51",
+    "facts": [
+      {
+        "member": "0_Production CHECK + C17_native reference (NO LLVM; PARTIAL).txt",
+        "line": "2026-11-17T08:48:02.3084100Z 100% tests passed, 0 tests failed out of 1124"
+      },
+      {
+        "member": "0_Production CHECK + C17_native reference (NO LLVM; PARTIAL).txt",
+        "line": "2026-11-17T08:48:02.3084423Z Total Test time (real) = 423.75 sec"
+      },
+      {
+        "member": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/6_Execute every registered frontend_C17 CTest (NO LLVM; PARTIAL).txt",
+        "line": "2026-11-17T08:48:02.3084092Z 100% tests passed, 0 tests failed out of 1124"
+      },
+      {
+        "member": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/6_Execute every registered frontend_C17 CTest (NO LLVM; PARTIAL).txt",
+        "line": "2026-11-17T08:48:02.3084409Z Total Test time (real) = 423.75 sec"
+      }
+    ]
+  },
+  {
+    "kind": "EARLY2",
+    "run": 44048660237,
+    "file": "/workspace/p1492-c1109/ci/EARLY2-44048660237.zip",
+    "bytes": 110398,
+    "sha256": "b3e1033f6d81f3099cb76220fb9e5b477b6d42d4921a8170145cb25c458b0dcd",
+    "facts": [
+      {
+        "member": "0_Early coding GO UBSan (NON-REQUIRED).txt",
+        "line": "2026-11-17T08:43:04.8062165Z 100% tests passed, 0 tests failed out of 84"
+      },
+      {
+        "member": "0_Early coding GO UBSan (NON-REQUIRED).txt",
+        "line": "2026-11-17T08:43:04.8062816Z Total Test time (real) = 121.04 sec"
+      },
+      {
+        "member": "Early coding GO UBSan (NON-REQUIRED)/8_Existing 84 CTests (success permits next work, not merge).txt",
+        "line": "2026-11-17T08:43:04.8062115Z 100% tests passed, 0 tests failed out of 84"
+      },
+      {
+        "member": "Early coding GO UBSan (NON-REQUIRED)/8_Existing 84 CTests (success permits next work, not merge).txt",
+        "line": "2026-11-17T08:43:04.8062812Z Total Test time (real) = 121.04 sec"
+      },
+      {
+        "member": "1_Early coding GO ASan (NON-REQUIRED).txt",
+        "line": "2026-11-17T08:44:39.5896364Z 100% tests passed, 0 tests failed out of 84"
+      },
+      {
+        "member": "1_Early coding GO ASan (NON-REQUIRED).txt",
+        "line": "2026-11-17T08:44:39.5917602Z Total Test time (real) = 237.09 sec"
+      },
+      {
+        "member": "Early coding GO ASan (NON-REQUIRED)/8_Existing 84 CTests (success permits next work, not merge).txt",
+        "line": "2026-11-17T08:44:39.5896327Z 100% tests passed, 0 tests failed out of 84"
+      },
+      {
+        "member": "Early coding GO ASan (NON-REQUIRED)/8_Existing 84 CTests (success permits next work, not merge).txt",
+        "line": "2026-11-17T08:44:39.5917598Z Total Test time (real) = 237.09 sec"
+      }
+    ]
+  }
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "id": 44048660214,
+    "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/44048660214",
+    "name": "Compiler validation",
+    "head_sha": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+    "head_branch": "p1492-guarded-usize-result",
+    "run_attempt": 1,
+    "event": "pull_request",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-17T08:39:52Z",
+    "updated_at": "2026-11-17T09:18:35Z",
+    "jobs": [
+      {
+        "id": 133920621599,
+        "name": "GCC Release",
+        "conclusion": "success"
+      },
+      {
+        "id": 133920622057,
+        "name": "UBSan",
+        "conclusion": "success"
+      },
+      {
+        "id": 133920622156,
+        "name": "GCC",
+        "conclusion": "success"
+      },
+      {
+        "id": 133920622181,
+        "name": "Clang",
+        "conclusion": "success"
+      },
+      {
+        "id": 133920622244,
+        "name": "ASan",
+        "conclusion": "success"
+      }
+    ]
+  },
+  {
+    "id": 44048660255,
+    "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/44048660255",
+    "name": "Compiler frontend/C17 reference (NO LLVM; PARTIAL)",
+    "head_sha": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+    "head_branch": "p1492-guarded-usize-result",
+    "run_attempt": 1,
+    "event": "pull_request",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-17T08:39:52Z",
+    "updated_at": "2026-11-17T08:48:06Z",
+    "jobs": [
+      {
+        "id": 133920622279,
+        "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+        "conclusion": "success"
+      }
+    ]
+  },
+  {
+    "id": 44048660237,
+    "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/44048660237",
+    "name": "Compiler early coding GO (NON-REQUIRED)",
+    "head_sha": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+    "head_branch": "p1492-guarded-usize-result",
+    "run_attempt": 1,
+    "event": "pull_request",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-17T08:39:52Z",
+    "updated_at": "2026-11-17T08:44:43Z",
+    "jobs": [
+      {
+        "id": 133920622114,
+        "name": "Early coding GO ASan (NON-REQUIRED)",
+        "conclusion": "success"
+      },
+      {
+        "id": 133920622399,
+        "name": "Early coding GO UBSan (NON-REQUIRED)",
+        "conclusion": "success"
+      }
+    ]
+  }
+]

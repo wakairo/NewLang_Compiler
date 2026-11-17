@@ -4,6 +4,21 @@ The user prefers persistent `/workspace` HEAD repositories and periodic cleanup
 during CI waits or after a successful PR, with development taking priority when
 storage is healthy. Do not put the active HEAD repository under `/tmp`.
 
+User-requested proposal on 2026-11-17: use PR publication as the retention
+checkpoint. Coordination Issue1496 records the proposal and comparison of
+Release assets, Git LFS and ordinary Git; the future archive backend is NOT
+decided. Existing verified LFS assets remain intact. The proposed local minimum
+is the persistent active Git worktree/common Git
+history, one reusable toolchain set, and the minimum inputs/binaries needed for
+the current PR's repair or the next authorized task. Git-tracked source/oracle
+already reachable on GitHub needs no second archive copy. Preserve private
+committed history with standard Git refs/bundles before retiring a worktree.
+Archive unique original execution evidence to Git/LFS, fresh-download and verify
+it, then remove local data that will not be reused. Retain a small restoration
+receipt, not every old checkout, complete build matrix or unpacked archive.
+Keep original FIRST/RED as historical results; a later rerun cannot replace them.
+https://github.com/wakairo/NewLang_Compiler/issues/1496
+
 The data-only remote is
 `wakairo/NewLang_Compiler:archive/track-p-evidence-20261117`.
 It has no workflows or compiler tree. It must not be merged into main or used as

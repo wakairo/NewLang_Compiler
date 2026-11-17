@@ -74,3 +74,17 @@ Git files. No READY/merge/Product GO is performed by this archive.
 apparatus config/CTest log files (74645853 original bytes), SHA256
 1e93a9cd80693806d3e758da795c56de75303b3949e2cc775493cd72d7aa203f.
 It supplements the complete-local archive without changing that frozen asset.
+
+## P1492 same-head final CI
+
+`ci-raw/p1492-c1109/` preserves the completed natural original log ZIPs and
+API/test-count receipts for fixed c4997882f981db5ba89dfeb475fe6fc283db2cfb.
+FULL5 44048660214 genuinely passed1125/1125 tests in each of5 jobs including
+LLVM23.1.3 smoke; PARTIAL44048660255 passed1124/1124; EARLY244048660237
+passed84/84 in each non-Required job. All are first natural attempt1. No manual
+rerun, subsequent Production push, READY, merge or Product GO follows this data.
+
+Archive-destination policy remains undecided: Issue1496 was accepted as a real
+tooling investigation and C1114 assigned Track T1498. Existing verified assets
+remain intact while Release assets/Git LFS/other storage are compared. These
+case-specific receipts do not adopt a new storage backend or migrate archives.

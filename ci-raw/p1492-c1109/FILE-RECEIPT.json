@@ -1,0 +1,40 @@
+{
+  "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+  "files": [
+    {
+      "name": "EARLY2-44048660237.zip",
+      "bytes": 110398,
+      "sha256": "b3e1033f6d81f3099cb76220fb9e5b477b6d42d4921a8170145cb25c458b0dcd"
+    },
+    {
+      "name": "FULL5-44048660214.zip",
+      "bytes": 600445,
+      "sha256": "21c3499ed0cb326d764cc377ca5c2d068e15bda3632edf27e43ac892860f4b8d"
+    },
+    {
+      "name": "PARTIAL-44048660255.zip",
+      "bytes": 146799,
+      "sha256": "c271c1cf95ef54244b5d1f86b860ce7dc842ab27209c40c6d7628376593bac51"
+    },
+    {
+      "name": "completed-log-receipts.json",
+      "bytes": 2951,
+      "sha256": "c1c62238ea9ca1c8bb365af2d88d678e74dfc878aba5923a756a0030e9b65d7b"
+    },
+    {
+      "name": "final-run-identities.json",
+      "bytes": 2394,
+      "sha256": "d358dac535cd1e26d78956ff42c9c55f15f8c5a632f535b635c490da7bc09f59"
+    },
+    {
+      "name": "full5-log-receipt.json",
+      "bytes": 16841,
+      "sha256": "0b35998598c720bd351243058593ea9e6c69250c77bea1d75f12f71596d00e49"
+    },
+    {
+      "name": "test-count-summary.json",
+      "bytes": 1126,
+      "sha256": "873130b5f421b847ec20ff60450894d041d84f956def1eb752e273fd0d1514dd"
+    }
+  ]
+}

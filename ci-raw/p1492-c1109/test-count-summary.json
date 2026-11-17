@@ -1,0 +1,60 @@
+[
+  {
+    "kind": "FULL5",
+    "run": 44048660214,
+    "job_test_results": [
+      {
+        "job_log": "0_Clang.txt",
+        "tests": 1125,
+        "failed": 0
+      },
+      {
+        "job_log": "1_ASan.txt",
+        "tests": 1125,
+        "failed": 0
+      },
+      {
+        "job_log": "2_UBSan.txt",
+        "tests": 1125,
+        "failed": 0
+      },
+      {
+        "job_log": "3_GCC.txt",
+        "tests": 1125,
+        "failed": 0
+      },
+      {
+        "job_log": "4_GCC Release.txt",
+        "tests": 1125,
+        "failed": 0
+      }
+    ]
+  },
+  {
+    "kind": "PARTIAL",
+    "run": 44048660255,
+    "job_test_results": [
+      {
+        "job_log": "0_Production CHECK + C17_native reference (NO LLVM; PARTIAL).txt",
+        "tests": 1124,
+        "failed": 0
+      }
+    ]
+  },
+  {
+    "kind": "EARLY2",
+    "run": 44048660237,
+    "job_test_results": [
+      {
+        "job_log": "0_Early coding GO UBSan (NON-REQUIRED).txt",
+        "tests": 84,
+        "failed": 0
+      },
+      {
+        "job_log": "1_Early coding GO ASan (NON-REQUIRED).txt",
+        "tests": 84,
+        "failed": 0
+      }
+    ]
+  }
+]
