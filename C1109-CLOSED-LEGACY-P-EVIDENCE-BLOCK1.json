@@ -1,0 +1,16 @@
+{
+  "file": "C1109-closed-legacy-P-evidence-block1.tar.gz",
+  "sha256": "3ca7f00cc36804a7172f13346adeb0322a7ff13f37506c25423d002a8e94acc0",
+  "bytes": 403193941,
+  "original_bytes": 1180438189,
+  "members": 142348,
+  "roots": [
+    "p1312-c489",
+    "p1280-c383",
+    "p1248-c296",
+    "p1372-c701",
+    "p1323-c521",
+    "p1272-c344",
+    "p1318-c508"
+  ]
+}
