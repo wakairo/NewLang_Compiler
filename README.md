@@ -69,3 +69,8 @@ PR1495 is the Production review surface, separate from this data-only branch.
 CI results must be read from their own same-head natural runs, not inferred
 from storage or the local archive. Publication receipts are separate small
 Git files. No READY/merge/Product GO is performed by this archive.
+
+`P1492-C1109-apparatus-RED-detail.tar.gz` additionally retains11 original failed
+apparatus config/CTest log files (74645853 original bytes), SHA256
+1e93a9cd80693806d3e758da795c56de75303b3949e2cc775493cd72d7aa203f.
+It supplements the complete-local archive without changing that frozen asset.
