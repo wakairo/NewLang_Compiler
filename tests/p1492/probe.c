@@ -20,6 +20,37 @@ typedef struct {
     NLSemanticContext *context;
     NLCheckedFragment *artifact;
 } Program;
+NLCheckStatus
+__real_nl_guarded_usize_capture(NLCheckedFragment *, NLCheckedNodeId,
+                                const NLSyntaxNode *, const NLSemanticContext *,
+                                const NLSemanticContext *, size_t, NLSymbolId);
+NLCheckStatus __wrap_nl_guarded_usize_capture(NLCheckedFragment *f,
+                                              NLCheckedNodeId id,
+                                              const NLSyntaxNode *s,
+                                              const NLSemanticContext *c,
+                                              const NLSemanticContext *entry,
+                                              size_t fn, NLSymbolId formal)
+{
+    NLCheckStatus status =
+        __real_nl_guarded_usize_capture(f, id, s, c, entry, fn, formal);
+    fprintf(stderr, "guard capture function=%zu formal=%zu status=%d\n", fn,
+            formal, (int)status);
+    return status;
+}
+NLCheckStatus __real_nl_h_custody_seal_result(NLCheckedFragment *,
+                                              NLCheckedFragment *,
+                                              NLCheckedNodeId,
+                                              const NLSemanticContext *);
+NLCheckStatus __wrap_nl_h_custody_seal_result(NLCheckedFragment *p,
+                                              NLCheckedFragment *f,
+                                              NLCheckedNodeId id,
+                                              const NLSemanticContext *c)
+{
+    NLCheckStatus status = __real_nl_h_custody_seal_result(p, f, id, c);
+    fprintf(stderr, "result seal call=%zu world=%d status=%d\n", id, c != NULL,
+            (int)status);
+    return status;
+}
 static void destroy(Program *p)
 {
     nl_checked_destroy(p->artifact);

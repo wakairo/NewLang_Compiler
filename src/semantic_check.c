@@ -4518,9 +4518,12 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     if ((predicate_result || scalar_h_read || current_result || result_world ||
          quantity_result) &&
         !host(&body,
-              nl_h_custody_seal_result(caller->artifact, body.artifact, call_id,
-                                       result_world || quantity_result ? c
-                                                                       : NULL),
+              nl_h_custody_seal_result(
+                  caller->artifact, body.artifact, call_id,
+                  result_world || (quantity_result &&
+                                   caller->artifact == caller->origin_root)
+                      ? c
+                      : NULL),
               call_span))
         goto failure;
     if (body.artifact->copy_body && body.artifact->copy_body->current_loop &&
