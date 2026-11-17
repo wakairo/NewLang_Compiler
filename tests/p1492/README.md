@@ -35,7 +35,9 @@ Boundary fixtures require the native 64-bit usize target used in the CI matrix.
 
 Dynamic bounds, arithmetic on a changed formal, nested result composition,
 multiple calls, explicit RETURN, H/T state composition and general range/CFG
-analysis are outside this C17 consumer. Such legal sources may remain safely
+analysis are outside the original P1492 C17 consumer. P1499 adds sequential
+result-to-next-call composition under the same existing issuer; see
+[its supported boundary](../p1499/README.md). Other such legal sources may remain safely
 unsupported. Earlier P/A/Q/N source/oracle/FIRST/RED are not rewritten.
 
 GCC Release, Clang ASan/LSan and Clang UBSan are the local host configurations.

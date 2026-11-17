@@ -319,7 +319,10 @@ static bool named(const char *path, const char *target)
     CHECK(remove(target) == 0);
     return true;
 }
-int main(int argc, char **argv)
+#ifndef NL_QUANTITY_PROBE_ENTRY
+#define NL_QUANTITY_PROBE_ENTRY main
+#endif
+int NL_QUANTITY_PROBE_ENTRY(int argc, char **argv)
 {
     if (argc == 4 && !strcmp(argv[1], "named"))
         return named(argv[2], argv[3]) ? 0 : 1;
