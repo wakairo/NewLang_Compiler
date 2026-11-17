@@ -1,0 +1,11 @@
+{
+  "file": "P1295-original-Clang19-host-toolchain.tar.gz",
+  "sha256": "b0d58a4db1e0e1191c228c3728d4ed54fdb0d8e81d83ead504553e6925fca5a5",
+  "bytes": 33948755,
+  "original_root": "/workspace/p1295-c439/tools/clang19",
+  "original_bytes": 133527293,
+  "members": 404,
+  "verified_members": 404,
+  "fresh_remote_download_verified": true,
+  "remote_commit": "2dc1a5fd42a15077a1bd7a6a3abb62cf446f285c"
+}

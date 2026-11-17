@@ -1,0 +1,237 @@
+{
+  "purpose": "Checkpoint only; ASan retry9 is still in progress, not PASS",
+  "closed_attempts": [
+    {
+      "category": "host",
+      "label": "R1-historical-and-current-contract",
+      "argv": [
+        "env",
+        "LD_LIBRARY_PATH=/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-099baf47d12a3791/usr/lib/x86_64-linux-gnu",
+        "PATH=/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-099baf47d12a3791/usr/bin:/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-099baf47d12a3791/usr/bin/ctest",
+        "--test-dir",
+        "/workspace/p1492-c1103/build-gcc",
+        "--output-on-failure",
+        "-j2",
+        "-R",
+        "^(p634_historical_hash.unit|p605_arithmetic_comparison.integration|p605_mutant_phase.unit|p1492_.*owned.unit|p1492_current_result_tamper.unit|p1492_N.*.unit)$"
+      ],
+      "cwd": "/workspace/p1492-c1103/repo",
+      "start_utc": 1794897642.868231,
+      "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+      "state": "COMPLETE",
+      "raw": "/workspace/p1492-c1109/runs/01-R1-historical-and-current-contract",
+      "status": 0,
+      "end_utc": 1794897643.2601385,
+      "stdout": {
+        "bytes": 1316,
+        "sha256": "c28ee7c0e5ad4c7d173038e7e16af45abb0682543f156f772689f5a6d5bc101b"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "category": "host",
+      "label": "R1-gcc-complete-suite",
+      "argv": [
+        "env",
+        "LD_LIBRARY_PATH=/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-099baf47d12a3791/usr/lib/x86_64-linux-gnu",
+        "PATH=/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-099baf47d12a3791/usr/bin:/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-099baf47d12a3791/usr/bin/ctest",
+        "--test-dir",
+        "/workspace/p1492-c1103/build-gcc",
+        "--output-on-failure",
+        "-j2"
+      ],
+      "cwd": "/workspace/p1492-c1103/repo",
+      "start_utc": 1794897654.9009979,
+      "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+      "state": "COMPLETE",
+      "raw": "/workspace/p1492-c1109/runs/02-R1-gcc-complete-suite",
+      "status": 8,
+      "end_utc": 1794897952.3278468,
+      "stdout": {
+        "bytes": 182755,
+        "sha256": "613590507349434762066be67f89f968a49f85d0daf509e02e40dd87db209983"
+      },
+      "stderr": {
+        "bytes": 27,
+        "sha256": "18e00877dc1071c85cd4f479d451bebeef8309022e46cf8c63b0bed5151984a4"
+      }
+    },
+    {
+      "category": "host",
+      "label": "R1-gcc-complete-fresh",
+      "argv": [
+        "python3",
+        "/workspace/p1492-c1109/full_suite.py",
+        "/workspace/p1492-c1103/repo",
+        "/workspace/p1492-c1103/build-gcc",
+        "/usr/bin/gcc",
+        "none",
+        "Release",
+        "gcc-release"
+      ],
+      "cwd": "/workspace/p1492-c1103/repo",
+      "start_utc": 1794898007.1705291,
+      "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+      "state": "COMPLETE",
+      "raw": "/workspace/p1492-c1109/runs/03-R1-gcc-complete-fresh",
+      "status": 1,
+      "end_utc": 1794898241.3438716,
+      "stdout": {
+        "bytes": 67590,
+        "sha256": "228a00fc14c851bc90b9032efec6ea80cde83066452a381de8d6756ab72ab841"
+      },
+      "stderr": {
+        "bytes": 659,
+        "sha256": "1f7f7894490b7b28a9a3116188dbae0eb2fed57e981cdab0d50ac908e5e539f4"
+      }
+    },
+    {
+      "category": "host",
+      "label": "R1-gcc-complete-inode-recovered",
+      "argv": [
+        "python3",
+        "/workspace/p1492-c1109/full_suite.py",
+        "/workspace/p1492-c1103/repo",
+        "/workspace/p1492-c1103/build-gcc",
+        "/usr/bin/gcc",
+        "none",
+        "Release",
+        "gcc-release-clean2"
+      ],
+      "cwd": "/workspace/p1492-c1103/repo",
+      "start_utc": 1794898394.2391248,
+      "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+      "state": "COMPLETE",
+      "raw": "/workspace/p1492-c1109/runs/04-R1-gcc-complete-inode-recovered",
+      "status": 0,
+      "end_utc": 1794898721.3054872,
+      "stdout": {
+        "bytes": 181494,
+        "sha256": "0a0c076252a0741495e80323f641c2efe18a45f3fa7adf3db671f50af8398eca"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "category": "host",
+      "label": "R1-clang-complete",
+      "argv": [
+        "python3",
+        "/workspace/p1492-c1109/full_suite.py",
+        "/workspace/p1492-c1103/repo",
+        "/workspace/p1492-c1109/build-clang",
+        "/workspace/p1295-c439/tools/clang19/clang",
+        "none",
+        "Debug",
+        "clang"
+      ],
+      "cwd": "/workspace/p1492-c1103/repo",
+      "start_utc": 1794898801.7076867,
+      "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+      "state": "COMPLETE",
+      "raw": "/workspace/p1492-c1109/runs/05-R1-clang-complete",
+      "status": 1,
+      "end_utc": 1794899277.0269384,
+      "stdout": {
+        "bytes": 224919,
+        "sha256": "766dc4fd1391b2e268cc29c6eb182b3ce9a1cdb69cb570aa2b6606465315cb1d"
+      },
+      "stderr": {
+        "bytes": 682,
+        "sha256": "ecdedb8ab91d6fdb3e7f7dcf03c6499594f74658b2f68ad1124ff9e667a6e2a9"
+      }
+    },
+    {
+      "category": "host",
+      "label": "R1-clang23-complete",
+      "argv": [
+        "python3",
+        "/workspace/p1492-c1109/full_suite.py",
+        "/workspace/p1492-c1103/repo",
+        "/workspace/p1492-c1109/build-clang23",
+        "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-099baf47d12a3791/usr/lib/llvm-23/bin/clang",
+        "none",
+        "Debug",
+        "clang23"
+      ],
+      "cwd": "/workspace/p1492-c1103/repo",
+      "start_utc": 1794899339.7971551,
+      "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+      "state": "COMPLETE",
+      "raw": "/workspace/p1492-c1109/runs/06-R1-clang23-complete",
+      "status": 0,
+      "end_utc": 1794899811.0279622,
+      "stdout": {
+        "bytes": 224079,
+        "sha256": "606b9491b6683029e90346275e64ad31ba702d4ea34462beb5af0850a02c4f11"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "category": "host",
+      "label": "R1-pinned-format-and-immutability",
+      "argv": [
+        "python3",
+        "/workspace/p1492-c1109/review.py"
+      ],
+      "cwd": "/workspace/p1492-c1103/repo",
+      "start_utc": 1794899837.4859347,
+      "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+      "state": "COMPLETE",
+      "raw": "/workspace/p1492-c1109/runs/07-R1-pinned-format-and-immutability",
+      "status": 0,
+      "end_utc": 1794899838.2540748,
+      "stdout": {
+        "bytes": 113,
+        "sha256": "fff234a21780b793f4d7585f674e68695e63a711516d8ef694132e46b7d98f75"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "category": "host",
+      "label": "R1-asan-complete",
+      "argv": [
+        "python3",
+        "/workspace/p1492-c1109/full_suite.py",
+        "/workspace/p1492-c1103/repo",
+        "/workspace/p1492-c1109/build-asan",
+        "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-099baf47d12a3791/usr/lib/llvm-23/bin/clang",
+        "address",
+        "Debug",
+        "asan"
+      ],
+      "cwd": "/workspace/p1492-c1103/repo",
+      "start_utc": 1794899860.843522,
+      "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+      "state": "COMPLETE",
+      "raw": "/workspace/p1492-c1109/runs/08-R1-asan-complete",
+      "status": 1,
+      "end_utc": 1794900100.8799505,
+      "stdout": {
+        "bytes": 173633,
+        "sha256": "91700858f7f9d82b49f011d26b64fa5ca38ca61b710061cb85d5b5bc1df3844e"
+      },
+      "stderr": {
+        "bytes": 653,
+        "sha256": "a484ee29e6e992b6bf813f53f450186d1fe246f6a7a27f90e354081963d49be3"
+      }
+    }
+  ],
+  "original_host_ledger_sha256": "a3a6348943fd34c700b6b81331d112dbce5c1095ca2e88200156ba655e00903c",
+  "source_head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb"
+}
