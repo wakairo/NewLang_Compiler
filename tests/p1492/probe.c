@@ -59,8 +59,9 @@ static bool owned(const char *path)
     NLCheckStatus status = define(&p, &diagnostic);
     if (status != NL_CHECK_OK)
         fprintf(stderr, "register status=%d code=%s\n", (int)status,
-                diagnostic.diagnostic.code ? diagnostic.diagnostic.code
-                                           : "(null)");
+                diagnostic.diagnostic.diagnostic.code
+                    ? diagnostic.diagnostic.diagnostic.code
+                    : "(null)");
     CHECK(status == NL_CHECK_OK);
     NLCheckDiagnostic checked = {0};
     status =
@@ -105,9 +106,11 @@ static bool negative(const char *path)
     NLFunctionUnitDiagnostic d = {0};
     NLCheckStatus status = define(&p, &d);
     printf("%s rejection status=%d code=%s\n", path, (int)status,
-           d.diagnostic.code ? d.diagnostic.code : "(null)");
-    CHECK(status == NL_CHECK_ANALYSIS_PRECISION_LIMIT && d.diagnostic.code &&
-          !strcmp(d.diagnostic.code, "USIZE-ADDITION-PRECISION"));
+           d.diagnostic.diagnostic.code ? d.diagnostic.diagnostic.code
+                                        : "(null)");
+    CHECK(status == NL_CHECK_ANALYSIS_PRECISION_LIMIT &&
+          d.diagnostic.diagnostic.code &&
+          !strcmp(d.diagnostic.diagnostic.code, "USIZE-ADDITION-PRECISION"));
     destroy(&p);
     return true;
 }
