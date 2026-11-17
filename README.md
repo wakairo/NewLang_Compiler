@@ -27,3 +27,22 @@ the complete forward source history, fixtures and unchanged prospective oracle.
 ledgers, raw stdout/stderr, generated C, native receipts, measured GCC/sanitizer
 ELFs, configurations, FIRST/RED and a per-file SHA256 manifest. These are bounded
 measurements, not complete CI evidence or a claim of general soundness.
+
+## Historical measured evidence
+
+The following archives contain a per-file `ARCHIVE-MANIFEST.json` with original
+absolute root, relative path, exact length and SHA256. Each archived directory
+is retained locally until its full remote Git LFS object has been independently
+downloaded and the complete member manifest verified.
+
+- `P1393-C795-preserved-C7-ELFs.tar.gz`: the original measured C7 host ELFs from
+  `/workspace/p1393-c795/preserved-C7-ELFs`, including the preserved safety STOP.
+- `P1260-C314-measured-binaries-and-raw.tar.gz`: measured GCC/Clang/sanitizer
+  binaries, original raw and configurations from
+  `/workspace/p1260-c314/actual-local-binaries-and-raw`.
+- `P1253-C299-measured-local-results.tar.gz`: original baseline/prototype and
+  measured host binaries/raw from `/workspace/p1253-c299/durable-local-results`.
+
+Relocation does not change any source, oracle, expectation, FIRST/RED, original
+status or historical CI claim. The manifests make restoration of exact bytes
+possible; no SHA-only reconstruction or regenerated result is substituted.

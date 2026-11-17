@@ -8,5 +8,29 @@
     "file": "P1492-C1103-STOP-evidence-20261117.tar.gz",
     "bytes": 22202114,
     "sha256": "e180e13f6462e69b51b43d11fa3d1c9df138b93f08da74c4347137bde1f1e81a"
+  },
+  {
+    "file": "P1393-C795-preserved-C7-ELFs.tar.gz",
+    "original_root": "/workspace/p1393-c795/preserved-C7-ELFs",
+    "original_bytes": 181251936,
+    "bytes": 52016196,
+    "sha256": "cd536a8d80a347f6e4095ecece76eb0ba27e20b16738635a73774a0f240a3a05",
+    "files": 27
+  },
+  {
+    "file": "P1260-C314-measured-binaries-and-raw.tar.gz",
+    "original_root": "/workspace/p1260-c314/actual-local-binaries-and-raw",
+    "original_bytes": 288835596,
+    "bytes": 61032276,
+    "sha256": "95864f474282f9401003f4cac12309499f93cb436ed5d74b41732d25f64a9730",
+    "files": 13419
+  },
+  {
+    "file": "P1253-C299-measured-local-results.tar.gz",
+    "original_root": "/workspace/p1253-c299/durable-local-results",
+    "original_bytes": 183697405,
+    "bytes": 32808895,
+    "sha256": "b05c58223a2c150cd6e6106a6b07ed65ec29112982991fbb339c8811a0641754",
+    "files": 7974
   }
 ]
