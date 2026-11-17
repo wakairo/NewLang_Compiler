@@ -1,0 +1,53 @@
+{
+  "authority": "7ea4dc1a2d72e4274433572b7bff3c1dacfd7434",
+  "canonical": "Draft17.38 \u00a7\u00a75.2,18.1,18.2,18.5,18.7\u20138,19.1",
+  "baseline_prediction": "SOURCE/CHECK0; main result is not sealed by finite single-call recognition; public quantity validator false / direct C17 CLI4. Native NOT_RUN until authenticated output.",
+  "forward": {
+    "A-offset-composition.nl": {
+      "main_result": 16,
+      "inputs": [
+        0,
+        14,
+        15,
+        16,
+        31,
+        32,
+        18446744073709551615
+      ],
+      "outputs": [
+        5,
+        19,
+        20,
+        20,
+        35,
+        32,
+        18446744073709551615
+      ]
+    },
+    "B-repeat-advance.nl": {
+      "main_result": 13,
+      "inputs": [
+        0,
+        14,
+        15,
+        16,
+        18446744073709551615
+      ],
+      "outputs": [
+        2,
+        16,
+        16,
+        16,
+        18446744073709551615
+      ]
+    }
+  },
+  "negatives": {
+    "N-overflow-consumer.nl": "USIZE-ADDITION-PRECISION",
+    "N-wrong-formal.nl": "USIZE-ADDITION-PRECISION",
+    "N-changed-formal.nl": "LOCAL-LOAN-PROFILE (earlier selected usize local write-loan implementation limit, not arithmetic acceptance)"
+  },
+  "unsupported": "nested call expressions, general CFG/range analysis, dynamic bounds, H/T composition, explicit RETURN; no public API/issuer changes",
+  "paths": "Both helpers total on size_t: guarded representable sum in true arm; unchanged input in false arm, including MAX. No allocation/owner/domain operations in selected scalar source. Host allocations must fail transactionally.",
+  "refinements": "Original changed-formal v1 parser RED preserved in history; v2 uses canonical scoped loan syntax, rejected earlier by LOCAL-LOAN-PROFILE. Initial tamper RED was no-op setting already-dead caller current_fact to 0; forward version targets the genuinely live consumer-arm formal."
+}

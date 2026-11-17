@@ -800,7 +800,7 @@ bool nl_guarded_usize_body_at(const NLCheckedFragment *f,
                 return false;
             const NLCheckedNodeView *init =
                 nl_checked_node_view(f, n->initializer);
-            if (!previous) {
+            if (init && init->kind == NL_CHECKED_REGISTERED_CALL) {
                 const NLSyntaxView *call =
                     nl_syntax_node_view(b->data.binding.initializer);
                 if (!call || call->kind != NL_SYNTAX_EXPR_CALL || !init ||
@@ -822,7 +822,10 @@ bool nl_guarded_usize_body_at(const NLCheckedFragment *f,
                     body->source != target->body->source ||
                     !helper_body(body, c, target, &nested) || !arg ||
                     arg->next_argument ||
-                    !literal(f, c, arg, call->data.call.arguments, &actual) ||
+                    !(previous ? name_copy(f, c, init->first_argument,
+                                           call->data.call.arguments, previous)
+                               : literal(f, c, arg, call->data.call.arguments,
+                                         &actual)) ||
                     !token(f->source, init->name, target->name) ||
                     !node_value(f, c, n->initializer, &result) ||
                     !node_value(body, c, body->root, &inner) ||
@@ -830,7 +833,8 @@ bool nl_guarded_usize_body_at(const NLCheckedFragment *f,
                     c->bindings[nested.formal - 1].view.value !=
                         arg->results[0].value)
                     return false;
-                plan.call = n->initializer;
+                if (!plan.call)
+                    plan.call = n->initializer;
             } else if (!name_copy(f, c, n->initializer,
                                   b->data.binding.initializer, previous))
                 return false;
@@ -862,9 +866,24 @@ bool nl_guarded_usize_call_valid(const NLCheckedFragment *f,
         !nl_guarded_usize_body_at(body, f->context, n->function, &plan) ||
         !node_value(f, f->context, call, &actual) ||
         !node_value(body, f->context, body->root, &returned) ||
-        actual != returned ||
-        (plan.call && !nl_h_custody_result_valid(body, plan.call)))
+        actual != returned)
         return false;
+    /* Each call has its own CHECK-owned body and result seal, including
+     * repeated calls to the same declaration with fresh formal bindings.
+     * Authenticate all of them, not just the first producer. The outer seal
+     * covers the complete final caller world and Copy chain. */
+    if (plan.call) {
+        const NLCheckedNodeView *root = nl_checked_node_view(body, body->root);
+        for (NLCheckedNodeId id = root->first_item; id;) {
+            const NLCheckedNodeView *binding = nl_checked_node_view(body, id);
+            const NLCheckedNodeView *init =
+                nl_checked_node_view(body, binding->initializer);
+            if (init->kind == NL_CHECKED_REGISTERED_CALL &&
+                !nl_h_custody_result_valid(body, binding->initializer))
+                return false;
+            id = binding->next_item;
+        }
+    }
     *out = plan;
     return true;
 }
