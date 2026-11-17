@@ -8546,8 +8546,13 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
             !host(check,
                   allocated_current_join(closed_prefix ? closed_prefix : c,
                                          &current, &joined),
-                  syntax->span))
+                  syntax->span)) {
+            /* Until captured_post takes it, the legacy closed prefix is
+             * locally owned. The failed join destroys only its own clone. */
+            if (closure == NULL)
+                nl_semantic_destroy(closed_prefix);
             return 0;
+        }
         if (closed_prefix) {
             nl_semantic_destroy(closed_prefix);
             closed_prefix = joined;
