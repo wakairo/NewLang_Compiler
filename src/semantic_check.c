@@ -4283,8 +4283,16 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                                                  body.readonly_u8_parameter, c),
               call_span))
         goto failure;
+    /* A concrete lexical T in a nested allocation definition has the same
+     * real scoped actual/formal call as its later entry check. Record it with
+     * the existing factory; do not turn the definition into an actual world
+     * or infer a formal_write capability from the signature alone. */
+    const bool allocated_definition_copy =
+        body.definition && caller->allocated_slice &&
+        caller->allocation_depth == 2 && caller->in_source_loan &&
+        caller->binding_floor == caller->arm_floor && !caller->loop;
     if (function->count == 2 &&
-        ((!body.definition &&
+        (((!body.definition || allocated_definition_copy) &&
           function->result == nl_semantic_core_type(c, NL_TYPE_U8)) ||
          function->result == 1)) {
         if (!host(&body,
@@ -8123,9 +8131,9 @@ bool nl_packet_same_entry(const NLSemanticContext *a,
 
 /* Exact ancestor-prefix equivalence; suffix claims must all be closed.
  * Post-fork numeric IDs are never compared across worlds or imported. */
-bool nl_allocated_post_matches(const NLSemanticContext *expected,
-                               const NLSemanticContext *arm,
-                               const NLCheckedNodeView *result)
+static bool allocated_suffix_closed(const NLSemanticContext *expected,
+                                    const NLSemanticContext *arm,
+                                    const NLCheckedNodeView *result)
 {
     if (result->result_count == 1 &&
         (result->results[0].value == 0 ||
@@ -8155,6 +8163,15 @@ bool nl_allocated_post_matches(const NLSemanticContext *expected,
         if (arm->values[j].carrier != NL_CARRIER_ENDED &&
             !arm->types[arm->values[j].type - 1].view.is_discardable)
             return false;
+    return true;
+}
+
+bool nl_allocated_post_matches(const NLSemanticContext *expected,
+                               const NLSemanticContext *arm,
+                               const NLCheckedNodeView *result)
+{
+    if (!allocated_suffix_closed(expected, arm, result))
+        return false;
     NLSemanticContext prefix = *arm;
     prefix.region_count = expected->region_count;
     prefix.domain_count = expected->domain_count;
@@ -8237,6 +8254,8 @@ static bool allocated_unit_return(Check *branch,
     }
     return same;
 }
+
+#include "allocated_current_check_internal.h"
 
 static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
 {
@@ -8358,6 +8377,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
     }
     NLTypeId normal_type = 0;
     size_t normal = 0;
+    NLCheckedField current = {0};
     for (size_t i = 0; i < 2; ++i) {
         Check branch = *check;
         branch.context = NULL;
@@ -8415,11 +8435,45 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
                               allocated_unit_return(&branch, expected, body);
         if (branch.status != NL_CHECK_OK)
             goto failure;
+        bool current_arm = false, caller_sealed = false;
+        NLCheckedField delta = {0};
+        if (!terminal && !branch.terminated && !certified && i == 1 &&
+            normal == 1 && result.type == 1 && result.result_count <= 1 &&
+            (!normal_type || normal_type == 1) &&
+            !nl_allocated_post_matches(expected, branch.context, &result) &&
+            allocated_current_candidate(expected, branch.context, &delta)) {
+            branch.artifact->root =
+                add(&branch, (NLCheckedNodeView){.kind = NL_CHECKED_MATCH_ARM,
+                                                 .span = arms[i]->span,
+                                                 .variant = i + 1,
+                                                 .symbol = binder,
+                                                 .initializer = event,
+                                                 .tail = body,
+                                                 .type = 1,
+                                                 .field = delta});
+            if (!branch.artifact->root ||
+                !host(&branch, nl_copy_body_seal_calls(branch.artifact),
+                      arms[i]->span))
+                goto failure;
+            caller_sealed = true;
+            NLCheckStatus joined =
+                allocated_current_frame(expected, branch.artifact, &delta);
+            if (joined != NL_CHECK_OK &&
+                joined != NL_CHECK_ANALYSIS_PRECISION_LIMIT) {
+                (void)host(&branch, joined, arms[i]->span);
+                goto failure;
+            }
+            current_arm =
+                joined == NL_CHECK_OK &&
+                (!current.present || allocated_current_same(&current, &delta));
+            if (current_arm)
+                current = delta;
+        }
         if ((branch.terminated && !terminal) ||
-            (!terminal &&
-             ((normal_type && normal_type != result.type) ||
-              (!scalar && !nl_allocated_post_matches(expected, branch.context,
-                                                     &result))))) {
+            (!terminal && ((normal_type && normal_type != result.type) ||
+                           (!current_arm && !scalar &&
+                            !nl_allocated_post_matches(expected, branch.context,
+                                                       &result))))) {
             fail(&branch, NL_CHECK_ANALYSIS_PRECISION_LIMIT, arms[i]->span,
                  closed_prefix != NULL ? "ALLOCATED-CAPTURED-JOIN-PRECISION"
                                        : "ALLOCATED-CLOSED-WORLD-PRECISION",
@@ -8431,19 +8485,20 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
             normal_type = result.type;
             ++normal;
         }
-        branch.artifact->root =
-            add(&branch,
-                (NLCheckedNodeView){.kind = NL_CHECKED_MATCH_ARM,
-                                    .span = arms[i]->span,
-                                    .variant = i + 1,
-                                    .symbol = binder,
-                                    .initializer = event,
-                                    .tail = body,
-                                    .type = terminal ? 0 : 1,
-                                    .terminates = terminal,
-                                    .returned = branch.returned,
-                                    .normal_frame_unchanged =
-                                        !terminal && closed_prefix == NULL});
+        if (!branch.artifact->root)
+            branch.artifact->root =
+                add(&branch, (NLCheckedNodeView){.kind = NL_CHECKED_MATCH_ARM,
+                                                 .span = arms[i]->span,
+                                                 .variant = i + 1,
+                                                 .symbol = binder,
+                                                 .initializer = event,
+                                                 .tail = body,
+                                                 .type = terminal ? 0 : 1,
+                                                 .terminates = terminal,
+                                                 .returned = branch.returned,
+                                                 .normal_frame_unchanged =
+                                                     !terminal &&
+                                                     closed_prefix == NULL});
         if (scalar && branch.artifact->root) {
             NLCheckedNodeView *arm = view(&branch, branch.artifact->root);
             arm->type = result.type;
@@ -8454,8 +8509,9 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
          * Only its direct source-owned callees can receive its immutable graph;
          * a failure leaves parent/closure ownership on the old cleanup path. */
         if (branch.artifact->root == 0 ||
-            !host(&branch, nl_copy_body_seal_calls(branch.artifact),
-                  arms[i]->span) ||
+            (!caller_sealed &&
+             !host(&branch, nl_copy_body_seal_calls(branch.artifact),
+                   arms[i]->span)) ||
             !host(&branch,
                   nl_control_exits_union(&check->artifact->exits,
                                          branch.artifact->exits),
@@ -8484,9 +8540,33 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
             nl_semantic_destroy(closed_prefix);
         return 0;
     }
+    if (current.present) {
+        NLSemanticContext *joined = NULL;
+        if (normal != 2 ||
+            !host(check,
+                  allocated_current_join(closed_prefix ? closed_prefix : c,
+                                         &current, &joined),
+                  syntax->span)) {
+            /* Until captured_post takes it, the legacy closed prefix is
+             * locally owned. The failed join destroys only its own clone. */
+            if (closure == NULL)
+                nl_semantic_destroy(closed_prefix);
+            return 0;
+        }
+        if (closed_prefix) {
+            nl_semantic_destroy(closed_prefix);
+            closed_prefix = joined;
+        } else {
+            nl_sem_commit(c, joined);
+        }
+        view(check, id)->field = current;
+        if (check->result_world)
+            *check->result_world = true;
+    }
     view(check, id)->type = 1;
     view(check, id)->normal_arms = normal;
-    view(check, id)->normal_frame_unchanged = closed_prefix == NULL;
+    view(check, id)->normal_frame_unchanged =
+        closed_prefix == NULL && !current.present;
     view(check, id)->captured_frame_closed = closed_prefix != NULL;
     if (closure != NULL &&
         !closure_status(check, nl_captured_closure_finish(check->artifact, id),
@@ -8518,7 +8598,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
     view(check, id)->type = 1;
     view(check, id)->normal_arms = normal;
     view(check, id)->normal_frame_unchanged =
-        !certificate.captured_frame_closed;
+        !certificate.captured_frame_closed && !current.present;
     if (normal_type != 1) {
         const NLValueId value = new_value(
             check, (NLSemanticValueView){.type = normal_type}, syntax->span);
