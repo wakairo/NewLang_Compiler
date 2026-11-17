@@ -1,0 +1,49 @@
+{
+  "pr_url": "https://github.com/wakairo/NewLang_Compiler/pull/1495",
+  "draft": true,
+  "head": "c4997882f981db5ba89dfeb475fe6fc283db2cfb",
+  "tree": "432c88701cb3cef799c8d6cc9518af2fdd836aa1",
+  "parents": [
+    "ad476afaf329bbdadbd49385a612c6fdfb5cc434"
+  ],
+  "base": "f7c277af59a4c4281c07fd6d3cc1d98f8bf88f48",
+  "changed_files": 19,
+  "push": {
+    "chunk_id": "3ed329",
+    "wall_time_seconds": 0.000019914,
+    "exit_code": 0,
+    "original_token_count": 108,
+    "output": "remote: \nremote: Create a pull request for 'p1492-guarded-usize-result' on GitHub by visiting:        \nremote:      https://github.com/wakairo/NewLang_Compiler/pull/new/p1492-guarded-usize-result        \nremote: \nTo https://github.com/wakairo/NewLang_Compiler.git\n * [new branch]      p1492-guarded-usize-result -> p1492-guarded-usize-result\nbranch 'p1492-guarded-usize-result' set up to track 'origin/p1492-guarded-usize-result'.\n"
+  },
+  "required_pair": 1,
+  "manual_actions": 0,
+  "runs": [
+    {
+      "id": 44048660214,
+      "kind": "FULL5",
+      "jobs": [
+        133920621599,
+        133920622057,
+        133920622156,
+        133920622181,
+        133920622244
+      ]
+    },
+    {
+      "id": 44048660255,
+      "kind": "PARTIAL",
+      "jobs": [
+        133920622279
+      ]
+    },
+    {
+      "id": 44048660237,
+      "kind": "EARLY2 non-required",
+      "jobs": [
+        133920622114,
+        133920622399
+      ]
+    }
+  ],
+  "status": "IN_PROGRESS, no success claimed yet"
+}

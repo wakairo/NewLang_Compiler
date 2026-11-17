@@ -1,0 +1,19 @@
+{
+  "file": "C1109-closed-legacy-P-evidence-block2.tar.gz",
+  "sha256": "1a515cef02380299c64c301b6ef51aefba92809f94b155911ce0d2d9845441b9",
+  "bytes": 229552261,
+  "original_bytes": 601769776,
+  "members": 40586,
+  "roots": [
+    "p1359-c653",
+    "p1364-c670",
+    "p1368-c688",
+    "p1375-c725",
+    "p1387-c768",
+    "p1299-c451",
+    "p1304-c464"
+  ],
+  "remote_commit": "4a95fadcedbe4c54f9c6b406f2129e520ab3f475",
+  "fresh_download_and_all_original_members_verified": true,
+  "local_relocation_complete": true
+}
