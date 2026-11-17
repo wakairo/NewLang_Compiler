@@ -1,8 +1,10 @@
 """Exact prospective private-attachment projection; original P605/P634 run intact."""
 from pathlib import Path
+import hashlib
 import json
 import runpy
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -24,6 +26,33 @@ READ_DECLS = (b'NLCheckStatus nl_captured_read_begin(NLCheckedFragment *, NLChec
               b'bool nl_node_unit_arm_frame(const NLSemanticContext *,\n'
               b'                            const NLSemanticContext *, NLValueId,\n'
               b'                            const NLCheckedNodeView *);\n')
+
+# The adopted arithmetic file was byte-identical from P605 through this base.
+# Keep its real Git blob in the test tree for offline/shallow CI. It is used only
+# by the old checksum fixture, never compiled or substituted into live sources.
+ADDITION_BASE = 'f7c277af59a4c4281c07fd6d3cc1d98f8bf88f48'
+ADDITION_BLOB = '901f758a9f1b937cdb854c86be42bdaedd32cdad'
+
+def blob_id(data):
+    return hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+
+def historical_addition(repo, frozen):
+    path = 'src/usize_addition.c'
+    historical = (repo / 'tests/p1492/history/usize_addition-p605.c').read_bytes()
+    assert blob_id(historical) == ADDITION_BLOB
+    assert hashlib.sha256(historical).hexdigest() == frozen[path]
+    current = (repo / path).read_bytes()
+    current_blob = subprocess.check_output(
+        ['git', '-C', str(repo), 'rev-parse', 'HEAD:' + path], text=True).strip()
+    assert blob_id(current) == current_blob, 'current arithmetic differs from frozen Git HEAD'
+    print(json.dumps(dict(historical_path=path, base_commit=ADDITION_BASE,
+                          historical_git_blob=ADDITION_BLOB,
+                          historical_sha256=frozen[path], current_git_blob=current_blob,
+                          current_sha256=hashlib.sha256(current).hexdigest(),
+                          current_compiler='unchanged; original P605 public/native checks run')),
+          flush=True)
+    return historical
+
 def project(data):
     # P1387 changes only private storage spelling here. This projection is
     # confined to old checksum fixtures, never CHECK or the live compiler.
@@ -74,13 +103,20 @@ def main():
     with tempfile.TemporaryDirectory(prefix='p1098-historical-') as temp:
         work = Path(temp)
         files = json.loads((repo / 'tests/p605/frozen.json').read_bytes())['adopted_proof_files']
+        old_addition = historical_addition(repo, files)
         for name in files:
             target = work / name
             target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_bytes(projected if name == 'src/semantic_internal.h' else (repo / name).read_bytes())
+            if name == 'src/semantic_internal.h':
+                data = projected
+            elif name == 'src/usize_addition.c':
+                data = old_addition
+            else:
+                data = (repo / name).read_bytes()
+            target.write_bytes(data)
         for name in ('p605', 'p603'):
             shutil.copytree(repo / 'tests' / name, work / 'tests' / name, dirs_exist_ok=True)
-        print('P1098 prospective exact header projection only; old scripts/oracle unchanged', flush=True)
+        print('P1098 exact historical Git-blob/header fixture; old scripts/oracle and live compiler unchanged', flush=True)
         if mode == 'p634':
             assert len(args) == 1 and Path(args[0]).resolve() == repo.resolve()
             sys.argv = [str(repo / 'tests/p634/hash_gate_test.py'), str(work)]
