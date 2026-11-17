@@ -4416,6 +4416,8 @@ static size_t v0_export_function(const NLSemanticContext *c, const char *name)
     return selected;
 }
 
+#include "c17_guarded_usize_internal.h"
+
 static int compile_v0_to(const char *path, bool check_only,
                          const char *export_name, FILE *output)
 {
@@ -4581,6 +4583,16 @@ static int compile_v0_to(const char *path, bool check_only,
     }
     const NLCheckedNodeId root = nl_checked_root(entry);
     const NLCheckedNodeView *root_view = nl_checked_node_view(entry, root);
+    if (!export_name && root_view &&
+        root_view->type == nl_semantic_core_type(context, NL_TYPE_USIZE)) {
+        result = guarded_usize_emit(output, entry) && fflush(output) == 0
+                     ? 0
+                     : report_error("V1-BACKEND-UNSUPPORTED",
+                                    "usize result has no authenticated guarded "
+                                    "quantity C17 plan",
+                                    path, ferror(output) ? 1 : 4);
+        goto cleanup;
+    }
     V0Program program = {.unit = nl_semantic_unit_type(context),
                          .u8 = nl_semantic_core_type(context, NL_TYPE_U8),
                          .u8_export = export_name != NULL};

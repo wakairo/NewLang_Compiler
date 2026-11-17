@@ -1,4 +1,7 @@
 #include "newlang/usize_addition.h"
+#include "guarded_usize_internal.h"
+#include "h_origin_internal.h"
+#include "newlang/parser.h"
 #include "newlang/usize_subtraction.h"
 #include "semantic_internal.h"
 #include "syntax_internal.h"
@@ -34,6 +37,13 @@ typedef struct NLUsizeAdditionProof {
     const NLSyntaxNode *syntax;
     const NLSemanticContext *context;
     NLValueId binding_values[2];
+    bool guarded;
+    const NLCheckedFragment *guard_parent;
+    NLCheckedNodeId conditional;
+    size_t function, limit, step;
+    NLSymbolId formal;
+    NLSemanticBindingView guard_binding;
+    NLSemanticPlaceView guard_place;
     struct NLUsizeAdditionProof *next;
 } NLUsizeAdditionProof;
 
@@ -187,7 +197,7 @@ static bool arithmetic_valid(const NLCheckedFragment *f, NLCheckedNodeId id,
                              const NLUsizeArithmeticView *candidate)
 {
     const NLUsizeAdditionProof *p = find(f, id);
-    if (!p || p->operation != operation || !f->body_owner ||
+    if (!p || p->guarded || p->operation != operation || !f->body_owner ||
         f->source != f->body_owner->source || p->context != f->context ||
         p->issued.origin != f || (candidate && !same(candidate, &p->issued)))
         return false;
@@ -327,7 +337,7 @@ bool nl_checked_usize_addition_view(const NLCheckedFragment *f,
                                     NLUsizeAdditionView *out)
 {
     const NLUsizeAdditionProof *p = find(f, id);
-    if (!p || p->operation != NL_USIZE_ADD || !out)
+    if (!p || p->guarded || p->operation != NL_USIZE_ADD || !out)
         return false;
     NLUsizeAdditionView v = {0};
     COPY_METADATA(v, p->issued);
@@ -371,3 +381,490 @@ bool nl_checked_usize_subtraction_valid(const NLCheckedFragment *f,
     return arithmetic_valid(f, id, NL_USIZE_SUBTRACT, &v);
 }
 #undef COPY_METADATA
+
+/* Conditional arithmetic is a private mode of this same source issuer. A
+ * bound is not a numeric answer and never enters the public Known views. */
+static bool quantity(const NLSemanticContext *c, NLValueId id, NLTypeId type)
+{
+    NLSemanticValueView v;
+    return nl_semantic_value_view(c, id, &v) && v.type == type &&
+           (v.scalar_known || v.scalar_value == 0) &&
+           v.dependencies == NL_DEPENDENCY_FREE && !v.value_dependency_count &&
+           !v.domain && !v.reference.place && !v.reference.incarnation &&
+           !v.reference.scope &&
+           v.reference.provenance == NL_PROVENANCE_UNKNOWN &&
+           !v.reference.readable && !v.reference.writable &&
+           !v.reference.occurrence_dependency && !v.reference_count &&
+           !v.slot_place && !v.allocation_region && !v.occupancy.region &&
+           !v.occupancy.start && !v.occupancy.length && !v.aggregate_owner &&
+           !v.field_count && !v.sum_owner && !v.sum_payload && !v.variant;
+}
+static const NLFunctionEntry *quantity_function(const NLSemanticContext *c,
+                                                size_t id, size_t count)
+{
+    if (!c || !c->functions || !id || id > c->function_count)
+        return NULL;
+    const NLFunctionEntry *fn = &c->functions[id - 1];
+    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    return fn->kind == NL_CHECKED_REGISTERED_CALL && fn->count == count &&
+                   fn->result == type && fn->body && fn->body->syntax &&
+                   fn->body->source && fn->body->count == count &&
+                   (!count || (fn->parameters && fn->parameters[0] == type &&
+                               fn->body->parameter_names[0])) &&
+                   !fn->caller_effects && !fn->hidden_dependencies &&
+                   !fn->owner_receiver && !fn->owner_producer &&
+                   !fn->custody_recipient
+               ? fn
+               : NULL;
+}
+static const NLSyntaxNode *source_node(const NLFunctionBody *body,
+                                       NLSyntaxKind kind, NLSourceSpan span)
+{
+    size_t count = 0;
+    for (const NLSyntaxNode *s = body->syntax->nodes; s; s = s->owned_next) {
+        if (++count > body->syntax->node_count)
+            return NULL;
+        const NLSyntaxView *v = nl_syntax_node_view(s);
+        if (v && v->kind == kind && span_equal(v->span, span))
+            return s;
+    }
+    return NULL;
+}
+static bool literal(const NLCheckedFragment *f, const NLSemanticContext *c,
+                    const NLCheckedNodeView *n, const NLSyntaxNode *syntax,
+                    size_t *number)
+{
+    const NLSyntaxView *s = nl_syntax_node_view(syntax);
+    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    NLSourceView text;
+    if (!n || !s || s->kind != NL_SYNTAX_USIZE_LITERAL ||
+        n->kind != NL_CHECKED_USIZE_LITERAL || n->type != type ||
+        n->terminates || n->result_count != 1 || n->results[0].type != type ||
+        !n->has_scalar_result || !n->scalar_result.known ||
+        n->scalar_result.type != type || !span_equal(n->span, s->span) ||
+        !plain(c, n->results[0].value, type, n->scalar_result.value) ||
+        !nl_source_view(f->source, s->data.usize_digits, &text) || !text.length)
+        return false;
+    size_t parsed = 0;
+    for (size_t i = 0; i < text.length; ++i) {
+        const unsigned char ch = text.bytes[i];
+        if (ch < '0' || ch > '9' || parsed > (SIZE_MAX - (ch - '0')) / 10)
+            return false;
+        parsed = parsed * 10 + ch - '0';
+    }
+    if (parsed != n->scalar_result.value)
+        return false;
+    *number = parsed;
+    return true;
+}
+static bool same_binding(NLSemanticBindingView a, NLSemanticBindingView b)
+{
+    return a.type == b.type && a.place == b.place && a.value == b.value &&
+           a.availability == b.availability;
+}
+static bool same_operand_place(NLSemanticPlaceView a, NLSemanticPlaceView b)
+{
+    return a.type == b.type && a.live && b.live &&
+           a.incarnation == b.incarnation &&
+           a.current_value == b.current_value && a.current_fact &&
+           a.current_fact == b.current_fact && !a.governing_domain &&
+           !b.governing_domain && !a.parent_aggregate && !b.parent_aggregate &&
+           !a.parent_sum && !b.parent_sum;
+}
+static bool guard_shape(const NLCheckedFragment *f, const NLSemanticContext *c,
+                        size_t function, NLSymbolId formal,
+                        const NLSyntaxNode *syntax, NLCheckedNodeId left,
+                        NLCheckedNodeId right, size_t *limit, size_t *step)
+{
+    const NLFunctionEntry *fn = quantity_function(c, function, 1);
+    const NLCheckedFragment *parent = f ? f->if_parent : NULL;
+    const NLCheckedNodeView *choice =
+        parent ? nl_checked_node_view(parent, f->if_parent_node) : NULL;
+    const NLCheckedNodeView *test =
+        choice ? nl_checked_node_view(parent, choice->initializer) : NULL;
+    const NLCheckedNodeView *a =
+        test ? nl_checked_node_view(parent, test->first_argument) : NULL;
+    const NLCheckedNodeView *bound =
+        a ? nl_checked_node_view(parent, a->next_argument) : NULL;
+    const NLCheckedNodeView *x = f ? nl_checked_node_view(f, left) : NULL;
+    const NLCheckedNodeView *k = f ? nl_checked_node_view(f, right) : NULL;
+    const NLSyntaxView *sum = nl_syntax_node_view(syntax);
+    if (!fn || !f || !parent || !choice || !test || !a || !bound || !x || !k ||
+        f->if_arm_index != 0 || f->source != parent->source ||
+        f->source != fn->body->source || choice->kind != NL_CHECKED_IF ||
+        test->kind != NL_CHECKED_USIZE_LESS_THAN ||
+        choice->initializer >= f->if_parent_node || !sum ||
+        sum->kind != NL_SYNTAX_USIZE_ADDITION ||
+        source_node(fn->body, sum->kind, sum->span) != syntax || !formal ||
+        formal > c->binding_count || a->kind != NL_CHECKED_IDENTIFIER ||
+        a->symbol != formal || a->value_use != NL_VALUE_COPIED ||
+        a->result_count != 1 || a->results[0].value > f->branch_value_prefix ||
+        x->kind != NL_CHECKED_IDENTIFIER || x->symbol != formal ||
+        x->value_use != NL_VALUE_COPIED || x->result_count != 1 ||
+        !span_equal(x->span,
+                    nl_syntax_node_view(sum->data.equality.left)->span) ||
+        !token(f->source, x->name, fn->body->parameter_names[0]) ||
+        !token(parent->source, a->name, fn->body->parameter_names[0]) ||
+        !c->bindings[formal - 1].name ||
+        strcmp(c->bindings[formal - 1].name, fn->body->parameter_names[0]) ||
+        bound->next_argument || k->next_argument)
+        return false;
+    const NLSyntaxNode *if_source =
+        source_node(fn->body, NL_SYNTAX_IF, choice->span);
+    const NLSyntaxView *branch = nl_syntax_node_view(if_source);
+    const NLSyntaxView *guard =
+        branch ? nl_syntax_node_view(branch->data.conditional.condition) : NULL;
+    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    NLSemanticBindingView binding;
+    NLSemanticPlaceView place;
+    if (!guard || guard->kind != NL_SYNTAX_USIZE_LESS_THAN ||
+        !span_equal(guard->span, test->span) ||
+        !span_equal(test->name, guard->data.equality.operator_span) ||
+        !token(f->source, test->name, "<") ||
+        !span_equal(a->span,
+                    nl_syntax_node_view(guard->data.equality.left)->span) ||
+        !literal(f, c, bound, guard->data.equality.right, limit) ||
+        !literal(f, c, k, sum->data.equality.right, step) || !*limit ||
+        *step > SIZE_MAX - (*limit - 1) ||
+        !nl_semantic_binding_view(c, formal, &binding) ||
+        binding.type != type || binding.availability != NL_AVAILABLE ||
+        !nl_semantic_place_view(c, binding.place, &place) || !place.live ||
+        !place.current_fact || place.current_value != binding.value ||
+        !quantity(c, binding.value, type) ||
+        !quantity(c, a->results[0].value, type) ||
+        !quantity(c, x->results[0].value, type))
+        return false;
+    const NLSemanticValueView original = c->values[binding.value - 1];
+    const NLSemanticValueView copied[] = {c->values[a->results[0].value - 1],
+                                          c->values[x->results[0].value - 1]};
+    for (size_t i = 0; i < 2; ++i)
+        if (copied[i].scalar_known != original.scalar_known ||
+            copied[i].scalar_value != original.scalar_value)
+            return false;
+    return true;
+}
+bool nl_guarded_usize_permitted(const NLCheckedFragment *f,
+                                const NLSemanticContext *c,
+                                const NLSemanticContext *entry, size_t function,
+                                NLSymbolId formal, const NLSyntaxNode *syntax,
+                                NLCheckedNodeId left, NLCheckedNodeId right)
+{
+    size_t limit, step;
+    NLSemanticBindingView before, now;
+    NLSemanticPlaceView a, b;
+    return entry && entry != c &&
+           guard_shape(f, c, function, formal, syntax, left, right, &limit,
+                       &step) &&
+           nl_semantic_binding_view(entry, formal, &before) &&
+           nl_semantic_binding_view(c, formal, &now) &&
+           same_binding(before, now) &&
+           nl_semantic_place_view(entry, before.place, &a) &&
+           nl_semantic_place_view(c, now.place, &b) && same_operand_place(a, b);
+}
+NLCheckStatus nl_guarded_usize_capture(NLCheckedFragment *f, NLCheckedNodeId id,
+                                       const NLSyntaxNode *syntax,
+                                       const NLSemanticContext *c,
+                                       const NLSemanticContext *entry,
+                                       size_t function, NLSymbolId formal)
+{
+    const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *left =
+        n ? nl_checked_node_view(f, n->first_argument) : NULL;
+    if (!n || !left || n->kind != NL_CHECKED_USIZE_ADDITION ||
+        !nl_guarded_usize_permitted(f, c, entry, function, formal, syntax,
+                                    n->first_argument, left->next_argument))
+        return NL_CHECK_INTERNAL_ERROR;
+    NLUsizeAdditionProof *p = calloc(1, sizeof(*p));
+    if (!p)
+        return NL_CHECK_OUT_OF_MEMORY;
+    p->guarded = true;
+    p->operation = NL_USIZE_ADD;
+    p->syntax = syntax;
+    p->context = f->context;
+    p->guard_parent = f->if_parent;
+    p->conditional = f->if_parent_node;
+    p->function = function;
+    p->formal = formal;
+    p->guard_binding = c->bindings[formal - 1].view;
+    p->guard_place = c->places[p->guard_binding.place - 1];
+    (void)guard_shape(f, c, function, formal, syntax, n->first_argument,
+                      left->next_argument, &p->limit, &p->step);
+    p->issued = (NLUsizeArithmeticView){
+        .origin = f,
+        .node = id,
+        .type = n->type,
+        .result = n->results[0].value,
+        .span = n->span,
+        .operator_span = n->name,
+        .operands = {n->first_argument, left->next_argument}};
+    p->next = f->usize_additions;
+    f->usize_additions = p;
+    f->destroy_usize_additions = destroy;
+    return NL_CHECK_OK;
+}
+static bool guarded_event(const NLCheckedFragment *f, NLCheckedNodeId id,
+                          size_t function, NLSymbolId formal,
+                          NLGuardedUsizePlan *out)
+{
+    const NLUsizeAdditionProof *p = find(f, id);
+    const NLSemanticContext *c = f ? f->context : NULL;
+    const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+    size_t limit, step;
+    NLSemanticValueView value;
+    if (!p || !p->guarded || p->operation != NL_USIZE_ADD || !c || !n ||
+        p->issued.origin != f || p->context != c || p->function != function ||
+        p->formal != formal || p->guard_parent != f->if_parent ||
+        p->conditional != f->if_parent_node ||
+        nl_checked_if_arm(f->if_parent, p->conditional, 0) != f ||
+        !guard_shape(f, c, function, formal, p->syntax, p->issued.operands[0],
+                     p->issued.operands[1], &limit, &step) ||
+        limit != p->limit || step != p->step ||
+        !same_binding(p->guard_binding, c->bindings[formal - 1].view) ||
+        !same_operand_place(p->guard_place,
+                            c->places[p->guard_binding.place - 1]) ||
+        n->kind != NL_CHECKED_USIZE_ADDITION || n->terminates ||
+        n->argument_count != 2 || n->first_argument != p->issued.operands[0] ||
+        n->result_count != 1 || n->type != p->issued.type ||
+        n->results[0].value != p->issued.result ||
+        !span_equal(n->span, p->issued.span) ||
+        !span_equal(n->name, p->issued.operator_span) ||
+        !token(f->source, n->name, "+") || !n->has_scalar_result ||
+        n->scalar_result.known || n->scalar_result.value ||
+        !quantity(c, n->results[0].value, n->type) ||
+        !nl_semantic_value_view(c, n->results[0].value, &value) ||
+        value.scalar_known || value.scalar_value)
+        return false;
+    out->addition = id;
+    out->limit = limit;
+    out->step = step;
+    return true;
+}
+
+static bool node_value(const NLCheckedFragment *f, const NLSemanticContext *c,
+                       NLCheckedNodeId id, NLValueId *value)
+{
+    const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    if (!n || n->terminates || n->result_count != 1 || n->type != type ||
+        n->results[0].type != type || !quantity(c, n->results[0].value, type))
+        return false;
+    *value = n->results[0].value;
+    return true;
+}
+static bool binding_source(const NLCheckedFragment *f,
+                           const NLSemanticContext *c,
+                           const NLCheckedNodeView *n, const NLSyntaxView *s)
+{
+    if (!s || s->kind != NL_SYNTAX_BINDING || !n ||
+        n->kind != NL_CHECKED_BINDING || n->terminates || n->result_count ||
+        n->argument_count != 1 || !n->symbol || n->symbol > c->binding_count ||
+        !span_equal(n->span, s->span))
+        return false;
+    const NLCheckedNodeView *r = nl_checked_node_view(f, n->first_argument);
+    const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
+    return r && init && r->kind == NL_CHECKED_RECEIVER &&
+           r->symbol == n->symbol && !r->next_argument &&
+           !n->results[0].value && r->type == init->type &&
+           init->result_count == 1 &&
+           span_equal(init->span,
+                      nl_syntax_node_view(s->data.binding.initializer)->span) &&
+           token(f->source, s->data.binding.name,
+                 c->bindings[n->symbol - 1].name) &&
+           span_equal(r->name, s->data.binding.name) &&
+           c->bindings[n->symbol - 1].view.type == init->type &&
+           c->bindings[n->symbol - 1].view.value == init->results[0].value;
+}
+static bool name_copy(const NLCheckedFragment *f, const NLSemanticContext *c,
+                      NLCheckedNodeId id, const NLSyntaxNode *syntax,
+                      NLSymbolId symbol)
+{
+    const NLSyntaxView *s = nl_syntax_node_view(syntax);
+    const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+    NLValueId value;
+    if (!s || s->kind != NL_SYNTAX_EXPR_NAME || !n ||
+        n->kind != NL_CHECKED_IDENTIFIER || n->value_use != NL_VALUE_COPIED ||
+        !symbol || symbol > c->binding_count || n->symbol != symbol ||
+        !span_equal(s->span, n->span) || !span_equal(s->data.name, n->name) ||
+        !token(f->source, n->name, c->bindings[symbol - 1].name) ||
+        !node_value(f, c, id, &value))
+        return false;
+    NLValueId original = c->bindings[symbol - 1].view.value;
+    if (!quantity(c, original, n->type))
+        return false;
+    return c->values[value - 1].scalar_known ==
+               c->values[original - 1].scalar_known &&
+           c->values[value - 1].scalar_value ==
+               c->values[original - 1].scalar_value;
+}
+static bool helper_body(const NLCheckedFragment *f, const NLSemanticContext *c,
+                        const NLFunctionEntry *fn, NLGuardedUsizePlan *p)
+{
+    const NLSyntaxView *source =
+        nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
+    const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
+    const NLCheckedNodeView *choice =
+        root ? nl_checked_node_view(f, root->tail) : NULL;
+    const NLSyntaxView *s =
+        source ? nl_syntax_node_view(source->data.block.tail) : NULL;
+    if (!source || source->kind != NL_SYNTAX_BLOCK ||
+        source->data.block.items || !root || root->kind != NL_CHECKED_BLOCK ||
+        root->first_item || !choice || !s || s->kind != NL_SYNTAX_IF ||
+        choice->kind != NL_CHECKED_IF || choice->normal_arms != 2 ||
+        choice->terminates || !span_equal(root->span, source->span) ||
+        !span_equal(choice->span, s->span))
+        return false;
+    NLValueId returned, selected;
+    if (!node_value(f, c, f->root, &returned) ||
+        !node_value(f, c, root->tail, &selected) || returned != selected ||
+        c->values[selected - 1].scalar_known ||
+        c->values[selected - 1].scalar_value)
+        return false;
+    const NLCheckedNodeView *test =
+        nl_checked_node_view(f, choice->initializer);
+    const NLCheckedNodeView *operand =
+        test ? nl_checked_node_view(f, test->first_argument) : NULL;
+    if (!operand || !operand->symbol)
+        return false;
+    p->formal = operand->symbol;
+    p->conditional = root->tail;
+    const NLSyntaxNode *syntax[] = {s->data.conditional.then_block,
+                                    s->data.conditional.else_block};
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedFragment *arm = nl_checked_if_arm(f, root->tail, a);
+        const NLSyntaxView *block_source = nl_syntax_node_view(syntax[a]);
+        const NLCheckedNodeView *ar =
+            arm ? nl_checked_node_view(arm, arm->root) : NULL;
+        const NLCheckedNodeView *block =
+            ar ? nl_checked_node_view(arm, ar->initializer) : NULL;
+        if (!arm || arm->if_parent != f || arm->if_parent_node != root->tail ||
+            arm->if_arm_index != a || arm->source != f->source || !ar ||
+            ar->kind != NL_CHECKED_IF_ARM || ar->terminates || !block ||
+            block->kind != NL_CHECKED_BLOCK || block->terminates ||
+            !block_source || block_source->kind != NL_SYNTAX_BLOCK ||
+            !span_equal(block->span, block_source->span))
+            return false;
+        NLValueId block_value, arm_value;
+        if (!node_value(arm, arm->context, ar->initializer, &block_value) ||
+            !node_value(arm, arm->context, arm->root, &arm_value) ||
+            block_value != arm_value)
+            return false;
+        if (a == 0) {
+            const NLSyntaxNode *item = block_source->data.block.items;
+            const NLCheckedNodeView *b =
+                nl_checked_node_view(arm, block->first_item);
+            if (!item || nl_syntax_next_argument(item) || !b || b->next_item ||
+                !binding_source(arm, arm->context, b,
+                                nl_syntax_node_view(item)) ||
+                !guarded_event(arm, b->initializer, p->function, p->formal,
+                               p) ||
+                !name_copy(arm, arm->context, block->tail,
+                           block_source->data.block.tail, b->symbol))
+                return false;
+        } else if (block->first_item || block_source->data.block.items ||
+                   !name_copy(arm, arm->context, block->tail,
+                              block_source->data.block.tail, p->formal))
+            return false;
+    }
+    return true;
+}
+bool nl_guarded_usize_body_at(const NLCheckedFragment *f,
+                              const NLSemanticContext *c, size_t function,
+                              NLGuardedUsizePlan *out)
+{
+    const NLFunctionEntry *fn = quantity_function(c, function, 1);
+    if (!fn)
+        fn = quantity_function(c, function, 0);
+    if (!f || !fn || !out || f->body_owner != fn->body ||
+        f->source != fn->body->source)
+        return false;
+    NLGuardedUsizePlan plan = {.body = f, .function = function};
+    if (fn->count) {
+        if (!helper_body(f, c, fn, &plan))
+            return false;
+    } else {
+        const NLSyntaxView *s =
+            nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
+        const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
+        if (!s || s->kind != NL_SYNTAX_BLOCK || !root ||
+            root->kind != NL_CHECKED_BLOCK || root->terminates ||
+            !span_equal(root->span, s->span))
+            return false;
+        NLCheckedNodeId id = root->first_item;
+        NLSymbolId previous = 0;
+        size_t count = 0;
+        for (const NLSyntaxNode *item = s->data.block.items; item;
+             item = nl_syntax_next_argument(item)) {
+            const NLSyntaxView *b = nl_syntax_node_view(item);
+            const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+            if (++count > NL_PARSER_MAX_NODES || !binding_source(f, c, n, b))
+                return false;
+            const NLCheckedNodeView *init =
+                nl_checked_node_view(f, n->initializer);
+            if (!previous) {
+                const NLSyntaxView *call =
+                    nl_syntax_node_view(b->data.binding.initializer);
+                if (!call || call->kind != NL_SYNTAX_EXPR_CALL || !init ||
+                    init->kind != NL_CHECKED_REGISTERED_CALL ||
+                    !init->body_backed || init->argument_count != 1 ||
+                    init->terminates)
+                    return false;
+                const NLFunctionEntry *target =
+                    quantity_function(c, init->function, 1);
+                const NLCheckedFragment *body =
+                    nl_checked_call_body(f, n->initializer);
+                NLGuardedUsizePlan nested = {.body = body,
+                                             .function = init->function};
+                const NLCheckedNodeView *arg =
+                    nl_checked_node_view(f, init->first_argument);
+                size_t actual;
+                NLValueId result, inner;
+                if (!target || !body || body->body_owner != target->body ||
+                    body->source != target->body->source ||
+                    !helper_body(body, c, target, &nested) || !arg ||
+                    arg->next_argument ||
+                    !literal(f, c, arg, call->data.call.arguments, &actual) ||
+                    !token(f->source, init->name, target->name) ||
+                    !node_value(f, c, n->initializer, &result) ||
+                    !node_value(body, c, body->root, &inner) ||
+                    result != inner ||
+                    c->bindings[nested.formal - 1].view.value !=
+                        arg->results[0].value)
+                    return false;
+                plan.call = n->initializer;
+            } else if (!name_copy(f, c, n->initializer,
+                                  b->data.binding.initializer, previous))
+                return false;
+            previous = n->symbol;
+            id = n->next_item;
+        }
+        NLValueId result, tail;
+        if (!previous || id ||
+            !name_copy(f, c, root->tail, s->data.block.tail, previous) ||
+            !node_value(f, c, f->root, &result) ||
+            !node_value(f, c, root->tail, &tail) || result != tail)
+            return false;
+    }
+    *out = plan;
+    return true;
+}
+bool nl_guarded_usize_call_valid(const NLCheckedFragment *f,
+                                 NLCheckedNodeId call, NLGuardedUsizePlan *out)
+{
+    if (!out || nl_checked_proof_class(f) != NL_CHECKED_MACHINE_PROVED ||
+        !nl_h_custody_result_valid(f, call))
+        return false;
+    const NLCheckedNodeView *n = nl_checked_node_view(f, call);
+    const NLCheckedFragment *body = nl_checked_call_body(f, call);
+    NLGuardedUsizePlan plan;
+    NLValueId actual, returned;
+    if (!n || !body || n->kind != NL_CHECKED_REGISTERED_CALL || n->terminates ||
+        !n->body_backed ||
+        !nl_guarded_usize_body_at(body, f->context, n->function, &plan) ||
+        !node_value(f, f->context, call, &actual) ||
+        !node_value(body, f->context, body->root, &returned) ||
+        actual != returned ||
+        (plan.call && !nl_h_custody_result_valid(body, plan.call)))
+        return false;
+    *out = plan;
+    return true;
+}

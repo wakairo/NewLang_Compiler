@@ -1,0 +1,28 @@
+{
+  "authority": "f7c277af59a4c4281c07fd6d3cc1d98f8bf88f48",
+  "canonical": "Draft17.38",
+  "target": "native size_t/usize, boundary fixtures require 64 bits",
+  "baseline": {
+    "Q-next-occupancy.nl": "CHECK3 USIZE-ADDITION-PRECISION (historical input, new-main observation pending)",
+    "B-batch-advance.nl": "predicted CHECK3 USIZE-ADDITION-PRECISION",
+    "M-max-bound.nl": "predicted conservative CHECK rejection; do not run generated C"
+  },
+  "forward": {
+    "Q-next-occupancy.nl": {"check": 0, "owned": "MACHINE", "definition_addition": "Unknown", "main_result": 12, "limit": 16, "step": 1, "inputs": [0, 14, 15, 16, 18446744073709551615], "outputs": [1, 15, 16, 16, 18446744073709551615]},
+    "B-batch-advance.nl": {"check": 0, "owned": "MACHINE", "definition_addition": "Unknown", "main_result": 15, "limit": 9, "step": 7, "inputs": [0, 7, 8, 9, 18446744073709551615], "outputs": [7, 14, 15, 9, 18446744073709551615]},
+    "M-max-bound.nl": {"check": 0, "owned": "MACHINE", "definition_addition": "Unknown", "main_result": 18446744073709551615, "limit": 18446744073709551615, "step": 1, "inputs": [0, 18446744073709551614, 18446744073709551615], "outputs": [1, 18446744073709551615, 18446744073709551615]},
+    "N-decoy-guard.nl": {"check": 3, "diagnostic": "USIZE-ADDITION-PRECISION", "codegen": "NOT_RUN"},
+    "N-overflow-bound.nl": {"check": 3, "diagnostic": "USIZE-ADDITION-PRECISION", "codegen": "NOT_RUN"}
+  },
+  "invariants": [
+    "same exact source/IF true arm/formal/value/place/incarnation/current fact",
+    "L > 0 and k <= SIZE_MAX-(L-1), never compute an overflowing checker bound",
+    "guarded result conservatively Unknown even on a concrete replay; unreachable false-guard true arm never manufactures an out-of-range Known result",
+    "public Known numeric receipt layout and interpretation unchanged",
+    "whole-root actual/formal/call/result/Copy/source/world authentication before codegen",
+    "one runtime condition and only selected-arm arithmetic; no cached expected result emission",
+    "foreign world/owner/call/body/arg/result/arm/source and Known-bit tampering reject",
+    "selected actual OOM hits leave out NULL, context unchanged, no partial named output, same-context retry succeeds"
+  ],
+  "legacy": "P1487/P1489 P/A/Q/N and P1490 PREP FIRST/RED remain immutable; old CLI4/4 is not reused as a new result"
+}
