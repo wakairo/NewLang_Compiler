@@ -2333,3 +2333,8 @@ include(tests/p1368/CMakeLists.txt)
 include(tests/p1372/CMakeLists.txt)
 
 include(tests/p1375/CMakeLists.txt)
+
+# R1486: isolated independent V1 CTest registration; NEVERMERGE branch only.
+if(BUILD_TESTING)
+    include(tests/r1486/CMakeLists.txt)
+endif()

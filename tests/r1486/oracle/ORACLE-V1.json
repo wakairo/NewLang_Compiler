@@ -1,0 +1,125 @@
+{
+  "oracle_id": "R1483-C1075-ORACLE-V1",
+  "status": "PREDICTION_ONLY; all execution stages UNOBSERVED; no PASS",
+  "authority": {
+    "repo": "wakairo/NewLang_Compiler",
+    "main": "94b149d8aaa9f2afbf70204fc3740a414003eb89",
+    "current_spec": "Draft17.38",
+    "clauses": "3.2, 13.5a, 13.8, 16.3.8, 17.1, 17.4, 18.1, 18.2, 18.7, 19.1, 26.9, 26.24-25, 27.3",
+    "process": "independent R canonical-FIRST; future R only dedicated GitHub branch + Actions after separate release"
+  },
+  "programs": {
+    "RZ": {
+      "bytes": 3297,
+      "sha256": "805824a8fe2096a4cf4d75aed9e9efd68e00617287f85a22e27ddbe08859506e",
+      "intent": "H2 genuine scalar u8(0) must still cause second named install; H0/H1 no second install",
+      "source_eligibility": "UNCERTAIN"
+    },
+    "RN": {
+      "bytes": 3299,
+      "sha256": "f545f5a2a800a4c8a7ff17ab5786e0327bcc89466520764c302e1f2923e1b118",
+      "intent": "H2 genuine scalar u8(176) nonzero control; same normal join structure",
+      "source_eligibility": "UNCERTAIN"
+    },
+    "RX": {
+      "bytes": 3296,
+      "sha256": "b7881457090bdd30ad619775ef3359becf0d01ef5d966c670618fbe958c3d08b",
+      "intent": "H2 wrong but live domain_first used for ptr_second; deliberate invalid safety control",
+      "source_eligibility": "UNCERTAIN"
+    }
+  },
+  "original_identity_and_semantics": {
+    "T": "One original lexical panel: Gauge {reading:index0 u8, sentinel:index1 u8}; implicit local Domain; its child projections share T root/incarnation throughout, no T clone.",
+    "initial_install": "Actual call install(loan_write(panel@reading),u8(91)); formal target: ref<write,u8> nonexclusive; incoming Copy u8; body replace returns displaced Copy; caller old_boot=29; current T.reading=91; sentinel=203.",
+    "two_H": "Exactly one Seed nominal {next:index0 Option<ptr<Seed>>, stamp:index1 u8}, two different static try_allocate_one<Seed> sites. H_a if allocated has distinct original R_a/Allocation_a/O_a/Domain_a; H_b if allocated has independent R_b/Allocation_b/O_b/Domain_b. Original stamped H_a=47 and H_b=0 or 176.",
+    "real_read": "H2 only: ptr_second from source initialize; loan_read(domain_second) issues live matching D_b stability; ref_from_ptr(read,ptr_second,stable_for_read) issues actual ref<read,Seed>; read(live_second@stamp) returns genuine current Copy from H_b. No substituted u8 literal and no root/owner grant from pointer bits.",
+    "release": "H1 frees only H_a; H2 frees H_b then H_a. Each uses true matched destroy(ptr,D exclusive)->erase_slot<Seed>->finalize_domain->deallocate(original Allocation,full R Storage); H0 has no H responsibilities. Loan ends before exclusive ending. No implicit cleanup or owner transfer.",
+    "second_install": "H2 only, after all H teardown: freshly scoped loan_write(panel@reading), same named install(actual target ref, actual_stamp Copy), different actual/formal/result frame, same physical T original/field. Return old_second=91; new value=0 RZ /176 RN; sibling remains203. No second T operation in H0/H1.",
+    "join": "Inner second allocation match has 2 normal outgoing edges, outer first match also has 2 normal outgoing edges; no early RETURN. Each normal edge carries same outer nonCopy availability but may carry different T current semantic value; memory state phi/may-set must preserve correlation or conservatively reject. Common postmatch panel@reading and panel@sentinel are actual current Copy reads.",
+    "identity_guard": "No same-number PlaceId/NodeId/DomainId across world/call/fragment is authority. T and H are separate nominals, original identities and D/loan/owner cannot be copied or remapped."
+  },
+  "stage_predictions_UNOBSERVED": {
+    "SOURCE": "RZ and RN SOURCE_ELIGIBILITY_UNCERTAIN. Individually selected operations do not conclusively admit whole H2-only second named T Change after both H cleanup and two normal joins within bounded mixed-unit source. RX full-program SOURCE uncertain too. Do not invent SOURCE pass or implementation ban.",
+    "definition": "IF SOURCE admits: independent install definition must verify replace on formal ref<write,u8> and old Copy result without assuming a favorable caller. Every actual call independently proves correct panel original/child/current and loan, may-set Unknown is not proof.",
+    "CHECK": "IF SOURCE admits: RZ/RN should be safe only if real H Copy scalar has no surviving blocked ref/Domain/root dependency after teardown and exact current state is tracked. If not provable, fail closed or analysis-precision reject. RX H2 must semantic reject wrong governing Domain D_a vs D_b; never use u8 bits, liveness of D_a, or ptr alone as proof.",
+    "public_owned": "IF CHECK passes: source-issued public owned and validator must have true T original/child/sibling, first/optional second named call actual/formal/result, correct event worlds, physical H R/Allocation/Domain/owner, each nonCopy claim exactly once, scope and origin. An unrelated copied T or host-seeded receipt FAIL CLOSED, no emitted C. Fragment/world-qualified IDs; missing evidence yields NOT_REACHED.",
+    "MACHINE": "Predicted abstract semantics only, NOT observed. H0 no allocation/free, H1 one genuine original allocated/freed, H2 two distinct originals allocated and read stamp from H_b before release, then both freed, then one second Change. Zero is a genuine successful H2 u8, never failure.",
+    "C17": "NOT_RUN; if earlier layers certified, strict C17 must encode exactly two physical T changes on H2 and one on H0/H1, same T carrier, real H allocation/read/cleanup, no phantom ghost replay, full source-issued owned receipt, consistent evaluation and strict C17.",
+    "native": "NOT_RUN; IF separate execution release and all safe gates hold, require GCC+Clang native on GitHub Actions branch, true physical original H_a/H_b/T addresses and passive allocation/deallocation observations, no ASan/LSan violation, no false H2-0 failure. If sanctioned identity cannot be observed record NOT_OBSERVABLE. RX must not be executed as unsafe guest."
+  },
+  "predicted_worlds": {
+    "H0": {
+      "allocations": 0,
+      "releases": 0,
+      "H_scalar_reads": 0,
+      "T_install_calls": 1,
+      "old_boot": 29,
+      "old_second": "ABSENT",
+      "T_reading": 91,
+      "T_sentinel": 203,
+      "outer_normal_join": "YES",
+      "inner_join": "NOT_ENTERED"
+    },
+    "H1": {
+      "allocations": 1,
+      "releases": [
+        "H_a"
+      ],
+      "H_scalar_reads": 0,
+      "T_install_calls": 1,
+      "old_boot": 29,
+      "old_second": "ABSENT",
+      "T_reading": 91,
+      "T_sentinel": 203,
+      "inner_normal_join": "YES second-None",
+      "outer_normal_join": "YES"
+    },
+    "H2_RZ": {
+      "allocations": 2,
+      "releases": [
+        "H_b",
+        "H_a"
+      ],
+      "H_scalar_read": "real H_b stamp=0 with D_b",
+      "T_install_calls": 2,
+      "old_boot": 29,
+      "old_second": 91,
+      "T_reading": 0,
+      "T_sentinel": 203,
+      "inner_normal_join": "YES both-Some",
+      "outer_normal_join": "YES",
+      "zero_is_success": true
+    },
+    "H2_RN": {
+      "allocations": 2,
+      "releases": [
+        "H_b",
+        "H_a"
+      ],
+      "H_scalar_read": "real H_b stamp=176 with D_b",
+      "T_install_calls": 2,
+      "old_boot": 29,
+      "old_second": 91,
+      "T_reading": 176,
+      "T_sentinel": 203,
+      "inner_normal_join": "YES both-Some",
+      "outer_normal_join": "YES"
+    },
+    "H2_RX": {
+      "allocations": 2,
+      "read_attempt": "ptr_second under domain_first: D_a != D_b",
+      "required": "semantic/source/precision REJECT before owned/C17/native",
+      "post_join": "NO ACCEPTED PROGRAM CLAIM"
+    }
+  },
+  "negative_and_OOM": {
+    "bad_domain": "two live Domains do not imply interchangeable governing identity; reject wrong D without inferred authority or host correction.",
+    "old_current_sibling": "first old Copy29, second old Copy91; Change on reading changes T ancestor and child current, not sentinel203 or original root incarnation; final read edge-sensitive.",
+    "owner_loan": "wrong R/A/D pair, swapped full Storage, double release, drop nonDiscardable, EndRoot with live conflicting ref, reborrow from ended H, forged checked receipt: reject where applicable; never treat pointers as owners.",
+    "allocation_failure": "None result is failure atomic; any earlier real H owner explicitly cleans on normal H1. No hidden initialized H on H0, no missing cleanup.",
+    "transactional_OOM": "parser/CHECK/issuer/public validator OOM must rollback/no partial root, owned receipt or generated C; no-clobber original T when safe validation fails. This is an obligation not test evidence.",
+    "physical": "Must observe actual original T address and H original allocation identity through permitted passive proof; if not possible NOT_OBSERVABLE, not PASS.",
+    "value": "\u00a71.1 author+ordinary-safe-caller UB-prevention audit/re-audit dependency closure vs well-factored C remains UNMEASURED; GO624 PAUSED/H1#268 HOLD."
+  },
+  "final": "PREP ONLY FIRST frozen, EXECUTION NOT_RELEASED; all SOURCE/CHECK/owned/C17/native UNOBSERVED; no compiler/native/Lean/build/CI/branch/PR, no future execution authority."
+}
