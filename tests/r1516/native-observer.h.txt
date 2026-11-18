@@ -1,0 +1,62 @@
+#ifndef R1516_NATIVE_PASSIVE_H
+#define R1516_NATIVE_PASSIVE_H
+
+/* Included inside emitted guest C after the real nl_node definition.
+ * Observer reads existing guest storage only; never allocates a NewLang
+ * authority, writes guest fields, or supplies a payload to a guest call. */
+void r1516_trial(const void *, size_t, size_t);
+void r1516_arm(unsigned);
+void r1516_domain(size_t);
+void r1516_initialize(const void *, size_t, uint8_t, unsigned);
+void r1516_reloan(const void *, size_t, uint8_t);
+void r1516_field(const void *, const uint8_t *, unsigned, size_t, size_t,
+                 size_t, size_t, size_t);
+void r1516_end(const void *, size_t, uint8_t, unsigned);
+void r1516_raw(const void *, size_t);
+void r1516_finalize(size_t);
+void r1516_release(const void *, const void *, size_t);
+void r1516_t_bind(uint8_t *, uint8_t *);
+void r1516_t_copy(uint8_t *, uint8_t, uint8_t);
+void r1516_finish(void);
+void r1516_forbid(const char *);
+
+#define NL_HEAP_TRIAL(p, n, a) r1516_trial((p), (n), (a))
+#define NL_HEAP_ARM(kind) r1516_arm((unsigned)(kind))
+#define NL_HEAP_DOMAIN(token) r1516_domain((size_t)(token))
+#define NL_HEAP_SLOT(...) ((void)0)
+#define NL_HEAP_INITIALIZE(p, token) \
+    r1516_initialize((p), (size_t)(token), (p)->f1, (p)->f0.tag)
+#define NL_HEAP_RELOAN(p, token) \
+    r1516_reloan((p), (size_t)(token), (p)->f1)
+#define NL_HEAP_ROOT(...) ((void)0)
+/* The finite direct-H scalar path emits FIELD, then an actual C scalar load.
+ * RELOAN is not emitted for this path; observe the real field operand. */
+#define NL_HEAP_FIELD(root, field, access, nominal, index, child, inc, scope) \
+    r1516_field((root), (field), (unsigned)(access), (size_t)(nominal), \
+                (size_t)(index), (size_t)(child), (size_t)(inc), (size_t)(scope))
+#define NL_HEAP_COPY(...) ((void)0)
+#define NL_HEAP_CHANGE(...) r1516_forbid("Unexpected H link Change")
+#define NL_HEAP_SCOPE_END(...) ((void)0)
+#define NL_HEAP_END(p, token) \
+    r1516_end((p), (size_t)(token), (p)->f1, (p)->f0.tag)
+#define NL_HEAP_RAW(p, length) r1516_raw((p), (length))
+#define NL_HEAP_FINALIZE(token) r1516_finalize((size_t)(token))
+#define NL_HEAP_RELEASE(handle, p, length) \
+    r1516_release((handle), (p), (length))
+#define NL_HEAP_FINISH() r1516_finish()
+#define NL_HEAP_HANDOFF(...) ((void)0)
+#define NL_HEAP_RECEIVER_ENTER(...) ((void)0)
+#define NL_HEAP_RECEIVER_EXIT(...) ((void)0)
+#define NL_HEAP_RETURNED(...) ((void)0)
+#define NL_LIVE_SEND(...) ((void)0)
+#define NL_LIVE_ENTER(...) ((void)0)
+#define NL_LIVE_RETURN(...) ((void)0)
+#define NL_LIVE_RECEIVE(...) ((void)0)
+
+#define NL_MIXED_COPY_BIND(frame, symbol, f0, f1) \
+    r1516_t_bind((f0), (f1))
+#define NL_MIXED_COPY_CALL(target, old, next) \
+    r1516_t_copy((target), (old), (next))
+#define NL_MIXED_COPY_STORE(...) r1516_forbid("Unexpected direct T store")
+
+#endif
