@@ -1,0 +1,32 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+#include <limits.h>
+_Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+#include <stddef.h>
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+
+static void nl_fn_10(void);
+
+static void nl_fn_10(void)
+{
+    const nl_type_10 nl_local_1 = { .f1 = 0, .f0 = 255, };
+    (void)nl_local_1;
+    const nl_type_10 nl_local_2 = { .f0 = 203, .f1 = 41, };
+    (void)nl_local_2;
+    if ((((size_t)UINTMAX_C(17)) == ((size_t)UINTMAX_C(17)))) {
+        (void)0;
+    } else {
+        (void)0;
+    }
+    (void)0;
+}
+
+int main(void)
+{
+    nl_fn_10();
+    return 0;
+}

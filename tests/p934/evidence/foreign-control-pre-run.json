@@ -1,0 +1,7 @@
+{
+  "frozen_utc": "2026-10-26T06:08:29.354920+00:00",
+  "source": "tests/p752/additional/negative_foreign_nominal.nl",
+  "sha256": "dc3cdb36d160dfe70e7e017758101f224562ce905bc9d691c80664235c0bd9e4",
+  "prediction": "genuine H value cannot destructure as distinct T nominal; both unchanged baseline and candidate CLI CHECK/emission must reject semantic EXIT3; no expected diagnostic code invented",
+  "expected_exit": 3
+}

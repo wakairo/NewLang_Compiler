@@ -1,0 +1,30 @@
+[
+  {
+    "binary": "/tmp/p934-fixed-build/newlangc",
+    "mode": "check",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p752/additional/negative_foreign_nominal.nl:10:96-10:103: error(semantic)[P5-DESTRUCTURE-TYPE]: destructuring RHS must be the selected aggregate\n"
+  },
+  {
+    "binary": "/tmp/p934-fixed-build/newlangc",
+    "mode": "C17",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p752/additional/negative_foreign_nominal.nl:10:96-10:103: error(semantic)[P5-DESTRUCTURE-TYPE]: destructuring RHS must be the selected aggregate\n"
+  },
+  {
+    "binary": "/tmp/p934-build/newlangc",
+    "mode": "check",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p752/additional/negative_foreign_nominal.nl:10:96-10:103: error(semantic)[P5-DESTRUCTURE-TYPE]: destructuring RHS must be the selected aggregate\n"
+  },
+  {
+    "binary": "/tmp/p934-build/newlangc",
+    "mode": "C17",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p752/additional/negative_foreign_nominal.nl:10:96-10:103: error(semantic)[P5-DESTRUCTURE-TYPE]: destructuring RHS must be the selected aggregate\n"
+  }
+]
