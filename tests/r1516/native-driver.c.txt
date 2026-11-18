@@ -136,6 +136,29 @@ void r1516_reloan(const void *p, size_t domain, uint8_t actual_byte)
             (unsigned)sampled);
 }
 
+/* Passive original-H scalar projection witness. The emitted guest performs
+ * its actual uint8_t load immediately AFTER this NL_HEAP_FIELD call, then the
+ * unchanged named T Copy passes its actual result. This hook cannot supply
+ * or overwrite a guest scalar. */
+void r1516_field(const void *root, const uint8_t *field, unsigned access,
+                 size_t nominal, size_t index, size_t child,
+                 size_t incarnation, size_t scope)
+{
+    OriginalH *h = find_original(root);
+    require(requested_world == 2 && reads == 0 &&
+                original_index(h) == 1 && h->initialized && !h->ended &&
+                !h->freed && access == 0 && index == 1 &&
+                nominal != 0 && child != 0 && incarnation != 0 && scope != 0 &&
+                (uintptr_t)field == h->address + 16u &&
+                h->domain == originals[1].domain && *field == h->payload,
+            "scalar projection must name the true second live H field");
+    sampled = *field;
+    ++reads;
+    fprintf(stderr, "R1516_H_SCALAR_OPERAND original=1 addr=0x%" PRIxPTR
+                    " domain=%zu value=%u\n",
+            h->address, h->domain, (unsigned)sampled);
+}
+
 void r1516_end(const void *p, size_t domain, uint8_t actual_byte,
                unsigned tag)
 {

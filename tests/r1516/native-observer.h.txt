@@ -9,6 +9,8 @@ void r1516_arm(unsigned);
 void r1516_domain(size_t);
 void r1516_initialize(const void *, size_t, uint8_t, unsigned);
 void r1516_reloan(const void *, size_t, uint8_t);
+void r1516_field(const void *, const uint8_t *, unsigned, size_t, size_t,
+                 size_t, size_t, size_t);
 void r1516_end(const void *, size_t, uint8_t, unsigned);
 void r1516_raw(const void *, size_t);
 void r1516_finalize(size_t);
@@ -27,7 +29,11 @@ void r1516_forbid(const char *);
 #define NL_HEAP_RELOAN(p, token) \
     r1516_reloan((p), (size_t)(token), (p)->f1)
 #define NL_HEAP_ROOT(...) ((void)0)
-#define NL_HEAP_FIELD(...) ((void)0)
+/* The finite direct-H scalar path emits FIELD, then an actual C scalar load.
+ * RELOAN is not emitted for this path; observe the real field operand. */
+#define NL_HEAP_FIELD(root, field, access, nominal, index, child, inc, scope) \
+    r1516_field((root), (field), (unsigned)(access), (size_t)(nominal), \
+                (size_t)(index), (size_t)(child), (size_t)(inc), (size_t)(scope))
 #define NL_HEAP_COPY(...) ((void)0)
 #define NL_HEAP_CHANGE(...) r1516_forbid("Unexpected H link Change")
 #define NL_HEAP_SCOPE_END(...) ((void)0)
