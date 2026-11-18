@@ -61,8 +61,8 @@ static bool inspect_copy(const NLCheckedFragment *fragment, NLCheckedNodeId id,
         NLCopyBodyEventView event;
         if (!demand(nl_checked_copy_body_event(fragment, id, i, &event),
                     "Copy event view") ||
-            !demand(nl_checked_copy_body_event_validate(
-                        fragment, id, i, &event) == NL_CHECK_OK,
+            !demand(nl_checked_copy_body_event_validate(fragment, id, i,
+                                                        &event) == NL_CHECK_OK,
                     "public Copy event validator"))
             return false;
         if (event.kind != NL_COPY_BODY_CHANGE)
@@ -73,7 +73,7 @@ static bool inspect_copy(const NLCheckedFragment *fragment, NLCheckedNodeId id,
         if (!demand(event.field.present && event.field.index == 0,
                     "original T field0") ||
             !demand(nl_semantic_place_view(event.before, event.field.parent,
-                                          &before) &&
+                                           &before) &&
                         nl_semantic_place_view(event.after, event.field.parent,
                                                &after),
                     "T original before/after") ||
@@ -83,23 +83,20 @@ static bool inspect_copy(const NLCheckedFragment *fragment, NLCheckedNodeId id,
                         after.fixed_field_count == 2,
                     "T original incarnation preserved") ||
             !demand(nl_semantic_place_view(event.before, before.fixed_fields[1],
-                                          &sibling_before) &&
-                        nl_semantic_place_view(event.after,
-                                               after.fixed_fields[1],
-                                               &sibling_after),
+                                           &sibling_before) &&
+                        nl_semantic_place_view(
+                            event.after, after.fixed_fields[1], &sibling_after),
                     "T disjoint sibling views") ||
-            !demand(sibling_before.incarnation == sibling_after.incarnation &&
-                        sibling_before.current_fact ==
-                            sibling_after.current_fact &&
-                        scalar(event.before, sibling_before.current_value,
-                               101) &&
-                        scalar(event.after, sibling_after.current_value, 101),
-                    "disjoint sibling identity/current101 preserved") ||
+            !demand(
+                sibling_before.incarnation == sibling_after.incarnation &&
+                    sibling_before.current_fact == sibling_after.current_fact &&
+                    scalar(event.before, sibling_before.current_value, 101) &&
+                    scalar(event.after, sibling_after.current_value, 101),
+                "disjoint sibling identity/current101 preserved") ||
             !demand(nl_semantic_value_view(event.before, event.field.old_value,
-                                          &old) &&
-                        nl_semantic_value_view(event.after,
-                                               event.field.new_value,
-                                               &incoming) &&
+                                           &old) &&
+                        nl_semantic_value_view(
+                            event.after, event.field.new_value, &incoming) &&
                         old.scalar_known && incoming.scalar_known,
                     "actual old/new scalar packages"))
             return false;
@@ -134,8 +131,8 @@ static bool inspect_owner(const NLCheckedFragment *fragment, NLCheckedNodeId id,
     if (!demand(entry && body, "source-owned terminal entry/body") ||
         !demand(node->owner_call.entry_proved && node->owner_call.post_proved,
                 "terminal actual entry/post predicates") ||
-        !demand(nl_semantic_function_applicability(
-                    nl_checked_context(fragment), node->function, &definition),
+        !demand(nl_semantic_function_applicability(nl_checked_context(fragment),
+                                                   node->function, &definition),
                 "independent receiver definition") ||
         !demand(definition.definition_checked && !definition.live_return &&
                     definition.requirements == NL_OWNER_ALL_REQUIREMENTS &&
@@ -149,16 +146,14 @@ static bool inspect_owner(const NLCheckedFragment *fragment, NLCheckedNodeId id,
     NLSemanticValueView actual[3], formal[3];
     for (size_t i = 0; i < 3; ++i) {
         NLSemanticBindingView parameter;
-        if (!demand(nl_semantic_value_view(entry, node->owner_call.inputs[i],
-                                          &actual[i]) &&
-                        nl_semantic_binding_view(
-                            entry, node->owner_call.parameters[i],
-                            &parameter) &&
-                        nl_semantic_value_view(entry, parameter.value,
-                                               &formal[i]),
-                    "actual and formal source packages") ||
-            !demand(node->owner_call.donor[i] !=
-                        node->owner_call.parameters[i],
+        if (!demand(
+                nl_semantic_value_view(entry, node->owner_call.inputs[i],
+                                       &actual[i]) &&
+                    nl_semantic_binding_view(
+                        entry, node->owner_call.parameters[i], &parameter) &&
+                    nl_semantic_value_view(entry, parameter.value, &formal[i]),
+                "actual and formal source packages") ||
+            !demand(node->owner_call.donor[i] != node->owner_call.parameters[i],
                     "fresh formal binding does not reuse donor binding"))
             return false;
     }
@@ -187,10 +182,10 @@ static bool inspect_owner(const NLCheckedFragment *fragment, NLCheckedNodeId id,
         !demand(root.fixed_field_count == 2, "H fixed children"))
         return false;
     NLSemanticPlaceView payload;
-    if (!demand(nl_semantic_place_view(entry, root.fixed_fields[1], &payload) &&
-                    scalar(entry, payload.current_value,
-                           audit->expected_payload),
-                "actual second original current payload"))
+    if (!demand(
+            nl_semantic_place_view(entry, root.fixed_fields[1], &payload) &&
+                scalar(entry, payload.current_value, audit->expected_payload),
+            "actual second original current payload"))
         return false;
     NLSemanticSnapshot snapshot;
     if (!demand(nl_semantic_snapshot(entry, &snapshot), "entry snapshot"))
@@ -258,13 +253,12 @@ static bool walk(const NLCheckedFragment *fragment, size_t depth, Audit *audit)
             node->field.index == 1) {
             NLSemanticTypeView reference, target;
             if (!demand(nl_semantic_type_view(nl_checked_context(fragment),
-                                             node->type, &reference) &&
+                                              node->type, &reference) &&
                             reference.kind == NL_TYPE_REF &&
                             reference.access == NL_ACCESS_READ &&
                             !reference.is_exclusive &&
                             nl_semantic_type_view(nl_checked_context(fragment),
-                                                   reference.target,
-                                                   &target) &&
+                                                  reference.target, &target) &&
                             target.kind == NL_TYPE_U8,
                         "read-only H u8 dependent field projection"))
                 return false;
@@ -329,13 +323,11 @@ int main(int argc, char **argv)
     if (nl_semantic_create(&context) != NL_CHECK_OK)
         goto done;
     const NLSyntaxTree *inputs[] = {tree};
-    NLCheckStatus registered =
-        nl_semantic_register_function_unit(context, inputs, 1,
-                                            &unit_diagnostic);
+    NLCheckStatus registered = nl_semantic_register_function_unit(
+        context, inputs, 1, &unit_diagnostic);
     printf("R1524 LAYER definition_CHECK status=%d\n", (int)registered);
     if (registered != NL_CHECK_OK) {
-        nl_check_diagnostic_render(stderr, source,
-                                   &unit_diagnostic.diagnostic);
+        nl_check_diagnostic_render(stderr, source, &unit_diagnostic.diagnostic);
         result = 32;
         goto done;
     }
@@ -343,7 +335,7 @@ int main(int argc, char **argv)
             NL_SOURCE_OK ||
         nl_parser_create(entry_source, &entry_parser) != NL_PARSE_OK ||
         nl_parser_parse_source_fragment(entry_parser, &entry_tree,
-                                         &parse_diagnostic) != NL_PARSE_OK)
+                                        &parse_diagnostic) != NL_PARSE_OK)
         goto done;
     NLCheckStatus checked_status = nl_semantic_check_source_fragment(
         context, entry_tree, &checked, &check_diagnostic);
