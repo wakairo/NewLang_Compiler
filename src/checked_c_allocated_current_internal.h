@@ -103,6 +103,28 @@ static bool copy_conditional_plan(Emit *e, const NLCheckedFragment *body)
     }
     if (!inner)
         return reject(e);
+    if (direct) {
+        /* Keep the exact checked H2 call/owner, never just a call count or
+         * a same-number root in another arm. The existing whole-root seal
+         * authenticates this graph before this serializer borrows it. */
+        const NLCheckedFragment *h2 = e->copy_conditional_issuer;
+        for (size_t id = 1; id <= nl_checked_node_count(h2); ++id) {
+            const NLCheckedNodeView *n = nl_checked_node_view(h2, id);
+            if (!n->owner_call.entry_proved)
+                continue;
+            if (e->direct_receiver_issuer ||
+                n->kind != NL_CHECKED_REGISTERED_CALL || !n->body_backed ||
+                !n->owner_call.post_proved ||
+                n->owner_call.definition.live_return ||
+                n->owner_call.definition.head_link_required ||
+                n->span.end_byte >
+                    nl_checked_node_view(h2, e->copy_conditional_call)
+                        ->span.start_byte)
+                return reject(e);
+            e->direct_receiver_issuer = h2;
+            e->direct_receiver_call = id;
+        }
+    }
     e->copy_conditional_inner = some;
     e->copy_conditional_inner_match = inner;
     e->copy_conditional_match = statement->initializer;

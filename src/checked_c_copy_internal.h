@@ -1087,7 +1087,7 @@ static bool copy_carrier_world(Emit *e, const Env *env)
         NLCopyBodyParameters p;
         if (e->allocations != 2 ||
             e->producer_calls != (e->direct_h ? 0u : 1u) ||
-            e->owner_calls != (e->direct_h ? 0u : 1u) || e->pending_live ||
+            e->owner_calls != expected_owner_calls(e) || e->pending_live ||
             e->active_owner_call || e->active_owner_body ||
             !copy_call_proof(e, env->artifact, e->copy_conditional_call, &p))
             return false;
@@ -1115,7 +1115,7 @@ static bool copy_carrier_world(Emit *e, const Env *env)
         return !e->pending_live && !e->active_owner_call &&
                !e->active_owner_body && e->allocations == 2 &&
                e->producer_calls == (e->direct_h ? 0u : 1u) &&
-               e->owner_calls == (e->direct_h ? 0u : 1u) &&
+               e->owner_calls == expected_owner_calls(e) &&
                !e->lifecycle[0].stage && !e->lifecycle[1].stage;
     if (e->copy_surviving_issuer && env->artifact == e->copy_surviving_issuer &&
         !env->parent && !env->backing && !env->heap_place &&
