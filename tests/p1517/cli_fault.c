@@ -11,7 +11,8 @@ void *__wrap_malloc(size_t size)
         ++text_allocations == strtoul(setting, NULL, 10)) {
         static const char message[] =
             "P1517 selected compiler-host text-buffer OOM\n";
-        (void)write(2, message, sizeof message - 1);
+        const ssize_t written = write(2, message, sizeof message - 1);
+        (void)written;
         return NULL;
     }
     return __real_malloc(size);
