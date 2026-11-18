@@ -1,0 +1,317 @@
+/* R1516 independent passive strict-C17 driver; original guest has its
+ * own emitted main renamed at compilation. No P fixture or P oracle is used. */
+#include <inttypes.h>
+#include <stdatomic.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+extern int r1516_guest_main(void);
+extern void *__real_malloc(size_t);
+extern void __real_free(void *);
+
+typedef struct {
+    uintptr_t address;
+    size_t domain;
+    uint8_t payload;
+    unsigned link_tag;
+    int acquired, initialized, ended, raw, finalized, released, freed;
+} OriginalH;
+
+static OriginalH originals[2];
+static unsigned requested_world, case_id;
+static unsigned malloc_calls, trials, arms, domains, initialized, reads;
+static unsigned ended, raws, finalized, releases, frees, copies, finishes;
+static unsigned free_order[2];
+static _Atomic unsigned free_signal;
+static uint8_t *t_first, *t_second;
+static uint8_t initial_field[2], current_field[2];
+static uint8_t sampled, old_first_call, old_second_call;
+
+static void require(int condition, const char *text)
+{
+    if (!condition) {
+        fprintf(stderr, "R1516_OBSERVER_RED: %s case=%u world=%u\n", text,
+                case_id, requested_world);
+        abort();
+    }
+}
+
+static OriginalH *find_original(const void *p)
+{
+    const uintptr_t address = (uintptr_t)p;
+    for (unsigned k = 0; k != 2; ++k) {
+        if (originals[k].acquired && originals[k].address == address)
+            return &originals[k];
+    }
+    require(0, "not a real original allocated H");
+    return NULL;
+}
+
+static unsigned original_index(const OriginalH *h)
+{
+    return (unsigned)(h - originals);
+}
+
+void *__wrap_malloc(size_t bytes)
+{
+    require(bytes == 24 && malloc_calls < 2,
+            "malloc must be an exact source-owned H 24-byte trial");
+    const unsigned i = malloc_calls++;
+    if (i >= requested_world)
+        return NULL;
+    void *p = __real_malloc(bytes);
+    require(p != NULL && (uintptr_t)p % 8u == 0u,
+            "successful H must have real aligned allocation");
+    originals[i].address = (uintptr_t)p;
+    originals[i].acquired = 1;
+    if (i == 1)
+        require(originals[0].address != originals[1].address,
+                "simultaneously live H addresses must differ");
+    fprintf(stderr, "R1516_H_ALLOC id=%u addr=0x%" PRIxPTR "\n", i,
+            originals[i].address);
+    return p;
+}
+
+void r1516_trial(const void *p, size_t bytes, size_t alignment)
+{
+    require(bytes == 24 && alignment == 8 && trials < malloc_calls,
+            "trial must reflect actual native malloc and selected layout");
+    const unsigned i = trials++;
+    require((uintptr_t)p == originals[i].address,
+            "trial must not substitute a host-seeded pointer");
+}
+
+void r1516_arm(unsigned branch)
+{
+    require(arms < 2, "unexpected extra H allocation arm");
+    const unsigned expected = arms == 0
+        ? (requested_world == 0 ? 1u : 2u)
+        : (requested_world == 1 ? 1u : 2u);
+    require(branch == expected, "H0/H1/H2 branch does not match native allocation");
+    ++arms;
+}
+
+void r1516_domain(size_t token)
+{
+    require(domains < requested_world && originals[domains].acquired,
+            "Domain must belong to a real new original H");
+    if (domains == 1)
+        require(token != originals[0].domain, "two original Domains must differ");
+    originals[domains++].domain = token;
+}
+
+void r1516_initialize(const void *p, size_t domain, uint8_t payload,
+                      unsigned tag)
+{
+    OriginalH *h = find_original(p);
+    const unsigned i = original_index(h);
+    require(!h->initialized && domain == h->domain,
+            "H initialization must use its actual governing Domain");
+    const uint8_t expected = i == 0
+        ? (case_id == 0 ? UINT8_C(47) : UINT8_C(66))
+        : (case_id == 0 ? UINT8_C(0) : UINT8_C(229));
+    require(payload == expected,
+            "actual typed H memory differs from independent source oracle");
+    h->payload = payload;
+    h->link_tag = tag;
+    h->initialized = 1;
+    ++initialized;
+    fprintf(stderr, "R1516_H_INIT id=%u domain=%zu payload=%u tag=%u\n",
+            i, domain, (unsigned)payload, tag);
+}
+
+void r1516_reloan(const void *p, size_t domain, uint8_t actual_byte)
+{
+    OriginalH *h = find_original(p);
+    require(requested_world == 2 && original_index(h) == 1 &&
+                h->initialized && !h->ended && !h->freed &&
+                h->domain == domain && actual_byte == h->payload &&
+                reads == 0,
+            "H2 u8 read must use current live second original and its D");
+    sampled = actual_byte;
+    ++reads;
+    fprintf(stderr, "R1516_H_READ original=1 payload=%u\n",
+            (unsigned)sampled);
+}
+
+void r1516_end(const void *p, size_t domain, uint8_t actual_byte,
+               unsigned tag)
+{
+    OriginalH *h = find_original(p);
+    const unsigned i = original_index(h);
+    require(h->initialized && !h->ended && domain == h->domain &&
+                actual_byte == h->payload && tag == h->link_tag,
+            "EndRoot must end the same original unchanged H incarnation");
+    if (requested_world == 2) {
+        require(i == (ended == 0 ? 1u : 0u),
+                "H2 EndRoot order must be second original then first");
+        if (i == 0)
+            require(atomic_load_explicit(&free_signal, memory_order_acquire) == 1,
+                    "first original EndRoot must follow actual second free");
+        if (i == 1)
+            require(reads == 1, "second original read must predate EndRoot");
+    }
+    h->ended = 1;
+    ++ended;
+    fprintf(stderr, "R1516_H_END id=%u domain=%zu\n", i, domain);
+}
+
+void r1516_raw(const void *p, size_t bytes)
+{
+    OriginalH *h = find_original(p);
+    require(h->ended && !h->raw && bytes == 24,
+            "raw full Storage only after actual original EndRoot");
+    h->raw = 1;
+    ++raws;
+}
+
+void r1516_finalize(size_t domain)
+{
+    OriginalH *h = NULL;
+    for (unsigned i = 0; i != 2; ++i)
+        if (originals[i].acquired && originals[i].domain == domain)
+            h = &originals[i];
+    require(h && h->ended && h->raw && !h->finalized,
+            "Domain finalize requires exact ended original, raw and no live loan");
+    h->finalized = 1;
+    ++finalized;
+}
+
+void r1516_release(const void *handle, const void *raw, size_t length)
+{
+    OriginalH *h = find_original(handle);
+    require(h->ended && h->raw && h->finalized && !h->released &&
+                h->address == (uintptr_t)raw && length == 24,
+            "deallocate must match same original Allocation/full Storage");
+    const unsigned i = original_index(h);
+    if (requested_world == 2)
+        require(i == (releases == 0 ? 1u : 0u),
+                "H2 release order must be second then first");
+    h->released = 1;
+    ++releases;
+    fprintf(stderr, "R1516_H_RELEASE id=%u addr=0x%" PRIxPTR "\n",
+            i, h->address);
+}
+
+void __wrap_free(void *p)
+{
+    OriginalH *h = find_original(p);
+    const unsigned i = original_index(h);
+    require(h->released && !h->freed && frees < 2,
+            "__wrap_free requires original validated release exactly once");
+    free_order[frees++] = i;
+    h->freed = 1;
+    atomic_store_explicit(&free_signal, frees, memory_order_release);
+    fprintf(stderr, "R1516_NATIVE_FREE id=%u addr=0x%" PRIxPTR "\n",
+            i, h->address);
+    __real_free(p);
+}
+
+void r1516_t_bind(uint8_t *f0, uint8_t *f1)
+{
+    require(!t_first && !t_second && f0 && f1 && f0 != f1,
+            "exactly one real T original with two different children");
+    t_first = f0;
+    t_second = f1;
+    initial_field[0] = *f0;
+    initial_field[1] = *f1;
+    require(initial_field[0] == (case_id == 0 ? 64u : 9u) &&
+                initial_field[1] == (case_id == 0 ? 201u : 118u),
+            "actual original T constructor values must match independent oracle");
+    current_field[0] = initial_field[0];
+    current_field[1] = initial_field[1];
+}
+
+void r1516_t_copy(uint8_t *target, uint8_t old, uint8_t next)
+{
+    require(t_first && t_second && copies < 2,
+            "only the source-issued original named T function can Copy");
+    const unsigned index = case_id == 0 ? 0u : 1u;
+    uint8_t *expected_ptr = index == 0 ? t_first : t_second;
+    const unsigned freed_now =
+        atomic_load_explicit(&free_signal, memory_order_acquire);
+    require(target == expected_ptr && *target == next &&
+                old == current_field[index],
+            "named Copy must hit same original child/current and return real old");
+    if (copies == 0) {
+        require(malloc_calls == 0 && freed_now == 0 &&
+                    next == (case_id == 0 ? 23u : 33u),
+                "startup named Copy must precede H allocation and use startup byte");
+        old_first_call = old;
+    } else {
+        require(requested_world == 2 && freed_now == 2 &&
+                    reads == 1 && next == sampled &&
+                    next == (case_id == 0 ? 0u : 229u),
+                "H2 second named Copy must use real second-H byte AFTER both frees");
+        old_second_call = old;
+    }
+    current_field[index] = next;
+    ++copies;
+    require(*t_first == current_field[0] &&
+                *t_second == current_field[1],
+            "T sibling/current must remain unchanged except target child");
+    fprintf(stderr, "R1516_T_COPY count=%u index=%u old=%u next=%u free=%u\n",
+            copies, index, (unsigned)old, (unsigned)next, freed_now);
+}
+
+void r1516_forbid(const char *reason)
+{
+    require(0, reason);
+}
+
+void r1516_finish(void)
+{
+    require(finishes++ == 0, "exactly one actual guest finish");
+    const unsigned expected_attempts = requested_world == 0 ? 1u : 2u;
+    require(malloc_calls == expected_attempts && trials == malloc_calls &&
+                arms == malloc_calls && domains == requested_world &&
+                initialized == requested_world && ended == requested_world &&
+                raws == requested_world && finalized == requested_world &&
+                releases == requested_world && frees == requested_world &&
+                atomic_load_explicit(&free_signal, memory_order_acquire) ==
+                    requested_world,
+            "true H0/H1/H2 allocations/domain/teardown/free must balance");
+    require(copies == (requested_world == 2 ? 2u : 1u) &&
+                reads == (requested_world == 2 ? 1u : 0u),
+            "H0/H1 require no second T Copy; H2 exactly one H2 read/copy");
+    require(old_first_call == (case_id == 0 ? 64u : 118u),
+            "startup old Copy must equal initial field");
+    if (requested_world == 2)
+        require(old_second_call == (case_id == 0 ? 23u : 33u) &&
+                    free_order[0] == 1 && free_order[1] == 0,
+                "H2 old Copy and actual frees must follow second->first");
+    else if (requested_world == 1)
+        require(free_order[0] == 0, "H1 must free its only original");
+    require(t_first && t_second &&
+                *t_first == (case_id == 0
+                    ? (requested_world == 2 ? 0u : 23u) : 9u) &&
+                *t_second == (case_id == 0 ? 201u
+                    : (requested_world == 2 ? 229u : 33u)),
+            "final current target/sibling must be original T physical bytes");
+    fprintf(stderr,
+            "R1516_NATIVE_OK case=%u world=%u attempts=%u frees=%u "
+            "reads=%u copies=%u old_start=%u old_H2=%u "
+            "f0=%u f1=%u addr0=0x%" PRIxPTR " addr1=0x%" PRIxPTR "\n",
+            case_id, requested_world, malloc_calls, frees, reads, copies,
+            (unsigned)old_first_call, (unsigned)old_second_call,
+            (unsigned)*t_first, (unsigned)*t_second,
+            originals[0].address, originals[1].address);
+}
+
+int main(int argc, char **argv)
+{
+    require(argc == 3, "native driver requires case and world");
+    require(strcmp(argv[1], "zero") == 0 ||
+                strcmp(argv[1], "high") == 0,
+            "case selection must be explicit");
+    case_id = strcmp(argv[1], "high") == 0 ? 1u : 0u;
+    require(argv[2][0] >= '0' && argv[2][0] <= '2' && argv[2][1] == '\0',
+            "world must be 0, 1 or 2");
+    requested_world = (unsigned)(argv[2][0] - '0');
+    const int guest_exit = r1516_guest_main();
+    require(guest_exit == 0 && finishes == 1,
+            "guest must return zero after native observer final checkpoint");
+    return 0;
+}
