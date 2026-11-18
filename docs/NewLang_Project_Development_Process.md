@@ -308,6 +308,8 @@ Coordinationは**境界を設定し、証拠を評価し、track間を裁定す�
 
 **適用範囲：** v0 の探索的 compiler 実装では、開発のクリティカルパスを普通の source→semantic CHECK→真正な source-issued owned/current→C17/native・異常系の実測に置く。過去の source/test/差分の保全は、原則として Git の commit・parent・tree・tracked file とレビュー済み PR、Issue・Actions の元ログを用いる。Git は**何を記録したか**の同一性を与えるが、意味論、安全性、テスト期待値、独立性、commit 著者の正当性をそれだけで保証するものではない。
 
+**大容量証拠の保存とCodex Cloud容量：** [Evidence archive / Codex Cloud disk policy](NewLang_Evidence_Archive_and_Codex_Cloud_Disk_Policy.md)を、この範囲の単一の運用正本とする。適格な個別ファイル群は通常GitのEvidence保存用branchへ保存し、remote固定commitから別の新規cloneへ全path・件数・size・SHAを完全復元照合してreceiptを残した後だけ、所有者が不要なローカル元copy・一時cloneを削除する。元FIRST/RED、Pank公開原則と具体的例外、active worktree/必要SDK、F/Rの独立custody、空きbytes/inodesの予防管理、GitHub制限・STOP・既存LFSを急いで移行しない扱いは同正本に従う。Git履歴の存在だけで復元確認を免除せず、以下の安全性・CI・PR条件は変更しない。
+
 **通常 PR / main で必須の実証：** 固定 HEAD に対する適切な build/format、約束した合法 source と偽の権限を拒否する負例、CHECK/owned/current/loan/provenance、該当する GCC/Clang の C17/native、sanitizer、failure/teardown、OOM・rollback・no-clobber、関連する機能的回帰検査を維持する。独立 F/R は重要な ownership/issuer/UB 境界でリスクに応じて行い、あらゆる CMake・テスト登録変更の一律必須 gate にしない。安全性違反や想定外の誤受理、wrong-code は STOP し、CI 緑やコストを理由に免除しない。
 
 **早期GO（次の実装着手）とマージGOの分離（C394 / 2026-11-09）：** 同一PRの固定HEADで非Requiredの早期ASan・UBSanサブセットが両方SUCCESSとなり、既知の重大な安全性STOPがない場合、Coordinationは**既に認可したscope内で次の実装に着手するGO**を判断できる。これは一律の必須gateでもTrack/Codexの自動起動でもなく、当該PRのREADY・マージ許可でもない。マージには従来どおり**全Required検証の真正な成功、リスクに応じた独立レビュー、Coordinationの採用判断**を要する。元のフルセットは削除せず同じHEADで最後まで確認し、後からfullがRED・skip・cancel・未実行・staleなら早期GREENを代用せず、影響する作業を停止・再評価して必要な修正・再試験を行う。HEADが変われば以前の早期GREENは流用しない。実行設定は[非Requiredの早期CTest workflow](../.github/workflows/compiler-early-ci.yml)を参照し、GitHubのRequired status checksや言語仕様はこの運用で変更しない。
