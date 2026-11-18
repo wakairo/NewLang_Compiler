@@ -12,6 +12,9 @@ typedef struct {
     size_t old149;
     size_t owners;
     size_t trials;
+    size_t trial_nodes;
+    const NLSource *trial_source[2];
+    NLSourceSpan trial_span[2];
     size_t scalar_projections;
     size_t expected_payload;
 } Audit;
@@ -143,16 +146,22 @@ static bool inspect_owner(const NLCheckedFragment *fragment, NLCheckedNodeId id,
                     definition.steps[3] == NL_OWNER_END_REGION,
                 "four-step conditional receiver definition"))
         return false;
+    const NLSemanticContext *post = nl_checked_context(body);
     NLSemanticValueView actual[3], formal[3];
     for (size_t i = 0; i < 3; ++i) {
         NLSemanticBindingView parameter;
-        if (!demand(
-                nl_semantic_value_view(entry, node->owner_call.inputs[i],
-                                       &actual[i]) &&
-                    nl_semantic_binding_view(
-                        entry, node->owner_call.parameters[i], &parameter) &&
-                    nl_semantic_value_view(entry, parameter.value, &formal[i]),
-                "actual and formal source packages") ||
+        bool actual_ok = nl_semantic_value_view(
+            entry, node->owner_call.inputs[i], &actual[i]);
+        bool parameter_ok = nl_semantic_binding_view(
+            post, node->owner_call.parameters[i], &parameter);
+        NLValueId formal_id = parameter_ok ? parameter.value : 0;
+        bool formal_ok = nl_semantic_value_view(post, formal_id, &formal[i]);
+        printf("R1524 PACKAGE i=%zu input=%zu parameter=%zu formal=%zu "
+               "actual_ok=%d binding_ok=%d formal_ok=%d\n",
+               i, node->owner_call.inputs[i], node->owner_call.parameters[i],
+               formal_id, actual_ok, parameter_ok, formal_ok);
+        if (!demand(actual_ok && parameter_ok && formal_ok,
+                    "actual and formal source packages") ||
             !demand(node->owner_call.donor[i] != node->owner_call.parameters[i],
                     "fresh formal binding does not reuse donor binding"))
             return false;
@@ -213,7 +222,6 @@ static bool inspect_owner(const NLCheckedFragment *fragment, NLCheckedNodeId id,
     }
     if (!demand(live_originals == 2, "two distinct actual originals at call"))
         return false;
-    const NLSemanticContext *post = nl_checked_context(body);
     NLSemanticPlaceView ended;
     NLSemanticDomainView domain;
     if (!demand(nl_semantic_place_view(post, node->owner_call.root, &ended) &&
@@ -239,6 +247,28 @@ static bool inspect_owner(const NLCheckedFragment *fragment, NLCheckedNodeId id,
     return true;
 }
 
+/* Count source sites, not conditional grant records in owned arm worlds. */
+static bool inspect_trial(const NLCheckedFragment *fragment,
+                          const NLCheckedNodeView *node, Audit *audit)
+{
+    const NLSource *source = nl_checked_source(fragment);
+    ++audit->trial_nodes;
+    for (size_t site = 0; site < audit->trials; ++site) {
+        if (audit->trial_source[site] == source &&
+            audit->trial_span[site].start_byte == node->span.start_byte &&
+            audit->trial_span[site].end_byte == node->span.end_byte)
+            return true;
+    }
+    if (!demand(audit->trials < 2, "exactly two source allocation sites"))
+        return false;
+    size_t site = audit->trials++;
+    audit->trial_source[site] = source;
+    audit->trial_span[site] = node->span;
+    printf("R1524 TRIAL site=%zu span=%zu:%zu\n", site, node->span.start_byte,
+           node->span.end_byte);
+    return true;
+}
+
 static bool walk(const NLCheckedFragment *fragment, size_t depth, Audit *audit)
 {
     if (!demand(fragment && depth < 32, "finite source-owned graph"))
@@ -247,8 +277,9 @@ static bool walk(const NLCheckedFragment *fragment, size_t depth, Audit *audit)
         const NLCheckedNodeView *node = nl_checked_node_view(fragment, id);
         if (!demand(node != NULL, "checked node exists"))
             return false;
-        if (node->kind == NL_CHECKED_TRY_ALLOCATE_ONE)
-            ++audit->trials;
+        if (node->kind == NL_CHECKED_TRY_ALLOCATE_ONE &&
+            !inspect_trial(fragment, node, audit))
+            return false;
         if (node->kind == NL_CHECKED_FIELD_REF && node->field.present &&
             node->field.index == 1) {
             NLSemanticTypeView reference, target;
@@ -362,9 +393,11 @@ int main(int argc, char **argv)
                "trials=%zu projections=%zu\n",
                audit.copies, audit.old29, audit.old149, audit.owners,
                audit.trials, audit.scalar_projections);
+        printf("R1524 TRIAL_NODE_RECORDS %zu\n", audit.trial_nodes);
         result = 34;
         goto done;
     }
+    printf("R1524 TRIAL_NODE_RECORDS %zu\n", audit.trial_nodes);
     printf("R1524 LAYER public_owned status=0 copies=2 receiver=1 trials=2 "
            "original_p_A_D=1 old_current_sibling=1\n");
     NLNodeCStatus backend =
