@@ -60,7 +60,9 @@ typedef struct {
     bool taking_live;
     size_t receiver_used, owner_calls;
     bool owner_read;
-    bool scalar_issued;  /* existing sealed CHECK body, no new issuer */
+    bool scalar_issued; /* existing sealed CHECK body, no new issuer */
+    bool direct_h;      /* direct physical closure, never a LiveTail producer */
+    size_t direct_payload_reads;
     bool scalar_control; /* primitive normal result, existing whole-root seal */
     NLTypeId boolean, usize;
     size_t scalar_none_expected;
@@ -1742,6 +1744,8 @@ static bool heap_link_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
                        out->temp, projected.temp, projected.temp, out->temp);
         }
         if (scalar) {
+            if (e->direct_h && ++e->direct_payload_reads != 1)
+                return reject(e);
             if (v->argument_count != 1 || ref->next_argument ||
                 v->value_use != NL_VALUE_COPIED ||
                 v->field.old_value == v->results[0].value ||
@@ -2047,7 +2051,8 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
     }
     if (closing) {
         if (!seen[0] || !seen[1] || e->allocations != 2 ||
-            e->producer_calls != 1 || e->owner_calls != 1)
+            e->producer_calls != (e->direct_h ? 0u : 1u) ||
+            e->owner_calls != (e->direct_h ? 0u : 1u))
             return reject(e);
         if (current_closing)
             e->current_h_closed = true;
@@ -3822,7 +3827,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     }
     if (e.copy_after_match)
         env.unit_function_body = get(&env, nl_checked_root(body));
-    if (e.copy_type && (!e.allocated || !e.two_heap || !e.live_tail)) {
+    if (e.copy_type &&
+        (!e.allocated || !e.two_heap || (!e.live_tail && !e.direct_h))) {
         free(e.text);
         return NL_NODE_C_UNSUPPORTED;
     }
@@ -3984,6 +3990,10 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         e.roots != (e.three_lexical_links ? 3u : 2u) || result.type != e.unit ||
         (e.copy_type && (!e.copy_roots || e.copy_roots > 2 ||
                          e.copy_calls != e.copy_expected_calls)) ||
+        (e.direct_h && (!e.copy_h_closed || e.copy_roots != 1 ||
+                        e.producer_calls || e.owner_calls || e.live_tail ||
+                        e.custody || e.heap_link || e.projections || e.reads ||
+                        e.link_updates || e.direct_payload_reads != 1)) ||
         (e.copy_second_function && e.copy_roots != e.copy_expected_roots) ||
         (e.copy_surviving_issuer &&
          (!e.copy_h_closed ||
@@ -4015,7 +4025,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
                   e.reloans != e.projections + e.reads - e.no_read_copies +
                                    e.caller_tail_reads + e.receiver_tail_reads)
                : e.reloans !=
-                     (e.ptr_ifs   ? 1u
+                     (e.direct_h  ? 0u
+                      : e.ptr_ifs ? 1u
                       : e.custody ? 4u
                       : e.two_heap
                           ? 4u + (e.live_tail != 0 ? 1u : 0u) +
@@ -4033,11 +4044,14 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
                         : e.no_pre_read ? e.no_read_copies
                                         : 1u))) ||
           e.option_bindings !=
-              (e.ptr_ifs          ? 2u
+              (e.direct_h         ? 0u
+               : e.ptr_ifs        ? 2u
                : e.live_tail != 0 ? (e.no_pre_read ? 1u + e.no_read_copies : 2u)
                                   : 3u) +
                   (e.scalar_control ? e.ptr_reads : 0u) ||
-          e.link_updates != (e.ptr_ifs ? 1u : 2u))) ||
+          e.link_updates != (e.direct_h  ? 0u
+                             : e.ptr_ifs ? 1u
+                                         : 2u))) ||
         !put(&e, e.allocated ? "NL_HEAP_FINISH();\nreturn 0;\n}\n"
                              : "NL_NODE_FINISH();\nreturn 0;\n}\n")) {
         if (e.status == NL_NODE_C_OK)

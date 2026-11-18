@@ -1,0 +1,2 @@
+error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument
+note: use --help for usage
