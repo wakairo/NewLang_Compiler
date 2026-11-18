@@ -1,0 +1,14 @@
+/workspace/NewLang_Compiler/tests/p1507/probe.c: In function ‘attacks’:
+/workspace/NewLang_Compiler/tests/p1507/probe.c:140:5: error: unknown type name ‘NLHOrigin’
+  140 |     NLHOrigin *origin = p.artifact->h_origin;
+      |     ^~~~~~~~~
+/workspace/NewLang_Compiler/tests/p1507/probe.c:140:25: error: initialization of ‘int *’ from incompatible pointer type ‘struct NLHOriginOwner *’ [-Wincompatible-pointer-types]
+  140 |     NLHOrigin *origin = p.artifact->h_origin;
+      |                         ^
+/workspace/NewLang_Compiler/tests/p1507/probe.c:143:26: error: assignment to ‘struct NLHOriginOwner *’ from incompatible pointer type ‘int *’ [-Wincompatible-pointer-types]
+  143 |     p.artifact->h_origin = origin;
+      |                          ^
+gmake[3]: *** [CMakeFiles/p1507_probe.dir/build.make:79: CMakeFiles/p1507_probe.dir/tests/p1507/probe.c.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:2291: CMakeFiles/p1507_probe.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:2298: CMakeFiles/p1507_probe.dir/rule] Error 2
+gmake: *** [Makefile:615: p1507_probe] Error 2

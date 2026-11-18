@@ -35,6 +35,11 @@ static bool copy_conditional_join(const Emit *e, const NLCheckedFragment *f,
 }
 static bool copy_conditional_plan(Emit *e, const NLCheckedFragment *body)
 {
+    /* Classification only: the whole source seal, both Copy proofs, exact
+     * arm attachments and real physical lifecycle checks remain mandatory.
+     * A missing producer is not replaced by a synthetic owner or LiveTail. */
+    const bool direct = !e->live_tail && e->scalar_issued && e->two_heap &&
+                        !e->custody && !e->current;
     const NLCheckedNodeView
         *root = nl_checked_node_view(body, nl_checked_root(body)),
         *binding = root ? nl_checked_node_view(body, root->first_item) : NULL,
@@ -54,7 +59,7 @@ static bool copy_conditional_plan(Emit *e, const NLCheckedFragment *body)
         loan->kind != NL_CHECKED_LOAN_HEADER || !block || block->item_count ||
         e->copy_expected_calls != 2 || e->copy_second_function ||
         body != e->copy_issuer || !e->scalar_issued || !e->two_heap ||
-        !e->live_tail || e->custody || e->current ||
+        (!e->live_tail && !direct) || e->custody || e->current ||
         !copy_conditional_join(e, body, statement->initializer) ||
         outer->captured_frame_closed ||
         !copy_call_proof(e, body, block->tail, &first) ||
@@ -103,6 +108,7 @@ static bool copy_conditional_plan(Emit *e, const NLCheckedFragment *body)
     e->copy_conditional_match = statement->initializer;
     e->copy_prefix_call = block->tail;
     e->copy_expected_roots = 1;
+    e->direct_h = direct;
     return true;
 }
 static bool copy_conditional_at(const Emit *e, const Env *env,

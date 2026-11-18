@@ -1,0 +1,9 @@
+/workspace/NewLang_Compiler/tests/p1507/probe.c: In function ‘attacks’:
+/workspace/NewLang_Compiler/tests/p1507/probe.c:192:28: error: initialization discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+  192 |         NLSource *source = call.owner->source;
+      |                            ^~~~
+cc1: all warnings being treated as errors
+gmake[2]: *** [CMakeFiles/p1507_probe.dir/build.make:79: CMakeFiles/p1507_probe.dir/tests/p1507/probe.c.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:2291: CMakeFiles/p1507_probe.dir/all] Error 2
+gmake[1]: *** Waiting for unfinished jobs....
+gmake: *** [Makefile:101: all] Error 2

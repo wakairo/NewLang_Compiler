@@ -111,7 +111,8 @@ static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
             continue; /* Already authenticated by the finite current plan. */
         if (!nl_checked_copy_body_parameters(body, id, &p))
             continue;
-        if (!e->two_heap || !e->live_tail || !copy_call_proof(e, body, id, &p))
+        if (!e->two_heap || (!e->live_tail && !e->scalar_issued) ||
+            !copy_call_proof(e, body, id, &p))
             return reject(e);
         if (e->copy_issuer && e->copy_issuer != body) {
             const NLCheckedNodeView *r =
@@ -1084,11 +1085,25 @@ static bool copy_carrier_world(Emit *e, const Env *env)
     if (e->copy_conditional_call &&
         env->artifact == e->copy_conditional_issuer) {
         NLCopyBodyParameters p;
-        if (e->allocations != 2 || e->producer_calls != 1 ||
-            e->owner_calls != 1 || e->pending_live || e->active_owner_call ||
-            e->active_owner_body ||
+        if (e->allocations != 2 ||
+            e->producer_calls != (e->direct_h ? 0u : 1u) ||
+            e->owner_calls != (e->direct_h ? 0u : 1u) || e->pending_live ||
+            e->active_owner_call || e->active_owner_body ||
             !copy_call_proof(e, env->artifact, e->copy_conditional_call, &p))
             return false;
+        if (e->direct_h) {
+            const Env *head = env->parent;
+            NLSemanticSnapshot snapshot;
+            if (!head || head->region_slot != 0 || env->region_slot != 1 ||
+                head->backing == env->backing ||
+                head->heap_place == env->heap_place ||
+                head->heap_domain == env->heap_domain ||
+                !nl_semantic_snapshot(p.entry, &snapshot) ||
+                snapshot.backing_regions != 2 || snapshot.domains != 2 ||
+                snapshot.raw_intervals || !copy_post_h(e, head, p.entry) ||
+                !copy_post_h(e, env, p.entry))
+                return false;
+        }
         for (size_t i = 0; i < 2; ++i)
             if (e->lifecycle[i].stage != 8 || e->lifecycle[i].owner_symbol ||
                 e->lifecycle[i].domain_symbol)
@@ -1099,7 +1114,8 @@ static bool copy_carrier_world(Emit *e, const Env *env)
         !env->parent && e->copy_h_closed)
         return !e->pending_live && !e->active_owner_call &&
                !e->active_owner_body && e->allocations == 2 &&
-               e->producer_calls == 1 && e->owner_calls == 1 &&
+               e->producer_calls == (e->direct_h ? 0u : 1u) &&
+               e->owner_calls == (e->direct_h ? 0u : 1u) &&
                !e->lifecycle[0].stage && !e->lifecycle[1].stage;
     if (e->copy_surviving_issuer && env->artifact == e->copy_surviving_issuer &&
         !env->parent && !env->backing && !env->heap_place &&
