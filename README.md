@@ -70,7 +70,7 @@ system as a requirement for every use of NewLang.
 | Your task | Start here | What it covers |
 | --- | --- | --- |
 | Build/develop the compiler or try source CHECK and bounded C17/native examples | [LLVM-independent frontend build](#llvm-independent-frontend-build); [first-user example](#initial-some-first-user-quickstart-no-llvm) | No LLVM bootstrap, SDK download or LLVM linkage. **NO LLVM / PARTIAL** validation. |
-| Build with the pinned SDK and run LLVM infrastructure validation | [Full SDK setup](#full-sdk-setup) | Exact curated LLVM **23.1.3**, including the LLVM C API link/run smoke. The current automatic bootstrap is restricted to **Ubuntu 24.04 x86_64**. |
+| Build with the pinned SDK and run LLVM infrastructure validation | [Full SDK setup](#full-sdk-setup) | Exact curated LLVM **23.1.3**, including the LLVM C API link/run smoke. Automatic acquisition is restricted to **Ubuntu 24.04 / Debian 13 x86_64** with host prerequisites. |
 | Check or apply C/H formatting only | [Formatter only](#formatter-only) | Use an already authenticated, version-checked **clang-format 23.1.3** executable. No compiler build or LLVM C API smoke is required. |
 
 ### Requirements and verified environments
@@ -200,7 +200,7 @@ See [CLI contract](#cli-contract) and
 
 <a id="full-sdk-setup"></a>
 
-## Full setup — adopted curated LLVM 23.1.3 (Ubuntu 24.04)
+## Full setup — curated LLVM 23.1.3 (Ubuntu 24.04 / Debian 13 x86_64)
 
 The curated LLVM 23.1.3 toolchain is **adopted on main** (merged PR #451);
 this is the full infrastructure/validation route, not required for the
@@ -210,12 +210,10 @@ of this toolchain adoption. The full route exercises the LLVM C API smoke;
 it does not establish general LLVM lowering or a general language backend,
 and is not a build or installation of every upstream LLVM component.
 
-The current [bootstrap implementation](scripts/bootstrap.py) and
-[toolchain lock](scripts/toolchain-lock.json) select the curated SDK only
-for **Ubuntu 24.04 x86_64** (including matching WSL2 Ubuntu userspace).
-This is an automatic-setup restriction, not proof that the upstream-derived
-Linux x86_64 binaries cannot run on another compatible distribution.
-Conversely, Linux x86_64 alone is not a sufficient compatibility guarantee:
+The [bootstrap implementation](scripts/bootstrap.py) selects the identical
+[locked archive](scripts/toolchain-lock.json) for **Ubuntu 24.04 x86_64**
+(including matching WSL2 Ubuntu userspace) and **Debian 13 x86_64**.
+Other hosts are rejected. Linux x86_64 alone is not a compatibility guarantee:
 loader/runtime and link-time dependencies must also be satisfied. Minimum
 libc/C++ runtime versions for this curated archive have not been established
 here; do not reuse ABI limits from the older 23.1.2 packages.
@@ -273,41 +271,38 @@ independent `NEWLANG_FRONTEND_ONLY=ON` **NO LLVM / PARTIAL** lane remains
 available for Production source/checker/C17 reference work during SDK
 infrastructure incidents; it never replaces full backend/native proof.
 
-### Debian 13 developer hosts (not a supported full-LLVM setup)
+### Debian 13 developer hosts
 
-This limitation concerns the **full automatic bootstrap**, not the
-reported Debian frontend development or formatter-only use above.
-On `debian-13-x86_64`, bootstrap still selects the historical **23.1.2**
-.deb lock, not the curated **23.1.3** SDK required by the default full build.
-That lock is retained for historical reproducibility, **not** as a
-maintained full-LLVM alternative. In independent [R #656's frozen Debian 13 logs](https://github.com/wakairo/NewLang_Compiler/tree/e419168cb42b8045daeb25ca161cb200317f5353/tests/r-normal-native/evidence/local),
-`python3 scripts/bootstrap.py` selected the legacy Debian packages and
-failed fetching the exact locked `libclang-cpp23` URL with HTTP 404.
-This is a dependency-availability failure, not permission to select a moving
-package, mirror or version, or to bypass HTTPS/TLS or SHA-256 validation.
+Use Debian's signed host prerequisites (the development linker names are
+required; runtime libraries alone are insufficient):
 
-For the currently documented automatic **full** LLVM C API build/test,
-use the Ubuntu setup above, including its host development libraries.
-For frontend/C17 work, use the
-[LLVM-independent frontend-only build](#llvm-independent-frontend-build)
-with its stated prerequisites; it does not run bootstrap or link LLVM.
-P's Debian13 development report supports that bounded use, not a clean
-Debian full-SDK setup. Frontend results remain **NO LLVM / PARTIAL** and
-cannot replace the full smoke/validation gate. Do not spoof the OS identity,
-substitute pins or bypass SDK markers/checks to force the full route.
+```sh
+sudo apt-get update
+sudo apt-get install --no-install-recommends -y \
+  gcc g++ make cmake python3 zstd \
+  libstdc++6 zlib1g-dev libzstd-dev libncurses-dev libxml2-dev
+python3 scripts/bootstrap.py
+. .deps/activate.sh
+```
 
-R #656 also experimentally used the **unchanged SHA-256-verified curated
-23.1.3 SDK selected by the Ubuntu lock entry** on Debian 13: its initial `llvm_smoke` link failed at
-`/usr/bin/ld: cannot find -lxml2` because the host had
-`libxml2.so.2` but not the link-time `libxml2.so` name. R made an
-isolated linker-name symlink for that run. Debian's `libxml2-dev` package
-normally provides `/usr/lib/x86_64-linux-gnu/libxml2.so`; installing
-the proper host development package resolves that *class* of missing linker
-name but **does not certify cross-distribution SDK compatibility**. The
-R-specific workaround is not a supported NewLang setup procedure.
-The old 23.1.2 Debian/Noble guidance in historical P0 decisions is not the
-curated installation path. When changing toolchains, use a **fresh** CMake
-build directory to avoid retained LLVM smoke link targets.
+Then use the build/test commands above in a **fresh** CMake build directory.
+Debian now selects the same exact 23.1.3 asset as Ubuntu, with its own
+host-specific prefix and unchanged SHA/size/extraction/marker validation.
+The historical Debian **23.1.2** package lock/provenance is retained unchanged
+and is no longer the default acquisition path. Its original HTTP404 failures
+remain in [R656](https://github.com/wakairo/NewLang_Compiler/issues/656#issuecomment-6286600904)
+and [P1517](https://github.com/wakairo/NewLang_Compiler/issues/1517#issuecomment-6971090011).
+
+[T1521's isolated Debian 13.6 measurements](https://github.com/wakairo/NewLang_Compiler/issues/1521)
+cover authenticated acquisition, loader/tool versions, the existing LLVM C
+API static link/run, strict C17 Clang O0/O2, formatter and minimal ASan/UBSan.
+The first `cannot find -lxml2` failure was preserved and resolved with
+distribution-trusted developer packages; no manual linker alias is required.
+These are finite toolchain measurements, **not** a Debian full compiler/CTest
+or general ABI certification, and do not regrade P1517's unexecuted Clang tests.
+Ubuntu remains the existing full CI lane. The
+[LLVM-independent frontend route](#llvm-independent-frontend-build) remains
+available when LLVM infrastructure validation is unnecessary.
 
 ## Formatter only
 
