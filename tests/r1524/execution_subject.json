@@ -1,0 +1,14 @@
+{
+  "release": "C1189",
+  "issue": 1524,
+  "operational_main": "c97ce81c48a0c003b072c77c655bdeb10860ebf1",
+  "target": "7deabd1b1f44bc40862b6a28c89fde502832d8cb",
+  "target_tree": "20083ff35349efd254e015f90dcac38a8d16852a",
+  "branch": "r-fast/r1524-terminal-receiver",
+  "pr_base": "p1525-terminal-receiver-c1184",
+  "first_comment": "https://github.com/wakairo/NewLang_Compiler/issues/1524#issuecomment-6974565517",
+  "oracle_sha256": "93d195a95eeb5d75b4354c2b44d8b9a66b5b22717ce611524353787e1110b2d8",
+  "allowed_fast": 6,
+  "allowed_full_sets": 2,
+  "manual_runs": 0
+}
