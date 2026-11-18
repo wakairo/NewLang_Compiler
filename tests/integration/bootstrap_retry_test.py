@@ -1,4 +1,4 @@
-"""Deterministic offline bootstrap tests; urlopen is always mocked."""
+"""Offline legacy downloader and Debian/Ubuntu SDK routing/trust tests."""
 import contextlib
 import hashlib
 import importlib.util
@@ -39,6 +39,8 @@ def versions(args, environment=None):
 
 
 class BootstrapRetry(unittest.TestCase):
+    """Preserve historical package-path checks; SDK dispatch is tested below."""
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -82,7 +84,7 @@ class BootstrapRetry(unittest.TestCase):
 
     def test_transient_404_then_verified_bytes(self):
         self.requests.side_effect = [http_error(), io.BytesIO(DATA)]
-        bootstrap.main()
+        bootstrap._legacy_main()
         self.exact_requests(2)
         self.wait.assert_called_once_with(1)
         self.assertEqual(self.path.read_bytes(), DATA)
@@ -94,7 +96,7 @@ class BootstrapRetry(unittest.TestCase):
 
     def test_third_attempt_can_succeed(self):
         self.requests.side_effect = [http_error(), http_error(), io.BytesIO(DATA)]
-        bootstrap.main()
+        bootstrap._legacy_main()
         self.exact_requests(3)
         self.assertEqual([c.args for c in self.wait.call_args_list], [(1,), (2,)])
         self.assertEqual(self.path.read_bytes(), DATA)
@@ -102,7 +104,7 @@ class BootstrapRetry(unittest.TestCase):
     def test_permanent_404_exhausts_budget(self):
         self.requests.side_effect = http_error()
         with self.assertRaises(urllib.error.HTTPError) as caught:
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.assertEqual(caught.exception.code, 404)
         self.exact_requests(3)
         self.assertEqual([c.args for c in self.wait.call_args_list], [(1,), (2,)])
@@ -135,7 +137,7 @@ with patch.object(b.urllib.request,'urlopen',side_effect=urllib.error.HTTPError(
     def test_hash_mismatch_after_404_still_stops_immediately(self):
         self.requests.side_effect = [http_error(), io.BytesIO(b"wrong bytes")]
         with self.assertRaisesRegex(SystemExit, "checksum mismatch"):
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.exact_requests(2)
         self.wait.assert_called_once_with(1)
         self.failed_outputs()
@@ -143,7 +145,7 @@ with patch.object(b.urllib.request,'urlopen',side_effect=urllib.error.HTTPError(
     def test_hash_mismatch_is_terminal_without_install(self):
         self.requests.return_value = io.BytesIO(b"wrong bytes")
         with self.assertRaisesRegex(SystemExit, "checksum mismatch"):
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.exact_requests(1)
         self.wait.assert_not_called()
         self.failed_outputs()
@@ -152,8 +154,8 @@ with patch.object(b.urllib.request,'urlopen',side_effect=urllib.error.HTTPError(
         self.cache.mkdir(parents=True)
         self.path.write_bytes(DATA)
         self.requests.side_effect = AssertionError("offline test must not request verified cache")
-        bootstrap.main()
-        bootstrap.main()
+        bootstrap._legacy_main()
+        bootstrap._legacy_main()
         self.requests.assert_not_called()
         self.wait.assert_not_called()
         self.assertEqual(self.extract.call_count, 1)  # complete prefix on second run
@@ -165,7 +167,7 @@ with patch.object(b.urllib.request,'urlopen',side_effect=urllib.error.HTTPError(
         self.path.write_bytes(b"corrupt cache")
         self.requests.side_effect = http_error()
         with self.assertRaises(urllib.error.HTTPError):
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.assertEqual(self.path.read_bytes(), b"corrupt cache")
         self.extract.assert_not_called()
         self.assertFalse(self.partial.exists())
@@ -180,7 +182,7 @@ with patch.object(b.urllib.request,'urlopen',side_effect=urllib.error.HTTPError(
                 return super().read(5)
         self.requests.return_value = Broken(DATA)
         with self.assertRaisesRegex(OSError, "interrupted stream"):
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.exact_requests(1)
         self.wait.assert_not_called()
         self.failed_outputs()
@@ -190,14 +192,14 @@ with patch.object(b.urllib.request,'urlopen',side_effect=urllib.error.HTTPError(
         self.partial.write_bytes(DATA)  # even a correctly hashed partial is not a cache
         self.requests.side_effect = http_error()
         with self.assertRaises(urllib.error.HTTPError):
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.exact_requests(3)
         self.failed_outputs()
 
     def test_tls_error_is_not_retried(self):
         self.requests.side_effect = urllib.error.URLError(ssl.SSLCertVerificationError("offline TLS"))
         with self.assertRaises(urllib.error.URLError):
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.exact_requests(1)
         self.wait.assert_not_called()
         self.failed_outputs()
@@ -205,7 +207,7 @@ with patch.object(b.urllib.request,'urlopen',side_effect=urllib.error.HTTPError(
     def test_other_http_error_is_not_retried(self):
         self.requests.side_effect = http_error(403)
         with self.assertRaises(urllib.error.HTTPError):
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.exact_requests(1)
         self.wait.assert_not_called()
         self.failed_outputs()
@@ -214,7 +216,7 @@ with patch.object(b.urllib.request,'urlopen',side_effect=urllib.error.HTTPError(
         self.requests.return_value = io.BytesIO(DATA)
         self.extract.side_effect = subprocess.CalledProcessError(1, ["dpkg-deb"])
         with self.assertRaises(subprocess.CalledProcessError):
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.assertEqual(self.path.read_bytes(), DATA)  # verified cache retained
         self.assertFalse(self.partial.exists())
         self.assertFalse((self.prefix / ".complete").exists())
@@ -225,14 +227,14 @@ with patch.object(b.urllib.request,'urlopen',side_effect=urllib.error.HTTPError(
         self.version.return_value = "wrong-version"
         self.version.side_effect = None
         with self.assertRaisesRegex(SystemExit, "LLVM version mismatch"):
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.assertFalse((self.prefix / ".complete").exists())
         self.assertFalse((self.root / ".deps/activate.sh").exists())
 
     def test_malformed_lock_is_terminal_without_network(self):
         self.lock.write_text("{invalid JSON")
         with self.assertRaises(json.JSONDecodeError):
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.requests.assert_not_called()
         self.failed_outputs()
 
@@ -241,12 +243,138 @@ with patch.object(b.urllib.request,'urlopen',side_effect=urllib.error.HTTPError(
         (self.prefix / ".complete").write_text("old marker")
         self.requests.side_effect = http_error()
         with self.assertRaises(urllib.error.HTTPError):
-            bootstrap.main()
+            bootstrap._legacy_main()
         self.exact_requests(3)
         self.extract.assert_not_called()
         self.version.assert_not_called()
         self.assertFalse((self.root / ".deps/activate.sh").exists())
         self.assertFalse(self.partial.exists())
+
+
+class CuratedSDKBootstrap(unittest.TestCase):
+    """T1521: no real network, package extraction or SDK tool execution."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.lock = self.root / "lock.json"
+        self.lock.write_text(json.dumps(LOCKED))
+        self.enterContext(patch.object(bootstrap, "ROOT", self.root))
+        self.enterContext(patch.object(bootstrap, "LOCK", self.lock))
+        self.enterContext(patch.object(bootstrap.platform, "system", return_value="Linux"))
+        self.enterContext(patch.object(bootstrap.platform, "machine", return_value="x86_64"))
+        self.enterContext(patch.object(bootstrap.shutil, "which", return_value="offline-tool"))
+        self.requests = self.enterContext(patch.object(bootstrap.urllib.request, "urlopen"))
+        self.requests.side_effect = AssertionError("unexpected offline network request")
+
+    def test_debian_and_ubuntu_default_to_sdk_without_legacy_download(self):
+        for distro, version in (("debian", "13"), ("ubuntu", "24.04")):
+            with self.subTest(distro=distro), \
+                    patch.object(bootstrap.platform, "freedesktop_os_release",
+                                 return_value={"ID": distro, "VERSION_ID": version}), \
+                    patch.object(bootstrap, "_sdk_main") as sdk, \
+                    patch.object(bootstrap, "_legacy_main") as legacy:
+                bootstrap.main()
+                sdk.assert_called_once_with(LOCKED, f"{distro}-{version}-x86_64")
+                legacy.assert_not_called()
+        self.requests.assert_not_called()
+
+    def test_both_hosts_select_the_identical_existing_archive(self):
+        artifact = LOCKED["platforms"]["ubuntu-24.04-x86_64"]["sdk_archive"]
+        for target in ("debian-13-x86_64", "ubuntu-24.04-x86_64"):
+            with self.subTest(target=target), \
+                    patch.object(bootstrap, "_sdk_download", side_effect=RuntimeError("download boundary")) as download, \
+                    patch.object(bootstrap, "download") as legacy:
+                with self.assertRaisesRegex(RuntimeError, "download boundary"):
+                    bootstrap._sdk_main(LOCKED, target)
+                download.assert_called_once_with(
+                    artifact, self.root / ".deps/downloads" / artifact["filename"])
+                legacy.assert_not_called()
+
+    def test_unknown_host_is_rejected_before_dispatch_or_network(self):
+        for distro, version in (("debian", "14"), ("ubuntu", "22.04"), ("other", "13")):
+            with self.subTest(distro=distro), \
+                    patch.object(bootstrap.platform, "freedesktop_os_release",
+                                 return_value={"ID": distro, "VERSION_ID": version}), \
+                    patch.object(bootstrap, "_sdk_main") as sdk, \
+                    patch.object(bootstrap, "_legacy_main") as legacy:
+                with self.assertRaisesRegex(SystemExit, "No reviewed toolchain lock"):
+                    bootstrap.main()
+                sdk.assert_not_called()
+                legacy.assert_not_called()
+        self.requests.assert_not_called()
+        self.assertFalse((self.root / ".deps").exists())
+
+    def test_direct_sdk_call_does_not_bypass_host_guard(self):
+        with self.assertRaisesRegex(SystemExit, "locked for Ubuntu 24.04 / Debian 13"):
+            bootstrap._sdk_main(LOCKED, "other-13-x86_64")
+        self.requests.assert_not_called()
+        self.assertFalse((self.root / ".deps").exists())
+
+    def test_changed_sdk_pin_is_rejected_before_acquisition(self):
+        changed = json.loads(json.dumps(LOCKED))
+        changed["platforms"]["ubuntu-24.04-x86_64"]["sdk_archive"]["sha256"] = "0" * 64
+        with self.assertRaisesRegex(SystemExit, "provenance lock unexpectedly changed"):
+            bootstrap._sdk_main(changed, "debian-13-x86_64")
+        self.requests.assert_not_called()
+        self.assertFalse((self.root / ".deps").exists())
+
+    def test_cache_size_digest_and_symlink_are_checked(self):
+        cache = self.root / "archive"
+        artifact = {"size": len(DATA), "sha256": DIGEST}
+        cache.write_bytes(DATA)
+        bootstrap._sdk_valid_archive(artifact, cache)
+        cache.write_bytes(b"X" * len(DATA))
+        with self.assertRaisesRegex(SystemExit, "SHA256 mismatch"):
+            bootstrap._sdk_valid_archive(artifact, cache)
+        cache.write_bytes(DATA[:-1])
+        with self.assertRaisesRegex(SystemExit, "size mismatch"):
+            bootstrap._sdk_valid_archive(artifact, cache)
+        cache.unlink()
+        source = self.root / "source"
+        source.write_bytes(DATA)
+        cache.symlink_to(source)
+        with self.assertRaisesRegex(SystemExit, "not a regular file"):
+            bootstrap._sdk_valid_archive(artifact, cache)
+
+    def test_download_http_redirect_is_refused_and_temporary_removed(self):
+        artifact = {"url": "https://example.invalid/sdk", "size": len(DATA), "sha256": DIGEST}
+        response = io.BytesIO(DATA)
+        response.geturl = lambda: "http://example.invalid/sdk"
+        self.requests.side_effect = None
+        self.requests.return_value = response
+        destination = self.root / "archive"
+        with self.assertRaisesRegex(SystemExit, "did not remain HTTPS"):
+            bootstrap._sdk_download(artifact, destination)
+        self.assertEqual(list(self.root.glob(".download-*")), [])
+        self.assertFalse(destination.exists())
+
+    def test_download_invalid_digest_never_becomes_cache(self):
+        artifact = {"url": "https://example.invalid/sdk", "size": len(DATA), "sha256": "0" * 64}
+        response = io.BytesIO(DATA)
+        response.geturl = lambda: artifact["url"]
+        self.requests.side_effect = None
+        self.requests.return_value = response
+        destination = self.root / "archive"
+        with self.assertRaisesRegex(SystemExit, "downloaded SHA256 mismatch"):
+            bootstrap._sdk_download(artifact, destination)
+        self.assertEqual(list(self.root.glob(".download-*")), [])
+        self.assertFalse(destination.exists())
+
+    def test_archive_cannot_supply_completion_marker(self):
+        (self.root / "bin").mkdir()
+        (self.root / ".complete").write_text("archive-supplied marker")
+        with self.assertRaisesRegex(SystemExit, "untrusted archive contains completion marker"):
+            bootstrap._sdk_root(self.root)
+
+    def test_completed_install_needs_regular_marker(self):
+        (self.root / "bin").mkdir()
+        with self.assertRaisesRegex(SystemExit, "missing regular marker"):
+            bootstrap._sdk_root(self.root, completed=True)
+        (self.root / ".complete").symlink_to(self.lock)
+        with self.assertRaisesRegex(SystemExit, "symlink completion marker"):
+            bootstrap._sdk_root(self.root, completed=True)
 
 
 if __name__ == "__main__":

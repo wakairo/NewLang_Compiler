@@ -324,13 +324,15 @@ def _sdk_verify_tools(sdk: Path, version: str) -> None:
 
 
 def _sdk_main(lock: dict, target: str) -> None:
-    if target != "ubuntu-24.04-x86_64":
-        raise SystemExit("Curated SDK is locked for Ubuntu 24.04 x86_64 only")
-    artifact = lock["platforms"][target]["sdk_archive"]
+    if target not in ("ubuntu-24.04-x86_64", "debian-13-x86_64"):
+        raise SystemExit("Curated SDK is locked for Ubuntu 24.04 / Debian 13 x86_64 only")
+    # Both reviewed hosts use identical bytes; retain Debian's old .deb lock
+    # as historical provenance, without selecting its unavailable 23.1.2 URLs.
+    artifact = lock["platforms"]["ubuntu-24.04-x86_64"]["sdk_archive"]
     if artifact["sha256"] != "5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133":
         raise SystemExit("Curated SDK provenance lock unexpectedly changed")
     if shutil.which("zstd") is None or shutil.which("g++") is None:
-        raise SystemExit("Install signed Ubuntu zstd and g++ prerequisites")
+        raise SystemExit("Install distribution-trusted zstd and g++ prerequisites; see README")
     identity = hashlib.sha256(LOCK.read_bytes()).hexdigest()[:16]
     prefix = ROOT / ".deps/toolchains" / f"{target}-{identity}"
     archive_dir = ROOT / ".deps/downloads"
@@ -393,7 +395,7 @@ def main() -> None:
     lock = json.loads(LOCK.read_text())
     if target not in lock["platforms"]:
         raise SystemExit(f"No reviewed toolchain lock for {target}")
-    if "sdk_archive" in lock["platforms"][target]:
+    if target == "debian-13-x86_64" or "sdk_archive" in lock["platforms"][target]:
         _sdk_main(lock, target)
     else:
         _legacy_main()
