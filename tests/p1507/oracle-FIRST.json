@@ -1,0 +1,65 @@
+{
+  "authority": "716a457d19c83ff2470a5be801f7108b37a6c7e7",
+  "spec": "Draft17.38",
+  "provenance": "P1503 canonical-derived hypothesis; no independent R originals",
+  "prediction": {
+    "positive": "SOURCE/CHECK0, true whole-root MACHINE/Copy validators; C17 initially unsupported (LiveTail-only backend guards), native NOT_REACHED",
+    "negative": "reject before C output; wrong domain/original/owner, affine availability, nonescape or type",
+    "owned_negative": [
+      "foreign owner/fragment/world with equal numeric IDs",
+      "wrong field old/current/sibling or actual/formal/result",
+      "missing/duplicate teardown",
+      "H2 proof as H0/H1"
+    ],
+    "host_failure": "selected OOM preserves output NULL/length/context; same artifact retry; named output no clobber"
+  },
+  "variants": {
+    "A-direct-zero": {
+      "field": 0,
+      "initial": 37,
+      "sibling": 91,
+      "payload": 0
+    },
+    "B-direct-index-one": {
+      "field": 1,
+      "initial": 91,
+      "sibling": 37,
+      "payload": 173
+    }
+  },
+  "worlds": {
+    "H0": {
+      "alloc_attempts": 1,
+      "roots": 0,
+      "second_writes": 0,
+      "current": 7
+    },
+    "H1": {
+      "alloc_attempts": 2,
+      "roots": 1,
+      "free_order": [
+        0
+      ],
+      "second_writes": 0,
+      "current": 7
+    },
+    "H2": {
+      "alloc_attempts": 2,
+      "roots": 2,
+      "free_order": [
+        1,
+        0
+      ],
+      "second_writes": 1,
+      "second_old": 7,
+      "current": "actual second H payload (zero is success)"
+    }
+  },
+  "invariants": [
+    "same original T address; old_start unchanged",
+    "links always None; zero producer/LiveTail/custody/link changes",
+    "read under own D, nonescape; destroy erase finalize deallocate each exactly once",
+    "common T CHECK current Unknown; no dummy H0/H1 success result"
+  ],
+  "counts": "0/48 local, 0/36 native, 0/16 host OOM, 0/2 natural CI pairs, 0/3 Evidence pushes"
+}

@@ -1,0 +1,151 @@
+[
+  {
+    "label": "raw-compile",
+    "argv": [
+      "gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-O2",
+      "/workspace/p1507-evidence/A.c",
+      "-o",
+      "/workspace/p1507-evidence/native-gcc/run-t7m_fcw0/raw"
+    ],
+    "guest": false,
+    "fail_at": 0,
+    "expected": 0,
+    "state": "completed",
+    "exit": 0
+  },
+  {
+    "label": "raw-native",
+    "argv": [
+      "/workspace/p1507-evidence/native-gcc/run-t7m_fcw0/raw"
+    ],
+    "guest": true,
+    "fail_at": 0,
+    "expected": 0,
+    "state": "completed",
+    "exit": 0
+  },
+  {
+    "label": "v0-O0-compile",
+    "argv": [
+      "gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-O0",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/NewLang_Compiler/tests/p1507/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/NewLang_Compiler/tests/p1507/passive.h\"",
+      "-DP1507_INDEX=0",
+      "/workspace/p1507-evidence/A.c",
+      "/workspace/NewLang_Compiler/tests/p1507/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/workspace/p1507-evidence/native-gcc/run-t7m_fcw0/v0-O0"
+    ],
+    "guest": false,
+    "fail_at": 0,
+    "expected": 0,
+    "state": "completed",
+    "exit": 0
+  },
+  {
+    "label": "v0-O0-fail1",
+    "argv": [
+      "/workspace/p1507-evidence/native-gcc/run-t7m_fcw0/v0-O0"
+    ],
+    "guest": true,
+    "fail_at": 1,
+    "expected": 0,
+    "state": "completed",
+    "exit": 0
+  },
+  {
+    "label": "v0-O0-fail2",
+    "argv": [
+      "/workspace/p1507-evidence/native-gcc/run-t7m_fcw0/v0-O0"
+    ],
+    "guest": true,
+    "fail_at": 2,
+    "expected": 0,
+    "state": "completed",
+    "exit": 0
+  },
+  {
+    "label": "v0-O0-fail0",
+    "argv": [
+      "/workspace/p1507-evidence/native-gcc/run-t7m_fcw0/v0-O0"
+    ],
+    "guest": true,
+    "fail_at": 0,
+    "expected": 0,
+    "state": "completed",
+    "exit": 0
+  },
+  {
+    "label": "v0-O2-compile",
+    "argv": [
+      "gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-O2",
+      "-DNEWLANG_NODE_OBSERVER=\"/workspace/NewLang_Compiler/tests/p1507/passive.h\"",
+      "-DNEWLANG_HEAP_OBSERVER=\"/workspace/NewLang_Compiler/tests/p1507/passive.h\"",
+      "-DP1507_INDEX=0",
+      "/workspace/p1507-evidence/A.c",
+      "/workspace/NewLang_Compiler/tests/p1507/guest_wrap.c",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=free",
+      "-o",
+      "/workspace/p1507-evidence/native-gcc/run-t7m_fcw0/v0-O2"
+    ],
+    "guest": false,
+    "fail_at": 0,
+    "expected": 0,
+    "state": "completed",
+    "exit": 0
+  },
+  {
+    "label": "v0-O2-fail1",
+    "argv": [
+      "/workspace/p1507-evidence/native-gcc/run-t7m_fcw0/v0-O2"
+    ],
+    "guest": true,
+    "fail_at": 1,
+    "expected": 0,
+    "state": "completed",
+    "exit": 0
+  },
+  {
+    "label": "v0-O2-fail2",
+    "argv": [
+      "/workspace/p1507-evidence/native-gcc/run-t7m_fcw0/v0-O2"
+    ],
+    "guest": true,
+    "fail_at": 2,
+    "expected": 0,
+    "state": "completed",
+    "exit": 0
+  },
+  {
+    "label": "v0-O2-fail0",
+    "argv": [
+      "/workspace/p1507-evidence/native-gcc/run-t7m_fcw0/v0-O2"
+    ],
+    "guest": true,
+    "fail_at": 0,
+    "expected": 0,
+    "state": "completed",
+    "exit": -6
+  }
+]

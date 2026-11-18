@@ -1,0 +1,1 @@
+P1507 301: !pending_free && (void *)(nl_v_61.handle) == (void *)(nl_v_62.bytes) && (nl_v_62.length) == 24 && ended[i] && finalized[i]
