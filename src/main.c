@@ -4417,6 +4417,7 @@ static size_t v0_export_function(const NLSemanticContext *c, const char *name)
 }
 
 #include "c17_guarded_usize_internal.h"
+#include "division_usize_internal.h"
 
 static int compile_v0_to(const char *path, bool check_only,
                          const char *export_name, FILE *output)
@@ -4592,6 +4593,28 @@ static int compile_v0_to(const char *path, bool check_only,
                                     "quantity C17 plan",
                                     path, ferror(output) ? 1 : 4);
         goto cleanup;
+    }
+    if (!export_name) {
+        char *division_c = NULL;
+        size_t division_length = 0;
+        const NLCheckStatus status =
+            nl_division_usize_c17(entry, &division_c, &division_length);
+        if (status == NL_CHECK_OK) {
+            result = fwrite(division_c, 1, division_length, output) ==
+                                 division_length &&
+                             fflush(output) == 0
+                         ? 0
+                         : report_error("V0-C-OUTPUT",
+                                        "failed to emit Checked-C", path, 1);
+            free(division_c);
+            goto cleanup;
+        }
+        if (status == NL_CHECK_OUT_OF_MEMORY ||
+            status == NL_CHECK_RESOURCE_LIMIT) {
+            result = report_error(
+                "V0-C-RESOURCE", "division emission resource failure", path, 1);
+            goto cleanup;
+        }
     }
     V0Program program = {.unit = nl_semantic_unit_type(context),
                          .u8 = nl_semantic_core_type(context, NL_TYPE_U8),

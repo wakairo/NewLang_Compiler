@@ -1,5 +1,6 @@
 #include "copy_body_internal.h"
 #include "copy_old_result_internal.h"
+#include "division_usize_internal.h"
 #include "guarded_usize_internal.h"
 #include "h_origin_internal.h"
 #include "if_field_internal.h"
@@ -2772,6 +2773,71 @@ static bool finite_add_bound(size_t limit, size_t step)
     return limit && step <= SIZE_MAX - (limit - 1);
 }
 
+/* C1247/C1249: this total unsigned relation needs no exact numerator fact.
+ * It is deliberately separate from the existing Known-only +/- rules. */
+static NLCheckedNodeId usize_division(Check *check, const NLSyntaxNode *source)
+{
+    const NLSyntaxView *s = nl_syntax_node_view(source);
+    const NLCheckedNodeId left = expression(check, s->data.equality.left);
+    if (!left)
+        return 0;
+    const NLCheckedNodeId right = expression(check, s->data.equality.right);
+    if (!right)
+        return 0;
+    const NLCheckedNodeView a = *view(check, left), b = *view(check, right);
+    NLSemanticContext *c = check->context;
+    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    if (check->terminated || a.type != type || b.type != type ||
+        a.result_count != 1 || b.result_count != 1 ||
+        a.results[0].type != type || b.results[0].type != type) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, s->data.equality.operator_span,
+             "USIZE-DIVISION-TYPE", "/ requires exact core usize operands");
+        return 0;
+    }
+    if (!nl_usize_division_operands(check->artifact, c, source, left, right)) {
+        fail(
+            check, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
+            s->data.equality.operator_span, "USIZE-DIVISION-PRECISION",
+            "/ requires a current dependency-free Copy name and typed literal");
+        return 0;
+    }
+    const NLSemanticValueView numerator = c->values[a.results[0].value - 1];
+    const size_t divisor = c->values[b.results[0].value - 1].scalar_value;
+    if (!divisor) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, s->data.equality.operator_span,
+             "USIZE-DIVISION-ZERO", "usize divisor must be nonzero");
+        return 0;
+    }
+    const bool known = numerator.scalar_known;
+    const size_t quotient = known ? numerator.scalar_value / divisor : 0;
+    const NLValueId value = new_value(
+        check,
+        (NLSemanticValueView){
+            .type = type, .scalar_known = known, .scalar_value = quotient},
+        s->span);
+    if (!value)
+        return 0;
+    end_temporary(check, a.results[0].value);
+    end_temporary(check, b.results[0].value);
+    view(check, left)->next_argument = right;
+    const NLCheckedNodeId id = add(
+        check, (NLCheckedNodeView){.kind = NL_CHECKED_USIZE_DIVISION,
+                                   .span = s->span,
+                                   .name = s->data.equality.operator_span,
+                                   .type = type,
+                                   .first_argument = left,
+                                   .argument_count = 2,
+                                   .result_count = 1,
+                                   .results = {{type, value}},
+                                   .has_scalar_result = true,
+                                   .scalar_result = {type, known, quotient}});
+    if (id && !host(check,
+                    nl_usize_arithmetic_capture(check->artifact, id, source, c),
+                    s->span))
+        return 0;
+    return id;
+}
+
 static NLCheckedNodeId usize_arithmetic(Check *check,
                                         const NLSyntaxNode *source)
 {
@@ -2905,6 +2971,7 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         node->kind != NL_SYNTAX_USIZE_LESS_THAN &&
         node->kind != NL_SYNTAX_USIZE_ADDITION &&
         node->kind != NL_SYNTAX_USIZE_SUBTRACTION &&
+        node->kind != NL_SYNTAX_USIZE_DIVISION &&
         node->kind != NL_SYNTAX_ARRAY4_CONSTRUCTOR &&
         node->kind != NL_SYNTAX_AGGREGATE &&
         node->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
@@ -2942,6 +3009,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
     } else if (node->kind == NL_SYNTAX_USIZE_EQUALITY ||
                node->kind == NL_SYNTAX_USIZE_LESS_THAN) {
         result = usize_comparison(check, node);
+    } else if (node->kind == NL_SYNTAX_USIZE_DIVISION) {
+        result = usize_division(check, syntax);
     } else if (node->kind == NL_SYNTAX_USIZE_ADDITION ||
                node->kind == NL_SYNTAX_USIZE_SUBTRACTION) {
         result = usize_arithmetic(check, syntax);
@@ -4511,10 +4580,13 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                          (body.artifact->bodies[i]->copy_body->current_loop ||
                           body.artifact->bodies[i]->copy_body->current_call);
     NLGuardedUsizePlan quantity_plan;
+    NLDivisionUsizePlan division_plan;
     const bool quantity_result =
         !body.definition &&
-        nl_guarded_usize_body_at(body.artifact, c, body.body_function,
-                                 &quantity_plan);
+        (nl_guarded_usize_body_at(body.artifact, c, body.body_function,
+                                  &quantity_plan) ||
+         nl_division_usize_body_at(body.artifact, c, body.body_function,
+                                   &division_plan));
     if ((predicate_result || scalar_h_read || current_result || result_world ||
          quantity_result) &&
         !host(&body,
@@ -11228,6 +11300,7 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
          root->kind != NL_SYNTAX_USIZE_LESS_THAN &&
          root->kind != NL_SYNTAX_USIZE_ADDITION &&
          root->kind != NL_SYNTAX_USIZE_SUBTRACTION &&
+         root->kind != NL_SYNTAX_USIZE_DIVISION &&
          root->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
          root->kind != NL_SYNTAX_LOCAL_WRITE_LOAN &&
          root->kind != NL_SYNTAX_ALLOCATED_TRY &&
