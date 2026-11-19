@@ -357,6 +357,17 @@ static bool operation_valid_at(const NLCheckedFragment *f, NLCheckedNodeId id,
     return true;
 }
 
+/* Preserve the existing Known-only private entry point as well as its public
+ * wrappers. Unknown events never enter this +/- validator. */
+static bool arithmetic_valid(const NLCheckedFragment *f, NLCheckedNodeId id,
+                             NLUsizeOperation operation,
+                             const NLUsizeArithmeticView *candidate)
+{
+    return (operation == NL_USIZE_ADD || operation == NL_USIZE_SUBTRACT) &&
+           operation_valid_at(f, id, operation, candidate,
+                              f ? f->context : NULL);
+}
+
 /* Conversion only: no public layout casts, union punning or API migration.
  * Arguments are plain local lvalues. Numeric result fields are deliberately
  * excluded; each wrapper maps .sum OR .difference explicitly. */
@@ -398,12 +409,11 @@ bool nl_checked_usize_addition_valid(const NLCheckedFragment *f,
                                      const NLUsizeAdditionView *candidate)
 {
     if (!candidate)
-        return operation_valid_at(f, id, NL_USIZE_ADD, NULL,
-                                  f ? f->context : NULL);
+        return arithmetic_valid(f, id, NL_USIZE_ADD, NULL);
     NLUsizeArithmeticView v = {0};
     COPY_METADATA(v, *candidate);
     v.answer = candidate->sum;
-    return operation_valid_at(f, id, NL_USIZE_ADD, &v, f ? f->context : NULL);
+    return arithmetic_valid(f, id, NL_USIZE_ADD, &v);
 }
 bool nl_checked_usize_subtraction_view(const NLCheckedFragment *f,
                                        NLCheckedNodeId id,
@@ -423,13 +433,11 @@ bool nl_checked_usize_subtraction_valid(const NLCheckedFragment *f,
                                         const NLUsizeSubtractionView *candidate)
 {
     if (!candidate)
-        return operation_valid_at(f, id, NL_USIZE_SUBTRACT, NULL,
-                                  f ? f->context : NULL);
+        return arithmetic_valid(f, id, NL_USIZE_SUBTRACT, NULL);
     NLUsizeArithmeticView v = {0};
     COPY_METADATA(v, *candidate);
     v.answer = candidate->difference;
-    return operation_valid_at(f, id, NL_USIZE_SUBTRACT, &v,
-                              f ? f->context : NULL);
+    return arithmetic_valid(f, id, NL_USIZE_SUBTRACT, &v);
 }
 bool nl_checked_usize_division_view(const NLCheckedFragment *f,
                                     NLCheckedNodeId id,

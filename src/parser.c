@@ -1479,7 +1479,8 @@ ordinary_name:
     if (peek(parser) && expression_extension(parser) && !punct(parser, ';') &&
         !punct(parser, '=') &&
         !(flat_atom &&
-          (punct(parser, '+') || punct(parser, '-') || punct(parser, '<')) &&
+          (punct(parser, '+') || punct(parser, '-') || punct(parser, '<') ||
+           punct(parser, '/')) &&
           result->view.kind == NL_SYNTAX_EXPR_NAME) &&
         !(parser->match_scrutinee && punct(parser, '{'))) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
