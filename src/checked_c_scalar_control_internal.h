@@ -124,11 +124,28 @@ static bool scalar_selection_call(Emit *e, Env *env, NLCheckedNodeId id,
  * Copy-local chains. Inline that chain using the once-evaluated runtime
  * actual, never a Known summary. T admission still needs its separate actual
  * stateful entry; no H authority enters this callee or escapes an IF arm. */
+static bool direct_scalar_call(const Emit *e, const Env *env,
+                               const NLCheckedNodeView *call)
+{
+    const NLCheckedNodeView *receiver = nl_checked_node_view(
+        e->direct_receiver_issuer, e->direct_receiver_call);
+    return e->direct_h && e->two_heap && e->copy_type && !e->live_tail &&
+           !e->custody && !e->current && !e->producer_calls &&
+           !e->owner_calls && e->direct_payload_reads == 1 &&
+           e->lifecycle[0].stage == 4 && e->lifecycle[1].stage == 4 &&
+           !env->stability_scope &&
+           env->artifact == e->direct_receiver_issuer && receiver &&
+           call->argument_count == 1 &&
+           call->span.end_byte < receiver->span.start_byte;
+}
+
 static bool scalar_readonly_call(Emit *e, Env *env, NLCheckedNodeId id,
                                  const NLCheckedNodeView *call, Value *out)
 {
-    if (!e->scalar_issued || !e->scalar_control || !e->copy_type ||
-        env->scalar_read_arm || ++e->scalar_readonly_calls != 1)
+    if (!e->scalar_issued ||
+        (!e->scalar_control && !direct_scalar_call(e, env, call)) ||
+        !e->copy_type || env->scalar_read_arm ||
+        ++e->scalar_readonly_calls != 1)
         return reject(e);
     if (call->argument_count == 2)
         return scalar_selection_call(e, env, id, call, out);

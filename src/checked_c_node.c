@@ -1231,8 +1231,9 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         return put(e, "uint8_t nl_v_%zu=nl_b_%zu_%zu.f%zu;\n", out->temp,
                    l->frame, l->symbol, v->field.index);
     }
-    if (v->kind == NL_CHECKED_REGISTERED_CALL && e->scalar_control &&
-        e->copy_type && v->type == e->u8)
+    if (v->kind == NL_CHECKED_REGISTERED_CALL && e->copy_type &&
+        v->type == e->u8 &&
+        (e->scalar_control || direct_scalar_call(e, env, v)))
         return scalar_readonly_call(e, env, id, v, out);
     if (v->kind == NL_CHECKED_REGISTERED_CALL)
         return e->qualified_unchecked && env->artifact == e->qualified_owner &&
