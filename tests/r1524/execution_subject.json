@@ -1,0 +1,14 @@
+{
+  "release": "C1220",
+  "issue": 1533,
+  "operational_main": "b2f22d39b61c0cf3ea18b7a1529fa8f0bf801be1",
+  "target": "b1a6f1725abe25981ad29088175de581f956f919",
+  "target_tree": "1fb87662e11c8e1ccd4d54a45be0e3d38a8e67b9",
+  "branch": "r-fast/r1533-prefix-replay",
+  "pr_base": "p1531-terminal-integration-c1209",
+  "first_comment": "https://github.com/wakairo/NewLang_Compiler/issues/1524#issuecomment-6974565517",
+  "oracle_sha256": "93d195a95eeb5d75b4354c2b44d8b9a66b5b22717ce611524353787e1110b2d8",
+  "allowed_fast": 6,
+  "allowed_full_sets": 2,
+  "manual_runs": 0
+}

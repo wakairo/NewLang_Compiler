@@ -1,0 +1,194 @@
+R1524 FIRST ORACLE v1
+Authority: wakairo/NewLang_Compiler main 4c388693b95f371783e666f5c77e0aec5d17d215
+Authority tree: 867784ea863675788bc5ce4745904091ee319d3e
+CURRENT_SPEC blob: 5ff1e4a460848472e8ef832168e6f25d9c7b65e0
+Selected Draft17.38 blob: 25951270752c9e6499a1dcefc99ab7b17115bcee
+Issue: https://github.com/wakairo/NewLang_Compiler/issues/1524
+
+STATUS AND INTERPRETATION
+All six source files are independently authored canonical-FIRST inputs.
+Every compiler/native observation is NOT_RUN. No candidate has been read.
+Membership is exactly P1, P2, N1, N2, N3, N4 named below.
+Sources and this oracle are frozen before any compiler execution.
+The second named T write is the H2 Some-arm normal continuation, after
+the real separate callee frees original H2 and the caller frees original H1.
+It is not syntactically after the outer join. The final T field reads are
+after that join and therefore must reflect the actually selected world.
+There is no payload-value test for success, no link write, and no observer
+repair or authority injection. H2 payload zero is a success with two frees.
+This is finite capability evidence preparation, not Product GO or soundness.
+
+SOURCE ELIGIBILITY AND SEMANTIC DERIVATION
+- Sections 3.2, 16.3 and 16.3.8: one completed recursive SignalCell H,
+  one distinct two-u8 ControlPair T, exactly two nested fallible H sites.
+- Section 16.2: named aggregate initializers take ordinary expressions.
+  First H datum is the genuine first T old Copy saved_setting, not a
+  fresh oracle literal. It equals 29 by the actual initial named exchange.
+- Sections 17.1/Draft17.33, 17.4, 13.5a/c, 18.2-8: field0 writes preserve
+  the same original T and both child incarnations; fresh current facts
+  replace old facts, while the known-disjoint seal sibling remains 101.
+  exchange_setting returns the actual displaced u8 Copy.
+- Section 17.1/Draft17.35: selected_datum is read from the second H's
+  actual current declared u8 field1 through a genuine ref<read,H> under
+  its own original live Domain. The receiver itself performs no read.
+- Sections 13.5a, 13.8: source-known integer packages here have no borrowed
+  capability or other surviving dependency. Their ordinary Copy can
+  leave the ended loan and remain after H destruction; this conclusion
+  is from the initialized package and value flow, not merely static u8.
+- Section 18.1a: retire_cell has exactly ptr<H>, Allocation, LifetimeDomain,
+  unit result, no extra root, no forwarding and the four existing terminal
+  steps. The definition is checked independently with conditional
+  requirements; each actual call must prove the original p/O/R/A/D,
+  current incarnation, full-range occupancy and compatible loan facts.
+  Fresh callee parameter bindings do not create or relocate the H root.
+- Sections 26.9, 27.3: only the selected allocation arms execute. H0 has
+  no authority; both H1/H2 normal nested arms consume initial H ownership.
+  H2 additionally consumes following H ownership in the separate callee.
+  The joined T current state is the actual world, not a fabricated constant.
+- The language permits fail-closed precision refusal. Canonical semantics
+  alone do not promise implementation support in an unseen candidate.
+
+FIRST-LAYER PREDICTIONS (NOT MEASUREMENTS)
+P1 r1524_p1_nonzero.nl:
+  Parse: predicted accept under the selected canonical closed forms.
+  Semantic CHECK: predicted eligible, with both definitions and all actual
+  calls/loans/cleanup checked; a documented precision refusal is possible.
+  Source-issued owned: should be authentic if the implementation supports
+  this exact composition; no fabricated correlation or new owner permitted.
+  Backend/native: intended accept and the world oracle below, conditional
+  on authentic preceding proof and candidate coverage. Not yet established.
+P2 r1524_p2_zero.nl:
+  Same as P1; only the second H initializer changes 211 to 0. There is no
+  semantic reason to treat this actual integer zero as allocation failure.
+N1 r1524_n1_wrong_original_pointer.nl:
+  One call-site operand changes following_ptr to initial_ptr.
+  Parse: predicted accept. First required semantic refusal: actual-call
+  applicability, because initial O/R/D cannot satisfy following A/D.
+  No source-issued owned authority, C or native program may be certified.
+N2 r1524_n2_wrong_allocation.nl:
+  One call-site operand changes following_allocation to initial_allocation.
+  Parse: predicted accept. First required semantic refusal: actual-call
+  applicability, because Allocation(R_initial) does not own R_following.
+  No source-issued owned authority, C or native program may be certified.
+N3 r1524_n3_wrong_domain.nl:
+  One call-site operand changes following_domain to initial_domain.
+  Parse: predicted accept. First required semantic refusal: actual-call
+  applicability, because D_initial cannot end original O_following.
+  No source-issued owned authority, C or native program may be certified.
+N4 r1524_n4_missing_callee_deallocate.nl:
+  Only deallocate(token, bytes) is removed from retire_cell.
+  Parse: predicted syntactically valid. The selected exact receiver profile
+  may fail closed before the targeted semantic obligation.
+  If definition checking is reached, reject its normal unit exit because
+  original Allocation and recovered full Storage remain non-Discardable
+  and unconsumed; caller cannot silently inherit or physically free them.
+  No successful semantic definition or certified C/native is permitted.
+
+EARLY REFUSAL DISCIPLINE
+The actual first layer is recorded verbatim, not guessed from a final exit.
+A parser/profile refusal for N1-N4 is safe rejection but does not demonstrate
+the targeted p/A/D or normal-exit predicate. The full bytes remain the test.
+Likewise a positive early precision/unsupported refusal does not imply
+unsafe source or backend/native success. Owned/backend/native stay NOT_TESTED
+when unreachable. The cross-argument negatives preserve the remaining P1
+source verbatim: later consumed-argument fallout is not credited as reaching
+the earlier relational predicate. No expected diagnostic spelling is frozen.
+Missing runtime cleanup after an accepted N4 would be a real failure, not
+permission for the observer or caller to perform a hidden compensating free.
+Consumed/stale-use source negatives, receiver-internal read/five-step body,
+T field1 write, forwarding, extra owners and wider CFG are not included
+in this bounded six-source membership.
+
+NATIVE WORLD ORACLE FOR EACH POSITIVE
+Common original T:
+  construction (setting,seal)=(29,101)
+  first named exchange writes setting=149 and returns old=29
+  intermediate reads (149,101)
+  same original T placement and child incarnations persist throughout
+
+World H0: guest allocation attempt1 fails
+  attempts=1; successful physical allocations=0; initialized H roots=0
+  receiver entries=0; H payload reads=0; frees=0
+  T named writes=1; second T old result absent
+  final reads (149,101); no second allocation attempt or phantom owner
+
+World H1: attempt1 succeeds, attempt2 fails
+  attempts=2; successful physical allocations=1; initialized H roots=1
+  first H actual datum=29 from saved_setting, chain=None
+  receiver entries=0; second H payload reads=0
+  caller ends/finalizes/frees original first H exactly once
+  frees=1, original first backing only
+  T named writes=1; second T old result absent
+  final reads (149,101); no following root/Domain/Allocation
+
+World H2: both attempts succeed
+  attempts=2; successful physical allocations=2; initialized H roots=2
+  two simultaneously live distinct originals O1/O2, R1/R2 and D1/D2
+  first H actual datum=29, second datum=P1:211 or P2:0, both chain=None
+  exactly one genuine second-H payload read under D2, then loan closes
+  exactly one receiver entry receives original p2/A2/D2
+  callee ends O2, recovers original full R2 Storage, finalizes D2, frees R2
+  only after callee return caller ends O1, recovers original full R1 Storage,
+  finalizes D1 and frees R1
+  physical free order: R2 before R1; counts per original exactly one
+  only after both frees second named T exchange receives selected_datum
+  second exchange writes P1:211 or P2:0 and returns actual old=149
+  T named writes=2; total frees=2; no dangling H read
+  final reads P1:(211,101), P2:(0,101)
+  H2-P2 must retain all H2 events; zero is never reclassified H0/H1
+
+OBSERVATION DESIGN TO BE IMPLEMENTED ONLY AFTER RELEASE
+- Source CHECK and genuine public checked-owned evidence must account for
+  original qualified root/incarnation, backing/allocation, Domain, fixed
+  ProjectionId, current facts, full-range recovery, loans and call summary
+  substitution. Equality of temporary numeric IDs or byte values is not
+  sufficient. Include first old29 and intermediate/current/sibling facts.
+- Native observation records actual guest allocator success/failure,
+  initialized bytes and pointer identity, actual scalar read, receiver
+  entry/return, physical deallocation order/count, real T addresses/values
+  and named helper old return values. Record separate machine-readable
+  world entries, not one aggregate boolean.
+- Original p/A passage is tied to actual allocated/free backing and actual
+  call arguments; original Domain passage and erased semantic identity
+  require authentic source-owned/call proof. If Domain is erased at runtime,
+  do not claim native measurement of a nonexistent Domain ID.
+- An observer may read actual data and record trace. It may not synthesize
+  payload, initialized fields, ownership, scope closure, cleanup, or guest
+  authority. Pointer/read observations must be taken while the object lives.
+  Pointer identity used for later free checks must be captured before free.
+- A narrowly scoped guest allocator failure hook forces fail-at=1 and
+  fail-at=2; no-failure is H2. Every successful region still comes from
+  the real target allocator; a hook must not return fabricated success
+  storage or obscure cleanup. Unexpected host OOM is not H2 success.
+- Intended C native matrix for both positives and all three worlds:
+  GCC and Clang, strict C17, O0 and O2, -Wall -Wextra -Wpedantic -Werror.
+  Exact installed compiler versions and commands must later be recorded.
+  Expected native exit is 0 only after every applicable assertion passes.
+  In intended matrix: 2 positives x 3 worlds x 2 compilers x 2 levels.
+- Negative named-output no-clobber: prepare a preexisting output file with
+  known bytes, invoke the ordinary candidate CLI on each negative, require
+  nonzero refusal and byte-identical preexisting output; also check absent
+  output stays absent. The exact CLI spelling is a later public-interface
+  mechanical detail, not invented or executed here.
+- If CTest only shows aggregate PASS and suppresses passing-world stdout,
+  report precisely that stdout was suppressed. Assertions may be evidence
+  only when actually executed; preserve diagnostics identifying compiler,
+  optimization, source hash, world, expected/actual trace and first failing
+  event. Do not claim six world traces were publicly visible if they were not.
+- Compiler-internal OOM is left to proportionate P evidence and F review;
+  this packet does not prepare a general compiler allocation fault engine.
+- No FAST result substitutes for source CHECK, owned proof, C/native,
+  negative no-clobber, sanitizer or FULL5+PARTIAL. All remain NOT_RUN now.
+
+STOP AND LIMITS
+Stop on unexpected semantic/owned/backend/native/authority behavior,
+information contamination, fixed-subject drift, safety uncertainty requiring
+new source law, changed source/oracle hiding a result, or budget overrun.
+Mechanical source/harness repairs require preserved original FIRST bytes,
+hashes, predictions and observed failures plus new preregistered bytes.
+Only future explicit fixed-candidate/budget release can permit branch/ref,
+commit, PR, CI or execution. No such permission is inferred here.
+Product GO #624 remains PAUSED; H1 #268 remains HOLD. Finite native outcomes
+cannot establish all safe-reachable states or audit/re-audit locality for
+library authors and ordinary-safe callers versus well-factored C.
+Sound Rust safe-facade alternatives remain admissible comparisons.

@@ -1,0 +1,30 @@
+{
+  "r1524_p1_nonzero.nl": {
+    "bytes": 3639,
+    "sha256": "0ad0e71d7d764041720c28fe29ba530f061f0cd4029d2b9a61a7d175ec54803b"
+  },
+  "r1524_p2_zero.nl": {
+    "bytes": 3637,
+    "sha256": "c08b135c39b2971abb371cb35975553328e002a02e01e8151297cb74d1e48c76"
+  },
+  "r1524_n1_wrong_original_pointer.nl": {
+    "bytes": 3637,
+    "sha256": "12ead9939b5bfeeb35470d46f8736689e6d67a6f00622affdc9b896bcd18053f"
+  },
+  "r1524_n2_wrong_allocation.nl": {
+    "bytes": 3637,
+    "sha256": "32519556a8e20ce76da4c195fcaf73bf1329c92e50a31c1a87905c58b60c9c50"
+  },
+  "r1524_n3_wrong_domain.nl": {
+    "bytes": 3637,
+    "sha256": "b0a8d68c19ab800adc8901040916902f7fc8b7fe74d45ae87f05827d732c513f"
+  },
+  "r1524_n4_missing_callee_deallocate.nl": {
+    "bytes": 3609,
+    "sha256": "e13b48a617a175f5f5fa458e4f3ef0479c4c7b4926a156c1b159d7e9d598c64f"
+  },
+  "r1524_first_oracle.txt": {
+    "bytes": 12135,
+    "sha256": "93d195a95eeb5d75b4354c2b44d8b9a66b5b22717ce611524353787e1110b2d8"
+  }
+}
