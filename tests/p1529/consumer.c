@@ -71,11 +71,31 @@ static bool attacks(const char *path)
     destroy(&p);
     return true;
 }
+static bool refusal(const char *path)
+{
+    Program p = {0};
+    NLCopyCallAnchor anchor = {0};
+    NLSemanticSnapshot before, after;
+    CHECK(ready(path, &p) && actual(&p));
+    CHECK(nl_copy_state_anchor(p.context, &anchor) == NL_CHECK_OK &&
+          nl_semantic_snapshot(p.context, &before));
+    CHECK(emit(&p, NL_NODE_C_UNSUPPORTED) &&
+          nl_checked_proof_class(p.artifact) == NL_CHECKED_MACHINE_PROVED &&
+          nl_copy_state_matches(p.context, &anchor) &&
+          nl_semantic_snapshot(p.context, &after) &&
+          !memcmp(&before, &after, sizeof before));
+    nl_copy_state_destroy(&anchor);
+    destroy(&p);
+    puts("P1531 source-owned MACHINE preserved on consumer refusal");
+    return true;
+}
 int main(int argc, char **argv)
 {
     if (argc == 4 && !strcmp(argv[1], "agree"))
         return agreement(argv[2], argv[3]) ? 0 : 1;
     if (argc == 3 && !strcmp(argv[1], "attack"))
         return attacks(argv[2]) ? 0 : 1;
+    if (argc == 3 && !strcmp(argv[1], "refuse"))
+        return refusal(argv[2]) ? 0 : 1;
     return 2;
 }

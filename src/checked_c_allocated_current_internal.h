@@ -106,7 +106,8 @@ static bool copy_conditional_plan(Emit *e, const NLCheckedFragment *body)
         return reject(e);
     size_t observations = 0;
     while (statement && statement->kind == NL_CHECKED_BINDING) {
-        if (++observations > root->item_count ||
+        /* New prefix observations are released only for the direct lane. */
+        if (!direct || ++observations > root->item_count ||
             !copy_prefix_observation(e, body, statement, &first))
             return reject(e);
         statement = nl_checked_node_view(body, statement->next_item);
