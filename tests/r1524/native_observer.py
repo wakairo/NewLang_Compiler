@@ -588,12 +588,29 @@ def instrument(generated: str) -> str:
         _fail("no recognizable actual H scalar-load expression")
 
     # Read T before its containing function's scope ends, never afterward.
-    insert(t_function["close"], "r1524_finish_t();")
-    for m in re.finditer(r"\breturn\b([^;]*);", t_function["body"]):
+    t_body = t_function["body"]
+    t_returns = list(re.finditer(r"\breturn\b([^;]*);", t_body))
+    for m in t_returns:
         expression = m[1].strip()
         if expression not in ("", "0", "EXIT_SUCCESS"):
             _fail("T-owning function return needs an explicit safe mapping")
         insert(t_function["open"] + 1 + m.start(), "r1524_finish_t();")
+
+    # Omit only an unreachable close hook after an already-hooked main return.
+    terminal_return = False
+    if t_function is mains[0] and len(t_returns) == 1:
+        terminal = t_returns[0]
+        prefix = t_body[:terminal.start()]
+        terminal_return = (
+            terminal[1].strip() == "0"
+            and not t_body[terminal.end():].strip()
+            and re.search(r"(?:^|[;}])\s*\Z", prefix) is not None
+            and all(prefix.count(a) == prefix.count(b)
+                    for a, b in (("{", "}"), ("(", ")"), ("[", "]")))
+            and re.search(r"(?m)^\s*#", t_body) is None
+        )
+    if not terminal_return:
+        insert(t_function["close"], "r1524_finish_t();")
 
     # Reject overlapping replacements rather than corrupt guest expressions.
     replacements = sorted((a, b) for a, b, _ in edits if a != b)
