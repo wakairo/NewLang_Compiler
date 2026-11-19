@@ -311,7 +311,9 @@ def _parameter(text):
     pointer = "*" in prefix
     base = re.sub(r"\bconst\b", "", prefix.replace("*", ""))
     base = " ".join(base.split())
-    if not re.fullmatch(r"(?:struct )?[A-Za-z_]\w*", base):
+    if not re.fullmatch(
+        r"(?:(?:struct )?[A-Za-z_]\w*|unsigned char)", base
+    ):
         _fail("unrecognized parameter base type")
     return {"type": base, "pointer": pointer, "name": name}
 
@@ -319,8 +321,21 @@ def _parameter(text):
 def _fields(body):
     fields = []
     for item in body.split(";"):
-        if item.strip():
+        if not item.strip():
+            continue
+        scalar_names = re.fullmatch(
+            r"\s*uint8_t\s+"
+            r"([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)+)\s*",
+            item,
+        )
+        if scalar_names:
+            for name in scalar_names[1].split(","):
+                fields.append(_parameter("uint8_t " + name.strip()))
+        else:
             fields.append(_parameter(item))
+    names = [field["name"] for field in fields]
+    if len(names) != len(set(names)):
+        _fail("duplicate generated struct field")
     return fields
 
 
@@ -464,17 +479,31 @@ def instrument(generated: str) -> str:
                 declarations.append((f, m[1], end))
     unique = {(f["name"], name, end): (f, name, end)
               for f, name, end in declarations}
-    if len(unique) != 1:
-        _fail("expected exactly one identifiable original T local")
-    t_function, t_name, t_end = next(iter(unique.values()))
     a, b = [x["name"] for x in t["fields"]]
+    # Aggregate value temporaries are not the mutable source T object.
+    # Bind only the unique outer-scope object passed to both real writes.
+    call_name = r"\b" + re.escape(copy["name"]) + r"\s*\("
+    field_call = re.compile(
+        call_name + r"\s*&\s*([A-Za-z_]\w*)\s*\.\s*" +
+        re.escape(a) + r"\s*,"
+    )
+    calls = [(f["name"], m[1]) for f in funcs
+             for m in field_call.finditer(f["body"])]
+    all_calls = sum(len(re.findall(call_name, f["body"])) for f in funcs)
+    if len(calls) != 2 or all_calls != 2 or len(set(calls)) != 1:
+        _fail("expected two real writes to the same original T field")
+    selected = [(f, name, end) for f, name, end in unique.values()
+                if (f["name"], name) == calls[0]]
+    if len(selected) != 1:
+        _fail("expected one outer-scope T declaration for actual writes")
+    t_function, t_name, t_end = selected[0]
     insert(t_end,
            f"r1524_bind_t(&{t_name}, &{t_name}.{a}, &{t_name}.{b});")
 
     # The named Copy store and return each evaluate the guest expression once.
     target = copy["params"][0]["name"]
     store_pattern = re.compile(
-        r"(?m)^[ \t]*(?:\*\s*" + re.escape(target) +
+        r"(?m)(?:^|(?<=;))[ \t]*(?:\*\s*" + re.escape(target) +
         r"|\(\s*\*\s*" + re.escape(target) +
         r"\s*\))\s*=(?!=)[^;{}]+;"
     )
