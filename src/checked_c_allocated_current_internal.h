@@ -33,6 +33,47 @@ static bool copy_conditional_join(const Emit *e, const NLCheckedFragment *f,
            unknown.dependencies == NL_DEPENDENCY_FREE &&
            !unknown.value_dependency_count;
 }
+/* Borrow only an ordinary read of the same original T in the actual startup
+ * handoff world. This recognizes an emitted observation, not an effect to skip.
+ * The whole-source seal and the later carrier/world checks remain mandatory. */
+static bool copy_prefix_observation(Emit *e, const NLCheckedFragment *body,
+                                    const NLCheckedNodeView *binding,
+                                    const NLCopyBodyParameters *first)
+{
+    const NLCheckedNodeView *read =
+        nl_checked_node_view(body, binding->initializer);
+    NLSemanticPlaceView root, child;
+    NLSemanticValueView current, observed;
+    if (binding->kind != NL_CHECKED_BINDING || binding->terminates ||
+        !binding->symbol || !read || read->kind != NL_CHECKED_FIELD_READ ||
+        read->terminates || read->type != e->u8 ||
+        read->value_use != NL_VALUE_COPIED || read->result_count != 1 ||
+        read->results[0].type != e->u8 || !read->field.present ||
+        !read->field.dependency_compatible ||
+        read->field.access != NL_ACCESS_READ ||
+        read->field.nominal != first->field.nominal ||
+        read->field.type != e->u8 || read->field.index > 1 ||
+        read->field.base != first->field.base ||
+        read->field.parent != first->field.parent ||
+        read->field.parent_incarnation != first->field.parent_incarnation ||
+        !nl_semantic_place_view(first->handoff, first->field.parent, &root) ||
+        !root.live || root.type != e->copy_type ||
+        root.incarnation != read->field.parent_incarnation ||
+        root.current_fact != read->field.parent_fact ||
+        root.fixed_field_count != 2 ||
+        root.fixed_fields[read->field.index] != read->field.child ||
+        !nl_semantic_place_view(first->handoff, read->field.child, &child) ||
+        !child.live || child.type != e->u8 ||
+        child.incarnation != read->field.child_incarnation ||
+        child.current_fact != read->field.child_fact ||
+        child.current_value != read->field.old_value ||
+        !copy_plain(first->handoff, child.current_value, e->u8, &current) ||
+        !copy_plain(nl_checked_context(body), read->results[0].value, e->u8,
+                    &observed) ||
+        observed.scalar_value != current.scalar_value)
+        return false;
+    return true;
+}
 static bool copy_conditional_plan(Emit *e, const NLCheckedFragment *body)
 {
     /* Classification only: the whole source seal, both Copy proofs, exact
@@ -47,26 +88,34 @@ static bool copy_conditional_plan(Emit *e, const NLCheckedFragment *body)
             binding ? nl_checked_node_view(body, binding->next_item) : NULL,
         *statement =
             prefix ? nl_checked_node_view(body, prefix->next_item) : NULL,
-        *outer = statement ? nl_checked_node_view(body, statement->initializer)
-                           : NULL,
         *loan = prefix ? nl_checked_node_view(body, prefix->initializer) : NULL,
         *block = loan ? nl_checked_node_view(body, loan->initializer) : NULL;
     NLCopyBodyParameters first, last;
     if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
         !binding || binding->kind != NL_CHECKED_BINDING || !prefix ||
-        prefix->kind != NL_CHECKED_BINDING || !statement ||
-        statement->kind != NL_CHECKED_STATEMENT || !outer || !loan ||
+        prefix->kind != NL_CHECKED_BINDING || !statement || !loan ||
         loan->kind != NL_CHECKED_LOAN_HEADER || !block || block->item_count ||
         e->copy_expected_calls != 2 || e->copy_second_function ||
         body != e->copy_issuer || !e->scalar_issued || !e->two_heap ||
         (!e->live_tail && !direct) || e->custody || e->current ||
-        !copy_conditional_join(e, body, statement->initializer) ||
-        outer->captured_frame_closed ||
         !copy_call_proof(e, body, block->tail, &first) ||
         !copy_call_proof(e, e->copy_conditional_issuer,
                          e->copy_conditional_call, &last) ||
         first.field.base != binding->symbol ||
-        !copy_conditional_field(&first.field, &last.field) ||
+        !copy_conditional_field(&first.field, &last.field))
+        return reject(e);
+    size_t observations = 0;
+    while (statement && statement->kind == NL_CHECKED_BINDING) {
+        if (++observations > root->item_count ||
+            !copy_prefix_observation(e, body, statement, &first))
+            return reject(e);
+        statement = nl_checked_node_view(body, statement->next_item);
+    }
+    const NLCheckedNodeView *outer =
+        statement ? nl_checked_node_view(body, statement->initializer) : NULL;
+    if (!statement || statement->kind != NL_CHECKED_STATEMENT || !outer ||
+        !copy_conditional_join(e, body, statement->initializer) ||
+        outer->captured_frame_closed ||
         !copy_conditional_field(&outer->field, &first.field))
         return reject(e);
     const NLCheckedFragment *none = nl_checked_match_arm(
@@ -103,6 +152,28 @@ static bool copy_conditional_plan(Emit *e, const NLCheckedFragment *body)
     }
     if (!inner)
         return reject(e);
+    if (direct) {
+        /* Keep the exact checked H2 call/owner, never just a call count or
+         * a same-number root in another arm. The existing whole-root seal
+         * authenticates this graph before this serializer borrows it. */
+        const NLCheckedFragment *h2 = e->copy_conditional_issuer;
+        for (size_t id = 1; id <= nl_checked_node_count(h2); ++id) {
+            const NLCheckedNodeView *n = nl_checked_node_view(h2, id);
+            if (!n->owner_call.entry_proved)
+                continue;
+            if (e->direct_receiver_issuer ||
+                n->kind != NL_CHECKED_REGISTERED_CALL || !n->body_backed ||
+                !n->owner_call.post_proved ||
+                n->owner_call.definition.live_return ||
+                n->owner_call.definition.head_link_required ||
+                n->span.end_byte >
+                    nl_checked_node_view(h2, e->copy_conditional_call)
+                        ->span.start_byte)
+                return reject(e);
+            e->direct_receiver_issuer = h2;
+            e->direct_receiver_call = id;
+        }
+    }
     e->copy_conditional_inner = some;
     e->copy_conditional_inner_match = inner;
     e->copy_conditional_match = statement->initializer;

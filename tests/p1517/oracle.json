@@ -1,0 +1,131 @@
+{
+  "mission": "P1517 C1157 LOCAL ONLY",
+  "adopted_main": "4c388693b95f371783e666f5c77e0aec5d17d215",
+  "parent": "7591848bd7f4bf8967dffd4be8d360e1901a3f06",
+  "parent_tree": "f0cea393dacbecc9b7fd0064fcd4955b8ad9c3a6",
+  "spec": "Draft17.38",
+  "inherited_FIRST": "https://github.com/wakairo/NewLang_Compiler/issues/1515#issuecomment-6970060503",
+  "inherited_RED": "https://github.com/wakairo/NewLang_Compiler/issues/1515#issuecomment-6970154248",
+  "files": [
+    {
+      "path": "N-H1-leak.nl",
+      "bytes": 2745,
+      "sha256": "bfc34cb49c3994dfcdd4d3310147d56360ae3c407748a98fc5f5c09b56860fc3"
+    },
+    {
+      "path": "N-foreign-allocation.nl",
+      "bytes": 3022,
+      "sha256": "3556c2d4c9c380b6f254a04f206346ddd0e4feebd244b5e705ca90739660c51e"
+    },
+    {
+      "path": "N-foreign-domain.nl",
+      "bytes": 3022,
+      "sha256": "ec3e689d27ea60d5cfcb5e285434cb6bacc369dc385f7332ac37cd04a2523fda"
+    },
+    {
+      "path": "N-foreign-pointer.nl",
+      "bytes": 3022,
+      "sha256": "9259c3e510359fd6a1ad1274b6d546333fa34e05f5ccab4814af7b99ff8fcb7f"
+    },
+    {
+      "path": "N-incomplete-callee.nl",
+      "bytes": 2997,
+      "sha256": "35961c146e53106e440e91733b49db4b8f940295d6f2cdc46a63dac5d0dc824f"
+    },
+    {
+      "path": "N-owner-reused.nl",
+      "bytes": 3062,
+      "sha256": "5426cc5561b381533a2b42798d318602b770ea15570aefbb6ad898f88bcbb7ae"
+    },
+    {
+      "path": "N-stale-read.nl",
+      "bytes": 3208,
+      "sha256": "73134d7f8a481309fec656a9829d5ca1dd3b78674452d469295919eac75f7a7c"
+    },
+    {
+      "path": "P-nonzero.nl",
+      "bytes": 3023,
+      "sha256": "3c77aa1bc12f87f6ff98e49fa088736514805377ff0cd7e056f6acdd8258675c"
+    },
+    {
+      "path": "P-zero.nl",
+      "bytes": 3022,
+      "sha256": "c34424400685c37d814d6dcb6a9e63b391c3b596263f55103f6718fa76581a0b"
+    },
+    {
+      "path": "guest_wrap.c",
+      "bytes": 707,
+      "sha256": "f511cbd663eef21768a350ef9fde0922e87cbb3931260b2d753949afb215ce98"
+    },
+    {
+      "path": "passive.h",
+      "bytes": 12352,
+      "sha256": "afea7a30c785f727fe05d90688cdaf9e79364d62ea38f16742e9c31cdb64d393"
+    },
+    {
+      "path": "public_owned.c",
+      "bytes": 18408,
+      "sha256": "23194e04fda8190396585c810cf42110036284565cba3c6befd09e1c2a0e8aa8"
+    }
+  ],
+  "worlds": {
+    "H0": {
+      "fail_malloc_at": 1,
+      "live_originals": 0,
+      "free_order": [],
+      "receiver": 0,
+      "writes": 1,
+      "current": 0
+    },
+    "H1": {
+      "fail_malloc_at": 2,
+      "live_originals": 1,
+      "free_order": [
+        "original0 caller"
+      ],
+      "receiver": 0,
+      "writes": 1,
+      "current": 0
+    },
+    "H2": {
+      "fail_malloc_at": 0,
+      "live_originals": 2,
+      "free_order": [
+        "original1 callee",
+        "original0 caller"
+      ],
+      "receiver": 1,
+      "writes": 2,
+      "current": "true sampled payload0 or42"
+    }
+  },
+  "all_worlds": {
+    "old_first": 91,
+    "old_second_H2": 0,
+    "sibling": 23,
+    "first_payload": 67,
+    "no_live_originals_after_finish": true,
+    "no_live_read_scope_at_EndRoot": true
+  },
+  "stages": {
+    "parent": "ordinary CHECK and public MACHINE/owner/Copy PASS, inherited source baseline emit unsupported4",
+    "candidate": "ordinary CHECK and public MACHINE/owner/Copy PASS; strict C17 ordinary CLI emission0; GCC/Clang O0/O2 H0/H1/H2 native0",
+    "source_negatives": "six original source negatives retain original earliest results; extra wrong-p0/a1/d1 must semantic reject; no unsafe artifact to native",
+    "artifact_negatives": "actual/formal/input/root/domain/incarnation/body/world/source/result/loan/teardown tampering invalidates MACHINE or emitter, no new issuer; pristine retry succeeds",
+    "host_OOM": "selected registration/call-entry source closure, Copy validators, main emitter buffer, receiver buffer and named output; explicit site/case census <=16/48; failure NULL/out_length unchanged, state/sentinel unchanged, no temp leak, clean retry succeeds"
+  },
+  "native_observer": "observe actual allocation/address/domain/read/free order and real named T stores without creating program state; free wrapper checks pointer before real free and clears stored pointer; receiver entry/exit use existing hooks; real malloc failures only; original generated C bytes preserved",
+  "matrix_guest": 24,
+  "optional_raw_native": 2,
+  "optional_sanitizer": "only if pinned Clang available and remaining budget; otherwise NOT_RUN",
+  "budget": {
+    "local": 80,
+    "guest": 36,
+    "host_oom_sites": 16,
+    "host_fault_retry_cases": 48,
+    "remote_production_push_PR_CI": 0
+  },
+  "toolchain": "use supplied adopted-main unchanged semantic/parser/etc archives only after exact source diff and binary hashes; compile parent/private changed backend TU and link isolated CLI; exact locked Clang23 Debian package fetch currently HTTP404; no silent unpinned substitution. Preserve failure; independently continue allowed GCC/private work, report missing mandatory Clang if unresolved.",
+  "source_law": "KEEP selected18.1a/16.3.8/17.35; no public API/ABI/issuer or checker semantics change",
+  "value": "UNMEASURED author+ordinary-safe caller audit dependency reduction vs well-factored C; sound Rust owned/Drop/safe facade valid alternative; Product GO PAUSED/H1 HOLD"
+}
