@@ -63,6 +63,7 @@ typedef struct {
     bool scalar_issued; /* existing sealed CHECK body, no new issuer */
     bool direct_h;      /* direct physical closure, never a LiveTail producer */
     size_t direct_payload_reads;
+    size_t direct_receiver_reads; /* emitted discarded refs, never authority */
     /* One genuine terminal receiver in the direct H2 arm. Borrowed source
      * call identity only; owner_evidence still proves every actual relation. */
     const NLCheckedFragment *direct_receiver_issuer;
@@ -601,6 +602,22 @@ static bool terminal_role_lane(const Emit *e)
 static size_t expected_owner_calls(const Emit *e)
 {
     return e->direct_h ? (e->direct_receiver_issuer ? 1u : 0u) : 1u;
+}
+
+/* Only the body borrowed after owner_evidence authenticated this exact
+ * source-issued call. This selects emission reuse, not a new owner proof. */
+static bool direct_receiver_body(const Emit *e, const Env *env)
+{
+    return e->two_heap && e->direct_h && !e->live_tail && !e->custody &&
+           !e->current && !e->producer_calls && e->owner_calls == 1 &&
+           e->active_owner_call &&
+           e->active_owner_id == e->direct_receiver_call &&
+           e->active_owner_call ==
+               nl_checked_node_view(e->direct_receiver_issuer,
+                                    e->direct_receiver_call) &&
+           e->active_owner_body == env->artifact &&
+           nl_checked_call_body(e->direct_receiver_issuer,
+                                e->direct_receiver_call) == env->artifact;
 }
 
 /* The same source-issued producer original licenses the optional caller read
@@ -2216,8 +2233,11 @@ static const NLCheckedNodeView *unit_observation(const Emit *e, const Env *env,
     /* The existing closed-main plan selects this normalization. Other H
      * consumers keep their topology/read protocol and emitted bytes intact;
      * this plan supplies no missing operand, liveness or ownership evidence. */
-    return e->copy_after_match && e->two_heap && e->live_tail && !e->custody &&
-                   b && b->kind == NL_CHECKED_BLOCK && !b->terminates &&
+    const bool lane =
+        (e->copy_after_match && e->two_heap && e->live_tail && !e->custody) ||
+        (direct_receiver_body(e, env) && e->owner_read &&
+         !e->direct_receiver_reads);
+    return lane && b && b->kind == NL_CHECKED_BLOCK && !b->terminates &&
                    b->type == e->unit && !b->result_count &&
                    b->item_count == 1 && tail &&
                    tail->kind == NL_CHECKED_UNIT && n &&
@@ -2329,6 +2349,15 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             if (h.domain_frame != src->frame || h.domain_symbol != src->symbol)
                 return reject(e);
         }
+        const NLCheckedNodeView *unit =
+            unit_observation(e, env, v->initializer);
+        /* The direct receiver's optional operation only obtains/discards a
+         * root ref and returns unit. Do not admit scalar/payload bodies here.
+         */
+        if (direct_receiver_body(e, env) && !l->is_exclusive &&
+            (!unit || v->type != e->unit ||
+             l->domain != e->active_owner_call->owner_call.domain))
+            return reject(e);
         Env body = {
             .artifact = env->artifact,
             .parent = env,
@@ -2341,7 +2370,7 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             .stability_scope = l->scope,
             .stability_domain = l->domain,
             .stability_place = db.place,
-            .unit_observation = unit_observation(e, env, v->initializer),
+            .unit_observation = unit,
             .scalar_observation = scalar_observation(e, env, v->initializer),
             .ptr_observation = ptr_copy_observation(e, env, v->initializer)};
         if (!add_local(e, &body, l->ref_symbol, binder.type, false) ||
@@ -2405,6 +2434,16 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             (!write && !role_read &&
              (env->unit_observation == v || env->scalar_observation == v)) ||
             env->ptr_observation == v;
+        const bool direct_read = direct_receiver_body(e, env);
+        if (direct_read &&
+            (!e->owner_read || e->direct_receiver_reads || !observation ||
+             env->unit_observation != v || !target ||
+             target->region_slot != 1 ||
+             v->lifetime_place != e->active_owner_call->owner_call.root ||
+             v->lifetime_incarnation !=
+                 e->active_owner_call->owner_call.incarnation ||
+             v->lifetime_domain != e->active_owner_call->owner_call.domain))
+            return reject(e);
         if ((role_lane && !role_read && !observation) ||
             (observation && (!target || target->region_slot >= 2 ||
                              e->lifecycle[target->region_slot].stage != 4)))
@@ -2474,6 +2513,8 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             return reject(e);
         if (!observation)
             ++e->reloans;
+        if (direct_read)
+            ++e->direct_receiver_reads;
         if (role_read) {
             if (e->owner_calls)
                 ++e->receiver_tail_reads;
@@ -3078,7 +3119,7 @@ static bool owner_evidence(Emit *e, Env *env, NLCheckedNodeId id,
         direct ? (e->lifecycle[0].stage != 4 || e->direct_payload_reads != 1 ||
                   e->reloans || e->link_updates || e->projections || e->reads ||
                   e->producer_calls || e->live_tail || e->custody ||
-                  v->owner_call.definition.step_count != 4)
+                  e->direct_receiver_reads)
                : ((terminal_role_lane(e)
                        ? !terminal_sequence(e, env, v)
                        : e->reloans !=
@@ -3281,7 +3322,7 @@ static bool owner_call(Emit *e, Env *env, NLCheckedNodeId id,
     e->used = e->receiver_used;
     ++e->owner_calls;
     e->owner_read = v->owner_call.definition.step_count == 5;
-    if (terminal_role_lane(e)) {
+    if (terminal_role_lane(e) || e->direct_h) {
         e->active_owner_call = v;
         e->active_owner_body = body;
         e->active_owner_id = id;
@@ -3317,6 +3358,8 @@ static bool owner_call(Emit *e, Env *env, NLCheckedNodeId id,
              head.domain_symbol == e->lifecycle[0].domain_symbol &&
              (!terminal_role_lane(e) ||
               e->receiver_tail_reads == (e->owner_read ? 1u : 0u)) &&
+             (!e->direct_h ||
+              e->direct_receiver_reads == (e->owner_read ? 1u : 0u)) &&
              put(e, "NL_HEAP_RECEIVER_EXIT();\n}\n");
     e->active_owner_call = NULL;
     e->active_owner_body = NULL;
@@ -4012,7 +4055,9 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
          (!e.copy_h_closed || e.copy_roots != 1 || e.producer_calls ||
           e.owner_calls != expected_owner_calls(&e) || e.live_tail ||
           e.custody || e.heap_link || e.projections || e.reads ||
-          e.link_updates || e.direct_payload_reads != 1)) ||
+          e.link_updates || e.direct_payload_reads != 1 ||
+          e.direct_receiver_reads != (e.owner_read ? 1u : 0u) ||
+          e.active_owner_call || e.active_owner_body || e.active_owner_id)) ||
         (e.copy_second_function && e.copy_roots != e.copy_expected_roots) ||
         (e.copy_surviving_issuer &&
          (!e.copy_h_closed ||
