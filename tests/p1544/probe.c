@@ -410,10 +410,10 @@ static bool oom(const char *path, unsigned site)
         NEED(registration(&p) == NL_CHECK_OUT_OF_MEMORY);
     } else if (site == 2) {
         armed = true;
-        p.artifact = (NLCheckedFragment *)(uintptr_t)1;
-        NEED(actual(&p) == NL_CHECK_OUT_OF_MEMORY &&
-             p.artifact == (NLCheckedFragment *)(uintptr_t)1);
-        p.artifact = NULL;
+        /* An occupied owner slot is refused before CHECK. Start with NULL
+         * so this injection reaches result sealing and must preserve NULL. */
+        NEED(p.artifact == NULL);
+        NEED(actual(&p) == NL_CHECK_OUT_OF_MEMORY && p.artifact == NULL);
     } else {
         NEED(actual(&p) == NL_CHECK_OK);
         before = *p.context;
