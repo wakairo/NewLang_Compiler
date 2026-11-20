@@ -4,6 +4,7 @@
 #include "h_origin_internal.h"
 #include "newlang/parser.h"
 #include "newlang/usize_division.h"
+#include "newlang/usize_remainder.h"
 #include "newlang/usize_subtraction.h"
 #include "semantic_internal.h"
 #include "syntax_internal.h"
@@ -12,13 +13,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* One receipt owner. Public Known-only +/- contracts remain unchanged;
- * division has its own optional-fact view and numerical validation rule. */
+/* One receipt owner, with a public view for each operation. */
 typedef enum {
     NL_USIZE_ADD,
     NL_USIZE_SUBTRACT,
-    NL_USIZE_DIVIDE
+    NL_USIZE_DIVIDE,
+    NL_USIZE_REMAINDER
 } NLUsizeOperation;
+static const struct {
+    NLSyntaxKind syntax;
+    NLCheckedKind checked;
+    const char *token;
+} arithmetic_operation[] = {
+    [NL_USIZE_ADD] = {NL_SYNTAX_USIZE_ADDITION, NL_CHECKED_USIZE_ADDITION, "+"},
+    [NL_USIZE_SUBTRACT] = {NL_SYNTAX_USIZE_SUBTRACTION,
+                           NL_CHECKED_USIZE_SUBTRACTION, "-"},
+    [NL_USIZE_DIVIDE] = {NL_SYNTAX_USIZE_DIVISION, NL_CHECKED_USIZE_DIVISION,
+                         "/"},
+    [NL_USIZE_REMAINDER] = {NL_SYNTAX_USIZE_REMAINDER,
+                            NL_CHECKED_USIZE_REMAINDER, "%"}};
 typedef struct {
     const NLCheckedFragment *origin;
     NLCheckedNodeId node, operands[2];
@@ -41,7 +54,7 @@ typedef struct NLUsizeAdditionProof {
     const NLSemanticContext *context;
     NLValueId binding_values[2];
     bool guarded;
-    bool numerator_known, quotient_known;
+    bool numerator_known, result_known;
     const NLCheckedFragment *guard_parent;
     NLCheckedNodeId conditional;
     size_t function, limit, step;
@@ -57,6 +70,11 @@ static bool span_equal(NLSourceSpan a, NLSourceSpan b)
 }
 
 static bool quantity(const NLSemanticContext *, NLValueId, NLTypeId);
+
+static bool fixed_divisor(NLUsizeOperation operation)
+{
+    return operation == NL_USIZE_DIVIDE || operation == NL_USIZE_REMAINDER;
+}
 
 static bool arithmetic_fact(const NLSemanticContext *c, NLValueId id,
                             NLTypeId type, bool known, size_t number)
@@ -98,18 +116,21 @@ NLCheckStatus nl_usize_arithmetic_capture(NLCheckedFragment *f,
                                           const NLSemanticContext *working)
 {
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-    if (!f || !n || !syntax ||
-        (n->kind != NL_CHECKED_USIZE_ADDITION &&
-         n->kind != NL_CHECKED_USIZE_SUBTRACTION &&
-         n->kind != NL_CHECKED_USIZE_DIVISION))
+    const NLSyntaxView *s = nl_syntax_node_view(syntax);
+    if (!n || !s)
+        return NL_CHECK_INTERNAL_ERROR;
+    size_t op = 0;
+    const size_t count =
+        sizeof(arithmetic_operation) / sizeof(*arithmetic_operation);
+    while (op < count && arithmetic_operation[op].checked != n->kind)
+        ++op;
+    if (op == count || arithmetic_operation[op].syntax != s->kind)
         return NL_CHECK_INTERNAL_ERROR;
     NLUsizeAdditionProof *p = calloc(1, sizeof(*p));
     if (!p)
         return NL_CHECK_OUT_OF_MEMORY;
-    p->operation = n->kind == NL_CHECKED_USIZE_ADDITION      ? NL_USIZE_ADD
-                   : n->kind == NL_CHECKED_USIZE_SUBTRACTION ? NL_USIZE_SUBTRACT
-                                                             : NL_USIZE_DIVIDE;
-    p->quotient_known = n->scalar_result.known;
+    p->operation = (NLUsizeOperation)op;
+    p->result_known = n->scalar_result.known;
     p->syntax = syntax;
     /* f->context is the publication destination; CHECK still operates on its
      * transaction clone. Read current facts from working, qualify saved IDs by
@@ -145,7 +166,7 @@ NLCheckStatus nl_usize_arithmetic_capture(NLCheckedFragment *f,
                 !nl_semantic_place_view(working, b.place, &place) ||
                 !place.live || !place.current_fact ||
                 place.current_value != b.value || place.type != n->type ||
-                !(p->operation == NL_USIZE_DIVIDE
+                !(fixed_divisor(p->operation)
                       ? arithmetic_fact(working, b.value, n->type,
                                         value.scalar_known, value.scalar_value)
                       : plain(working, b.value, n->type, value.scalar_value)))
@@ -211,6 +232,10 @@ static bool arithmetic_result(NLUsizeOperation operation, size_t lhs,
         return rhs <= SIZE_MAX - lhs && answer == lhs + rhs;
     if (operation == NL_USIZE_SUBTRACT)
         return lhs >= rhs && answer == lhs - rhs;
+    if (operation == NL_USIZE_DIVIDE)
+        return rhs && answer == lhs / rhs;
+    if (operation == NL_USIZE_REMAINDER)
+        return rhs && answer < rhs && answer == lhs % rhs;
     return false;
 }
 
@@ -242,16 +267,8 @@ static bool operation_valid_at(const NLCheckedFragment *f, NLCheckedNodeId id,
     if (v->type != nl_semantic_core_type(c, NL_TYPE_USIZE) ||
         !nl_semantic_type_view(c, v->type, &t) || !t.is_copy ||
         t.kind != NL_TYPE_USIZE ||
-        s->kind != (operation == NL_USIZE_ADD ? NL_SYNTAX_USIZE_ADDITION
-                    : operation == NL_USIZE_SUBTRACT
-                        ? NL_SYNTAX_USIZE_SUBTRACTION
-                        : NL_SYNTAX_USIZE_DIVISION) ||
-        !n ||
-        n->kind != (operation == NL_USIZE_ADD ? NL_CHECKED_USIZE_ADDITION
-                    : operation == NL_USIZE_SUBTRACT
-                        ? NL_CHECKED_USIZE_SUBTRACTION
-                        : NL_CHECKED_USIZE_DIVISION) ||
-        n->terminates ||
+        s->kind != arithmetic_operation[operation].syntax || !n ||
+        n->kind != arithmetic_operation[operation].checked || n->terminates ||
         !span_equal(v->span, (NLSourceSpan){v->operand_spans[0].start_byte,
                                             v->operand_spans[1].end_byte}) ||
         v->operand_spans[0].end_byte > v->operator_span.start_byte ||
@@ -263,21 +280,21 @@ static bool operation_valid_at(const NLCheckedFragment *f, NLCheckedNodeId id,
         !span_equal(n->name, v->operator_span) ||
         !span_equal(s->data.equality.operator_span, v->operator_span) ||
         !token(f->source, v->operator_span,
-               operation == NL_USIZE_ADD        ? "+"
-               : operation == NL_USIZE_SUBTRACT ? "-"
-                                                : "/") ||
+               arithmetic_operation[operation].token) ||
         n->value_use != NL_VALUE_USE_NONE || !n->has_scalar_result ||
         n->scalar_result.type != v->type ||
         n->scalar_result.value != v->answer ||
-        (operation == NL_USIZE_DIVIDE
-             ? (p->quotient_known != p->numerator_known ||
-                n->scalar_result.known != p->quotient_known || !v->numbers[1] ||
-                (p->numerator_known ? v->answer != v->numbers[0] / v->numbers[1]
-                                    : (v->numbers[0] != 0 || v->answer != 0)) ||
-                !arithmetic_fact(c, v->result, v->type, p->quotient_known,
+        (fixed_divisor(operation)
+             ? (p->result_known != p->numerator_known ||
+                n->scalar_result.known != p->result_known || !v->numbers[1] ||
+                (p->numerator_known
+                     ? !arithmetic_result(operation, v->numbers[0],
+                                          v->numbers[1], v->answer)
+                     : (v->numbers[0] != 0 || v->answer != 0)) ||
+                !arithmetic_fact(c, v->result, v->type, p->result_known,
                                  v->answer))
              : (!n->scalar_result.known || !p->numerator_known ||
-                !p->quotient_known ||
+                !p->result_known ||
                 !arithmetic_result(operation, v->numbers[0], v->numbers[1],
                                    v->answer) ||
                 !plain(c, v->result, v->type, v->answer))))
@@ -298,11 +315,11 @@ static bool operation_valid_at(const NLCheckedFragment *f, NLCheckedNodeId id,
             operand->results[0].value != v->values[i] ||
             operand->next_argument != (i == 0 ? v->operands[1] : 0) ||
             !arithmetic_fact(c, v->values[i], v->type,
-                             operation != NL_USIZE_DIVIDE || i ||
+                             !fixed_divisor(operation) || i ||
                                  p->numerator_known,
                              v->numbers[i]))
             return false;
-        if (operation == NL_USIZE_DIVIDE &&
+        if (fixed_divisor(operation) &&
             a->kind != (i ? NL_SYNTAX_USIZE_LITERAL : NL_SYNTAX_EXPR_NAME))
             return false;
         if (a->kind == NL_SYNTAX_USIZE_LITERAL) {
@@ -347,7 +364,7 @@ static bool operation_valid_at(const NLCheckedFragment *f, NLCheckedNodeId id,
                 place.incarnation != v->incarnations[i] || !v->facts[i] ||
                 v->facts[i] > c->last_value_fact ||
                 !arithmetic_fact(c, p->binding_values[i], v->type,
-                                 operation != NL_USIZE_DIVIDE || i ||
+                                 !fixed_divisor(operation) || i ||
                                      p->numerator_known,
                                  v->numbers[i]))
                 return false;
@@ -450,7 +467,7 @@ bool nl_checked_usize_division_view(const NLCheckedFragment *f,
     COPY_METADATA(v, p->issued);
     v.quotient = p->issued.answer;
     v.numerator_known = p->numerator_known;
-    v.quotient_known = p->quotient_known;
+    v.quotient_known = p->result_known;
     v.target_max = SIZE_MAX;
     *out = v;
     return true;
@@ -465,7 +482,7 @@ bool nl_checked_usize_division_valid(const NLCheckedFragment *f,
     NLUsizeArithmeticView v = {0};
     if (candidate) {
         if (candidate->numerator_known != p->numerator_known ||
-            candidate->quotient_known != p->quotient_known ||
+            candidate->quotient_known != p->result_known ||
             candidate->target_max != SIZE_MAX)
             return false;
         COPY_METADATA(v, *candidate);
@@ -473,6 +490,49 @@ bool nl_checked_usize_division_valid(const NLCheckedFragment *f,
     }
     return operation_valid_at(f, id, NL_USIZE_DIVIDE, candidate ? &v : NULL,
                               f ? f->context : NULL);
+}
+
+bool nl_checked_usize_remainder_view(const NLCheckedFragment *f,
+                                     NLCheckedNodeId id,
+                                     NLUsizeRemainderView *out)
+{
+    const NLUsizeAdditionProof *p = find(f, id);
+    if (!out || !p || p->guarded || p->operation != NL_USIZE_REMAINDER ||
+        p->issued.origin != f || !f->source ||
+        (f->body_owner && f->source != f->body_owner->source) ||
+        !nl_h_custody_borrow_valid(f))
+        return false;
+    NLUsizeRemainderView v = {0};
+    COPY_METADATA(v, p->issued);
+    v.source = f->source;
+    v.remainder = p->issued.answer;
+    v.numerator_known = p->numerator_known;
+    v.remainder_known = p->result_known;
+    v.target_max = SIZE_MAX;
+    *out = v;
+    return true;
+}
+
+bool nl_checked_usize_remainder_valid(const NLCheckedFragment *f,
+                                      NLCheckedNodeId id,
+                                      const NLUsizeRemainderView *candidate)
+{
+    const NLUsizeAdditionProof *p = find(f, id);
+    if (!p || p->operation != NL_USIZE_REMAINDER ||
+        !nl_h_custody_borrow_valid(f))
+        return false;
+    NLUsizeArithmeticView v = {0};
+    if (candidate) {
+        if (candidate->source != f->source ||
+            candidate->numerator_known != p->numerator_known ||
+            candidate->remainder_known != p->result_known ||
+            candidate->target_max != SIZE_MAX)
+            return false;
+        COPY_METADATA(v, *candidate);
+        v.answer = candidate->remainder;
+    }
+    return operation_valid_at(f, id, NL_USIZE_REMAINDER, candidate ? &v : NULL,
+                              f->context);
 }
 #undef COPY_METADATA
 
@@ -982,10 +1042,11 @@ bool nl_guarded_usize_call_valid(const NLCheckedFragment *f,
     return true;
 }
 
-bool nl_usize_division_operands(const NLCheckedFragment *f,
-                                const NLSemanticContext *c,
-                                const NLSyntaxNode *syntax,
-                                NLCheckedNodeId left, NLCheckedNodeId right)
+static bool literal_divisor_operands(const NLCheckedFragment *f,
+                                     const NLSemanticContext *c,
+                                     const NLSyntaxNode *syntax,
+                                     NLSyntaxKind kind, NLCheckedNodeId left,
+                                     NLCheckedNodeId right)
 {
     const NLSyntaxView *s = nl_syntax_node_view(syntax);
     const NLSyntaxView *a =
@@ -996,12 +1057,11 @@ bool nl_usize_division_operands(const NLCheckedFragment *f,
     NLSemanticBindingView binding;
     NLSemanticPlaceView place;
     size_t divisor;
-    if (!s || s->kind != NL_SYNTAX_USIZE_DIVISION || !a ||
-        a->kind != NL_SYNTAX_EXPR_NAME || !x || !k ||
-        x->kind != NL_CHECKED_IDENTIFIER || x->value_use != NL_VALUE_COPIED ||
-        x->type != type || x->result_count != 1 ||
-        !quantity(c, x->results[0].value, type) || !x->symbol ||
-        x->symbol > c->binding_count ||
+    if (!s || s->kind != kind || !a || a->kind != NL_SYNTAX_EXPR_NAME || !x ||
+        !k || x->kind != NL_CHECKED_IDENTIFIER ||
+        x->value_use != NL_VALUE_COPIED || x->type != type ||
+        x->result_count != 1 || !quantity(c, x->results[0].value, type) ||
+        !x->symbol || x->symbol > c->binding_count ||
         !nl_semantic_binding_view(c, x->symbol, &binding) ||
         binding.type != type || binding.availability != NL_AVAILABLE ||
         !nl_semantic_place_view(c, binding.place, &place) || !place.live ||
@@ -1014,6 +1074,24 @@ bool nl_usize_division_operands(const NLCheckedFragment *f,
     const NLSemanticValueView original = c->values[binding.value - 1];
     return arithmetic_fact(c, x->results[0].value, type, original.scalar_known,
                            original.scalar_value);
+}
+
+bool nl_usize_division_operands(const NLCheckedFragment *f,
+                                const NLSemanticContext *c,
+                                const NLSyntaxNode *syntax,
+                                NLCheckedNodeId left, NLCheckedNodeId right)
+{
+    return literal_divisor_operands(f, c, syntax, NL_SYNTAX_USIZE_DIVISION,
+                                    left, right);
+}
+
+bool nl_usize_remainder_operands(const NLCheckedFragment *f,
+                                 const NLSemanticContext *c,
+                                 const NLSyntaxNode *syntax,
+                                 NLCheckedNodeId left, NLCheckedNodeId right)
+{
+    return literal_divisor_operands(f, c, syntax, NL_SYNTAX_USIZE_REMAINDER,
+                                    left, right);
 }
 
 /* These consumers borrow the checked lexical order and existing result/world
@@ -1048,11 +1126,13 @@ static bool division_copy_at(const NLCheckedFragment *f,
 static bool division_event_at(const NLCheckedFragment *f,
                               const NLSemanticContext *c,
                               const NLFunctionEntry *fn, NLCheckedNodeId id,
-                              const NLSyntaxNode *src, NLDivisionUsizePlan *p)
+                              const NLSyntaxNode *src,
+                              NLUsizeOperation operation,
+                              NLDivisionUsizePlan *p)
 {
     const NLUsizeAdditionProof *receipt = find(f, id);
     if (!receipt || receipt->syntax != src ||
-        !operation_valid_at(f, id, NL_USIZE_DIVIDE, NULL, c) ||
+        !operation_valid_at(f, id, operation, NULL, c) ||
         !token(f->source, receipt->issued.operand_spans[0],
                fn->body->parameter_names[0]))
         return false;
@@ -1090,6 +1170,7 @@ static bool division_return_at(const NLCheckedFragment *f,
 
 static bool division_helper(const NLCheckedFragment *f,
                             const NLSemanticContext *c, size_t function,
+                            NLUsizeOperation operation,
                             NLDivisionUsizePlan *out)
 {
     const NLFunctionEntry *fn = quantity_function(c, function, 1);
@@ -1125,7 +1206,8 @@ static bool division_helper(const NLCheckedFragment *f,
             return false;
         const NLSyntaxNode *init = src->data.binding.initializer;
         if (!plan.division) {
-            if (!division_event_at(f, c, fn, n->initializer, init, &plan))
+            if (!division_event_at(f, c, fn, n->initializer, init, operation,
+                                   &plan))
                 return false;
         } else if (!division_copy_at(f, c, n->initializer, init))
             return false;
@@ -1137,8 +1219,9 @@ static bool division_helper(const NLCheckedFragment *f,
         !node_value(f, c, f->root, &body_result) ||
         !node_value(f, c, root->tail, &tail_value) || body_result != tail_value)
         return false;
-    if (plan.division ? !division_copy_at(f, c, root->tail, tail)
-                      : !division_event_at(f, c, fn, root->tail, tail, &plan))
+    if (plan.division
+            ? !division_copy_at(f, c, root->tail, tail)
+            : !division_event_at(f, c, fn, root->tail, tail, operation, &plan))
         return false;
     plan.result = root->tail;
     *out = plan;
@@ -1167,7 +1250,8 @@ static bool division_call_values(const NLCheckedFragment *f,
 static bool division_call_at(const NLCheckedFragment *f,
                              const NLSemanticContext *c, NLCheckedNodeId id,
                              const NLSyntaxNode *syntax,
-                             NLCheckedNodeId first_call)
+                             NLCheckedNodeId first_call,
+                             NLUsizeOperation operation)
 {
     const NLSyntaxView *src = nl_syntax_node_view(syntax);
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
@@ -1178,7 +1262,7 @@ static bool division_call_at(const NLCheckedFragment *f,
         nl_syntax_next_argument(src->data.call.arguments) ||
         (first && first->function != n->function) ||
         !span_equal(n->span, src->span) ||
-        !division_helper(nl_checked_call_body(f, id), c, n->function,
+        !division_helper(nl_checked_call_body(f, id), c, n->function, operation,
                          &helper) ||
         !token(f->source, n->name, c->functions[n->function - 1].name) || !arg)
         return false;
@@ -1208,14 +1292,15 @@ static bool division_caller_arithmetic(const NLCheckedFragment *f,
     return true;
 }
 
-bool nl_division_usize_body_at(const NLCheckedFragment *f,
-                               const NLSemanticContext *c, size_t function,
-                               NLDivisionUsizePlan *out)
+static bool literal_divisor_body_at(const NLCheckedFragment *f,
+                                    const NLSemanticContext *c, size_t function,
+                                    NLUsizeOperation operation,
+                                    NLDivisionUsizePlan *out)
 {
     if (!f || !c || !out || !function || function > c->function_count)
         return false;
     NLDivisionUsizePlan plan;
-    if (division_helper(f, c, function, &plan)) {
+    if (division_helper(f, c, function, operation, &plan)) {
         *out = plan;
         return true;
     }
@@ -1257,7 +1342,8 @@ bool nl_division_usize_body_at(const NLCheckedFragment *f,
         const NLSyntaxNode *syntax = src->data.binding.initializer;
         const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
         if (init->kind == NL_CHECKED_REGISTERED_CALL) {
-            if (!division_call_at(f, c, n->initializer, syntax, plan.call))
+            if (!division_call_at(f, c, n->initializer, syntax, plan.call,
+                                  operation))
                 return false;
             if (++calls == 1)
                 plan.call = n->initializer;
@@ -1283,9 +1369,10 @@ bool nl_division_usize_body_at(const NLCheckedFragment *f,
     return true;
 }
 
-bool nl_division_usize_call_valid(const NLCheckedFragment *f,
-                                  NLCheckedNodeId call,
-                                  NLDivisionUsizePlan *out)
+static bool literal_divisor_call_valid(const NLCheckedFragment *f,
+                                       NLCheckedNodeId call,
+                                       NLUsizeOperation operation,
+                                       NLDivisionUsizePlan *out)
 {
     if (!f || !out || nl_checked_proof_class(f) != NL_CHECKED_MACHINE_PROVED ||
         !nl_h_custody_result_valid(f, call))
@@ -1295,11 +1382,15 @@ bool nl_division_usize_call_valid(const NLCheckedFragment *f,
     NLDivisionUsizePlan plan;
     if (!n || !body || n->kind != NL_CHECKED_REGISTERED_CALL ||
         !n->body_backed || n->terminates ||
-        !nl_division_usize_body_at(body, f->context, n->function, &plan))
+        !literal_divisor_body_at(body, f->context, n->function, operation,
+                                 &plan))
         return false;
     if (plan.formal) {
         if (!division_call_values(f, f->context, call, &plan) ||
-            !nl_checked_usize_division_valid(body, plan.division, NULL))
+            !(operation == NL_USIZE_DIVIDE
+                  ? nl_checked_usize_division_valid(body, plan.division, NULL)
+                  : nl_checked_usize_remainder_valid(body, plan.division,
+                                                     NULL)))
             return false;
     } else {
         if (n->argument_count || n->type != nl_semantic_unit_type(f->context) ||
@@ -1313,4 +1404,32 @@ bool nl_division_usize_call_valid(const NLCheckedFragment *f,
     }
     *out = plan;
     return true;
+}
+
+bool nl_division_usize_body_at(const NLCheckedFragment *f,
+                               const NLSemanticContext *c, size_t function,
+                               NLDivisionUsizePlan *out)
+{
+    return literal_divisor_body_at(f, c, function, NL_USIZE_DIVIDE, out);
+}
+
+bool nl_remainder_usize_body_at(const NLCheckedFragment *f,
+                                const NLSemanticContext *c, size_t function,
+                                NLDivisionUsizePlan *out)
+{
+    return literal_divisor_body_at(f, c, function, NL_USIZE_REMAINDER, out);
+}
+
+bool nl_division_usize_call_valid(const NLCheckedFragment *f,
+                                  NLCheckedNodeId call,
+                                  NLDivisionUsizePlan *out)
+{
+    return literal_divisor_call_valid(f, call, NL_USIZE_DIVIDE, out);
+}
+
+bool nl_remainder_usize_call_valid(const NLCheckedFragment *f,
+                                   NLCheckedNodeId call,
+                                   NLDivisionUsizePlan *out)
+{
+    return literal_divisor_call_valid(f, call, NL_USIZE_REMAINDER, out);
 }

@@ -1480,7 +1480,7 @@ ordinary_name:
         !punct(parser, '=') &&
         !(flat_atom &&
           (punct(parser, '+') || punct(parser, '-') || punct(parser, '<') ||
-           punct(parser, '/')) &&
+           punct(parser, '/') || punct(parser, '%')) &&
           result->view.kind == NL_SYNTAX_EXPR_NAME) &&
         !(parser->match_scrutinee && punct(parser, '{'))) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
@@ -1499,20 +1499,22 @@ static bool equality_operand(const NLSyntaxNode *operand)
            kind == NL_SYNTAX_USIZE_LITERAL;
 }
 
-/* C587/C593/C603: one flat +, -, < or ==, no precedence grammar.
+/* One flat operation, no precedence grammar.
  * Compound operands and chaining remain unsupported source profiles. */
 static NLSyntaxNode *source_expression(NLParser *parser)
 {
     NLSyntaxNode *left = source_primary(parser, true);
     if (left == NULL ||
         (!punct(parser, '=') && !punct(parser, '+') && !punct(parser, '-') &&
-         !punct(parser, '<') && !punct(parser, '/')))
+         !punct(parser, '<') && !punct(parser, '/') && !punct(parser, '%')))
         return left;
     const bool addition = punct(parser, '+');
     const bool subtraction = punct(parser, '-');
     const bool less = punct(parser, '<');
     const bool division = punct(parser, '/');
-    const bool single = addition || subtraction || less || division;
+    const bool remainder = punct(parser, '%');
+    const bool single =
+        addition || subtraction || less || division || remainder;
     const NLSourceSpan first = parser->token.span;
     consume(parser);
     if (!single && (!punct(parser, '=') ||
@@ -1531,12 +1533,14 @@ static NLSyntaxNode *source_expression(NLParser *parser)
     if (right == NULL)
         return NULL;
     if (!equality_operand(left) || !equality_operand(right) ||
-        (division && (left->view.kind != NL_SYNTAX_EXPR_NAME ||
-                      right->view.kind != NL_SYNTAX_USIZE_LITERAL)) ||
+        ((division || remainder) &&
+         (left->view.kind != NL_SYNTAX_EXPR_NAME ||
+          right->view.kind != NL_SYNTAX_USIZE_LITERAL)) ||
         (punct(parser, '=') || punct(parser, '+') || punct(parser, '-') ||
-         punct(parser, '<') || punct(parser, '/'))) {
+         punct(parser, '<') || punct(parser, '/') || punct(parser, '%'))) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, operator_span,
-             division      ? "USIZE-DIVISION-SOURCE-PRECISION"
+             remainder     ? "USIZE-REMAINDER-SOURCE-PRECISION"
+             : division    ? "USIZE-DIVISION-SOURCE-PRECISION"
              : subtraction ? "USIZE-SUBTRACTION-SOURCE-PRECISION"
              : addition    ? "USIZE-ADDITION-SOURCE-PRECISION"
              : less        ? "USIZE-LESS-THAN-SOURCE-PRECISION"
@@ -1547,7 +1551,8 @@ static NLSyntaxNode *source_expression(NLParser *parser)
     }
     NLSyntaxNode *result = node(
         parser,
-        division      ? NL_SYNTAX_USIZE_DIVISION
+        remainder     ? NL_SYNTAX_USIZE_REMAINDER
+        : division    ? NL_SYNTAX_USIZE_DIVISION
         : subtraction ? NL_SYNTAX_USIZE_SUBTRACTION
         : addition    ? NL_SYNTAX_USIZE_ADDITION
         : less        ? NL_SYNTAX_USIZE_LESS_THAN
