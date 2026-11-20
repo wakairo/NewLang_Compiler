@@ -103,9 +103,23 @@ NLCheckStatus __wrap_nl_usize_arithmetic_capture(NLCheckedFragment *f,
         value.scalar_known || value.scalar_value)
         observer_error = true;
     const char *callee = NULL;
-    for (size_t i = 0; i < c->function_count; ++i)
-        if (c->functions[i].body == f->body_owner)
-            callee = c->functions[i].name;
+    for (size_t i = 0; i < c->function_count; ++i) {
+        const NLFunctionEntry *fn = &c->functions[i];
+        if (!fn->body || fn->body->source != f->source)
+            continue;
+        /* Independent definition checking has no retained invocation owner.
+         * Qualify this test label with the registered lexical source extent. */
+        const NLSyntaxView *body =
+            nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
+        if (f->body_owner
+                ? fn->body == f->body_owner
+                : body && body->span.start_byte <= n->span.start_byte &&
+                      n->span.end_byte <= body->span.end_byte) {
+            if (callee)
+                observer_error = true;
+            callee = fn->name;
+        }
+    }
     if (callee)
         printf("UNKNOWN %s %c\n", callee,
                n->kind == NL_CHECKED_USIZE_DIVISION ? '/' : '%');
