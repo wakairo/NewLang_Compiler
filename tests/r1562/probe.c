@@ -462,14 +462,14 @@ int main(int argc, char **argv)
                   find_event("P1", 6), 0);
         challenge("P1_different_leaf", find_event("P1", 3), find_event("P1", 5),
                   0);
-        challenge("P2_equal_remainders_distinct_actual", find_event("P2", 10),
-                  find_event("P2", 11), 0);
-        challenge("P2_other_actual_origin", find_event("P2", 10),
-                  find_event("P2", 11), 1);
-        challenge("P2_identical_bytes_foreign_context", find_event("P2", 10),
-                  find_event("P2DUP", 10), 0);
-        challenge("P2_foreign_source_only", find_event("P2", 10),
-                  find_event("P2DUP", 10), 2);
+        challenge("P2_equal_remainders_distinct_actual", find_event("P2", 4),
+                  find_event("P2", 5), 0);
+        challenge("P2_other_actual_origin", find_event("P2", 4),
+                  find_event("P2", 5), 1);
+        challenge("P2_identical_bytes_foreign_context", find_event("P2", 4),
+                  find_event("P2DUP", 4), 0);
+        challenge("P2_foreign_source_only", find_event("P2", 4),
+                  find_event("P2DUP", 4), 2);
     }
     for (size_t i = 7; i > 0; --i)
         close_unit(&units[i - 1]);

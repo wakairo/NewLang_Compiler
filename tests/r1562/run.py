@@ -9,6 +9,45 @@ from common import Stop, invoke, require, sha, source_manifest, write_json
 from observe import assess_stdout, make_observer
 
 
+def map_public_sources(root, manifest, out, records):
+    """Map actual retained body bytes to unique immutable source occurrences."""
+    originals = {item["id"]: (root / item["name"]).read_bytes()
+                 for item in manifest["sources"]}
+    offsets = {}
+    mappings = []
+    for body in records:
+        if body["kind"] != "BODY" or body["owner"] == "<entry>":
+            continue
+        unit = body["unit"]
+        original = originals["P2" if unit == "P2DUP" else unit]
+        retained = (out / ("public-source-" + body["label"] + ".nl")).read_bytes()
+        require(retained, "empty actual retained body")
+        start = original.find(retained)
+        require(start >= 0 and original.find(retained, start + 1) < 0,
+                "retained body has no unique immutable source occurrence")
+        header = original[:start].rsplit(b"\n", 1)[-1]
+        pattern = (rb"fn\s+" + re.escape(body["owner"].encode()) +
+                   rb"\([^{}]*\)\s*->\s*(?:usize|unit)\s*")
+        require(re.fullmatch(pattern, header) is not None,
+                "retained body does not belong to actual callee declaration")
+        offset = original[:start].count(b"\n")
+        key = (unit, body["owner"])
+        require(key not in offsets or offsets[key] == offset,
+                "same declaration mapped to different source occurrences")
+        offsets[key] = offset
+        mappings.append({"unit": unit, "owner": body["owner"],
+                         "body": body["body"], "source": body["source"],
+                         "context": body["context"], "label": body["label"],
+                         "retained_bytes": len(retained),
+                         "retained_sha256": sha(retained),
+                         "whole_source_sha256": sha(original),
+                         "start_byte": start, "end_byte": start + len(retained),
+                         "whole_line_offset": offset,
+                         "mapping": "unique exact retained-byte substring; declaration name verified"})
+    write_json(out / "source-mapping.json", mappings)
+    return offsets
+
+
 def public(config):
     root, manifest = source_manifest(config)
     out = pathlib.Path(config["evidence_dir"]) / "public"
@@ -22,6 +61,7 @@ def public(config):
     write_json(out / "records.json", records)
     require(rc == 0, "public probe failed; inspect original status/diagnostic")
     require(not stderr, "unexpected public probe stderr")
+    offsets = map_public_sources(root, manifest, out, records)
     limits = []
     target = next(r for r in records if r["kind"] == "HOST")
     require(target["size_t_bytes"] == 8 and
@@ -45,7 +85,7 @@ def public(config):
         require(len(calls) == 3, "expected three actual ordinary calls: " + unit)
         identities = {}
         for call in calls:
-            expected = expected_calls[original].get(call["line"])
+            expected = expected_calls[original].get(call["line"] + offsets[(unit, "main")])
             require(expected is not None and call["name"] == expected[0],
                     "call/source identity mismatch")
             require(call["function"] > 0, "absent genuine function identity")
@@ -66,7 +106,7 @@ def public(config):
                       r["unit"] == unit]
         require(len(arithmetic) == 3, "three genuine leaf operations")
         for event in arithmetic:
-            e = expected_calls[original].get(event["call_line"])
+            e = expected_calls[original].get(event["call_line"] + offsets[(unit, "main")])
             require(e is not None and event["owner"] == e[0] and
                     event["divisor"] == e[2] and event["op"] == e[4],
                     "operation/call/source association mismatch")
@@ -98,20 +138,45 @@ def public(config):
             if not observed:
                 limits.append(unit + " " + name + " value NOT OBSERVED")
     negatives = {}
-    for unit, line in (("N1", 19), ("N2", 2), ("N3", 3), ("N4", 15)):
+    # FIRST defines semantic obligations, not a diagnostic location or order.
+    # These actual public code labels bind the unchanged obligations after FULL1.
+    obligation_codes = {"N1": "USIZE-DIVISION-ZERO",
+                        "N2": "USIZE-REMAINDER-ZERO",
+                        "N3": "P3-TYPE-MISMATCH",
+                        "N4": "P9-RETURN-TYPE"}
+    for unit, code in obligation_codes.items():
         parsed = next(r for r in records if r["kind"] == "PARSE" and
                       r["unit"] == unit)
         registered = next(r for r in records if r["kind"] == "REGISTER" and
                           r["unit"] == unit)
         require(parsed["status"] == 0 and registered["status"] == 1,
                 "negative did not reach intended semantic rejection: " + unit)
-        require(registered["line"] == line, "unexpected negative semantic site")
+        require(registered["code"] == code,
+                "negative did not reach frozen semantic obligation: " + unit)
         require(registered["code"] and registered["message"],
                 "missing actual negative diagnostic")
         negatives[unit] = registered
     auth = [r for r in records if r["kind"] == "AUTH"]
     require(len(auth) == 6 and all(not r["accepted"] for r in auth),
             "foreign public evidence was accepted")
+    challenge_anchors = {
+        "P1_same_value_repeated_call": ("P1", 5, "P1", 6),
+        "P1_different_leaf": ("P1", 3, "P1", 5),
+        "P2_equal_remainders_distinct_actual": ("P2", 10, "P2", 11),
+        "P2_other_actual_origin": ("P2", 10, "P2", 11),
+        "P2_identical_bytes_foreign_context": ("P2", 10, "P2DUP", 10),
+        "P2_foreign_source_only": ("P2", 10, "P2DUP", 10)}
+    mapped_auth = []
+    for challenge in auth:
+        target = challenge["unit"]
+        foreign = challenge["foreign_unit"]
+        actual_anchor = (
+            target, challenge["target_call_line"] + offsets[(target, "main")],
+            foreign, challenge["foreign_call_line"] + offsets[(foreign, "main")])
+        require(actual_anchor == challenge_anchors.get(challenge["challenge"]),
+                "authentication challenge does not select frozen source calls")
+        mapped_auth.append({**challenge, "whole_source_anchors": actual_anchor})
+    write_json(out / "mapped-authentication.json", mapped_auth)
     copy_surface = [r for r in records if r["kind"] == "COPY_BODY_SURFACE"]
     for item in copy_surface:
         if not item["observed"]:
