@@ -1,0 +1,239 @@
+R1551 C1264 CANONICAL-FIRST SOURCE-ONLY STAGE ORACLE V1
+STATUS: PREP ONLY; EXECUTION NOT_RELEASED; no measured PASS or RED.
+AUTHORITY: Compiler/main 1a0b885171eed6942275bfc34620ec33055fcabe
+TREE: 160fa9fb284c60bf1eff60c0dafa1c95ca81c462
+CANONICAL: docs/reference/CURRENT_SPEC.md selects Draft17.38.
+ISSUE: https://github.com/wakairo/NewLang_Compiler/issues/1551
+ACTOR: /root/r1551_independent_prep
+FUTURE EXECUTION MODE: dedicated GitHub branch plus Actions only.
+PROHIBITED FUTURE MODE: an execution environment equivalent to P's.
+CURRENT BUDGET: branch/ref/commit/PR/Actions/CI/compiler/native/Lean/SDK
+execution and implementation all 0. Administrative text byte/SHA work only.
+
+1. Immutable input identity
+Exactly two positive and four negative independently authored complete
+fn-only physical source units. Each contains every ordinary named callee
+it uses; core typed literals and division are the only built-ins needed.
+The payload of each fenced source block is UTF-8 without BOM, uses LF,
+has no trailing spaces, and ends in exactly one LF. Fence delimiters,
+labels and the following table are not part of those source bytes.
+Each input is a separate semantic unit, not six concatenated fragments.
+
+file | UTF-8 bytes | SHA256
+r1551_n1_zero.nl | 129 | d05a5d46f78435dec036962c93f4bf3c71fd6db28345fc28554b23c4f5fe0ba1
+r1551_n2_wrong_core.nl | 115 | 1ee0bd392d80446a556bdd120f9c9fd7d2c5076be7ed9fae7785110b1f82bf85
+r1551_n3_literal_range.nl | 134 | 67b21bf8c9bcdbe3a20b1860a4efe4f62d73742c443b07aa51d9347ca41b9553
+r1551_n4_return_type.nl | 144 | c4a6e9f3fa07c725119c69ecec036d73c23ebbe475906adc439cccab550064ae
+r1551_p1_tail_copy.nl | 433 | e8bfb26f20db04b31ab2ec2781bbb93632867b9dd9fed9e5516db19bdb8bc43d
+r1551_p2_return_copy.nl | 446 | 167992deba0774a56ea980e4f24642defe62a6a2b1e03ff06dc7bd2cfc83fb32
+
+This oracle is a text specification, not executable test or harness code.
+Its own complete UTF-8 byte count and SHA256 are recorded outside its
+payload to avoid a self-referential digest.
+
+2. Scope and target assumptions
+The observation target is ordinary usize quantity value flow:
+division -> initialized local -> Copy -> function result -> caller reuse.
+No resource ownership, pointer, loan, allocation, generic, loop, branch,
+dynamic divisor, mixed precedence, new operator grammar or hidden
+authority is introduced. All divisions have the selected flat form
+existing_scalar_name / usize(decimal_digits).
+The narrow target assumption for this packet is usize width W in {32,64},
+with range 0 through 2^W-1 and mathematical decimal literal interpretation.
+No host width or actual future CI target has been measured by this PREP.
+A future execution must establish the actual target before interpreting
+the results. A different width is a target mismatch, not permission to
+change the frozen packet or count a negative as passed.
+All ordinary positive literals are representable for W in {32,64};
+all positive divisors are truly nonzero. Unsigned quotient is floor(a/b).
+No overflow, wrap, saturation, resource authority or dependency erasure
+is required or permitted.
+
+3. Source eligibility and semantic grounds
+Issue #1551 fixes the flat division form and ordinary selected expression
+positions. Draft17.38 sections 18.1, 19.1 and 27.1 supply fn declarations,
+initialized single bindings, expression statements and normal tails.
+Sections 18.5 and 27.9 supply the explicit return terminator and its exact
+result-type obligation. Semicolons follow section 19.1.
+Sections 4.2, 4.4, 4.7, 18.2 and 27.2 make usize an ordinary Copy value:
+copy/use does not consume its binding. Copy values may be discarded.
+Sections 5.1-5.2, 5.4 and 6 give distinct numeric types, usize/usize -> usize,
+floor division, the true nonzero precondition, and target range checking.
+Section 5.6 uses explicit numeric conversion; no conversion is written here.
+Sections 13.5a/c, 18.5, 18.8 and 19.1 preserve semantic packages through
+calls, results and blocks. These plain integer values carry no local ref,
+loan or resource dependency; a scalar Copy does not mint any authority.
+Actual compiler coverage is separate from canonical eligibility.
+
+CANONICAL_SOURCE_FORM:
+P1 and P2 are justified complete selected-source hypotheses under the
+Issue form, the cited canonical rules and W in {32,64}; no new syntax is
+selected by this packet. N1-N4 use the same syntactically meaningful
+forms but contain the specific semantic violations below.
+SOURCE_ELIGIBILITY_UNCERTAIN:
+No unresolved canonical spelling is silently treated as valid. The
+exact complete-source acceptance of the fixed compiler remains UNMEASURED.
+If a later source-admission review identifies an unproved integration
+rule, report SOURCE_ELIGIBILITY_UNCERTAIN for the affected original input;
+do not rewrite it and do not infer native safety from source eligibility.
+
+Minimal public definitions inspected, without implementation or fixtures:
+include/newlang/syntax.h provides function/binding/name/call/return/usize
+literal and one flat name/usize-literal division node categories;
+include/newlang/parser.h provides the fn-only complete unit entry.
+These interfaces support the syntax forecast but do not prove acceptance
+or semantic/owned/backend coverage for any complete input.
+The header's phrase "positive decimal" is not authority to reject zero
+syntax: Issue #1551 expressly requires zero to reach its semantic condition.
+
+4. Current fixed-baseline forecast, distinct from normative obligations
+All stages are NOT_RUN. These are predictions, not observed outcomes.
+Working SOURCE forecast for all six inputs: complete-unit parsing succeeds.
+Working first stopping-layer forecast for baseline P1/P2: CHECK, with an
+implementation-coverage/unsupported value-composition refusal rather than
+a claim that the positive source is language-invalid. Confidence is LOW:
+the public interfaces do not establish the exact current stopping layer,
+and no producer implementation/report/test/CI was consulted.
+Working first stopping-layer forecast for baseline N1-N4: CHECK, for the
+specific semantic refusal in section 6. Confidence about the exact
+implementation diagnostic layer is LOW; the semantic obligation is firm.
+
+A baseline SOURCE refusal must be reported at SOURCE with the exact
+diagnostic and all later stages NOT_REACHED; it does not establish the
+intended semantic negative. If CHECK succeeds and a later owned/export
+boundary refuses, report that later first failure exactly. If a positive
+reaches native correctly, the conservative coverage forecast is refuted;
+that alone is not an unsoundness finding. None of these refinements may
+overwrite this original forecast or the first actual observation.
+A future supported-family claim must name which frozen positive units it
+covers before execution; it cannot retrospectively relabel a failed
+promised positive as an invalid source. Honest unsupported coverage is
+distinct from the conditional success obligations in section 5.
+
+5. Positive obligations for a future candidate that claims these families
+P1 = r1551_p1_tail_copy.nl
+- willow_tail(1019): quotient=145, remembered=145, narrow=48; tail result=145.
+- willow_caller: original=1019, received=145, retained=145, local_piece=13.
+- Its second willow_tail call receives 145: quotient=20, remembered=20,
+  narrow=6; tail result=20.
+- willow_caller has normal tail result 20.
+The later division must not overwrite the retained earlier quotient.
+received remains usable after forming retained, division and the call.
+A result of 48, 6, 13 or 145 at willow_caller is not the required 20.
+
+P2 = r1551_p2_return_copy.nl
+- copper_return(997): share=199, retained=199, discarded=99;
+  explicit return result=199.
+- copper_caller: source=997, returned=199, mirror=199, local_piece=66.
+- Its second copper_return call receives 199: share=39, retained=39,
+  discarded=19; explicit return result=39.
+- copper_caller has explicit return result 39.
+The return edge is not a normal tail edge and has no synthetic unit result.
+returned remains usable after forming mirror, division and the call.
+A result of 99, 19, 66 or 199 at copper_caller is not the required 39.
+
+Stage-oriented success conditions:
+SOURCE:
+  Parse the exact complete unit and its declaration/body/call relationships.
+  Do not substitute fragments, pre-registered bodies, renamed producer
+  fixtures or a host-defined quotient for the frozen input.
+CHECK:
+  Check the complete unit, every actual ordinary call, each initialized
+  binding and Copy use, nonzero/range/core type requirements, function
+  result type and each real control edge. Expect acceptance for P1/P2
+  under W in {32,64}. Result scalar dependencies remain truthful.
+PUBLIC-OWNED:
+  Any accepted owned evidence must be genuinely issued from that exact
+  successfully checked source/unit and validate through the ordinary
+  public path. Preserve source/function/call/value identities and ordered
+  quotient-to-binding, Copy, result and caller connections. Do not mint
+  an owned certificate or attach an expected host quotient to fake success.
+  Record actual public identities/API and missing observation coverage;
+  this PREP invents no serialized schema or observation API.
+C17:
+  Emit only from genuine validated owned evidence. Generated C must
+  implement the two different control edges and quantity dataflow, use the
+  established target width, and preserve floor division and original
+  retained values. Compile unmodified generated C with the later released
+  strict C17 configuration. Host constants or patched emitted guest code
+  cannot stand in for source-generated behavior.
+NATIVE:
+  Observe the genuine generated willow_caller result 20 and copper_caller
+  result 39 through the future authorized read-only interface. Intermediate
+  values above are semantic obligations; observing only the final return
+  does not independently establish every intermediate owned connection.
+  Record exactly what the public proof and native observer actually show.
+  No observer/harness is implemented or run in this PREP.
+
+6. Negative obligations and first semantic refusal
+N1 = r1551_n1_zero.nl
+  Supply=383; typed literal usize(0) is syntactically meaningful and in range.
+  First required semantic refusal: CHECK, division nonzero precondition.
+  No valid divided value, downstream owned certificate, C17 or native
+  result may be claimed. Syntax rejection alone is not this obligation.
+
+N2 = r1551_n2_wrong_core.nl
+  octet has core type u8 and value 223; divisor has core type usize.
+  First required semantic refusal: CHECK, wrong left core type for the
+  selected usize/usize operation. No implicit u8-to-usize conversion is
+  authorized by fitting the mathematical range or machine representation.
+  Do not treat the final return as the cause if the division already fails.
+
+N3 = r1551_n3_literal_range.nl
+  The divisor spells the mathematical integer 18446744073709551616 = 2^64.
+  First required semantic refusal for W in {32,64}: CHECK, typed literal
+  range, before treating it as a representable divisor.
+  It must not wrap to zero or truncate; a zero-divisor error after wrapping
+  does not demonstrate correct range handling.
+  For W >= 65 this literal can be representable and nonzero, so the same
+  frozen source is not a range negative on such a target. Report target
+  mismatch; do not count acceptance there as a compiler safety defect.
+
+N4 = r1551_n4_return_type.nl
+  total=769; the lawful usize division yields mathematical 109 with
+  static type usize. retained is also usize. Declared function result is u8.
+  First required semantic refusal: CHECK, explicit return result-type
+  mismatch under section 27.9, even though 109 is representable in u8.
+  Do not silently insert an explicit numeric conversion absent from source.
+
+For all four, no successful unit-level owned/C17/native result is permitted
+after the semantic violation. Partial internal parsing/checking work is
+not a successful source-issued owned certificate.
+These are full source counterexamples, not artifact mutations. No claim is
+made to cover non-Copy use-after-consume, local-ref dependency escape,
+loan/callable return context, general arithmetic or any resource authority.
+
+7. Provenance, preservation and stop
+Read order: own Issue and duplicate/STOP check; ACTUAL START POST/GET;
+Compass; actual Product Value Strategy 1.1; Process 7; CURRENT_SPEC and
+Draft17.38 required sections plus minimal core/grammar definitions;
+only then independently draft the input sources and this oracle.
+No P1549 Issue/source/implementation/report/tests/oracle/new PR/CI,
+F1550 originals, other-R source/oracle packets, aggregate C Issue, shared
+scratch or producer rationale was read before this FIRST.
+The required policy/navigation/canonical texts expose historical links,
+summaries and old schematic examples; the Value Strategy section display
+also extended beyond 1.1 and included historical evidence summaries.
+Those linked artifacts were not opened and those examples were not used
+as the input or result oracle. Public syntax/parser headers at fixed main
+were additionally inspected. This is canonical-FIRST independent PREP,
+not a claim of perfect all-history BLIND isolation.
+
+Freeze all six original inputs and this oracle. Preserve FIRST and every
+future first actual failure/result unchanged. Any authorized successor
+source gets a distinct identity, reason and predictions before execution;
+producer-calibrated successors must be labeled calibrated.
+PREP FINAL POST/GET completes this assignment, then STOP C.
+Future execution requires a separate C release naming an immutable P
+candidate, canonical/base, dedicated branch, frozen inputs, finite R-FAST
+budget and separate natural FULL5 plus NO-LLVM PARTIAL budget.
+No budget, ref creation, push, CI, compiler or toolchain execution is
+authorized by this text. An unexpected semantic acceptance of a negative,
+owned/proof/identity discrepancy or genuine safety anomaly requires STOP C.
+
+LIMITS:
+This preparation establishes retrievable predictions only. It demonstrates
+no compiler acceptance, owned authenticity, C17/native safety, sanitizer
+result, general soundness or product value. Author plus ordinary-safe
+caller UB-prevention audit/re-audit dependency closure against well-factored
+C remains UNMEASURED. Product GO #624 PAUSED and H1 HOLD remain unchanged.

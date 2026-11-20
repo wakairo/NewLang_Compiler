@@ -1,0 +1,228 @@
+R1551 C1265 V2 SCOPE-INFORMED / CALIBRATED SOURCE-PREP ORACLE
+STATUS: SOURCE-ONLY PREP; EXECUTION NOT_RELEASED; all results NOT_RUN.
+ACTOR: same /root/r1551_independent_prep actor as V1.
+RELEASE: https://github.com/wakairo/NewLang_Compiler/issues/1551#issuecomment-7029540772
+RESUME: https://github.com/wakairo/NewLang_Compiler/issues/1551#issuecomment-7029555363
+BASE: Compiler/main 1a0b885171eed6942275bfc34620ec33055fcabe
+TREE: 160fa9fb284c60bf1eff60c0dafa1c95ca81c462
+CANONICAL: CURRENT_SPEC.md selects Draft17.38.
+FUTURE MODE: dedicated GitHub branch plus Actions only.
+A P-equivalent execution environment is prohibited.
+CURRENT execution/code budget: branch/ref/commit/PR/Actions/CI/compiler/
+native/Lean/SDK, compiler implementation, harness and observer all 0.
+Only administrative text byte/SHA calculation is permitted.
+
+1. Identity and relation to V1
+This is a new calibrated preparation, not an independent-blind original,
+not a V1 repair, and not a measured result.
+V1 FIRST remains immutable at:
+https://github.com/wakairo/NewLang_Compiler/issues/1551#issuecomment-7029369644
+All six V1 sources, V1 oracle, original predictions and byte identities
+remain unchanged. V1 negatives are not silently replaced or promoted into
+this tentative family's supported set. This V2 adds no new negatives.
+
+Each new source below is one complete physical fn-only unit containing
+exactly one unary usize helper and one ordinary fn main() -> unit.
+The two units must remain separate: they each define their own main.
+There are no missing ordinary callees, host-registered source fragments,
+multiple helper divisions or separate usize-returning outer functions.
+Each payload is UTF-8 without BOM, LF only, with one final LF.
+Fence markers, titles and tables are outside the payload bytes.
+
+file | UTF-8 bytes | SHA256
+r1551_v2_p1_tail_main.nl | 393 | d2af10092dd67928001d760f3e74833dfe4ed084d5f86ea15ce11a7aff70d9b4
+r1551_v2_p2_return_main.nl | 455 | 62b795939aec1a6968abff6e6577aa604609bd619798fcea2db6fde76af33bc9
+
+The complete oracle text is separately hashed outside its own payload.
+This is a prose stage oracle, not executable test/harness/observer code.
+
+2. Disclosed calibration and scope boundaries
+C disclosed only the following tentative family:
+one ordinary unary usize helper, exactly one formal/nonzero-literal flat
+division; ordered immutable quotient bindings and Copy; ordinary tail or
+final explicit RETURN; unit main may repeatedly call that helper and
+Copy/reuse prior genuine call results as actuals, with existing proven
+Known-only +/- after calls.
+No P input text, names, constants, expected values, oracle, implementation
+or result was supplied. The source/data/expectations here were authored by
+this actor after that abstract envelope was disclosed.
+
+P's tentative proposal is not an adopted final promise. Tail and RETURN
+are independent conditional families for later C adjudication:
+- V2-P1 is relevant only if the immutable candidate promises its tail family.
+- V2-P2 is relevant only if the immutable candidate promises its RETURN family.
+No candidate is required by this packet to promise both.
+Before any execution C must settle exact source fit on an immutable
+candidate and release a separate finite execution budget.
+An unpromised family is NOT_PROMISED / NOT_TESTED, not language-invalid,
+and does not become an implementation defect merely because it was drafted.
+Do not run FULL CI merely to discover a predictable scope mismatch.
+
+3. Canonical hypotheses and explicit uncertainty
+The C envelope is an implementation-scope disclosure, not a replacement
+for language authority.
+Draft17.38 sections 18.1 and 19.1 justify explicit non-generic fn signatures,
+complete blocks, semicolon-terminated bindings and normal tail expressions.
+Section 4.9 makes unit a distinguished core singleton type and value.
+Sections 4.2, 4.4, 4.7, 18.2 and 27.1-27.2 make these initialized integer
+bindings Copy and Discardable; Copy-use preserves the original binding.
+Sections 5.1-5.2, 5.4 and 6 give usize range, mathematical literals,
+nonzero unsigned floor division, and range preconditions for +/-.
+Sections 13.5a/c, 18.5, 18.8 and 19.1 preserve ordinary scalar value flow
+through calls, local binding and result. No ref/resource dependency is
+introduced or erased by these plain integers.
+Section 27.9 gives exact final return semantics and result-type matching.
+
+Every division has exactly the disclosed form formal_name / usize(digits).
+Every +/- is a single flat name and typed literal, outside the helper and
+after calls whose exact mathematical results are independently known.
+All ordinary calls name the sole helper in the same source unit.
+There is no dynamic divisor, general precedence, new operator grammar,
+loop, branch, resource authority, loan, pointer or non-Copy owner.
+
+Canonical positive hypotheses are justified by those rules. No new syntax
+is silently selected. Actual complete-unit admission on the future
+candidate remains SOURCE_INTEGRATION_UNVERIFIED and SOURCE_FIT_PENDING_C.
+The public syntax/parser interfaces read for V1 are not acceptance proof.
+If a source-rule integration gap is later found, retain the frozen input
+as SOURCE_ELIGIBILITY_UNCERTAIN until adjudicated; never infer language
+invalidity from an implementation coverage refusal.
+
+Target assumption: usize width W in {32,64}, range 0 through 2^W-1.
+No actual target was measured. All written literals and all predicted
+arithmetic intermediates below are in range on either assumed target.
+Both divisors 9 and 13 are nonzero. A zero quotient is legal.
+A future execution on another target must establish suitability explicitly
+rather than silently rewriting the payload or assuming the host width.
+
+4. Frozen positive predictions
+V2-P1: r1551_v2_p1_tail_main.nl
+Helper: cedar_tail(stock), exactly one division by usize(9).
+For each invocation, quotient = floor(stock/9); held and outgoing are
+Copies of that same quotient; normal tail returns outgoing.
+main source-order trace:
+  first call actual = 2017; quotient/held/outgoing/result = 224 (remainder 1).
+  first = 224; preserved = 224.
+  second call actual = preserved = 224; quotient/result = 24 (remainder 8).
+  second = 24.
+  raised = first + 17 = 241; first is still 224 after the second call.
+  adjusted = raised - 9 = 232.
+  third call actual = adjusted = 232; quotient/result = 25 (remainder 7).
+  third = 25.
+  main returns the singleton unit, not any of these quantities.
+The ordered genuine call-result sequence is [224,24,25].
+The retained first value must not become 24, 241 or 232.
+The third result must not become 24 or 26 by losing the arithmetic/dataflow.
+No expected quantity is seeded by the host or by a fabricated certificate.
+
+V2-P2: r1551_v2_p2_return_main.nl
+Helper: basalt_return(tokens), exactly one division by usize(13).
+For each invocation, quotient = floor(tokens/13); recorded and courier are
+Copies of that quotient. Final explicit return returns original quotient
+after those Copy uses; the original binding must remain Available.
+The return edge is not a normal tail edge or synthetic unit result.
+main source-order trace:
+  first call actual = 1059; quotient/recorded/courier/result = 81 (remainder 6).
+  first = 81; preserved = 81.
+  second call actual = preserved = 81; quotient/result = 6 (remainder 3).
+  second = 6.
+  raised = second + 7 = 13.
+  below = raised - 1 = 12.
+  terminal call actual = below = 12; quotient/result = 0 (remainder 12).
+  terminal = 0: this is lawful nonzero-divisor floor division.
+  reused = first + 1 = 82 after the other calls; first remains 81.
+  main returns the singleton unit, not a quantity.
+The ordered genuine call-result sequence is [81,6,0].
+The terminal result must not be forced nonzero or confused with divisor 13.
+The late reused value must be 82, not 7, 1 or a value from the last call.
+
+These predictions are manual mathematical/source-semantic expectations.
+No NewLang program, compiler, generated C or native observation was run
+to obtain or tune them.
+
+5. Stage oracle and pre-execution forecast
+Working forecast for the unchanged adopted baseline:
+  SOURCE: expected complete-unit parse acceptance; LOW CONFIDENCE.
+  First stopping-layer forecast: CHECK implementation-coverage refusal
+  for the composed ordinary value/call/Known-arithmetic path; LOW CONFIDENCE.
+  Exact baseline coverage and diagnostic layer are UNMEASURED.
+No P implementation/report/test/CI was read to refine that forecast.
+If baseline stops at SOURCE or later at public-owned/export instead, retain
+that exact first observation; it refutes this forecast, not automatically
+a safety invariant. A lawful unsupported program remains lawful.
+No baseline run is authorized here.
+
+For a later immutable candidate expressly promising a selected V2 family:
+SOURCE:
+  Expected acceptance of that exact whole source unit, including ordinary
+  unit main, one helper, Copy bindings and all actual call relationships.
+  A fragment or producer fixture cannot stand in for the frozen payload.
+CHECK:
+  Expected acceptance with exact core types, nonzero/range preconditions,
+  Copy availability, result types and real tail/RETURN control semantics.
+  Known-only +/- facts must follow from the genuine checked call results.
+  Missing sound analysis is a reported coverage/precision refusal, never
+  permission to assume host-provided Known values or dependency erasure.
+PUBLIC-OWNED:
+  Expected genuine source-issued evidence for the exact checked unit,
+  ordered division/binding/Copy/result/caller connections and true scalar
+  facts. It must validate through the actual ordinary public issuer path.
+  No fabricated owned artifact, proof identity or manually seeded result.
+  Public identities/schema/API have not been inspected for a candidate;
+  their availability and the observable dataflow are UNRESOLVED.
+C17:
+  If the promised family is covered, expect emission from genuine validated
+  owned evidence and strict C17 compilation of the unmodified emitted unit.
+  Preserve target width, unsigned floor behavior, retained earlier values,
+  actual call-result reuse, proven arithmetic and the correct control edge.
+  No patched generated arithmetic or source substitution is permitted.
+NATIVE:
+  Expected guest semantic values are exactly the traces in section 4.
+  Both main functions return unit. A successful process exit or unit return
+  alone cannot establish their internal call-result or arithmetic trace.
+  Native observation interface and its coverage are UNRESOLVED in this PREP.
+  A future release must identify a genuine, authorized read-only way to
+  observe the source-generated values. Observing only the helper separately
+  does not prove that main reused its prior genuine results correctly.
+  If the public/native path cannot expose the relevant facts, record
+  NATIVE_OBSERVABILITY_UNRESOLVED / NOT_MEASURED; do not manufacture success
+  with host arithmetic, hardcoded expected values, changed source, a numeric
+  replacement main result or patched generated guest computation.
+  No observer or harness is implemented by this preparation.
+
+Actual present stage state for both units:
+SOURCE NOT_RUN; CHECK NOT_RUN; PUBLIC-OWNED NOT_RUN;
+C17 NOT_RUN; NATIVE NOT_RUN.
+No native PASS, first actual RED or owned-authenticity finding exists.
+
+6. Provenance, immutable successors and stopping
+V1's own Issue -> START -> Compass -> actual Value Strategy 1.1 ->
+Process 7 -> canonical/public grammar reading order remains recorded in V1.
+This resume performed own Issue latest GET, C1265 exact release GET,
+duplicate/STOP metadata check, then ACTUAL RESUME POST/GET equality.
+The only new substantive project calibration is C's abstract envelope and
+its statement of the V1 scope mismatch; section 4.9 was additionally read
+from this actor's own fixed canonical snapshot to ground unit main.
+All previously disclosed historical-policy/canonical-example exposure and
+this actor's own V1 work remain known. This V2 is deliberately calibrated.
+P1549 original Issue/packet/source/implementation/report/tests/oracle/CI,
+F originals, other-R packets, aggregate C and shared scratch remain unread.
+
+V1 and this V2 each keep their full original text, hashes and predictions.
+A later source/expectation change is a distinct successor with its own
+reason, scope/calibration label and pre-execution identity.
+Never overwrite either FIRST or the first actual observation to obtain PASS.
+
+V2 FIRST POST/GET exact equality and retrieved-payload byte/SHA checks,
+then PREP FINAL POST/GET, then STOP C.
+Future execution needs a separate C release naming immutable candidate,
+base/canonical, actual source-fit adjudication, dedicated GitHub branch,
+frozen inputs, finite R-FAST and separate natural FULL5 plus
+NO-LLVM PARTIAL budget. None is supplied by this PREP or tentative family.
+P private work remains nonblocking.
+
+Value limits: capability preparation only. No general compiler soundness,
+native safety, sanitizer, ordinary-safe library or product-value proof.
+Author plus ordinary-safe caller UB-prevention audit/re-audit dependency
+closure improvement against well-factored C remains UNMEASURED.
+Product GO #624 PAUSED and H1 HOLD remain unchanged.

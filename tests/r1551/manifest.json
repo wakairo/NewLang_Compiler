@@ -1,0 +1,242 @@
+{
+  "candidate": "83beb80d98654f6a4b18ecff8cf6df96c75d8968",
+  "base": "1a0b885171eed6942275bfc34620ec33055fcabe",
+  "branch": "r-fast/r1551-quantity-composition-c1268",
+  "pr_base": "p1549-ordinary-quantity-composition",
+  "evidence_label": "NON-BLIND C-source-fit-exposed calibrated execution",
+  "frozen": {
+    "r1551_n1_zero.nl": {
+      "bytes": 129,
+      "sha256": "d05a5d46f78435dec036962c93f4bf3c71fd6db28345fc28554b23c4f5fe0ba1"
+    },
+    "r1551_n2_wrong_core.nl": {
+      "bytes": 115,
+      "sha256": "1ee0bd392d80446a556bdd120f9c9fd7d2c5076be7ed9fae7785110b1f82bf85"
+    },
+    "r1551_n3_literal_range.nl": {
+      "bytes": 134,
+      "sha256": "67b21bf8c9bcdbe3a20b1860a4efe4f62d73742c443b07aa51d9347ca41b9553"
+    },
+    "r1551_n4_return_type.nl": {
+      "bytes": 144,
+      "sha256": "c4a6e9f3fa07c725119c69ecec036d73c23ebbe475906adc439cccab550064ae"
+    },
+    "r1551_p1_tail_copy.nl": {
+      "bytes": 433,
+      "sha256": "e8bfb26f20db04b31ab2ec2781bbb93632867b9dd9fed9e5516db19bdb8bc43d"
+    },
+    "r1551_p2_return_copy.nl": {
+      "bytes": 446,
+      "sha256": "167992deba0774a56ea980e4f24642defe62a6a2b1e03ff06dc7bd2cfc83fb32"
+    },
+    "r1551_v2_p1_tail_main.nl": {
+      "bytes": 393,
+      "sha256": "d2af10092dd67928001d760f3e74833dfe4ed084d5f86ea15ce11a7aff70d9b4"
+    },
+    "r1551_v2_p2_return_main.nl": {
+      "bytes": 455,
+      "sha256": "62b795939aec1a6968abff6e6577aa604609bd619798fcea2db6fde76af33bc9"
+    },
+    "r1551_stage_oracle_v1.txt": {
+      "bytes": 14293,
+      "sha256": "50b907759fd9d276e2689a09f67a8c038b7e8a615c457b3cfc59daba36bc20da"
+    },
+    "r1551_v2_stage_oracle.txt": {
+      "bytes": 13164,
+      "sha256": "bf5ccf0342691ae76c83ef5bd19b5b32eef247cd20b8ef42e99ff02c7a162054"
+    }
+  },
+  "positives": {
+    "tail": {
+      "file": "r1551_v2_p1_tail_main.nl",
+      "helper": "cedar_tail",
+      "formal": "stock",
+      "divisor": 9,
+      "control": "tail",
+      "helper_bindings": [
+        "quotient",
+        "held",
+        "outgoing"
+      ],
+      "return_name": "outgoing",
+      "calls": [
+        [
+          2017,
+          224
+        ],
+        [
+          224,
+          24
+        ],
+        [
+          232,
+          25
+        ]
+      ],
+      "bindings": [
+        [
+          "first",
+          "CALL",
+          224
+        ],
+        [
+          "preserved",
+          "IDENTIFIER",
+          224
+        ],
+        [
+          "second",
+          "CALL",
+          24
+        ],
+        [
+          "raised",
+          "ADDITION",
+          241
+        ],
+        [
+          "adjusted",
+          "SUBTRACTION",
+          232
+        ],
+        [
+          "third",
+          "CALL",
+          25
+        ]
+      ],
+      "copies": {
+        "preserved": "first"
+      },
+      "arithmetic": {
+        "raised": [
+          "ADDITION",
+          "first",
+          17,
+          241
+        ],
+        "adjusted": [
+          "SUBTRACTION",
+          "raised",
+          9,
+          232
+        ]
+      },
+      "call_actuals": [
+        null,
+        "preserved",
+        "adjusted"
+      ]
+    },
+    "return": {
+      "file": "r1551_v2_p2_return_main.nl",
+      "helper": "basalt_return",
+      "formal": "tokens",
+      "divisor": 13,
+      "control": "return",
+      "helper_bindings": [
+        "quotient",
+        "recorded",
+        "courier"
+      ],
+      "return_name": "quotient",
+      "calls": [
+        [
+          1059,
+          81
+        ],
+        [
+          81,
+          6
+        ],
+        [
+          12,
+          0
+        ]
+      ],
+      "bindings": [
+        [
+          "first",
+          "CALL",
+          81
+        ],
+        [
+          "preserved",
+          "IDENTIFIER",
+          81
+        ],
+        [
+          "second",
+          "CALL",
+          6
+        ],
+        [
+          "raised",
+          "ADDITION",
+          13
+        ],
+        [
+          "below",
+          "SUBTRACTION",
+          12
+        ],
+        [
+          "terminal",
+          "CALL",
+          0
+        ],
+        [
+          "reused",
+          "ADDITION",
+          82
+        ]
+      ],
+      "copies": {
+        "preserved": "first"
+      },
+      "arithmetic": {
+        "raised": [
+          "ADDITION",
+          "second",
+          7,
+          13
+        ],
+        "below": [
+          "SUBTRACTION",
+          "raised",
+          1,
+          12
+        ],
+        "reused": [
+          "ADDITION",
+          "first",
+          1,
+          82
+        ]
+      },
+      "call_actuals": [
+        null,
+        "preserved",
+        "below"
+      ]
+    }
+  },
+  "negatives": [
+    {
+      "file": "r1551_n1_zero.nl",
+      "code": "USIZE-DIVISION-ZERO"
+    },
+    {
+      "file": "r1551_n2_wrong_core.nl",
+      "code": "USIZE-DIVISION-TYPE"
+    },
+    {
+      "file": "r1551_n3_literal_range.nl",
+      "code": "USIZE-LITERAL-RANGE"
+    },
+    {
+      "file": "r1551_n4_return_type.nl",
+      "code": "P9-RETURN-TYPE"
+    }
+  ]
+}
