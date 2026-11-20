@@ -4595,31 +4595,34 @@ static int compile_v0_to(const char *path, bool check_only,
         goto cleanup;
     }
     if (!export_name) {
-        char *division_c = NULL;
-        size_t division_length = 0;
+        char *quantity_c = NULL;
+        size_t quantity_length = 0;
         NLCheckStatus status =
-            nl_division_usize_c17(entry, &division_c, &division_length);
-        const bool try_remainder = status == NL_CHECK_SEMANTIC_UNSUPPORTED;
-        if (try_remainder)
+            nl_division_usize_c17(entry, &quantity_c, &quantity_length);
+        const char *failure = "division emission resource failure";
+        if (status == NL_CHECK_SEMANTIC_UNSUPPORTED) {
+            failure = "remainder emission resource failure";
             status =
-                nl_remainder_usize_c17(entry, &division_c, &division_length);
+                nl_remainder_usize_c17(entry, &quantity_c, &quantity_length);
+        }
+        if (status == NL_CHECK_SEMANTIC_UNSUPPORTED) {
+            failure = "quantity composition emission resource failure";
+            status =
+                nl_quantity_usize_c17(entry, &quantity_c, &quantity_length);
+        }
         if (status == NL_CHECK_OK) {
-            result = fwrite(division_c, 1, division_length, output) ==
-                                 division_length &&
+            result = fwrite(quantity_c, 1, quantity_length, output) ==
+                                 quantity_length &&
                              fflush(output) == 0
                          ? 0
                          : report_error("V0-C-OUTPUT",
                                         "failed to emit Checked-C", path, 1);
-            free(division_c);
+            free(quantity_c);
             goto cleanup;
         }
         if (status == NL_CHECK_OUT_OF_MEMORY ||
             status == NL_CHECK_RESOURCE_LIMIT) {
-            result = report_error("V0-C-RESOURCE",
-                                  try_remainder
-                                      ? "remainder emission resource failure"
-                                      : "division emission resource failure",
-                                  path, 1);
+            result = report_error("V0-C-RESOURCE", failure, path, 1);
             goto cleanup;
         }
     }

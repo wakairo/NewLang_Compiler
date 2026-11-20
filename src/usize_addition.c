@@ -18,7 +18,8 @@ typedef enum {
     NL_USIZE_ADD,
     NL_USIZE_SUBTRACT,
     NL_USIZE_DIVIDE,
-    NL_USIZE_REMAINDER
+    NL_USIZE_REMAINDER,
+    NL_USIZE_ANY_FIXED_DIVISOR /* Caller matching only. Receipts name one op. */
 } NLUsizeOperation;
 static const struct {
     NLSyntaxKind syntax;
@@ -1132,7 +1133,10 @@ static bool division_event_at(const NLCheckedFragment *f,
 {
     const NLUsizeAdditionProof *receipt = find(f, id);
     if (!receipt || receipt->syntax != src ||
-        !operation_valid_at(f, id, operation, NULL, c) ||
+        !fixed_divisor(receipt->operation) ||
+        (operation != NL_USIZE_ANY_FIXED_DIVISOR &&
+         operation != receipt->operation) ||
+        !operation_valid_at(f, id, receipt->operation, NULL, c) ||
         !token(f->source, receipt->issued.operand_spans[0],
                fn->body->parameter_names[0]))
         return false;
@@ -1256,19 +1260,22 @@ static bool division_call_at(const NLCheckedFragment *f,
     const NLSyntaxView *src = nl_syntax_node_view(syntax);
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
     const NLCheckedNodeView *first = nl_checked_node_view(f, first_call);
-    const NLCheckedNodeView *arg = nl_checked_node_view(f, n->first_argument);
     NLDivisionUsizePlan helper;
-    if (!src || src->kind != NL_SYNTAX_EXPR_CALL ||
+    if (!n || !src || src->kind != NL_SYNTAX_EXPR_CALL ||
         nl_syntax_next_argument(src->data.call.arguments) ||
-        (first && first->function != n->function) ||
+        (first && operation != NL_USIZE_ANY_FIXED_DIVISOR &&
+         first->function != n->function) ||
         !span_equal(n->span, src->span) ||
+        !span_equal(n->name, src->data.call.callee) ||
         !division_helper(nl_checked_call_body(f, id), c, n->function, operation,
                          &helper) ||
-        !token(f->source, n->name, c->functions[n->function - 1].name) || !arg)
+        !token(f->source, n->name, c->functions[n->function - 1].name))
         return false;
+    const NLCheckedNodeView *arg = nl_checked_node_view(f, n->first_argument);
     const NLSyntaxNode *actual = src->data.call.arguments;
     size_t literal_value;
-    return (arg->kind == NL_CHECKED_IDENTIFIER
+    return arg &&
+           (arg->kind == NL_CHECKED_IDENTIFIER
                 ? division_copy_at(f, c, n->first_argument, actual)
                 : literal(f, c, arg, actual, &literal_value)) &&
            division_call_values(f, c, id, &helper);
@@ -1297,7 +1304,8 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
                                     NLUsizeOperation operation,
                                     NLDivisionUsizePlan *out)
 {
-    if (!f || !c || !out || !function || function > c->function_count)
+    if (!f || !c || !out || !function || function > c->function_count ||
+        f->body_count > NL_CHECKED_MAX_BODY_CALLS)
         return false;
     NLDivisionUsizePlan plan;
     if (division_helper(f, c, function, operation, &plan)) {
@@ -1342,7 +1350,9 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
         const NLSyntaxNode *syntax = src->data.binding.initializer;
         const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
         if (init->kind == NL_CHECKED_REGISTERED_CALL) {
-            if (!division_call_at(f, c, n->initializer, syntax, plan.call,
+            if (calls >= f->body_count ||
+                f->body_calls[calls] != n->initializer ||
+                !division_call_at(f, c, n->initializer, syntax, plan.call,
                                   operation))
                 return false;
             if (++calls == 1)
@@ -1386,11 +1396,13 @@ static bool literal_divisor_call_valid(const NLCheckedFragment *f,
                                  &plan))
         return false;
     if (plan.formal) {
-        if (!division_call_values(f, f->context, call, &plan) ||
-            !(operation == NL_USIZE_DIVIDE
-                  ? nl_checked_usize_division_valid(body, plan.division, NULL)
-                  : nl_checked_usize_remainder_valid(body, plan.division,
-                                                     NULL)))
+        const NLCheckedNodeView *event =
+            nl_checked_node_view(body, plan.division);
+        if (!division_call_values(f, f->context, call, &plan) || !event ||
+            !((event->kind == NL_CHECKED_USIZE_DIVISION &&
+               nl_checked_usize_division_valid(body, plan.division, NULL)) ||
+              (event->kind == NL_CHECKED_USIZE_REMAINDER &&
+               nl_checked_usize_remainder_valid(body, plan.division, NULL))))
             return false;
     } else {
         if (n->argument_count || n->type != nl_semantic_unit_type(f->context) ||
@@ -1432,4 +1444,19 @@ bool nl_remainder_usize_call_valid(const NLCheckedFragment *f,
                                    NLDivisionUsizePlan *out)
 {
     return literal_divisor_call_valid(f, call, NL_USIZE_REMAINDER, out);
+}
+
+bool nl_quantity_usize_body_at(const NLCheckedFragment *f,
+                               const NLSemanticContext *c, size_t function,
+                               NLDivisionUsizePlan *out)
+{
+    return literal_divisor_body_at(f, c, function, NL_USIZE_ANY_FIXED_DIVISOR,
+                                   out);
+}
+
+bool nl_quantity_usize_call_valid(const NLCheckedFragment *f,
+                                  NLCheckedNodeId call,
+                                  NLDivisionUsizePlan *out)
+{
+    return literal_divisor_call_valid(f, call, NL_USIZE_ANY_FIXED_DIVISOR, out);
 }

@@ -1,0 +1,214 @@
+{
+  "issue": 1561,
+  "authority": "C1285, Draft17.38 §§5.2/5.4/13.5c/18.1/18.2/18.5/19.1/27.1/27.2/27.9/28.2; C1247/C1273; DI-011",
+  "main": "be0ae7fa537b550ffdb8ad3640f49a504629062a",
+  "early_base": "93fd2752972a9c2348d85e33f941bb7c786ec99b",
+  "early_tree": "74666c834b433b63e00aed3ebdb020f7a2b6d10b",
+  "target_bits": 64,
+  "call_columns": [
+    "destination",
+    "callee",
+    "operation",
+    "actual_binding",
+    "actual",
+    "divisor",
+    "result",
+    "edge"
+  ],
+  "positive": [
+    {
+      "source": "same-leaf.nl",
+      "purpose": "Existing repeated-call control; original result used again after the second call",
+      "calls": [
+        [
+          "rows",
+          "rows_for",
+          "/",
+          "pieces",
+          84,
+          4,
+          21,
+          "tail"
+        ],
+        [
+          "racks",
+          "rows_for",
+          "/",
+          "carried",
+          21,
+          4,
+          5,
+          "tail"
+        ]
+      ],
+      "caller": {
+        "pieces": 84,
+        "rows": 21,
+        "carried": 21,
+        "racks": 5,
+        "with_spares": 24
+      }
+    },
+    {
+      "source": "two-quotients.nl",
+      "purpose": "Two distinct quotient declarations; let/Copy forwarding, explicit return and tail, reused old result",
+      "calls": [
+        [
+          "first_crates",
+          "crates_for",
+          "/",
+          null,
+          173,
+          5,
+          34,
+          "return"
+        ],
+        [
+          "first_loads",
+          "loads_for",
+          "/",
+          "for_shipping",
+          34,
+          3,
+          11,
+          "tail"
+        ],
+        [
+          "reserve_crates",
+          "crates_for",
+          "/",
+          "first_crates",
+          34,
+          5,
+          6,
+          "return"
+        ],
+        [
+          "reserve_loads",
+          "loads_for",
+          "/",
+          "reserve_crates",
+          6,
+          3,
+          2,
+          "tail"
+        ]
+      ],
+      "caller": {
+        "first_crates": 34,
+        "for_shipping": 34,
+        "first_loads": 11,
+        "reserve_crates": 6,
+        "reserve_loads": 2,
+        "original_crates": 34,
+        "loads_with_reserve": 13
+      }
+    },
+    {
+      "source": "mixed-window.nl",
+      "purpose": "Three distinct declarations with source ordering differing from call ordering. Cross-operator equal value 5, repeated remainder 5 and retained earlier values have distinct identities",
+      "calls": [
+        [
+          "slices",
+          "slice_count",
+          "/",
+          null,
+          157,
+          8,
+          19,
+          "tail"
+        ],
+        [
+          "phase",
+          "window_phase",
+          "%",
+          "carried_slices",
+          19,
+          7,
+          5,
+          "return"
+        ],
+        [
+          "lanes",
+          "lane_count",
+          "/",
+          "available_slices",
+          16,
+          3,
+          5,
+          "tail"
+        ],
+        [
+          "phase_lanes",
+          "lane_count",
+          "/",
+          "phase_copy",
+          5,
+          3,
+          1,
+          "tail"
+        ],
+        [
+          "next_phase",
+          "window_phase",
+          "%",
+          null,
+          26,
+          7,
+          5,
+          "return"
+        ]
+      ],
+      "caller": {
+        "slices": 19,
+        "carried_slices": 19,
+        "phase": 5,
+        "available_slices": 16,
+        "lanes": 5,
+        "phase_copy": 5,
+        "phase_lanes": 1,
+        "next_phase": 5,
+        "retained_phase": 5,
+        "free_slots": 3
+      }
+    }
+  ],
+  "negative": [
+    {
+      "source": "zero-leaf.nl",
+      "stage": "CHECK",
+      "diagnostic": "USIZE-REMAINDER-ZERO",
+      "kind": "semantic invalid; zero divisor spelling parses"
+    },
+    {
+      "source": "type-leaf.nl",
+      "stage": "CHECK",
+      "diagnostic": "USIZE-DIVISION-TYPE",
+      "kind": "semantic invalid; exact core usize required"
+    },
+    {
+      "source": "range-leaf.nl",
+      "stage": "CHECK",
+      "diagnostic": "USIZE-LITERAL-RANGE",
+      "kind": "semantic invalid; literal beyond current target"
+    },
+    {
+      "source": "nested-helper.nl",
+      "stage": "C17",
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "kind": "SOURCE/CHECK accept; nested helper profile deliberately outside C17"
+    }
+  ],
+  "baseline": {
+    "same_leaf": "SOURCE/CHECK, actual public arithmetic and leaf/caller result/world validation, ordinary C17 pass",
+    "distinct_case": "two-quotients.nl SOURCE/CHECK and individual actual quotient evidence/leaf result seals pass; outer complete caller result/world consumer first refuses; ordinary named C17 refuses with V1-BACKEND-UNSUPPORTED, existing output untouched; native NOT_REACHED"
+  },
+  "stage_expectations": {
+    "source": "Existing parsing and semantics. Each actual follows the lexical let/Copy/call order and uses one genuine registered unary operand with a typed nonzero literal.",
+    "custody": "Individual checked callee/source/operator/result and complete caller/result/world seals. Actual Copy has a fresh value ID mapped to a fresh formal binding and matches the preceding bound value; leaf result and caller initializer match by identity. Definition-time Unknown remains honest.",
+    "negative_identity": "Under labelled internal negative instrumentation reject an equal-valued different callee/operation/result and a different retained source. Direct public division/remainder views reject cross-operation or foreign evidence. Accept the genuine graph again after restoration.",
+    "c17": "Keep actual C source and observer additions separate. Emit each used leaf declaration once, preserve statement/call order and real / or %, nonzero and target guards. Observe all caller values with GCC/Clang and available ASan/UBSan.",
+    "oom": "Reach the newly selected outer node and world seal allocations and the composed emitter staging allocation; preserve context and named/C outputs; check no partial artifact, one hit and pristine retry. Preserve relevant old controls.",
+    "boundary": "Flat, straight-line unit caller with one-or-more distinct reachable existing unary leaves and existing Known-only arithmetic. No nested calls in leaves, no new syntax/types/ownership, no public proof/schema and no new state snapshots."
+  }
+}
