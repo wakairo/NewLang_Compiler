@@ -1,0 +1,34 @@
+{
+  "equal-literal.nl": {
+    "bytes": 185,
+    "sha256": "26f0a38986a698762bdf7f0e04eeb13310eb5e66ab8a35ffe7177a6a42c656c0"
+  },
+  "mixed-lots.nl": {
+    "bytes": 628,
+    "sha256": "b40f20dc37ebd398cefa5b753129ed9f953e43e646a1cccf6fdd3ab8dfb9430e"
+  },
+  "oracle.json": {
+    "bytes": 1864,
+    "sha256": "d0b74e6bcc1505892b34715d45710311e0353d1568a0364d9c773a429ee619a1"
+  },
+  "return-prefix.nl": {
+    "bytes": 199,
+    "sha256": "50ffc4f3e2f7eab2edcf4110252880b23861967b49eab04fef7d8e5f16be403d"
+  },
+  "shelves-aliases.nl": {
+    "bytes": 396,
+    "sha256": "1755d3e207b44ab8e8d62eb37c0bef7d4df2b53c882460ac9194e7163f33bcb7"
+  },
+  "shelves-direct.nl": {
+    "bytes": 303,
+    "sha256": "382e135b8780bfc04014626617d4aae1bd69f996bb4bf4e402fd0be0b9a97cdc"
+  },
+  "wrong-type.nl": {
+    "bytes": 144,
+    "sha256": "6bcce3f415991ab2ca32647aeff0aaacc0b0dd87037594f6da4da91ba45b1558"
+  },
+  "zero.nl": {
+    "bytes": 150,
+    "sha256": "a46f6b9bb16238d86302477be46619e9b72ac832d244bb3bddd66cbdb889013c"
+  }
+}

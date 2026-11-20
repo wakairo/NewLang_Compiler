@@ -1098,30 +1098,62 @@ bool nl_usize_remainder_operands(const NLCheckedFragment *f,
 /* These consumers borrow the checked lexical order and existing result/world
  * custody. A Copy's symbol and fresh checked value belong to that graph; the
  * scalar facts checked by name_copy are only a consistency condition. */
-static bool division_local_before(const NLCheckedFragment *f,
-                                  NLCheckedNodeId before, NLSymbolId symbol)
+static NLCheckedNodeId division_local_before(const NLCheckedFragment *f,
+                                             NLCheckedNodeId before,
+                                             NLSymbolId symbol)
 {
     const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
     for (NLCheckedNodeId id = root->first_item; id && id < before;) {
         const NLCheckedNodeView *binding = nl_checked_node_view(f, id);
         if (!binding || binding->kind != NL_CHECKED_BINDING ||
             (binding->next_item && binding->next_item <= id))
-            return false;
+            return 0;
         if (binding->symbol == symbol)
-            return true;
+            return id;
         id = binding->next_item;
     }
-    return false;
+    return 0;
+}
+
+static bool division_name_copy(const NLCheckedFragment *f,
+                               const NLSemanticContext *c, NLCheckedNodeId id,
+                               const NLSyntaxNode *syntax, NLSymbolId symbol)
+{
+    return name_copy(f, c, id, syntax, symbol) &&
+           c->bindings[symbol - 1].view.value <
+               nl_checked_node_view(f, id)->results[0].value;
 }
 
 static bool division_copy_at(const NLCheckedFragment *f,
                              const NLSemanticContext *c, NLCheckedNodeId id,
-                             const NLSyntaxNode *syntax)
+                             const NLSyntaxNode *syntax,
+                             NLCheckedNodeId first_binding)
 {
     const NLCheckedNodeView *use = nl_checked_node_view(f, id);
-    return use && division_local_before(f, id, use->symbol) &&
-           name_copy(f, c, id, syntax, use->symbol) &&
-           c->bindings[use->symbol - 1].view.value < use->results[0].value;
+    const NLCheckedNodeId binding =
+        use ? division_local_before(f, id, use->symbol) : 0;
+    return binding && binding >= first_binding &&
+           division_name_copy(f, c, id, syntax, use->symbol);
+}
+
+/* Before the operation, each previously accepted local is rooted in this
+ * same formal. The selected operand can borrow one of those bindings. */
+static bool division_input_copy(const NLCheckedFragment *f,
+                                const NLSemanticContext *c,
+                                const NLFunctionEntry *fn, NLCheckedNodeId id,
+                                const NLSyntaxNode *syntax,
+                                NLDivisionUsizePlan *p)
+{
+    const NLCheckedNodeView *use = nl_checked_node_view(f, id);
+    if (!use)
+        return false;
+    if (p->formal && use->symbol != p->formal)
+        return division_copy_at(f, c, id, syntax, 0);
+    if (!token(f->source, use->name, fn->body->parameter_names[0]) ||
+        !division_name_copy(f, c, id, syntax, use->symbol))
+        return false;
+    p->formal = use->symbol;
+    return true;
 }
 
 static bool division_event_at(const NLCheckedFragment *f,
@@ -1137,11 +1169,10 @@ static bool division_event_at(const NLCheckedFragment *f,
         (operation != NL_USIZE_ANY_FIXED_DIVISOR &&
          operation != receipt->operation) ||
         !operation_valid_at(f, id, receipt->operation, NULL, c) ||
-        !token(f->source, receipt->issued.operand_spans[0],
-               fn->body->parameter_names[0]))
+        !division_input_copy(f, c, fn, receipt->issued.operands[0],
+                             nl_syntax_node_view(src)->data.equality.left, p))
         return false;
     p->division = id;
-    p->formal = receipt->issued.symbols[0];
     p->divisor = receipt->issued.numbers[1];
     return true;
 }
@@ -1150,7 +1181,8 @@ static bool division_return_at(const NLCheckedFragment *f,
                                const NLSemanticContext *c,
                                const NLCheckedNodeView *root,
                                const NLCheckedNodeView *ret,
-                               const NLSyntaxView *syntax)
+                               const NLSyntaxView *syntax,
+                               NLCheckedNodeId operation_binding)
 {
     NLValueId value;
     const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
@@ -1166,7 +1198,8 @@ static bool division_return_at(const NLCheckedFragment *f,
            exit->values[0].type == type &&
            nl_control_exits_only_return(f->exits, f->function_target) &&
            division_copy_at(f, c, ret->initializer,
-                            syntax->data.statement.expression) &&
+                            syntax->data.statement.expression,
+                            operation_binding) &&
            node_value(f, c, ret->initializer, &value) &&
            ret->returned.type == type && ret->returned.value == value &&
            root->returned.type == type && root->returned.value == value;
@@ -1189,6 +1222,7 @@ static bool division_helper(const NLCheckedFragment *f,
         return false;
     NLDivisionUsizePlan plan = {.body = f, .function = function};
     NLCheckedNodeId id = root->first_item;
+    NLCheckedNodeId operation_binding = 0;
     size_t count = 0;
     for (const NLSyntaxNode *item = s->data.block.items; item;
          item = nl_syntax_next_argument(item)) {
@@ -1199,7 +1233,7 @@ static bool division_helper(const NLCheckedFragment *f,
         if (src->kind == NL_SYNTAX_RETURN) {
             if (!plan.division || nl_syntax_next_argument(item) ||
                 s->data.block.tail || count != root->item_count ||
-                !division_return_at(f, c, root, n, src))
+                !division_return_at(f, c, root, n, src, operation_binding))
                 return false;
             plan.result = n->initializer;
             *out = plan;
@@ -1209,12 +1243,21 @@ static bool division_helper(const NLCheckedFragment *f,
             (n->next_item && n->next_item <= id))
             return false;
         const NLSyntaxNode *init = src->data.binding.initializer;
-        if (!plan.division) {
+        if (operation_binding) {
+            /* Result copies can only start at the operation's binding. */
+            if (!division_copy_at(f, c, n->initializer, init,
+                                  operation_binding))
+                return false;
+        } else if (nl_checked_node_view(f, n->initializer)->kind ==
+                   NL_CHECKED_IDENTIFIER) {
+            if (!division_input_copy(f, c, fn, n->initializer, init, &plan))
+                return false;
+        } else {
             if (!division_event_at(f, c, fn, n->initializer, init, operation,
                                    &plan))
                 return false;
-        } else if (!division_copy_at(f, c, n->initializer, init))
-            return false;
+            operation_binding = id;
+        }
         id = n->next_item;
     }
     const NLSyntaxNode *tail = s->data.block.tail;
@@ -1223,8 +1266,8 @@ static bool division_helper(const NLCheckedFragment *f,
         !node_value(f, c, f->root, &body_result) ||
         !node_value(f, c, root->tail, &tail_value) || body_result != tail_value)
         return false;
-    if (plan.division
-            ? !division_copy_at(f, c, root->tail, tail)
+    if (operation_binding
+            ? !division_copy_at(f, c, root->tail, tail, operation_binding)
             : !division_event_at(f, c, fn, root->tail, tail, operation, &plan))
         return false;
     plan.result = root->tail;
@@ -1276,7 +1319,7 @@ static bool division_call_at(const NLCheckedFragment *f,
     size_t literal_value;
     return arg &&
            (arg->kind == NL_CHECKED_IDENTIFIER
-                ? division_copy_at(f, c, n->first_argument, actual)
+                ? division_copy_at(f, c, n->first_argument, actual, 0)
                 : literal(f, c, arg, actual, &literal_value)) &&
            division_call_values(f, c, id, &helper);
 }
@@ -1369,7 +1412,7 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
             size_t number;
             if (!literal(f, c, init, syntax, &number))
                 return false;
-        } else if (!division_copy_at(f, c, n->initializer, syntax))
+        } else if (!division_copy_at(f, c, n->initializer, syntax, 0))
             return false;
         id = n->next_item;
     }
