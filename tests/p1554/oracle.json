@@ -1,0 +1,111 @@
+{
+  "issue": 1554,
+  "authority": "C1274/C1273, Draft17.38 §§5.2/5.4/6/7/18.2/18.5, DI-011",
+  "canonical_main": "1a0b885171eed6942275bfc34620ec33055fcabe",
+  "early_base": "83beb80d98654f6a4b18ecff8cf6df96c75d8968",
+  "early_tree": "59142dcd7fa08820d57b7f17f870f1ed915a5e37",
+  "target_bits": 64,
+  "baseline": {
+    "sample": "page-alignment.nl",
+    "first": "SOURCE parser rejects the flat percent expression",
+    "later": "CHECK, owned result, emit and guest not reached"
+  },
+  "positive": [
+    {
+      "source": "page-alignment.nl",
+      "form": "let/Copy/tail, aligned zero distinguished from Unknown",
+      "calls": [
+        [
+          "64",
+          "16",
+          "0",
+          "tail"
+        ]
+      ],
+      "caller": {
+        "written": "64",
+        "leftover": "0",
+        "remembered": "0",
+        "with_next_page": "16"
+      }
+    },
+    {
+      "source": "bucket-phase.nl",
+      "form": "explicit RETURN, equal remainders from three actuals with fresh call/result identities",
+      "calls": [
+        [
+          "152",
+          "11",
+          "9",
+          "return"
+        ],
+        [
+          "9",
+          "11",
+          "9",
+          "return"
+        ],
+        [
+          "20",
+          "11",
+          "9",
+          "return"
+        ]
+      ],
+      "caller": {
+        "first_phase": "9",
+        "reduced_again": "9",
+        "translated": "20",
+        "translated_phase": "9",
+        "first_again": "9",
+        "room": "2"
+      }
+    },
+    {
+      "source": "wide-offset.nl",
+      "form": "direct tail; numerator below the maximum divisor stays intact",
+      "calls": [
+        [
+          "18446744073709551614",
+          "18446744073709551615",
+          "18446744073709551614",
+          "tail"
+        ]
+      ],
+      "caller": {
+        "offset": "18446744073709551614",
+        "prior": "18446744073709551613"
+      }
+    }
+  ],
+  "negative": [
+    {
+      "source": "zero-divisor.nl",
+      "failure": "definition CHECK, true nonzero precondition",
+      "diagnostic": "USIZE-REMAINDER-ZERO"
+    },
+    {
+      "source": "wrong-type.nl",
+      "failure": "definition CHECK, exact core usize type",
+      "diagnostic": "USIZE-REMAINDER-TYPE"
+    },
+    {
+      "source": "wide-divisor.nl",
+      "failure": "definition CHECK, target range",
+      "diagnostic": "USIZE-LITERAL-RANGE"
+    },
+    {
+      "source": "unknown-add.nl",
+      "failure": "definition CHECK, Known-only precision limit even with a favorable actual",
+      "diagnostic": "USIZE-ADDITION-PRECISION"
+    }
+  ],
+  "stages": {
+    "source": "Accept one selected name % typed usize literal in existing positions. Keep zero syntactically meaningful and defer operator grammar expansion.",
+    "check": "Exact core usize, current Copy numerator, target representable nonzero divisor. Unknown stays Unknown at definition and through Copy. Each actual produces a fresh r = n % k, with 0 <= r < k.",
+    "owned": "Public operation-specific receipt binds retained source and exact operator/operand spans, value and binding identities, target and optional facts. Division and remainder stay disjoint when both results are zero. Reject foreign source/receipt, substituted result ID even with the same number, wrong operator/span and fabricated Known. The full consumer checks existing per-call and complete-result/world custody.",
+    "emit": "Strict C17 computes % with the real actual and nonzero/target guards. Observe every value listed under caller through the real guest in GCC, Clang, ASan and UBSan configurations. Exit zero alone is insufficient.",
+    "failures": "Named output stays unchanged on refused source. Hit receipt allocation, result seal and emission staging in real host code; retain context/output on failure and check pristine retry. Preserve original control cases.",
+    "boundary": "Reuse the existing one-helper scalar family, ordinary lets and Copies, unit caller and proven Known-only plus/minus. No dynamic divisor, general expression syntax, new permissive range or custody machinery. Mixed helper/operator graphs beyond this family remain separate work."
+  }
+}
