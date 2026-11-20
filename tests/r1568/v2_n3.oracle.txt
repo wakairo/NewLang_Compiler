@@ -1,0 +1,10 @@
+V2 N3 - unit-entry counterpart of the same definite-invalid usize literal-range case.
+Provenance: POST-FIRST / C-informed source-profile adaptation, implementation-unexposed; original N3 source/oracle/hash in FIRST 7034396980 is unchanged.
+Canonical authority: main 5e5049ff2c809a826ecc472ad0077fd93605cf7c / Draft17.38 sections 4.3-4.4, 4.9, 5.1, 5.2, 5.4, 6, 18.1, 19.1 and 27.1.
+Exact adaptation: change main result type usize -> unit; retain the exact divide_negative_literal(usize(26)) call as initializer of a new ordinary quantity binding; finish main with unit. The original-formal Copy and divisor usize(-1) are byte-for-byte unchanged.
+Target premise retained for the valid caller literal: U >= 26. usize(-1) is invalid for every width because usize is non-negative.
+Source-law prediction: the negative mathematical integer must be range-checked; it is not wrapped, saturated or reduced modulo target width. A valid usize divisor value is not produced.
+Predicted semantic fault class: typed-literal range rejection. Do not reinterpret -1 as U or borrow the signed division exception. Unit result adaptation does not change this obligation.
+No successful quantity binding value, quotient or normal main completion is predicted. main is declared unit and has no numeric return oracle. This case still does not test signed MIN/-1 behavior.
+An earlier parser/coverage rejection is a separately attributed first layer, not proof that literal-range checking was reached. No exact diagnostic code/text, physical ID, source/report position or traversal order is promised.
+Execution: NOT_RUN; predicted negative, not observed rejection. All execution/change counters remain 0.

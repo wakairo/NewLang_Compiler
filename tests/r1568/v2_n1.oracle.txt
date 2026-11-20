@@ -1,0 +1,10 @@
+V2 N1 - unit-entry counterpart of the same definite-invalid zero-division case.
+Provenance: POST-FIRST / C-informed source-profile adaptation, implementation-unexposed; original N1 source/oracle/hash in FIRST 7034396980 is unchanged.
+Canonical authority: main 5e5049ff2c809a826ecc472ad0077fd93605cf7c / Draft17.38 sections 4.2-4.4, 4.9, 5.2, 5.4, 6, 8.1, 18.1, 19.1 and 27.1.
+Exact adaptation: change main result type usize -> unit; retain the exact divide_zero(usize(26)) call as initializer of a new ordinary quantity binding; finish main with unit. The leaf is byte-for-byte unchanged and no literal, call or arithmetic operation is changed.
+Target premise retained for the caller literal: U >= 26. Literal zero is representable for every usize target.
+Source-law prediction: the declarations, unit entry and receiving binding are structurally well formed, but operand / usize(0) still has a false required precondition. Returning unit or leaving the result unused cannot legalize the bad operation.
+Predicted semantic fault class: nonzero-divisor obligation fails at static applicability/CHECK. Reject; do not issue successful whole-program semantic certification or execute the division.
+No successful quantity binding value, quotient or normal main completion is assigned by this oracle. main's declared result type is unit, not a numeric return channel. Unknown original does not affect the decisive zero-divisor violation.
+An earlier parser/entry/coverage failure must be recorded at its actual first layer and is not evidence that this semantic rejection was reached. No exact diagnostic text/code, physical ID, position or traversal order is required.
+Execution: NOT_RUN; predicted negative, not observed rejection. All execution/change counters remain 0.

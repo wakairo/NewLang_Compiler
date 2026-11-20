@@ -1,0 +1,10 @@
+V2 N2 - unit-entry counterpart of the same definite-invalid zero-remainder case.
+Provenance: POST-FIRST / C-informed source-profile adaptation, implementation-unexposed; original N2 source/oracle/hash in FIRST 7034396980 is unchanged.
+Canonical authority: main 5e5049ff2c809a826ecc472ad0077fd93605cf7c / Draft17.38 sections 4.2-4.4, 4.9, 5.2, 5.4, 6, 8.1, 18.1, 19.1, 27.1 and 27.9.
+Exact adaptation: change main result type usize -> unit; retain the exact remainder_zero(usize(41)) call as initializer of a new ordinary quantity binding; finish main with unit. The leaf, its two pre-Copies, percent operation, leaf quantity and final return are byte-for-byte unchanged.
+Target premise retained for the caller literal: U >= 41. Literal zero is representable for every usize target.
+Source-law prediction: the unit entry and receiving binding are structurally well formed, but operand % usize(0) has the same false required precondition. Copies, final leaf return and unit main do not repair it.
+Predicted semantic fault class: nonzero-divisor obligation fails at static applicability/CHECK. Reject; no successful whole-program semantic certification or execution of the remainder.
+No successful caller quantity binding, remainder value or normal main completion is predicted. main is declared unit and has no numeric return oracle. Unknown original cannot justify a Known quantity or erase zero.
+If an earlier unsupported-source or other coverage boundary rejects the unit, report that actual layer separately; it does not establish that remainder-precondition checking was reached. No exact diagnostic code/text, physical IDs, report positions or visit order is mandated.
+Execution: NOT_RUN; predicted negative, not observed rejection. All execution/change counters remain 0.

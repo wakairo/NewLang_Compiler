@@ -1,0 +1,12 @@
+V2 N4 - unit-entry counterpart of the same canonically legal excluded direct-caller-division control.
+Provenance: POST-FIRST / C-informed source-profile adaptation, implementation-unexposed; original N4 source/oracle/hash in FIRST 7034396980 is unchanged.
+Canonical authority: main 5e5049ff2c809a826ecc472ad0077fd93605cf7c / Draft17.38 sections 4.2-4.4, 4.9, 5.2, 5.4, 6, 8.1, 13.5c, 18.1, 18.2, 18.5, 19.1, 27.1 and 28.
+Exact adaptation: change main result type usize -> unit; retain the original quantity / usize(2) expression as initializer of a new ordinary final_quantity binding; finish with unit. The leaf, its Copy, divide_copy(usize(26)) call and all literal values are unchanged.
+Target premise retained: usize maximum U >= 26.
+Source-law prediction: the complete unit is valid under that premise. Both divisors 4 and 2 are representable and statically nonzero. quantity = floor(26 / 4) = 6; final_quantity = floor(quantity / 2) = 3. These are genuine ordinary source bindings.
+Entry result oracle: main completes with core singleton unit; it has NO numeric return-value or native exit-status oracle. The predicted 3 belongs only to final_quantity.
+Classification retained: CANONICAL_VALID_OUT_OF_SELECTED_SCOPE. Direct caller division remains excluded from this implementation goal even after main entry shape is adapted. It is not universally illegal and is not a definite-invalid semantic case.
+Implementation oracle: NO mandatory rejection. Existing acceptance would not by itself be a bug; a fail-closed coverage rejection would not make the source illegal. No P scope expansion or oracle adjustment is authorized to force PASS.
+Definition-time leaf input remains Unknown/symbolic. Concrete binding predictions are not observations; neither equal numeric values nor unit completion certifies source/callee/formal/Copy/result identity.
+Public binding values and evidence correspondence are NOT_OBSERVABLE in this PREP. No new schema, private observer, fixed physical ID, diagnostic code/text, report position or traversal order is required.
+Execution: NOT_RUN. Only the selected-scope classification is negative; all execution/change counters remain 0.
