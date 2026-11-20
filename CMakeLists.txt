@@ -109,6 +109,7 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    include(tests/r1551/CMakeLists.txt)
     include(tests/p1507/CMakeLists.txt)
     include(tests/p1517/CMakeLists.txt)
     include(tests/p1529/CMakeLists.txt)
