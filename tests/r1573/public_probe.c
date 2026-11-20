@@ -20,18 +20,18 @@ typedef struct {
 
 /* Independent frozen FIRST 7036152423: never calibrated to P. */
 static const R1573Expected math_oracle[] = {
-    {0, NL_CHECKED_USIZE_DIVISION, "kept / usize(7)", "kept",
-     "usize(7)", 93, 7, 13},
-    {0, NL_CHECKED_USIZE_REMAINDER, "cargo % usize(7)", "cargo",
-     "usize(7)", 93, 7, 2},
-    {1, NL_CHECKED_USIZE_DIVISION, "pack / usize(4)", "pack",
-     "usize(4)", 86, 4, 21},
-    {1, NL_CHECKED_USIZE_REMAINDER, "second % usize(6)", "second",
-     "usize(6)", 21, 6, 3},
-    {2, NL_CHECKED_USIZE_DIVISION, "before / usize(4)", "before",
-     "usize(4)", 21, 4, 5},
-    {3, NL_CHECKED_USIZE_DIVISION, "before / usize(4)", "before",
-     "usize(4)", 86, 4, 21},
+    {0, NL_CHECKED_USIZE_DIVISION, "kept / usize(7)", "kept", "usize(7)", 93, 7,
+     13},
+    {0, NL_CHECKED_USIZE_REMAINDER, "cargo % usize(7)", "cargo", "usize(7)", 93,
+     7, 2},
+    {1, NL_CHECKED_USIZE_DIVISION, "pack / usize(4)", "pack", "usize(4)", 86, 4,
+     21},
+    {1, NL_CHECKED_USIZE_REMAINDER, "second % usize(6)", "second", "usize(6)",
+     21, 6, 3},
+    {2, NL_CHECKED_USIZE_DIVISION, "before / usize(4)", "before", "usize(4)",
+     21, 4, 5},
+    {3, NL_CHECKED_USIZE_DIVISION, "before / usize(4)", "before", "usize(4)",
+     86, 4, 21},
 };
 
 typedef struct {
@@ -118,9 +118,8 @@ static bool identical_source(const NLSource *actual, const NLSource *expected)
     size_t n = nl_source_length(expected);
     NLSourceSpan whole = {0, n};
     return nl_source_view(actual, whole, &a) &&
-           nl_source_view(expected, whole, &b) &&
-           a.length == n && b.length == n &&
-           (n == 0 || memcmp(a.bytes, b.bytes, n) == 0);
+           nl_source_view(expected, whole, &b) && a.length == n &&
+           b.length == n && (n == 0 || memcmp(a.bytes, b.bytes, n) == 0);
 }
 
 static bool public_known_usize(const NLCheckedFragment *fragment,
@@ -149,9 +148,8 @@ static bool public_known_usize(const NLCheckedFragment *fragment,
 }
 
 static void assert_math(const NLCheckedFragment *fragment,
-                        const NLSource *source, int role,
-                        NLCheckedNodeId id, NLCheckedKind kind,
-                        R1573Evidence *out)
+                        const NLSource *source, int role, NLCheckedNodeId id,
+                        NLCheckedKind kind, R1573Evidence *out)
 {
     NLSourceSpan expression = {0}, operator_span = {0};
     NLSourceSpan operands[2] = {{0}, {0}};
@@ -211,24 +209,24 @@ static void assert_math(const NLCheckedFragment *fragment,
             !span_equals(source, expression, e->whole)) {
             continue;
         }
-        bool syntax = span_equals(source, operands[0], e->left) &&
-                      span_equals(source, operands[1], e->right) &&
-                      span_equals(source, operator_span,
-                                  kind == NL_CHECKED_USIZE_DIVISION ? "/" : "%");
+        bool syntax =
+            span_equals(source, operands[0], e->left) &&
+            span_equals(source, operands[1], e->right) &&
+            span_equals(source, operator_span,
+                        kind == NL_CHECKED_USIZE_DIVISION ? "/" : "%");
         size_t premise = role == 0 ? 93u : 86u;
-        bool target = maximum >= premise && divisor == e->k &&
-                      divisor != 0 && divisor <= maximum;
+        bool target = maximum >= premise && divisor == e->k && divisor != 0 &&
+                      divisor <= maximum;
         bool numerics = (!n_known || numerator == e->n) &&
                         (!result_known || answer == e->answer);
-        bool placeholders = (n_known || numerator == 0) &&
-                            (result_known || answer == 0);
-        if (out->seen[j] || !syntax || !target || !numerics ||
-            !placeholders) {
+        bool placeholders =
+            (n_known || numerator == 0) && (result_known || answer == 0);
+        if (out->seen[j] || !syntax || !target || !numerics || !placeholders) {
             printf("R1573_STOP|FROZEN_MATH_MISMATCH|index=%zu|role=%d|"
                    "n=%zu|k=%zu|result=%zu|max=%zu|known=%d,%d|"
                    "source=%d|target=%d\n",
-                   j, role, numerator, divisor, answer, maximum,
-                   (int)n_known, (int)result_known, (int)syntax, (int)target);
+                   j, role, numerator, divisor, answer, maximum, (int)n_known,
+                   (int)result_known, (int)syntax, (int)target);
             out->invalid = true;
             return;
         }
@@ -248,15 +246,14 @@ static void assert_math(const NLCheckedFragment *fragment,
         }
         return;
     }
-    printf("R1573_STOP|unrecognized_source_operation|role=%d|kind=%d\n",
-           role, (int)kind);
+    printf("R1573_STOP|unrecognized_source_operation|role=%d|kind=%d\n", role,
+           (int)kind);
     out->invalid = true;
 }
 
 static void observe_scalar(const NLCheckedFragment *fragment,
                            const NLSource *source, int role,
-                           const NLCheckedNodeView *node,
-                           R1573Evidence *out)
+                           const NLCheckedNodeView *node, R1573Evidence *out)
 {
     for (size_t i = 0; i < 4; ++i) {
         const R1573ScalarExpected *e = &scalar_oracle[i];
@@ -268,13 +265,15 @@ static void observe_scalar(const NLCheckedFragment *fragment,
         bool known = public_known_usize(fragment, node, &result);
         if (out->scalar_seen[i] || (known && result != e->answer)) {
             printf("R1573_STOP|plus_minus_oracle_disagrees|expr=%s|"
-                   "known=%d|result=%zu\n", e->whole, (int)known, result);
+                   "known=%d|result=%zu\n",
+                   e->whole, (int)known, result);
             out->invalid = true;
         }
         out->scalar_seen[i] = true;
         out->scalar_known[i] = known;
         printf("R1573_PUBLIC_PLUS_MINUS|role=%d|expr=%s|"
-               "Known=%d|value=%zu\n", role, e->whole, (int)known, result);
+               "Known=%d|value=%zu\n",
+               role, e->whole, (int)known, result);
         if (!known) {
             printf("R1573_NOT_OBSERVABLE|plus_minus_Known_value|%s\n",
                    e->whole);
@@ -283,9 +282,8 @@ static void observe_scalar(const NLCheckedFragment *fragment,
     }
 }
 
-static void inspect(const NLCheckedFragment *fragment,
-                    const NLSource *source, int role, size_t depth,
-                    R1573Evidence *out)
+static void inspect(const NLCheckedFragment *fragment, const NLSource *source,
+                    int role, size_t depth, R1573Evidence *out)
 {
     if (fragment == NULL || depth > 3 ||
         !identical_source(nl_checked_source(fragment), source)) {
@@ -342,7 +340,8 @@ static void inspect(const NLCheckedFragment *fragment,
                 out->function = node->function;
                 out->function_set = true;
             } else if (out->function != node->function) {
-                printf("R1573_STOP|two_calls_resolved_to_different_functions\n");
+                printf(
+                    "R1573_STOP|two_calls_resolved_to_different_functions\n");
                 out->invalid = true;
             }
             size_t actual = 0, returned = 0;
@@ -382,7 +381,8 @@ static bool finish_evidence(const R1573Evidence *out, bool mixed)
             printf("R1573_STOP|frozen_operation_not_seen|index=%zu\n", i);
             valid = false;
         }
-        if (!required && out->seen[i]) valid = false;
+        if (!required && out->seen[i])
+            valid = false;
         if (required && out->seen[i]) {
             ++observed;
             if (out->n_known[i] && out->result_known[i]) {
@@ -399,11 +399,11 @@ static bool finish_evidence(const R1573Evidence *out, bool mixed)
                    scalar_oracle[i].whole);
         }
     }
-    if (mixed ? (!out->call_seen[0] || !out->call_seen[1] ||
-                 out->division != 3 || out->remainder != 1 ||
-                 out->nested_calls != 2)
-              : (out->division != 1 || out->remainder != 1 ||
-                 out->nested_calls != 0)) {
+    if (mixed
+            ? (!out->call_seen[0] || !out->call_seen[1] || out->division != 3 ||
+               out->remainder != 1 || out->nested_calls != 2)
+            : (out->division != 1 || out->remainder != 1 ||
+               out->nested_calls != 0)) {
         valid = false;
     }
     printf("R1573_FROZEN_NUMERIC_LEDGER|case=%s|arithmetic=%zu|"
