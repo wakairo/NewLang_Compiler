@@ -463,12 +463,23 @@ def native_test(args):
 
 def inventory(args):
     evidence = Path(args.evidence)
+    environment = os.environ.copy()
+    environment["R1557_REGISTRATION_ONLY"] = "1"
     result = subprocess.run(
         [args.ctest, "--test-dir", args.build_dir, "-N", "--show-only=json-v1"],
-        capture_output=True, check=False,
+        capture_output=True, check=False, env=environment,
     )
+    save(evidence, "inventory.ctest_complete.stdout", result.stdout)
+    save(evidence, "inventory.ctest_complete.stderr", result.stderr)
     require(result.returncode == 0, "actual CTest -N inventory")
-    report = json.loads(result.stdout)
+    text = result.stdout.decode("utf-8").lstrip()
+    report, end = json.JSONDecoder().raw_decode(text)
+    trailer = text[end:]
+    save(evidence, "inventory.ctest_trailer.stdout", trailer)
+    print("R1557 INVENTORY_TRAILER " + json.dumps({
+        "bytes": len(trailer.encode()), "sha256": digest(trailer.encode()),
+        "text": trailer if len(trailer) <= 8192 else "retained; too long to print",
+    }, sort_keys=True))
     names = [entry["name"] for entry in report["tests"]]
     own = sorted(name for name in names if name.startswith("r1557_"))
     require(len(names) == len(set(names)) and own == TESTS,
@@ -486,6 +497,8 @@ def inventory(args):
 
 
 def transport(args):
+    if os.environ.get("R1557_REGISTRATION_ONLY") == "1":
+        return
     evidence = Path(args.evidence)
     allowed = {".json", ".txt", ".stdout", ".stderr", ".c", ".diff"}
     payload = {}
@@ -495,7 +508,7 @@ def transport(args):
             continue
         data = path.read_bytes()
         total += len(data)
-        if len(data) > 1_000_000 or total > 2_000_000:
+        if len(data) > 2_000_000 or total > 3_000_000:
             print("R1557_TRANSPORT_LIMIT " + path.name, flush=True)
             return
         payload[path.name] = {
