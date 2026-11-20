@@ -4597,8 +4597,12 @@ static int compile_v0_to(const char *path, bool check_only,
     if (!export_name) {
         char *division_c = NULL;
         size_t division_length = 0;
-        const NLCheckStatus status =
+        NLCheckStatus status =
             nl_division_usize_c17(entry, &division_c, &division_length);
+        const bool try_remainder = status == NL_CHECK_SEMANTIC_UNSUPPORTED;
+        if (try_remainder)
+            status =
+                nl_remainder_usize_c17(entry, &division_c, &division_length);
         if (status == NL_CHECK_OK) {
             result = fwrite(division_c, 1, division_length, output) ==
                                  division_length &&
@@ -4611,8 +4615,11 @@ static int compile_v0_to(const char *path, bool check_only,
         }
         if (status == NL_CHECK_OUT_OF_MEMORY ||
             status == NL_CHECK_RESOURCE_LIMIT) {
-            result = report_error(
-                "V0-C-RESOURCE", "division emission resource failure", path, 1);
+            result = report_error("V0-C-RESOURCE",
+                                  try_remainder
+                                      ? "remainder emission resource failure"
+                                      : "division emission resource failure",
+                                  path, 1);
             goto cleanup;
         }
     }

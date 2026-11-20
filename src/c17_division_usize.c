@@ -50,6 +50,9 @@ static bool division_emit_expression(DivisionText *t,
     case NL_CHECKED_USIZE_DIVISION:
         operator_text = " / ";
         break;
+    case NL_CHECKED_USIZE_REMAINDER:
+        operator_text = " % ";
+        break;
     case NL_CHECKED_USIZE_ADDITION:
         operator_text = " + ";
         break;
@@ -81,15 +84,18 @@ static bool division_emit_bindings(DivisionText *t, const NLCheckedFragment *f)
     return true;
 }
 
-NLCheckStatus nl_division_usize_c17(const NLCheckedFragment *entry, char **out,
-                                    size_t *length)
+static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
+                                         bool remainder, char **out,
+                                         size_t *length)
 {
+    bool (*call_valid)(const NLCheckedFragment *, NLCheckedNodeId,
+                       NLDivisionUsizePlan *) =
+        remainder ? nl_remainder_usize_call_valid
+                  : nl_division_usize_call_valid;
     NLDivisionUsizePlan main, helper;
-    if (!out || !length ||
-        !nl_division_usize_call_valid(entry, nl_checked_root(entry), &main) ||
+    if (!out || !length || !call_valid(entry, nl_checked_root(entry), &main) ||
         main.formal || !main.call ||
-        !nl_division_usize_call_valid(main.body, main.call, &helper) ||
-        !helper.formal)
+        !call_valid(main.body, main.call, &helper) || !helper.formal)
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     const size_t node_limit = (SIZE_MAX - 2048) / 512;
     if (main.body->count > node_limit ||
@@ -104,13 +110,14 @@ NLCheckStatus nl_division_usize_c17(const NLCheckedFragment *entry, char **out,
         return NL_CHECK_OUT_OF_MEMORY;
     if (!division_text_append(
             &text,
-            "/* NewLang source-owned quantity division C17. */\n"
+            "/* NewLang source-owned quantity %s C17. */\n"
             "#include <stddef.h>\n#include <stdint.h>\n"
             "_Static_assert(SIZE_MAX == UINTMAX_C(%zu), "
             "\"NewLang usize target mismatch\");\n\n"
             "static size_t nl_qty_fn_%zu(size_t nl_local_%zu)\n{\n"
             "    _Static_assert(UINTMAX_C(%zu) != 0, \"nonzero divisor\");\n",
-            SIZE_MAX, helper.function, helper.formal, helper.divisor) ||
+            remainder ? "remainder" : "division", SIZE_MAX, helper.function,
+            helper.formal, helper.divisor) ||
         !division_emit_bindings(&text, helper.body) ||
         !division_text_append(&text, "    return ") ||
         !division_emit_expression(&text, helper.body, helper.result) ||
@@ -128,4 +135,16 @@ NLCheckStatus nl_division_usize_c17(const NLCheckedFragment *entry, char **out,
     *out = text.bytes;
     *length = text.length;
     return NL_CHECK_OK;
+}
+
+NLCheckStatus nl_division_usize_c17(const NLCheckedFragment *entry, char **out,
+                                    size_t *length)
+{
+    return literal_divisor_c17(entry, false, out, length);
+}
+
+NLCheckStatus nl_remainder_usize_c17(const NLCheckedFragment *entry, char **out,
+                                     size_t *length)
+{
+    return literal_divisor_c17(entry, true, out, length);
 }

@@ -1,0 +1,40 @@
+{
+  "canonical_main": "1a0b885171eed6942275bfc34620ec33055fcabe",
+  "early_base": "83beb80d98654f6a4b18ecff8cf6df96c75d8968",
+  "tree": "59142dcd7fa08820d57b7f17f870f1ed915a5e37",
+  "encoding": "UTF-8/LF/final newline",
+  "files": {
+    "page-alignment.nl": {
+      "bytes": 332,
+      "sha256": "01c27b5dfa47f4f0db596f0b86b5e5415571d4ac3df281fc397bda0c5a7d2d01"
+    },
+    "bucket-phase.nl": {
+      "bytes": 443,
+      "sha256": "f4d3f721249a66385dd6ce50f43abde5375d1119f97db49f85e99ce8c1e1734a"
+    },
+    "wide-offset.nl": {
+      "bytes": 222,
+      "sha256": "27c3d5acb044dcbbec990651b6b003c40b3fe597d7ffe53927dd8f1df191af7a"
+    },
+    "zero-divisor.nl": {
+      "bytes": 160,
+      "sha256": "0f0b9e1de58c5e56f5cd89b2fd11516de7cbf674aeacd364b6b9e9bbf4abb6a4"
+    },
+    "wrong-type.nl": {
+      "bytes": 115,
+      "sha256": "b75a714416b5be7372b3c2669d09c7b47f8a98c8d2d39f8c848b36920456abd8"
+    },
+    "wide-divisor.nl": {
+      "bytes": 117,
+      "sha256": "0a2ac6f261594d328d63e33caba2f8afb89011fba3e489d1761bb65d9028c68d"
+    },
+    "unknown-add.nl": {
+      "bytes": 246,
+      "sha256": "6f1b4e0c37716a4492611d2ae8a7464d35f4da4bad8f1b06a069013673489611"
+    },
+    "oracle.json": {
+      "bytes": 4126,
+      "sha256": "c8489c9406b1ce639cc61f91df5c8645926c5b0247d14d197f121fbeda902678"
+    }
+  }
+}
