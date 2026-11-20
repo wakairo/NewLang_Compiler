@@ -1,0 +1,3 @@
+fatal: ambiguous argument '93fd2752972a9c2348d85e33f941bb7c786ec99b^{tree}': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'

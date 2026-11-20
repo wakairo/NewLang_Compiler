@@ -95,13 +95,18 @@ def identity(root, evidence, lane):
     for name, arguments in [
         ("head", ["rev-parse", "HEAD"]),
         ("tree", ["rev-parse", "HEAD^{tree}"]),
-        ("parents", ["show", "-s", "--format=%P", "HEAD"]),
-        ("candidate_tree", ["rev-parse", CANDIDATE + "^{tree}"]),
+        ("commit_object", ["cat-file", "-p", "HEAD"]),
+        ("shallow", ["rev-parse", "--is-shallow-repository"]),
     ]:
         result = run(evidence, lane + ".git." + name,
                      ["git", "-C", str(root), *arguments])
         require(result.returncode == 0, "checkout metadata " + name)
         fields[name] = result.stdout.decode().strip()
+    headers = fields["commit_object"].split("\n\n", 1)[0].splitlines()
+    trees = [line[5:] for line in headers if line.startswith("tree ")]
+    parents = [line[7:] for line in headers if line.startswith("parent ")]
+    require(trees == [fields["tree"]], "checkout commit tree identity")
+    fields["parents"] = parents
     fields["fixed_candidate"] = CANDIDATE
     fields["fixed_adopted_base"] = BASE
     fields["github"] = {
@@ -111,26 +116,48 @@ def identity(root, evidence, lane):
             "GITHUB_BASE_REF", "GITHUB_RUN_ID", "GITHUB_RUN_ATTEMPT",
         )
     }
+    require(fields["github"]["GITHUB_EVENT_NAME"] == "pull_request",
+            "natural PR event required for measurement")
+    require(fields["github"]["GITHUB_SHA"] == fields["head"],
+            "actual checkout equals event checkout SHA")
     event_path = os.environ.get("GITHUB_EVENT_PATH")
-    if event_path:
-        event = json.loads(Path(event_path).read_text())
-        pr = event.get("pull_request", {})
-        fields["pull_request"] = {
-            "head_sha": pr.get("head", {}).get("sha"),
-            "head_ref": pr.get("head", {}).get("ref"),
-            "base_sha": pr.get("base", {}).get("sha"),
-            "base_ref": pr.get("base", {}).get("ref"),
-        }
-        require(fields["pull_request"]["base_sha"] == CANDIDATE,
-                "fixed PR base drift")
-        require(fields["pull_request"]["head_ref"] ==
-                "r-fast/r1557-remainder-c1281", "own PR head ref")
-        require(fields["pull_request"]["base_ref"] ==
-                "p1554-authenticated-usize-remainder-public",
-                "own fixed base ref")
-    require(fields["candidate_tree"] ==
-            "74666c834b433b63e00aed3ebdb020f7a2b6d10b",
-            "candidate tree drift")
+    require(event_path, "actual PR event metadata available")
+    event = json.loads(Path(event_path).read_text())
+    pr = event.get("pull_request", {})
+    fields["pull_request"] = {
+        "head_sha": pr.get("head", {}).get("sha"),
+        "head_ref": pr.get("head", {}).get("ref"),
+        "base_sha": pr.get("base", {}).get("sha"),
+        "base_ref": pr.get("base", {}).get("ref"),
+    }
+    require(fields["pull_request"]["base_sha"] == CANDIDATE,
+            "fixed PR base drift")
+    require(fields["pull_request"]["head_ref"] ==
+            "r-fast/r1557-remainder-c1281", "own PR head ref")
+    require(fields["pull_request"]["base_ref"] ==
+            "p1554-authenticated-usize-remainder-public",
+            "own fixed base ref")
+    require(parents == [CANDIDATE, fields["pull_request"]["head_sha"]],
+            "synthetic checkout actual ordered parents")
+    candidate = run(evidence, lane + ".git.candidate_tree",
+                    ["git", "-C", str(root),
+                     "rev-parse", CANDIDATE + "^{tree}"])
+    fields["candidate_tree_local_returncode"] = candidate.returncode
+    if candidate.returncode == 0:
+        fields["candidate_tree_local"] = candidate.stdout.decode().strip()
+        require(fields["candidate_tree_local"] ==
+                "74666c834b433b63e00aed3ebdb020f7a2b6d10b",
+                "locally available candidate tree drift")
+    else:
+        require(fields["shallow"] == "true",
+                "missing candidate object requires actual shallow checkout")
+        fields["candidate_tree_local"] = None
+    fields["candidate_tree_authoritative_api"] = {
+        "commit": CANDIDATE,
+        "tree": "74666c834b433b63e00aed3ebdb020f7a2b6d10b",
+        "provenance": "C1281 fixed release plus R individual GitHub commit GET",
+        "is_local_observation": False,
+    }
     save_json(evidence, lane + ".identity.json", fields)
 
 
