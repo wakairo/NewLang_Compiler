@@ -122,8 +122,8 @@ static bool load(Unit *unit, const char *path, unsigned cohort)
     NLParseDiagnostic parse_diagnostic;
     NLParseStatus parse_status = nl_parser_create(unit->source, &unit->parser);
     if (parse_status == NL_PARSE_OK)
-        parse_status = nl_parser_parse_function_unit(
-            unit->parser, &unit->tree, &parse_diagnostic);
+        parse_status = nl_parser_parse_function_unit(unit->parser, &unit->tree,
+                                                     &parse_diagnostic);
     printf("{\"record\":\"parse\",\"cohort\":%u,\"status\":%d}\n", cohort,
            (int)parse_status);
     if (parse_status != NL_PARSE_OK)
@@ -173,8 +173,8 @@ static bool load(Unit *unit, const char *path, unsigned cohort)
     if (nl_parser_create(unit->selector, &unit->selector_parser) != NL_PARSE_OK)
         return false;
     if (nl_parser_parse_expression_fragment(unit->selector_parser,
-                                           &unit->selector_tree,
-                                           &parse_diagnostic) != NL_PARSE_OK)
+                                            &unit->selector_tree,
+                                            &parse_diagnostic) != NL_PARSE_OK)
         return false;
     NLCheckDiagnostic entry_diagnostic;
     check_status = nl_semantic_check_expression(
@@ -229,8 +229,8 @@ static void arithmetic(const NLCheckedFragment *fragment, NLCheckedNodeId id,
     printf(",\"present\":%s,\"valid\":%s,\"known\":%s,",
            present ? "true" : "false", valid ? "true" : "false",
            known ? "true" : "false");
-    printf("\"numerator\":%zu,\"divisor\":%zu,\"quantity\":%zu,",
-           numerator, divisor, result);
+    printf("\"numerator\":%zu,\"divisor\":%zu,\"quantity\":%zu,", numerator,
+           divisor, result);
     printf("\"target_max\":%zu,\"span\":[%zu,%zu],", maximum,
            node->span.start_byte, node->span.end_byte);
     printf("\"numerator_known\":%s,\"quantity_known\":%s",
@@ -245,8 +245,8 @@ static void arithmetic(const NLCheckedFragment *fragment, NLCheckedNodeId id,
             event.division ? event.div.places : event.rem.places;
         const NLValueFactId *facts =
             event.division ? event.div.facts : event.rem.facts;
-        NLSourceSpan operation = event.division ? event.div.operator_span
-                                               : event.rem.operator_span;
+        NLSourceSpan operation =
+            event.division ? event.div.operator_span : event.rem.operator_span;
         NLValueId result_id =
             event.division ? event.div.result : event.rem.result;
         printf(",\"values\":[%zu,%zu],\"result\":%zu,", values[0], values[1],
@@ -336,9 +336,9 @@ static void walk_node(const NLCheckedFragment *fragment, NLCheckedNodeId id,
             walk_fragment(body, cohort, callee, depth + 1);
         }
     }
-    NLCheckedNodeId edges[] = {node->initializer, node->first_item,
-                              node->next_item, node->tail,
-                              node->first_argument, node->next_argument};
+    NLCheckedNodeId edges[] = {node->initializer,    node->first_item,
+                               node->next_item,      node->tail,
+                               node->first_argument, node->next_argument};
     for (size_t i = 0; i < sizeof(edges) / sizeof(edges[0]); ++i)
         walk_node(fragment, edges[i], cohort, scope, depth, seen, seen_count);
 }
@@ -348,12 +348,11 @@ static void walk_fragment(const NLCheckedFragment *fragment, unsigned cohort,
 {
     ++fragments;
     const NLSource *source = nl_checked_source(fragment);
-    printf("{\"record\":\"fragment\",\"cohort\":%u,\"origin\":\"%p\",",
-           cohort, (const void *)fragment);
+    printf("{\"record\":\"fragment\",\"cohort\":%u,\"origin\":\"%p\",", cohort,
+           (const void *)fragment);
     printf("\"context\":\"%p\",\"root\":%zu,\"node_count\":%zu,",
            (const void *)nl_checked_context(fragment),
-           nl_checked_root(fragment),
-           nl_checked_node_count(fragment));
+           nl_checked_root(fragment), nl_checked_node_count(fragment));
     fputs("\"source\":", stdout);
     NLSourceSpan whole = {0, source ? nl_source_length(source) : 0};
     span_text(source, whole);
@@ -389,12 +388,11 @@ static void challenges(void)
             Event *a = &events[i], *b = &events[j];
             if (!a->division || !b->division || a->cohort != 0 ||
                 b->cohort != 0 || !a->div.quotient_known ||
-                !b->div.quotient_known ||
-                a->div.quotient != b->div.quotient ||
+                !b->div.quotient_known || a->div.quotient != b->div.quotient ||
                 a->fragment == b->fragment)
                 continue;
-            bool accepted = nl_checked_usize_division_valid(
-                a->fragment, a->node, &b->div);
+            bool accepted =
+                nl_checked_usize_division_valid(a->fragment, a->node, &b->div);
             printf("{\"record\":\"same_value\",\"quantity\":%zu,",
                    a->div.quotient);
             printf("\"accepted\":%s}\n", accepted ? "true" : "false");
