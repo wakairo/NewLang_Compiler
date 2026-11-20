@@ -1,0 +1,25 @@
+ORACLE_R_C1258_V3
+Class: R independently authored POST-FIRST CALIBRATED pre-execution hypotheses; NOT BLIND and NOT_RUN.
+Fixed compiler: P1547 HEAD 0ec2aa7cb4a7e0a66191768962fae78b07f66bce, tree 160fa9fb284c60bf1eff60c0dafa1c95ca81c462; unmerged.
+Canonical: adopted main a9715f4bc788c13e213231c639057c2d718a9200, tree b7a0ab30f9150143df2434e8e478232daf9ca951; Draft17.38.
+Allowed calibration: C1247/C1249 and C1258 high-level selected helper-body-tail existing_scalar_name / usize(decimal_digits), real main()->unit call and existing Known-only +1/Copy. Earlier R V1 and V2 FIRST and oracles read, remain immutable. C/F issue-scope exposure disclosed in earlier ledger. P producer source/tests/oracle/runner/PR patch and F authored originals not read.
+Target assumption: v0 usize and C17 size_t both unsigned 32 or 64 bits, U=2^width-1. All V3 integer literals fit either width. No unchecked, coercion, new symbolic engine, memory owner or provenance generated.
+Stages: SOURCE is selected profile and grammar; CHECK is independent function/call semantics; OWNED is authentic publicly validated source-owned operation and actual/formal/return/caller link; C17 is strict emitted runtime computation; NATIVE requires R-owned read-only actual numeric observation. Before first R Actions all stages NOT_RUN.
+
+V3P01:
+  SOURCE: predict ACCEPT. One flat direct helper body tail loaded_crates / usize(23), no helper-local binding or explicit return; ordinary main()->unit call, Copy and separate existing +1 are selected positions.
+  CHECK: predict ACCEPT. Helper formal loaded_crates is genuinely Unknown core-usize Copy. k=23 is statically representable/nonzero. For any n in [0,U], q=floor(n/23) is representable and remains exact-value Unknown at definition time, not invented Known.
+  ACTUAL/CALL: real caller passes usize(1601), so q=69 and remainder=14 because 23*69=1587. Authentic fresh formal/body tail/result/caller binding counted carries quotient69, copy_count=69 by Copy, extra=70 from existing Known-only addition. Actual Known cannot be guessed during definition checking.
+  OWNED: real source/operator/operands/result receipt and read-only validator must authenticate issuer, world, kind, dependencies, actual/formal, return and caller and reject forged Known or foreign substitution. No memory rights from scalar facts.
+  C17: compute actual size_t numerator / 23, never checker-guessed guest quotient; runtime quotient69, copied69 and successor70.
+  NATIVE: independently read actual computed q=69 and extra=70 using read-only R-owned observation of generated guest C17; stdout-less main exit0 alone cannot establish numeric correctness. NOT_RUN.
+V3N01:
+  SOURCE: typed usize(0) is syntactically valid in same helper-tail slash source position.
+  CHECK: MUST REJECT because divisor zero violates unconditional division precondition irrespective of caller input73. A profile SOURCE rejection is not an observed CHECK refusal. No successful owned seal or emitted C17/native.
+  False successful source/CHECK/issuer/native division is an immediate STOP, not recalibration.
+COMMON:
+  Original C1250 FIRST positives2 negatives4 and V2 positives2 negatives2 plus their original oracles, bytes and SHA remain unchanged; let/return/query-function shapes may be legitimately outside fixed P's declared profile.
+  Public result failures, foreign world/source/kind, forged Unknown->Known, wrong operand, wrong call or issuer, stale output, target mismatch, wrong native quotient, C17 UB, OOM/rollback/no-clobber defects are STOP; preserve original raw and first RED. R-owned apparatus failings are distinct and may be repaired only within Process7.6 and explicit budgets.
+  A true numeric PASS requires actual source->CHECK->genuine public-owned->strict C17 and R-independent observed quotient/consumer values; FAST green, CTest registration, and native exit0 alone are insufficient. Positive acceptance is a prediction only.
+  R execution only with GitHub dedicated branch + Actions, fixed P HEAD. No P-equivalent R-local compiler/native/Lean. ProductGO624 PAUSED, H1 HOLD, human audit locality vs factored C UNMEASURED.
+END_ORACLE_R_C1258_V3
