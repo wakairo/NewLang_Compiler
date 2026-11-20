@@ -2346,3 +2346,6 @@ include(tests/p1368/CMakeLists.txt)
 include(tests/p1372/CMakeLists.txt)
 
 include(tests/p1375/CMakeLists.txt)
+
+# Independent R1568 frozen-source apparatus.
+include(tests/r1568/CMakeLists.txt)

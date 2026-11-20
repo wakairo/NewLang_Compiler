@@ -1,0 +1,68 @@
+{
+  "fixed_p": "4e24d608b1a695b0c6bdf278555df58e2a36ba9c",
+  "canonical": "dd577445343da04cb5039a89d9dfa228e98cbb54",
+  "first_comment": 7034396980,
+  "v2_comment": 7034671626,
+  "v3_comment": 7035501161,
+  "plan_comment": 7035309920,
+  "scope_correction": 7035378938,
+  "exposure": "V2 independent source-law questions plus post-FIRST C-informed adaptation; V3 P2 NON-BLIND C-calibrated entry-profile; public-interface exposed; private bodies unexposed",
+  "cases": {
+    "P1": {
+      "source": "v2_p1.nl",
+      "oracle": "v2_p1.oracle.txt",
+      "bytes": 353,
+      "sha256": "81b922926f8d9f9f49d4e40b11db8f8621ae20fc1af7e5ac4806cf916b9dde2f",
+      "oracle_sha256": "7f397a870670613ac2bfb9c253e817948f3668e50b600dc41c8530d3a7962664",
+      "role": "native_public_positive"
+    },
+    "P2": {
+      "source": "v2_p2.nl",
+      "oracle": "v2_p2.oracle.txt",
+      "bytes": 473,
+      "sha256": "db7cc5bdc37f3f81d053abd2be0512b26dcf4ac48ebb63451ad92883e1c82275",
+      "oracle_sha256": "127ce0af80979d7737a4cacd0849289520ce9545e358d963c94ef0077883c3b3",
+      "role": "canonical_valid_entry_coverage_control"
+    },
+    "N1": {
+      "source": "v2_n1.nl",
+      "oracle": "v2_n1.oracle.txt",
+      "bytes": 171,
+      "sha256": "1a877a1e5f7d3a8e772ba3145112b0b4e13469d527df6c72594d9d215d02345d",
+      "oracle_sha256": "76123a399b88341a225049d12fd656a01e300252cb3fc1da830c8313183fe271",
+      "role": "definite_invalid"
+    },
+    "N2": {
+      "source": "v2_n2.nl",
+      "oracle": "v2_n2.oracle.txt",
+      "bytes": 247,
+      "sha256": "74b155155ebbb484ff32dea3dd98f3bd27455434b86cc07202fdf60b7e9f1643",
+      "oracle_sha256": "ee98c1690dbe9a4e7ada179d5262b00b9d4f43027d0a7905c86bdc1d91717c98",
+      "role": "definite_invalid"
+    },
+    "N3": {
+      "source": "v2_n3.nl",
+      "oracle": "v2_n3.oracle.txt",
+      "bytes": 196,
+      "sha256": "88b48308cec8529fd777fb8ce51c7bfb9226629ffd5bfb7abd5234d3ea469cd9",
+      "oracle_sha256": "c1a0afbce9bdf06ba114644b3dd9dc165ed20efa6a56e33830fe101243c4039a",
+      "role": "definite_invalid"
+    },
+    "N4": {
+      "source": "v2_n4.nl",
+      "oracle": "v2_n4.oracle.txt",
+      "bytes": 217,
+      "sha256": "cf81b59b311f9052ae1f8434bdadfefd5a62ba9b25232fe2f3a4e38de4e39079",
+      "oracle_sha256": "b5d107e36ed8daef00c84018f62fed8963238b23c5ab38346f27e90f8c85d90e",
+      "role": "canonical_valid_excluded_caller_control"
+    },
+    "V3_P2": {
+      "source": "v3_p2.nl",
+      "oracle": "v3_p2.oracle.txt",
+      "bytes": 465,
+      "sha256": "2bc3662d4dd05b10530869402041e0a6d798a96b907df72cae8d07c6a3bca0a8",
+      "oracle_sha256": "31f86faac4758ec765e24418445f860ef2bd051faffd2dab3f4fab36c45ef8b9",
+      "role": "native_public_positive"
+    }
+  }
+}
