@@ -1016,37 +1016,195 @@ bool nl_usize_division_operands(const NLCheckedFragment *f,
                            original.scalar_value);
 }
 
+/* These consumers borrow the checked lexical order and existing result/world
+ * custody. A Copy's symbol and fresh checked value belong to that graph; the
+ * scalar facts checked by name_copy are only a consistency condition. */
+static bool division_local_before(const NLCheckedFragment *f,
+                                  NLCheckedNodeId before, NLSymbolId symbol)
+{
+    const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
+    for (NLCheckedNodeId id = root->first_item; id && id < before;) {
+        const NLCheckedNodeView *binding = nl_checked_node_view(f, id);
+        if (!binding || binding->kind != NL_CHECKED_BINDING ||
+            (binding->next_item && binding->next_item <= id))
+            return false;
+        if (binding->symbol == symbol)
+            return true;
+        id = binding->next_item;
+    }
+    return false;
+}
+
+static bool division_copy_at(const NLCheckedFragment *f,
+                             const NLSemanticContext *c, NLCheckedNodeId id,
+                             const NLSyntaxNode *syntax)
+{
+    const NLCheckedNodeView *use = nl_checked_node_view(f, id);
+    return use && division_local_before(f, id, use->symbol) &&
+           name_copy(f, c, id, syntax, use->symbol) &&
+           c->bindings[use->symbol - 1].view.value < use->results[0].value;
+}
+
+static bool division_event_at(const NLCheckedFragment *f,
+                              const NLSemanticContext *c,
+                              const NLFunctionEntry *fn, NLCheckedNodeId id,
+                              const NLSyntaxNode *src, NLDivisionUsizePlan *p)
+{
+    const NLUsizeAdditionProof *receipt = find(f, id);
+    if (!receipt || receipt->syntax != src ||
+        !operation_valid_at(f, id, NL_USIZE_DIVIDE, NULL, c) ||
+        !token(f->source, receipt->issued.operand_spans[0],
+               fn->body->parameter_names[0]))
+        return false;
+    p->division = id;
+    p->formal = receipt->issued.symbols[0];
+    p->divisor = receipt->issued.numbers[1];
+    return true;
+}
+
+static bool division_return_at(const NLCheckedFragment *f,
+                               const NLSemanticContext *c,
+                               const NLCheckedNodeView *root,
+                               const NLCheckedNodeView *ret,
+                               const NLSyntaxView *syntax)
+{
+    NLValueId value;
+    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLControlExitView *exit = nl_control_exit_view(f->exits, 0);
+    /* The exit owns its post-state and IDs. Match the returned package in the
+     * committed world via the issued return and root nodes, not across worlds.
+     */
+    return root->terminates && !root->tail && !root->type &&
+           !root->result_count && ret && ret->kind == NL_CHECKED_RETURN &&
+           ret->terminates && !ret->next_item && !ret->result_count &&
+           span_equal(ret->span, syntax->span) &&
+           nl_control_exits_count(f->exits) == 1 && exit && exit->count == 1 &&
+           exit->values[0].type == type &&
+           nl_control_exits_only_return(f->exits, f->function_target) &&
+           division_copy_at(f, c, ret->initializer,
+                            syntax->data.statement.expression) &&
+           node_value(f, c, ret->initializer, &value) &&
+           ret->returned.type == type && ret->returned.value == value &&
+           root->returned.type == type && root->returned.value == value;
+}
+
 static bool division_helper(const NLCheckedFragment *f,
                             const NLSemanticContext *c, size_t function,
                             NLDivisionUsizePlan *out)
 {
     const NLFunctionEntry *fn = quantity_function(c, function, 1);
-    if (!f || !fn || f->body_owner != fn->body || f->source != fn->body->source)
+    if (!f || !fn || f->body_owner != fn->body ||
+        f->source != fn->body->source || f->body_count || f->arm_count)
         return false;
     const NLSyntaxView *s =
         nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
     const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
-    if (!s || s->kind != NL_SYNTAX_BLOCK || s->data.block.items || !root ||
-        root->kind != NL_CHECKED_BLOCK || root->first_item ||
-        !span_equal(root->span, s->span) ||
-        !operation_valid_at(f, root->tail, NL_USIZE_DIVIDE, NULL, c))
+    if (!s || s->kind != NL_SYNTAX_BLOCK || !root ||
+        root->kind != NL_CHECKED_BLOCK || !span_equal(root->span, s->span))
         return false;
-    const NLCheckedNodeView *div = nl_checked_node_view(f, root->tail);
-    const NLCheckedNodeView *arg = nl_checked_node_view(f, div->first_argument);
-    const NLSyntaxView *tail = nl_syntax_node_view(s->data.block.tail);
-    NLValueId returned, quotient;
-    if (!arg || !tail || tail->kind != NL_SYNTAX_USIZE_DIVISION ||
-        !span_equal(tail->span, div->span) || !arg->symbol ||
-        !token(f->source, arg->name, fn->body->parameter_names[0]) ||
-        !node_value(f, c, f->root, &returned) ||
-        !node_value(f, c, root->tail, &quotient) || returned != quotient)
+    NLDivisionUsizePlan plan = {.body = f, .function = function};
+    NLCheckedNodeId id = root->first_item;
+    size_t count = 0;
+    for (const NLSyntaxNode *item = s->data.block.items; item;
+         item = nl_syntax_next_argument(item)) {
+        const NLSyntaxView *src = nl_syntax_node_view(item);
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        if (++count > NL_PARSER_MAX_NODES || !src || !n)
+            return false;
+        if (src->kind == NL_SYNTAX_RETURN) {
+            if (!plan.division || nl_syntax_next_argument(item) ||
+                s->data.block.tail || count != root->item_count ||
+                !division_return_at(f, c, root, n, src))
+                return false;
+            plan.result = n->initializer;
+            *out = plan;
+            return true;
+        }
+        if (!binding_source(f, c, n, src) ||
+            (n->next_item && n->next_item <= id))
+            return false;
+        const NLSyntaxNode *init = src->data.binding.initializer;
+        if (!plan.division) {
+            if (!division_event_at(f, c, fn, n->initializer, init, &plan))
+                return false;
+        } else if (!division_copy_at(f, c, n->initializer, init))
+            return false;
+        id = n->next_item;
+    }
+    const NLSyntaxNode *tail = s->data.block.tail;
+    NLValueId body_result, tail_value;
+    if (id || count != root->item_count || nl_control_exits_count(f->exits) ||
+        !node_value(f, c, f->root, &body_result) ||
+        !node_value(f, c, root->tail, &tail_value) || body_result != tail_value)
         return false;
-    const NLUsizeAdditionProof *receipt = find(f, root->tail);
-    *out = (NLDivisionUsizePlan){.body = f,
-                                 .function = function,
-                                 .formal = arg->symbol,
-                                 .division = root->tail,
-                                 .divisor = receipt->issued.numbers[1]};
+    if (plan.division ? !division_copy_at(f, c, root->tail, tail)
+                      : !division_event_at(f, c, fn, root->tail, tail, &plan))
+        return false;
+    plan.result = root->tail;
+    *out = plan;
+    return true;
+}
+
+static bool division_call_values(const NLCheckedFragment *f,
+                                 const NLSemanticContext *c, NLCheckedNodeId id,
+                                 const NLDivisionUsizePlan *helper)
+{
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *arg =
+        nl_checked_node_view(f, call->first_argument);
+    NLValueId actual, result, body_result;
+    return call->kind == NL_CHECKED_REGISTERED_CALL && call->body_backed &&
+           call->argument_count == 1 && arg && !arg->next_argument &&
+           helper->formal && call->function == helper->function &&
+           node_value(f, c, call->first_argument, &actual) &&
+           c->bindings[helper->formal - 1].view.value == actual &&
+           (!arg->symbol || arg->symbol < helper->formal) &&
+           node_value(f, c, id, &result) &&
+           node_value(helper->body, c, helper->result, &body_result) &&
+           result == body_result;
+}
+
+static bool division_call_at(const NLCheckedFragment *f,
+                             const NLSemanticContext *c, NLCheckedNodeId id,
+                             const NLSyntaxNode *syntax,
+                             NLCheckedNodeId first_call)
+{
+    const NLSyntaxView *src = nl_syntax_node_view(syntax);
+    const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *first = nl_checked_node_view(f, first_call);
+    const NLCheckedNodeView *arg = nl_checked_node_view(f, n->first_argument);
+    NLDivisionUsizePlan helper;
+    if (!src || src->kind != NL_SYNTAX_EXPR_CALL ||
+        nl_syntax_next_argument(src->data.call.arguments) ||
+        (first && first->function != n->function) ||
+        !span_equal(n->span, src->span) ||
+        !division_helper(nl_checked_call_body(f, id), c, n->function,
+                         &helper) ||
+        !token(f->source, n->name, c->functions[n->function - 1].name) || !arg)
+        return false;
+    const NLSyntaxNode *actual = src->data.call.arguments;
+    size_t literal_value;
+    return (arg->kind == NL_CHECKED_IDENTIFIER
+                ? division_copy_at(f, c, n->first_argument, actual)
+                : literal(f, c, arg, actual, &literal_value)) &&
+           division_call_values(f, c, id, &helper);
+}
+
+static bool division_caller_arithmetic(const NLCheckedFragment *f,
+                                       const NLSemanticContext *c,
+                                       NLCheckedNodeId id,
+                                       const NLSyntaxNode *syntax,
+                                       NLUsizeOperation operation)
+{
+    const NLUsizeAdditionProof *p = find(f, id);
+    if (!p || p->syntax != syntax ||
+        !operation_valid_at(f, id, operation, NULL, c))
+        return false;
+    for (size_t i = 0; i < 2; ++i)
+        if (p->issued.symbols[i] &&
+            !division_local_before(f, p->issued.operands[i],
+                                   p->issued.symbols[i]))
+            return false;
     return true;
 }
 
@@ -1068,84 +1226,58 @@ bool nl_division_usize_body_at(const NLCheckedFragment *f,
         !fn->body->syntax || f->body_owner != fn->body ||
         f->source != fn->body->source || fn->caller_effects ||
         fn->hidden_dependencies || fn->owner_receiver || fn->owner_producer ||
-        fn->custody_recipient)
+        fn->custody_recipient || f->arm_count)
         return false;
     const NLSyntaxView *s =
         nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
     const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
-    const NLCheckedNodeView *tail =
-        root ? nl_checked_node_view(f, root->tail) : NULL;
-    const NLSyntaxView *end =
-        s ? nl_syntax_node_view(s->data.block.tail) : NULL;
     if (!s || s->kind != NL_SYNTAX_BLOCK || !root ||
         root->kind != NL_CHECKED_BLOCK || root->terminates ||
-        root->type != unit || root->result_count || !tail ||
-        tail->kind != NL_CHECKED_UNIT || tail->type != unit ||
+        root->type != unit || root->result_count ||
+        !span_equal(s->span, root->span) || nl_control_exits_count(f->exits))
+        return false;
+    const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
+    const NLSyntaxView *end = nl_syntax_node_view(s->data.block.tail);
+    if (!tail || tail->kind != NL_CHECKED_UNIT || tail->type != unit ||
         tail->result_count || tail->terminates || !end ||
         end->kind != NL_SYNTAX_EXPR_NAME ||
         !token(f->source, end->data.name, "unit") ||
-        !span_equal(end->span, tail->span) || !span_equal(s->span, root->span))
+        !span_equal(end->span, tail->span))
         return false;
     plan = (NLDivisionUsizePlan){.body = f, .function = function};
     NLCheckedNodeId id = root->first_item;
-    size_t count = 0;
+    size_t count = 0, calls = 0;
     for (const NLSyntaxNode *item = s->data.block.items; item;
          item = nl_syntax_next_argument(item)) {
-        const NLSyntaxView *b = nl_syntax_node_view(item);
+        const NLSyntaxView *src = nl_syntax_node_view(item);
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-        if (++count > NL_PARSER_MAX_NODES || !binding_source(f, c, n, b))
+        if (++count > NL_PARSER_MAX_NODES || !binding_source(f, c, n, src) ||
+            (n->next_item && n->next_item <= id))
             return false;
+        const NLSyntaxNode *syntax = src->data.binding.initializer;
         const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
-        if (!init)
-            return false;
         if (init->kind == NL_CHECKED_REGISTERED_CALL) {
-            const NLSyntaxView *call =
-                nl_syntax_node_view(b->data.binding.initializer);
-            const NLCheckedFragment *body =
-                nl_checked_call_body(f, n->initializer);
-            const NLCheckedNodeView *arg =
-                nl_checked_node_view(f, init->first_argument);
-            NLDivisionUsizePlan helper;
-            NLValueId returned, quotient;
-            size_t actual;
-            if (plan.call || !call || call->kind != NL_SYNTAX_EXPR_CALL ||
-                nl_syntax_next_argument(call->data.call.arguments) ||
-                !init->body_backed || init->argument_count != 1 ||
-                !division_helper(body, c, init->function, &helper) || !arg ||
-                arg->next_argument ||
-                !(arg->kind == NL_CHECKED_IDENTIFIER
-                      ? name_copy(f, c, init->first_argument,
-                                  call->data.call.arguments, arg->symbol)
-                      : literal(f, c, arg, call->data.call.arguments,
-                                &actual)) ||
-                !token(f->source, init->name,
-                       c->functions[init->function - 1].name) ||
-                !span_equal(init->span, call->span) ||
-                !node_value(f, c, n->initializer, &returned) ||
-                !node_value(body, c, body->root, &quotient) ||
-                returned != quotient ||
-                c->bindings[helper.formal - 1].view.value !=
-                    arg->results[0].value)
+            if (!division_call_at(f, c, n->initializer, syntax, plan.call))
                 return false;
-            plan.call = n->initializer;
+            if (++calls == 1)
+                plan.call = n->initializer;
         } else if (init->kind == NL_CHECKED_USIZE_ADDITION ||
                    init->kind == NL_CHECKED_USIZE_SUBTRACTION) {
-            if (!operation_valid_at(f, n->initializer,
-                                    init->kind == NL_CHECKED_USIZE_ADDITION
-                                        ? NL_USIZE_ADD
-                                        : NL_USIZE_SUBTRACT,
-                                    NULL, c))
+            if (!division_caller_arithmetic(f, c, n->initializer, syntax,
+                                            init->kind ==
+                                                    NL_CHECKED_USIZE_ADDITION
+                                                ? NL_USIZE_ADD
+                                                : NL_USIZE_SUBTRACT))
                 return false;
         } else if (init->kind == NL_CHECKED_USIZE_LITERAL) {
             size_t number;
-            if (!literal(f, c, init, b->data.binding.initializer, &number))
+            if (!literal(f, c, init, syntax, &number))
                 return false;
-        } else if (!name_copy(f, c, n->initializer, b->data.binding.initializer,
-                              init->symbol))
+        } else if (!division_copy_at(f, c, n->initializer, syntax))
             return false;
         id = n->next_item;
     }
-    if (id || !plan.call)
+    if (id || count != root->item_count || !calls || calls != f->body_count)
         return false;
     *out = plan;
     return true;
@@ -1166,24 +1298,18 @@ bool nl_division_usize_call_valid(const NLCheckedFragment *f,
         !nl_division_usize_body_at(body, f->context, n->function, &plan))
         return false;
     if (plan.formal) {
-        const NLCheckedNodeView *arg =
-            nl_checked_node_view(f, n->first_argument);
-        NLValueId returned, quotient;
-        if (n->argument_count != 1 || !arg || arg->next_argument ||
-            !node_value(f, f->context, call, &returned) ||
-            !node_value(body, f->context, body->root, &quotient) ||
-            returned != quotient ||
-            f->context->bindings[plan.formal - 1].view.value !=
-                arg->results[0].value ||
+        if (!division_call_values(f, f->context, call, &plan) ||
             !nl_checked_usize_division_valid(body, plan.division, NULL))
             return false;
     } else {
-        NLDivisionUsizePlan helper;
         if (n->argument_count || n->type != nl_semantic_unit_type(f->context) ||
-            n->result_count || !nl_h_custody_result_world_present(f, call) ||
-            !nl_division_usize_call_valid(body, plan.call, &helper) ||
-            !helper.formal)
+            n->result_count || !nl_h_custody_result_world_present(f, call))
             return false;
+        /* Each actual invocation owns its result even when the emitter uses
+         * one shared C definition for the same source declaration. */
+        for (size_t i = 0; i < body->body_count; ++i)
+            if (!nl_h_custody_result_valid(body, body->body_calls[i]))
+                return false;
     }
     *out = plan;
     return true;

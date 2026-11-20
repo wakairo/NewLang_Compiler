@@ -21,16 +21,66 @@ static bool division_text_append(DivisionText *t, const char *format, ...)
     t->length += (size_t)count;
     return true;
 }
-static bool atom(DivisionText *t, const NLCheckedFragment *f,
-                 NLCheckedNodeId id)
+static bool division_emit_atom(DivisionText *t, const NLCheckedFragment *f,
+                               NLCheckedNodeId id)
 {
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+    if (!n)
+        return false;
     if (n->kind == NL_CHECKED_IDENTIFIER)
         return division_text_append(t, "nl_local_%zu", n->symbol);
     return n->kind == NL_CHECKED_USIZE_LITERAL &&
            division_text_append(t, "((size_t)UINTMAX_C(%zu))",
                                 n->scalar_result.value);
 }
+
+/* The complete plan has already matched these operands, kinds, and child
+ * calls to their source-owned graph. Render actual expressions in order. */
+static bool division_emit_expression(DivisionText *t,
+                                     const NLCheckedFragment *f,
+                                     NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+    const char *operator_text;
+    switch (n->kind) {
+    case NL_CHECKED_REGISTERED_CALL:
+        return division_text_append(t, "nl_qty_fn_%zu(", n->function) &&
+               division_emit_atom(t, f, n->first_argument) &&
+               division_text_append(t, ")");
+    case NL_CHECKED_USIZE_DIVISION:
+        operator_text = " / ";
+        break;
+    case NL_CHECKED_USIZE_ADDITION:
+        operator_text = " + ";
+        break;
+    case NL_CHECKED_USIZE_SUBTRACTION:
+        operator_text = " - ";
+        break;
+    default:
+        return division_emit_atom(t, f, id);
+    }
+    const NLCheckedNodeView *left = nl_checked_node_view(f, n->first_argument);
+    return division_emit_atom(t, f, n->first_argument) &&
+           division_text_append(t, "%s", operator_text) &&
+           division_emit_atom(t, f, left->next_argument);
+}
+
+static bool division_emit_bindings(DivisionText *t, const NLCheckedFragment *f)
+{
+    const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
+    for (NLCheckedNodeId id = root->first_item; id;) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        if (n->kind == NL_CHECKED_RETURN)
+            break; /* The validated plan supplies the separate exit result. */
+        if (!division_text_append(t, "    size_t nl_local_%zu = ", n->symbol) ||
+            !division_emit_expression(t, f, n->initializer) ||
+            !division_text_append(t, ";\n    (void)nl_local_%zu;\n", n->symbol))
+            return false;
+        id = n->next_item;
+    }
+    return true;
+}
+
 NLCheckStatus nl_division_usize_c17(const NLCheckedFragment *entry, char **out,
                                     size_t *length)
 {
@@ -41,14 +91,14 @@ NLCheckStatus nl_division_usize_c17(const NLCheckedFragment *entry, char **out,
         !nl_division_usize_call_valid(main.body, main.call, &helper) ||
         !helper.formal)
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
-    const NLCheckedNodeView *root =
-        nl_checked_node_view(main.body, main.body->root);
-    if (main.body->count > (SIZE_MAX - 2048) / 512)
+    const size_t node_limit = (SIZE_MAX - 2048) / 512;
+    if (main.body->count > node_limit ||
+        helper.body->count > node_limit - main.body->count)
         return NL_CHECK_RESOURCE_LIMIT;
-    /* A bounded rendering buffer, not another plan/world/authority copy.
-     * All source events and the complete committed world are validated before
-     * allocating or producing output. Both caller outputs commit together. */
-    DivisionText text = {.capacity = main.body->count * 512 + 2048};
+    /* One existing staging buffer. The selected helper is emitted once;
+     * every caller invocation uses its own actual value and checked result. */
+    DivisionText text = {
+        .capacity = (main.body->count + helper.body->count) * 512 + 2048};
     text.bytes = malloc(text.capacity);
     if (!text.bytes)
         return NL_CHECK_OUT_OF_MEMORY;
@@ -59,51 +109,23 @@ NLCheckStatus nl_division_usize_c17(const NLCheckedFragment *entry, char **out,
             "_Static_assert(SIZE_MAX == UINTMAX_C(%zu), "
             "\"NewLang usize target mismatch\");\n\n"
             "static size_t nl_qty_fn_%zu(size_t nl_local_%zu)\n{\n"
-            "    _Static_assert(UINTMAX_C(%zu) != 0, \"nonzero divisor\");\n"
-            "    return nl_local_%zu / ((size_t)UINTMAX_C(%zu));\n}\n\n"
-            "static void nl_qty_fn_%zu(void)\n{\n",
-            SIZE_MAX, helper.function, helper.formal, helper.divisor,
-            helper.formal, helper.divisor, main.function))
-        goto failure;
-    for (NLCheckedNodeId id = root->first_item; id;) {
-        const NLCheckedNodeView *n = nl_checked_node_view(main.body, id);
-        const NLCheckedNodeView *init =
-            nl_checked_node_view(main.body, n->initializer);
-        if (!division_text_append(&text,
-                                  "    size_t nl_local_%zu = ", n->symbol))
-            goto failure;
-        if (init->kind == NL_CHECKED_REGISTERED_CALL) {
-            if (!division_text_append(&text, "nl_qty_fn_%zu(",
-                                      init->function) ||
-                !atom(&text, main.body, init->first_argument) ||
-                !division_text_append(&text, ")"))
-                goto failure;
-        } else if (init->kind == NL_CHECKED_USIZE_ADDITION ||
-                   init->kind == NL_CHECKED_USIZE_SUBTRACTION) {
-            const NLCheckedNodeView *left =
-                nl_checked_node_view(main.body, init->first_argument);
-            if (!atom(&text, main.body, init->first_argument) ||
-                !division_text_append(
-                    &text,
-                    init->kind == NL_CHECKED_USIZE_ADDITION ? " + " : " - ") ||
-                !atom(&text, main.body, left->next_argument))
-                goto failure;
-        } else if (!atom(&text, main.body, n->initializer))
-            goto failure;
-        if (!division_text_append(&text, ";\n    (void)nl_local_%zu;\n",
-                                  n->symbol))
-            goto failure;
-        id = n->next_item;
-    }
-    if (!division_text_append(&text,
+            "    _Static_assert(UINTMAX_C(%zu) != 0, \"nonzero divisor\");\n",
+            SIZE_MAX, helper.function, helper.formal, helper.divisor) ||
+        !division_emit_bindings(&text, helper.body) ||
+        !division_text_append(&text, "    return ") ||
+        !division_emit_expression(&text, helper.body, helper.result) ||
+        !division_text_append(&text,
+                              ";\n}\n\nstatic void nl_qty_fn_%zu(void)\n{\n",
+                              main.function) ||
+        !division_emit_bindings(&text, main.body) ||
+        !division_text_append(&text,
                               "    return;\n}\n\nint main(void)\n{\n"
                               "    nl_qty_fn_%zu();\n    return 0;\n}\n",
-                              main.function))
-        goto failure;
+                              main.function)) {
+        free(text.bytes);
+        return NL_CHECK_RESOURCE_LIMIT;
+    }
     *out = text.bytes;
     *length = text.length;
     return NL_CHECK_OK;
-failure:
-    free(text.bytes);
-    return NL_CHECK_RESOURCE_LIMIT;
 }

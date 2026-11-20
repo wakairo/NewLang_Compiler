@@ -7,7 +7,7 @@ typedef struct {
     const NLCheckedFragment *body;
     size_t function;
     NLSymbolId formal;
-    NLCheckedNodeId division, call;
+    NLCheckedNodeId division, result, call;
     size_t divisor;
 } NLDivisionUsizePlan;
 bool nl_usize_division_operands(const NLCheckedFragment *,
