@@ -17,3 +17,21 @@ add_test(NAME r1573_cli_c17_native.integration
 set_tests_properties(
     r1573_public_p1.unit r1573_public_p2.unit
     r1573_cli_c17_native.integration PROPERTIES DEPENDS r1573_bytes.unit)
+
+# Show exact R-owned CTest names in standard configure and R-FAST raw logs.
+if(NOT TEST r1573_bytes.unit)
+    message(FATAL_ERROR "R1573 CTest registration missing: r1573_bytes.unit")
+endif()
+message(STATUS "R1573_OWN_REGISTRATION: r1573_bytes.unit")
+if(NOT TEST r1573_public_p1.unit)
+    message(FATAL_ERROR "R1573 CTest registration missing: r1573_public_p1.unit")
+endif()
+message(STATUS "R1573_OWN_REGISTRATION: r1573_public_p1.unit")
+if(NOT TEST r1573_public_p2.unit)
+    message(FATAL_ERROR "R1573 CTest registration missing: r1573_public_p2.unit")
+endif()
+message(STATUS "R1573_OWN_REGISTRATION: r1573_public_p2.unit")
+if(NOT TEST r1573_cli_c17_native.integration)
+    message(FATAL_ERROR "R1573 CTest registration missing: r1573_cli_c17_native.integration")
+endif()
+message(STATUS "R1573_OWN_REGISTRATION: r1573_cli_c17_native.integration")
