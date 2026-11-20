@@ -1,0 +1,21 @@
+Case: P1_zero_helper_unit_tail.nl
+Class: POSITIVE; zero helper calls; normal unit tail.
+Target premise: M >= 93. Every typed literal and intermediate fits.
+Expected source law: valid ordinary immutable let/Copy scalar program.
+Source-order values:
+cargo = 93; kept = 93.
+quotient = floor(93/7) = 13.
+remainder = 93 % 7 = 2; 93 = 13*7 + 2 and 0 <= 2 < 7.
+reduced = 13 - 2 = 11.
+combined = 11 + 4 = 15; mirror = 15.
+The divisor literal 7 is representable and nonzero at both operations.
+All uses are Copy; unused final bindings are Discardable.
+The semicolon-free unit tail is the body's ordinary unit result.
+There is no helper declaration/call, numeric main return, or exit code.
+Question: can direct / and % on actual source names, their Copies,
+Known-only +/- flow, and the real unit entry/body be represented without
+requiring a helper or mistaking empty numeric output for missing work?
+kept and cargo legitimately have the same value; combined and mirror do
+too. These equalities are not authentication of operand/result origin.
+Expected future goal coverage: positive, subject to the exact C release.
+Actual compiler/public/native status: NOT_RUN; mapping NOT_OBSERVABLE.

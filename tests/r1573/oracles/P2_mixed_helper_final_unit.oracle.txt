@@ -1,0 +1,33 @@
+Case: P2_mixed_helper_final_unit.nl
+Class: POSITIVE; genuine direct/helper/direct result flow; final unit return.
+Target premise: M >= 86. Every typed literal and intermediate fits.
+main appears before carve. Exact ordinary function names/signatures in
+the semantic unit are visible before body checking regardless of order.
+carve is independently valid for every usize quantity on this target:
+Copies preserve quantity; division by representable nonzero 4 is total
+on its input range and its quotient remains representable. Its single
+final return after; returns that call's quotient as usize.
+Source-order main values:
+pack = 86; direct = floor(86/4) = 21; pre = 21.
+First actual call carve(pre): quantity=21; before=21; segment=5; after=5;
+the returned value received as first is 5.
+Second actual call carve(pack): quantity=86; before=86; segment=21;
+after=21; the returned value received as second is 21.
+residue = second % 6 = 3; 21 = 3*6 + 3 and 0 <= 3 < 6.
+back = residue + first = 3 + 5 = 8.
+final = back - 2 = 6; copied = 6.
+The two calls select the same declared carve but have distinct actual
+argument/result flows. direct and second both equal 21, from different
+source computations; that equality cannot replace authentic provenance.
+Swapping the two call results would make residue=5, back=26, final=24.
+Substituting pack for pre in the first call would make first=21, back=24,
+final=22. These are discriminating questions, not additional source units.
+The first call takes direct's copied value via pre; a later direct % uses
+the second helper's result; +/- combines the two flows. No dummy helper
+or separately computed expected constant can establish this chain.
+All quantities are Copy/Discardable and no caller state is consumed.
+main's sole final return unit; matches its declared unit result and
+leaves no normal tail edge. No general early return or CFG is required.
+No heap, authority, nested helper graph, dynamic divisor, or ABI claim.
+Expected future goal coverage: positive, subject to the exact C release.
+Actual compiler/public/native status: NOT_RUN; mapping NOT_OBSERVABLE.

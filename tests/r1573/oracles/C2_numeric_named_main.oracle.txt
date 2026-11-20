@@ -1,0 +1,15 @@
+Case: C2_numeric_named_main.nl
+Class: CANONICALLY LEGAL EXCLUDED ordinary-function control.
+Target premise: M >= 38.
+stock=38; part=38%7=3. main is explicitly declared -> usize, so
+return part; has the correct result type under ordinary function law.
+The body is the same as N2; only its declared result type is changed.
+This is a complete semantic unit containing an ordinary function named
+main. It is excluded from the selected main()->unit entry goal.
+No canonical host executable entry ABI or numeric exit status is inferred
+from that ordinary function's spelling. In particular, exit status 3 is
+NOT an oracle, and source validity is not a claim of executable support.
+NO mandatory-reject oracle. A candidate may reject unsupported numeric
+entry coverage without showing an ordinary source-law error; acceptance
+is not itself a violation of this prep's semantic oracle.
+Actual compiler/public/native status: NOT_RUN; entry mapping NOT_OBSERVABLE.

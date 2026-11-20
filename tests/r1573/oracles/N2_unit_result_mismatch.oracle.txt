@@ -1,0 +1,12 @@
+Case: N2_unit_result_mismatch.nl
+Class: TRUE INVALID ordinary function result typing.
+Target premise: M >= 38.
+The arithmetic itself is valid: stock=38; part=38%7=3.
+return part; has expression type usize, but main is declared -> unit.
+Draft 17.38 requires the return expression type to match the function
+result. Copy/Discardable and the small numerical value do not coerce
+usize into unit or silently discard the explicit return result.
+The complete unit must not receive valid ordinary checked acceptance.
+An earlier unsupported return/profile boundary does not establish that
+the actual result-type mismatch was diagnosed. No exact diagnostic.
+Actual compiler/public/native status: NOT_RUN.
