@@ -1,0 +1,42 @@
+{
+  "divisor-zero.nl": {
+    "bytes": 93,
+    "sha256": "e674e85a979041ad831398cb4ed65f36ee94f32c13f7436a148dcfe1e21a54cf"
+  },
+  "dynamic-divisor.nl": {
+    "bytes": 120,
+    "sha256": "bd886399c529b026d0a8063338619ea19b84a26bccd3d4702b33bf72d29a9c0b"
+  },
+  "equal-helper.nl": {
+    "bytes": 223,
+    "sha256": "7c19c50ca850f374617fdda02ac0f0e76164acbf2d9a36ff9d92b9c329c2e958"
+  },
+  "helper-tail.nl": {
+    "bytes": 206,
+    "sha256": "d10c8c403d800465cf64f595d528eda0c2619d1074ec86999f16e883c3e5d0cb"
+  },
+  "invalid-return.nl": {
+    "bytes": 103,
+    "sha256": "24becd395693375876da82435a8d6e5079a1298d898e27531bd4f088bc90b86e"
+  },
+  "operand-type.nl": {
+    "bytes": 98,
+    "sha256": "41527112478061142c94acdf17d89a39e5b7203684d58f9bb63cffbe3ad54b66"
+  },
+  "oracle.json": {
+    "bytes": 1541,
+    "sha256": "374b51df11b7c0edb052b267f5e776db87105647120c4d6dd9b9a1aaa752a3a6"
+  },
+  "stock-mixed.nl": {
+    "bytes": 623,
+    "sha256": "81a8406922593312bfee525ee6cee9e55daef301f8087a52a3b8719207ceea58"
+  },
+  "turns-return.nl": {
+    "bytes": 255,
+    "sha256": "e0e4efaa17da2db8ee319e3b146de49766292dd398e5f698417ee1649fb274f5"
+  },
+  "turns-tail.nl": {
+    "bytes": 247,
+    "sha256": "d0a03d296ffd81ec48e3fe3ef8553d5e531b38788a3c4c20eeb20a078f4c8536"
+  }
+}

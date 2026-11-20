@@ -1334,12 +1334,49 @@ static bool division_caller_arithmetic(const NLCheckedFragment *f,
     if (!p || p->syntax != syntax ||
         !operation_valid_at(f, id, operation, NULL, c))
         return false;
+    if (fixed_divisor(operation))
+        return division_copy_at(f, c, p->issued.operands[0],
+                                nl_syntax_node_view(syntax)->data.equality.left,
+                                0);
     for (size_t i = 0; i < 2; ++i)
         if (p->issued.symbols[i] &&
             !division_local_before(f, p->issued.operands[i],
                                    p->issued.symbols[i]))
             return false;
     return true;
+}
+
+static bool division_unit_expression(const NLCheckedFragment *f,
+                                     NLCheckedNodeId id,
+                                     const NLSyntaxNode *syntax, NLTypeId unit)
+{
+    const NLCheckedNodeView *node = nl_checked_node_view(f, id);
+    const NLSyntaxView *src = nl_syntax_node_view(syntax);
+    return node && node->kind == NL_CHECKED_UNIT && node->type == unit &&
+           !node->result_count && !node->results[0].value &&
+           !node->terminates && src && src->kind == NL_SYNTAX_EXPR_NAME &&
+           token(f->source, src->data.name, "unit") &&
+           span_equal(src->span, node->span);
+}
+
+static bool division_unit_return(const NLCheckedFragment *f,
+                                 const NLCheckedNodeView *root,
+                                 const NLCheckedNodeView *ret,
+                                 const NLSyntaxView *src, NLTypeId unit)
+{
+    const NLControlExitView *exit = nl_control_exit_view(f->exits, 0);
+    return root->terminates && !root->type && !root->tail &&
+           !root->result_count && root->returned.type == unit &&
+           !root->returned.value && ret->kind == NL_CHECKED_RETURN &&
+           ret->terminates && !ret->next_item && !ret->result_count &&
+           ret->returned.type == unit && !ret->returned.value &&
+           span_equal(ret->span, src->span) &&
+           division_unit_expression(f, ret->initializer,
+                                    src->data.statement.expression, unit) &&
+           nl_control_exits_count(f->exits) == 1 && exit && exit->state &&
+           nl_control_exits_only_return(f->exits, f->function_target) &&
+           exit->count == 1 && exit->values[0].type == unit &&
+           !exit->values[0].value;
 }
 
 static bool literal_divisor_body_at(const NLCheckedFragment *f,
@@ -1368,18 +1405,14 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
         nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
     const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
     if (!s || s->kind != NL_SYNTAX_BLOCK || !root ||
-        root->kind != NL_CHECKED_BLOCK || root->terminates ||
-        root->type != unit || root->result_count ||
-        !span_equal(s->span, root->span) || nl_control_exits_count(f->exits))
+        root->kind != NL_CHECKED_BLOCK || !span_equal(s->span, root->span))
         return false;
-    const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
-    const NLSyntaxView *end = nl_syntax_node_view(s->data.block.tail);
-    if (!tail || tail->kind != NL_CHECKED_UNIT || tail->type != unit ||
-        tail->result_count || tail->terminates || !end ||
-        end->kind != NL_SYNTAX_EXPR_NAME ||
-        !token(f->source, end->data.name, "unit") ||
-        !span_equal(end->span, tail->span))
-        return false;
+
+    /* Direct arithmetic and unit return belong to the actual scalar entry.
+     * Keep the existing specialized helper-only profiles as their own paths. */
+    const bool scalar_entry =
+        operation == NL_USIZE_ANY_FIXED_DIVISOR && !strcmp(fn->name, "main");
+    bool has_direct_divisor = false, returned = false;
     plan = (NLDivisionUsizePlan){.body = f, .function = function};
     NLCheckedNodeId id = root->first_item;
     size_t count = 0, calls = 0;
@@ -1387,7 +1420,18 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
          item = nl_syntax_next_argument(item)) {
         const NLSyntaxView *src = nl_syntax_node_view(item);
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-        if (++count > NL_PARSER_MAX_NODES || !binding_source(f, c, n, src) ||
+        if (++count > NL_PARSER_MAX_NODES || !src || !n)
+            return false;
+        if (src->kind == NL_SYNTAX_RETURN) {
+            if (!scalar_entry || nl_syntax_next_argument(item) ||
+                s->data.block.tail ||
+                !division_unit_return(f, root, n, src, unit))
+                return false;
+            returned = true;
+            id = 0;
+            break;
+        }
+        if (!binding_source(f, c, n, src) ||
             (n->next_item && n->next_item <= id))
             return false;
         const NLSyntaxNode *syntax = src->data.binding.initializer;
@@ -1408,6 +1452,15 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
                                                 ? NL_USIZE_ADD
                                                 : NL_USIZE_SUBTRACT))
                 return false;
+        } else if (init->kind == NL_CHECKED_USIZE_DIVISION ||
+                   init->kind == NL_CHECKED_USIZE_REMAINDER) {
+            const NLUsizeOperation direct =
+                init->kind == NL_CHECKED_USIZE_DIVISION ? NL_USIZE_DIVIDE
+                                                        : NL_USIZE_REMAINDER;
+            if (!scalar_entry || !division_caller_arithmetic(
+                                     f, c, n->initializer, syntax, direct))
+                return false;
+            has_direct_divisor = true;
         } else if (init->kind == NL_CHECKED_USIZE_LITERAL) {
             size_t number;
             if (!literal(f, c, init, syntax, &number))
@@ -1416,7 +1469,13 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
             return false;
         id = n->next_item;
     }
-    if (id || count != root->item_count || !calls || calls != f->body_count)
+    if (id || count != root->item_count || calls != f->body_count ||
+        (!calls && !has_direct_divisor))
+        return false;
+    if (!returned &&
+        (root->terminates || root->type != unit || root->result_count ||
+         root->results[0].value || nl_control_exits_count(f->exits) ||
+         !division_unit_expression(f, root->tail, s->data.block.tail, unit)))
         return false;
     *out = plan;
     return true;
@@ -1448,8 +1507,9 @@ static bool literal_divisor_call_valid(const NLCheckedFragment *f,
                nl_checked_usize_remainder_valid(body, plan.division, NULL))))
             return false;
     } else {
-        if (n->argument_count || n->type != nl_semantic_unit_type(f->context) ||
-            n->result_count || !nl_h_custody_result_world_present(f, call))
+        if (n->argument_count || n->first_argument ||
+            n->type != nl_semantic_unit_type(f->context) || n->result_count ||
+            n->results[0].value || !nl_h_custody_result_world_present(f, call))
             return false;
         /* Each actual invocation owns its result even when the emitter uses
          * one shared C definition for the same source declaration. */
