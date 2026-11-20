@@ -84,45 +84,74 @@ static bool division_emit_bindings(DivisionText *t, const NLCheckedFragment *f)
     return true;
 }
 
-static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
-                                         bool remainder, char **out,
-                                         size_t *length)
+static bool division_emit_helper(DivisionText *text,
+                                 const NLDivisionUsizePlan *helper)
 {
-    bool (*call_valid)(const NLCheckedFragment *, NLCheckedNodeId,
-                       NLDivisionUsizePlan *) =
-        remainder ? nl_remainder_usize_call_valid
-                  : nl_division_usize_call_valid;
-    NLDivisionUsizePlan main, helper;
+    return division_text_append(
+               text,
+               "static size_t nl_qty_fn_%zu(size_t nl_local_%zu)\n{\n"
+               "    _Static_assert(UINTMAX_C(%zu) != 0, \"nonzero "
+               "divisor\");\n",
+               helper->function, helper->formal, helper->divisor) &&
+           division_emit_bindings(text, helper->body) &&
+           division_text_append(text, "    return ") &&
+           division_emit_expression(text, helper->body, helper->result) &&
+           division_text_append(text, ";\n}\n\n");
+}
+
+typedef bool (*QuantityCallValidator)(const NLCheckedFragment *,
+                                      NLCheckedNodeId, NLDivisionUsizePlan *);
+
+static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
+                                         const char *profile,
+                                         QuantityCallValidator call_valid,
+                                         char **out, size_t *length)
+{
+    NLDivisionUsizePlan main;
     if (!out || !length || !call_valid(entry, nl_checked_root(entry), &main) ||
         main.formal || !main.call ||
-        !call_valid(main.body, main.call, &helper) || !helper.formal)
+        main.body->body_count > NL_CHECKED_MAX_BODY_CALLS)
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     const size_t node_limit = (SIZE_MAX - 2048) / 512;
-    if (main.body->count > node_limit ||
-        helper.body->count > node_limit - main.body->count)
+    size_t nodes = main.body->count;
+    if (nodes > node_limit)
         return NL_CHECK_RESOURCE_LIMIT;
-    /* One existing staging buffer. The selected helper is emitted once;
-     * every caller invocation uses its own actual value and checked result. */
-    DivisionText text = {
-        .capacity = (main.body->count + helper.body->count) * 512 + 2048};
+
+    /* Authenticate every invocation. One representative of each registered
+     * declaration supplies code shape only, in first-use order. */
+    NLDivisionUsizePlan helpers[NL_CHECKED_MAX_BODY_CALLS];
+    size_t helper_count = 0;
+    for (size_t i = 0; i < main.body->body_count; ++i) {
+        NLDivisionUsizePlan helper;
+        if (!call_valid(main.body, main.body->body_calls[i], &helper) ||
+            !helper.formal)
+            return NL_CHECK_SEMANTIC_UNSUPPORTED;
+        size_t j = 0;
+        while (j < helper_count && helpers[j].function != helper.function)
+            ++j;
+        if (j == helper_count) {
+            if (helper.body->count > node_limit - nodes)
+                return NL_CHECK_RESOURCE_LIMIT;
+            nodes += helper.body->count;
+            helpers[helper_count++] = helper;
+        }
+    }
+
+    DivisionText text = {.capacity = nodes * 512 + 2048};
     text.bytes = malloc(text.capacity);
     if (!text.bytes)
         return NL_CHECK_OUT_OF_MEMORY;
-    if (!division_text_append(
-            &text,
-            "/* NewLang source-owned quantity %s C17. */\n"
-            "#include <stddef.h>\n#include <stdint.h>\n"
-            "_Static_assert(SIZE_MAX == UINTMAX_C(%zu), "
-            "\"NewLang usize target mismatch\");\n\n"
-            "static size_t nl_qty_fn_%zu(size_t nl_local_%zu)\n{\n"
-            "    _Static_assert(UINTMAX_C(%zu) != 0, \"nonzero divisor\");\n",
-            remainder ? "remainder" : "division", SIZE_MAX, helper.function,
-            helper.formal, helper.divisor) ||
-        !division_emit_bindings(&text, helper.body) ||
-        !division_text_append(&text, "    return ") ||
-        !division_emit_expression(&text, helper.body, helper.result) ||
-        !division_text_append(&text,
-                              ";\n}\n\nstatic void nl_qty_fn_%zu(void)\n{\n",
+    bool emitted =
+        division_text_append(&text,
+                             "/* NewLang source-owned quantity %s C17. */\n"
+                             "#include <stddef.h>\n#include <stdint.h>\n"
+                             "_Static_assert(SIZE_MAX == UINTMAX_C(%zu), "
+                             "\"NewLang usize target mismatch\");\n\n",
+                             profile, SIZE_MAX);
+    for (size_t i = 0; emitted && i < helper_count; ++i)
+        emitted = division_emit_helper(&text, &helpers[i]);
+    if (!emitted ||
+        !division_text_append(&text, "static void nl_qty_fn_%zu(void)\n{\n",
                               main.function) ||
         !division_emit_bindings(&text, main.body) ||
         !division_text_append(&text,
@@ -140,11 +169,20 @@ static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
 NLCheckStatus nl_division_usize_c17(const NLCheckedFragment *entry, char **out,
                                     size_t *length)
 {
-    return literal_divisor_c17(entry, false, out, length);
+    return literal_divisor_c17(entry, "division", nl_division_usize_call_valid,
+                               out, length);
 }
 
 NLCheckStatus nl_remainder_usize_c17(const NLCheckedFragment *entry, char **out,
                                      size_t *length)
 {
-    return literal_divisor_c17(entry, true, out, length);
+    return literal_divisor_c17(entry, "remainder",
+                               nl_remainder_usize_call_valid, out, length);
+}
+
+NLCheckStatus nl_quantity_usize_c17(const NLCheckedFragment *entry, char **out,
+                                    size_t *length)
+{
+    return literal_divisor_c17(entry, "composition",
+                               nl_quantity_usize_call_valid, out, length);
 }
