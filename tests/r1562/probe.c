@@ -38,8 +38,8 @@ static bool failed;
 static void string(const char *s)
 {
     putchar('"');
-    for (const unsigned char *p = (const unsigned char *)(s ? s : "");
-         *p != 0; ++p) {
+    for (const unsigned char *p = (const unsigned char *)(s ? s : ""); *p != 0;
+         ++p) {
         if (*p == '"' || *p == '\\')
             printf("\\%c", *p);
         else if (*p < 32)
@@ -53,8 +53,8 @@ static void string(const char *s)
 static size_t line_of(const NLSource *source, NLSourceSpan span)
 {
     NLSourceView view;
-    if (!source || !nl_source_view(source, (NLSourceSpan){0, span.start_byte},
-                                  &view))
+    if (!source ||
+        !nl_source_view(source, (NLSourceSpan){0, span.start_byte}, &view))
         return 0;
     size_t line = 1;
     for (size_t i = 0; i < view.length; ++i)
@@ -144,13 +144,13 @@ static bool open_unit(Unit *u, const char *path, bool positive)
                          &u->entry_source) != NL_SOURCE_OK ||
         nl_parser_create(u->entry_source, &u->entry_parser) != NL_PARSE_OK)
         return false;
-    parsed = nl_parser_parse_expression_fragment(
-        u->entry_parser, &u->entry_tree, &pd);
+    parsed = nl_parser_parse_expression_fragment(u->entry_parser,
+                                                 &u->entry_tree, &pd);
     if (parsed != NL_PARSE_OK)
         return false;
     NLCheckDiagnostic cd = {0};
-    NLCheckStatus checked = nl_semantic_check_expression(
-        u->context, u->entry_tree, &u->entry, &cd);
+    NLCheckStatus checked =
+        nl_semantic_check_expression(u->context, u->entry_tree, &u->entry, &cd);
     diagnostic("ENTRY", u->label, (int)checked, u->entry_source, &cd);
     return checked == NL_CHECK_OK;
 }
@@ -219,8 +219,8 @@ static void arithmetic(const char *unit, const char *owner, size_t call_line,
     } else {
         observed = nl_checked_usize_division_view(body, id, &e->division);
         genuine = nl_checked_usize_division_valid(body, id, NULL);
-        detached = observed &&
-                   nl_checked_usize_division_valid(body, id, &e->division);
+        detached =
+            observed && nl_checked_usize_division_valid(body, id, &e->division);
         a = e->division.numbers[0];
         b = e->division.numbers[1];
         result = e->division.quotient;
@@ -231,8 +231,8 @@ static void arithmetic(const char *unit, const char *owner, size_t call_line,
     prefix("ARITH", unit);
     printf(",\"owner\":");
     string(owner);
-    printf(",\"call_line\":%zu,\"node\":%zu,\"line\":%zu,\"op\":",
-           call_line, id, line_of(nl_checked_source(body), node->span));
+    printf(",\"call_line\":%zu,\"node\":%zu,\"line\":%zu,\"op\":", call_line,
+           id, line_of(nl_checked_source(body), node->span));
     string(e->remainder ? "%" : "/");
     printf(",\"body\":\"%p\",\"context\":\"%p\",\"observed\":%s,"
            "\"genuine\":%s,\"detached\":%s,\"numerator_known\":%s,"
@@ -260,8 +260,7 @@ static void arithmetic(const char *unit, const char *owner, size_t call_line,
         e->remainder ? e->residue.origin : e->division.origin;
     const NLSource *receipt_source =
         e->remainder ? e->residue.source : nl_checked_source(body);
-    NLValueId result_id =
-        e->remainder ? e->residue.result : e->division.result;
+    NLValueId result_id = e->remainder ? e->residue.result : e->division.result;
     printf(",\"origin\":\"%p\",\"source\":\"%p\",\"operands\":[%zu,%zu],"
            "\"values\":[%zu,%zu],\"result_id\":%zu,"
            "\"symbols\":[%zu,%zu],\"places\":[%zu,%zu],"
@@ -444,9 +443,8 @@ int main(int argc, char **argv)
     }
     printf("{\"kind\":\"HOST\",\"size_t_bytes\":%zu,\"size_max\":%zu}\n",
            sizeof(size_t), (size_t)SIZE_MAX);
-    Unit units[7] = {{.label = "P1"},     {.label = "P2"},
-                     {.label = "P2DUP"}, {.label = "N1"},
-                     {.label = "N2"},    {.label = "N3"},
+    Unit units[7] = {{.label = "P1"}, {.label = "P2"}, {.label = "P2DUP"},
+                     {.label = "N1"}, {.label = "N2"}, {.label = "N3"},
                      {.label = "N4"}};
     const char *paths[] = {argv[2], argv[3], argv[3], argv[4],
                            argv[5], argv[6], argv[7]};
