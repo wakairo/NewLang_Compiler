@@ -19,7 +19,8 @@ typedef struct {
 } R1573Evidence;
 
 static bool span_equals(const NLSource *source, NLSourceSpan span,
-                        const char *text) {
+                        const char *text)
+{
     NLSourceView view;
     size_t length = strlen(text);
     return nl_source_span_valid(source, span) &&
@@ -27,10 +28,10 @@ static bool span_equals(const NLSource *source, NLSourceSpan span,
            memcmp(view.bytes, text, length) == 0;
 }
 
-static bool authentic_main_ast(const NLSource *source,
-                               const NLSyntaxTree *tree, bool mixed) {
-    const NLSyntaxView *root =
-        nl_syntax_node_view(nl_syntax_tree_root(tree));
+static bool authentic_main_ast(const NLSource *source, const NLSyntaxTree *tree,
+                               bool mixed)
+{
+    const NLSyntaxView *root = nl_syntax_node_view(nl_syntax_tree_root(tree));
     size_t count = mixed ? 2u : 1u;
     if (root == NULL || root->kind != NL_SYNTAX_FUNCTION_UNIT ||
         root->data.function_unit.count != count) {
@@ -69,7 +70,8 @@ static bool authentic_main_ast(const NLSource *source,
 }
 
 static void inspect(const NLCheckedFragment *fragment, size_t depth,
-                    R1573Evidence *result) {
+                    R1573Evidence *result)
+{
     size_t total = nl_checked_node_count(fragment);
     const NLSource *source = nl_checked_source(fragment);
     if (depth > 4 || total == 0) {
@@ -97,9 +99,9 @@ static void inspect(const NLCheckedFragment *fragment, size_t depth,
             ++result->division;
             printf("R1573_DIV|depth=%zu|known=%d,%d|n=%zu|k=%zu|"
                    "q=%zu|target_max=%zu|node=%zu\n",
-                   depth, (int)view.numerator_known,
-                   (int)view.quotient_known, view.numbers[0], view.numbers[1],
-                   view.quotient, view.target_max, (size_t)id);
+                   depth, (int)view.numerator_known, (int)view.quotient_known,
+                   view.numbers[0], view.numbers[1], view.quotient,
+                   view.target_max, (size_t)id);
         } else if (node->kind == NL_CHECKED_USIZE_REMAINDER) {
             NLUsizeRemainderView view = {0};
             bool issued = nl_checked_usize_remainder_view(fragment, id, &view);
@@ -115,14 +117,13 @@ static void inspect(const NLCheckedFragment *fragment, size_t depth,
             ++result->remainder;
             printf("R1573_REMAINDER|depth=%zu|known=%d,%d|n=%zu|k=%zu|"
                    "r=%zu|target_max=%zu|node=%zu\n",
-                   depth, (int)view.numerator_known,
-                   (int)view.remainder_known, view.numbers[0], view.numbers[1],
-                   view.remainder, view.target_max, (size_t)id);
+                   depth, (int)view.numerator_known, (int)view.remainder_known,
+                   view.numbers[0], view.numbers[1], view.remainder,
+                   view.target_max, (size_t)id);
         } else if (node->kind == NL_CHECKED_REGISTERED_CALL) {
             const NLCheckedFragment *body = nl_checked_call_body(fragment, id);
-            printf("R1573_CALL|depth=%zu|function=%zu|body_backed=%d\n",
-                   depth, node->function,
-                   (int)(node->body_backed && body != NULL));
+            printf("R1573_CALL|depth=%zu|function=%zu|body_backed=%d\n", depth,
+                   node->function, (int)(node->body_backed && body != NULL));
             if (!node->body_backed || body == NULL) {
                 result->invalid = true;
                 continue;
@@ -135,7 +136,8 @@ static void inspect(const NLCheckedFragment *fragment, size_t depth,
     }
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     NLSource *source = NULL;
     NLSource *observer = NULL;
     NLParser *parser = NULL;
@@ -172,9 +174,8 @@ int main(int argc, char **argv) {
         goto cleanup;
     }
     const NLSyntaxTree *inputs[] = {unit};
-    NLCheckStatus register_status =
-        nl_semantic_register_function_unit(context, inputs, 1,
-                                           &unit_diagnostic);
+    NLCheckStatus register_status = nl_semantic_register_function_unit(
+        context, inputs, 1, &unit_diagnostic);
     printf("R1573_REAL_UNIT_REGISTER|case=%s|status=%d\n", argv[1],
            (int)register_status);
     if (register_status != NL_CHECK_OK) {
@@ -182,18 +183,16 @@ int main(int argc, char **argv) {
         goto cleanup;
     }
     if (nl_source_create(expression, sizeof(expression) - 1,
-                         "R1573_observer_expression", &observer) !=
-            NL_SOURCE_OK ||
+                         "R1573_observer_expression",
+                         &observer) != NL_SOURCE_OK ||
         nl_parser_create(observer, &observer_parser) != NL_PARSE_OK ||
         nl_parser_parse_expression_fragment(observer_parser, &call,
-                                            &parse_diagnostic) !=
-            NL_PARSE_OK) {
+                                            &parse_diagnostic) != NL_PARSE_OK) {
         fprintf(stderr, "R1573_OBSERVER_EXPRESSION_PARSE_FAILED\n");
         goto cleanup;
     }
-    NLCheckStatus checked_status =
-        nl_semantic_check_expression(context, call, &checked,
-                                     &check_diagnostic);
+    NLCheckStatus checked_status = nl_semantic_check_expression(
+        context, call, &checked, &check_diagnostic);
     printf("R1573_OBSERVER_CHECK|status=%d\n", (int)checked_status);
     if (checked_status != NL_CHECK_OK || checked == NULL) {
         fprintf(stderr, "R1573_MAIN_OBSERVER_NOT_OBSERVABLE\n");
