@@ -1,0 +1,29 @@
+{
+  "shelves-direct": {
+    "bindings": {"count": 95, "full": 15, "keep": 15, "again": 2, "with_spare": 16},
+    "calls": [
+      {"function": "shelf_count", "actual": 95, "op": "/", "rhs": 6, "result": 15, "copies_before": 0, "copies_after": 1, "body_exit": "tail"},
+      {"function": "shelf_count", "actual": 15, "op": "/", "rhs": 6, "result": 2, "copies_before": 0, "copies_after": 1, "body_exit": "tail"}
+    ]
+  },
+  "shelves-aliases": {
+    "bindings": {"count": 95, "full": 15, "keep": 15, "again": 2, "with_spare": 16},
+    "calls": [
+      {"function": "shelf_count", "actual": 95, "op": "/", "rhs": 6, "result": 15, "copies_before": 3, "copies_after": 1, "body_exit": "tail"},
+      {"function": "shelf_count", "actual": 15, "op": "/", "rhs": 6, "result": 2, "copies_before": 3, "copies_after": 1, "body_exit": "tail"}
+    ]
+  },
+  "mixed-lots": {
+    "bindings": {"initial": 19, "retained_groups": 19, "coarse": 5, "normalized": 1, "repeat": 5, "retained_coarse": 5, "with_pad": 7, "allocation": 18},
+    "calls": [
+      {"function": "groups", "actual": 99, "op": "/", "rhs": 5, "result": 19, "copies_before": 1, "copies_after": 0, "body_exit": "tail"},
+      {"function": "offset", "actual": 19, "op": "%", "rhs": 7, "result": 5, "copies_before": 3, "copies_after": 1, "body_exit": "return"},
+      {"function": "groups", "actual": 5, "op": "/", "rhs": 5, "result": 1, "copies_before": 1, "copies_after": 0, "body_exit": "tail"},
+      {"function": "offset", "actual": 12, "op": "%", "rhs": 7, "result": 5, "copies_before": 3, "copies_after": 1, "body_exit": "return"}
+    ]
+  },
+  "equal-literal": {"check": "PASS", "computed": 4, "emit": "V1-BACKEND-UNSUPPORTED"},
+  "return-prefix": {"check": "PASS", "computed": 3, "emit": "V1-BACKEND-UNSUPPORTED"},
+  "zero": {"check": "USIZE-REMAINDER-ZERO"},
+  "wrong-type": {"check": "USIZE-DIVISION-TYPE"}
+}
