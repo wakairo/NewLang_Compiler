@@ -1,0 +1,68 @@
+{
+  "authority": "fixedmain9c9b17f7f0584c88a92ab284f57e4a93b8ab350b / Draft17.38 \u00a7\u00a75.2/5.4,13.5a/c,18/19; C1247 finite slash selection7004012251",
+  "status": "PREP hypothesis only; implementation NOT_RELEASED; CLI0 and no later-layer PASS",
+  "selected_source": "one flat existing scalar name / typed decimal usize literal per expression; fn tail is ordinary selected slot; distinct + in caller reuses old flat addition, no chain/mixing in one expression",
+  "program_shape": "2 ordinary nongeneric fns incl main; quotient_once has1usize formal; one caller call; no heap/ref/owner/Domain/FFI; helper result is real usize and is copied/used as caller + input",
+  "independent_definition": {
+    "amount": "Unknown current coreusize Copy package; not made Known by favorable actual50/0",
+    "divisor": 7,
+    "quotient": "fresh actual result with relation q=floor(n/7), 0<=q<=n<=U; Unknown exact fact if numeratorUnknown; no guessed quotient/range authority",
+    "dependencies": "retain actual package/dependency obligations; usize alone never means Free; first plain-scalar boundary needs authentic evidence or failclosed"
+  },
+  "actual": [
+    {
+      "source": "P-ordinary-quotient.nl",
+      "amount": 50,
+      "quotient": 7,
+      "successor": 8,
+      "retained_quotient": 7,
+      "remainder": 1
+    },
+    {
+      "source": "P-zero-numerator.nl",
+      "amount": 0,
+      "quotient": 0,
+      "successor": 1,
+      "retained_quotient": 0,
+      "remainder": 0
+    }
+  ],
+  "negative": [
+    {
+      "source": "N-zero-divisor.nl",
+      "prediction": "typed zero source syntactically valid; independent definition must reject division precondition; no call-specialized acceptance/trap/C17/native"
+    },
+    {
+      "source": "N-divisor-out-of-target.nl",
+      "prediction": "literal2^64 > current 64bit model U=SIZE_MAX; distinct existing literal-range refusal, not zero/overflow-as-wrap; targetwidth must match or STOP"
+    }
+  ],
+  "range": "current implementation uses host SIZE_MAX and generated C17 SIZE_MAX equality guard; source law itself remains actual-target-sized. No 64bit language rule is proposed.",
+  "caller_addition": "At actual50/0 call, a genuinely evaluated quotient may be Known7/0 and old Known-only +1 proves8/1. Do not require an Unknown-addition range engine and do not reinterpret + receipt as / receipt.",
+  "unknown_call": "Future C17 must compute numerator/divisor using actual runtime actual/formal; a threshold-only bool classifier or checker-guessed quotient is insufficient.",
+  "first_expected_current_boundary": "fixed baseline source_expression excludes slash / syntax and checked kinds absent; known barrier, static evidence sufficient; no --check needed to rediscover",
+  "rejection_table": [
+    "zero denominator regardless numerator",
+    "typed literal beyond true target U",
+    "wrong coretype u8/addr/ptr/ref, stale/nonCopy/unavailable actual",
+    "dynamic divisor/chained/mixed/parenthesized forms outside selected profile",
+    "wrong operator/kind/operands/source span/result/foreign origin world",
+    "forged Known exact value for Unknown",
+    "dependency laundering/reference/owner issuance",
+    "OOM must leave out/length/context/original source unchanged; retry authentic same source"
+  ],
+  "limits": {
+    "minutes": 60,
+    "optional_existing_check_max": 1,
+    "actual_check": 0,
+    "build": 0,
+    "probe": 0,
+    "native": 0,
+    "SDK": 0,
+    "CI": 0,
+    "Git": 0,
+    "tracked_edits": 0
+  },
+  "P1539_priority": "same actor resumes originalASan/custody/FINAL first as soon as terminal",
+  "value": "Core quantity capability not useful safe facade or comparative UB audit locality; no broad range/world engine justified."
+}

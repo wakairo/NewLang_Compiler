@@ -1,0 +1,110 @@
+{
+  "authority": "a9715f4bc788c13e213231c639057c2d718a9200 / Draft17.38; C1247/C1249/C1252",
+  "original_first": "https://github.com/wakairo/NewLang_Compiler/issues/1543#issuecomment-7004243499",
+  "files": {
+    "C-guarded.nl": {
+      "bytes": 195,
+      "sha256": "3a724c5d52eac3b6f46eed19cbb22e37b40a128befd24deb0e3d4d6f09f245ed"
+    },
+    "C-known.nl": {
+      "bytes": 105,
+      "sha256": "084c1a637e21b86100fcb5fb780ddc89b54ff2fd409400005c9cd5c7a33df7c0"
+    },
+    "N-chain.nl": {
+      "bytes": 316,
+      "sha256": "a44cec4708a4727fefeaf8e06f1de4fdcdc48c4e30f583daa55a485a6e6ed2d2"
+    },
+    "N-divisor-out-of-target.nl": {
+      "bytes": 324,
+      "sha256": "8e6e2962aa686d0f440957b6ca946dd89076157fdc32835035af835fbae75125"
+    },
+    "N-dynamic.nl": {
+      "bytes": 303,
+      "sha256": "e696de9f31a15fd54bd22233f0e166e90bd5933c4717fb5b6ecea549495ffe64"
+    },
+    "N-mixed.nl": {
+      "bytes": 316,
+      "sha256": "593700b58de7aa3c83469322fd3f61bc685acf2572840b31828eb808f7a7f986"
+    },
+    "N-parentheses.nl": {
+      "bytes": 307,
+      "sha256": "99c665b1e25d274092b1f2a2c8f06c2ba7b58239a60ff939ecc3f19facbfe9e0"
+    },
+    "N-type.nl": {
+      "bytes": 299,
+      "sha256": "c5576f6b2d129c2c3309e9976e3307d1b852bc27e4184c5440748c503c8e74a8"
+    },
+    "N-unknown-add.nl": {
+      "bytes": 76,
+      "sha256": "883015647aed07b0ffce0489139dffefca376af43346146d093c9ab8b8da32d3"
+    },
+    "N-zero-divisor.nl": {
+      "bytes": 305,
+      "sha256": "a07848ecb318611dd24fff23258cfbbe7a1ffc3cc33be59813d98ad1b945f9dc"
+    },
+    "P-divisor-max.nl": {
+      "bytes": 342,
+      "sha256": "245c5530dedd07a63a26cd057c05b9bc0847a17a98b17e7de2e77e269b5e3e5d"
+    },
+    "P-divisor1.nl": {
+      "bytes": 305,
+      "sha256": "1a9a7abb56d0092608dcfd38df140be5f557134198eb95f27dc478c4b1596b6b"
+    },
+    "P-max-over7.nl": {
+      "bytes": 323,
+      "sha256": "c39b47b6bbc11e8f68fbbd47bd362fb6b111e52db38245d6e66c31f04dd3bc8b"
+    },
+    "P-ordinary-quotient.nl": {
+      "bytes": 305,
+      "sha256": "b1eae3d681d6f7d5347b999c8f970305cb301697e636c165c293dfa35b642ba6"
+    },
+    "P-unknown-event.nl": {
+      "bytes": 365,
+      "sha256": "884fc71a4f0777d068ecf68bc677753ffe6b8325a9a071aed392ca9274097321"
+    },
+    "P-zero-numerator.nl": {
+      "bytes": 304,
+      "sha256": "4066a0c039542371d420337b9d8f226f3eedf0d2e80836d90ee90441651c26cc"
+    },
+    "oracle.json": {
+      "bytes": 3711,
+      "sha256": "0c7d0689decbfae16b0ddc7e0265b582299e8db564feebbac3698f5d436e2b88"
+    }
+  },
+  "extra_actual": {
+    "P-max-over7.nl": {
+      "amount": 18446744073709551615,
+      "divisor": 7,
+      "quotient": 2635249153387078802,
+      "successor": 2635249153387078803
+    },
+    "P-divisor1.nl": {
+      "amount": 50,
+      "divisor": 1,
+      "quotient": 50,
+      "successor": 51
+    },
+    "P-divisor-max.nl": {
+      "amount": 18446744073709551615,
+      "divisor": 18446744073709551615,
+      "quotient": 1,
+      "successor": 2
+    },
+    "P-unknown-event.nl": {
+      "amount": 50,
+      "divisor": 7,
+      "quotient": 7,
+      "successor": 8
+    }
+  },
+  "prospective_reject": {
+    "N-zero-divisor.nl": "USIZE-DIVISION-ZERO",
+    "N-divisor-out-of-target.nl": "USIZE-LITERAL-RANGE",
+    "N-type.nl": "USIZE-DIVISION-TYPE",
+    "N-dynamic.nl": "SOURCE",
+    "N-chain.nl": "SOURCE",
+    "N-mixed.nl": "SOURCE",
+    "N-parentheses.nl": "SOURCE",
+    "N-unknown-add.nl": "USIZE-ADDITION-PRECISION"
+  }
+}
