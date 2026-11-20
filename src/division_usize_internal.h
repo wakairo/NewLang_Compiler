@@ -13,7 +13,7 @@ typedef struct {
     size_t function;
     NLSymbolId formal;
     NLCheckedNodeId division, result,
-        call; /* division is the helper operation */
+        call; /* division identifies the specialized single operation */
     size_t divisor;
 } NLDivisionUsizePlan;
 bool nl_usize_division_operands(const NLCheckedFragment *,
@@ -23,18 +23,12 @@ bool nl_usize_remainder_operands(const NLCheckedFragment *,
                                  const NLSemanticContext *,
                                  const NLSyntaxNode *, NLCheckedNodeId,
                                  NLCheckedNodeId);
-bool nl_division_usize_body_at(const NLCheckedFragment *,
-                               const NLSemanticContext *, size_t,
-                               NLDivisionUsizePlan *);
 bool nl_division_usize_call_valid(const NLCheckedFragment *, NLCheckedNodeId,
                                   NLDivisionUsizePlan *);
-bool nl_remainder_usize_body_at(const NLCheckedFragment *,
-                                const NLSemanticContext *, size_t,
-                                NLDivisionUsizePlan *);
 bool nl_remainder_usize_call_valid(const NLCheckedFragment *, NLCheckedNodeId,
                                    NLDivisionUsizePlan *);
 bool nl_quantity_usize_body_at(const NLCheckedFragment *,
-                               const NLSemanticContext *, size_t,
+                               const NLSemanticContext *, size_t, bool entry,
                                NLDivisionUsizePlan *);
 bool nl_quantity_usize_call_valid(const NLCheckedFragment *, NLCheckedNodeId,
                                   NLDivisionUsizePlan *);

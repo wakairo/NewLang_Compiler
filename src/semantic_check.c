@@ -4612,13 +4612,8 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         !body.definition &&
         (nl_guarded_usize_body_at(body.artifact, c, body.body_function,
                                   &quantity_plan) ||
-         (entry_body
-              ? nl_quantity_usize_body_at(body.artifact, c, body.body_function,
-                                          &division_plan)
-              : nl_division_usize_body_at(body.artifact, c, body.body_function,
-                                          &division_plan) ||
-                    nl_remainder_usize_body_at(
-                        body.artifact, c, body.body_function, &division_plan)));
+         nl_quantity_usize_body_at(body.artifact, c, body.body_function,
+                                   entry_body, &division_plan));
     if ((predicate_result || scalar_h_read || current_result || result_world ||
          quantity_result) &&
         !host(&body,
