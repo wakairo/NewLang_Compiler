@@ -44,7 +44,8 @@ def charge(kind, command, amount=1):
         assert count <= LIMITS[kind], (kind, count)
         record["counts"][kind] = count
         record["events"].append(
-            dict(kind=kind, mode=MODE, command=command, charged=amount, raw=str(WORK))
+            dict(kind=kind, mode=MODE, command=[str(part) for part in command],
+                 charged=amount, raw=str(WORK))
         )
         ledger.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
 
