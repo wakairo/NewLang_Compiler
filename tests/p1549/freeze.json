@@ -1,0 +1,39 @@
+{
+  "base": "1a0b885171eed6942275bfc34620ec33055fcabe",
+  "tree": "160fa9fb284c60bf1eff60c0dafa1c95ca81c462",
+  "encoding": "UTF-8/LF/final newline",
+  "files": {
+    "tail-copy.nl": {
+      "bytes": 349,
+      "sha256": "00239f5efeef988322525da87db4b1e65fd2aba51c78428651fad11763c0be88"
+    },
+    "call-reuse.nl": {
+      "bytes": 344,
+      "sha256": "616adec25b81a0028b4172a5bfdabe10897714490da7cc7ff82a11726dde06c6"
+    },
+    "return-copy.nl": {
+      "bytes": 267,
+      "sha256": "fb0bf639d1ad58d090c1ff95da73bc16e667dd4967913c4759dfd34085293226"
+    },
+    "zero.nl": {
+      "bytes": 173,
+      "sha256": "3012d32e311aa20e24b293805f45d7029e1c82b952c37d9eedb273086c2b8331"
+    },
+    "wrong-type.nl": {
+      "bytes": 138,
+      "sha256": "80bd0e4f1e64b9812995b2fd2379694ad9e725c5fea25c98e1a50979f9328d09"
+    },
+    "target-range.nl": {
+      "bytes": 140,
+      "sha256": "8bd92e8e51210b8bc59b894f4bfec37045a498b253e961fe5ac01bcd188b40ba"
+    },
+    "unknown-plus.nl": {
+      "bytes": 228,
+      "sha256": "c8772548bfcf1b6dce53eb5f3c13a4bc5ec71b9bfa12a66dcf6fcf3e9beec2f0"
+    },
+    "oracle.json": {
+      "bytes": 3911,
+      "sha256": "22d401b55b1043a6ed430f7e561925c4428b8212329b73c701d10345be2b520c"
+    }
+  }
+}

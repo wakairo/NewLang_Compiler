@@ -1,0 +1,118 @@
+{
+  "issue": 1549,
+  "authority": "C1263 / Draft17.38 / selected flat C1247 division",
+  "base": "1a0b885171eed6942275bfc34620ec33055fcabe",
+  "usize_target_bits": 64,
+  "positive": [
+    {
+      "source": "tail-copy.nl",
+      "gate0": {
+        "source": "PASS",
+        "check": "PASS",
+        "public_event": "PASS",
+        "complete_result_seal": "ABSENT",
+        "emit": "REFUSE",
+        "native": "NOT_REACHED"
+      },
+      "calls": [
+        {
+          "actual": 47,
+          "divisor": 6,
+          "quotient": 7,
+          "edge": "tail"
+        }
+      ],
+      "caller": {
+        "available": 47,
+        "batches": 7,
+        "saved_batches": 7,
+        "with_header": 10,
+        "remaining": 8
+      }
+    },
+    {
+      "source": "call-reuse.nl",
+      "gate0": {
+        "source": "PASS",
+        "check": "PASS",
+        "public_event": "PASS",
+        "complete_result_seal": "ABSENT",
+        "emit": "REFUSE",
+        "native": "NOT_REACHED"
+      },
+      "calls": [
+        {
+          "actual": 137,
+          "divisor": 5,
+          "quotient": 27,
+          "edge": "tail"
+        },
+        {
+          "actual": 27,
+          "divisor": 5,
+          "quotient": 5,
+          "edge": "tail"
+        }
+      ],
+      "caller": {
+        "coarse": 27,
+        "fine": 5,
+        "kept_coarse": 27,
+        "with_reserve": 9
+      }
+    },
+    {
+      "source": "return-copy.nl",
+      "gate0": {
+        "source": "PASS",
+        "check": "PASS",
+        "public_event": "PASS",
+        "complete_result_seal": "ABSENT",
+        "emit": "REFUSE",
+        "native": "NOT_REACHED"
+      },
+      "calls": [
+        {
+          "actual": 31,
+          "divisor": 4,
+          "quotient": 7,
+          "edge": "return"
+        }
+      ],
+      "caller": {
+        "pages": 7,
+        "extra_pages": 5
+      }
+    }
+  ],
+  "negative": [
+    {
+      "source": "zero.nl",
+      "stage": "definition-CHECK",
+      "diagnostic": "USIZE-DIVISION-ZERO"
+    },
+    {
+      "source": "wrong-type.nl",
+      "stage": "definition-CHECK",
+      "diagnostic": "USIZE-DIVISION-TYPE"
+    },
+    {
+      "source": "target-range.nl",
+      "stage": "definition-CHECK",
+      "diagnostic": "USIZE-LITERAL-RANGE"
+    },
+    {
+      "source": "unknown-plus.nl",
+      "stage": "definition-CHECK",
+      "diagnostic": "USIZE-ADDITION-PRECISION"
+    }
+  ],
+  "candidate_contract": {
+    "definition": "Division on the Unknown usize formal yields a valid Unknown receipt. Copy preserves Unknown. A favorable actual does not discharge definition-time Known-only addition.",
+    "source_family": "Exactly one fixed nonzero literal division in one ordinary unary usize helper, immutable quotient bindings and Copy, ordinary tail or final explicit return. Unit main may Copy and reuse genuine call results as usize actuals and in existing proven plus/minus. The same helper can be used more than once.",
+    "identity": "Validate each source-issued division occurrence and distinct actual, fresh formal binding, ordered Copy uses, returned package, caller binding and complete existing result/world custody. Type or numeric equality alone cannot authorize a substituted node, value, source or world.",
+    "execution": "Use normal CLI CHECK and C17 emission. Observe real C17 guest values for every declared caller observation with GCC, Clang, ASan, UBSan. A zero process exit alone is insufficient.",
+    "failure": "Out-of-scope source/authority fails closed at the appropriate stage. No published fragment/text on failure, no changes to caller-owned outputs, pristine retry after a reached CHECK result-seal or C17 staging allocation failure.",
+    "deferred": "Dynamic or zero division, other operand types, chaining/precedence/parentheses, range solver and generic/control-flow or public authority changes. Final implementation support will be based on measured results with this FIRST retained."
+  }
+}
