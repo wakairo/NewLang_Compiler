@@ -47,10 +47,10 @@ static bool retained_in_original(const NLSource *retained,
 {
     NLSourceView a = {0}, b = {0};
     if (!retained || !original ||
-        !nl_source_view(retained,
-                        (NLSourceSpan){0, nl_source_length(retained)}, &a) ||
-        !nl_source_view(original,
-                        (NLSourceSpan){0, nl_source_length(original)}, &b) ||
+        !nl_source_view(retained, (NLSourceSpan){0, nl_source_length(retained)},
+                        &a) ||
+        !nl_source_view(original, (NLSourceSpan){0, nl_source_length(original)},
+                        &b) ||
         !a.length || a.length > b.length)
         return false;
     for (size_t i = 0; i <= b.length - a.length; ++i) {
@@ -158,8 +158,8 @@ static bool emit_graph(const NLCheckedFragment *fragment,
         const NLCheckedNodeView *node = nl_checked_node_view(fragment, id);
         if (!node)
             return false;
-        printf("{\"record\":\"node\",\"graph\":%zu,\"id\":%zu,\"kind\":",
-               graph, id);
+        printf("{\"record\":\"node\",\"graph\":%zu,\"id\":%zu,\"kind\":", graph,
+               id);
         json_string(kind_name(node->kind));
         printf(",\"name\":");
         json_span(source, node->name);
@@ -174,10 +174,9 @@ static bool emit_graph(const NLCheckedFragment *fragment,
                node->function, node->type, (int)node->value_use,
                node->body_backed ? "true" : "false",
                node->terminates ? "true" : "false", node->initializer,
-               node->first_argument, node->next_argument,
-               node->argument_count, node->first_item, node->next_item,
-               node->tail, node->item_count, node->return_edges,
-               node->result_count);
+               node->first_argument, node->next_argument, node->argument_count,
+               node->first_item, node->next_item, node->tail, node->item_count,
+               node->return_edges, node->result_count);
         for (size_t j = 0; j < node->result_count && j < 2; ++j) {
             if (j)
                 putchar(',');
@@ -186,41 +185,38 @@ static bool emit_graph(const NLCheckedFragment *fragment,
         printf("],\"returned\":");
         result_json(context, node->returned);
         NLSemanticBindingView binding = {0};
-        const bool bound =
-            node->symbol &&
-            nl_semantic_binding_view(context, node->symbol, &binding);
+        const bool bound = node->symbol && nl_semantic_binding_view(
+                                               context, node->symbol, &binding);
         printf(",\"binding_visible\":%s,\"availability\":%d,\"binding\":",
                bound ? "true" : "false",
                bound ? (int)binding.availability : -1);
-        result_json(context,
-                    (NLCheckedResult){binding.type, binding.value});
+        result_json(context, (NLCheckedResult){binding.type, binding.value});
         printf("}\n");
         if (node->kind == NL_CHECKED_USIZE_DIVISION) {
             NLUsizeDivisionView view = {0};
             const bool present =
                 nl_checked_usize_division_view(fragment, id, &view);
-            printf("{\"record\":\"division\",\"graph\":%zu,\"node\":%zu,"
-                   "\"present\":%s,\"valid\":%s,\"copy_valid\":%s,"
-                   "\"origin_same\":%s,\"left_node\":%zu,"
-                   "\"right_node\":%zu,\"formal_symbol\":%zu,"
-                   "\"left_value\":%zu,\"right_value\":%zu,"
-                   "\"result\":%zu,\"numerator_known\":%s,"
-                   "\"quotient_known\":%s,\"numerator\":%zu,"
-                   "\"divisor\":%zu,\"quotient\":%zu,\"target_max\":%zu}\n",
-                   graph, id, present ? "true" : "false",
-                   nl_checked_usize_division_valid(fragment, id, NULL)
-                       ? "true"
-                       : "false",
-                   present &&
-                           nl_checked_usize_division_valid(fragment, id, &view)
-                       ? "true"
-                       : "false",
-                   present && view.origin == fragment ? "true" : "false",
-                   view.operands[0], view.operands[1], view.symbols[0],
-                   view.values[0], view.values[1], view.result,
-                   view.numerator_known ? "true" : "false",
-                   view.quotient_known ? "true" : "false", view.numbers[0],
-                   view.numbers[1], view.quotient, view.target_max);
+            printf(
+                "{\"record\":\"division\",\"graph\":%zu,\"node\":%zu,"
+                "\"present\":%s,\"valid\":%s,\"copy_valid\":%s,"
+                "\"origin_same\":%s,\"left_node\":%zu,"
+                "\"right_node\":%zu,\"formal_symbol\":%zu,"
+                "\"left_value\":%zu,\"right_value\":%zu,"
+                "\"result\":%zu,\"numerator_known\":%s,"
+                "\"quotient_known\":%s,\"numerator\":%zu,"
+                "\"divisor\":%zu,\"quotient\":%zu,\"target_max\":%zu}\n",
+                graph, id, present ? "true" : "false",
+                nl_checked_usize_division_valid(fragment, id, NULL) ? "true"
+                                                                    : "false",
+                present && nl_checked_usize_division_valid(fragment, id, &view)
+                    ? "true"
+                    : "false",
+                present && view.origin == fragment ? "true" : "false",
+                view.operands[0], view.operands[1], view.symbols[0],
+                view.values[0], view.values[1], view.result,
+                view.numerator_known ? "true" : "false",
+                view.quotient_known ? "true" : "false", view.numbers[0],
+                view.numbers[1], view.quotient, view.target_max);
         }
         if (node->kind == NL_CHECKED_USIZE_ADDITION) {
             NLUsizeAdditionView view = {0};
@@ -255,8 +251,8 @@ static bool emit_graph(const NLCheckedFragment *fragment,
         }
         if (node->kind == NL_CHECKED_REGISTERED_CALL) {
             NLCopyBodyParameters parameters = {0};
-            const bool present = nl_checked_copy_body_parameters(
-                fragment, id, &parameters);
+            const bool present =
+                nl_checked_copy_body_parameters(fragment, id, &parameters);
             const int validated =
                 present ? (int)nl_checked_copy_body_parameters_validate(
                               fragment, id, &parameters)
@@ -275,9 +271,8 @@ static bool emit_graph(const NLCheckedFragment *fragment,
         const NLCheckedNodeView *node = nl_checked_node_view(fragment, id);
         if (node->kind == NL_CHECKED_REGISTERED_CALL) {
             const NLCheckedFragment *body = nl_checked_call_body(fragment, id);
-            if (body &&
-                !emit_graph(body, original, graph, id, context, depth + 1,
-                            serial))
+            if (body && !emit_graph(body, original, graph, id, context,
+                                    depth + 1, serial))
                 return false;
         }
     }
@@ -315,29 +310,27 @@ int main(int argc, char **argv)
         goto cleanup;
     const NLSyntaxTree *inputs[] = {unit};
     NLFunctionUnitDiagnostic diagnostic = {0};
-    const NLCheckStatus registered = nl_semantic_register_function_unit(
-        context, inputs, 1, &diagnostic);
+    const NLCheckStatus registered =
+        nl_semantic_register_function_unit(context, inputs, 1, &diagnostic);
     if (!nl_semantic_snapshot(context, &after))
         goto cleanup;
-    diagnostic_json("definition", (int)registered,
-                    &diagnostic.diagnostic.diagnostic,
-                    diagnostic.diagnostic.span,
-                    snapshots_equal(&before, &after));
+    diagnostic_json(
+        "definition", (int)registered, &diagnostic.diagnostic.diagnostic,
+        diagnostic.diagnostic.span, snapshots_equal(&before, &after));
     if (registered != NL_CHECK_OK) {
         result = 0;
         goto cleanup;
     }
-    const NLTypeId usize_type =
-        nl_semantic_core_type(context, NL_TYPE_USIZE);
-    printf("{\"record\":\"types\",\"usize\":%zu,\"unit\":%zu}\n",
-           usize_type, nl_semantic_unit_type(context));
+    const NLTypeId usize_type = nl_semantic_core_type(context, NL_TYPE_USIZE);
+    printf("{\"record\":\"types\",\"usize\":%zu,\"unit\":%zu}\n", usize_type,
+           nl_semantic_unit_type(context));
     if (nl_source_create("main()", 6, "<r1551-ordinary-entry>",
                          &entry_source) != NL_SOURCE_OK ||
         nl_parser_create(entry_source, &entry_parser) != NL_PARSE_OK)
         goto cleanup;
     parse_diagnostic = (NLParseDiagnostic){0};
     if (nl_parser_parse_expression_fragment(entry_parser, &entry_tree,
-                                             &parse_diagnostic) != NL_PARSE_OK)
+                                            &parse_diagnostic) != NL_PARSE_OK)
         goto cleanup;
     NLCheckDiagnostic checked_diagnostic = {0};
     const NLCheckStatus checked = nl_semantic_check_expression(

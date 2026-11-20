@@ -108,8 +108,9 @@ def identity():
     require(pr["head"]["ref"] == MANIFEST["branch"], "wrong R branch")
     require(pr["draft"] is True, "R PR must remain draft")
     # Exact-object metadata fetch accommodates the unchanged shallow checkout.
-    run(["git", "fetch", "--no-tags", "--depth=8", "origin",
-         MANIFEST["candidate"], pr["head"]["sha"]], "identity-object-fetch", 0)
+    if MODE == "source":
+        run(["git", "fetch", "--no-tags", "--depth=8", "origin",
+             MANIFEST["candidate"], pr["head"]["sha"]], "identity-object-fetch", 0)
     head = run(["git", "rev-parse", "HEAD"], "checkout-head", 0).stdout.strip().decode()
     tree = run(["git", "rev-parse", "HEAD^{tree}"], "checkout-tree", 0).stdout.strip().decode()
     rtree = run(["git", "rev-parse", pr["head"]["sha"] + "^{tree}"],

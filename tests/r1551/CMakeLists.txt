@@ -31,3 +31,7 @@ endif()
 foreach(r1551_test IN LISTS r1551_registered)
     message(STATUS "R1551 registered CTest: ${r1551_test}")
 endforeach()
+add_custom_target(r1551_registration_inventory ALL
+    COMMAND "${CMAKE_CTEST_COMMAND}" --test-dir "${CMAKE_CURRENT_BINARY_DIR}"
+        -N -R "^r1551_"
+    VERBATIM)
