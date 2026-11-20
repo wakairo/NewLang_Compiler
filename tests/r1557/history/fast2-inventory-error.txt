@@ -1,0 +1,11 @@
+2026-11-20T05:40:22.8558144Z -- R1557 registered exactly two tests; build inventory is CTest -N only
+2026-11-20T05:40:38.2660203Z [  7%] Building C object CMakeFiles/r1557_public_probe.dir/tests/r1557/public_probe.c.o
+2026-11-20T05:40:38.3317971Z [  7%] Linking C executable r1557_public_probe
+2026-11-20T05:40:38.3727766Z [  9%] Built target r1557_public_probe
+2026-11-20T05:41:08.7841977Z Traceback (most recent call last):
+2026-11-20T05:41:08.7842691Z   File "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1557/driver.py", line 546, in main
+2026-11-20T05:41:08.7843617Z   File "/home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/r1557/driver.py", line 471, in inventory
+2026-11-20T05:41:08.7844066Z     report = json.loads(result.stdout)
+2026-11-20T05:41:08.7846316Z json.decoder.JSONDecodeError: Extra data: line 55016 column 2 (char 1385695)
+2026-11-20T05:41:08.7919150Z gmake[2]: *** [CMakeFiles/r1557_registration_inventory.dir/build.make:71: CMakeFiles/r1557_registration_inventory] Error 1
+2026-11-20T05:41:08.7920732Z gmake[1]: *** [CMakeFiles/Makefile2:2359: CMakeFiles/r1557_registration_inventory.dir/all] Error 2

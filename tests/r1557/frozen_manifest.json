@@ -1,0 +1,69 @@
+{
+  "fixed_candidate": "93fd2752972a9c2348d85e33f941bb7c786ec99b",
+  "fixed_tree": "74666c834b433b63e00aed3ebdb020f7a2b6d10b",
+  "canonical_base": "be0ae7fa537b550ffdb8ad3640f49a504629062a",
+  "sources": [
+    {
+      "path": "tests/r1557/sources/r1557_v2_p1_tail.nl",
+      "name": "r1557_v2_p1_tail.nl",
+      "utf8_bytes": 327,
+      "sha256": "9dea431469145775e6da99b6aed6ffa14ff5875d005a78ae303806940f6324ae"
+    },
+    {
+      "path": "tests/r1557/sources/r1557_v2_p2_return_unitdivisor.nl",
+      "name": "r1557_v2_p2_return_unitdivisor.nl",
+      "utf8_bytes": 340,
+      "sha256": "e571495e4aee394cbfc8379976a1efc1f1409e08ab9ef6cf3bcec24c0a971317"
+    },
+    {
+      "path": "tests/r1557/sources/r1557_v1_n1_zero_divisor.nl",
+      "name": "r1557_v1_n1_zero_divisor.nl",
+      "utf8_bytes": 99,
+      "sha256": "ddceb2ed64e2e54c3ac1f8c517ccc7963308e77165f8dd28950c533759f29edb"
+    },
+    {
+      "path": "tests/r1557/sources/r1557_v1_n2_wrong_core_type.nl",
+      "name": "r1557_v1_n2_wrong_core_type.nl",
+      "utf8_bytes": 93,
+      "sha256": "5cef86a4c3517955f69cad2a2e632f8d0daa2ffedb3eb710e702db9c2511f5e6"
+    },
+    {
+      "path": "tests/r1557/sources/r1557_v1_n3_target_range.nl",
+      "name": "r1557_v1_n3_target_range.nl",
+      "utf8_bytes": 116,
+      "sha256": "1215a8ca0399068365d37e89c003cd11b4bc82b198068b782f16ef6e22ad7cfe"
+    },
+    {
+      "path": "tests/r1557/sources/r1557_v1_n4_result_context.nl",
+      "name": "r1557_v1_n4_result_context.nl",
+      "utf8_bytes": 156,
+      "sha256": "bb7996ab5193b5d4a0790c481c3135cb17c710df3dc04e1d76e8fc1ee239dd92"
+    },
+    {
+      "path": "tests/r1557/sources/r1557_auth_v1_division.nl",
+      "name": "r1557_auth_v1_division.nl",
+      "utf8_bytes": 345,
+      "sha256": "fc47b837b8152af7139255ca231da86e468f1047034dd85967f21eea00871029"
+    }
+  ],
+  "oracles": [
+    {
+      "path": "tests/r1557/oracles/r1557_v1_stage_oracle.txt",
+      "name": "r1557_v1_stage_oracle.txt",
+      "utf8_bytes": 10891,
+      "sha256": "c06f54c9bf3f42f6af020272694d3829e79938cdd0dd5155435e88aff9589068"
+    },
+    {
+      "path": "tests/r1557/oracles/r1557_v2_stage_oracle.txt",
+      "name": "r1557_v2_stage_oracle.txt",
+      "utf8_bytes": 12547,
+      "sha256": "50847646c04dcf1f32d400bfe648107b1249ec927e64047862d10bb269f2f00d"
+    },
+    {
+      "path": "tests/r1557/oracles/r1557_auth_v1_oracle.txt",
+      "name": "r1557_auth_v1_oracle.txt",
+      "utf8_bytes": 7911,
+      "sha256": "bb71e0c14ea23c7c61e4198bc86312cfc5bd11965fa0b0b24bdcd78906fdf2c5"
+    }
+  ]
+}

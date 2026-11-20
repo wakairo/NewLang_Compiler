@@ -1,0 +1,259 @@
+--- a/tests/r1557/public_probe.c
++++ b/tests/r1557/public_probe.c
+@@ -72,25 +72,21 @@
+     NLCheckStatus status =
+         nl_semantic_register_function_unit(p->context, inputs, 1, &ud);
+     printf("R1557 REGISTER label=%s status=%d code=%s input=%zu\n", label,
+-           (int)status, ud.diagnostic.diagnostic.code
+-                           ? ud.diagnostic.diagnostic.code
+-                           : "-",
++           (int)status,
++           ud.diagnostic.diagnostic.code ? ud.diagnostic.diagnostic.code : "-",
+            ud.input_index);
+     if (negative) {
+         if (ud.diagnostic.diagnostic.code)
+-            (void)nl_check_diagnostic_render(stdout, p->source,
+-                                             &ud.diagnostic);
++            (void)nl_check_diagnostic_render(stdout, p->source, &ud.diagnostic);
+         return require(status == NL_CHECK_SEMANTIC_ERROR,
+                        "negative must fail semantic registration") &&
+                require(ud.diagnostic.diagnostic.code != NULL &&
+-                           strcmp(ud.diagnostic.diagnostic.code, negative) ==
+-                               0,
++                           strcmp(ud.diagnostic.diagnostic.code, negative) == 0,
+                        "negative first semantic diagnostic");
+     }
+     if (status != NL_CHECK_OK) {
+         if (ud.diagnostic.diagnostic.code)
+-            (void)nl_check_diagnostic_render(stderr, p->source,
+-                                             &ud.diagnostic);
++            (void)nl_check_diagnostic_render(stderr, p->source, &ud.diagnostic);
+         return require(false, "positive definition CHECK refused");
+     }
+     return true;
+@@ -111,8 +107,8 @@
+                      p->entry_parser, &p->entry_tree, &pd) == NL_PARSE_OK,
+                  "ordinary main entry syntax"))
+         return false;
+-    NLCheckStatus status = nl_semantic_check_expression(
+-        p->context, p->entry_tree, &p->entry, &cd);
++    NLCheckStatus status =
++        nl_semantic_check_expression(p->context, p->entry_tree, &p->entry, &cd);
+     printf("R1557 ENTRY label=%s status=%d code=%s\n", label, (int)status,
+            cd.diagnostic.code ? cd.diagnostic.code : "-");
+     if (status != NL_CHECK_OK) {
+@@ -140,7 +136,7 @@
+ }
+ 
+ static bool scalar(const NLSemanticContext *context, NLValueId id,
+-                    size_t expected, const char *label)
++                   size_t expected, const char *label)
+ {
+     NLSemanticValueView value = {0};
+     if (!require(nl_semantic_value_view(context, id, &value),
+@@ -150,8 +146,7 @@
+            "number=%zu carrier=%d\n",
+            label, (const void *)context, id, value.type,
+            (int)value.scalar_known, value.scalar_value, (int)value.carrier);
+-    return require(value.type ==
+-                       nl_semantic_core_type(context, NL_TYPE_USIZE),
++    return require(value.type == nl_semantic_core_type(context, NL_TYPE_USIZE),
+                    "scalar core type identity") &&
+            require(value.scalar_known,
+                    "INCONCLUSIVE actual call scalar observation unavailable") &&
+@@ -160,7 +155,7 @@
+ }
+ 
+ static bool name_is(const NLCheckedFragment *body, NLSourceSpan span,
+-                     const char *name)
++                    const char *name)
+ {
+     NLSourceView text = {0};
+     return nl_source_view(nl_checked_source(body), span, &text) &&
+@@ -169,7 +164,7 @@
+ }
+ 
+ static bool inspect_bindings(const NLCheckedFragment *body, size_t first,
+-                              size_t second, bool caller)
++                             size_t second, bool caller)
+ {
+     const NLSemanticContext *context = nl_checked_context(body);
+     size_t matched = 0;
+@@ -218,7 +213,7 @@
+ }
+ 
+ static bool inspect_result(const NLCheckedFragment *body, bool explicit_return,
+-                            size_t expected)
++                           size_t expected)
+ {
+     const NLCheckedNodeView *root =
+         nl_checked_node_view(body, nl_checked_root(body));
+@@ -254,12 +249,11 @@
+ }
+ 
+ static bool inspect_program(Program *p, const char *label, bool division,
+-                             bool explicit_return, const size_t inputs[2],
+-                             const size_t results[2], Event events[2])
++                            bool explicit_return, const size_t inputs[2],
++                            const size_t results[2], Event events[2])
+ {
+     const NLCheckedNodeId entry_id = nl_checked_root(p->entry);
+-    const NLCheckedNodeView *entry =
+-        nl_checked_node_view(p->entry, entry_id);
++    const NLCheckedNodeView *entry = nl_checked_node_view(p->entry, entry_id);
+     if (!require(entry && entry->kind == NL_CHECKED_REGISTERED_CALL &&
+                      entry->body_backed && entry->result_count == 0,
+                  "whole unit ordinary main call"))
+@@ -271,18 +265,16 @@
+         return false;
+     size_t calls = 0;
+     size_t function = 0;
+-    for (NLCheckedNodeId call = 1;
+-         call <= nl_checked_node_count(main_body); ++call) {
++    for (NLCheckedNodeId call = 1; call <= nl_checked_node_count(main_body);
++         ++call) {
+         const NLCheckedNodeView *node = nl_checked_node_view(main_body, call);
+         if (node->kind != NL_CHECKED_REGISTERED_CALL)
+             continue;
+         if (!require(calls < 2 && node->body_backed &&
+-                         node->argument_count == 1 &&
+-                         node->result_count == 1,
++                         node->argument_count == 1 && node->result_count == 1,
+                      "two unary actual helper calls"))
+             return false;
+-        const NLCheckedFragment *body =
+-            nl_checked_call_body(main_body, call);
++        const NLCheckedFragment *body = nl_checked_call_body(main_body, call);
+         if (!require(body && nl_checked_context(body) == p->context,
+                      "actual child body same qualified context"))
+             return false;
+@@ -306,8 +298,7 @@
+             return false;
+         size_t operations = 0;
+         for (NLCheckedNodeId op = 1; op <= nl_checked_node_count(body); ++op) {
+-            const NLCheckedNodeView *operation =
+-                nl_checked_node_view(body, op);
++            const NLCheckedNodeView *operation = nl_checked_node_view(body, op);
+             NLCheckedKind wanted = division ? NL_CHECKED_USIZE_DIVISION
+                                             : NL_CHECKED_USIZE_REMAINDER;
+             if (operation->kind != wanted)
+@@ -318,12 +309,11 @@
+             events[calls].call = call;
+             if (division) {
+                 NLUsizeDivisionView *view = &events[calls].division;
+-                if (!require(nl_checked_usize_division_view(body, op, view) &&
+-                                 nl_checked_usize_division_valid(body, op,
+-                                                                 NULL) &&
+-                                 nl_checked_usize_division_valid(body, op,
+-                                                                 view),
+-                             "own actual division accessor/NULL/view"))
++                if (!require(
++                        nl_checked_usize_division_view(body, op, view) &&
++                            nl_checked_usize_division_valid(body, op, NULL) &&
++                            nl_checked_usize_division_valid(body, op, view),
++                        "own actual division accessor/NULL/view"))
+                     return false;
+                 printf("R1557 DIVISION label=%s call=%zu node=%zu result=%zu "
+                        "num_known=%d numerator=%zu divisor=%zu "
+@@ -340,20 +330,20 @@
+                     return false;
+             } else {
+                 NLUsizeRemainderView *view = &events[calls].remainder;
+-                if (!require(nl_checked_usize_remainder_view(body, op, view) &&
+-                                 nl_checked_usize_remainder_valid(body, op,
+-                                                                  NULL) &&
+-                                 nl_checked_usize_remainder_valid(body, op,
+-                                                                  view),
+-                             "own actual remainder accessor/NULL/view"))
++                if (!require(
++                        nl_checked_usize_remainder_view(body, op, view) &&
++                            nl_checked_usize_remainder_valid(body, op, NULL) &&
++                            nl_checked_usize_remainder_valid(body, op, view),
++                        "own actual remainder accessor/NULL/view"))
+                     return false;
+                 printf("R1557 REMAINDER label=%s call=%zu node=%zu result=%zu "
+                        "source=%p num_known=%d numerator=%zu divisor=%zu "
+                        "known=%d remainder=%zu max=%zu\n",
+-                       label, call, op, view->result, (const void *)view->source,
+-                       (int)view->numerator_known, view->numbers[0],
+-                       view->numbers[1], (int)view->remainder_known,
+-                       view->remainder, view->target_max);
++                       label, call, op, view->result,
++                       (const void *)view->source, (int)view->numerator_known,
++                       view->numbers[0], view->numbers[1],
++                       (int)view->remainder_known, view->remainder,
++                       view->target_max);
+                 if (!require(view->origin == body && view->node == op &&
+                                  view->source == nl_checked_source(body) &&
+                                  view->target_max == SIZE_MAX,
+@@ -374,7 +364,7 @@
+ }
+ 
+ static bool authenticate(Event events[2], Event duplicate[2], Event division[2],
+-                          Program *p2, Program *copy)
++                         Program *p2, Program *copy)
+ {
+     Event *a = &events[0], *b = &events[1], *foreign = &duplicate[0];
+     if (!require(p2->context != copy->context &&
+@@ -395,11 +385,10 @@
+         !require(rejected_source && rejected_call, "foreign view rejection"))
+         return false;
+     NLSemanticValueView va = {0}, vb = {0};
+-    if (!require(nl_semantic_value_view(p2->context, a->remainder.result,
+-                                        &va) &&
+-                     nl_semantic_value_view(p2->context, b->remainder.result,
+-                                             &vb),
+-                 "two genuine result observations") ||
++    if (!require(
++            nl_semantic_value_view(p2->context, a->remainder.result, &va) &&
++                nl_semantic_value_view(p2->context, b->remainder.result, &vb),
++            "two genuine result observations") ||
+         !require(a->remainder.result != b->remainder.result &&
+                      va.scalar_known && vb.scalar_known &&
+                      va.scalar_value == vb.scalar_value,
+@@ -449,26 +438,25 @@
+     const size_t first_inputs[] = {143, 153}, first_results[] = {7, 0};
+     const size_t second_inputs[] = {0, 65535}, second_results[] = {0, 0};
+     const size_t division_inputs[] = {0, 7}, division_results[] = {0, 7};
+-    const char *negative_codes[] = {
+-        "USIZE-REMAINDER-ZERO", "USIZE-REMAINDER-TYPE",
+-        "USIZE-LITERAL-RANGE", "P8-BODY-RESULT"};
+-    bool ok = register_program(&p1, argv[1], "p1", NULL) &&
+-              enter_main(&p1, "p1") &&
+-              inspect_program(&p1, "p1", false, false, first_inputs,
+-                              first_results, first) &&
+-              register_program(&p2, argv[2], "p2", NULL) &&
+-              enter_main(&p2, "p2") &&
+-              inspect_program(&p2, "p2", false, true, second_inputs,
+-                              second_results, second) &&
+-              register_program(&copy, argv[2], "p2-duplicate", NULL) &&
+-              enter_main(&copy, "p2-duplicate") &&
+-              inspect_program(&copy, "p2-duplicate", false, true, second_inputs,
+-                              second_results, duplicate) &&
+-              register_program(&division, argv[3], "auth", NULL) &&
+-              enter_main(&division, "auth") &&
+-              inspect_program(&division, "auth", true, true, division_inputs,
+-                              division_results, control) &&
+-              authenticate(second, duplicate, control, &p2, &copy);
++    const char *negative_codes[] = {"USIZE-REMAINDER-ZERO",
++                                    "USIZE-REMAINDER-TYPE",
++                                    "USIZE-LITERAL-RANGE", "P8-BODY-RESULT"};
++    bool ok =
++        register_program(&p1, argv[1], "p1", NULL) && enter_main(&p1, "p1") &&
++        inspect_program(&p1, "p1", false, false, first_inputs, first_results,
++                        first) &&
++        register_program(&p2, argv[2], "p2", NULL) && enter_main(&p2, "p2") &&
++        inspect_program(&p2, "p2", false, true, second_inputs, second_results,
++                        second) &&
++        register_program(&copy, argv[2], "p2-duplicate", NULL) &&
++        enter_main(&copy, "p2-duplicate") &&
++        inspect_program(&copy, "p2-duplicate", false, true, second_inputs,
++                        second_results, duplicate) &&
++        register_program(&division, argv[3], "auth", NULL) &&
++        enter_main(&division, "auth") &&
++        inspect_program(&division, "auth", true, true, division_inputs,
++                        division_results, control) &&
++        authenticate(second, duplicate, control, &p2, &copy);
+     for (size_t i = 0; ok && i < 4; ++i) {
+         Program negative = {0};
+         ok = register_program(&negative, argv[4 + i], negative_codes[i],

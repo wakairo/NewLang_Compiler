@@ -1,0 +1,75 @@
+{
+  "schema": "r1557-mechanical-repair-receipt-v1",
+  "observed_utc": "2026-11-20T06:00:27Z",
+  "candidate": "93fd2752972a9c2348d85e33f941bb7c786ec99b",
+  "r_head": "3671b678636ed17fcd2f487adb8d946b6f0388e2",
+  "checkout_head": "ded08143e565c1d296ab78ca12309cb046a7097b",
+  "checkout_tree": "dde95149c02eca3c575f584dfcd3b192287647e2",
+  "original_parent_porcelain_stdout": "\n",
+  "first_full_run": 44683423598,
+  "first_partial_run": 44683423672,
+  "jobs": [
+    {
+      "id": 136111974426,
+      "name": "GCC",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 136111974095,
+      "name": "GCC Release",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 136111974411,
+      "name": "Clang",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 136111974409,
+      "name": "PARTIAL",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 136111974304,
+      "name": "ASan",
+      "status": "in_progress"
+    },
+    {
+      "id": 136111974406,
+      "name": "UBSan",
+      "status": "in_progress"
+    }
+  ],
+  "first_failure": "R identity metadata adapter before public probe: checkout metadata candidate_tree",
+  "candidate_tree_returncode": 128,
+  "candidate_tree_stdout": "93fd2752972a9c2348d85e33f941bb7c786ec99b^{tree}\n",
+  "candidate_tree_stderr_sha256": "30106d50f9ab005539ac9915f3829ca6df73f580b0e0ec488906b118333b56cf",
+  "public_probe_reached": false,
+  "native_fixture": "Not Run",
+  "guest_processes": 0,
+  "representative_transport_job": 136111974409,
+  "representative_transport": {
+    "base64_characters": 99104,
+    "files": 21,
+    "gzip_sha256": "a893a32f2a576e1db7e7604c8be89faf6f32f53311ce3554429631a9a795920b",
+    "missing": [
+      "public.result.json",
+      "native.result.json"
+    ],
+    "payload_bytes": 1862390,
+    "payload_sha256": "9a1cb5450245832f1503aae757e123d3d0f6196e3fe8cc9a789bd81a8b919f67",
+    "transport_is_pass_gate": false
+  },
+  "repair": "Only R identity() adapter: read actual current commit tree/parent headers with cat-file; compare actual event SHA/PR base/head/ordered parents; record unavailable local candidate object explicitly when actual checkout shallow; retain separately labelled authoritative API fixed candidate tree. No source/oracle/compiler/predicate/native observer change.",
+  "budgets_before_repair": {
+    "fast": 3,
+    "fast_limit": 6,
+    "natural_full_partial_sets": 1,
+    "full_partial_job_limit": 12
+  },
+  "budget_effect": "One FAST4 and sole additional natural FULL5+PARTIAL; original first jobs preserved and never canceled."
+}
