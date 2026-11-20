@@ -32,3 +32,10 @@ set_tests_properties(r1568.cli_negative_control.integration PROPERTIES
 set_tests_properties(r1568.c17_native.integration PROPERTIES
     FIXTURES_REQUIRED "r1568_public_ready;r1568_controls_ready"
     TIMEOUT 240 LABELS "independent-r;r1568")
+
+# Inventory only: retain the own actual CTest names in FAST build logs.
+add_custom_target(r1568_registration ALL
+    COMMAND "${CMAKE_CTEST_COMMAND}" --test-dir "${CMAKE_BINARY_DIR}"
+        -N -R "^r1568[.]"
+    DEPENDS r1568_public newlangc
+    VERBATIM)
