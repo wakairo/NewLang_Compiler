@@ -214,8 +214,10 @@ def positive():
 def negative():
     for name in ("equal-helper", "divisor-zero", "operand-type", "dynamic-divisor", "invalid-return"):
         case = ORACLE[name]
-        # The named nonzero divisor is legal source outside the literal profile.
-        checked = run([CLI, "--check", source(name)], success=case["check"] == "PASS")
+        # The unchanged parser refuses a legal named divisor before the
+        # semantic precision diagnostic predicted in the frozen FIRST.
+        diagnostic = "USIZE-REMAINDER-SOURCE-PRECISION" if name == "dynamic-divisor" else case["check"]
+        checked = run([CLI, "--check", source(name)], success=diagnostic == "PASS")
         assert not checked.stdout
         if "helper" in case:
             assert not checked.stderr
@@ -223,14 +225,14 @@ def negative():
             marker = f"EXCLUDED actual={case['direct']} helper={case['helper']} leaf seal=0 no-clobber=PASS"
             assert marker.encode() in excluded.stdout and not excluded.stderr
         else:
-            assert case["check"].encode() in checked.stderr
+            assert diagnostic.encode() in checked.stderr
         target = WORK / f"{name}.c"
         sentinel = b"P1572 existing named target\x00\n"
         target.write_bytes(sentinel)
         before = target.stat()
         result = run([CLI, "--emit-c17-to", target, source(name)], success=False)
         after = target.stat()
-        assert case.get("emit", case["check"]).encode() in result.stderr and not result.stdout
+        assert case.get("emit", diagnostic).encode() in result.stderr and not result.stdout
         assert target.read_bytes() == sentinel
         assert (before.st_ino, before.st_mtime_ns) == (after.st_ino, after.st_mtime_ns)
         assert not list(WORK.glob(target.name + ".tmp*"))
