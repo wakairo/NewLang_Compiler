@@ -1,0 +1,2505 @@
+{
+  "label": "NON-BLIND / implementation-exposed calibrated",
+  "original_head": "6580bd0f2bc4b2ed29d5acf7727d963d2317ffaf",
+  "original_tree": "c98575586230b1cf51366a1e0615c9cc10bc2048",
+  "original_checkout": "2fac3282c13d3d1a2e312d7557cdacf425f74b8a",
+  "fixed_p": "069d219d53351302b374260e9045d22cfee48977",
+  "original_runs": {
+    "full": 44695424248,
+    "partial": 44695424301
+  },
+  "original_asan": {
+    "job": 136150927998,
+    "status_at_repair_preparation": "in_progress",
+    "result": "PENDING; no success/failure or guest count inferred",
+    "recovery": "retain original job ID; recover after natural completion"
+  },
+  "formation": "FIRST source/oracle independent and unchanged; original exposure STOP remains valid",
+  "first": {
+    "bytes": 18788,
+    "sha256": "658564074e9b5c80bf4cec97aa52b76cdad7b20f45e76eb6e4f36f73e4fc1040",
+    "oracle_sha256": "59d63e02a169e4fecd8e2916207c900d8757130d3355b069ee894733a7bb59b9"
+  },
+  "source_manifest": [
+    {
+      "path": "tests/r1562/r1562_first_p1_division_chain.nl",
+      "bytes": 459,
+      "sha256": "20c976aa377797cf230ce5793c4cd0992e076a66a05495cb795d6efaac888742"
+    },
+    {
+      "path": "tests/r1562/r1562_first_p2_equal_value_distinct_origin.nl",
+      "bytes": 507,
+      "sha256": "e3d863263c0dd8518519ea6231244d8676d1b27e1716bf2ccfd2a251e55f202b"
+    },
+    {
+      "path": "tests/r1562/r1562_first_n1_zero_division.nl",
+      "bytes": 459,
+      "sha256": "2bf51ab6f7f327a22d960abb17fe0f11ddb82c281e33598b32aedddd3b41ea0f"
+    },
+    {
+      "path": "tests/r1562/r1562_first_n2_zero_remainder.nl",
+      "bytes": 507,
+      "sha256": "f20498c5be7ca749088c0455bf75b5171748647c5d05869c87359d436836d5b2"
+    },
+    {
+      "path": "tests/r1562/r1562_first_n3_actual_type.nl",
+      "bytes": 456,
+      "sha256": "ef8a7763816695ace7400f0dca72740f85edd0b65df3b0a65857b2a87ef8302a"
+    },
+    {
+      "path": "tests/r1562/r1562_first_n4_return_type.nl",
+      "bytes": 453,
+      "sha256": "af1dca95315308fe990b2c324502f4d45fef3fc4007fb50455db07a243620100"
+    }
+  ],
+  "failure": "P2 public retained body uses local lines3/4/5; own challenge selector used whole-source lines10/11. Four challenges not executed; two P1 challenges rejected. Native fixture Not Run.",
+  "correction": "Only authentic target selection coordinate literals and driver source-coordinate/diagnostic adapter; no source/oracle/validator predicate/observer/production/target change.",
+  "diagnostic_adapter": "FIRST froze obligations, explicitly not diagnostic locations/codes/traversal. Remove later unpromised exact report-line assertion; bind observed code labels to original semantic obligations and retain raw spans/messages.",
+  "source_coordinate_evidence": [
+    {
+      "unit": "P1",
+      "owner": "main",
+      "body": "0x556615e95690",
+      "start": 18,
+      "unique": true,
+      "offset": 0,
+      "header": "fn main() -> unit "
+    },
+    {
+      "unit": "P1",
+      "owner": "sift_five",
+      "body": "0x556615e9d1d0",
+      "start": 410,
+      "unique": true,
+      "offset": 17,
+      "header": "fn sift_five(parcel: usize) -> usize "
+    },
+    {
+      "unit": "P1",
+      "owner": "pack_three",
+      "body": "0x556615ea0880",
+      "start": 282,
+      "unique": true,
+      "offset": 11,
+      "header": "fn pack_three(parcel: usize) -> usize "
+    },
+    {
+      "unit": "P1",
+      "owner": "pack_three",
+      "body": "0x556615e7e4f0",
+      "start": 282,
+      "unique": true,
+      "offset": 11,
+      "header": "fn pack_three(parcel: usize) -> usize "
+    },
+    {
+      "unit": "P2",
+      "owner": "main",
+      "body": "0x556615edd910",
+      "start": 136,
+      "unique": true,
+      "offset": 6,
+      "header": "fn main() -> unit "
+    },
+    {
+      "unit": "P2",
+      "owner": "split_seventeen",
+      "body": "0x556615f3fac0",
+      "start": 449,
+      "unique": true,
+      "offset": 17,
+      "header": "fn split_seventeen(amount: usize) -> usize "
+    },
+    {
+      "unit": "P2",
+      "owner": "residue_six",
+      "body": "0x556615f3c300",
+      "start": 39,
+      "unique": true,
+      "offset": 0,
+      "header": "fn residue_six(amount: usize) -> usize "
+    },
+    {
+      "unit": "P2",
+      "owner": "residue_six",
+      "body": "0x556615edc920",
+      "start": 39,
+      "unique": true,
+      "offset": 0,
+      "header": "fn residue_six(amount: usize) -> usize "
+    },
+    {
+      "unit": "P2DUP",
+      "owner": "main",
+      "body": "0x556615f64930",
+      "start": 136,
+      "unique": true,
+      "offset": 6,
+      "header": "fn main() -> unit "
+    },
+    {
+      "unit": "P2DUP",
+      "owner": "split_seventeen",
+      "body": "0x556615f64690",
+      "start": 449,
+      "unique": true,
+      "offset": 17,
+      "header": "fn split_seventeen(amount: usize) -> usize "
+    },
+    {
+      "unit": "P2DUP",
+      "owner": "residue_six",
+      "body": "0x556615f6d090",
+      "start": 39,
+      "unique": true,
+      "offset": 0,
+      "header": "fn residue_six(amount: usize) -> usize "
+    },
+    {
+      "unit": "P2DUP",
+      "owner": "residue_six",
+      "body": "0x556615f78680",
+      "start": 39,
+      "unique": true,
+      "offset": 0,
+      "header": "fn residue_six(amount: usize) -> usize "
+    }
+  ],
+  "original_record_preserved": "tests/r1562/repairs/full1-clang-probe.stdout",
+  "original_record_hash": {
+    "bytes": 86399,
+    "sha256": "340174ec594efdf92abb911d26615a85b44084d9af01d8ff89a3e442ed975b6f"
+  },
+  "prepared_repair": [
+    {
+      "path": "tests/r1562/probe.c",
+      "sha": "cd23151eac91f1eed69b5489d6ed6cb807d38c3b",
+      "bytes": 18396,
+      "sha256": "c7852cf828ba91e8b4995b581de9dfacd43384140bfb7f92b606b8d9752c3f0d"
+    },
+    {
+      "path": "tests/r1562/run.py",
+      "sha": "854aef0a916064f34cd4a323251e21f75c378c9f",
+      "bytes": 16326,
+      "sha256": "8246149e9420be1de284d94288bef0aa1530b6b544db61c2144cc02d6ecd0890"
+    },
+    {
+      "path": "tests/r1562/repairs/full1-clang-probe.stdout",
+      "sha": "81c2881e12cf3a166f94c247f0ac45faa1520730",
+      "bytes": 86399,
+      "sha256": "340174ec594efdf92abb911d26615a85b44084d9af01d8ff89a3e442ed975b6f"
+    }
+  ],
+  "completed_original_jobs": [
+    {
+      "job": 136150928017,
+      "run": 44695424248,
+      "status": "completed/failure",
+      "public_probe": "exit1; four apparatus errors; stderr empty",
+      "native": "Not Run (fixture dependency)",
+      "guest_attempts": 0,
+      "raw_probe": {
+        "bytes": 86399,
+        "sha256": "eb668732dd6dd9df83d02b95df985b23ecece49a2168cc1eba9fbbf0035777e6"
+      },
+      "parse_registration_entry": [
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N1"
+        },
+        {
+          "code": "USIZE-DIVISION-ZERO",
+          "end": 77,
+          "kind": "REGISTER",
+          "line": 3,
+          "message": "usize divisor must be nonzero",
+          "start": 62,
+          "status": 1,
+          "unit": "N1"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N2"
+        },
+        {
+          "code": "USIZE-REMAINDER-ZERO",
+          "end": 245,
+          "kind": "REGISTER",
+          "line": 10,
+          "message": "usize divisor must be nonzero",
+          "start": 227,
+          "status": 1,
+          "unit": "N2"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N3"
+        },
+        {
+          "code": "P3-TYPE-MISMATCH",
+          "end": 73,
+          "kind": "REGISTER",
+          "line": 3,
+          "message": "argument semantic type does not match selected parameter",
+          "start": 69,
+          "status": 1,
+          "unit": "N3"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N4"
+        },
+        {
+          "code": "P9-RETURN-TYPE",
+          "end": 136,
+          "kind": "REGISTER",
+          "line": 5,
+          "message": "return expression must exactly match the function result",
+          "start": 119,
+          "status": 1,
+          "unit": "N4"
+        }
+      ],
+      "authentication": [
+        {
+          "accepted": false,
+          "challenge": "P1_same_value_repeated_call",
+          "foreign_call_line": 6,
+          "foreign_unit": "P1",
+          "kind": "AUTH",
+          "target_call_line": 5,
+          "unit": "P1"
+        },
+        {
+          "accepted": false,
+          "challenge": "P1_different_leaf",
+          "foreign_call_line": 5,
+          "foreign_unit": "P1",
+          "kind": "AUTH",
+          "target_call_line": 3,
+          "unit": "P1"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_equal_remainders_distinct_actual",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_other_actual_origin",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_identical_bytes_foreign_context",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_foreign_source_only",
+          "unit": "AUTH"
+        },
+        {
+          "failed": true,
+          "kind": "END"
+        }
+      ],
+      "checkout": {
+        "event_name": "pull_request",
+        "event_sha": "2fac3282c13d3d1a2e312d7557cdacf425f74b8a",
+        "fixed_p_object_present": false,
+        "head": "2fac3282c13d3d1a2e312d7557cdacf425f74b8a",
+        "ordered_parents": [
+          "069d219d53351302b374260e9045d22cfee48977",
+          "6580bd0f2bc4b2ed29d5acf7727d963d2317ffaf"
+        ],
+        "pr": {
+          "base_ref": "p1561-distinct-usize-leaf-composition-public",
+          "base_sha": "069d219d53351302b374260e9045d22cfee48977",
+          "head_ref": "r-fast/r1562-distinct-quantity-composition",
+          "head_sha": "6580bd0f2bc4b2ed29d5acf7727d963d2317ffaf",
+          "number": 1565
+        },
+        "ref": "refs/pull/1565/merge",
+        "run_attempt": "1",
+        "run_id": "44695424248",
+        "tree": [
+          "c98575586230b1cf51366a1e0615c9cc10bc2048"
+        ]
+      },
+      "recovered_batches": [
+        {
+          "files": 35,
+          "bytes": 281500
+        }
+      ],
+      "recovered_files": [
+        {
+          "path": "metadata/build-config.json",
+          "bytes": 856,
+          "sha256": "c50ade40405f8e946284b308a9f13620d1dbf78804f2778a500ba02fcaedb2e0",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.command.json",
+          "bytes": 388,
+          "sha256": "d8eeb1504758782082f3c70308eed6fbe7f14108742fd0d19d3609ace2e07ca3",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.stdout",
+          "bytes": 1179,
+          "sha256": "c6c19b50b988d39d1fa40ee9637398a46aa2631fbcda44a6947db759e34abdd8",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.command.json",
+          "bytes": 377,
+          "sha256": "c09988ded9db12772989c9136c76c1ae58dc9a160943752ec5eb06400ed7290a",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.stdout",
+          "bytes": 41,
+          "sha256": "e6c718d1138c8eeccc9c311f7f05b21599dda95f4e290265382aa6cca669283d",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout.json",
+          "bytes": 732,
+          "sha256": "9daf426f06a238f4234439754e4597b3b1d3c6924acb9d08f6a422bb991848b2",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.command.json",
+          "bytes": 476,
+          "sha256": "e35d003e1efd4eb225c913c6df40ddedb4b0497a67b6b9e0d60a8fffb862225c",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.stdout",
+          "bytes": 53161,
+          "sha256": "4855bccc5ff5d76258bc734df38f4ea3bb586fe919dbe0bd75d2980693508907",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.command.json",
+          "bytes": 433,
+          "sha256": "12e6699df1a8ee464379f669853edb6759971bf35aae9a33b8b9f577ac2079f2",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.stderr",
+          "bytes": 81,
+          "sha256": "7eb05038b0227771aebf939899ced42424a52bfabbfb3f52599a5d655abbc231",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/inventory.json",
+          "bytes": 296,
+          "sha256": "55b77cf469dbeea1b8bdf3e38220ea2dc683dac9d326dfe08ccc8c4e0d0e9ead",
+          "verified": true
+        },
+        {
+          "path": "public/STOP.json",
+          "bytes": 196,
+          "sha256": "064cfca42c75c5c4e094b15c01114f03f64748e1b701718ad144e46342d23978",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.command.json",
+          "bytes": 1162,
+          "sha256": "33b9bd901b6cc20ee8526556a3bbea8ba6159102f5c26365552b3890e88658c5",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.stdout",
+          "bytes": 86399,
+          "sha256": "eb668732dd6dd9df83d02b95df985b23ecece49a2168cc1eba9fbbf0035777e6",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n12.nl",
+          "bytes": 89,
+          "sha256": "a2cdbce25acefc865c520a18cdc89c16192c06d8491a9fdcde54abfe3513c257",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n16.nl",
+          "bytes": 89,
+          "sha256": "a2cdbce25acefc865c520a18cdc89c16192c06d8491a9fdcde54abfe3513c257",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n5.nl",
+          "bytes": 48,
+          "sha256": "63daeb748f7081f734ffacd14347b5c98db8160bbe4e4326325762643685bc09",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1.nl",
+          "bytes": 224,
+          "sha256": "8e5f63213d8cd29ea9f9f5180f17806cbe7ab61409f8c3db6a47b26f883039c2",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n13.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n5.nl",
+          "bytes": 57,
+          "sha256": "ff5378c084aff8d74edc437232548d218c67db24a3094dbfbf8281a6a60d38da",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n9.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1.nl",
+          "bytes": 268,
+          "sha256": "eac3fb81f89cff09b3f411e3ea047d831a517a087cf7dd28694ecf4316124b9e",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n13.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n5.nl",
+          "bytes": 57,
+          "sha256": "ff5378c084aff8d74edc437232548d218c67db24a3094dbfbf8281a6a60d38da",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n9.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1.nl",
+          "bytes": 268,
+          "sha256": "eac3fb81f89cff09b3f411e3ea047d831a517a087cf7dd28694ecf4316124b9e",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/records.json",
+          "bytes": 134297,
+          "sha256": "f732e031999a26b491699e6c354d5743e6ed528bf785a4ffa912b744e9bfc0f6",
+          "verified": true
+        }
+      ],
+      "recovery_issues": []
+    },
+    {
+      "job": 136150927964,
+      "run": 44695424248,
+      "status": "completed/failure",
+      "public_probe": "exit1; four apparatus errors; stderr empty",
+      "native": "Not Run (fixture dependency)",
+      "guest_attempts": 0,
+      "raw_probe": {
+        "bytes": 86399,
+        "sha256": "376e1f6838705e28119287694e7987534d7684b2b2b1a04d45724ca1d21ceef9"
+      },
+      "parse_registration_entry": [
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N1"
+        },
+        {
+          "code": "USIZE-DIVISION-ZERO",
+          "end": 77,
+          "kind": "REGISTER",
+          "line": 3,
+          "message": "usize divisor must be nonzero",
+          "start": 62,
+          "status": 1,
+          "unit": "N1"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N2"
+        },
+        {
+          "code": "USIZE-REMAINDER-ZERO",
+          "end": 245,
+          "kind": "REGISTER",
+          "line": 10,
+          "message": "usize divisor must be nonzero",
+          "start": 227,
+          "status": 1,
+          "unit": "N2"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N3"
+        },
+        {
+          "code": "P3-TYPE-MISMATCH",
+          "end": 73,
+          "kind": "REGISTER",
+          "line": 3,
+          "message": "argument semantic type does not match selected parameter",
+          "start": 69,
+          "status": 1,
+          "unit": "N3"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N4"
+        },
+        {
+          "code": "P9-RETURN-TYPE",
+          "end": 136,
+          "kind": "REGISTER",
+          "line": 5,
+          "message": "return expression must exactly match the function result",
+          "start": 119,
+          "status": 1,
+          "unit": "N4"
+        }
+      ],
+      "authentication": [
+        {
+          "accepted": false,
+          "challenge": "P1_same_value_repeated_call",
+          "foreign_call_line": 6,
+          "foreign_unit": "P1",
+          "kind": "AUTH",
+          "target_call_line": 5,
+          "unit": "P1"
+        },
+        {
+          "accepted": false,
+          "challenge": "P1_different_leaf",
+          "foreign_call_line": 5,
+          "foreign_unit": "P1",
+          "kind": "AUTH",
+          "target_call_line": 3,
+          "unit": "P1"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_equal_remainders_distinct_actual",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_other_actual_origin",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_identical_bytes_foreign_context",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_foreign_source_only",
+          "unit": "AUTH"
+        },
+        {
+          "failed": true,
+          "kind": "END"
+        }
+      ],
+      "checkout": {
+        "event_name": "pull_request",
+        "event_sha": "2fac3282c13d3d1a2e312d7557cdacf425f74b8a",
+        "fixed_p_object_present": false,
+        "head": "2fac3282c13d3d1a2e312d7557cdacf425f74b8a",
+        "ordered_parents": [
+          "069d219d53351302b374260e9045d22cfee48977",
+          "6580bd0f2bc4b2ed29d5acf7727d963d2317ffaf"
+        ],
+        "pr": {
+          "base_ref": "p1561-distinct-usize-leaf-composition-public",
+          "base_sha": "069d219d53351302b374260e9045d22cfee48977",
+          "head_ref": "r-fast/r1562-distinct-quantity-composition",
+          "head_sha": "6580bd0f2bc4b2ed29d5acf7727d963d2317ffaf",
+          "number": 1565
+        },
+        "ref": "refs/pull/1565/merge",
+        "run_attempt": "1",
+        "run_id": "44695424248",
+        "tree": [
+          "c98575586230b1cf51366a1e0615c9cc10bc2048"
+        ]
+      },
+      "recovered_batches": [
+        {
+          "files": 35,
+          "bytes": 315284
+        }
+      ],
+      "recovered_files": [
+        {
+          "path": "metadata/build-config.json",
+          "bytes": 858,
+          "sha256": "c9a4458c024c4aba8947fac01b77c6f4c0c3e28a0a195e9f323eb70c8c474209",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.command.json",
+          "bytes": 388,
+          "sha256": "d8eeb1504758782082f3c70308eed6fbe7f14108742fd0d19d3609ace2e07ca3",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.stdout",
+          "bytes": 1179,
+          "sha256": "c6c19b50b988d39d1fa40ee9637398a46aa2631fbcda44a6947db759e34abdd8",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.command.json",
+          "bytes": 377,
+          "sha256": "c09988ded9db12772989c9136c76c1ae58dc9a160943752ec5eb06400ed7290a",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.stdout",
+          "bytes": 41,
+          "sha256": "e6c718d1138c8eeccc9c311f7f05b21599dda95f4e290265382aa6cca669283d",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout.json",
+          "bytes": 732,
+          "sha256": "9daf426f06a238f4234439754e4597b3b1d3c6924acb9d08f6a422bb991848b2",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.command.json",
+          "bytes": 476,
+          "sha256": "9f536946f97647353e58de95276c844377a91e4b5d58db426663932ea2c8fff0",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.stdout",
+          "bytes": 86943,
+          "sha256": "59b561aa4d5a0adabfca418f663f6f15bd9ce95d81cc36500a80220c9d73bc1e",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.command.json",
+          "bytes": 433,
+          "sha256": "12e6699df1a8ee464379f669853edb6759971bf35aae9a33b8b9f577ac2079f2",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.stderr",
+          "bytes": 81,
+          "sha256": "7eb05038b0227771aebf939899ced42424a52bfabbfb3f52599a5d655abbc231",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/inventory.json",
+          "bytes": 296,
+          "sha256": "9590b4fd34f356b5c534ef52269ad758bcec9ab8a77aee1fc2c7e0dc493a2cd9",
+          "verified": true
+        },
+        {
+          "path": "public/STOP.json",
+          "bytes": 196,
+          "sha256": "064cfca42c75c5c4e094b15c01114f03f64748e1b701718ad144e46342d23978",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.command.json",
+          "bytes": 1162,
+          "sha256": "d2a909c287c11bdae06aa68f7b8870eea0c72169d7ee22e479463dd405f98bd2",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.stdout",
+          "bytes": 86399,
+          "sha256": "376e1f6838705e28119287694e7987534d7684b2b2b1a04d45724ca1d21ceef9",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n12.nl",
+          "bytes": 89,
+          "sha256": "a2cdbce25acefc865c520a18cdc89c16192c06d8491a9fdcde54abfe3513c257",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n16.nl",
+          "bytes": 89,
+          "sha256": "a2cdbce25acefc865c520a18cdc89c16192c06d8491a9fdcde54abfe3513c257",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n5.nl",
+          "bytes": 48,
+          "sha256": "63daeb748f7081f734ffacd14347b5c98db8160bbe4e4326325762643685bc09",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1.nl",
+          "bytes": 224,
+          "sha256": "8e5f63213d8cd29ea9f9f5180f17806cbe7ab61409f8c3db6a47b26f883039c2",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n13.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n5.nl",
+          "bytes": 57,
+          "sha256": "ff5378c084aff8d74edc437232548d218c67db24a3094dbfbf8281a6a60d38da",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n9.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1.nl",
+          "bytes": 268,
+          "sha256": "eac3fb81f89cff09b3f411e3ea047d831a517a087cf7dd28694ecf4316124b9e",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n13.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n5.nl",
+          "bytes": 57,
+          "sha256": "ff5378c084aff8d74edc437232548d218c67db24a3094dbfbf8281a6a60d38da",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n9.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1.nl",
+          "bytes": 268,
+          "sha256": "eac3fb81f89cff09b3f411e3ea047d831a517a087cf7dd28694ecf4316124b9e",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/records.json",
+          "bytes": 134297,
+          "sha256": "daf8cc09d9988cd1626b55059324f1251143beaac16667e380e4795dbbf57b2a",
+          "verified": true
+        }
+      ],
+      "recovery_issues": []
+    },
+    {
+      "job": 136150927926,
+      "run": 44695424248,
+      "status": "completed/failure",
+      "public_probe": "exit1; four apparatus errors; stderr empty",
+      "native": "Not Run (fixture dependency)",
+      "guest_attempts": 0,
+      "raw_probe": {
+        "bytes": 86399,
+        "sha256": "340174ec594efdf92abb911d26615a85b44084d9af01d8ff89a3e442ed975b6f"
+      },
+      "parse_registration_entry": [
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N1"
+        },
+        {
+          "code": "USIZE-DIVISION-ZERO",
+          "end": 77,
+          "kind": "REGISTER",
+          "line": 3,
+          "message": "usize divisor must be nonzero",
+          "start": 62,
+          "status": 1,
+          "unit": "N1"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N2"
+        },
+        {
+          "code": "USIZE-REMAINDER-ZERO",
+          "end": 245,
+          "kind": "REGISTER",
+          "line": 10,
+          "message": "usize divisor must be nonzero",
+          "start": 227,
+          "status": 1,
+          "unit": "N2"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N3"
+        },
+        {
+          "code": "P3-TYPE-MISMATCH",
+          "end": 73,
+          "kind": "REGISTER",
+          "line": 3,
+          "message": "argument semantic type does not match selected parameter",
+          "start": 69,
+          "status": 1,
+          "unit": "N3"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N4"
+        },
+        {
+          "code": "P9-RETURN-TYPE",
+          "end": 136,
+          "kind": "REGISTER",
+          "line": 5,
+          "message": "return expression must exactly match the function result",
+          "start": 119,
+          "status": 1,
+          "unit": "N4"
+        }
+      ],
+      "authentication": [
+        {
+          "accepted": false,
+          "challenge": "P1_same_value_repeated_call",
+          "foreign_call_line": 6,
+          "foreign_unit": "P1",
+          "kind": "AUTH",
+          "target_call_line": 5,
+          "unit": "P1"
+        },
+        {
+          "accepted": false,
+          "challenge": "P1_different_leaf",
+          "foreign_call_line": 5,
+          "foreign_unit": "P1",
+          "kind": "AUTH",
+          "target_call_line": 3,
+          "unit": "P1"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_equal_remainders_distinct_actual",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_other_actual_origin",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_identical_bytes_foreign_context",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_foreign_source_only",
+          "unit": "AUTH"
+        },
+        {
+          "failed": true,
+          "kind": "END"
+        }
+      ],
+      "checkout": {
+        "event_name": "pull_request",
+        "event_sha": "2fac3282c13d3d1a2e312d7557cdacf425f74b8a",
+        "fixed_p_object_present": false,
+        "head": "2fac3282c13d3d1a2e312d7557cdacf425f74b8a",
+        "ordered_parents": [
+          "069d219d53351302b374260e9045d22cfee48977",
+          "6580bd0f2bc4b2ed29d5acf7727d963d2317ffaf"
+        ],
+        "pr": {
+          "base_ref": "p1561-distinct-usize-leaf-composition-public",
+          "base_sha": "069d219d53351302b374260e9045d22cfee48977",
+          "head_ref": "r-fast/r1562-distinct-quantity-composition",
+          "head_sha": "6580bd0f2bc4b2ed29d5acf7727d963d2317ffaf",
+          "number": 1565
+        },
+        "ref": "refs/pull/1565/merge",
+        "run_attempt": "1",
+        "run_id": "44695424248",
+        "tree": [
+          "c98575586230b1cf51366a1e0615c9cc10bc2048"
+        ]
+      },
+      "recovered_batches": [
+        {
+          "files": 35,
+          "bytes": 291923
+        }
+      ],
+      "recovered_files": [
+        {
+          "path": "metadata/build-config.json",
+          "bytes": 1025,
+          "sha256": "819c342ade1e8b81c9f65d00ecf0708764970206ccdc359288edbd8e15bfa9da",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.command.json",
+          "bytes": 388,
+          "sha256": "d8eeb1504758782082f3c70308eed6fbe7f14108742fd0d19d3609ace2e07ca3",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.stdout",
+          "bytes": 1179,
+          "sha256": "c6c19b50b988d39d1fa40ee9637398a46aa2631fbcda44a6947db759e34abdd8",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.command.json",
+          "bytes": 377,
+          "sha256": "c09988ded9db12772989c9136c76c1ae58dc9a160943752ec5eb06400ed7290a",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.stdout",
+          "bytes": 41,
+          "sha256": "e6c718d1138c8eeccc9c311f7f05b21599dda95f4e290265382aa6cca669283d",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout.json",
+          "bytes": 732,
+          "sha256": "9daf426f06a238f4234439754e4597b3b1d3c6924acb9d08f6a422bb991848b2",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.command.json",
+          "bytes": 476,
+          "sha256": "50115a5b38a71172bae589dfb8f2a8fe113378cf36cbec4b556908b30316d7ff",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.stdout",
+          "bytes": 63415,
+          "sha256": "5eb8476c7ecc2213b151cbe234b51575e4cd0122fe53c3c15350ab59e85018c1",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.command.json",
+          "bytes": 433,
+          "sha256": "12e6699df1a8ee464379f669853edb6759971bf35aae9a33b8b9f577ac2079f2",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.stderr",
+          "bytes": 81,
+          "sha256": "7eb05038b0227771aebf939899ced42424a52bfabbfb3f52599a5d655abbc231",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/inventory.json",
+          "bytes": 296,
+          "sha256": "bfbdec11839203883e18c265b347bde75024befec853561158a3e8a1d9eb2ff0",
+          "verified": true
+        },
+        {
+          "path": "public/STOP.json",
+          "bytes": 196,
+          "sha256": "064cfca42c75c5c4e094b15c01114f03f64748e1b701718ad144e46342d23978",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.command.json",
+          "bytes": 1162,
+          "sha256": "8c9b187bac9577f3c1752f2e8c92312ac165398bc6923a6f103af277ebde67d0",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.stdout",
+          "bytes": 86399,
+          "sha256": "340174ec594efdf92abb911d26615a85b44084d9af01d8ff89a3e442ed975b6f",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n12.nl",
+          "bytes": 89,
+          "sha256": "a2cdbce25acefc865c520a18cdc89c16192c06d8491a9fdcde54abfe3513c257",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n16.nl",
+          "bytes": 89,
+          "sha256": "a2cdbce25acefc865c520a18cdc89c16192c06d8491a9fdcde54abfe3513c257",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n5.nl",
+          "bytes": 48,
+          "sha256": "63daeb748f7081f734ffacd14347b5c98db8160bbe4e4326325762643685bc09",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1.nl",
+          "bytes": 224,
+          "sha256": "8e5f63213d8cd29ea9f9f5180f17806cbe7ab61409f8c3db6a47b26f883039c2",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n13.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n5.nl",
+          "bytes": 57,
+          "sha256": "ff5378c084aff8d74edc437232548d218c67db24a3094dbfbf8281a6a60d38da",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n9.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1.nl",
+          "bytes": 268,
+          "sha256": "eac3fb81f89cff09b3f411e3ea047d831a517a087cf7dd28694ecf4316124b9e",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n13.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n5.nl",
+          "bytes": 57,
+          "sha256": "ff5378c084aff8d74edc437232548d218c67db24a3094dbfbf8281a6a60d38da",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n9.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1.nl",
+          "bytes": 268,
+          "sha256": "eac3fb81f89cff09b3f411e3ea047d831a517a087cf7dd28694ecf4316124b9e",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/records.json",
+          "bytes": 134297,
+          "sha256": "735d137fc505958c3d5d51f28620a15a37bbb463dc69d64cfc14d61b0b042feb",
+          "verified": true
+        }
+      ],
+      "recovery_issues": []
+    },
+    {
+      "job": 136150927761,
+      "run": 44695424248,
+      "status": "completed/failure",
+      "public_probe": "exit1; four apparatus errors; stderr empty",
+      "native": "Not Run (fixture dependency)",
+      "guest_attempts": 0,
+      "raw_probe": {
+        "bytes": 86399,
+        "sha256": "83c4d7d50afd8f3fe1146f6e6fcbc87756735242257fef64f8dc8fe10df3b1e8"
+      },
+      "parse_registration_entry": [
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N1"
+        },
+        {
+          "code": "USIZE-DIVISION-ZERO",
+          "end": 77,
+          "kind": "REGISTER",
+          "line": 3,
+          "message": "usize divisor must be nonzero",
+          "start": 62,
+          "status": 1,
+          "unit": "N1"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N2"
+        },
+        {
+          "code": "USIZE-REMAINDER-ZERO",
+          "end": 245,
+          "kind": "REGISTER",
+          "line": 10,
+          "message": "usize divisor must be nonzero",
+          "start": 227,
+          "status": 1,
+          "unit": "N2"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N3"
+        },
+        {
+          "code": "P3-TYPE-MISMATCH",
+          "end": 73,
+          "kind": "REGISTER",
+          "line": 3,
+          "message": "argument semantic type does not match selected parameter",
+          "start": 69,
+          "status": 1,
+          "unit": "N3"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N4"
+        },
+        {
+          "code": "P9-RETURN-TYPE",
+          "end": 136,
+          "kind": "REGISTER",
+          "line": 5,
+          "message": "return expression must exactly match the function result",
+          "start": 119,
+          "status": 1,
+          "unit": "N4"
+        }
+      ],
+      "authentication": [
+        {
+          "accepted": false,
+          "challenge": "P1_same_value_repeated_call",
+          "foreign_call_line": 6,
+          "foreign_unit": "P1",
+          "kind": "AUTH",
+          "target_call_line": 5,
+          "unit": "P1"
+        },
+        {
+          "accepted": false,
+          "challenge": "P1_different_leaf",
+          "foreign_call_line": 5,
+          "foreign_unit": "P1",
+          "kind": "AUTH",
+          "target_call_line": 3,
+          "unit": "P1"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_equal_remainders_distinct_actual",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_other_actual_origin",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_identical_bytes_foreign_context",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_foreign_source_only",
+          "unit": "AUTH"
+        },
+        {
+          "failed": true,
+          "kind": "END"
+        }
+      ],
+      "checkout": {
+        "event_name": "pull_request",
+        "event_sha": "2fac3282c13d3d1a2e312d7557cdacf425f74b8a",
+        "fixed_p_object_present": false,
+        "head": "2fac3282c13d3d1a2e312d7557cdacf425f74b8a",
+        "ordered_parents": [
+          "069d219d53351302b374260e9045d22cfee48977",
+          "6580bd0f2bc4b2ed29d5acf7727d963d2317ffaf"
+        ],
+        "pr": {
+          "base_ref": "p1561-distinct-usize-leaf-composition-public",
+          "base_sha": "069d219d53351302b374260e9045d22cfee48977",
+          "head_ref": "r-fast/r1562-distinct-quantity-composition",
+          "head_sha": "6580bd0f2bc4b2ed29d5acf7727d963d2317ffaf",
+          "number": 1565
+        },
+        "ref": "refs/pull/1565/merge",
+        "run_attempt": "1",
+        "run_id": "44695424248",
+        "tree": [
+          "c98575586230b1cf51366a1e0615c9cc10bc2048"
+        ]
+      },
+      "recovered_batches": [
+        {
+          "files": 35,
+          "bytes": 291936
+        }
+      ],
+      "recovered_files": [
+        {
+          "path": "metadata/build-config.json",
+          "bytes": 1030,
+          "sha256": "f51102360f8d1a6bd6c68b4877cd0a3b28b83506c018008f9e0c3e3defb2fdba",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.command.json",
+          "bytes": 388,
+          "sha256": "d8eeb1504758782082f3c70308eed6fbe7f14108742fd0d19d3609ace2e07ca3",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.stdout",
+          "bytes": 1179,
+          "sha256": "c6c19b50b988d39d1fa40ee9637398a46aa2631fbcda44a6947db759e34abdd8",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.command.json",
+          "bytes": 377,
+          "sha256": "c09988ded9db12772989c9136c76c1ae58dc9a160943752ec5eb06400ed7290a",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.stdout",
+          "bytes": 41,
+          "sha256": "e6c718d1138c8eeccc9c311f7f05b21599dda95f4e290265382aa6cca669283d",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout.json",
+          "bytes": 732,
+          "sha256": "9daf426f06a238f4234439754e4597b3b1d3c6924acb9d08f6a422bb991848b2",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.command.json",
+          "bytes": 476,
+          "sha256": "6090f48bbda9a866c7539f5046bbe1038b7506d5c9293956c7202c435c7fc932",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.stdout",
+          "bytes": 63423,
+          "sha256": "92b8ffcf77ab26a94bdef01328060611432d523c02938aee438fa082ed02d364",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.command.json",
+          "bytes": 433,
+          "sha256": "12e6699df1a8ee464379f669853edb6759971bf35aae9a33b8b9f577ac2079f2",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.stderr",
+          "bytes": 81,
+          "sha256": "7eb05038b0227771aebf939899ced42424a52bfabbfb3f52599a5d655abbc231",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/inventory.json",
+          "bytes": 296,
+          "sha256": "83a7604c9940fa2c32c0e750a16d8bc421cb0b135eb7e879e5a9f54219225c43",
+          "verified": true
+        },
+        {
+          "path": "public/STOP.json",
+          "bytes": 196,
+          "sha256": "064cfca42c75c5c4e094b15c01114f03f64748e1b701718ad144e46342d23978",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.command.json",
+          "bytes": 1162,
+          "sha256": "b8edfb6995f6a3bcf0a402f50244712828f29e46e2d2e6bf438ec8ec7a89ade6",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.stdout",
+          "bytes": 86399,
+          "sha256": "83c4d7d50afd8f3fe1146f6e6fcbc87756735242257fef64f8dc8fe10df3b1e8",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n12.nl",
+          "bytes": 89,
+          "sha256": "a2cdbce25acefc865c520a18cdc89c16192c06d8491a9fdcde54abfe3513c257",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n16.nl",
+          "bytes": 89,
+          "sha256": "a2cdbce25acefc865c520a18cdc89c16192c06d8491a9fdcde54abfe3513c257",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n5.nl",
+          "bytes": 48,
+          "sha256": "63daeb748f7081f734ffacd14347b5c98db8160bbe4e4326325762643685bc09",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1.nl",
+          "bytes": 224,
+          "sha256": "8e5f63213d8cd29ea9f9f5180f17806cbe7ab61409f8c3db6a47b26f883039c2",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n13.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n5.nl",
+          "bytes": 57,
+          "sha256": "ff5378c084aff8d74edc437232548d218c67db24a3094dbfbf8281a6a60d38da",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n9.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1.nl",
+          "bytes": 268,
+          "sha256": "eac3fb81f89cff09b3f411e3ea047d831a517a087cf7dd28694ecf4316124b9e",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n13.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n5.nl",
+          "bytes": 57,
+          "sha256": "ff5378c084aff8d74edc437232548d218c67db24a3094dbfbf8281a6a60d38da",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n9.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1.nl",
+          "bytes": 268,
+          "sha256": "eac3fb81f89cff09b3f411e3ea047d831a517a087cf7dd28694ecf4316124b9e",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/records.json",
+          "bytes": 134297,
+          "sha256": "5a387441736ba79a2f745c1b8ee4066099e6f4ba0942fbf1d7a5393c8c2c833a",
+          "verified": true
+        }
+      ],
+      "recovery_issues": []
+    },
+    {
+      "job": 136150927769,
+      "run": 44695424301,
+      "status": "completed/failure",
+      "public_probe": "exit1; four apparatus errors; stderr empty",
+      "native": "Not Run (fixture dependency)",
+      "guest_attempts": 0,
+      "raw_probe": {
+        "bytes": 86399,
+        "sha256": "c53f655f143617eef77ab3ff74456b4a15802b11b4cbd04719ffc0b5a1ef894a"
+      },
+      "parse_registration_entry": [
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P1"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "REGISTER",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "end": 0,
+          "kind": "ENTRY",
+          "line": 1,
+          "message": "",
+          "start": 0,
+          "status": 0,
+          "unit": "P2DUP"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N1"
+        },
+        {
+          "code": "USIZE-DIVISION-ZERO",
+          "end": 77,
+          "kind": "REGISTER",
+          "line": 3,
+          "message": "usize divisor must be nonzero",
+          "start": 62,
+          "status": 1,
+          "unit": "N1"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N2"
+        },
+        {
+          "code": "USIZE-REMAINDER-ZERO",
+          "end": 245,
+          "kind": "REGISTER",
+          "line": 10,
+          "message": "usize divisor must be nonzero",
+          "start": 227,
+          "status": 1,
+          "unit": "N2"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N3"
+        },
+        {
+          "code": "P3-TYPE-MISMATCH",
+          "end": 73,
+          "kind": "REGISTER",
+          "line": 3,
+          "message": "argument semantic type does not match selected parameter",
+          "start": 69,
+          "status": 1,
+          "unit": "N3"
+        },
+        {
+          "code": "",
+          "kind": "PARSE",
+          "line": 1,
+          "message": "",
+          "status": 0,
+          "unit": "N4"
+        },
+        {
+          "code": "P9-RETURN-TYPE",
+          "end": 136,
+          "kind": "REGISTER",
+          "line": 5,
+          "message": "return expression must exactly match the function result",
+          "start": 119,
+          "status": 1,
+          "unit": "N4"
+        }
+      ],
+      "authentication": [
+        {
+          "accepted": false,
+          "challenge": "P1_same_value_repeated_call",
+          "foreign_call_line": 6,
+          "foreign_unit": "P1",
+          "kind": "AUTH",
+          "target_call_line": 5,
+          "unit": "P1"
+        },
+        {
+          "accepted": false,
+          "challenge": "P1_different_leaf",
+          "foreign_call_line": 5,
+          "foreign_unit": "P1",
+          "kind": "AUTH",
+          "target_call_line": 3,
+          "unit": "P1"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_equal_remainders_distinct_actual",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_other_actual_origin",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_identical_bytes_foreign_context",
+          "unit": "AUTH"
+        },
+        {
+          "kind": "APPARATUS_ERROR",
+          "message": "P2_foreign_source_only",
+          "unit": "AUTH"
+        },
+        {
+          "failed": true,
+          "kind": "END"
+        }
+      ],
+      "checkout": {
+        "event_name": "pull_request",
+        "event_sha": "2fac3282c13d3d1a2e312d7557cdacf425f74b8a",
+        "fixed_p_object_present": false,
+        "head": "2fac3282c13d3d1a2e312d7557cdacf425f74b8a",
+        "ordered_parents": [
+          "069d219d53351302b374260e9045d22cfee48977",
+          "6580bd0f2bc4b2ed29d5acf7727d963d2317ffaf"
+        ],
+        "pr": {
+          "base_ref": "p1561-distinct-usize-leaf-composition-public",
+          "base_sha": "069d219d53351302b374260e9045d22cfee48977",
+          "head_ref": "r-fast/r1562-distinct-quantity-composition",
+          "head_sha": "6580bd0f2bc4b2ed29d5acf7727d963d2317ffaf",
+          "number": 1565
+        },
+        "ref": "refs/pull/1565/merge",
+        "run_attempt": "1",
+        "run_id": "44695424301",
+        "tree": [
+          "c98575586230b1cf51366a1e0615c9cc10bc2048"
+        ]
+      },
+      "recovered_batches": [
+        {
+          "files": 15,
+          "bytes": 58127
+        },
+        {
+          "files": 35,
+          "bytes": 281634
+        }
+      ],
+      "recovered_files": [
+        {
+          "path": "metadata/build-config.json",
+          "bytes": 888,
+          "sha256": "48bb0e7cd8dd22290f59ab8b3304d7df16638a7dcfd9b399d1f30c7f54f0bab3",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.command.json",
+          "bytes": 388,
+          "sha256": "d8eeb1504758782082f3c70308eed6fbe7f14108742fd0d19d3609ace2e07ca3",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-commit.stdout",
+          "bytes": 1179,
+          "sha256": "c6c19b50b988d39d1fa40ee9637398a46aa2631fbcda44a6947db759e34abdd8",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.command.json",
+          "bytes": 377,
+          "sha256": "c09988ded9db12772989c9136c76c1ae58dc9a160943752ec5eb06400ed7290a",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout-head.stdout",
+          "bytes": 41,
+          "sha256": "e6c718d1138c8eeccc9c311f7f05b21599dda95f4e290265382aa6cca669283d",
+          "verified": true
+        },
+        {
+          "path": "metadata/checkout.json",
+          "bytes": 732,
+          "sha256": "e3c3db8890208e0842abbcd480204266374b89b16a68dd063a5f9353e5e2e5da",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.command.json",
+          "bytes": 494,
+          "sha256": "0b06c990915f5342461285cbfb134b56a71c621ca24fe48d8feb81a2586e10c8",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/ctest-inventory.stdout",
+          "bytes": 53218,
+          "sha256": "bfffcecaccf705595b257b6b675becfd8dbcb6e00b7ad4346e403793f96245b0",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.command.json",
+          "bytes": 433,
+          "sha256": "12e6699df1a8ee464379f669853edb6759971bf35aae9a33b8b9f577ac2079f2",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.stderr",
+          "bytes": 81,
+          "sha256": "7eb05038b0227771aebf939899ced42424a52bfabbfb3f52599a5d655abbc231",
+          "verified": true
+        },
+        {
+          "path": "metadata/fixed-parent-object-presence.stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "metadata/inventory.json",
+          "bytes": 296,
+          "sha256": "36ec789ea06f610a878a6c7e910de8043362e5192af1a0ce9ef2fbdf99244079",
+          "verified": true
+        },
+        {
+          "path": "public/STOP.json",
+          "bytes": 196,
+          "sha256": "064cfca42c75c5c4e094b15c01114f03f64748e1b701718ad144e46342d23978",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.command.json",
+          "bytes": 1189,
+          "sha256": "1a5d078f5ab51848bb550c37818281414cee0c1acf1c244605eabbaac2988d66",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "verified": true
+        },
+        {
+          "path": "public/public-probe.stdout",
+          "bytes": 86399,
+          "sha256": "c53f655f143617eef77ab3ff74456b4a15802b11b4cbd04719ffc0b5a1ef894a",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n12.nl",
+          "bytes": 89,
+          "sha256": "a2cdbce25acefc865c520a18cdc89c16192c06d8491a9fdcde54abfe3513c257",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n16.nl",
+          "bytes": 89,
+          "sha256": "a2cdbce25acefc865c520a18cdc89c16192c06d8491a9fdcde54abfe3513c257",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1-n5.nl",
+          "bytes": 48,
+          "sha256": "63daeb748f7081f734ffacd14347b5c98db8160bbe4e4326325762643685bc09",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1-n1.nl",
+          "bytes": 224,
+          "sha256": "8e5f63213d8cd29ea9f9f5180f17806cbe7ab61409f8c3db6a47b26f883039c2",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P1.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n13.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n5.nl",
+          "bytes": 57,
+          "sha256": "ff5378c084aff8d74edc437232548d218c67db24a3094dbfbf8281a6a60d38da",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1-n9.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2-n1.nl",
+          "bytes": 268,
+          "sha256": "eac3fb81f89cff09b3f411e3ea047d831a517a087cf7dd28694ecf4316124b9e",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n13.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n5.nl",
+          "bytes": 57,
+          "sha256": "ff5378c084aff8d74edc437232548d218c67db24a3094dbfbf8281a6a60d38da",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1-n9.nl",
+          "bytes": 77,
+          "sha256": "db674ac5c9ee8ffc7dff4521685ba4a1933315d57dcebf00b2078171e32977ce",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP-n1.nl",
+          "bytes": 268,
+          "sha256": "eac3fb81f89cff09b3f411e3ea047d831a517a087cf7dd28694ecf4316124b9e",
+          "verified": true
+        },
+        {
+          "path": "public/public-source-P2DUP.nl",
+          "bytes": 6,
+          "sha256": "ea1a0f9102305e02f12ac58acc01ab6365ca5bb5e56e25b917139808b9c932c1",
+          "verified": true
+        },
+        {
+          "path": "public/records.json",
+          "bytes": 134297,
+          "sha256": "e6923a1fbbd8e5d50c2de6a8852ed6b2f99b2d72a49c22ea12bb0e5cd16141a0",
+          "verified": true
+        }
+      ],
+      "recovery_issues": []
+    }
+  ],
+  "workflow_metadata": {
+    "compiler_ci": {
+      "bytes": 6976,
+      "sha256": "811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742"
+    },
+    "compiler_frontend_ci": {
+      "bytes": 6418,
+      "sha256": "33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74"
+    },
+    "concurrency_keys": [],
+    "cancel_in_progress_keys": [],
+    "meaning": "No configured cancellation of old runs by a new synchronize event; original ASan remains a separate immutable run."
+  },
+  "budget_before_push": {
+    "FAST": 2,
+    "DRAFT": 1,
+    "FULL_PARTIAL_jobs": 6,
+    "manual_CI": 0,
+    "local_execution": 0
+  },
+  "projected_natural_budget_after_single_repair_push": {
+    "FAST": 3,
+    "DRAFT": 1,
+    "FULL_PARTIAL_jobs": 12,
+    "additional_FULL_sets_available": 0
+  }
+}

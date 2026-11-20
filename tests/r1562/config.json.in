@@ -1,0 +1,18 @@
+{
+  "source_dir": "@CMAKE_CURRENT_SOURCE_DIR@",
+  "binary_dir": "@CMAKE_CURRENT_BINARY_DIR@",
+  "evidence_dir": "@R1562_EVIDENCE_DIR@",
+  "probe": "@CMAKE_CURRENT_BINARY_DIR@/r1562_probe",
+  "newlangc": "@CMAKE_CURRENT_BINARY_DIR@/newlangc",
+  "host_compiler": "@CMAKE_C_COMPILER@",
+  "host_flags": "@CMAKE_C_FLAGS@",
+  "host_debug_flags": "@CMAKE_C_FLAGS_DEBUG@",
+  "host_release_flags": "@CMAKE_C_FLAGS_RELEASE@",
+  "build_type": "@CMAKE_BUILD_TYPE@",
+  "sanitizer": "@NEWLANG_SANITIZER@",
+  "frontend_only": "@NEWLANG_FRONTEND_ONLY@",
+  "fixed_p": "069d219d53351302b374260e9045d22cfee48977",
+  "fixed_p_tree": "fafcb1b413485e6f1540694a246b285b72fe3d94",
+  "canonical_base": "5e5049ff2c809a826ecc472ad0077fd93605cf7c",
+  "label": "NON-BLIND / implementation-exposed calibrated"
+}

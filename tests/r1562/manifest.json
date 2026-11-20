@@ -1,0 +1,69 @@
+{
+  "label": "NON-BLIND / implementation-exposed calibrated",
+  "formation": "Independent C-informed FIRST/V1 before candidate exposure",
+  "first_comment": 7032304424,
+  "first_bytes": 18788,
+  "first_sha256": "658564074e9b5c80bf4cec97aa52b76cdad7b20f45e76eb6e4f36f73e4fc1040",
+  "sources": [
+    {
+      "id": "P1",
+      "name": "r1562_first_p1_division_chain.nl",
+      "bytes": 459,
+      "lines": 21,
+      "sha256": "20c976aa377797cf230ce5793c4cd0992e076a66a05495cb795d6efaac888742"
+    },
+    {
+      "id": "P2",
+      "name": "r1562_first_p2_equal_value_distinct_origin.nl",
+      "bytes": 507,
+      "lines": 21,
+      "sha256": "e3d863263c0dd8518519ea6231244d8676d1b27e1716bf2ccfd2a251e55f202b"
+    },
+    {
+      "id": "N1",
+      "name": "r1562_first_n1_zero_division.nl",
+      "bytes": 459,
+      "lines": 21,
+      "sha256": "2bf51ab6f7f327a22d960abb17fe0f11ddb82c281e33598b32aedddd3b41ea0f"
+    },
+    {
+      "id": "N2",
+      "name": "r1562_first_n2_zero_remainder.nl",
+      "bytes": 507,
+      "lines": 21,
+      "sha256": "f20498c5be7ca749088c0455bf75b5171748647c5d05869c87359d436836d5b2"
+    },
+    {
+      "id": "N3",
+      "name": "r1562_first_n3_actual_type.nl",
+      "bytes": 456,
+      "lines": 21,
+      "sha256": "ef8a7763816695ace7400f0dca72740f85edd0b65df3b0a65857b2a87ef8302a"
+    },
+    {
+      "id": "N4",
+      "name": "r1562_first_n4_return_type.nl",
+      "bytes": 453,
+      "lines": 21,
+      "sha256": "af1dca95315308fe990b2c324502f4d45fef3fc4007fb50455db07a243620100"
+    }
+  ],
+  "fixed_target_api_receipt": {
+    "classification": "GitHub API fixed-candidate receipt, not an Actions checkout observation",
+    "candidate": {
+      "sha": "069d219d53351302b374260e9045d22cfee48977",
+      "tree": "fafcb1b413485e6f1540694a246b285b72fe3d94",
+      "ordered_parents": [
+        "fe7fa127eedef0850a030a92db4cb80214474edc"
+      ]
+    },
+    "candidate_ref": {
+      "ref": "refs/heads/p1561-distinct-usize-leaf-composition-public",
+      "sha": "069d219d53351302b374260e9045d22cfee48977"
+    },
+    "canonical_ref": {
+      "ref": "refs/heads/main",
+      "sha": "5e5049ff2c809a826ecc472ad0077fd93605cf7c"
+    }
+  }
+}

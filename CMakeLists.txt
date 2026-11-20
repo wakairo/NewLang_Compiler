@@ -2345,3 +2345,5 @@ include(tests/p1368/CMakeLists.txt)
 include(tests/p1372/CMakeLists.txt)
 
 include(tests/p1375/CMakeLists.txt)
+
+include(tests/r1562/CMakeLists.txt)
