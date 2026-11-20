@@ -15,7 +15,8 @@ typedef struct {
 } R1546Audit;
 
 static int inspect(const NLCheckedFragment *fragment, unsigned depth,
-                   R1546Audit *audit) {
+                   R1546Audit *audit)
+{
     if (fragment == NULL || depth > 12) {
         fprintf(stderr, "R1546 STOP: missing body or recursive body depth\n");
         return 0;
@@ -37,7 +38,8 @@ static int inspect(const NLCheckedFragment *fragment, unsigned depth,
             if (!nl_checked_usize_division_view(fragment, id, &view) ||
                 !nl_checked_usize_division_valid(fragment, id, NULL) ||
                 !nl_checked_usize_division_valid(fragment, id, &view)) {
-                fprintf(stderr, "R1546 STOP: genuine division issuer invalid\n");
+                fprintf(stderr,
+                        "R1546 STOP: genuine division issuer invalid\n");
                 return 0;
             }
             if (view.numbers[1] != 23 || view.target_max != SIZE_MAX) {
@@ -91,7 +93,8 @@ static int inspect(const NLCheckedFragment *fragment, unsigned depth,
                 !nl_checked_usize_addition_valid(fragment, id, NULL) ||
                 !nl_checked_usize_addition_valid(fragment, id, &view) ||
                 view.sum != 70) {
-                fprintf(stderr, "R1546 STOP: caller addition not authenticated\n");
+                fprintf(stderr,
+                        "R1546 STOP: caller addition not authenticated\n");
                 return 0;
             }
             audit->authenticated_sums++;
@@ -105,10 +108,10 @@ static int inspect(const NLCheckedFragment *fragment, unsigned depth,
     return 1;
 }
 
-int main(int argc, char **argv) {
-    if (argc != 3 ||
-        (strcmp(argv[1], "positive") != 0 &&
-         strcmp(argv[1], "negative") != 0)) {
+int main(int argc, char **argv)
+{
+    if (argc != 3 || (strcmp(argv[1], "positive") != 0 &&
+                      strcmp(argv[1], "negative") != 0)) {
         fprintf(stderr, "usage: r1546_public_probe positive|negative SOURCE\n");
         return 2;
     }
@@ -132,8 +135,7 @@ int main(int argc, char **argv) {
     NLParseStatus parsed =
         nl_parser_parse_function_unit(parser, &unit, &parse_diagnostic);
     if (parsed != NL_PARSE_OK) {
-        fprintf(stderr, "R1546 SOURCE refusal: parse status %d\n",
-                (int)parsed);
+        fprintf(stderr, "R1546 SOURCE refusal: parse status %d\n", (int)parsed);
         goto cleanup;
     }
     if (nl_semantic_create(&context) != NL_CHECK_OK) {
@@ -142,8 +144,8 @@ int main(int argc, char **argv) {
     }
     const NLSyntaxTree *inputs[1] = {unit};
     NLFunctionUnitDiagnostic registration = {0};
-    NLCheckStatus registered = nl_semantic_register_function_unit(
-        context, inputs, 1, &registration);
+    NLCheckStatus registered =
+        nl_semantic_register_function_unit(context, inputs, 1, &registration);
 
     if (strcmp(argv[1], "negative") == 0) {
         if (registered == NL_CHECK_SEMANTIC_ERROR) {
@@ -166,7 +168,7 @@ int main(int argc, char **argv) {
                          &call_source) != NL_SOURCE_OK ||
         nl_parser_create(call_source, &call_parser) != NL_PARSE_OK ||
         nl_parser_parse_expression_fragment(call_parser, &call_tree,
-                                             &parse_diagnostic) != NL_PARSE_OK) {
+                                            &parse_diagnostic) != NL_PARSE_OK) {
         fprintf(stderr, "R1546 STOP: independent main call setup failed\n");
         goto cleanup;
     }
@@ -179,8 +181,7 @@ int main(int argc, char **argv) {
         goto cleanup;
     }
     R1546Audit audit = {0};
-    if (!inspect(checked, 0, &audit) ||
-        audit.authenticated_quotients == 0 ||
+    if (!inspect(checked, 0, &audit) || audit.authenticated_quotients == 0 ||
         audit.authenticated_sums == 0) {
         fprintf(stderr,
                 "R1546 INCONCLUSIVE: real quotient/caller not observable "
