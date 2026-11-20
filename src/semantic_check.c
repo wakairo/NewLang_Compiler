@@ -4559,7 +4559,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     }
     /* Save owned checked body evidence; no source expansion into caller nodes.
      */
-    if (caller->artifact->body_count == 64) {
+    if (caller->artifact->body_count == NL_CHECKED_MAX_BODY_CALLS) {
         (void)host(&body, NL_CHECK_RESOURCE_LIMIT, (NLSourceSpan){0});
         goto failure;
     }
@@ -4607,23 +4607,24 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                           body.artifact->bodies[i]->copy_body->current_call);
     NLGuardedUsizePlan quantity_plan;
     NLDivisionUsizePlan division_plan;
+    const bool entry_body = caller->artifact == caller->origin_root;
     const bool quantity_result =
         !body.definition &&
         (nl_guarded_usize_body_at(body.artifact, c, body.body_function,
                                   &quantity_plan) ||
-         nl_division_usize_body_at(body.artifact, c, body.body_function,
-                                   &division_plan) ||
-         nl_remainder_usize_body_at(body.artifact, c, body.body_function,
-                                    &division_plan));
+         (entry_body
+              ? nl_quantity_usize_body_at(body.artifact, c, body.body_function,
+                                          &division_plan)
+              : nl_division_usize_body_at(body.artifact, c, body.body_function,
+                                          &division_plan) ||
+                    nl_remainder_usize_body_at(
+                        body.artifact, c, body.body_function, &division_plan)));
     if ((predicate_result || scalar_h_read || current_result || result_world ||
          quantity_result) &&
         !host(&body,
               nl_h_custody_seal_result(
                   caller->artifact, body.artifact, call_id,
-                  result_world || (quantity_result &&
-                                   caller->artifact == caller->origin_root)
-                      ? c
-                      : NULL),
+                  result_world || (quantity_result && entry_body) ? c : NULL),
               call_span))
         goto failure;
     if (body.artifact->copy_body && body.artifact->copy_body->current_loop &&

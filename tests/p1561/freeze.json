@@ -1,0 +1,40 @@
+{
+  "canonical_main": "be0ae7fa537b550ffdb8ad3640f49a504629062a",
+  "early_base": "93fd2752972a9c2348d85e33f941bb7c786ec99b",
+  "early_tree": "74666c834b433b63e00aed3ebdb020f7a2b6d10b",
+  "encoding": "UTF-8/LF/final newline",
+  "files": {
+    "same-leaf.nl": {
+      "bytes": 307,
+      "sha256": "fa773c1e69a53081eeb4c8b03a15e36766c1073bbe78d80031bbef45db3e17db"
+    },
+    "two-quotients.nl": {
+      "bytes": 549,
+      "sha256": "afc8d62ac8e49b82a9b65f4006e100c33226f802eea6725f888986b3020e7193"
+    },
+    "mixed-window.nl": {
+      "bytes": 706,
+      "sha256": "545cecab024fbc4014d1666c1cf88d44f30e21eb186ce1d37295e7a87df49a46"
+    },
+    "zero-leaf.nl": {
+      "bytes": 129,
+      "sha256": "41b67a79114c7b378add1dcb350d772e595b1b094b09cf201a94ed90385fc8e3"
+    },
+    "type-leaf.nl": {
+      "bytes": 130,
+      "sha256": "47552e7ee0935d05fc19ddcbed2a42c1d543b535cbc60f27cb8c919905ed077d"
+    },
+    "range-leaf.nl": {
+      "bytes": 155,
+      "sha256": "5a69e389bba4dd8cb50391a8ecd4943b6fdb05f064c806266baa9523c9ef6001"
+    },
+    "nested-helper.nl": {
+      "bytes": 333,
+      "sha256": "ab43f94c93e780b79ed70aa160d1cd444934eecc38d391153a0b34df0b242611"
+    },
+    "oracle.json": {
+      "bytes": 6312,
+      "sha256": "884a199e83c9f7d0df4fde6f06b84ef29d150c25d17350c1cb5fac215fcf02f6"
+    }
+  }
+}
