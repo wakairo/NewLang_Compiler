@@ -133,10 +133,6 @@ typedef struct NLArray4Capture {
 NLCheckStatus nl_usize_arithmetic_capture(NLCheckedFragment *, NLCheckedNodeId,
                                           const NLSyntaxNode *,
                                           const NLSemanticContext *);
-enum {
-    NL_CHECKED_MAX_BODY_CALLS = 64
-};
-
 struct NLCheckedFragment {
     struct NLHOriginOwner *h_origin;
     struct NLProducerLocalProof *producer_local;

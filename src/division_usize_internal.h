@@ -2,6 +2,11 @@
 #define NEWLANG_DIVISION_USIZE_INTERNAL_H
 #include "semantic_internal.h"
 
+/* Existing per-parent body-call bound, shared by CHECK and C17. */
+enum {
+    NL_CHECKED_MAX_BODY_CALLS = 64
+};
+
 /* Borrowed finite plan, using the existing complete function-result seal. */
 typedef struct {
     const NLCheckedFragment *body;
