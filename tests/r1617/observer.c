@@ -8,9 +8,15 @@
 #include <stdio.h>
 #include <string.h>
 
-enum { MAX_SOURCES = 64, MAX_WORLDS = 64, MAX_FRAGMENTS = 64,
-       MAX_NODES = 1024, MAX_TOTAL_NODES = 4096, MAX_DEPTH = 32,
-       MAX_SOURCE_BYTES = 8192 };
+enum {
+    MAX_SOURCES = 64,
+    MAX_WORLDS = 64,
+    MAX_FRAGMENTS = 64,
+    MAX_NODES = 1024,
+    MAX_TOTAL_NODES = 4096,
+    MAX_DEPTH = 32,
+    MAX_SOURCE_BYTES = 8192
+};
 static const NLSource *sources[MAX_SOURCES];
 static const NLSemanticContext *worlds[MAX_WORLDS];
 static const NLCheckedFragment *fragments[MAX_FRAGMENTS];
@@ -18,12 +24,14 @@ static size_t source_count, world_count, fragment_count, syntax_count;
 static size_t checked_count;
 static bool evidence_error, observation_gap;
 
-static void hex_bytes(const unsigned char *p, size_t n) {
+static void hex_bytes(const unsigned char *p, size_t n)
+{
     for (size_t i = 0; i < n; ++i) {
         printf("%02x", (unsigned)p[i]);
     }
 }
-static void hex_text(const char *p) {
+static void hex_text(const char *p)
+{
     if (p != NULL) {
         size_t n = strlen(p);
         if (n > MAX_SOURCE_BYTES) {
@@ -33,7 +41,8 @@ static void hex_text(const char *p) {
         hex_bytes((const unsigned char *)p, n);
     }
 }
-static size_t source_id(const NLSource *s) {
+static size_t source_id(const NLSource *s)
+{
     if (s == NULL) {
         observation_gap = true;
         return 0;
@@ -43,8 +52,7 @@ static size_t source_id(const NLSource *s) {
             return i + 1;
         }
     }
-    if (source_count == MAX_SOURCES ||
-        nl_source_length(s) > MAX_SOURCE_BYTES) {
+    if (source_count == MAX_SOURCES || nl_source_length(s) > MAX_SOURCE_BYTES) {
         evidence_error = true;
         return 0;
     }
@@ -56,13 +64,14 @@ static size_t source_id(const NLSource *s) {
         evidence_error = true;
         return 0;
     }
-    printf("{\"record\":\"source\",\"source\":%zu,\"bytes\":%zu,\"hex\":\"",
-           id, v.length);
+    printf("{\"record\":\"source\",\"source\":%zu,\"bytes\":%zu,\"hex\":\"", id,
+           v.length);
     hex_bytes(v.bytes, v.length);
     printf("\"}\n");
     return id;
 }
-static size_t world_id(const NLSemanticContext *w) {
+static size_t world_id(const NLSemanticContext *w)
+{
     if (w == NULL) {
         observation_gap = true;
         return 0;
@@ -82,10 +91,12 @@ static size_t world_id(const NLSemanticContext *w) {
     bool ok = nl_semantic_snapshot(w, &s);
     printf("{\"record\":\"world\",\"world\":%zu,\"snapshot_available\":%s,"
            "\"types\":%zu,\"bindings\":%zu,\"values\":%zu,\"functions\":%zu}\n",
-           id, ok ? "true" : "false", s.types, s.bindings, s.values, s.functions);
+           id, ok ? "true" : "false", s.types, s.bindings, s.values,
+           s.functions);
     return id;
 }
-static void span_hex(const NLSource *s, NLSourceSpan span) {
+static void span_hex(const NLSource *s, NLSourceSpan span)
+{
     NLSourceView v = {0};
     if (s == NULL || !nl_source_view(s, span, &v)) {
         observation_gap = true;
@@ -93,34 +104,51 @@ static void span_hex(const NLSource *s, NLSourceSpan span) {
     }
     hex_bytes(v.bytes, v.length);
 }
-static const char *parse_status(NLParseStatus s) {
+static const char *parse_status(NLParseStatus s)
+{
     switch (s) {
-    case NL_PARSE_OK: return "OK";
-    case NL_PARSE_LEXICALLY_UNSUPPORTED: return "LEXICALLY_UNSUPPORTED";
-    case NL_PARSE_SYNTAX_UNSUPPORTED: return "SYNTAX_UNSUPPORTED";
-    case NL_PARSE_SYNTAX_ERROR: return "SYNTAX_ERROR";
-    case NL_PARSE_OUT_OF_MEMORY: return "OUT_OF_MEMORY";
-    case NL_PARSE_RESOURCE_LIMIT: return "RESOURCE_LIMIT";
-    case NL_PARSE_INTERNAL_ERROR: return "INTERNAL_ERROR";
+    case NL_PARSE_OK:
+        return "OK";
+    case NL_PARSE_LEXICALLY_UNSUPPORTED:
+        return "LEXICALLY_UNSUPPORTED";
+    case NL_PARSE_SYNTAX_UNSUPPORTED:
+        return "SYNTAX_UNSUPPORTED";
+    case NL_PARSE_SYNTAX_ERROR:
+        return "SYNTAX_ERROR";
+    case NL_PARSE_OUT_OF_MEMORY:
+        return "OUT_OF_MEMORY";
+    case NL_PARSE_RESOURCE_LIMIT:
+        return "RESOURCE_LIMIT";
+    case NL_PARSE_INTERNAL_ERROR:
+        return "INTERNAL_ERROR";
     }
     evidence_error = true;
     return "UNKNOWN_ENUM";
 }
-static const char *check_status(NLCheckStatus s) {
+static const char *check_status(NLCheckStatus s)
+{
     switch (s) {
-    case NL_CHECK_OK: return "OK";
-    case NL_CHECK_SEMANTIC_ERROR: return "SEMANTIC_ERROR";
-    case NL_CHECK_SEMANTIC_UNSUPPORTED: return "SEMANTIC_UNSUPPORTED";
-    case NL_CHECK_ANALYSIS_PRECISION_LIMIT: return "ANALYSIS_PRECISION_LIMIT";
-    case NL_CHECK_OUT_OF_MEMORY: return "OUT_OF_MEMORY";
-    case NL_CHECK_RESOURCE_LIMIT: return "RESOURCE_LIMIT";
-    case NL_CHECK_INTERNAL_ERROR: return "INTERNAL_ERROR";
+    case NL_CHECK_OK:
+        return "OK";
+    case NL_CHECK_SEMANTIC_ERROR:
+        return "SEMANTIC_ERROR";
+    case NL_CHECK_SEMANTIC_UNSUPPORTED:
+        return "SEMANTIC_UNSUPPORTED";
+    case NL_CHECK_ANALYSIS_PRECISION_LIMIT:
+        return "ANALYSIS_PRECISION_LIMIT";
+    case NL_CHECK_OUT_OF_MEMORY:
+        return "OUT_OF_MEMORY";
+    case NL_CHECK_RESOURCE_LIMIT:
+        return "RESOURCE_LIMIT";
+    case NL_CHECK_INTERNAL_ERROR:
+        return "INTERNAL_ERROR";
     }
     evidence_error = true;
     return "UNKNOWN_ENUM";
 }
 static void diagnostic(const char *phase, const NLDiagnostic *d,
-                       NLSourceSpan span) {
+                       NLSourceSpan span)
+{
     printf("{\"record\":\"diagnostic\",\"phase\":\"%s\",\"severity\":%d,"
            "\"span\":[%zu,%zu],\"code_hex\":\"",
            phase, (int)d->severity, span.start_byte, span.end_byte);
@@ -131,10 +159,11 @@ static void diagnostic(const char *phase, const NLDiagnostic *d,
     hex_text(d->message);
     printf("\"}\n");
 }
-static size_t syntax_node(const NLSource *, const NLSyntaxNode *,
-                          size_t, const char *, size_t, size_t);
+static size_t syntax_node(const NLSource *, const NLSyntaxNode *, size_t,
+                          const char *, size_t, size_t);
 static void syntax_list(const NLSource *s, const NLSyntaxNode *p, size_t count,
-                        size_t parent, const char *role, size_t depth) {
+                        size_t parent, const char *role, size_t depth)
+{
     if (count > MAX_NODES) {
         evidence_error = true;
         return;
@@ -153,7 +182,8 @@ static void syntax_list(const NLSource *s, const NLSyntaxNode *p, size_t count,
 }
 static size_t syntax_node(const NLSource *s, const NLSyntaxNode *p,
                           size_t parent, const char *role, size_t position,
-                          size_t depth) {
+                          size_t depth)
+{
     if (p == NULL) {
         return 0;
     }
@@ -169,8 +199,8 @@ static size_t syntax_node(const NLSource *s, const NLSyntaxNode *p,
     size_t id = ++syntax_count;
     printf("{\"record\":\"syntax\",\"node\":%zu,\"parent\":%zu,"
            "\"role\":\"%s\",\"position\":%zu,\"kind\":%d,\"span\":[%zu,%zu]}\n",
-           id, parent, role, position, (int)v->kind,
-           v->span.start_byte, v->span.end_byte);
+           id, parent, role, position, (int)v->kind, v->span.start_byte,
+           v->span.end_byte);
     switch (v->kind) {
     case NL_SYNTAX_FUNCTION_UNIT:
         syntax_list(s, v->data.function_unit.declarations,
@@ -182,13 +212,15 @@ static size_t syntax_node(const NLSource *s, const NLSyntaxNode *p,
                id, v->data.function.count);
         span_hex(s, v->data.function.name);
         printf("\"}\n");
-        syntax_list(s, v->data.function.parameters, v->data.function.count,
-                    id, "formal_declaration", depth + 1);
-        syntax_node(s, v->data.function.result, id, "result_type", 0, depth + 1);
+        syntax_list(s, v->data.function.parameters, v->data.function.count, id,
+                    "formal_declaration", depth + 1);
+        syntax_node(s, v->data.function.result, id, "result_type", 0,
+                    depth + 1);
         syntax_node(s, v->data.function.body, id, "body", 0, depth + 1);
         break;
     case NL_SYNTAX_PARAMETER:
-        printf("{\"record\":\"formal_syntax\",\"node\":%zu,\"name_hex\":\"", id);
+        printf("{\"record\":\"formal_syntax\",\"node\":%zu,\"name_hex\":\"",
+               id);
         span_hex(s, v->data.parameter.name);
         printf("\"}\n");
         syntax_node(s, v->data.parameter.type, id, "formal_type", 0, depth + 1);
@@ -199,19 +231,20 @@ static size_t syntax_node(const NLSource *s, const NLSyntaxNode *p,
                id, v->data.call.argument_count);
         span_hex(s, v->data.call.callee);
         printf("\"}\n");
-        syntax_list(s, v->data.call.arguments, v->data.call.argument_count,
-                    id, "actual_source_order", depth + 1);
+        syntax_list(s, v->data.call.arguments, v->data.call.argument_count, id,
+                    "actual_source_order", depth + 1);
         break;
     case NL_SYNTAX_BINDING:
-        printf("{\"record\":\"binding_syntax\",\"node\":%zu,\"name_hex\":\"", id);
+        printf("{\"record\":\"binding_syntax\",\"node\":%zu,\"name_hex\":\"",
+               id);
         span_hex(s, v->data.binding.name);
         printf("\"}\n");
         syntax_node(s, v->data.binding.initializer, id, "initializer", 0,
                     depth + 1);
         break;
     case NL_SYNTAX_BLOCK:
-        syntax_list(s, v->data.block.items, v->data.block.item_count,
-                    id, "block_item", depth + 1);
+        syntax_list(s, v->data.block.items, v->data.block.item_count, id,
+                    "block_item", depth + 1);
         syntax_node(s, v->data.block.tail, id, "tail", 0, depth + 1);
         break;
     case NL_SYNTAX_STATEMENT:
@@ -222,8 +255,10 @@ static size_t syntax_node(const NLSource *s, const NLSyntaxNode *p,
     case NL_SYNTAX_IF:
         syntax_node(s, v->data.conditional.condition, id, "condition", 0,
                     depth + 1);
-        syntax_node(s, v->data.conditional.then_block, id, "then", 0, depth + 1);
-        syntax_node(s, v->data.conditional.else_block, id, "else", 1, depth + 1);
+        syntax_node(s, v->data.conditional.then_block, id, "then", 0,
+                    depth + 1);
+        syntax_node(s, v->data.conditional.else_block, id, "else", 1,
+                    depth + 1);
         break;
     case NL_SYNTAX_USIZE_EQUALITY:
     case NL_SYNTAX_USIZE_LESS_THAN:
@@ -245,7 +280,8 @@ static size_t syntax_node(const NLSource *s, const NLSyntaxNode *p,
     }
     return id;
 }
-static void value_record(const NLSemanticContext *w, size_t wid, NLValueId id) {
+static void value_record(const NLSemanticContext *w, size_t wid, NLValueId id)
+{
     if (id == 0) {
         return;
     }
@@ -261,7 +297,8 @@ static void value_record(const NLSemanticContext *w, size_t wid, NLValueId id) {
     }
 }
 static void binding_record(const NLSemanticContext *w, size_t wid,
-                           NLSymbolId id) {
+                           NLSymbolId id)
+{
     if (id == 0) {
         return;
     }
@@ -270,15 +307,16 @@ static void binding_record(const NLSemanticContext *w, size_t wid,
     printf("{\"record\":\"binding\",\"world\":%zu,\"symbol\":%zu,"
            "\"view_available\":%s,\"availability\":%d,\"type\":%zu,"
            "\"value\":%zu,\"place\":%zu}\n",
-           wid, id, ok ? "true" : "false", (int)b.availability,
-           b.type, b.value, b.place);
+           wid, id, ok ? "true" : "false", (int)b.availability, b.type, b.value,
+           b.place);
     if (ok) {
         value_record(w, wid, b.value);
     } else {
         observation_gap = true;
     }
 }
-static void queue_node(NLCheckedNodeId *ids, size_t *n, NLCheckedNodeId id) {
+static void queue_node(NLCheckedNodeId *ids, size_t *n, NLCheckedNodeId id)
+{
     if (id == 0) {
         return;
     }
@@ -295,7 +333,8 @@ static void queue_node(NLCheckedNodeId *ids, size_t *n, NLCheckedNodeId id) {
 }
 static void checked_fragment(const NLCheckedFragment *f, size_t parent,
                              NLCheckedNodeId owner, const char *role,
-                             size_t position, size_t depth) {
+                             size_t position, size_t depth)
+{
     if (f == NULL) {
         observation_gap = true;
         printf("{\"record\":\"missing_fragment\",\"parent\":%zu,"
@@ -363,13 +402,13 @@ static void checked_fragment(const NLCheckedFragment *f, size_t parent,
                "\"normal_arms\":%zu,\"has_scalar_result\":%s,"
                "\"scalar_known\":%s,\"scalar\":%zu,\"results\":[",
                v->function, v->body_backed ? "true" : "false", v->symbol,
-               v->type, v->parameter_type, (int)v->value_use,
-               v->argument_count, v->first_argument, v->next_argument,
-               v->initializer, v->first_item, v->next_item, v->tail,
-               v->item_count, v->result_count,
-               v->terminates ? "true" : "false", v->normal_arms,
-               v->has_scalar_result ? "true" : "false",
-               v->has_scalar_result && v->scalar_result.known ? "true" : "false",
+               v->type, v->parameter_type, (int)v->value_use, v->argument_count,
+               v->first_argument, v->next_argument, v->initializer,
+               v->first_item, v->next_item, v->tail, v->item_count,
+               v->result_count, v->terminates ? "true" : "false",
+               v->normal_arms, v->has_scalar_result ? "true" : "false",
+               v->has_scalar_result && v->scalar_result.known ? "true"
+                                                              : "false",
                v->has_scalar_result && v->scalar_result.known
                    ? v->scalar_result.value
                    : 0);
@@ -412,7 +451,8 @@ static void checked_fragment(const NLCheckedFragment *f, size_t parent,
                    d.operands[0], d.operands[1], d.values[0], d.values[1],
                    d.result, d.symbols[0], d.symbols[1], d.numbers[0],
                    d.numbers[1], d.numerator_known ? "true" : "false",
-                   d.quotient_known ? "true" : "false", d.quotient, d.target_max);
+                   d.quotient_known ? "true" : "false", d.quotient,
+                   d.target_max);
             if (!available || !valid) {
                 observation_gap = true;
             }
@@ -456,24 +496,31 @@ static void checked_fragment(const NLCheckedFragment *f, size_t parent,
            fid, n, declared);
 }
 
-static void phase_record(const char *name, const char *status, size_t sid) {
+static void phase_record(const char *name, const char *status, size_t sid)
+{
     printf("{\"record\":\"phase\",\"phase\":\"%s\",\"status\":\"%s\","
-           "\"source\":%zu}\n", name, status, sid);
+           "\"source\":%zu}\n",
+           name, status, sid);
     if (fflush(stdout) != 0) {
         evidence_error = true;
     }
 }
-static void admission_record(const char *name, size_t sid) {
+static void admission_record(const char *name, size_t sid)
+{
     printf("{\"record\":\"admission\",\"phase\":\"%s\",\"source\":%zu,"
-           "\"status\":\"OK\",\"admitted\":true}\n", name, sid);
+           "\"status\":\"OK\",\"admitted\":true}\n",
+           name, sid);
     if (fflush(stdout) != 0) {
         evidence_error = true;
     }
 }
 static bool rendered_diagnostic(const char *phase, const NLSource *source,
                                 size_t sid, const NLParseDiagnostic *parse,
-                                const NLCheckDiagnostic *check) {
-    enum { MAX_RENDER_BYTES = 32768 };
+                                const NLCheckDiagnostic *check)
+{
+    enum {
+        MAX_RENDER_BYTES = 32768
+    };
     unsigned char bytes[MAX_RENDER_BYTES + 1];
     size_t count = 0, forwarded = 0;
     bool renderer_ok = false, capture_ok = true, truncated = false;
@@ -529,7 +576,8 @@ static bool rendered_diagnostic(const char *phase, const NLSource *source,
     }
     return renderer_ok && capture_ok && !truncated && stderr_ok && count != 0;
 }
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     NLSource *source = NULL, *entry = NULL;
     NLParser *parser = NULL, *entry_parser = NULL;
     NLSyntaxTree *tree = NULL, *entry_tree = NULL;
@@ -546,10 +594,12 @@ int main(int argc, char **argv) {
         return 20;
     }
     printf("{\"record\":\"begin\",\"schema\":\"r1617-observer-v2\","
-           "\"mode\":\"%s\"}\n", argv[2]);
+           "\"mode\":\"%s\"}\n",
+           argv[2]);
     NLSourceStatus ss = nl_source_load(argv[1], &source);
     printf("{\"record\":\"source_load\",\"status\":%d}\n", (int)ss);
-    phase_record("source_load", ss == NL_SOURCE_OK ? "OK" : "SOURCE_FAILURE", 0);
+    phase_record("source_load", ss == NL_SOURCE_OK ? "OK" : "SOURCE_FAILURE",
+                 0);
     if (ss != NL_SOURCE_OK || source == NULL ||
         nl_source_length(source) > MAX_SOURCE_BYTES || evidence_error) {
         goto done;
@@ -564,7 +614,8 @@ int main(int argc, char **argv) {
     phase_record("original_parse", parse_status(ps), original_sid);
     if (ps != NL_PARSE_OK) {
         diagnostic("original_parse", &pd.diagnostic, pd.span);
-        if (!rendered_diagnostic("original_parse", source, original_sid, &pd, NULL)) {
+        if (!rendered_diagnostic("original_parse", source, original_sid, &pd,
+                                 NULL)) {
             goto done;
         }
         if (ps == NL_PARSE_LEXICALLY_UNSUPPORTED ||
@@ -607,7 +658,8 @@ int main(int argc, char **argv) {
         }
         goto done;
     }
-    /* Preserve the actual original admission before any observation or cleanup. */
+    /* Preserve the actual original admission before any observation or cleanup.
+     */
     admission_record("original_register", original_sid);
     if (evidence_error) {
         goto done;
@@ -679,7 +731,8 @@ done:
            "\"observation_gap\":%s,\"evidence_error\":%s}\n",
            terminal, rc, observation_gap ? "true" : "false",
            evidence_error ? "true" : "false");
-    /* Destructors are after the admission prefix; their errors cannot erase it. */
+    /* Destructors are after the admission prefix; their errors cannot erase it.
+     */
     nl_checked_destroy(checked);
     nl_syntax_tree_destroy(entry_tree);
     nl_parser_destroy(entry_parser);
@@ -688,8 +741,8 @@ done:
     nl_syntax_tree_destroy(tree);
     nl_parser_destroy(parser);
     nl_source_destroy(source);
-    if (ferror(stdout) || fflush(stdout) != 0 ||
-        ferror(stderr) || fflush(stderr) != 0) {
+    if (ferror(stdout) || fflush(stdout) != 0 || ferror(stderr) ||
+        fflush(stderr) != 0) {
         return 22;
     }
     return rc;
