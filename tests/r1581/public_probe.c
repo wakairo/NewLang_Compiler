@@ -10,7 +10,8 @@ typedef const NLCheckedFragment Frag;
 typedef const NLCheckedNodeView Node;
 typedef NLCheckedNodeId Id;
 
-static const char *check_name(NLCheckStatus s) {
+static const char *check_name(NLCheckStatus s)
+{
     switch (s) {
     case NL_CHECK_OK:
         return "OK";
@@ -30,7 +31,8 @@ static const char *check_name(NLCheckStatus s) {
     return "INVALID_STATUS";
 }
 
-static const char *parse_name(NLParseStatus s) {
+static const char *parse_name(NLParseStatus s)
+{
     switch (s) {
     case NL_PARSE_OK:
         return "OK";
@@ -51,7 +53,8 @@ static const char *parse_name(NLParseStatus s) {
 }
 
 static bool text_at(const NLSource *s, NLSourceSpan span, char *out,
-                    size_t capacity) {
+                    size_t capacity)
+{
     NLSourceView v;
     if (!nl_source_view(s, span, &v) || v.length >= capacity) {
         return false;
@@ -64,13 +67,15 @@ static bool text_at(const NLSource *s, NLSourceSpan span, char *out,
 }
 
 static bool child_path(char *out, size_t capacity, const char *parent,
-                       const char *name) {
+                       const char *name)
+{
     int n = snprintf(out, capacity, "%s/%s", parent, name);
     return n >= 0 && (size_t)n < capacity;
 }
 
 static void scalar(Frag *f, NLCheckedResult r, const char *path,
-                   const char *tag) {
+                   const char *tag)
+{
     NLSemanticValueView v;
     NLSemanticTypeView t;
     const NLSemanticContext *c = nl_checked_context(f);
@@ -78,11 +83,12 @@ static void scalar(Frag *f, NLCheckedResult r, const char *path,
         !nl_semantic_type_view(c, v.type, &t) || t.kind != NL_TYPE_USIZE) {
         return;
     }
-    printf("%s\t%s\t%d\t%zu\t%zu\t%zu\n", tag, path,
-           v.scalar_known ? 1 : 0, v.scalar_value, r.type, r.value);
+    printf("%s\t%s\t%d\t%zu\t%zu\t%zu\n", tag, path, v.scalar_known ? 1 : 0,
+           v.scalar_value, r.type, r.value);
 }
 
-static bool arithmetic(Frag *f, Id id, const char *path, NLCheckedKind k) {
+static bool arithmetic(Frag *f, Id id, const char *path, NLCheckedKind k)
+{
     bool nk, rk;
     size_t n, divisor, result, maximum;
     char op;
@@ -90,8 +96,8 @@ static bool arithmetic(Frag *f, Id id, const char *path, NLCheckedKind k) {
         NLUsizeDivisionView v;
         if (!nl_checked_usize_division_view(f, id, &v) ||
             !nl_checked_usize_division_valid(f, id, NULL) ||
-            !nl_checked_usize_division_valid(f, id, &v) ||
-            v.origin != f || v.node != id) {
+            !nl_checked_usize_division_valid(f, id, &v) || v.origin != f ||
+            v.node != id) {
             printf("PUBLIC_ERROR\t%s\tdivision_validation\n", path);
             return false;
         }
@@ -106,9 +112,8 @@ static bool arithmetic(Frag *f, Id id, const char *path, NLCheckedKind k) {
         NLUsizeRemainderView v;
         if (!nl_checked_usize_remainder_view(f, id, &v) ||
             !nl_checked_usize_remainder_valid(f, id, NULL) ||
-            !nl_checked_usize_remainder_valid(f, id, &v) ||
-            v.origin != f || v.node != id ||
-            v.source != nl_checked_source(f)) {
+            !nl_checked_usize_remainder_valid(f, id, &v) || v.origin != f ||
+            v.node != id || v.source != nl_checked_source(f)) {
             printf("PUBLIC_ERROR\t%s\tremainder_validation\n", path);
             return false;
         }
@@ -120,12 +125,13 @@ static bool arithmetic(Frag *f, Id id, const char *path, NLCheckedKind k) {
         maximum = v.target_max;
         op = '%';
     }
-    printf("ARITH\t%s\t%c\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n", path, op,
-           nk ? 1 : 0, rk ? 1 : 0, n, divisor, result, maximum);
+    printf("ARITH\t%s\t%c\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n", path, op, nk ? 1 : 0,
+           rk ? 1 : 0, n, divisor, result, maximum);
     return true;
 }
 
-static bool walk(Frag *f, Id id, const char *path, unsigned depth) {
+static bool walk(Frag *f, Id id, const char *path, unsigned depth)
+{
     if (depth > 128) {
         printf("APPARATUS_ERROR\tdepth\n");
         return false;
@@ -137,8 +143,7 @@ static bool walk(Frag *f, Id id, const char *path, unsigned depth) {
     }
     if (v->kind == NL_CHECKED_BINDING) {
         char name[128], next[1024];
-        bool named = text_at(nl_checked_source(f), v->name, name,
-                             sizeof(name));
+        bool named = text_at(nl_checked_source(f), v->name, name, sizeof(name));
         if (!named || name[0] == '\0') {
             printf("NOT_OBSERVABLE\t%s\tbinding_name\n", path);
             if (snprintf(name, sizeof(name), "unmapped_%zu", id) < 0) {
@@ -148,8 +153,7 @@ static bool walk(Frag *f, Id id, const char *path, unsigned depth) {
         if (!child_path(next, sizeof(next), path, name)) {
             return false;
         }
-        if (v->initializer != 0 &&
-            !walk(f, v->initializer, next, depth + 1)) {
+        if (v->initializer != 0 && !walk(f, v->initializer, next, depth + 1)) {
             return false;
         }
         return true;
@@ -195,8 +199,7 @@ static bool walk(Frag *f, Id id, const char *path, unsigned depth) {
     }
     if (v->kind == NL_CHECKED_REGISTERED_CALL) {
         char callee[128], next[1024];
-        if (!text_at(nl_checked_source(f), v->name, callee,
-                     sizeof(callee))) {
+        if (!text_at(nl_checked_source(f), v->name, callee, sizeof(callee))) {
             callee[0] = '\0';
         }
         Frag *body = nl_checked_call_body(f, id);
@@ -237,7 +240,8 @@ static bool walk(Frag *f, Id id, const char *path, unsigned depth) {
     return true;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     NLSource *source = NULL, *entry = NULL;
     NLParser *parser = NULL, *entry_parser = NULL;
     NLSyntaxTree *tree = NULL, *entry_tree = NULL;
@@ -284,8 +288,7 @@ int main(int argc, char **argv) {
         result = 0;
         goto cleanup;
     }
-    if (nl_source_create("main()", 6, "R1581-entry", &entry) !=
-        NL_SOURCE_OK) {
+    if (nl_source_create("main()", 6, "R1581-entry", &entry) != NL_SOURCE_OK) {
         goto cleanup;
     }
     ps = nl_parser_create(entry, &entry_parser);
