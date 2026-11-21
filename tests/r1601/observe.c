@@ -10,7 +10,11 @@
  * No assert(): all error handling remains active in Release.
  * Only the original registered main call is entered. No helper is reinvoked.
  */
-enum { R_MAX_FRAMES = 16, R_MAX_NODES = 512, R_MAX_SOURCE = 4096 };
+enum {
+    R_MAX_FRAMES = 16,
+    R_MAX_NODES = 512,
+    R_MAX_SOURCE = 4096
+};
 
 typedef struct {
     size_t frame;
@@ -23,11 +27,13 @@ typedef struct {
     bool failed, limited;
 } Walk;
 
-static const char *bit(bool value) {
+static const char *bit(bool value)
+{
     return value ? "true" : "false";
 }
 
-static const char *parse_name(NLParseStatus status) {
+static const char *parse_name(NLParseStatus status)
+{
     switch (status) {
     case NL_PARSE_OK:
         return "OK";
@@ -47,7 +53,8 @@ static const char *parse_name(NLParseStatus status) {
     return "UNCLASSIFIED";
 }
 
-static const char *check_name(NLCheckStatus status) {
+static const char *check_name(NLCheckStatus status)
+{
     switch (status) {
     case NL_CHECK_OK:
         return "OK";
@@ -67,19 +74,22 @@ static const char *check_name(NLCheckStatus status) {
     return "UNCLASSIFIED";
 }
 
-static bool ordinary_parse_refusal(NLParseStatus status) {
+static bool ordinary_parse_refusal(NLParseStatus status)
+{
     return status == NL_PARSE_LEXICALLY_UNSUPPORTED ||
            status == NL_PARSE_SYNTAX_UNSUPPORTED ||
            status == NL_PARSE_SYNTAX_ERROR;
 }
 
-static bool ordinary_check_refusal(NLCheckStatus status) {
+static bool ordinary_check_refusal(NLCheckStatus status)
+{
     return status == NL_CHECK_SEMANTIC_ERROR ||
            status == NL_CHECK_SEMANTIC_UNSUPPORTED ||
            status == NL_CHECK_ANALYSIS_PRECISION_LIMIT;
 }
 
-static const char *kind_name(NLCheckedKind kind) {
+static const char *kind_name(NLCheckedKind kind)
+{
     switch (kind) {
     case NL_CHECKED_REGISTERED_CALL:
         return "CALL";
@@ -108,7 +118,8 @@ static const char *kind_name(NLCheckedKind kind) {
     }
 }
 
-static const char *use_name(NLValueUse use) {
+static const char *use_name(NLValueUse use)
+{
     switch (use) {
     case NL_VALUE_USE_NONE:
         return "NONE";
@@ -124,7 +135,8 @@ static const char *use_name(NLValueUse use) {
     return "UNCLASSIFIED";
 }
 
-static void hex(const unsigned char *bytes, size_t length) {
+static void hex(const unsigned char *bytes, size_t length)
+{
     putchar('"');
     for (size_t i = 0; i < length; ++i) {
         printf("%02x", (unsigned)bytes[i]);
@@ -132,7 +144,8 @@ static void hex(const unsigned char *bytes, size_t length) {
     putchar('"');
 }
 
-static bool span_hex(const NLSource *source, NLSourceSpan span) {
+static bool span_hex(const NLSource *source, NLSourceSpan span)
+{
     NLSourceView view = {0};
     if (!source || !nl_source_view(source, span, &view) ||
         view.length > R_MAX_SOURCE) {
@@ -144,16 +157,17 @@ static bool span_hex(const NLSource *source, NLSourceSpan span) {
 }
 
 static void source_record(const NLSource *source, size_t frame,
-                          const char *role) {
-    printf("{\"record\":\"source\",\"frame\":%zu,\"role\":\"%s\",",
-           frame, role);
+                          const char *role)
+{
+    printf("{\"record\":\"source\",\"frame\":%zu,\"role\":\"%s\",", frame,
+           role);
     if (!source) {
         fputs("\"available\":false,\"length\":0,\"hex\":null}\n", stdout);
         return;
     }
     size_t length = nl_source_length(source);
-    printf("\"length\":%zu,\"available\":%s,\"hex\":",
-           length, bit(length <= R_MAX_SOURCE));
+    printf("\"length\":%zu,\"available\":%s,\"hex\":", length,
+           bit(length <= R_MAX_SOURCE));
     if (length <= R_MAX_SOURCE) {
         NLSourceSpan all = {0, length};
         (void)span_hex(source, all);
@@ -163,7 +177,8 @@ static void source_record(const NLSource *source, size_t frame,
     fputs("}\n", stdout);
 }
 
-static const char *severity_name(NLDiagnosticSeverity severity) {
+static const char *severity_name(NLDiagnosticSeverity severity)
+{
     switch (severity) {
     case NL_DIAG_NOTE:
         return "NOTE";
@@ -177,7 +192,8 @@ static const char *severity_name(NLDiagnosticSeverity severity) {
 
 /* These are actual borrowed diagnostic fields, not expected spellings.
  * A capped/unavailable field makes the record incomplete, never a match. */
-static bool diagnostic_text(const char *text) {
+static bool diagnostic_text(const char *text)
+{
     if (!text) {
         fputs("null", stdout);
         return true;
@@ -194,7 +210,8 @@ static bool diagnostic_text(const char *text) {
     return true;
 }
 
-static bool diagnostic_range(const NLSourceRange *range) {
+static bool diagnostic_range(const NLSourceRange *range)
+{
     if (!range) {
         fputs("null", stdout);
         return true;
@@ -203,15 +220,16 @@ static bool diagnostic_range(const NLSourceRange *range) {
     bool complete = diagnostic_text(range->path);
     printf(",\"start_line\":%zu,\"start_column\":%zu,"
            "\"end_line\":%zu,\"end_column\":%zu}",
-           range->start_line, range->start_column,
-           range->end_line, range->end_column);
+           range->start_line, range->start_column, range->end_line,
+           range->end_column);
     return complete;
 }
 
 static bool diagnostic_record(const NLSource *source,
-                              const NLDiagnostic *diagnostic,
-                              NLSourceSpan span, const char *phase,
-                              const char *role, size_t input_index) {
+                              const NLDiagnostic *diagnostic, NLSourceSpan span,
+                              const char *phase, const char *role,
+                              size_t input_index)
+{
     bool complete = true;
     bool valid = source && nl_source_span_valid(source, span);
     printf("{\"record\":\"diagnostic\",\"phase\":\"%s\","
@@ -269,12 +287,13 @@ static bool diagnostic_record(const NLSource *source,
 }
 
 static bool render_parse(const NLSource *source,
-                         const NLParseDiagnostic *diagnostic,
-                         const char *phase, const char *role) {
+                         const NLParseDiagnostic *diagnostic, const char *phase,
+                         const char *role)
+{
     bool complete = diagnostic_record(source, &diagnostic->diagnostic,
                                       diagnostic->span, phase, role, 0);
-    bool rendered = complete &&
-                    nl_parse_diagnostic_render(stderr, source, diagnostic);
+    bool rendered =
+        complete && nl_parse_diagnostic_render(stderr, source, diagnostic);
     printf("{\"record\":\"diagnostic_render\",\"phase\":\"%s\","
            "\"source_role\":\"%s\",\"input_index\":0,"
            "\"attempted\":%s,\"ok\":%s}\n",
@@ -283,14 +302,14 @@ static bool render_parse(const NLSource *source,
 }
 
 static bool render_check(const NLSource *source,
-                         const NLCheckDiagnostic *diagnostic,
-                         const char *phase, const char *role,
-                         size_t input_index) {
-    bool complete = diagnostic_record(source, &diagnostic->diagnostic,
-                                      diagnostic->span, phase, role,
-                                      input_index);
-    bool rendered = complete &&
-                    nl_check_diagnostic_render(stderr, source, diagnostic);
+                         const NLCheckDiagnostic *diagnostic, const char *phase,
+                         const char *role, size_t input_index)
+{
+    bool complete =
+        diagnostic_record(source, &diagnostic->diagnostic, diagnostic->span,
+                          phase, role, input_index);
+    bool rendered =
+        complete && nl_check_diagnostic_render(stderr, source, diagnostic);
     printf("{\"record\":\"diagnostic_render\",\"phase\":\"%s\","
            "\"source_role\":\"%s\",\"input_index\":%zu,"
            "\"attempted\":%s,\"ok\":%s}\n",
@@ -298,13 +317,14 @@ static bool render_check(const NLSource *source,
     return complete && rendered;
 }
 
-static void scalar(const NLSemanticContext *context, NLCheckedResult result) {
+static void scalar(const NLSemanticContext *context, NLCheckedResult result)
+{
     NLSemanticValueView value = {0};
     NLSemanticTypeView type = {0};
     bool have_value = result.value != 0 &&
                       nl_semantic_value_view(context, result.value, &value);
-    bool have_type = result.type != 0 &&
-                     nl_semantic_type_view(context, result.type, &type);
+    bool have_type =
+        result.type != 0 && nl_semantic_type_view(context, result.type, &type);
     bool quantity = have_value && have_type && type.kind == NL_TYPE_USIZE &&
                     value.type == result.type;
     bool known = quantity && value.scalar_known;
@@ -321,7 +341,8 @@ static void scalar(const NLSemanticContext *context, NLCheckedResult result) {
 }
 
 static void arithmetic(const NLCheckedFragment *fragment, size_t frame,
-                       NLCheckedNodeId id, NLCheckedKind kind, Walk *walk) {
+                       NLCheckedNodeId id, NLCheckedKind kind, Walk *walk)
+{
     if (kind == NL_CHECKED_USIZE_DIVISION) {
         NLUsizeDivisionView view = {0};
         bool present = nl_checked_usize_division_view(fragment, id, &view);
@@ -343,23 +364,20 @@ static void arithmetic(const NLCheckedFragment *fragment, size_t frame,
                    "\"numerator_known\":%s,\"result_known\":%s,"
                    "\"raw_numerator\":%zu,\"divisor\":%zu,"
                    "\"raw_result\":%zu,\"target_max\":%zu",
-                   bit(valid), bit(copy_valid),
-                   bit(view.origin == fragment), view.node,
-                   view.operands[0], view.operands[1],
+                   bit(valid), bit(copy_valid), bit(view.origin == fragment),
+                   view.node, view.operands[0], view.operands[1],
                    view.values[0], view.values[1], view.result, view.type,
-                   view.symbols[0], view.symbols[1],
-                   view.places[0], view.places[1],
-                   view.incarnations[0], view.incarnations[1],
-                   view.facts[0], view.facts[1],
-                   view.span.start_byte, view.span.end_byte,
-                   view.operator_span.start_byte, view.operator_span.end_byte,
+                   view.symbols[0], view.symbols[1], view.places[0],
+                   view.places[1], view.incarnations[0], view.incarnations[1],
+                   view.facts[0], view.facts[1], view.span.start_byte,
+                   view.span.end_byte, view.operator_span.start_byte,
+                   view.operator_span.end_byte,
                    view.operand_spans[0].start_byte,
                    view.operand_spans[0].end_byte,
                    view.operand_spans[1].start_byte,
-                   view.operand_spans[1].end_byte,
-                   bit(view.numerator_known), bit(view.quotient_known),
-                   view.numbers[0], view.numbers[1], view.quotient,
-                   view.target_max);
+                   view.operand_spans[1].end_byte, bit(view.numerator_known),
+                   bit(view.quotient_known), view.numbers[0], view.numbers[1],
+                   view.quotient, view.target_max);
             if (!valid || !copy_valid || view.origin != fragment ||
                 view.node != id) {
                 walk->failed = true;
@@ -388,24 +406,20 @@ static void arithmetic(const NLCheckedFragment *fragment, size_t frame,
                    "\"numerator_known\":%s,\"result_known\":%s,"
                    "\"raw_numerator\":%zu,\"divisor\":%zu,"
                    "\"raw_result\":%zu,\"target_max\":%zu",
-                   bit(valid), bit(copy_valid),
-                   bit(view.origin == fragment), view.node,
-                   bit(view.source == nl_checked_source(fragment)),
-                   view.operands[0], view.operands[1],
-                   view.values[0], view.values[1], view.result, view.type,
-                   view.symbols[0], view.symbols[1],
-                   view.places[0], view.places[1],
-                   view.incarnations[0], view.incarnations[1],
-                   view.facts[0], view.facts[1],
-                   view.span.start_byte, view.span.end_byte,
+                   bit(valid), bit(copy_valid), bit(view.origin == fragment),
+                   view.node, bit(view.source == nl_checked_source(fragment)),
+                   view.operands[0], view.operands[1], view.values[0],
+                   view.values[1], view.result, view.type, view.symbols[0],
+                   view.symbols[1], view.places[0], view.places[1],
+                   view.incarnations[0], view.incarnations[1], view.facts[0],
+                   view.facts[1], view.span.start_byte, view.span.end_byte,
                    view.operator_span.start_byte, view.operator_span.end_byte,
                    view.operand_spans[0].start_byte,
                    view.operand_spans[0].end_byte,
                    view.operand_spans[1].start_byte,
-                   view.operand_spans[1].end_byte,
-                   bit(view.numerator_known), bit(view.remainder_known),
-                   view.numbers[0], view.numbers[1], view.remainder,
-                   view.target_max);
+                   view.operand_spans[1].end_byte, bit(view.numerator_known),
+                   bit(view.remainder_known), view.numbers[0], view.numbers[1],
+                   view.remainder, view.target_max);
             if (!valid || !copy_valid || view.origin != fragment ||
                 view.node != id) {
                 walk->failed = true;
@@ -420,7 +434,8 @@ static void visit(const NLCheckedFragment *, size_t, NLCheckedNodeId,
 
 static void visit_chain(const NLCheckedFragment *fragment, size_t frame,
                         NLCheckedNodeId first, NLCheckedNodeId parent,
-                        bool items, size_t depth, Walk *walk) {
+                        bool items, size_t depth, Walk *walk)
+{
     NLCheckedNodeId id = first;
     size_t count = 0;
     while (id != 0 && !walk->failed && !walk->limited) {
@@ -441,8 +456,9 @@ static void visit_chain(const NLCheckedFragment *fragment, size_t frame,
 }
 
 static void visit(const NLCheckedFragment *fragment, size_t frame,
-                  NLCheckedNodeId id, NLCheckedNodeId parent,
-                  const char *edge, size_t depth, Walk *walk) {
+                  NLCheckedNodeId id, NLCheckedNodeId parent, const char *edge,
+                  size_t depth, Walk *walk)
+{
     if (id == 0 || walk->failed || walk->limited) {
         return;
     }
@@ -497,8 +513,8 @@ static void visit(const NLCheckedFragment *fragment, size_t frame,
 
     switch (view->kind) {
     case NL_CHECKED_BINDING:
-        visit(fragment, frame, view->initializer, id, "initializer",
-              depth + 1, walk);
+        visit(fragment, frame, view->initializer, id, "initializer", depth + 1,
+              walk);
         break;
     case NL_CHECKED_BLOCK:
         visit_chain(fragment, frame, view->first_item, id, true, depth, walk);
@@ -512,8 +528,8 @@ static void visit(const NLCheckedFragment *fragment, size_t frame,
                frame, id);
         break;
     case NL_CHECKED_REGISTERED_CALL: {
-        visit_chain(fragment, frame, view->first_argument, id, false,
-                    depth, walk);
+        visit_chain(fragment, frame, view->first_argument, id, false, depth,
+                    walk);
         const NLCheckedFragment *body = nl_checked_call_body(fragment, id);
         if (!body) {
             printf("{\"record\":\"body\",\"frame\":%zu,\"call\":%zu,"
@@ -544,8 +560,8 @@ static void visit(const NLCheckedFragment *fragment, size_t frame,
     case NL_CHECKED_USIZE_SUBTRACTION:
     case NL_CHECKED_USIZE_DIVISION:
     case NL_CHECKED_USIZE_REMAINDER:
-        visit_chain(fragment, frame, view->first_argument, id, false,
-                    depth, walk);
+        visit_chain(fragment, frame, view->first_argument, id, false, depth,
+                    walk);
         break;
     case NL_CHECKED_IDENTIFIER:
     case NL_CHECKED_UNIT:
@@ -559,9 +575,9 @@ static void visit(const NLCheckedFragment *fragment, size_t frame,
     }
 }
 
-static bool declarations(const NLSyntaxTree *tree) {
-    const NLSyntaxView *root =
-        nl_syntax_node_view(nl_syntax_tree_root(tree));
+static bool declarations(const NLSyntaxTree *tree)
+{
+    const NLSyntaxView *root = nl_syntax_node_view(nl_syntax_tree_root(tree));
     if (!root || root->kind != NL_SYNTAX_FUNCTION_UNIT) {
         return false;
     }
@@ -587,7 +603,8 @@ static bool declarations(const NLSyntaxTree *tree) {
     return count == root->data.function_unit.count;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     NLSource *original = NULL, *entry = NULL;
     NLParser *unit_parser = NULL, *entry_parser = NULL;
     NLSyntaxTree *unit_tree = NULL, *entry_tree = NULL;
@@ -606,7 +623,8 @@ int main(int argc, char **argv) {
         return 20;
     }
     bool invalid_original = strcmp(argv[2], "invalid") == 0;
-    /* This frozen host-side law flag is not an input fact to any compiler API. */
+    /* This frozen host-side law flag is not an input fact to any compiler API.
+     */
     printf("{\"record\":\"observer_config\",\"revision\":\"V2\","
            "\"source_law\":\"%s\"}\n",
            invalid_original ? "INVALID" : "LAWFUL");
@@ -620,13 +638,15 @@ int main(int argc, char **argv) {
     source_record(original, 0, "original_unit");
     NLParseStatus ps = nl_parser_create(original, &unit_parser);
     printf("{\"record\":\"phase\",\"phase\":\"unit_parser_create\","
-           "\"status\":\"%s\"}\n", parse_name(ps));
+           "\"status\":\"%s\"}\n",
+           parse_name(ps));
     if (ps != NL_PARSE_OK) {
         goto cleanup;
     }
     ps = nl_parser_parse_function_unit(unit_parser, &unit_tree, &pd);
     printf("{\"record\":\"phase\",\"phase\":\"original_unit_parse\","
-           "\"status\":\"%s\"}\n", parse_name(ps));
+           "\"status\":\"%s\"}\n",
+           parse_name(ps));
     if (ps != NL_PARSE_OK) {
         outcome = ordinary_parse_refusal(ps) ? 10 : 20;
         if (!render_parse(original, &pd, "original_unit_parse",
@@ -641,7 +661,8 @@ int main(int argc, char **argv) {
     }
     NLCheckStatus cs = nl_semantic_create(&context);
     printf("{\"record\":\"phase\",\"phase\":\"context_create\","
-           "\"status\":\"%s\"}\n", check_name(cs));
+           "\"status\":\"%s\"}\n",
+           check_name(cs));
     if (cs != NL_CHECK_OK) {
         goto cleanup;
     }
@@ -665,7 +686,8 @@ int main(int argc, char **argv) {
         fputs("{\"record\":\"admission_stop\","
               "\"phase\":\"original_unit_register\","
               "\"reason\":\"TRUE_INVALID_ORIGINAL_UNIT_REGISTERED\","
-              "\"synthetic_entry\":\"NOT_STARTED\"}\n", stdout);
+              "\"synthetic_entry\":\"NOT_STARTED\"}\n",
+              stdout);
         outcome = 23;
         goto cleanup;
     }
@@ -680,14 +702,16 @@ int main(int argc, char **argv) {
     }
     ps = nl_parser_create(entry, &entry_parser);
     printf("{\"record\":\"phase\",\"phase\":\"entry_parser_create\","
-           "\"status\":\"%s\"}\n", parse_name(ps));
+           "\"status\":\"%s\"}\n",
+           parse_name(ps));
     if (ps != NL_PARSE_OK) {
         goto cleanup;
     }
     pd = (NLParseDiagnostic){0};
     ps = nl_parser_parse_expression_fragment(entry_parser, &entry_tree, &pd);
     printf("{\"record\":\"phase\",\"phase\":\"synthetic_entry_parse\","
-           "\"status\":\"%s\"}\n", parse_name(ps));
+           "\"status\":\"%s\"}\n",
+           parse_name(ps));
     if (ps != NL_PARSE_OK) {
         if (!render_parse(entry, &pd, "synthetic_entry_parse",
                           "synthetic_entry")) {
@@ -697,7 +721,8 @@ int main(int argc, char **argv) {
     }
     cs = nl_semantic_check_expression(context, entry_tree, &checked, &cd);
     printf("{\"record\":\"phase\",\"phase\":\"synthetic_entry_check\","
-           "\"status\":\"%s\"}\n", check_name(cs));
+           "\"status\":\"%s\"}\n",
+           check_name(cs));
     if (cs != NL_CHECK_OK) {
         outcome = ordinary_check_refusal(cs) ? 12 : 20;
         if (!render_check(entry, &cd, "synthetic_entry_check",
@@ -735,8 +760,8 @@ cleanup:
     nl_parser_destroy(unit_parser);
     nl_source_destroy(original);
     printf("{\"record\":\"observer_end\",\"exit\":%d}\n", outcome);
-    if (fflush(stdout) != 0 || fflush(stderr) != 0 ||
-        ferror(stdout) || ferror(stderr)) {
+    if (fflush(stdout) != 0 || fflush(stderr) != 0 || ferror(stdout) ||
+        ferror(stderr)) {
         return 20;
     }
     return outcome;
