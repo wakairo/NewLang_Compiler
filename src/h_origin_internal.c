@@ -527,6 +527,63 @@ static const CustodyEdge *incoming_edge(const CustodyParent *child,
     return NULL;
 }
 
+static const CustodyEdge *body_invocation(const struct NLHOriginOwner *o,
+                                          const CustodyParent *body,
+                                          const CustodyParent **caller)
+{
+    const CustodyEdge *e = incoming_edge(body, caller);
+    if (!e || e->role != NL_CUSTODY_BODY ||
+        !custody_storage_matches(o, *caller) || e->world != body->world ||
+        (*caller)->world != body->world)
+        return NULL;
+    const CustodyParent *p = *caller;
+    if (e->state == COMMITTED)
+        return e->slot < p->body_count &&
+                       p->bodies[e->slot] == body->fragment &&
+                       p->calls[e->slot] == e->site
+                   ? e
+                   : NULL;
+    return !o->published && e->state == PENDING && e->slot == p->body_count &&
+                   e->slot < p->body_capacity && e->slot < p->call_capacity
+               ? e
+               : NULL;
+}
+
+static bool custody_reaches_root(const struct NLHOriginOwner *o,
+                                 const CustodyParent *p)
+{
+    while (p->fragment != o->root) {
+        const CustodyEdge *link = incoming_edge(p, &p);
+        if (!link || link->state != COMMITTED)
+            return false;
+    }
+    return true;
+}
+
+const NLCheckedFragment *
+nl_h_custody_body_caller(const NLCheckedFragment *f,
+                         const NLSemanticContext *working,
+                         NLCheckedNodeId *call)
+{
+    const struct NLHOriginOwner *o = f ? f->h_origin : NULL;
+    const CustodyParent *body = custody_parent(o, f);
+    if (!body || !working || !call || o->aborted ||
+        !custody_storage_matches(o, body) || !custody_parent(o, o->root))
+        return NULL;
+    if (o->published &&
+        (body->world != working || !custody_reaches_root(o, body) ||
+         !nl_h_custody_validate(o->root) ||
+         !nl_h_custody_result_world_present(o->root, o->root->root)))
+        return NULL;
+    const CustodyParent *caller = NULL;
+    const CustodyEdge *e = body_invocation(o, body, &caller);
+    if (!e || (e->state == COMMITTED &&
+               !nl_h_custody_result_valid(caller->fragment, e->site)))
+        return NULL;
+    *call = e->site;
+    return caller->fragment;
+}
+
 bool nl_h_custody_is_body(const NLCheckedFragment *f)
 {
     const struct NLHOriginOwner *o = f ? f->h_origin : NULL;
@@ -599,32 +656,14 @@ nl_h_custody_if_body(const NLCheckedFragment *arm,
         return NULL;
 
     const CustodyParent *caller = NULL;
-    const CustodyEdge *invocation = incoming_edge(body, &caller);
-    if (!invocation || invocation->role != NL_CUSTODY_BODY ||
-        !custody_storage_matches(o, caller) ||
-        invocation->world != body->world || caller->world != body->world)
+    const CustodyEdge *invocation = body_invocation(o, body, &caller);
+    if (!invocation)
         return NULL;
-    if (invocation->state == COMMITTED) {
-        if (invocation->slot >= caller->body_count ||
-            caller->bodies[invocation->slot] != body->fragment ||
-            caller->calls[invocation->slot] != invocation->site)
-            return NULL;
-    } else if (o->published || invocation->state != PENDING ||
-               invocation->slot != caller->body_count ||
-               invocation->slot >= caller->body_capacity ||
-               invocation->slot >= caller->call_capacity) {
-        return NULL;
-    }
     /* An outer invocation can still be under construction during CHECK. Once
      * published, the authenticated call must be reachable from the real root.
      */
-    if (o->published) {
-        for (const CustodyParent *p = caller; p->fragment != o->root;) {
-            const CustodyEdge *link = incoming_edge(p, &p);
-            if (!link || link->state != COMMITTED)
-                return NULL;
-        }
-    }
+    if (o->published && !custody_reaches_root(o, caller))
+        return NULL;
     const NLCheckedNodeView *call =
         nl_checked_node_view(caller->fragment, invocation->site);
     if (!call || call->kind != NL_CHECKED_REGISTERED_CALL ||

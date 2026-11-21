@@ -46,6 +46,12 @@ bool nl_h_custody_validate_candidate(const NLCheckedFragment *root,
 /* Recognize the canonical BODY and its attached CHECK state before reserve.
  * The arithmetic caller still authenticates the registered source event. */
 bool nl_h_custody_is_body(const NLCheckedFragment *);
+/* Resolve the existing BODY edge. CHECK may inspect its pending reservation.
+ * Published consumers read the original world through the existing seals. */
+const NLCheckedFragment *
+nl_h_custody_body_caller(const NLCheckedFragment *,
+                         const NLSemanticContext *working,
+                         NLCheckedNodeId *call);
 /* Locate the owning registered BODY invocation of a canonical normal IF arm.
  * The CHECK planner supplies its exact parent while the graph is unpublished.
  * Callers verify the registered source, IF and exact syntax event separately.

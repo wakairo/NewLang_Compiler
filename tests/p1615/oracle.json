@@ -1,0 +1,49 @@
+{
+  "route-pair": {
+    "owned": [["route", [43, 29], null], ["route", [83, 17], null]],
+    "joins": ["route", "route"],
+    "trace": [
+      "ARG 0 43", "ARG 1 29", "CALL route 43 29", "COND 1", "BIND trip 2",
+      "ARG 0 83", "ARG 1 17", "CALL route 83 17", "COND 0", "BIND remote 13",
+      "BIND residue 3"
+    ]
+  },
+  "joined-actual": {
+    "owned": [
+      ["relay", [19, 33], null], ["carry_right", [0, null], null],
+      ["relay", [29, 41], null], ["carry_right", [8, null], null]
+    ],
+    "joins": ["relay", "relay"],
+    "trace": [
+      "ARG 0 19", "ARG 1 33", "CALL relay 19 33", "COND 1",
+      "ARG 0 0", "ARG 1 19", "CALL carry_right 0 19", "BIND total 19",
+      "ARG 0 29", "ARG 1 41", "CALL relay 29 41", "COND 0",
+      "ARG 0 8", "ARG 1 41", "CALL carry_right 8 41", "BIND backup 41",
+      "BIND residue 1"
+    ]
+  },
+  "evaluated-unused": {
+    "owned": [
+      ["keep_second", [11, 3], 3], ["keep_second", [11, 11], 11],
+      ["keep_second", [11, 11], 11]
+    ],
+    "trace": [
+      "ARG 0 11", "ARG 1 3", "CALL keep_second 11 3", "BIND primary 3",
+      "ARG 0 11", "CALL spare 50", "ARG 1 11", "CALL keep_second 11 11", "BIND equal_values 11",
+      "CALL rows 44", "CALL spare 50", "ARG 0 11", "ARG 1 11",
+      "CALL keep_second 11 11", "BIND forwarded 11"
+    ]
+  },
+  "unary-alternative": {
+    "joins": ["main"],
+    "trace": [
+      "CALL batch 43", "BIND near 7", "CALL leftover 29", "BIND far 2",
+      "COND 1", "BIND result 2", "BIND audit 2"
+    ]
+  },
+  "ordered-unused": {"check": 0, "emit": 4, "diagnostic": "[V1-BACKEND-UNSUPPORTED]"},
+  "three-formals": {"check": 0, "emit": 4, "diagnostic": "[V1-BACKEND-UNSUPPORTED]"},
+  "wrong-arity": {"check": 3, "emit": 3, "diagnostic": "[P3-ARITY]"},
+  "wrong-type": {"check": 3, "emit": 3, "diagnostic": "[P3-TYPE-MISMATCH]"},
+  "zero-in-unused": {"check": 3, "emit": 3, "diagnostic": "[USIZE-DIVISION-ZERO]"}
+}
