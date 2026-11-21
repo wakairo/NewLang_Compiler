@@ -2355,3 +2355,8 @@ include(tests/p1368/CMakeLists.txt)
 include(tests/p1372/CMakeLists.txt)
 
 include(tests/p1375/CMakeLists.txt)
+
+# R1617: after existing global and late property passes.
+if(BUILD_TESTING)
+    include("${CMAKE_SOURCE_DIR}/tests/r1617/CMakeLists.txt")
+endif()

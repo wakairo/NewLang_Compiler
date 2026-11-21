@@ -1,0 +1,55 @@
+{
+  "schema": "r1617-inputs-v1",
+  "sources": {
+    "01_ratio_forward": {
+      "path": "first/01_ratio_forward.nl",
+      "bytes": 186,
+      "sha256": "20405f2c2aa7ff82bd2488ad0d3a3a4f3a50b7e86e8eec2060fb2e851c0ea867"
+    },
+    "02_ratio_reversed": {
+      "path": "first/02_ratio_reversed.nl",
+      "bytes": 186,
+      "sha256": "7d8bfd258b8f2cbf4d615731e92d8f39a6ef63b8606b451a5e8a409e65214c87"
+    },
+    "03_copy_two_calls": {
+      "path": "first/03_copy_two_calls.nl",
+      "bytes": 277,
+      "sha256": "72a6be73fcf999e561a9cfbc83d18a26a35917d4e5584ded4a3a8b3a8ac245bb"
+    },
+    "04_unused_actual_order": {
+      "path": "first/04_unused_actual_order.nl",
+      "bytes": 152,
+      "sha256": "350efc2ccb5cc52828d7c56a2b9549770dedd4887bbda42fb0cc84076fc4e440"
+    },
+    "05_missing_actual": {
+      "path": "first/05_missing_actual.nl",
+      "bytes": 118,
+      "sha256": "672d2404ca7cc53e0ab48c09cfb8a7057332fc57eadbfc104b7877507d7cc2eb"
+    },
+    "06_unsafe_unused_actual": {
+      "path": "first/06_unsafe_unused_actual.nl",
+      "bytes": 139,
+      "sha256": "edb79b7cd1a415666b53581b2f7369e45fc66d7b5c419303c113de7404306077"
+    },
+    "S1_copy_branch_calls": {
+      "path": "supplement/S1_copy_branch_calls.nl",
+      "bytes": 351,
+      "sha256": "c37c9de2cec6c36afb47d6b458cc87bff570759bd2d17f8914af80e1fb63bdd3"
+    },
+    "S2_unused_actual_pipeline": {
+      "path": "supplement/S2_unused_actual_pipeline.nl",
+      "bytes": 240,
+      "sha256": "6deb2ccaee7fabee7af4989f8bbcfbfc8d9db138f6200a9ded812acba95b0076"
+    }
+  },
+  "oracles": {
+    "first-oracle.json": {
+      "bytes": 6581,
+      "sha256": "6447fed6e42828f57655c71117a9c50df9e5c892d0c7545053e371d36d10198d"
+    },
+    "supplemental-oracle.json": {
+      "bytes": 5779,
+      "sha256": "b1f21a3424d77243629e1d002a6b7c8f770a9c1cc4e2a1efde4b1e6cc3658368"
+    }
+  }
+}

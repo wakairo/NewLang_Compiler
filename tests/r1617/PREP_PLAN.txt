@@ -1,0 +1,350 @@
+R1617 C1309 TEXT V2 REPAIR PREPARATION
+Status: STOP C after publication. Execution target NOT_RELEASED.
+Preparation is not compiler, build, formatter, CMake, test, mock, recovery-tool or CI execution.
+
+1. AUTHORITIES AND INDEPENDENCE
+This V2 is authorized only by the bounded own C repair control:
+https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061834158
+ACTUAL RESUME/exposure POSTGET:
+https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061846952
+Original Issue C1309 and own clarification remain earlier authorities:
+https://github.com/wakairo/NewLang_Compiler/issues/1617
+https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061474909
+ACTUAL START: https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061411800
+Original FIRST: https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061437231
+Supplemental FIRST: https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061487066
+
+Canonical b217d83c0b4253abf4832d36916d2107f8ab205b / Draft17.38.
+Public interface and scaffolds only: 3e979df92a8ff37d456896cbb761185f1725f871.
+The latter is an unadopted dependency and is not an execution target.
+V1 remains immutable at its original receipts; V2 replaces only explicitly listed own
+apparatus/control-text paths and adds the shared capture module and exact delta.
+V1 final index: https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061727116
+V1 descriptor: 60017e929875e7b293606dcef7be5af76bbc2b0e1551a73ddf0a3c076b0a89b5.
+The six originals, two supplements, both oracle files and execution-release.json
+are byte-identical to V1. C static auxiliary own-apparatus review is disclosed as
+an apparatus correction input; it is not independent R/F or candidate evidence.
+READ_LEDGER.json records exact blob and content identities, include closure, permitted
+scaffold reads, incidental historical paths and the disclosed canonical-doc overread.
+No producer/other-track originals, src/internal/test contents, producer CI, actor
+inventory/descendants, personal context or shared scratch/worktree were accessed.
+
+2. WORKLOADS AND FIXED PREDICTIONS
+Exactly six original FIRST cases and two separately authorized supplemental cases.
+No original was revised. Supplemental cases are material new, independently chosen,
+public-interface-informed workloads; they are not mechanical repairs and not
+pre-interface FIRST. Full original and supplemental oracle JSON files accompany
+the byte-identical source files and inputs-manifest.json.
+
+Future independent reset/serial order:
+05_missing_actual, 06_unsafe_unused_actual, S1_copy_branch_calls,
+S2_unused_actual_pipeline, 01_ratio_forward, 02_ratio_reversed,
+03_copy_two_calls, 04_unused_actual_order.
+
+Original numeric expectations: ratio(29,4)=7; ratio(4,29)=0;
+modulo(47,6)=5 then modulo(6,47)=6 with copied n still47;
+unused-actual positive computes 55/4=13 before41%6=5 and returns13.
+The arity-deficient and zero-divisor unused-actual originals must reject.
+S1: (33,7) computes5 and2, chooses else result2; (7,33) computes0
+and11, chooses then result0; caller a remains33.
+S2: first actual35%9=8, then second actual26/4=6, then helper8/2=4;
+the unused second actual remains part of source evaluation; caller right%5=1.
+
+Definition checking is separate from each concrete call. Canonical law permits the
+broader original forms; public headers expose a narrower flat name/literal q/r
+profile. Possible unsupportedness is not an observed result. No production
+support, successful parse, CHECK or native result is presumed.
+
+3. OBSERVER AND OBSERVATION CEILING
+observer.c includes only the approved public closure and C standard headers.
+It loads exact source bytes, parses the function unit, walks immutable syntax,
+creates a fresh semantic context, and registers the actual function unit.
+It does not seed a value/root/layout, bind a fabricated result, register a fake
+signature, modify a borrowed view, cast an internal layout or inspect an oracle.
+Registration-only mode never constructs the entry adapter.
+Entry mode is requested only for legal originals/supplements with prior real CLI
+CHECK0. It parses the separate frozen "main()\n" adapter and invokes the public
+semantic checker; no text substitution, body rewriting or artificial caller facts.
+
+Syntax records retain declaration/formal positions, actual source order, callee
+spelling, source spans and branch/body structure. Checked records retain resolved
+function IDs, arguments, result packages, Copy use, retained call bodies and
+source/context/fragment-qualified identities. Traversal follows public root/edge
+getters, not an assumed contiguous node-ID layout. Conditional arm evidence is
+labelled hypothetical and never treated as the executed native arm.
+Each public division/remainder view and its read-only authenticator are logged;
+a false authenticator/origin mismatch stops the driver before codegen/native.
+
+The selected headers do not expose an ordinary scalar actual-to-corresponding-
+formal identity seal. Numeric equality, IDs from unrelated contexts and unit
+exit0 cannot supply that proof. The driver compares only genuinely exposed
+known scalar actual/result observations to the frozen independent predictions.
+Missing values/calls remain explicit missing observations. No source/oracle
+derived guest state or observer pass field is generated.
+
+Every original entry returns unit. Pristine native exit0 with empty streams is
+only a finite native health/unit-completion observation. No passive native
+instrumentation is planned in this finite capsule. Internal native numeric
+values and temporal argument order remain UNOBSERVED. Pure operations may be
+optimized away. Syntax order, checked argument order, observation traversal
+order and native temporal order are distinct.
+
+4. ADMISSION PRECEDENCE / PHASE AND STREAM CONTRACTS
+Every attempted case starts with real newlangc --check ORIGINAL_COPY.nl.
+Copies are byte-identical to FIRST, retained and rechecked after children.
+Invalid CHECK exit0 is a latched UNSAFE_ADMISSION_STOP even if the same
+child later has capture, stream, cleanup or persistence failure. No observer,
+adapter, emitter, native process or later case may follow that admission.
+
+After a healthy CHECK3 with no stdout and nonempty stderr, registration-only
+observation may parse/register the original to retain genuine structured
+evidence. It never constructs the main() adapter. Crucially, a complete captured
+public original_register OK phase/admission tied to exact original source bytes
+is also UNSAFE_ADMISSION_STOP for an INVALID original, including after CLI3.
+The observer flushes that actual phase and admission before getters, entry or
+destructors. The driver inspects complete captured prefix records before any
+health, terminal, stream, raw-budget or cleanup assessment. Later incomplete
+output, contradictory terminal, failed close/kill/wait or failed persistence
+cannot clear the in-memory unsafe latch. The latch, raw prefix and first
+failure are retained separately; all later work is forbidden.
+
+Legal CHECK0 requires empty stdout/stderr and may request the genuine entry
+path. A full observer record must have exactly one matching begin/terminal,
+correct mode, ordered source/load/parser/parse/semantic/register and optional
+entry phases, valid source identities, and consistent admissions/status/exit.
+rc10 is original parse refusal; rc11 original registration refusal; rc12 entry
+refusal only in entry mode; rc0 has the exact mode-specific success terminal.
+rc20/21/22, unknown states, malformed records, unexpected entry/checked
+observations, contradictory admissions or unclassified CLI/public disagreement
+are STOP. An unsafe original admission has precedence over these secondary
+failures, without hiding their captured process/status facts.
+
+Success observer stderr must be empty. For refusal, observer.c calls the actual
+approved public parse/check diagnostic renderer into a C17 temporary FILE,
+captures at most32768 bytes, records renderer return/phase/source/kind/hex,
+forwards the actual captured bytes to stderr and records the forwarding result.
+Structured diagnostic severity/span/message and original-unit input index must
+match the refusing phase. Healthy refusal requires exact child stderr equality
+to those actual renderer bytes, successful renderer/capture/forward/flush, and
+no truncation. Unexpected bytes, including sanitizer/resource/health diagnostics,
+fail this contract. No guessed renderer string or broad text search is used.
+
+CLI3 is considered a consistent original refusal only with rc10/11 in
+registration mode and byte-identical CLI stderr to that genuine renderer
+evidence. Other CLI/public combinations STOP as unclassified disagreement.
+Even a consistent refusal remains INVALID_REJECTION_REASON_UNCONFIRMED or
+LEGAL_REFUSAL_UNCLASSIFIED_NONPASS until its specific reason receives own C
+review. A healthy independently reset refusal may continue to the next frozen
+case; it is never a capability PASS or proof of the intended invalid law.
+Process completion, semantic phase and reason confirmation have separate fields.
+
+5. NAMED OUTPUT / HOST / NATIVE / MONOTONIC FINDINGS
+Only legal CHECK0 plus a successful genuine public entry observation may
+attempt newlangc --emit-c17-to pristine.c ORIGINAL_COPY.nl.
+The destination starts as exact R1617-NO-CLOBBER plus LF. Emission records
+separate process completion/health, captured streams/hashes, sentinel equality,
+postimage identity/read failure and unexpected side files before classification.
+Every nonzero or unavailable emitter status is EMISSION_UNCLASSIFIED_NONPASS.
+It is never labelled legal unsupported merely from an arbitrary process code.
+The sentinel/no-clobber facts are recorded independently; an unhealthy child,
+clobber, output leak or incomplete postimage remains a separate STOP fact.
+No emitter refusal proceeds to host compilation/native or a later case.
+
+Emission success requires empty streams, a changed nonempty regular C file,
+complete capture/persistence/cleanup and no new sibling side files. The exact
+unmodified C bytes are hashed before host compilation and checked afterward.
+Host flags remain C17, Wall/Wextra/Wpedantic/Werror, -O0 Debug or -O2 Release,
+and the selected sanitizer/no-recovery/frame-pointer settings. The only inherited
+CFLAGS list accepted remains [] or exactly [-Wno-error=gcc-install-dir-libstdcxx].
+That flag is not a diagnostic-output waiver. V2's allowed host-success stdout
+and stderr byte sets are both empty. No Clang installation-warning bytes are
+automatically whitelisted. Any actual warning is preserved and stops as
+HOST_COMPILE_STREAM_NONPASS; a future exact-byte exception needs its own
+explicit recorded mechanical repair, not a broad sanitizer-obscuring filter.
+A nonzero host compile result is its own NONPASS with full raw diagnostics.
+
+Each native binary is retained with SHA and compile argv. Native success
+requires exit0, empty streams and healthy complete group/capture/persistence.
+It proves only finite pristine health/unit completion. Actual-to-formal scalar
+identity, internal native numeric values and temporal evaluation order remain
+UNOBSERVED. Known public scalar mismatches STOP; missing known values stay gaps.
+
+Findings are append-only own JSON latches and retained in terminal evidence;
+first failures are immutable. A later healthy stage cannot erase a prior
+NONPASS/gap. Driver exit0 means COMPLETED_WITH_NONPASS_OR_GAPS and complete
+evidence procedure, not feature/capability acceptance. Every terminal records
+capability_pass:false, explicit NONPASS/unobserved status, unsafe priority,
+first failures, attempts, incomplete persistence and NOT_RUN later stages.
+
+6. SHARED CAPTURE / GROUP AND PERSISTENCE BOUNDS
+capture.py is an own shared standard-library module used by driver.py and
+metadata.py, so their launch/drain/kill/wait/close/persistence rules are identical.
+It accepts only each explicitly supplied argv; it adds no child, shell, oracle,
+retry or recovered-code execution. Before launch it persists attempted argv/cwd.
+It writes bounded actual stdout/stderr prefixes incrementally, keeps the same
+prefixes in bounded memory, and retains a bounded event journal and status.
+
+Kill/probe/wait/selector/unregister/pipe-close/file-flush/file-close exceptions
+are recorded independently; the first failure is never replaced. Finalization
+continues best effort through other cleanup actions. Prefix fallback files,
+an explicit incomplete outcome and a bounded enclosing runner-log notice are
+attempted if primary persistence fails. A status file does not certify its own
+write; returned records and enclosing terminal/runner receipts identify completion.
+An actual storage failure, hard external kill or lost runner log can prevent full
+evidence; that is EVIDENCE_INCOMPLETE/STOP, not invented complete/healthy data.
+Failed writes are not overwritten or silently repaired as successful evidence.
+
+Each direct child starts a new session/process group. Parent poll/reap and pipe
+EOF are recorded separately from a bounded launched-PGID absence probe. A
+residual group after parent reap is recorded, killed and reprobed within the
+cleanup grace. A surviving/unverifiable group or unreaped parent prevents any
+later child. V2 conservatively stops even if an observed residual group is then
+cleaned. Group absence means only that launched PGID at observation time.
+Descendants that escaped the launched group are not excluded or globally proven
+quiescent. No own code claims global containment.
+
+The driver remains serial: maximum34 command-attempt slots/direct children =
+eight CHECK + eight observers + at most six emitters + six C compilers + six
+pristine natives. Actual successful spawns are separately counted. No retry.
+Per-child periodic deadlines: CHECK8s, observer8s, emitter8s, host20s, native4s.
+A separate bounded2s cleanup grace handles drain/wait/group probes. Blocking
+spawn/filesystem/syscalls are not all continuously timed. Driver360s is a
+cooperative clock checked at gates/polls. The actual enclosing CTest timeout420s
+is separate, with RUN_SERIAL and standard ENV unchanged.
+
+Source cap8192 bytes; capture262144 bytes per stream per driver child; generated
+file cap8MiB via RLIMIT_FSIZE; core0; CPU24s. Observer caps remain64 sources/
+worlds/fragments,1024 syntax nodes or nodes per fragment,4096 total checked
+nodes,depth32; renderer capture adds its own32768-byte cap.
+Driver raw32MiB/256files is a continuation check, not a continuously enforced
+filesystem quota. Publisher48MiB/320files is the existing emergency data reserve.
+Truncation/incomplete EOF/extra observed bytes are explicit; captured-prefix
+hashes never imply the complete stream. Filesystem traversal, hashing and final
+writes can consume time between clock gates; only the external runner bound
+can stop a blocked operation. No continuous wall-limit claim is made.
+
+7. CMAKE / WORKFLOW / CLEAN CHECKOUT METADATA
+The complete proposed root CMake, root append, own CMake and all three proposed
+workflow replacements are byte-identical to V1. Existing natural triggers,
+validation, SDK/toolchain, cache/trust/credentials, sanitizer and test selection
+are unchanged by this V2. EARLY remains untouched. Own registration remains
+BUILD_TESTING guarded, duplicate rejecting, exactly r1617_multiarg.integration,
+with generated exact argv, TIMEOUT420, RUN_SERIAL and all five standard ENV.
+
+Both entry scripts suppress bytecode generation before importing the own capture
+module, avoiding a new untracked __pycache__ instead of weakening the clean gate.
+metadata.py still attempts at most five data/registration commands:
+git rev-parse HEAD; git show tree/parents HEAD; git show commit/tree/parents
+HEAD^1; git status --porcelain; ctest --show-only=json-v1.
+Each has8s periodic deadline,8MiB per-stream/file bound, CPU10s/core0 and the
+shared bounded cleanup. The metadata script's45s is cooperative; FAST has an
+actual60s metadata step bound. FULL/PARTIAL call metadata inside the existing
+build step, so its outer step/job bounds apply; no separate45s hard timer exists.
+CTest --show-only executes zero semantic/native tests. The driver adds at most
+34 children, metadata5; total own direct-child ceiling39 in FULL/PARTIAL and
+5 registration-only in FAST, excluding preexisting infrastructure/build/test work.
+
+Every metadata command requires successful complete process/group/capture/
+persistence and zero stderr. Exact SHA/tree/parent output is validated before
+continuing. git status --porcelain must be exactly empty. There is no allowed
+reported tracked modification or untracked path, and no blanket path exclusion.
+Git-ignored build/SDK outputs are outside porcelain's report; own metadata is in
+the exact RUNNER_TEMP/r1617-metadata destination outside the checkout. This is
+a clean-checkout observation at metadata time, not a claim that ignored files
+are absent or that later execution cannot change state.
+
+Actual generated registration must contain one own test, exact generated argv,
+timeout420, RUN_SERIAL and all five standard ENV entries. Deferred changes or
+duplicates fail. Complete metadata records all five actual process receipts,
+clean policy/result, repository/event/checkout SHA, exact tree/parents,
+candidate parent identity and PR event head/base. Dirty state stops before
+target trust. Driver explicitly requires schema-v2 complete metadata, all five
+healthy commands, and the exact empty-porcelain policy/result before comparing
+the later C-released candidate/PR tuple. Missing/incomplete metadata cannot
+open execution. All failed/NOT_RUN commands and persistence failures are retained.
+
+8. DATA TRANSPORT / PERIODIC CLOCK LIMITS
+publish.py and recover.py remain byte-identical to V1. No payload is imported,
+evaluated or executed. Publisher's existing recursive enumeration retains the
+new capture journals, fallback prefixes and incomplete/stop files as ordinary
+original bytes; no producer/other-track log is added.
+
+FULL/PARTIAL/FAST retain existing always() data publisher and pinned artifact
+upload. Publisher has an actual2min workflow-step bound. Its60s checks occur
+during enumeration and before final log publication; traversal, rehash,
+compression, encoding and file writes are not continuously clock checked.
+Raw cap48MiB/320files, individual8MiB, payload72MiB, compressed56MiB and
+4096-character ASCII base64 chunks remain unchanged. Incomplete/oversized
+publication is a failed-evidence result, not a partial successful test.
+
+Original source/oracle/release/metadata, process streams/status, pristine C and
+native bytes are preserved under the raw and transport manifests and full SHA.
+The same strict single BEGIN/CHUNK/END frame, unique ordered chunks, mtime0
+gzip and complete compressed artifact remain. Recover validates schemas,
+paths, lengths/hashes, single bounded gzip, run/attempt/repository and exact
+external checkout/job-label inputs. It writes only fresh0600 *.data files.
+Missing metadata remains failed-evidence data recovery without a test claim.
+Decoder caps log84MiB/payload72MiB/raw48MiB/320files remain, with zero children.
+Its60s is only periodic cooperative checks; there is no built-in hard outer
+timer on every hash/decompression/write. No decoder, publisher or recovered
+bytes have been run in this preparation.
+
+9. FUTURE CLOSED RELEASE / BRANCH / RUN RECEIPTS
+execution-release.json is unchanged and deliberately NOT_RELEASED. Driver stops
+before any child when it is closed. C must later supply an exact execution
+release with candidate commit/tree/parents, own release URL and candidate SHA
+as execution_target. Opening it needs separately recorded text/hash revision;
+3e is only the unadopted public/scaffold reference, never implicit authority.
+Eventual mode remains GitHub branch + Actions ONLY. A P-equivalent local
+execution environment is prohibited.
+
+Proposed dedicated branch: r-fast/r1617-multiarg-usize.
+Before a first ref, prepare final own blobs/tree and one coherent child commit
+whose sole parent is the later released candidate. Create the new ref directly
+at that complete child; no empty candidate ref. None was created in preparation.
+Future FAST ceiling6 includes initial ref creation and every failed/queued/
+cancelled/successful whole-branch attempt, with no manual retry. Preserve full
+own branch push-run history/all pages before first ref, after each run, before
+later push and before PR. Retain runID/URL/SHA/branch/event/attempt/status/
+conclusion and count every attempt. After fourth FAST and before fifth, post
+the Process7.6 checkpoint. Mechanical repairs preserve all originals, first
+diagnostics, failed attempts and revision hashes within a separately released
+remaining budget. Same complete own R HEAD success is required before PR.
+FAST is pinned formatting/frontend host build/registration, not CHECK/native.
+
+After separately accepted FAST, propose one DRAFT NEVERMERGE PR with exact
+candidate base and fixed R head: one natural FULL5 (GCC, GCC Release, Clang,
+ASan, UBSan) plus PARTIAL, attempt1. EARLY's natural future-base behavior must
+be pinned by C; it is neither disabled nor substituted for those six jobs.
+Preserve exact checkout SHA/tree/parents, R head/candidate and each run attempt.
+Approved attempt-jobs reads must use per_page100/all pages until complete,
+including numeric jobIDs, names/status/conclusion and every step. Match each
+raw frame to job label, runID/attempt, HEAD and numeric jobID. Missing, skipped,
+cancelled, duplicate or truncated evidence is not a green replacement.
+Data hashes authenticate receipt bytes, not general soundness. No rerun/merge
+or ref/PR/CI mutation is authorized in this TEXT phase.
+
+10. V2 DELTA / LIMITS / STOP
+V1 packet, original FIRST6 and supplemental FIRST2 remain immutable with their
+original Issue receipts/hashes. TEXT_V2_DELTA.json lists exact old/new own path
+identities and why each changed. TEXT_MANIFEST.json plus outer V2 index provides
+every composed V2 file, using new full payload chunks for changed/new paths
+and exact immutable V1 chunk receipts for unchanged files. No baseline byte is
+silently replaced. READ_LEDGER preserves V1 exposure and lists the own C static
+control, ACTUAL RESUME, own artifact reconstruction and publication receipts.
+
+No compiler/native/Lean/build/test/mock/formatter/syntax/SDK/apparatus/Actions/
+Git execution occurred. No repository/spec/code/test/ref/PR mutation occurred.
+Text construction and UTF8/SHA/Issue POST->individual GET are data work only.
+Static reasoning is not validation by execution. A later authorized FAST may
+require Process7.6 mechanical formatting/connection repair; original semantics
+and independent predictions cannot be adjusted as a hidden repair.
+
+Neither this finite scalar exercise nor its apparatus proves broad ordinary
+multiargument support, native argument order, library-author/caller UB-audit
+dependency closure or locality improvement against well-factored C. Unary or
+caller-side decompositions would be separate workloads, never retroactive PASS
+for a refused original. ProductGO624 PAUSED; H1 HOLD; locality UNMEASURED.
+
+Complete immutable V2 payload/hash/manifest/delta/ledger POST->individual GET,
+publish TEXT V2 FINAL and STOP C. Await acceptance and an exact future release.

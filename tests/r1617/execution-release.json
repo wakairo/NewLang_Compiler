@@ -1,0 +1,15 @@
+{
+  "schema": "r1617-execution-release-v1",
+  "execution_target": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+  "mode": "GitHub branch + Actions ONLY",
+  "canonical_commit": "b217d83c0b4253abf4832d36916d2107f8ab205b",
+  "interface_scaffold_reference": "3e979df92a8ff37d456896cbb761185f1725f871",
+  "candidate_commit": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+  "candidate_tree": "b51f1b2642aa5867afa2e9b59d153232e5d81f40",
+  "candidate_parents": [
+    "43745d03f6f763b5a017e597bbb6825b1f3fadd9",
+    "95c043e561574d674a9704237ab5836cfd9933e9"
+  ],
+  "coordination_release_url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7062973753",
+  "note": "C1309 authorizes preparation only. This file must remain closed until a new exact C release and a separately recorded text revision; no runtime flag bypass exists."
+}

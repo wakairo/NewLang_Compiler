@@ -1,0 +1,224 @@
+{
+  "schema": "r1617-first-v1",
+  "canonical": "b217d83c0b4253abf4832d36916d2107f8ab205b",
+  "draft": "Draft17.38",
+  "claim": "finite ordinary known-direct two-usize Copy actuals to one-usize helper result",
+  "cases": [
+    {
+      "id": "01_ratio_forward",
+      "source": "01_ratio_forward.nl",
+      "law": "LEGAL",
+      "entry_result": "unit",
+      "events": [
+        {
+          "invocation": "main.call1",
+          "callee": "ratio",
+          "actuals": [
+            29,
+            4
+          ],
+          "formals": {
+            "n": 29,
+            "d": 4
+          },
+          "selected_arm": "then",
+          "division": {
+            "lhs": 29,
+            "rhs": 4,
+            "value": 7
+          },
+          "helper_result": 7,
+          "caller_binding": "answer"
+        }
+      ]
+    },
+    {
+      "id": "02_ratio_reversed",
+      "source": "02_ratio_reversed.nl",
+      "law": "LEGAL",
+      "entry_result": "unit",
+      "events": [
+        {
+          "invocation": "main.call1",
+          "callee": "ratio",
+          "actuals": [
+            4,
+            29
+          ],
+          "formals": {
+            "n": 4,
+            "d": 29
+          },
+          "selected_arm": "then",
+          "division": {
+            "lhs": 4,
+            "rhs": 29,
+            "value": 0
+          },
+          "helper_result": 0,
+          "caller_binding": "answer"
+        }
+      ]
+    },
+    {
+      "id": "03_copy_two_calls",
+      "source": "03_copy_two_calls.nl",
+      "law": "LEGAL",
+      "entry_result": "unit",
+      "events": [
+        {
+          "invocation": "main.call1",
+          "callee": "modulo",
+          "actuals": [
+            47,
+            6
+          ],
+          "formals": {
+            "n": 47,
+            "d": 6
+          },
+          "selected_arm": "then",
+          "remainder": {
+            "lhs": 47,
+            "rhs": 6,
+            "value": 5
+          },
+          "helper_result": 5,
+          "caller_binding": "first"
+        },
+        {
+          "invocation": "main.call2",
+          "callee": "modulo",
+          "actuals": [
+            6,
+            47
+          ],
+          "formals": {
+            "n": 6,
+            "d": 47
+          },
+          "selected_arm": "then",
+          "remainder": {
+            "lhs": 6,
+            "rhs": 47,
+            "value": 6
+          },
+          "helper_result": 6,
+          "caller_binding": "second"
+        },
+        {
+          "operation": "main.kept",
+          "division": {
+            "lhs": 47,
+            "rhs": 1,
+            "value": 47
+          },
+          "caller_binding": "kept"
+        }
+      ],
+      "copy_bindings_after_calls": {
+        "n": 47,
+        "d": 6
+      }
+    },
+    {
+      "id": "04_unused_actual_order",
+      "source": "04_unused_actual_order.nl",
+      "law": "LEGAL",
+      "entry_result": "unit",
+      "events": [
+        {
+          "operation": "main.call1.actual0",
+          "division": {
+            "lhs": 55,
+            "rhs": 4,
+            "value": 13
+          }
+        },
+        {
+          "operation": "main.call1.actual1",
+          "remainder": {
+            "lhs": 41,
+            "rhs": 6,
+            "value": 5
+          }
+        },
+        {
+          "invocation": "main.call1",
+          "callee": "take_left",
+          "actuals": [
+            13,
+            5
+          ],
+          "formals": {
+            "a": 13,
+            "unused": 5
+          },
+          "helper_result": 13,
+          "caller_binding": "answer"
+        }
+      ],
+      "expected_evaluation_order": [
+        "actual0.complete",
+        "actual1.complete",
+        "call.take_left",
+        "result.to.answer"
+      ]
+    },
+    {
+      "id": "05_missing_actual",
+      "source": "05_missing_actual.nl",
+      "law": "INVALID",
+      "expected": "REJECT before adapter or native",
+      "reason": "two-formal known-direct helper receives one actual",
+      "entry_result": null,
+      "events": []
+    },
+    {
+      "id": "06_unsafe_unused_actual",
+      "source": "06_unsafe_unused_actual.nl",
+      "law": "INVALID",
+      "expected": "REJECT before adapter or native",
+      "reason": "second actual is evaluated despite unused formal; ordinary usize division by zero has false precondition",
+      "entry_result": null,
+      "events": []
+    }
+  ],
+  "law_references": [
+    "Draft17.38 §§4.2,4.4,4.7 (Copy / value use)",
+    "§§5.1,5.2,5.4,6,8.1 (usize and arithmetic preconditions)",
+    "§§7.1,18.2 (left-to-right complete actual evaluation)",
+    "§§18.1,18.5,19.1,27.1,27.4,28.1–28.2 (function declarations, exact signature, result, block, binding, branch and visibility)"
+  ],
+  "support_prediction": "No implementation/API/backend support assumed; all unexecuted.",
+  "observation_limits": [
+    "Each definition is checked on its own formal context; a definition-time symbolic proof is distinct from one concrete invocation.",
+    "Constant/scalar equality does not identify callee, actual position, formal binding, invocation, retained result or caller binding.",
+    "Four legal originals have unit entry result; pristine native exit zero is only a finite health/result-shape observation, never internal numeric or argument-order proof.",
+    "Pure positive arithmetic has no runtime-visible side effect; an optimizer may remove computations. Numerical equality cannot demonstrate temporal order. Report missing order observation, do not synthesize it.",
+    "Unused actual's unsafe division must not be skipped; invalid admission is a safety STOP before C17/native.",
+    "Read-only observation must report genuine public data with contextual identities; hidden numeric/formal/return relationships stay UNOBSERVED.",
+    "No replacement caller state, expected guest values, oracle-derived pass fields or reconstructed fake public-owned views.",
+    "Under Process7.6 a later spelling/harness repair preserves this exact source/oracle and first rejection, freezes distinct revised bytes and new predictions before any new execution."
+  ],
+  "grades": [
+    "NOT_RUN",
+    "LEGAL_UNSUPPORTED_OR_REFUSED",
+    "VALID_ACCEPTED_OBSERVATION_INCOMPLETE",
+    "FINITE_OBSERVED_MATCH",
+    "INVALID_REJECTED_CONFIRMED",
+    "REJECTION_UNCLASSIFIED",
+    "UNSAFE_ADMISSION_STOP",
+    "SEMANTIC_MISMATCH_STOP",
+    "HEALTH_OR_RESOURCE_STOP",
+    "EVIDENCE_FAILURE_STOP"
+  ],
+  "status": {
+    "execution_target": "NOT_RELEASED",
+    "execution_count": 0,
+    "repo_ref_pr_ci_mutations": 0,
+    "product_go_624": "PAUSED",
+    "h1": "HOLD",
+    "audit_locality": "UNMEASURED"
+  }
+}

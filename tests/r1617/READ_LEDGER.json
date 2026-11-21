@@ -1,0 +1,661 @@
+{
+  "schema": "r1617-read-ledger-v2",
+  "actor": "same independent R1617 actor; no descendants created or inspected",
+  "status": "TEXT_ONLY_REPAIR; execution target NOT_RELEASED",
+  "immutable_v1_ledger": {
+    "path": "tests/r1617/READ_LEDGER.json",
+    "bytes": 15611,
+    "sha256": "44496c62e8e77134a76e1683c9300ef2147b9a2b096b351b9000c296d220b04e",
+    "receipt": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061705865",
+    "content": {
+      "schema": "r1617-read-ledger-v1",
+      "actor": "fresh independent R1617; no descendants created or inspected",
+      "authority": {
+        "own_issue": "https://github.com/wakairo/NewLang_Compiler/issues/1617",
+        "canonical": "b217d83c0b4253abf4832d36916d2107f8ab205b",
+        "canonical_tree": "e738634c40f1703225a367b5e9313bfa3fd02ee6",
+        "draft": "Draft17.38",
+        "interface": "3e979df92a8ff37d456896cbb761185f1725f871",
+        "interface_tree": "1d55c6611f217371c15640d38a523d9d8c33276d",
+        "interface_parents": [
+          "b217d83c0b4253abf4832d36916d2107f8ab205b",
+          "9c1fb62d326e8e550881e2d28db0e0feae582430"
+        ],
+        "execution_target": "NOT_RELEASED"
+      },
+      "reads": [
+        {
+          "order": 1,
+          "kind": "own-issue",
+          "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617",
+          "sha256": "31662552bedb932bc51ecd489436493a86ef32aeeb38921a575d10b8bc31b8dc",
+          "bytes": 8628
+        },
+        {
+          "order": 2,
+          "kind": "own-comments",
+          "count": 0
+        },
+        {
+          "order": 3,
+          "kind": "own-POSTGET",
+          "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061411800",
+          "sha256": "ab01ae37269b8ab9f05f532c6c0d158c52439d383835d016c8830d47cdb3c205",
+          "bytes": 2346
+        },
+        {
+          "order": 4,
+          "kind": "canonical",
+          "ref": "b217d83c0b4253abf4832d36916d2107f8ab205b",
+          "path": "docs/NewLang_Project_Compass.md",
+          "scope": "full",
+          "blob_sha": "0f9b170ce26504a16acec8e4b84beab11f9fbd4e",
+          "full_payload_bytes": 9043,
+          "full_payload_sha256": "402a124c6fa7b7867891ac8290bc4e358efccfcedd9e1c0df95e2359c76e756c"
+        },
+        {
+          "order": 5,
+          "kind": "canonical",
+          "ref": "b217d83c0b4253abf4832d36916d2107f8ab205b",
+          "path": "docs/NewLang_Product_Value_Strategy.md",
+          "scope": "§§1,1.1–1.4 plus headings; §1.2/1.4 incidental overread disclosed",
+          "blob_sha": "c75f1601f13070bc5a588bd78957b54662bdfd23",
+          "full_payload_bytes": 51375,
+          "full_payload_sha256": "f1afe4845487654d2e11a9f159bd0128149d93caf5c1cd5f9fad2ed29cc0d7ca"
+        },
+        {
+          "order": 6,
+          "kind": "canonical",
+          "ref": "b217d83c0b4253abf4832d36916d2107f8ab205b",
+          "path": "docs/NewLang_Project_Development_Process.md",
+          "scope": "§7 full including R-FAST appendix",
+          "blob_sha": "a4c3df91cffd5d6fe0c97787de56499f5608312d",
+          "full_payload_bytes": 74091,
+          "full_payload_sha256": "673d9b7df9f504acfb0fd34bf5f513330673953b4c5060277d9677fc254b8399"
+        },
+        {
+          "order": 7,
+          "kind": "canonical",
+          "ref": "b217d83c0b4253abf4832d36916d2107f8ab205b",
+          "path": "docs/reference/CURRENT_SPEC.md",
+          "scope": "full including embedded historical summaries",
+          "blob_sha": "5ff1e4a460848472e8ef832168e6f25d9c7b65e0",
+          "full_payload_bytes": 17219,
+          "full_payload_sha256": "6f5391cd9513142b49fb9ad0e317dc3ced425edfc63f771d1bbea153ff6cefaf"
+        },
+        {
+          "order": 8,
+          "kind": "canonical",
+          "ref": "b217d83c0b4253abf4832d36916d2107f8ab205b",
+          "path": "docs/reference/NewLang_v0_spec_Draft17_38.md",
+          "scope": "heading navigation; lines3400–3525,3622–3746,3784–3870,3934–4020,8145–8272,9248–9333,9378–9592,12148–12191,12283–12407,12803–12828,12913–12966",
+          "blob_sha": "25951270752c9e6499a1dcefc99ab7b17115bcee",
+          "full_payload_bytes": 639477,
+          "full_payload_sha256": "1a40abd7f8b404c61eaa0e0d65a3095f0d6198db71478a92a14f2ca54ad66aa8"
+        },
+        {
+          "order": 9,
+          "kind": "own-FIRST-POSTGET",
+          "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061437231",
+          "sha256": "8ce4048051c2627f4fd0382ec1b3260c0d859f530bd4bbf3d8033cbc9cd3a3cd",
+          "exact": true
+        },
+        {
+          "order": 10,
+          "kind": "public-header",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "include/newlang/source.h",
+          "blob_sha": "269b2723c07bed009455e5e3f2766b9086a33dd2",
+          "full_payload_bytes": 2813,
+          "full_payload_sha256": "511238c5f041551906dc2a0d98429f2056acbc977b803e1dfc05e08c56a71524"
+        },
+        {
+          "order": 11,
+          "kind": "public-header",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "include/newlang/syntax.h",
+          "blob_sha": "7c36b3be6b2679f4bdb98bb97d6bb923df8a30c1",
+          "full_payload_bytes": 7186,
+          "full_payload_sha256": "bc9cafb6dffb93e556dba0a6125f411e2b19bbfe9d7248cb2e167f9dcb533172"
+        },
+        {
+          "order": 12,
+          "kind": "public-header",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "include/newlang/parser.h",
+          "blob_sha": "20584427e155e88917a3a819ac24b9d7b0850eaf",
+          "full_payload_bytes": 4478,
+          "full_payload_sha256": "6f22979df969ffe033a8c9a26b9bcb15e1a2cefad4d55a1e556e5a42ee29f126"
+        },
+        {
+          "order": 13,
+          "kind": "public-header",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "include/newlang/semantic.h",
+          "blob_sha": "a2b4e786878617d048335db51ca0f7ea0d877bd5",
+          "full_payload_bytes": 22089,
+          "full_payload_sha256": "928f892877c99cedbb5bf919efb28e09e7b1f98ef3f4d245aa1557e44a1a27c6"
+        },
+        {
+          "order": 14,
+          "kind": "public-header",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "include/newlang/checked.h",
+          "blob_sha": "778f02797d815692183d4dea31072010d8ea24d3",
+          "full_payload_bytes": 17412,
+          "full_payload_sha256": "86da04d0cf2f153421152abd53d124e2adf8e47b2cc9d2f3118a755ad5de1355"
+        },
+        {
+          "order": 15,
+          "kind": "public-header",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "include/newlang/usize_division.h",
+          "blob_sha": "c5e45ff79fcb87dfdd8b371dfe530698bcf29d80",
+          "full_payload_bytes": 1677,
+          "full_payload_sha256": "7e3781d6bd32acb7dbd0833ec0cbe0fb1194da8348a5895bd1b3da69731983a1"
+        },
+        {
+          "order": 16,
+          "kind": "public-header",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "include/newlang/usize_remainder.h",
+          "blob_sha": "19f3e404d114e92d95f058a8f33b66bd92b67296",
+          "full_payload_bytes": 1599,
+          "full_payload_sha256": "4b16a602ef5d16176a3c6a66517971aedc87463db2dfb8df941d7cdc08cd55ef"
+        },
+        {
+          "order": 17,
+          "kind": "public-header",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "include/newlang/diagnostic.h",
+          "blob_sha": "8332bf9e2ffb8235c14f17472c73677c086f5c7f",
+          "full_payload_bytes": 1225,
+          "full_payload_sha256": "bb4820420edd48bfc83a6f4972363ea9c2b1462c429ec37ec8031b2bd5ccd649"
+        },
+        {
+          "order": 18,
+          "kind": "approved-scaffold",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "CMakeLists.txt",
+          "scope": "approved root linkage and test registration/global/late properties; incidental test/src paths not followed",
+          "blob_sha": "6eafa05d938427262f0af2b92e2f87b206ce7395",
+          "payload_bytes": 156589,
+          "payload_sha256": "a6d2dde999c24543b905a8a99f2795d8372f487c2bc7abc28a6fbae76acf1bf7"
+        },
+        {
+          "order": 19,
+          "kind": "approved-scaffold",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "README.md",
+          "scope": "lines44–50 only",
+          "blob_sha": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+          "payload_bytes": 417,
+          "payload_sha256": "d797adb7d538476beb746715ee2cfc3d6d5197d5d5505acf46cfbff6de86c85c"
+        },
+        {
+          "order": 20,
+          "kind": "approved-scaffold",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "README.md",
+          "scope": "lines391–402 only",
+          "blob_sha": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+          "payload_bytes": 698,
+          "payload_sha256": "aa4784f6e118f1e855c90aa636c8e27ce4876063400962b1df3604ec95444f02"
+        },
+        {
+          "order": 21,
+          "kind": "approved-scaffold",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "README.md",
+          "scope": "lines404–411 only",
+          "blob_sha": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+          "payload_bytes": 531,
+          "payload_sha256": "8b7b752a21edc3ea84d16605d029227cb92a4b6188da772bbecbd998a3775b11"
+        },
+        {
+          "order": 22,
+          "kind": "approved-scaffold",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": ".github/workflows/r-preflight.yml",
+          "scope": "full",
+          "blob_sha": "9fea1afeeef948127c73e9ca86c476091036116e",
+          "payload_bytes": 6749,
+          "payload_sha256": "4e905e3abe62fffaf936824f53c4078d20dae1375b4f8f2b4d199c8da9048df9"
+        },
+        {
+          "order": 23,
+          "kind": "approved-scaffold",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": ".github/workflows/compiler-ci.yml",
+          "scope": "full",
+          "blob_sha": "23655288e60f0d3d08a12c9a542346bf31829a08",
+          "payload_bytes": 6976,
+          "payload_sha256": "811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742"
+        },
+        {
+          "order": 24,
+          "kind": "approved-scaffold",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": ".github/workflows/compiler-frontend-ci.yml",
+          "scope": "full",
+          "blob_sha": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5",
+          "payload_bytes": 6418,
+          "payload_sha256": "33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74"
+        },
+        {
+          "order": 25,
+          "kind": "approved-scaffold",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": ".github/workflows/compiler-early-ci.yml",
+          "scope": "full",
+          "blob_sha": "81c611c81bc8d0d5125bedaaf8d5db617a9f6846",
+          "payload_bytes": 5376,
+          "payload_sha256": "43a1d48bd181b572bdcc53013ed9aa83e112d471e177524312c1d109bde528c6"
+        },
+        {
+          "order": 26,
+          "kind": "own-control",
+          "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061474909",
+          "bytes": 3859,
+          "sha256": "733afbd9a44f0161b643c0f75c6b3c3d677805dbde3fb5ee3b39f0742991b62a"
+        },
+        {
+          "order": 27,
+          "kind": "own-supplement-FIRST-POSTGET",
+          "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061487066",
+          "sha256": "08822b43a137890141f56b36b9cd0e253ad0b31e2c51dee069da0ddd463b5dc4",
+          "exact": true
+        },
+        {
+          "order": 28,
+          "kind": "additional-approved-scaffold",
+          "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+          "path": "cmake/independent-r-tests-hook.cmake",
+          "blob_sha": "a1063d203068bd02bee807cb141cbe74b37fad83",
+          "payload_bytes": 4180,
+          "payload_sha256": "ecd14067f30cac138607b606916e84464b2391b61703ebe2e530940e27ec64af"
+        }
+      ],
+      "ancillary_metadata_reads": [
+        {
+          "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/contents/.github/workflows?ref=3e979df92a8ff37d456896cbb761185f1725f871",
+          "scope": "workflow filenames/blob IDs only, to identify the four released scaffolds",
+          "entries": [
+            {
+              "name": "compiler-ci.yml",
+              "path": ".github/workflows/compiler-ci.yml",
+              "blob_sha": "23655288e60f0d3d08a12c9a542346bf31829a08"
+            },
+            {
+              "name": "compiler-early-ci.yml",
+              "path": ".github/workflows/compiler-early-ci.yml",
+              "blob_sha": "81c611c81bc8d0d5125bedaaf8d5db617a9f6846"
+            },
+            {
+              "name": "compiler-frontend-ci.yml",
+              "path": ".github/workflows/compiler-frontend-ci.yml",
+              "blob_sha": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5"
+            },
+            {
+              "name": "r-preflight.yml",
+              "path": ".github/workflows/r-preflight.yml",
+              "blob_sha": "9fea1afeeef948127c73e9ca86c476091036116e"
+            }
+          ]
+        }
+      ],
+      "include_closure": {
+        "source.h": [
+          "stdbool.h",
+          "stddef.h"
+        ],
+        "syntax.h": [
+          "newlang/source.h"
+        ],
+        "parser.h": [
+          "newlang/diagnostic.h",
+          "newlang/syntax.h"
+        ],
+        "semantic.h": [
+          "newlang/diagnostic.h",
+          "newlang/syntax.h"
+        ],
+        "checked.h": [
+          "newlang/semantic.h"
+        ],
+        "usize_division.h": [
+          "newlang/checked.h"
+        ],
+        "usize_remainder.h": [
+          "newlang/checked.h"
+        ],
+        "diagnostic.h": [
+          "stdbool.h",
+          "stddef.h",
+          "stdio.h"
+        ],
+        "additional_project_headers_needed": false
+      },
+      "exposure": {
+        "first_exposure_note": "FIRST exposure notes: Compass was read first among project documents. Value Strategy output included §§1.2 and 1.4 in addition to authorized §§1.1/1.3 because the first section slice extended to §2; §1.3 was then read separately without truncation. CURRENT_SPEC was read including its embedded historical summaries. These canonical-doc historical references and incidental filenames were not followed; no producer/other-track original Issue/PR/source/oracle/result/CI was opened. Process §7 was read fully, with the R-FAST tail reread after initial output truncation. Draft retrieval was retained as text, with only heading navigation and the selected ordinary scalar/call/control sections displayed. No public compiler headers or implementation/scaffold text has yet been read. This exposure is disclosed rather than omitted.",
+        "hook_incidental_unfollowed": [
+          "tests/t991/approved-tests.cmake",
+          "tests/r/approved-cohort-manifest.txt",
+          "tests/t993/approved-cohort-manifest.txt",
+          "cmake/independent-r-manifest.py"
+        ],
+        "root_cmake_incidental": "src/** and tests/** filenames, target names and root-level comments were visible in explicitly approved root CMake linkage/registration reads; no referenced file or test tree was opened.",
+        "workflow_incidental": "scripts/bootstrap.py, scripts/check-format.sh, pinned SDK path and existing test names/fixture paths were visible; no referenced script, fixture, test or historical issue was opened.",
+        "producer_pointer": "P1615 metadata-only from own release; body/comments/PR/reports/results/CI not read.",
+        "forbidden_reads_performed": [],
+        "shared_scratch_worktree_access": false,
+        "personal_context_access": false,
+        "actor_inventory_descendants_access": false
+      },
+      "data_work": {
+        "method": "functions.exec in-memory own text construction, UTF-8 byte counting, SHA256 and GitHub own POST→individualGET data roundtrip only",
+        "sha256_abc_known_answer_check": true,
+        "tooling_error": "One in-memory text-construction call raised a JavaScript interpolation ReferenceError before store/POST; corrected as literal text. No C/Python/CMake/apparatus execution occurred.",
+        "compiler_native_lean_build_test_mock_apparatus_formatter_syntax_sdk_actions_ci_git_executions": 0,
+        "repository_spec_code_test_ref_pr_mutations": 0,
+        "own_issue_text_comments_only": true,
+        "final_text_checks": {
+          "rawTextRoundtrip": true,
+          "rootExactAppend": true,
+          "workflowBytePreservation": [
+            {
+              "path": ".github/workflows/compiler-ci.yml",
+              "originalPreserved": true
+            },
+            {
+              "path": ".github/workflows/compiler-frontend-ci.yml",
+              "originalPreserved": true
+            },
+            {
+              "path": ".github/workflows/r-preflight.yml",
+              "originalPreserved": true
+            }
+          ]
+        }
+      },
+      "latest_own_controls_check": {
+        "comment_ids": [
+          7061411800,
+          7061437231,
+          7061474909,
+          7061487066
+        ],
+        "new_controls": [],
+        "kind": "own Issue comments GET before immutable TEXT publication"
+      },
+      "publication_reads": "Subsequent own TEXT chunk POST→individualGET and final-index receipts are recorded in the outer immutable publication index, avoiding a self-referential file."
+    }
+  },
+  "v2_reads": [
+    {
+      "order": 1,
+      "kind": "own-latest-C-control-individual-GET",
+      "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061834158",
+      "comment_id": 7061834158,
+      "bytes": 7186,
+      "sha256": "4a072f0a20c4fa675fbe49676d9360e08fca6f2771a8c2d8571b9141ba54675d",
+      "scope": "full own C static own-apparatus findings and bounded TEXT V2 release"
+    },
+    {
+      "order": 2,
+      "kind": "own-Issue-latest-comments",
+      "comment_ids": [
+        7061411800,
+        7061437231,
+        7061474909,
+        7061487066,
+        7061702627,
+        7061703032,
+        7061703339,
+        7061703664,
+        7061704128,
+        7061704789,
+        7061705176,
+        7061705515,
+        7061705865,
+        7061706193,
+        7061727116,
+        7061834158
+      ],
+      "new_control_ids": [
+        7061834158
+      ]
+    },
+    {
+      "order": 3,
+      "kind": "ACTUAL-RESUME-POST-individual-GET",
+      "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061846952",
+      "comment_id": 7061846952,
+      "bytes": 2345,
+      "sha256": "f910e284f7d36af453b1f26e8046e8b8b11f27f164aeb15e2fd4793a8c27c871",
+      "exact": true
+    },
+    {
+      "order": 4,
+      "kind": "own-immutable-artifact-reconstruction",
+      "final_url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061727116",
+      "final_body_sha256": "bb88219547be0d96a0b3c6483e0fa2fd00754a67ae69b8dfa520ba689fefb42f",
+      "index_sha256": "8ef23ac2b471216cb5667819885c43fc16585264e37ba4ed4ae9c4674df0e45d",
+      "file_set_descriptor_sha256": "60017e929875e7b293606dcef7be5af76bbc2b0e1551a73ddf0a3c076b0a89b5",
+      "files": 27,
+      "chunks": 33,
+      "bytes": 312723,
+      "chunk_comment_ids": [
+        7061702627,
+        7061703032,
+        7061703339,
+        7061703664,
+        7061704128,
+        7061704789,
+        7061705176,
+        7061705515,
+        7061705865,
+        7061706193
+      ],
+      "all_chunk_file_index_hashes_matched": true,
+      "method": "own comments as data; no reconstructed code executed"
+    },
+    {
+      "order": 5,
+      "kind": "own-authoring-static-text-review",
+      "paths": [
+        "tests/r1617/driver.py",
+        "tests/r1617/observer.c",
+        "tests/r1617/metadata.py",
+        "tests/r1617/capture.py",
+        "tests/r1617/PREP_PLAN.txt"
+      ],
+      "unchanged_supporting_text_reads": [
+        "tests/r1617/publish.py",
+        "tests/r1617/recover.py",
+        ".github/workflows/compiler-ci.yml",
+        ".github/workflows/r-preflight.yml"
+      ],
+      "scope": "own apparatus/control text only, language-agnostic text construction and manual reasoning; no syntax/formatter/mock execution"
+    },
+    {
+      "order": 6,
+      "kind": "own-latest-control-check-before-freeze",
+      "comment_ids": [
+        7061411800,
+        7061437231,
+        7061474909,
+        7061487066,
+        7061702627,
+        7061703032,
+        7061703339,
+        7061703664,
+        7061704128,
+        7061704789,
+        7061705176,
+        7061705515,
+        7061705865,
+        7061706193,
+        7061727116,
+        7061834158,
+        7061846952
+      ],
+      "new_controls_after_7061834158": [],
+      "scope": "all own Issue comments; no external linked original followed"
+    },
+    {
+      "order": 7,
+      "kind": "reread-already-approved-public-header",
+      "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+      "path": "include/newlang/source.h",
+      "scope": "full; enum code verification for source OK0 and diagnostic ERROR2",
+      "blob_sha": "269b2723c07bed009455e5e3f2766b9086a33dd2",
+      "bytes": 2813,
+      "sha256": "511238c5f041551906dc2a0d98429f2056acbc977b803e1dfc05e08c56a71524",
+      "unchanged_from_v1_read": true
+    },
+    {
+      "order": 8,
+      "kind": "reread-already-approved-public-header",
+      "ref": "3e979df92a8ff37d456896cbb761185f1725f871",
+      "path": "include/newlang/diagnostic.h",
+      "scope": "full; enum code verification for source OK0 and diagnostic ERROR2",
+      "blob_sha": "8332bf9e2ffb8235c14f17472c73677c086f5c7f",
+      "bytes": 1225,
+      "sha256": "bb4820420edd48bfc83a6f4972363ea9c2b1462c429ec37ec8031b2bd5ccd649",
+      "unchanged_from_v1_read": true
+    }
+  ],
+  "v2_exposure": {
+    "c_auxiliary_static_review_received": true,
+    "nature": "C findings concern own V1 apparatus/scaffolds only; not independent R/F, producer evidence, or a candidate execution result",
+    "semantic_predictions_changed": false,
+    "original6_and_supplement2_and_oracles_changed": false,
+    "new_candidate_outcome_supplied": false,
+    "producer_other_track_originals_source_internal_tests_or_ci_read": false,
+    "shared_scratch_worktree_access": false,
+    "personal_context_access": false,
+    "actor_inventory_descendants_access": false,
+    "descendants_created": 0,
+    "only_new_project_reads": "the two already-approved public header rereads listed above",
+    "original_v1_exposure_retained": "complete immutable V1 ledger included above; its disclosed canonical-doc overread is not removed"
+  },
+  "v2_data_work": {
+    "method": "functions.exec own in-memory text/JSON/UTF8/SHA256, approved GitHub reads, own Issue text POST->individualGET only",
+    "prior_turn_store_unavailable": "An initial data-only call found previous-turn in-memory state unavailable; own immutable comments were reconstructed and rehashed. No authored code, filesystem or repository operation was used as fallback.",
+    "sha256_abc_known_answer_check": true,
+    "preservation_checks": {
+      "frozen": [
+        {
+          "path": "tests/r1617/entry-call.nl",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/execution-release.json",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/first-oracle.json",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/first/01_ratio_forward.nl",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/first/02_ratio_reversed.nl",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/first/03_copy_two_calls.nl",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/first/04_unused_actual_order.nl",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/first/05_missing_actual.nl",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/first/06_unsafe_unused_actual.nl",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/inputs-manifest.json",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/supplement/S1_copy_branch_calls.nl",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/supplement/S2_unused_actual_pipeline.nl",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/supplemental-oracle.json",
+          "unchanged": true
+        }
+      ],
+      "infrastructure": [
+        {
+          "path": "CMakeLists.txt",
+          "unchanged": true
+        },
+        {
+          "path": "root-cmake.append.txt",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/CMakeLists.txt",
+          "unchanged": true
+        },
+        {
+          "path": ".github/workflows/compiler-ci.yml",
+          "unchanged": true
+        },
+        {
+          "path": ".github/workflows/compiler-frontend-ci.yml",
+          "unchanged": true
+        },
+        {
+          "path": ".github/workflows/r-preflight.yml",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/publish.py",
+          "unchanged": true
+        },
+        {
+          "path": "tests/r1617/recover.py",
+          "unchanged": true
+        }
+      ],
+      "closed": true,
+      "newPublicRereads": [
+        {
+          "path": "include/newlang/source.h",
+          "blob": "269b2723c07bed009455e5e3f2766b9086a33dd2",
+          "sha256": "511238c5f041551906dc2a0d98429f2056acbc977b803e1dfc05e08c56a71524",
+          "bytes": 2813
+        },
+        {
+          "path": "include/newlang/diagnostic.h",
+          "blob": "8332bf9e2ffb8235c14f17472c73677c086f5c7f",
+          "sha256": "bb4820420edd48bfc83a6f4972363ea9c2b1462c429ec37ec8031b2bd5ccd649",
+          "bytes": 1225
+        }
+      ]
+    },
+    "compiler_native_lean_build_test_mock_apparatus_formatter_syntax_sdk_actions_ci_git_executions": 0,
+    "repository_spec_code_test_ref_pr_mutations": 0,
+    "issue_comment_edits_deletes": 0,
+    "only_mutations": "new authorized immutable own Issue comments",
+    "validation_limit": "manual static reasoning and byte/hash integrity only; no compiler/apparatus behavior has been executed or observed",
+    "future_mode": "GitHub専用ブランチ＋Actions ONLY; Pと同等のローカル実行環境は禁止",
+    "execution_target": "NOT_RELEASED"
+  },
+  "publication_reads": "V2 chunk POST->individualGET, fresh full reconstruction and final receipt are recorded in the outer immutable V2 index; no recursive self-hash is embedded."
+}

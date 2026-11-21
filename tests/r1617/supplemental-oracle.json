@@ -1,0 +1,191 @@
+{
+  "schema": "r1617-supplemental-first-v1",
+  "authorization": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061474909",
+  "identity": "independent public-interface-informed supplemental FIRST; not a replacement or mechanical repair of original FIRST",
+  "canonical": "b217d83c0b4253abf4832d36916d2107f8ab205b",
+  "interface": "3e979df92a8ff37d456896cbb761185f1725f871",
+  "reason": "Exercise selected two-usize Copy actuals/one-usize result using advertised ordinary pure flat name/nonzero-typed-literal q/r forms. Preserve broader originals and all uncertainty.",
+  "cases": [
+    {
+      "id": "S1_copy_branch_calls",
+      "source": "S1_copy_branch_calls.nl",
+      "law": "LEGAL",
+      "entry_result": "unit",
+      "events": [
+        {
+          "invocation": "main.call1",
+          "callee": "smaller_piece",
+          "actuals": [
+            33,
+            7
+          ],
+          "formals": {
+            "a": 33,
+            "b": 7
+          },
+          "ordered_body": [
+            {
+              "operation": "remainder",
+              "lhs": 33,
+              "rhs": 7,
+              "value": 5
+            },
+            {
+              "operation": "division",
+              "lhs": 7,
+              "rhs": 3,
+              "value": 2
+            },
+            {
+              "operation": "less_than",
+              "lhs": 5,
+              "rhs": 2,
+              "value": false
+            }
+          ],
+          "selected_arm": "else",
+          "helper_result": 2,
+          "caller_binding": "first"
+        },
+        {
+          "invocation": "main.call2",
+          "callee": "smaller_piece",
+          "actuals": [
+            7,
+            33
+          ],
+          "formals": {
+            "a": 7,
+            "b": 33
+          },
+          "ordered_body": [
+            {
+              "operation": "remainder",
+              "lhs": 7,
+              "rhs": 7,
+              "value": 0
+            },
+            {
+              "operation": "division",
+              "lhs": 33,
+              "rhs": 3,
+              "value": 11
+            },
+            {
+              "operation": "less_than",
+              "lhs": 0,
+              "rhs": 11,
+              "value": true
+            }
+          ],
+          "selected_arm": "then",
+          "helper_result": 0,
+          "caller_binding": "second"
+        },
+        {
+          "operation": "main.kept",
+          "division": {
+            "lhs": 33,
+            "rhs": 1,
+            "value": 33
+          },
+          "caller_binding": "kept"
+        }
+      ],
+      "copy_bindings_after_calls": {
+        "a": 33,
+        "b": 7
+      }
+    },
+    {
+      "id": "S2_unused_actual_pipeline",
+      "source": "S2_unused_actual_pipeline.nl",
+      "law": "LEGAL",
+      "entry_result": "unit",
+      "events": [
+        {
+          "operation": "main.call1.actual0",
+          "remainder": {
+            "lhs": 35,
+            "rhs": 9,
+            "value": 8
+          }
+        },
+        {
+          "operation": "main.call1.actual1",
+          "division": {
+            "lhs": 26,
+            "rhs": 4,
+            "value": 6
+          }
+        },
+        {
+          "invocation": "main.call1",
+          "callee": "half_left",
+          "actuals": [
+            8,
+            6
+          ],
+          "formals": {
+            "a": 8,
+            "unused": 6
+          },
+          "division": {
+            "lhs": 8,
+            "rhs": 2,
+            "value": 4
+          },
+          "helper_result": 4,
+          "caller_binding": "answer"
+        },
+        {
+          "operation": "main.kept",
+          "remainder": {
+            "lhs": 26,
+            "rhs": 5,
+            "value": 1
+          },
+          "caller_binding": "kept"
+        }
+      ],
+      "expected_evaluation_order": [
+        "actual0.complete",
+        "actual1.complete",
+        "call.half_left",
+        "body.division",
+        "result.to.answer",
+        "kept.remainder"
+      ],
+      "copy_bindings_after_calls": {
+        "left": 35,
+        "right": 26
+      }
+    }
+  ],
+  "invariants": [
+    "Definition check is independent of concrete invocation; every division/remainder divisor here is a nonzero typed literal.",
+    "q/r are total on all usize numerators with those nonzero divisors; no overflow-producing addition/subtraction or new operator/source grammar is needed.",
+    "Neither overload, generic, heap, ref, dynamic divisor nor new source/issuer law is requested.",
+    "Original FIRST bytes/oracle remain immutable and NOT_RUN.",
+    "Public actual argument chain, function ID, retained body and source spans are genuine observations; an ordinary scalar actual-to-formal identity seal is not exposed by the selected headers.",
+    "Matching scalars/IDs or pristine unit exit0 cannot supply the missing formal-identity or runtime temporal-order observation.",
+    "Pure operations can be optimized away; semantic source order and checked graph order must be separated from native execution ordering."
+  ],
+  "execution_order": [
+    "05_missing_actual",
+    "06_unsafe_unused_actual",
+    "S1_copy_branch_calls",
+    "S2_unused_actual_pipeline",
+    "01_ratio_forward",
+    "02_ratio_reversed",
+    "03_copy_two_calls",
+    "04_unused_actual_order"
+  ],
+  "continuation": "Healthy refusal/unsupportedness is retained per independently reset case and may continue to the next case. Invalid admission, semantic/wrong-code/UB discrepancy, health/resource/output/evidence/authority failure is global STOP; later stages/cases become explicit NOT_RUN.",
+  "support_prediction": "UNKNOWN; no execution or producer evidence supplied.",
+  "status": {
+    "execution_target": "NOT_RELEASED",
+    "execution_count": 0,
+    "repo_ref_pr_ci_mutations": 0
+  }
+}

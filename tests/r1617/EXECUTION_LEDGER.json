@@ -1,0 +1,410 @@
+{
+  "schema": "r1617-c1311-execution-ledger-v1",
+  "phase": "PRE_REF_BINDING",
+  "authority": {
+    "go_url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7062973753",
+    "go_bytes": 8569,
+    "go_sha256": "d3722a3d3da7c494cece15322c1e75f38a7b7e753e02c0430650abc700690d49",
+    "acceptance_url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7062302490",
+    "acceptance_sha256": "733954967a9ec68fe411f3c28187258d57ac79d228fbe265ece34490c2da787c",
+    "actual_resume": {
+      "id": 7062985672,
+      "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7062985672",
+      "bytes": 2991,
+      "sha256": "fe74d7c5db7dc1b2498a90b4eec8e276e0680b0325e98bf78bb1cf9926b75ae7",
+      "post_get_exact": true
+    }
+  },
+  "mode": "GitHub branch + Actions ONLY",
+  "P_equivalent_local_execution_prohibited": true,
+  "target": {
+    "commit": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+    "tree": "b51f1b2642aa5867afa2e9b59d153232e5d81f40",
+    "parents": [
+      "43745d03f6f763b5a017e597bbb6825b1f3fadd9",
+      "95c043e561574d674a9704237ab5836cfd9933e9"
+    ],
+    "base_ref": "p1615-multiarg-quantity-public",
+    "held_base_ref_verified_at": "1dc585eee3176975580f81153e63f1eaa1f9d894"
+  },
+  "current_main_observed": {
+    "commit": "43745d03f6f763b5a017e597bbb6825b1f3fadd9",
+    "tree": "e479cfb4b7760973e79a078c0dfbde7eb07fa4f6",
+    "parents": [
+      "b217d83c0b4253abf4832d36916d2107f8ab205b",
+      "f03dd0a76d5e93fe417e12e529271777fa961d67"
+    ]
+  },
+  "preparation_authority": {
+    "canonical_commit": "b217d83c0b4253abf4832d36916d2107f8ab205b",
+    "draft": "Draft17.38",
+    "interface_scaffold_reference": "3e979df92a8ff37d456896cbb761185f1725f871",
+    "canonical_reads": "retained immutable earlier own READ_LEDGER; no reclassification or source/oracle change",
+    "accepted_v2_descriptor": "390f643228c29dbf1128154be2a42deeeda81eb3790928fa94d4902e6e8bea09",
+    "accepted_v2_final": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7062135763",
+    "accepted_v2_index_sha256": "25faf3fea8b2dd0b4f9f8c47b1e8cab236d623e2f2e4530ae783f9e60acbbf79"
+  },
+  "reads": [
+    {
+      "path": "CMakeLists.txt",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "b3ea40638cffc497928d9716525e53e248dadcae",
+      "bytes": 156674,
+      "sha256": "c605453feeee77d4cf0f37212b6901c509502545519e2d076ac4b14430209f58",
+      "scope": "full bytes retained; linkage head and late/global property/end registration sections examined; incidental production/test filenames not followed"
+    },
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "23655288e60f0d3d08a12c9a542346bf31829a08",
+      "bytes": 6976,
+      "sha256": "811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742",
+      "scope": "approved scaffold only; referenced implementation/scripts/tests not followed"
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5",
+      "bytes": 6418,
+      "sha256": "33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74",
+      "scope": "approved scaffold only; referenced implementation/scripts/tests not followed"
+    },
+    {
+      "path": ".github/workflows/r-preflight.yml",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "9fea1afeeef948127c73e9ca86c476091036116e",
+      "bytes": 6749,
+      "sha256": "4e905e3abe62fffaf936824f53c4078d20dae1375b4f8f2b4d199c8da9048df9",
+      "scope": "approved scaffold only; referenced implementation/scripts/tests not followed"
+    },
+    {
+      "path": ".github/workflows/compiler-early-ci.yml",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "81c611c81bc8d0d5125bedaaf8d5db617a9f6846",
+      "bytes": 5376,
+      "sha256": "43a1d48bd181b572bdcc53013ed9aa83e112d471e177524312c1d109bde528c6",
+      "scope": "approved scaffold only; referenced implementation/scripts/tests not followed"
+    },
+    {
+      "path": "cmake/independent-r-tests-hook.cmake",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "a1063d203068bd02bee807cb141cbe74b37fad83",
+      "bytes": 4180,
+      "sha256": "ecd14067f30cac138607b606916e84464b2391b61703ebe2e530940e27ec64af",
+      "scope": "approved scaffold only; referenced implementation/scripts/tests not followed"
+    },
+    {
+      "path": "include/newlang/source.h",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "269b2723c07bed009455e5e3f2766b9086a33dd2",
+      "bytes": 2813,
+      "sha256": "511238c5f041551906dc2a0d98429f2056acbc977b803e1dfc05e08c56a71524",
+      "scope": "approved public closure, identical to frozen3e"
+    },
+    {
+      "path": "include/newlang/syntax.h",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "7c36b3be6b2679f4bdb98bb97d6bb923df8a30c1",
+      "bytes": 7186,
+      "sha256": "bc9cafb6dffb93e556dba0a6125f411e2b19bbfe9d7248cb2e167f9dcb533172",
+      "scope": "approved public closure, identical to frozen3e"
+    },
+    {
+      "path": "include/newlang/parser.h",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "20584427e155e88917a3a819ac24b9d7b0850eaf",
+      "bytes": 4478,
+      "sha256": "6f22979df969ffe033a8c9a26b9bcb15e1a2cefad4d55a1e556e5a42ee29f126",
+      "scope": "approved public closure, identical to frozen3e"
+    },
+    {
+      "path": "include/newlang/semantic.h",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "a2b4e786878617d048335db51ca0f7ea0d877bd5",
+      "bytes": 22089,
+      "sha256": "928f892877c99cedbb5bf919efb28e09e7b1f98ef3f4d245aa1557e44a1a27c6",
+      "scope": "approved public closure, identical to frozen3e"
+    },
+    {
+      "path": "include/newlang/checked.h",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "778f02797d815692183d4dea31072010d8ea24d3",
+      "bytes": 17412,
+      "sha256": "86da04d0cf2f153421152abd53d124e2adf8e47b2cc9d2f3118a755ad5de1355",
+      "scope": "approved public closure, identical to frozen3e"
+    },
+    {
+      "path": "include/newlang/usize_division.h",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "c5e45ff79fcb87dfdd8b371dfe530698bcf29d80",
+      "bytes": 1677,
+      "sha256": "7e3781d6bd32acb7dbd0833ec0cbe0fb1194da8348a5895bd1b3da69731983a1",
+      "scope": "approved public closure, identical to frozen3e"
+    },
+    {
+      "path": "include/newlang/usize_remainder.h",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "19f3e404d114e92d95f058a8f33b66bd92b67296",
+      "bytes": 1599,
+      "sha256": "4b16a602ef5d16176a3c6a66517971aedc87463db2dfb8df941d7cdc08cd55ef",
+      "scope": "approved public closure, identical to frozen3e"
+    },
+    {
+      "path": "include/newlang/diagnostic.h",
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "blob_sha": "8332bf9e2ffb8235c14f17472c73677c086f5c7f",
+      "bytes": 1225,
+      "sha256": "bb4820420edd48bfc83a6f4972363ea9c2b1462c429ec37ec8031b2bd5ccd649",
+      "scope": "approved public closure, identical to frozen3e"
+    }
+  ],
+  "metadata_only_reads": [
+    "GET git/commits/exact1dc: SHA/tree/ordered parents only; producer message/implementation not examined",
+    "GET git/ref/heads/p1615-multiarg-quantity-public and main: exact ref identity",
+    "GET git/commits/exact43745: SHA/tree/ordered parents only",
+    "GET exact target root/.github/workflows Git trees: path/mode/blob metadata for authorized existing overlay paths only",
+    "GET contents/tests/r1617 at exact1dc returned404: own namespace absent",
+    "GET git/ref/heads/r-fast/r1617-multiarg-usize returned404: own branch absent",
+    "GET actions/runs?branch=r-fast%2Fr1617-multiarg-usize&event=push&per_page=100&page=1: total_count0; complete initial own-branch push-run history"
+  ],
+  "data_reconstruction": {
+    "prior_turn_stores_unavailable": true,
+    "source": "own immutable Issue payload/index receipts only",
+    "accepted_files": 29,
+    "accepted_chunks": 39,
+    "accepted_bytes": 397791,
+    "all_full_hashes_verified": true,
+    "own_latest_controls_checked": [
+      7062302490,
+      7062973753
+    ],
+    "producer_other_track_or_aggregate_C_material": false
+  },
+  "overlay_resolution": {
+    "root": {
+      "baseline_blob": "b3ea40638cffc497928d9716525e53e248dadcae",
+      "baseline_bytes": 156674,
+      "baseline_sha256": "c605453feeee77d4cf0f37212b6901c509502545519e2d076ac4b14430209f58",
+      "operation": "exact actual candidate root bytes plus unchanged accepted root-cmake.append.txt; after actual global/late passes",
+      "append_sha256": "f28bbe08754cba9c5198a0581949bf00c4dbcea966c20de41cf57c91fd1f1368",
+      "result_bytes": 156820,
+      "result_sha256": "303fc4ec26a4710df6e0b93332c4ee112f5cd7d9a1c1b469c1020030e2a39622",
+      "all_current_bytes_preserved": true
+    },
+    "workflows": [
+      {
+        "path": ".github/workflows/compiler-ci.yml",
+        "baseline_bytes_preserved": true,
+        "resolved_matches_accepted_v2": true,
+        "metadata_before": "ctest_started=$(date +%s)",
+        "fetch_depth_after_persist_credentials": true
+      },
+      {
+        "path": ".github/workflows/compiler-frontend-ci.yml",
+        "baseline_bytes_preserved": true,
+        "resolved_matches_accepted_v2": true,
+        "metadata_before": "ctest_started=$(date +%s)",
+        "fetch_depth_after_persist_credentials": true
+      },
+      {
+        "path": ".github/workflows/r-preflight.yml",
+        "current_is_exact_prefix": true,
+        "resolved_matches_accepted_v2": true
+      }
+    ],
+    "early": "unchanged; existing pull_request branches:[main] does not match released non-main base",
+    "read_boundaries": "No referenced producer/test/implementation/SDK/bootstrap/check-format/hook manifest body was opened.",
+    "data_only_construction_errors": "A local in-memory overlay assertion caught fetch-depth insertion on the wrong side of persist-credentials before any store/publication/Git mutation; corrected to the accepted exact byte order. A workflow-file-name runs URL was rejected by fetch's route allowlist; equivalent approved own branch actions/runs collection returned complete zero history. Neither was project execution or an Actions attempt."
+  },
+  "release_binding": {
+    "changed_keys": [
+      "candidate_commit",
+      "candidate_parents",
+      "candidate_tree",
+      "coordination_release_url",
+      "execution_target"
+    ],
+    "old_bytes": 565,
+    "old_sha256": "38452335c5f1625474389abb5286270bdc5ac1a3a6c0c720d459eab22b76e522",
+    "new_bytes": 842,
+    "new_sha256": "ae6371b85110cd1cc72cb894a139924c52a1ff976f4c8f01cea7dbf71502c694",
+    "mode_canonical_interface_note_preserved": true
+  },
+  "preservation": {
+    "unchanged_accepted_own_files": [
+      {
+        "path": "tests/r1617/CMakeLists.txt",
+        "sha256": "0b11d877a562ca8214e04faa598b70d9618df9428d8424bf8b445bc77c460964"
+      },
+      {
+        "path": "tests/r1617/PREP_PLAN.txt",
+        "sha256": "7de5678639d1cf8e6763346e7f64a1aca4227761c1932e64709332fd2fcebc8b"
+      },
+      {
+        "path": "tests/r1617/READ_LEDGER.json",
+        "sha256": "787b30939d4374b09e0256c5ab3061320905e9ae29f4d0626cd1367b6783715f"
+      },
+      {
+        "path": "tests/r1617/TEXT_MANIFEST.json",
+        "sha256": "b533e71321bb811caafdfa4f960e9bf9e092e5f7170bdcc9ab89b7d34f662d87"
+      },
+      {
+        "path": "tests/r1617/TEXT_V2_DELTA.json",
+        "sha256": "ba817abf8dca3b3866c53f15199985e77bb30db2f752a7dfe8e60db6f72198eb"
+      },
+      {
+        "path": "tests/r1617/capture.py",
+        "sha256": "108128d41a6a1d1f176cf93f6a787607843317e8c36d2f55ae077756afc0eb5d"
+      },
+      {
+        "path": "tests/r1617/driver.py",
+        "sha256": "6dbbeb2b8b42a83d769450c2fbff29fff5d7831d3c9a853cb2b3f1cc05a02271"
+      },
+      {
+        "path": "tests/r1617/entry-call.nl",
+        "sha256": "a8b6c5ba40d39d59b1f8f55b823765e05fb67439986c02df6bcaee2310ddf791"
+      },
+      {
+        "path": "tests/r1617/first-oracle.json",
+        "sha256": "6447fed6e42828f57655c71117a9c50df9e5c892d0c7545053e371d36d10198d"
+      },
+      {
+        "path": "tests/r1617/first/01_ratio_forward.nl",
+        "sha256": "20405f2c2aa7ff82bd2488ad0d3a3a4f3a50b7e86e8eec2060fb2e851c0ea867"
+      },
+      {
+        "path": "tests/r1617/first/02_ratio_reversed.nl",
+        "sha256": "7d8bfd258b8f2cbf4d615731e92d8f39a6ef63b8606b451a5e8a409e65214c87"
+      },
+      {
+        "path": "tests/r1617/first/03_copy_two_calls.nl",
+        "sha256": "72a6be73fcf999e561a9cfbc83d18a26a35917d4e5584ded4a3a8b3a8ac245bb"
+      },
+      {
+        "path": "tests/r1617/first/04_unused_actual_order.nl",
+        "sha256": "350efc2ccb5cc52828d7c56a2b9549770dedd4887bbda42fb0cc84076fc4e440"
+      },
+      {
+        "path": "tests/r1617/first/05_missing_actual.nl",
+        "sha256": "672d2404ca7cc53e0ab48c09cfb8a7057332fc57eadbfc104b7877507d7cc2eb"
+      },
+      {
+        "path": "tests/r1617/first/06_unsafe_unused_actual.nl",
+        "sha256": "edb79b7cd1a415666b53581b2f7369e45fc66d7b5c419303c113de7404306077"
+      },
+      {
+        "path": "tests/r1617/inputs-manifest.json",
+        "sha256": "77dedb7e2507565ab51f98f79515300e62e9c9a3b0139b6a0a90d374ed90fd13"
+      },
+      {
+        "path": "tests/r1617/metadata.py",
+        "sha256": "a45754e35740780929caf1136ac0b223a188de170f5460a44dbeedcca5303541"
+      },
+      {
+        "path": "tests/r1617/observer.c",
+        "sha256": "6011c47df0238b17cbc82707ce0057de03f17bb8d510b04cdafc3079b5364df3"
+      },
+      {
+        "path": "tests/r1617/publish.py",
+        "sha256": "c6e04dee1f50fa8b5bef512e4b475014362ecebff7fbb5670c6f3e3fd732c92c"
+      },
+      {
+        "path": "tests/r1617/recover.py",
+        "sha256": "dabbaaa01eddfffe1c3c4e258e36dc836ae378d749809bab7ce47e9178bd477c"
+      },
+      {
+        "path": "tests/r1617/supplement/S1_copy_branch_calls.nl",
+        "sha256": "c37c9de2cec6c36afb47d6b458cc87bff570759bd2d17f8914af80e1fb63bdd3"
+      },
+      {
+        "path": "tests/r1617/supplement/S2_unused_actual_pipeline.nl",
+        "sha256": "6deb2ccaee7fabee7af4989f8bbcfbfc8d9db138f6200a9ded812acba95b0076"
+      },
+      {
+        "path": "tests/r1617/supplemental-oracle.json",
+        "sha256": "b1f21a3424d77243629e1d002a6b7c8f770a9c1cc4e2a1efde4b1e6cc3658368"
+      }
+    ],
+    "original6_supplement2_oracles_inputs_adapter": true,
+    "observer_driver_capture_metadata_publisher_recovery_semantics_unchanged": true,
+    "old_V1_V2_comments_and_descriptors_immutable": true,
+    "historical_TEXT_MANIFEST_and_PREP_PLAN": "preserved as historical accepted preparation records; live C1311 binding is execution-release.json plus EXECUTION_MANIFEST.json and PRE-REF receipt"
+  },
+  "git_path_derivation": {
+    "include": "accepted V2 proposed_repository_file paths, resolved current root/workflows, identity-bound release, plus own EXECUTION_LEDGER.json and EXECUTION_MANIFEST.json",
+    "exclude": [
+      "root-cmake.append.txt"
+    ],
+    "excluded_reason": "accepted non-repository overlay descriptor; exact bytes retained in original Issue and root overlay proof",
+    "existing_files_modified": [
+      "CMakeLists.txt",
+      ".github/workflows/compiler-ci.yml",
+      ".github/workflows/compiler-frontend-ci.yml",
+      ".github/workflows/r-preflight.yml"
+    ],
+    "all_other_paths_under": "tests/r1617/",
+    "file_mode": "100644; matches current existing authorized paths; own scripts invoked via interpreter",
+    "initial_sole_parent": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+    "initial_branch": "r-fast/r1617-multiarg-usize",
+    "initial_commit_tree_and_full_path_manifest": "bound by outer PRE-REF receipt after object creation; no recursive commit self-identity"
+  },
+  "finite_release": {
+    "FAST_cumulative_cap": 6,
+    "checkpoint_after": 4,
+    "before": 5,
+    "FAST_no_test_execution": true,
+    "DRAFT_only_after_qualifying_FAST_and_PRE_DRAFT_POSTGET": true,
+    "PR_count": 1,
+    "PR_base": "p1615-multiarg-quantity-public",
+    "maintainer_can_modify": false,
+    "FULL_jobs": 5,
+    "PARTIAL_jobs": 1,
+    "natural_cycle": 1,
+    "attempt": 1,
+    "post_PR_push_rerun_dispatch_READY_merge": false,
+    "driver_children": 34,
+    "metadata_children": 5,
+    "driver_phase_seconds": [
+      8,
+      8,
+      8,
+      20,
+      4
+    ],
+    "driver_cooperative_seconds": 360,
+    "CTest_outer_seconds": 420,
+    "metadata_cooperative_seconds": 45,
+    "FAST_metadata_outer_seconds": 60,
+    "publisher_cooperative_seconds": 60,
+    "publisher_outer_seconds": 120,
+    "cleanup_grace_seconds": 2,
+    "stream_bytes": 262144,
+    "file_bytes": 8388608,
+    "raw_bytes": 33554432,
+    "raw_files": 256,
+    "publisher_raw_bytes": 50331648,
+    "publisher_files": 320,
+    "payload_bytes": 75497472,
+    "compressed_bytes": 58720256,
+    "escaped_descendants_excluded": false,
+    "procedural_exit0_is_capability_PASS": false,
+    "each_original_log_download_max": 1
+  },
+  "counters_at_binding": {
+    "local_project_execution": 0,
+    "Git_objects": 0,
+    "refs": 0,
+    "PRs": 0,
+    "FAST": 0,
+    "FULL_PARTIAL": 0,
+    "original_log_downloads": 0
+  },
+  "exposure": {
+    "shared_scratch_worktrees": false,
+    "personal_context": false,
+    "actor_inventory_descendants": false,
+    "producer_or_other_F_R_originals": false,
+    "implementation_internal_tests_read": false
+  },
+  "status": "Binding text only until complete PRE-REF POSTGET; final actual outcomes remain to be collected. ProductGO624 PAUSED; H1 HOLD; comparative locality UNMEASURED."
+}

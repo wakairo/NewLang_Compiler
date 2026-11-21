@@ -1,0 +1,309 @@
+{
+  "schema": "r1617-text-v2-delta",
+  "authority": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061834158",
+  "actual_resume": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061846952",
+  "immutable_v1_index": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061727116",
+  "immutable_v1_descriptor_sha256": "60017e929875e7b293606dcef7be5af76bbc2b0e1551a73ddf0a3c076b0a89b5",
+  "execution_target": "NOT_RELEASED",
+  "changes": [
+    {
+      "path": "tests/r1617/driver.py",
+      "operation": "replace proposed own V2 text; V1 receipt remains immutable",
+      "c_control_obligations": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "old": {
+        "bytes": 28891,
+        "sha256": "f18a25fcb5be6af17d34173dfd27e312915a33dcf5d2f9058bf1e3eacda70b9a",
+        "chunks": [
+          {
+            "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061705176",
+            "chunk": 1,
+            "of": 2
+          },
+          {
+            "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061705176",
+            "chunk": 2,
+            "of": 2
+          }
+        ]
+      },
+      "new": {
+        "bytes": 49394,
+        "sha256": "6dbbeb2b8b42a83d769450c2fbff29fff5d7831d3c9a853cb2b3f1cc05a02271"
+      },
+      "behavior": "Monotonic invalid CHECK/public-original admission before health gates; exact phase/mode/terminal/exit and renderer stderr validation; host success zero-stream contract; shared capture; unclassified emitter facts; latched NONPASS/gaps; clean metadata gate; separate cooperative clock and procedure exit policy."
+    },
+    {
+      "path": "tests/r1617/observer.c",
+      "operation": "replace proposed own V2 text; V1 receipt remains immutable",
+      "c_control_obligations": [
+        1,
+        2
+      ],
+      "old": {
+        "bytes": 23686,
+        "sha256": "6b13c85ea1cbafc7b69dac9ffb834a93e9de84503ac6adcce474162c427beffc",
+        "chunks": [
+          {
+            "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061705515",
+            "chunk": 1,
+            "of": 1
+          }
+        ]
+      },
+      "new": {
+        "bytes": 27739,
+        "sha256": "6011c47df0238b17cbc82707ce0057de03f17bb8d510b04cdafc3079b5364df3"
+      },
+      "behavior": "Original phase/admission is immediately flushed and source-bound; public diagnostic renderers are captured through a bounded C17 FILE and actual bytes/forwarding are recorded; explicit creation/entry phases. Existing syntax/checked/getter walker prefix remains byte-identical."
+    },
+    {
+      "path": "tests/r1617/metadata.py",
+      "operation": "replace proposed own V2 text; V1 receipt remains immutable",
+      "c_control_obligations": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "old": {
+        "bytes": 7215,
+        "sha256": "0e443cd2d9bd8bda33f4055d5b39248403dd7ba0aa51b603a76523ae6533c369",
+        "chunks": [
+          {
+            "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061705515",
+            "chunk": 1,
+            "of": 1
+          }
+        ]
+      },
+      "new": {
+        "bytes": 13349,
+        "sha256": "a45754e35740780929caf1136ac0b223a188de170f5460a44dbeedcca5303541"
+      },
+      "behavior": "Same five commands through shared persistent/group-aware capture; zero stderr; exact empty porcelain clean rule and complete schema-v2 binding; failed/NOT_RUN/incomplete outcomes; periodic clock accurately labelled."
+    },
+    {
+      "path": "tests/r1617/capture.py",
+      "operation": "add own proposed text",
+      "c_control_obligations": [
+        3,
+        4
+      ],
+      "old": null,
+      "new": {
+        "bytes": 19920,
+        "sha256": "108128d41a6a1d1f176cf93f6a787607843317e8c36d2f55ae077756afc0eb5d"
+      },
+      "behavior": "New own shared bounded launch/capture/finalization module: argv before launch, incremental actual prefixes, journal, separate errors and first failure, bounded kill/wait/PGID probe, incomplete persistence/fallback record; no additional child or shell."
+    },
+    {
+      "path": "tests/r1617/PREP_PLAN.txt",
+      "operation": "replace proposed own V2 text; V1 receipt remains immutable",
+      "c_control_obligations": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "old": {
+        "bytes": 17104,
+        "sha256": "3e29f5c95fb0bb81cf856b588abf0556c636db05593a0b8c99f19071a4d12b0d",
+        "chunks": [
+          {
+            "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061705865",
+            "chunk": 1,
+            "of": 1
+          }
+        ]
+      },
+      "new": {
+        "bytes": 23268,
+        "sha256": "7de5678639d1cf8e6763346e7f64a1aca4227761c1932e64709332fd2fcebc8b"
+      },
+      "behavior": "Full V2 procedure and limits; original case predictions preserved; no automatic host warning waiver; metadata import avoids new bytecode dirtiness; honest external/cooperative timing and escaped-descendant/persistence limits."
+    },
+    {
+      "path": "tests/r1617/READ_LEDGER.json",
+      "operation": "replace proposed own V2 text; V1 receipt remains immutable",
+      "c_control_obligations": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "old": {
+        "bytes": 15611,
+        "sha256": "44496c62e8e77134a76e1683c9300ef2147b9a2b096b351b9000c296d220b04e",
+        "chunks": [
+          {
+            "url": "https://github.com/wakairo/NewLang_Compiler/issues/1617#issuecomment-7061705865",
+            "chunk": 1,
+            "of": 1
+          }
+        ]
+      },
+      "new": {
+        "bytes": 26753,
+        "sha256": "787b30939d4374b09e0256c5ab3061320905e9ae29f4d0626cd1367b6783715f"
+      },
+      "behavior": "Retains complete immutable V1 exposure/history and adds exact own V2 C/resume/reconstruction/static review/header-reread ledger; zero execution/mutation counters."
+    }
+  ],
+  "control_file_identities": {
+    "tests/r1617/TEXT_MANIFEST.json": {
+      "old": {
+        "bytes": 6720,
+        "sha256": "e7df19b333c537fe59c71d4b94cc152544cf140695eb65644d9cbdc3ff291fc5"
+      },
+      "new_identity": "Exact bytes/SHA/full payload in outer immutable V2 index; avoids manifest/delta hash cycle"
+    },
+    "tests/r1617/TEXT_V2_DELTA.json": {
+      "old": null,
+      "new_identity": "Exact bytes/SHA/full payload in V2 manifest and outer immutable V2 index; no self-hash"
+    }
+  },
+  "preserved_unchanged": [
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "bytes": 7875,
+      "sha256": "9f76f710f63184452b8fc05640c4786fd06b2d9dba7a3b61bb259d342ce67767"
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "bytes": 7308,
+      "sha256": "c7b6a0cc914d66d0425845209d656404cd2841734a507922785767787f0ca9bd"
+    },
+    {
+      "path": ".github/workflows/r-preflight.yml",
+      "bytes": 7772,
+      "sha256": "80fad74752e4242ba97a37ce644381ae24481e4353658d9a0a73c12dca9e523e"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "bytes": 156735,
+      "sha256": "6a060b93a4d2c670274bfc94551a664515558bf7b1ce8567379c43810fa18016"
+    },
+    {
+      "path": "root-cmake.append.txt",
+      "bytes": 146,
+      "sha256": "f28bbe08754cba9c5198a0581949bf00c4dbcea966c20de41cf57c91fd1f1368"
+    },
+    {
+      "path": "tests/r1617/CMakeLists.txt",
+      "bytes": 1701,
+      "sha256": "0b11d877a562ca8214e04faa598b70d9618df9428d8424bf8b445bc77c460964"
+    },
+    {
+      "path": "tests/r1617/entry-call.nl",
+      "bytes": 7,
+      "sha256": "a8b6c5ba40d39d59b1f8f55b823765e05fb67439986c02df6bcaee2310ddf791"
+    },
+    {
+      "path": "tests/r1617/execution-release.json",
+      "bytes": 565,
+      "sha256": "38452335c5f1625474389abb5286270bdc5ac1a3a6c0c720d459eab22b76e522"
+    },
+    {
+      "path": "tests/r1617/first-oracle.json",
+      "bytes": 6581,
+      "sha256": "6447fed6e42828f57655c71117a9c50df9e5c892d0c7545053e371d36d10198d"
+    },
+    {
+      "path": "tests/r1617/first/01_ratio_forward.nl",
+      "bytes": 186,
+      "sha256": "20405f2c2aa7ff82bd2488ad0d3a3a4f3a50b7e86e8eec2060fb2e851c0ea867"
+    },
+    {
+      "path": "tests/r1617/first/02_ratio_reversed.nl",
+      "bytes": 186,
+      "sha256": "7d8bfd258b8f2cbf4d615731e92d8f39a6ef63b8606b451a5e8a409e65214c87"
+    },
+    {
+      "path": "tests/r1617/first/03_copy_two_calls.nl",
+      "bytes": 277,
+      "sha256": "72a6be73fcf999e561a9cfbc83d18a26a35917d4e5584ded4a3a8b3a8ac245bb"
+    },
+    {
+      "path": "tests/r1617/first/04_unused_actual_order.nl",
+      "bytes": 152,
+      "sha256": "350efc2ccb5cc52828d7c56a2b9549770dedd4887bbda42fb0cc84076fc4e440"
+    },
+    {
+      "path": "tests/r1617/first/05_missing_actual.nl",
+      "bytes": 118,
+      "sha256": "672d2404ca7cc53e0ab48c09cfb8a7057332fc57eadbfc104b7877507d7cc2eb"
+    },
+    {
+      "path": "tests/r1617/first/06_unsafe_unused_actual.nl",
+      "bytes": 139,
+      "sha256": "edb79b7cd1a415666b53581b2f7369e45fc66d7b5c419303c113de7404306077"
+    },
+    {
+      "path": "tests/r1617/inputs-manifest.json",
+      "bytes": 1855,
+      "sha256": "77dedb7e2507565ab51f98f79515300e62e9c9a3b0139b6a0a90d374ed90fd13"
+    },
+    {
+      "path": "tests/r1617/publish.py",
+      "bytes": 6153,
+      "sha256": "c6e04dee1f50fa8b5bef512e4b475014362ecebff7fbb5670c6f3e3fd732c92c"
+    },
+    {
+      "path": "tests/r1617/recover.py",
+      "bytes": 9370,
+      "sha256": "dabbaaa01eddfffe1c3c4e258e36dc836ae378d749809bab7ce47e9178bd477c"
+    },
+    {
+      "path": "tests/r1617/supplement/S1_copy_branch_calls.nl",
+      "bytes": 351,
+      "sha256": "c37c9de2cec6c36afb47d6b458cc87bff570759bd2d17f8914af80e1fb63bdd3"
+    },
+    {
+      "path": "tests/r1617/supplement/S2_unused_actual_pipeline.nl",
+      "bytes": 240,
+      "sha256": "6deb2ccaee7fabee7af4989f8bbcfbfc8d9db138f6200a9ded812acba95b0076"
+    },
+    {
+      "path": "tests/r1617/supplemental-oracle.json",
+      "bytes": 5779,
+      "sha256": "b1f21a3424d77243629e1d002a6b7c8f770a9c1cc4e2a1efde4b1e6cc3658368"
+    }
+  ],
+  "controls": {
+    "driver_child_ceiling": 34,
+    "metadata_child_ceiling": 5,
+    "no_retry": true,
+    "driver_clock_periodic_seconds": 360,
+    "ctest_outer_timeout_seconds": 420,
+    "metadata_clock_periodic_seconds": 45,
+    "metadata_FAST_outer_seconds": 60,
+    "publisher_clock_periodic_seconds": 60,
+    "publisher_outer_seconds": 120,
+    "cleanup_grace_seconds": 2,
+    "driver_stream_bytes": 262144,
+    "file_bytes": 8388608,
+    "driver_raw_bytes": 33554432,
+    "driver_raw_files": 256,
+    "publisher_raw_bytes": 50331648,
+    "publisher_raw_files": 320,
+    "publisher_payload_bytes": 75497472,
+    "publisher_compressed_bytes": 58720256,
+    "automatic_host_success_warning_byte_whitelist": [],
+    "source_oracle_changes": 0,
+    "execution_release_changes": 0,
+    "root_cmake_own_cmake_workflow_transport_recovery_changes": 0,
+    "additional_project_implementation_reads": 0,
+    "executions": 0,
+    "git_ref_pr_ci_mutations": 0
+  },
+  "semantic_scope": "No new source/oracle case, no result supplied or observed; ordinary actual/formal/native-order gaps remain explicit. C static review repairs apparatus credibility only.",
+  "proof_limit": "Static text and byte integrity only; compiled behavior/syntax/formatting/capture fault behavior have not been executed or mocked."
+}

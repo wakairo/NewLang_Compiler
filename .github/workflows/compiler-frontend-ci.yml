@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
+          fetch-depth: 3
 
       - name: Verify available Ubuntu runner tools (no LLVM install)
         shell: bash
@@ -118,6 +119,7 @@ jobs:
           ctest_workers="$detected_nproc"
           if test "$ctest_workers" -gt "$ctest_cap"; then ctest_workers="$ctest_cap"; fi
           echo "T753 chosen CTest workers=$ctest_workers detected=$detected_nproc cap=$ctest_cap"
+          python3 tests/r1617/metadata.py --root "$GITHUB_WORKSPACE" --build "build-frontend" --destination "$RUNNER_TEMP/r1617-metadata" --label "PARTIAL"
           ctest_started=$(date +%s)
           set +e
           ctest --test-dir build-frontend --parallel "$ctest_workers" --output-on-failure
@@ -138,3 +140,20 @@ jobs:
           test ! -s "$RUNNER_TEMP/newlang-check-stdout"
           test ! -s "$RUNNER_TEMP/newlang-check-stderr"
           echo "NO LLVM / PARTIAL: Production source/checker exit 0, zero stdout/stderr"
+
+      - name: R1617 original raw DATA ONLY publication
+        if: ${{ always() }}
+        timeout-minutes: 2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tests/r1617/publish.py --raw "build-frontend/r1617-raw" --metadata "$RUNNER_TEMP/r1617-metadata" --out "$RUNNER_TEMP/r1617-transport"
+
+      - name: R1617 immutable data transport artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r1617-partial-${{ github.run_id }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/r1617-transport
+          if-no-files-found: error
+          retention-days: 7

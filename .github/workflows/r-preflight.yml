@@ -151,3 +151,27 @@ jobs:
           print("R-FAST ONLY format, host build, test registration. "
                 "SOURCE/CHECK/PROOF/C17/NATIVE/NEGATIVE/OOM/ASAN/UBSAN NOT TESTED")
           PY
+
+      - name: R1617 exact registration metadata only
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tests/r1617/metadata.py --root "$GITHUB_WORKSPACE" --build "build-frontend" --destination "$RUNNER_TEMP/r1617-metadata" --label "R-FAST"
+
+      - name: R1617 original raw DATA ONLY publication
+        if: ${{ always() }}
+        timeout-minutes: 2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tests/r1617/publish.py --raw "build-frontend/r1617-raw" --metadata "$RUNNER_TEMP/r1617-metadata" --out "$RUNNER_TEMP/r1617-transport"
+
+      - name: R1617 immutable data transport artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r1617-fast-registration-only-${{ github.run_id }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/r1617-transport
+          if-no-files-found: error
+          retention-days: 7
