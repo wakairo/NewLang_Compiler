@@ -50,9 +50,7 @@ static bool division_emit_expression(DivisionText *t,
             nl_checked_node_view(f, n->first_argument);
         return arg && n->first_argument > id &&
                division_text_append(t, "nl_qty_fn_%zu(", n->function) &&
-               (arg->kind == NL_CHECKED_REGISTERED_CALL
-                    ? division_emit_expression(t, f, n->first_argument)
-                    : division_emit_atom(t, f, n->first_argument)) &&
+               division_emit_expression(t, f, n->first_argument) &&
                division_text_append(t, ")");
     }
     case NL_CHECKED_IF:
