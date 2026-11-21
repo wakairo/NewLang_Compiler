@@ -1,0 +1,11 @@
+      - name: R1601 bounded raw evidence (data only)
+        if: ${{ always() }}
+        shell: bash
+        env:
+          R1601_JOB_LABEL: ${{ matrix.name }}
+        run: |
+          if test -f tests/r1601/publish.py; then
+            python3 tests/r1601/publish.py full
+          else
+            echo 'R1601v1 STATUS {"status":"PUBLISHER_MISSING"}'
+          fi

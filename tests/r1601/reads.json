@@ -1,0 +1,179 @@
+{
+  "read_base": "6287fcb4cb94df3da1c67f57d7d717b29c25ecf9",
+  "tree_from_release_not_independently_fetched": "ef3a5906c7c3b015073d363c965ac6edb1898c58",
+  "execution_target": "NOT_RELEASED",
+  "full_file_reads": [
+    {
+      "path": "docs/NewLang_Project_Compass.md",
+      "git_blob_sha": "0f9b170ce26504a16acec8e4b84beab11f9fbd4e",
+      "returned_utf8_bytes": 9043,
+      "returned_text_sha256": "402a124c6fa7b7867891ac8290bc4e358efccfcedd9e1c0df95e2359c76e756c",
+      "final_lf": true
+    },
+    {
+      "path": "docs/NewLang_Product_Value_Strategy.md",
+      "git_blob_sha": "c75f1601f13070bc5a588bd78957b54662bdfd23",
+      "returned_utf8_bytes": 51375,
+      "returned_text_sha256": "f1afe4845487654d2e11a9f159bd0128149d93caf5c1cd5f9fad2ed29cc0d7ca",
+      "final_lf": true
+    },
+    {
+      "path": "docs/NewLang_Project_Development_Process.md",
+      "git_blob_sha": "a4c3df91cffd5d6fe0c97787de56499f5608312d",
+      "returned_utf8_bytes": 74091,
+      "returned_text_sha256": "673d9b7df9f504acfb0fd34bf5f513330673953b4c5060277d9677fc254b8399",
+      "final_lf": true
+    },
+    {
+      "path": "docs/reference/CURRENT_SPEC.md",
+      "git_blob_sha": "5ff1e4a460848472e8ef832168e6f25d9c7b65e0",
+      "returned_utf8_bytes": 17219,
+      "returned_text_sha256": "6f5391cd9513142b49fb9ad0e317dc3ced425edfc63f771d1bbea153ff6cefaf",
+      "final_lf": true
+    },
+    {
+      "path": "docs/reference/NewLang_v0_spec_Draft17_38.md",
+      "git_blob_sha": "25951270752c9e6499a1dcefc99ab7b17115bcee",
+      "returned_utf8_bytes": 639477,
+      "returned_text_sha256": "1a40abd7f8b404c61eaa0e0d65a3095f0d6198db71478a92a14f2ca54ad66aa8",
+      "final_lf": true
+    },
+    {
+      "path": "include/newlang/source.h",
+      "git_blob_sha": "269b2723c07bed009455e5e3f2766b9086a33dd2",
+      "returned_utf8_bytes": 2813,
+      "returned_text_sha256": "511238c5f041551906dc2a0d98429f2056acbc977b803e1dfc05e08c56a71524",
+      "final_lf": true
+    },
+    {
+      "path": "include/newlang/syntax.h",
+      "git_blob_sha": "7c36b3be6b2679f4bdb98bb97d6bb923df8a30c1",
+      "returned_utf8_bytes": 7186,
+      "returned_text_sha256": "bc9cafb6dffb93e556dba0a6125f411e2b19bbfe9d7248cb2e167f9dcb533172",
+      "final_lf": true
+    },
+    {
+      "path": "include/newlang/parser.h",
+      "git_blob_sha": "20584427e155e88917a3a819ac24b9d7b0850eaf",
+      "returned_utf8_bytes": 4478,
+      "returned_text_sha256": "6f22979df969ffe033a8c9a26b9bcb15e1a2cefad4d55a1e556e5a42ee29f126",
+      "final_lf": true
+    },
+    {
+      "path": "include/newlang/semantic.h",
+      "git_blob_sha": "a2b4e786878617d048335db51ca0f7ea0d877bd5",
+      "returned_utf8_bytes": 22089,
+      "returned_text_sha256": "928f892877c99cedbb5bf919efb28e09e7b1f98ef3f4d245aa1557e44a1a27c6",
+      "final_lf": true
+    },
+    {
+      "path": "include/newlang/checked.h",
+      "git_blob_sha": "778f02797d815692183d4dea31072010d8ea24d3",
+      "returned_utf8_bytes": 17412,
+      "returned_text_sha256": "86da04d0cf2f153421152abd53d124e2adf8e47b2cc9d2f3118a755ad5de1355",
+      "final_lf": true
+    },
+    {
+      "path": "include/newlang/usize_division.h",
+      "git_blob_sha": "c5e45ff79fcb87dfdd8b371dfe530698bcf29d80",
+      "returned_utf8_bytes": 1677,
+      "returned_text_sha256": "7e3781d6bd32acb7dbd0833ec0cbe0fb1194da8348a5895bd1b3da69731983a1",
+      "final_lf": true
+    },
+    {
+      "path": "include/newlang/usize_remainder.h",
+      "git_blob_sha": "19f3e404d114e92d95f058a8f33b66bd92b67296",
+      "returned_utf8_bytes": 1599,
+      "returned_text_sha256": "4b16a602ef5d16176a3c6a66517971aedc87463db2dfb8df941d7cdc08cd55ef",
+      "final_lf": true
+    },
+    {
+      "path": "include/newlang/diagnostic.h",
+      "git_blob_sha": "8332bf9e2ffb8235c14f17472c73677c086f5c7f",
+      "returned_utf8_bytes": 1225,
+      "returned_text_sha256": "bb4820420edd48bfc83a6f4972363ea9c2b1462c429ec37ec8031b2bd5ccd649",
+      "final_lf": true
+    },
+    {
+      "path": "CMakeLists.txt",
+      "git_blob_sha": "c842488d5105f3108d8ccea62215c14cbab6f265",
+      "returned_utf8_bytes": 156429,
+      "returned_text_sha256": "92266e8b926195af2c53962fe2b2aba14ada38a279b8835dbf2ca3e0eeed5cc4",
+      "final_lf": true
+    },
+    {
+      "path": ".github/workflows/r-preflight.yml",
+      "git_blob_sha": "9fea1afeeef948127c73e9ca86c476091036116e",
+      "returned_utf8_bytes": 6749,
+      "returned_text_sha256": "4e905e3abe62fffaf936824f53c4078d20dae1375b4f8f2b4d199c8da9048df9",
+      "final_lf": true
+    },
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "git_blob_sha": "23655288e60f0d3d08a12c9a542346bf31829a08",
+      "returned_utf8_bytes": 6976,
+      "returned_text_sha256": "811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742",
+      "final_lf": true
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "git_blob_sha": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5",
+      "returned_utf8_bytes": 6418,
+      "returned_text_sha256": "33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74",
+      "final_lf": true
+    },
+    {
+      "path": ".github/workflows/compiler-early-ci.yml",
+      "git_blob_sha": "81c611c81bc8d0d5125bedaaf8d5db617a9f6846",
+      "returned_utf8_bytes": 5376,
+      "returned_text_sha256": "43a1d48bd181b572bdcc53013ed9aa83e112d471e177524312c1d109bde528c6",
+      "final_lf": true
+    }
+  ],
+  "readme_ranges": [
+    {
+      "path": "README.md",
+      "inclusive_lines": "391-402",
+      "git_blob_sha": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+      "returned_utf8_bytes": 698,
+      "returned_text_sha256": "aa4784f6e118f1e855c90aa636c8e27ce4876063400962b1df3604ec95444f02",
+      "final_lf": false,
+      "returned_content": "## CLI contract\n\n`--version` prints `newlangc 0.1.0 (P0 bootstrap)`. `--help` (also no arguments)\nprints usage; both exit 0. Invalid options / argument counts exit 2.\n\n`newlangc --check SOURCE` runs the same production parser, function-unit\nregistration and semantic checking of the ordinary `main()` entry, then\ndestroys the source-generated checked-owned fragment without invoking codegen.\nSuccess exits 0 with zero stdout/stderr bytes. Source I/O failures exit 1;\nparser and semantic failures retain their diagnostics and exit 3. A missing\nentry is a semantic failure. Backend-unsupported but semantically valid source\ncan pass `--check`; this does **not** establish C17, LLVM or native support.",
+      "hash_scope": "returned range bytes only, not whole README"
+    },
+    {
+      "path": "README.md",
+      "inclusive_lines": "44-50",
+      "git_blob_sha": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+      "returned_utf8_bytes": 417,
+      "returned_text_sha256": "d797adb7d538476beb746715ee2cfc3d6d5197d5d5505acf46cfbff6de86c85c",
+      "final_lf": false,
+      "returned_content": "## Named C17 output (POSIX host)\n\nUse `newlangc --emit-c17-to OUTPUT.c SOURCE.nl` to preserve an existing output\nwhen compilation or saving fails. The compiler stages the same normal C17 bytes\nin a private sibling file, then replaces the target only after emission, flush\nand close succeed. Source aliases and symlink/special-file destinations are\nrefused. Default stdout and `--check` retain their existing behavior.",
+      "hash_scope": "returned range bytes only, not whole README"
+    },
+    {
+      "path": "README.md",
+      "inclusive_lines": "404-411",
+      "git_blob_sha": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+      "returned_utf8_bytes": 531,
+      "returned_text_sha256": "8b7b752a21edc3ea84d16605d029227cb92a4b6188da772bbecbd998a3775b11",
+      "final_lf": false,
+      "returned_content": "For a source path, the bounded CLI path reads the actual source, parses the\nsource function unit, registers/checks it with the production semantic\nchecker, then checks an ordinary zero-argument `main()` call selected only\nby the driver. Only after these checks does `newlangc SOURCE` emit bounded\nC17 reference code to stdout, including the\n[initial Some fixture](#initial-some-first-user-quickstart-no-llvm).\nSemantic rejection emits no C bytes. Checked programs beyond the finite\nemitter profiles report `V1-BACKEND-UNSUPPORTED`.",
+      "hash_scope": "returned range bytes only, not whole README"
+    }
+  ],
+  "scope_notes": [
+    "Eight public headers close over themselves plus standard C headers; no additional project header read.",
+    "Canonical metadata and history were incidental exposure; no linked producer original followed.",
+    "Root CMake was read for target/library/registration metadata; incidental existing test names and configuration references were seen, but their bodies were not opened or reused.",
+    "The four workflows were read only for integration, toolchain, test-selection and logging metadata; no hook/test/script body was followed.",
+    "README linked fixtures and all unapproved README ranges remain unread.",
+    "Source-first oracle and six exact originals are unchanged; apparatus is independently derived from released public contracts.",
+    "No private/candidate implementation, other R apparatus/results, shared scratch/worktrees, actor inventory or descendant worker."
+  ],
+  "authority_comments": [
+    "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7058995046",
+    "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7059034403",
+    "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7059175133"
+  ]
+}
