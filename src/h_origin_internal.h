@@ -43,7 +43,8 @@ bool nl_h_custody_validate(const NLCheckedFragment *root);
  * Published validation always follows the canonical recorded world. */
 bool nl_h_custody_validate_candidate(const NLCheckedFragment *root,
                                      const NLSemanticContext *candidate);
-/* The canonical role of a checked child, independent of its display fields. */
+/* Recognize the canonical BODY and its attached CHECK state before reserve.
+ * The arithmetic caller still authenticates the registered source event. */
 bool nl_h_custody_is_body(const NLCheckedFragment *);
 /* Locate the owning registered BODY invocation of a canonical normal IF arm.
  * The CHECK planner supplies its exact parent while the graph is unpublished.

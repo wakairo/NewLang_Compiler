@@ -529,10 +529,23 @@ static const CustodyEdge *incoming_edge(const CustodyParent *child,
 
 bool nl_h_custody_is_body(const NLCheckedFragment *f)
 {
-    const CustodyParent *body = f ? custody_parent(f->h_origin, f) : NULL;
+    const struct NLHOriginOwner *o = f ? f->h_origin : NULL;
+    const CustodyParent *body = custody_parent(o, f);
+    if (!body || !custody_storage_matches(o, body))
+        return false;
     const CustodyParent *caller = NULL;
-    const CustodyEdge *edge = body ? incoming_edge(body, &caller) : NULL;
-    return edge && edge->role == NL_CUSTODY_BODY;
+    const CustodyEdge *edge = incoming_edge(body, &caller);
+    if (edge)
+        return edge->role == NL_CUSTODY_BODY;
+    /* A registered body can recheck its retained event during definition
+     * checking, before run_body reserves the call edge. Its still-attached
+     * fragment borrows an existing world. An IF arm owns a distinct fork. */
+    if (o->published || o->root == f || f->destroy_context || !body->world)
+        return false;
+    for (const CustodyParent *p = body->next; p; p = p->next)
+        if (p->world == body->world && custody_storage_matches(o, p))
+            return true;
+    return false;
 }
 
 static bool custody_if_arm_edge(const CustodyParent *body, const CustodyEdge *e)
