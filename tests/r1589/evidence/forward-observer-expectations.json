@@ -1,0 +1,94 @@
+{
+  "authority": "Issue1589 comment7058271047",
+  "mode": "GitHub dedicated branch + Actions ONLY; P-equivalent local environment prohibited",
+  "actor": "/root/r1589_successor_prep",
+  "original_first": 7055394999,
+  "first_observation_freeze": 7058236491,
+  "late_apparatus_exposure": 7058271047,
+  "fixed_target": "fd42817e053e773d7b7bcbbadb9ac4fb6a161f23",
+  "canonical": "3d2c0e05a206c905d5f5cfab12659d1b90b63456 / Draft17.38",
+  "original_R_head": "3665d616239a610648d1773bc1bd0b012a34c759",
+  "original_R_tree": "4191111a0b0f808a8282c712dd31401bc22be29e",
+  "before_probe_sha256": "0b4fd8bbf85dcd33a619e1ddaf78effb4a6fec88ee8b0de91c5ec56e7cec46d6",
+  "after_probe_sha256": "7fef1560f8c11bb44457560db608f0bba03239dc77c7728327cbdc61e3b88ec4",
+  "unchanged_driver_sha256": "4d0b850948eddbe65d9312b777876a54bf57edd708e412085b1fa8fe47612f47",
+  "original_artifacts": [
+    {
+      "name": "positive_parcel.nl",
+      "classification": "positive",
+      "bytes": 668,
+      "sha256": "a45c5040f5d8d3cbdeea6542aca1961c853f44187c8dfa31ce39f6aae0ad19ff"
+    },
+    {
+      "name": "positive_receipt.nl",
+      "classification": "positive",
+      "bytes": 609,
+      "sha256": "694f5b37e9a31d3a3f55941b21a12bb3354c3bd40e88205f83e4062d2d9c3ac0"
+    },
+    {
+      "name": "invalid_condition.nl",
+      "classification": "true-invalid",
+      "bytes": 177,
+      "sha256": "179d903b20154997726e41ce496df87ab19ee43e655fa8f6fe3f144a8a4fe581"
+    },
+    {
+      "name": "invalid_arm_type.nl",
+      "classification": "true-invalid",
+      "bytes": 185,
+      "sha256": "43c91b3d3cf44dd563d46a23481bba54065e26c06210afdd6f2807edcccf5fc8"
+    },
+    {
+      "name": "invalid_zero_divisor.nl",
+      "classification": "true-invalid",
+      "bytes": 251,
+      "sha256": "4b23558460ec92460ca1f58091275cde7840ab9b5cabbc2f7580a98d49c75455"
+    },
+    {
+      "name": "lawful_no_if_control.nl",
+      "classification": "lawful-coverage-control",
+      "bytes": 247,
+      "sha256": "b6047d85619b3e157d6de4029d664ff685b13e769a96e3592ef3f8efafc4ed89"
+    },
+    {
+      "name": "oracle.json",
+      "classification": "oracle",
+      "bytes": 22967,
+      "sha256": "08b70a3a4ae6a0f81754e2a148489217b49ae226c6bf0abb5b9980681924c841"
+    }
+  ],
+  "source_law_values": "Unchanged from original FIRST and oracle; no observed compiler result regrades them",
+  "correction": [
+    "Exclude only NL_CHECKED_IF from the generic same-fragment item-list traversal. Continue the existing condition/tail traversal and authentic nl_checked_if_arm(index0/1) traversal.",
+    "Keep all other item/argument, result type, Known arithmetic, source/origin and context checks unchanged.",
+    "Print the compiled IF enum and actual public link/count fields qualified by fragment label. They are diagnostic transport, not fixed-ID expectations.",
+    "Report a missing actual item/argument with owner/index/link/count; propagate a recursive failure unchanged instead of adding misleading parent missing-link errors."
+  ],
+  "pre_execution_observer_expectations": [
+    "The old IF generic-item assumption should no longer stop the walk before the existing IF accessor. This is an apparatus prediction, not a compiler result.",
+    "Reach actual owned IF-arm snapshots when the released accessor provides them; keep each fragment/context's identities separate and arms labelled hypothetical.",
+    "No required first_item/item_count numeric layout, physical node ID, diagnostic code or generated C name is imposed.",
+    "Missing arm/body observation stays NOT_OBSERVABLE; no fabricated arm, alternate helper call or new authority substitutes for it.",
+    "Original main-binding expectations are compared only if actual public evidence is visible and Known; Unknown placeholders never equal Known0.",
+    "Actual operand/result Known flags, local arithmetic validation and observed target maximum are reported; complete call/result/world custody remains unmeasured.",
+    "If ordinary CHECK and the corrected public measurement complete without a stop, original authorized pristine C17 emission/compile/run is attempted. Its result is empirical; unit exit0 cannot verify internal quantities or the selected runtime arm.",
+    "Lawful no-if control remains lawful coverage, with no mandatory-rejection expectation; its first actual syntax refusal remains historical.",
+    "True-invalid intended semantic boundary is not certified by a hidden successful child trace or an earlier profile refusal.",
+    "Any new unexplained semantic/authority/identity/arithmetical/native/sanitizer anomaly or original hash/target/independence/budget breach stops affected execution to C."
+  ],
+  "budget": {
+    "branch_lifetime_fast_ceiling": 6,
+    "already_consumed_fast": 3,
+    "additional_post_PR_pushes": 1,
+    "expected_next_fast": 4,
+    "additional_natural_FULL5_PARTIAL1_sets": 1,
+    "no_further_push_or_third_full": true
+  },
+  "workflow_identity": {
+    "full_blob": "23655288e60f0d3d08a12c9a542346bf31829a08",
+    "partial_blob": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5",
+    "fast_blob": "9fea1afeeef948127c73e9ca86c476091036116e",
+    "full_partial_concurrency_cancel": false,
+    "full_fail_fast": false
+  },
+  "validation_limit": "Text-only inspection before the single push; no local compiler/test and no preemptive semantic/native PASS"
+}

@@ -173,6 +173,10 @@ static bool walk_node(Walk *walk, NLCheckedNodeId id, unsigned depth)
     printf("NODE\t%zu\t%zu\t%d\t%zu\t%zu\t%zu\n", walk->label, id,
            (int)node->kind, node->span.start_byte, node->span.end_byte,
            node->result_count);
+    printf("LINKS\t%zu\t%zu\t%zu\t%zu\t%zu\t%zu\t%zu\t%zu\t%zu\t%zu\n",
+           walk->label, id, node->initializer, node->tail, node->first_item,
+           node->next_item, node->item_count, node->first_argument,
+           node->next_argument, node->argument_count);
     if (node->result_count > 2) {
         return failure("PUBLIC_RESULT_COUNT_OUT_OF_CONTRACT");
     }
@@ -267,20 +271,34 @@ static bool walk_node(Walk *walk, NLCheckedNodeId id, unsigned depth)
         return false;
     }
     NLCheckedNodeId child = node->first_item;
-    for (size_t i = 0; i < node->item_count; ++i) {
-        const NLCheckedNodeView *item;
-        item = nl_checked_node_view(walk->fragment, child);
-        if (item == NULL || !walk_node(walk, child, depth + 1)) {
-            return failure("PUBLIC_ITEM_RELATION_UNAVAILABLE");
+    /* IF arms are separately owned fragments, obtained below through the
+     * public arm accessor, not a same-fragment first_item/next_item chain. */
+    if (node->kind != NL_CHECKED_IF) {
+        for (size_t i = 0; i < node->item_count; ++i) {
+            const NLCheckedNodeView *item;
+            item = nl_checked_node_view(walk->fragment, child);
+            if (item == NULL) {
+                printf("ITEM_LINK_MISSING\t%zu\t%zu\t%zu\t%zu\t%zu\n",
+                       walk->label, id, i, child, node->item_count);
+                return failure("PUBLIC_ITEM_RELATION_UNAVAILABLE");
+            }
+            if (!walk_node(walk, child, depth + 1)) {
+                return false;
+            }
+            child = item->next_item;
         }
-        child = item->next_item;
     }
     child = node->first_argument;
     for (size_t i = 0; i < node->argument_count; ++i) {
         const NLCheckedNodeView *argument;
         argument = nl_checked_node_view(walk->fragment, child);
-        if (argument == NULL || !walk_node(walk, child, depth + 1)) {
+        if (argument == NULL) {
+            printf("ARGUMENT_LINK_MISSING\t%zu\t%zu\t%zu\t%zu\t%zu\n",
+                   walk->label, id, i, child, node->argument_count);
             return failure("PUBLIC_ARGUMENT_RELATION_UNAVAILABLE");
+        }
+        if (!walk_node(walk, child, depth + 1)) {
+            return false;
         }
         child = argument->next_argument;
     }
@@ -351,6 +369,7 @@ int main(int argc, char **argv)
         return 70;
     }
     printf("TYPE_KIND\tUSIZE\t%d\n", (int)NL_TYPE_USIZE);
+    printf("NODE_KIND\tIF\t%d\n", (int)NL_CHECKED_IF);
     int result = 70;
     NLSource *source = NULL, *adapter_source = NULL;
     NLParser *parser = NULL, *adapter_parser = NULL;

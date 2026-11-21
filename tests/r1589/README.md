@@ -95,3 +95,26 @@ No retry/dispatch/cancel; a post-PR push needs a separate full-budget amendment.
 
 Product GO PAUSED; H1 HOLD; author + ordinary-safe-caller audit locality
 versus well-factored C remains UNMEASURED.
+
+## Forward-only IF observer repair
+
+The first natural FULL5/PARTIAL1 at head3665d616 is preserved as failed
+observation evidence. Both positives passed ordinary CHECK, but the R probe
+applied a generic same-fragment item chain to IF before its owned-arm accessor.
+Issue7058236491 froze the actual records before later diagnosis; C7058271047
+admitted this R apparatus repair and exactly one additional natural set.
+
+The repaired traversal reads IF arms only through nl_checked_if_arm with the
+returned fragment/context qualifying every ID. The existing condition/tail
+walk and all non-IF item/argument, result, arithmetic and identity checks remain.
+An actual missing item/argument reports its owner/index/link/count; a recursive
+failure propagates its first reason without adding a misleading missing-link
+reason. NODE_KIND IF is the compiled public enum value. LINKS columns are
+fragment-label, node, initializer, tail, first-item, next-item, item-count,
+first-argument, next-argument, argument-count. These are observed diagnostics,
+not invented identities or new semantic authority.
+
+Pre-execution observer expectations are recorded in
+evidence/forward-observer-expectations.json. The original seven sources/oracle
+are unchanged. Unknown joined quantities and hypothetical arms remain distinct
+from Known values and selected runtime arms; native unit exit0 remains bounded.
