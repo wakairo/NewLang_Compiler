@@ -1,0 +1,300 @@
+C1298 / R1581 SOURCE-FIRST ORACLE v1
+=====================================
+
+AUTHORITY AND SCOPE
+- Canonical main: dac938947b4ff396d8667cc8840504cedbe53949.
+- Canonical tree: e7232a1c08818792ced258020fa66ebf4285d601 (assignment anchor).
+- CURRENT_SPEC at that main selects NewLang_v0_spec_Draft17_38.md.
+- Assignment: https://github.com/wakairo/NewLang_Compiler/issues/1581.
+- This document is an independent prediction, not a new language/API/issuer/schema.
+- Six complete physical source units are independent alternatives, never concatenated.
+- P1/P2: positive source-law predictions within the assigned arithmetic/call envelope.
+- N1/N2: true-invalid safety controls.
+- E1/E2: canonical-legal controls outside the assigned coverage envelope.
+- Compiler/candidate/API/paths are not released. No current implementation success,
+  acceptance, rejection, behavior, proof format, or resource cost is inferred.
+
+NORMATIVE BASIS
+- Draft 4.2, 4.3, 4.4, 4.7: integer/unit Copy and Discardable; repeated value-use
+  copies an available binding. Unused usize values may be discarded.
+- Draft 4.9: explicit unit value and type.
+- Draft 5.1, 5.2, 5.4: usize is a nonnegative target-sized quantity; ordinary
+  arithmetic requires representability; division/remainder require a nonzero
+  divisor, with q=floor(a/b), a=q*b+r, 0<=r<b.
+- Draft 6: decimal typed literals denote mathematical integers and are range
+  checked; there is no implicit wrapping or saturation.
+- Draft 7.1, 8.1: complete source-order evaluation and proof of preconditions.
+- Draft 13.5c: known-callee summaries compose by substitution through call chains.
+- Draft 18.1, 18.2, 18.5: ordinary non-generic functions, fresh formal bindings,
+  Copy actuals, and normal-tail/explicit-return result flow. Signature visibility
+  precedes body checking and does not depend on textual declaration order.
+- Draft 19.1, 27.1, 27.9: immutable initialized lets, semicolon items, a normal
+  tail or return expr; terminator, and function-result type consistency.
+- Draft 28.1/28.2: one semantic unit and ordinary lexical namespace.
+- These are source-law grounds. They do not assert current compiler coverage.
+
+TARGET PRECONDITIONS
+Let UMAX be the largest value of usize on the eventual released target.
+Every source literal and every valid intermediate must be representable.
+Per-source sufficient target conditions:
+  P1: UMAX >= 251.
+  P2: UMAX >= 191.
+  N1: UMAX >= 73, so the intended failure is division by zero.
+  N2: UMAX >= 61, so the intended failure is the negative subtraction result.
+  E1: UMAX >= 173.
+  E2: UMAX >= 83.
+UMAX >= 251 is sufficient for the entire corpus. No target width, ABI,
+C typedef, machine architecture, or physical integer encoding is assumed.
+On a target failing its condition, classify TARGET_UNSUITABLE for this oracle;
+do not change the frozen numbers or treat a literal-range rejection as the
+intended arithmetic/call observation.
+
+UNKNOWN FORMALS
+Each formal is an arbitrary representable usize at definition time, never
+Known(0). P1/P2 helpers use only / and % by nonzero typed decimal literals.
+Thus those operations are safe for every representable formal input without
+assuming caller constants or making an unknown formal zero. Result values
+can remain abstractly Unknown even where mathematical range bounds are known.
+The exact numbers below are predictions for the specified actual call
+instances. Their availability in a future compiler/public proof is a separate
+observation. All P1/P2 + and - occur in main after calls with explicit constant
+origins; their mathematical exact operands and representable results are fixed
+below. This does not authorize range-generalized Unknown arithmetic.
+
+P1: r1581-p1.nl
+Classification: CANONICAL_LEGAL, SELECTED_GOAL_POSITIVE, execution NOT_RUN.
+Source shape: main declared before braid and sift; main calls braid and sift;
+braid calls sift. Finite acyclic ordinary unary known-call graph.
+braid has a normal usize tail; sift has one final return usize expression.
+main has a normal unit tail. All ordinary lets are immutable.
+Equations:
+  sift(x) = floor((x % 9) / 2).
+  braid(x) = sift(floor(x / 7) % 13) % 3.
+
+All braid call instances, in main source order:
+context | amount | quotient | residue | copied | sift.amount | sift.remainder | sift.quotient/result | small | tail/result
+west    | 203    | 29       | 3       | 3      | 3           | 3              | 1                    | 1     | 1
+east    | 203    | 29       | 3       | 3      | 3           | 3              | 1                    | 1     | 1
+close   | 214    | 30       | 4       | 4      | 4           | 4              | 2                    | 2     | 2
+later   | 244    | 34       | 8       | 8      | 8           | 8              | 4                    | 4     | 1
+boundary| 251    | 35       | 9       | 9      | 9           | 0              | 0                    | 0     | 0
+
+The later instance makes small % 3 change 4 to 1.
+The boundary instance makes the nested sift remainder change 9 to 0.
+The separate main cross call is sift(later): actual/formal 1, remainder 1,
+quotient 0, returned result 0, main.cross 0.
+
+All main bindings, in source order:
+  seed=203; shared=203 (Copy from seed);
+  west=1; east=1; close=2; later=1; boundary=0; cross=0;
+  total=west+cross=1+0=1;
+  rest=total-east=1-1=0;
+  joined=rest+close=0+2=2;
+  tallied=joined+later=2+1=3;
+  final=tallied+boundary=3+0=3;
+  normal function result=unit.
+No subtraction underflow or addition overflow occurs under the target condition.
+
+P1 identity questions:
+- seed and shared are distinct source binding occurrences connected by Copy.
+- west and east use distinct call occurrences and distinct actual expressions,
+  even though both values are 203 and both returned numbers are 1.
+- later also returns 1, but its original actual is 244 and nested sift returns
+  4 before the final remainder. Numeric equality with west/east cannot certify
+  this different call/result path.
+- braid.copied is linked to that invocation's residue, not a same-valued result
+  from another call. Its sift formal is fresh for the correct actual.
+- main.cross consumes a Copy of the returned later value, not the original 244
+  or the intermediate sift result 4.
+- These are semantic source/call associations, not required physical object IDs
+  or a requirement to forbid valid constant folding.
+
+P2: r1581-p2.nl
+Classification: CANONICAL_LEGAL, SELECTED_GOAL_POSITIVE, execution NOT_RUN.
+Source shape: knot precedes trim and cut; main follows them. knot calls cut
+with a nested cut actual and then trim. main also nests cut inside trim.
+All ordinary helpers are unary and the graph is finite and acyclic.
+knot/cut use one final usize return; trim uses a normal usize tail; main uses
+one final return unit;.
+Equations:
+  cut(x) = floor(x / 2) % 29.
+  trim(x) = floor((x % 13) / 2).
+  knot(x) = trim(cut(cut(x % 97)) % 11).
+
+Top call knot(seed):
+  main.seed=191; knot.value=191; bounded=191%97=94.
+  Inner cut actual/formal=94: quotient=47; residue=18; return=18.
+  Outer cut actual/formal=18: quotient=9; residue=9; return=9.
+  folded=9; residue=9%11=9.
+  trim actual/formal=9: residue=9; quotient=4; normal result=4.
+  knot.output=4; return=4; main.top=4.
+
+Main nested call trim(cut(95)):
+  cut actual/formal=95: quotient=47; residue=18; return=18.
+  trim actual/formal=18: residue=5; quotient=2; normal result=2.
+  main.nested=2.
+Main same call trim(5):
+  trim actual/formal=5: residue=5; quotient=2; normal result=2.
+  main.same=2.
+
+Repeat call knot(153):
+  knot.value=153; bounded=153%97=56.
+  Inner cut actual/formal=56: quotient=28; residue=28; return=28.
+  Outer cut actual/formal=28: quotient=14; residue=14; return=14.
+  folded=14; residue=14%11=3.
+  trim actual/formal=3: residue=3; quotient=1; normal result=1.
+  knot.output=1; return=1; main.repeat=1.
+
+Remaining main bindings:
+  sum=top+nested=4+2=6;
+  delta=sum-same=6-2=4;
+  final=delta+repeat=4+1=5;
+  explicit function result=unit.
+No subtraction underflow or addition overflow occurs under the target condition.
+
+P2 identity and order questions:
+- For cut(cut(bounded)), the inner call completes and its result becomes the
+  outer actual. The outer formal must not receive bounded or the original
+  knot formal instead. Then folded feeds the remainder and trim call.
+- The cut(94) in top and cut(95) in main.nested both yield quotient 47 and
+  residue 18. Equal intermediate numbers do not identify their original actual.
+- trim(18) and trim(5) both return 2 through residue 5 but have different actual
+  origins; their function input associations remain distinct.
+- Repeated calls to the same static helper body must preserve each actual's
+  relational flow. Memoization/constant folding may preserve semantics without
+  materializing a physical record per dynamic evaluation.
+- main.top and main.delta both equal 4, but one is a returned helper result and
+  the other is a subtraction result. They are not interchangeable source proof.
+
+N1: r1581-n1-zero.nl
+Classification: TRUE_INVALID, mandatory semantic rejection, execution NOT_RUN.
+Surface syntax, types, declarations and calls are otherwise in the ordinary
+closed source forms. The nonzero-divisor law is violated at broken.result.
+Mathematical prefix for the specified actual:
+  main broken actual/formal=73;
+  clean actual/formal=73; remainder=73%11=7; quotient=7/2=3;
+  clean normal result=3; broken.middle=3.
+  usize(0)=0 is representable; middle / 0 has no defined quotient.
+  broken.result and its normal return have no valid usize value.
+  main.result and successful main completion have no valid execution prediction.
+Definition-time unknown input does not rescue a literal-zero divisor.
+Do not assign zero, a wrapped number, or a native numeric oracle to the invalid
+operation. The source must not receive successful semantic CHECK or authentic
+success certification. No diagnostic code, location, wording, or stage count
+is prescribed.
+
+N2: r1581-n2-underflow.nl
+Classification: TRUE_INVALID, mandatory semantic rejection, execution NOT_RUN.
+Mathematical prefix:
+  step actual/formal=61; quotient=floor(61/5)=12; residue=12%7=5;
+  step normal result=5; main.exact=5.
+  The mathematical result 4-exact is -1, not representable by usize.
+  main.bad has no valid usize result; no wrap/saturate/modulo substitute is legal.
+  Successful main completion has no valid execution prediction.
+The helper alone is safe for an arbitrary formal because its divisors are
+nonzero literals. Its returned actual value must reach the subtraction check.
+Do not turn an unobserved or abstractly Unknown exact into Known(0) to accept.
+Mandatory semantic rejection, not a mandatory parser error or fixed diagnostic.
+
+E1: r1581-e1-named-divisor.nl
+Classification: CANONICAL_LEGAL, LEGAL_EXCLUDED_COVERAGE, execution NOT_RUN.
+The immutable divisor binding is 7 and is therefore nonzero for every call.
+Draft 5.2/5.4 do not restrict the divisor to a literal source expression.
+The named divisor is explicitly outside the assigned preparation goal.
+Prediction:
+  named actual/formal=173; divisor=7; quotient=floor(173/7)=24;
+  remainder=24%5=4; normal helper result=4; main.result=4;
+  normal main result=unit.
+No mandatory-reject oracle. A future unsupported-coverage rejection and
+conforming support must be distinguished from source invalidity. Do not claim
+that current compiler accepts this source.
+
+E2: r1581-e2-multiplication.nl
+Classification: CANONICAL_LEGAL, LEGAL_EXCLUDED_COVERAGE, execution NOT_RUN.
+Draft 5.2 includes representable usize multiplication, but this assignment
+selects /%, existing Known-only +/- and ordinary-call composition, not *.
+Prediction:
+  portion actual/formal=83; quotient=floor(83/3)=27; residue=27%5=2;
+  normal helper result=2; main.amount=2;
+  product=2*7=14; original=14-7=7; normal main result=unit.
+All are representable under its target condition.
+No mandatory-reject oracle. Canonical legality does not imply implementation
+coverage or authorization to implement, execute, or broaden the selected slice.
+
+SEPARATED LAYER ORACLES
+SOURCE:
+  P1/P2 are canonical source-law positive predictions with specified target
+  conditions. N1/N2 are syntactically ordinary units with semantic violations.
+  E1/E2 are canonical legal but outside the assigned coverage envelope.
+  Source legality is not current compiler admission or a parsed-source result.
+CHECK:
+  A conforming capable implementation must preserve the exact safe arithmetic
+  and call/result associations above and must not certify N1/N2 as valid.
+  Actual CHECK is NOT_RUN. For positives, a future unexpected CHECK result is
+  a separate first observation requiring preservation and C review, not an
+  instruction to adjust the source or predictions to match the producer.
+  For excluded cases, coverage rejection is not the same as semantic invalidity.
+PUBLIC:
+  No API/header/schema/issuer is read or proposed. Whether released public
+  evidence can expose the authentic source, exact operation operands/results,
+  callee identity, formal/actual relation, or nested result origin is presently
+  NOT_OBSERVABLE. Future evidence must come from the actual source-issued path;
+  observer-manufactured expected values or substituted equal numbers do not
+  establish that path. Missing observations remain NOT_OBSERVABLE, not PASS.
+C17:
+  No emission or C compilation occurs. A later authorized observation would
+  distinguish source/semantic success from authentic lowering to the released
+  target, arithmetic preservation, and faithful call/result behavior.
+  No fixed C function names, typedefs, emitted strings, statement counts,
+  physical record IDs, locations, or diagnostic codes are oracle conditions.
+  Optimizations may remove computations while preserving program semantics;
+  source identity demands are for any evidence actually claimed, not a demand
+  to materialize erased computations.
+NATIVE:
+  No execution occurs. P1/P2 and E1/E2 have mathematical normal unit completion
+  under their conditions, but these units expose no numerical entry result.
+  main()->unit is retained. No host-process exit ABI is selected here.
+  Even a later exit0 alone would establish neither internal quantity values
+  nor source identity. Those require separately authorized authentic observable
+  evidence; where unavailable, the quantity/identity conclusion is
+  NOT_OBSERVABLE. There is no native success oracle for N1/N2.
+
+EVIDENCE AND ISOLATION
+- All compiler/source parser/semantic CHECK/public/C17/native/Lean/build/SDK/
+  Actions/CI execution: NOT_RUN, count 0.
+- Git object/ref/branch/PR/code/spec changes: 0; new workers: 0.
+- No local/shared filesystem or worktree inspection occurred.
+- Own Issue, canonical Compass, Value Strategy, Process, CURRENT_SPEC and
+  selected Draft sections are the project inputs. Root/docs directory names
+  were listed only to locate canonical documents.
+- Canonical documents contain historical links, implementation summaries,
+  examples and report/issue names. These incidental exposures are acknowledged;
+  no linked P/M/F/other-R original material or implementation was followed.
+- The ACTUAL START records an overly broad tool-metadata discovery filter and
+  reaction-tool metadata exposure. These were administrative metadata only;
+  no corresponding actions or project-material reads occurred.
+- No candidate, implementation header/code, other-track original source,
+  fixtures/oracles/results, aggregate C or actor inventory/list_agents read.
+- This prediction is frozen before any producer implementation/result input.
+
+GOAL ALIGNMENT, SEPARATE FROM TECHNICAL SOURCE LAW
+Value 1.1 keeps Product GO separate from capability evidence; Value 1.3 permits
+bounded reusable investment in already-selected semantics. The two positives
+probe reusable arithmetic/call composition with different declaration/return
+forms, repeated calls, Copy arguments, and value-colliding distinct flows.
+This PREP cannot measure whether a future implementation creates a bespoke
+mechanism/world per helper or source, nor its maintenance cost. Such growth
+would be a separate goal-alignment concern for C, not proof of a source-law
+defect. No new source/authority/issuer/API or general CFG/recursion/owner work
+is justified by this corpus. Product GO #624 remains PAUSED; H1 remains HOLD;
+author-plus-ordinary-safe-caller audit-locality versus well-factored C remains
+UNMEASURED.
+
+FREEZE AND STOP
+All source/oracle artifacts are UTF-8, ASCII subset, no BOM, LF only, with one
+final LF. Fenced artifact contents, not fence lines, are the exact artifacts.
+The FIRST manifest hashes these exact bytes. Individual GET must reproduce
+the complete FIRST body, then re-extracted artifact byte counts and SHA256.
+After verified PREP FINAL, STOP C. Future execution requires a separate C
+release fixing candidate/paths/scope/FAST and FULL budgets, and remains GitHub
+dedicated branch + Actions ONLY. This PREP is not a current P/R gate.

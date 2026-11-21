@@ -1,0 +1,37 @@
+[
+  {
+    "name": "r1581-p1.nl",
+    "bytes": 788,
+    "sha256": "e3ed32735043fba301120e7ec10a7c3088efe40224902636b8b61ed633a1628e"
+  },
+  {
+    "name": "r1581-p2.nl",
+    "bytes": 740,
+    "sha256": "30ab02a4b502e2956c35d3e4901b0831f68ccebcb3719643995c1f5850eccdb7"
+  },
+  {
+    "name": "r1581-n1-zero.nl",
+    "bytes": 313,
+    "sha256": "15c5516c5ce70a4f04dacf5237f42134048ebb3c4baaf24cb4c2928a0be4efd3"
+  },
+  {
+    "name": "r1581-n2-underflow.nl",
+    "bytes": 220,
+    "sha256": "638eded59334f9ab31bdd5f4e99dbc03cd59d7cc557743d90a0caea82050fbdb"
+  },
+  {
+    "name": "r1581-e1-named-divisor.nl",
+    "bytes": 223,
+    "sha256": "604ae46529061f402a2d412142ceb3435bda3854e54029593a28e6d145a594ef"
+  },
+  {
+    "name": "r1581-e2-multiplication.nl",
+    "bytes": 271,
+    "sha256": "af3f31135685b281dbaa9ab213da351b87328a204c18623789830bcc0a150ffb"
+  },
+  {
+    "name": "r1581-oracle.txt",
+    "bytes": 16914,
+    "sha256": "e48019f52f98db760814023caafe5681d44a2b5d8862dc5a63531d5f899e9378"
+  }
+]
