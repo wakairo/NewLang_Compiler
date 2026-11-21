@@ -1,0 +1,757 @@
+﻿2026-11-21T05:30:56.8502745Z Current runner version: '2.338.2'
+2026-11-21T05:30:56.8527070Z ##[group]Runner Image Provisioner
+2026-11-21T05:30:56.8528304Z Hosted Compute Agent
+2026-11-21T05:30:56.8528934Z Version: 20261111.635
+2026-11-21T05:30:56.8529565Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+2026-11-21T05:30:56.8530344Z Build Date: 2026-11-11T01:49:01Z
+2026-11-21T05:30:56.8531039Z Worker ID: {0f68bfb1-1ea6-4f6a-9746-383d6a61d6f2}
+2026-11-21T05:30:56.8531712Z Region: westus2
+2026-11-21T05:30:56.8532604Z Cloud: Azure
+2026-11-21T05:30:56.8533189Z ##[endgroup]
+2026-11-21T05:30:56.8534878Z ##[group]Operating System
+2026-11-21T05:30:56.8535520Z Ubuntu
+2026-11-21T05:30:56.8536020Z 24.04.5
+2026-11-21T05:30:56.8536534Z LTS
+2026-11-21T05:30:56.8537038Z ##[endgroup]
+2026-11-21T05:30:56.8537874Z ##[group]Runner Image
+2026-11-21T05:30:56.8538464Z Image: ubuntu-24.04
+2026-11-21T05:30:56.8539007Z Version: 20261116.376.1
+2026-11-21T05:30:56.8540273Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261116.376/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-21T05:30:56.8541731Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261116.376
+2026-11-21T05:30:56.8542656Z ##[endgroup]
+2026-11-21T05:30:56.8543725Z ##[group]GITHUB_TOKEN Permissions
+2026-11-21T05:30:56.8546226Z Contents: read
+2026-11-21T05:30:56.8546802Z Metadata: read
+2026-11-21T05:30:56.8547648Z ##[endgroup]
+2026-11-21T05:30:56.8549913Z Secret source: Actions
+2026-11-21T05:30:56.8550793Z Cache mode: write
+2026-11-21T05:30:56.8551512Z Prepare workflow directory
+2026-11-21T05:30:56.8885181Z Prepare all required actions
+2026-11-21T05:30:56.8936854Z Getting action download info
+2026-11-21T05:30:57.2431363Z Download action repository 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
+2026-11-21T05:30:57.4574939Z Download action repository 'actions/cache@3edfce9056124e459a23f683a21433670d47daca' (SHA:3edfce9056124e459a23f683a21433670d47daca)
+2026-11-21T05:30:57.7763511Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-21T05:30:58.0529243Z Complete job name: R-FAST pinned format + GCC build + CTest registration only
+2026-11-21T05:30:58.1364941Z ##[group]Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+2026-11-21T05:30:58.1365965Z with:
+2026-11-21T05:30:58.1366547Z   ref: 5b826d158b6b88e88f2c08905ff0d71df4e2dd35
+2026-11-21T05:30:58.1367426Z   fetch-depth: 3
+2026-11-21T05:30:58.1367999Z   persist-credentials: false
+2026-11-21T05:30:58.1368568Z   repository: wakairo/NewLang_Compiler
+2026-11-21T05:30:58.1372442Z   token: ***
+2026-11-21T05:30:58.1372925Z   ssh-strict: true
+2026-11-21T05:30:58.1373450Z   ssh-user: git
+2026-11-21T05:30:58.1373922Z   clean: true
+2026-11-21T05:30:58.1374405Z   sparse-checkout-cone-mode: true
+2026-11-21T05:30:58.1375023Z   fetch-tags: false
+2026-11-21T05:30:58.1375566Z   show-progress: true
+2026-11-21T05:30:58.1376142Z   lfs: false
+2026-11-21T05:30:58.1376653Z   submodules: false
+2026-11-21T05:30:58.1377402Z   set-safe-directory: true
+2026-11-21T05:30:58.1378469Z ##[endgroup]
+2026-11-21T05:30:58.3852301Z Syncing repository: wakairo/NewLang_Compiler
+2026-11-21T05:30:58.3855583Z ##[group]Getting Git version info
+2026-11-21T05:30:58.3856915Z Working directory is '/home/runner/work/NewLang_Compiler/NewLang_Compiler'
+2026-11-21T05:30:58.3858853Z [command]/usr/bin/git version
+2026-11-21T05:30:58.3917687Z git version 2.56.1
+2026-11-21T05:30:58.3935104Z ##[endgroup]
+2026-11-21T05:30:58.3949271Z Temporarily overriding HOME='/home/runner/work/_temp/a0311e34-684c-4e02-a2ce-cb57f2b33beb' before making global git config changes
+2026-11-21T05:30:58.3951366Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-21T05:30:58.3955567Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-21T05:30:58.4001687Z Deleting the contents of '/home/runner/work/NewLang_Compiler/NewLang_Compiler'
+2026-11-21T05:30:58.4005199Z ##[group]Initializing the repository
+2026-11-21T05:30:58.4010479Z [command]/usr/bin/git init /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-21T05:30:58.4138538Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-21T05:30:58.4140161Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-21T05:30:58.4141567Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-21T05:30:58.4142716Z hint: call:
+2026-11-21T05:30:58.4143340Z hint:
+2026-11-21T05:30:58.4144195Z hint: 	git config --global init.defaultBranch <name>
+2026-11-21T05:30:58.4145125Z hint:
+2026-11-21T05:30:58.4146413Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-21T05:30:58.4148058Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-21T05:30:58.4149139Z hint:
+2026-11-21T05:30:58.4149800Z hint: 	git branch -m <name>
+2026-11-21T05:30:58.4150582Z hint:
+2026-11-21T05:30:58.4151546Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-21T05:30:58.4162896Z Initialized empty Git repository in /home/runner/work/NewLang_Compiler/NewLang_Compiler/.git/
+2026-11-21T05:30:58.4173233Z [command]/usr/bin/git remote add origin https://github.com/wakairo/NewLang_Compiler
+2026-11-21T05:30:58.4432147Z ##[endgroup]
+2026-11-21T05:30:58.4433484Z ##[group]Disabling automatic garbage collection
+2026-11-21T05:30:58.4436572Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-21T05:30:58.4476686Z ##[endgroup]
+2026-11-21T05:30:58.4478835Z ##[group]Setting up auth
+2026-11-21T05:30:58.4484705Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-21T05:30:58.4520326Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-21T05:30:58.4884635Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-21T05:30:58.4918200Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-21T05:30:58.5125429Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-21T05:30:58.5229040Z ##[endgroup]
+2026-11-21T05:30:58.5230640Z ##[group]Fetching the repository
+2026-11-21T05:30:58.5244334Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=3 origin 5b826d158b6b88e88f2c08905ff0d71df4e2dd35
+2026-11-21T05:31:02.1238011Z From https://github.com/wakairo/NewLang_Compiler
+2026-11-21T05:31:02.1238840Z  * branch            5b826d158b6b88e88f2c08905ff0d71df4e2dd35 -> FETCH_HEAD
+2026-11-21T05:31:02.1241929Z ##[endgroup]
+2026-11-21T05:31:02.1242604Z ##[group]Determining the checkout info
+2026-11-21T05:31:02.1244618Z ##[endgroup]
+2026-11-21T05:31:02.1251315Z [command]/usr/bin/git sparse-checkout disable
+2026-11-21T05:31:02.1316072Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-21T05:31:02.1352179Z ##[group]Checking out the ref
+2026-11-21T05:31:02.1357264Z [command]/usr/bin/git checkout --progress --force 5b826d158b6b88e88f2c08905ff0d71df4e2dd35
+2026-11-21T05:31:02.8450339Z Note: switching to '5b826d158b6b88e88f2c08905ff0d71df4e2dd35'.
+2026-11-21T05:31:02.8450860Z 
+2026-11-21T05:31:02.8451132Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-21T05:31:02.8452265Z changes and commit them, and you can discard any commits you make in this
+2026-11-21T05:31:02.8453068Z state without impacting any branches by switching back to a branch.
+2026-11-21T05:31:02.8453457Z 
+2026-11-21T05:31:02.8453871Z If you want to create a new branch to retain commits you create, you may
+2026-11-21T05:31:02.8454587Z do so (now or later) by using -c with the switch command. Example:
+2026-11-21T05:31:02.8455438Z 
+2026-11-21T05:31:02.8455653Z   git switch -c <new-branch-name>
+2026-11-21T05:31:02.8456040Z 
+2026-11-21T05:31:02.8456229Z Or undo this operation with:
+2026-11-21T05:31:02.8456532Z 
+2026-11-21T05:31:02.8456681Z   git switch -
+2026-11-21T05:31:02.8456918Z 
+2026-11-21T05:31:02.8457583Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-21T05:31:02.8458028Z 
+2026-11-21T05:31:02.8458423Z HEAD is now at 5b826d1 R1589: preserve original FIRST and add isolated public/native evidence apparatus
+2026-11-21T05:31:02.8612870Z ##[endgroup]
+2026-11-21T05:31:02.8667532Z [command]/usr/bin/git log -1 --format=%H
+2026-11-21T05:31:02.8693617Z 5b826d158b6b88e88f2c08905ff0d71df4e2dd35
+2026-11-21T05:31:02.8701161Z ##[group]Removing auth
+2026-11-21T05:31:02.8704809Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-21T05:31:02.8733995Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-21T05:31:02.8933714Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-21T05:31:02.8960310Z http.https://github.com/.extraheader
+2026-11-21T05:31:02.8967517Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-21T05:31:02.9032378Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-21T05:31:02.9228714Z ##[endgroup]
+2026-11-21T05:31:02.9457854Z ##[group]Run set -euo pipefail
+2026-11-21T05:31:02.9458419Z [36;1mset -euo pipefail[0m
+2026-11-21T05:31:02.9459025Z [36;1mtest "$GITHUB_EVENT_NAME" = "push"[0m
+2026-11-21T05:31:02.9459431Z [36;1mcase "$GITHUB_REF" in[0m
+2026-11-21T05:31:02.9459775Z [36;1m  refs/heads/r-fast/*) ;;[0m
+2026-11-21T05:31:02.9460297Z [36;1m  *) echo "STOP: not an opt-in R-FAST ref"; exit 1 ;;[0m
+2026-11-21T05:31:02.9460714Z [36;1mesac[0m
+2026-11-21T05:31:02.9461058Z [36;1mtest "$GITHUB_REF_TYPE" = "branch"[0m
+2026-11-21T05:31:02.9461489Z [36;1mtest "$(git rev-parse HEAD)" = "$GITHUB_SHA"[0m
+2026-11-21T05:31:02.9461912Z [36;1mtest "$(git status --porcelain)" = ""[0m
+2026-11-21T05:31:02.9462447Z [36;1mtest "wakairo/NewLang_Compiler" = "$GITHUB_REPOSITORY"[0m
+2026-11-21T05:31:02.9463046Z [36;1mecho "R-FAST event=$GITHUB_EVENT_NAME repository=$GITHUB_REPOSITORY branch=$GITHUB_REF"[0m
+2026-11-21T05:31:02.9463883Z [36;1mecho "R-FAST immutable_HEAD=$(git rev-parse HEAD) event_SHA=$GITHUB_SHA attempt=$GITHUB_RUN_ATTEMPT"[0m
+2026-11-21T05:31:02.9464723Z [36;1mecho "R-FAST preparation only: semantic CHECK execution, source-issued owned proof, native/C17, negative/OOM, ASan and UBSan NOT TESTED"[0m
+2026-11-21T05:31:02.9485362Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-21T05:31:02.9485828Z ##[endgroup]
+2026-11-21T05:31:03.6046965Z R-FAST event=push repository=wakairo/NewLang_Compiler branch=refs/heads/r-fast/r1589-if-quantity
+2026-11-21T05:31:03.6065751Z R-FAST immutable_HEAD=5b826d158b6b88e88f2c08905ff0d71df4e2dd35 event_SHA=5b826d158b6b88e88f2c08905ff0d71df4e2dd35 attempt=1
+2026-11-21T05:31:03.6067281Z R-FAST preparation only: semantic CHECK execution, source-issued owned proof, native/C17, negative/OOM, ASan and UBSan NOT TESTED
+2026-11-21T05:31:03.6148591Z ##[group]Run set -euo pipefail
+2026-11-21T05:31:03.6149021Z [36;1mset -euo pipefail[0m
+2026-11-21T05:31:03.6149401Z [36;1mcmake_before=$(command -v cmake)[0m
+2026-11-21T05:31:03.6149907Z [36;1mcmake_version=$(cmake --version | sed -n '1s/^cmake version //p')[0m
+2026-11-21T05:31:03.6150380Z [36;1mpython3 - "$cmake_version" <<'PY'[0m
+2026-11-21T05:31:03.6150775Z [36;1mimport re[0m
+2026-11-21T05:31:03.6151096Z [36;1mimport sys[0m
+2026-11-21T05:31:03.6151498Z [36;1mmatch = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", sys.argv[1])[0m
+2026-11-21T05:31:03.6152068Z [36;1mif not match:[0m
+2026-11-21T05:31:03.6152434Z [36;1m    sys.exit("STOP: unexpected CMake version")[0m
+2026-11-21T05:31:03.6152859Z [36;1mmajor, minor, patch = map(int, match.groups())[0m
+2026-11-21T05:31:03.6153321Z [36;1mif not ((3, 28) <= (major, minor) < (4, 0)):[0m
+2026-11-21T05:31:03.6153777Z [36;1m    sys.exit("STOP: CMake outside reviewed interval")[0m
+2026-11-21T05:31:03.6154222Z [36;1mPY[0m
+2026-11-21T05:31:03.6154594Z [36;1msudo apt-get update[0m
+2026-11-21T05:31:03.6155056Z [36;1msudo apt-get install --no-install-recommends -y \[0m
+2026-11-21T05:31:03.6155512Z [36;1m  gcc-13 g++-13 make python3 zstd \[0m
+2026-11-21T05:31:03.6155942Z [36;1m  libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev[0m
+2026-11-21T05:31:03.6156445Z [36;1mtest "$(command -v cmake)" = "$cmake_before"[0m
+2026-11-21T05:31:03.6156937Z [36;1mtest "$(cmake --version | sed -n '1s/^cmake version //p')" = "$cmake_version"[0m
+2026-11-21T05:31:03.6171810Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-21T05:31:03.6172210Z ##[endgroup]
+2026-11-21T05:31:05.4897444Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-21T05:31:05.5245532Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-11-21T05:31:05.5252009Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-11-21T05:31:05.5296706Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-11-21T05:31:05.5341904Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-11-21T05:31:05.5365610Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-11-21T05:31:05.6374980Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [762 kB]
+2026-11-21T05:31:05.6589092Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [832 kB]
+2026-11-21T05:31:05.6828194Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1475 kB]
+2026-11-21T05:31:05.6908948Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [319 kB]
+2026-11-21T05:31:05.6930297Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1716 kB]
+2026-11-21T05:31:05.7018205Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [346 kB]
+2026-11-21T05:31:05.7048738Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1922 kB]
+2026-11-21T05:31:05.7200641Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [443 kB]
+2026-11-21T05:31:05.7803641Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1198 kB]
+2026-11-21T05:31:05.7862624Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [239 kB]
+2026-11-21T05:31:05.7888363Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1231 kB]
+2026-11-21T05:31:05.7951175Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1792 kB]
+2026-11-21T05:31:05.8448396Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [414 kB]
+2026-11-21T05:31:10.0044299Z Fetched 13.1 MB in 1s (9451 kB/s)
+2026-11-21T05:31:11.2951582Z Reading package lists...
+2026-11-21T05:31:11.3352422Z Reading package lists...
+2026-11-21T05:31:11.6232914Z Building dependency tree...
+2026-11-21T05:31:11.6237980Z Reading state information...
+2026-11-21T05:31:11.8437526Z gcc-13 is already the newest version (13.3.0-6ubuntu2~24.04.1).
+2026-11-21T05:31:11.8438232Z gcc-13 set to manually installed.
+2026-11-21T05:31:11.8439007Z g++-13 is already the newest version (13.3.0-6ubuntu2~24.04.1).
+2026-11-21T05:31:11.8459463Z make is already the newest version (4.3-4.1build2).
+2026-11-21T05:31:11.8460267Z python3 is already the newest version (3.12.3-0ubuntu2.1).
+2026-11-21T05:31:11.8460921Z zstd is already the newest version (1.5.5+dfsg2-2build1.1).
+2026-11-21T05:31:11.8461859Z zstd set to manually installed.
+2026-11-21T05:31:11.8462507Z libstdc++6 is already the newest version (14.2.0-4ubuntu2~24.04.1).
+2026-11-21T05:31:11.8463196Z zlib1g-dev is already the newest version (1:1.3.dfsg-3.1ubuntu2.3).
+2026-11-21T05:31:11.8464380Z libzstd-dev is already the newest version (1.5.5+dfsg2-2build1.1).
+2026-11-21T05:31:11.8465047Z libzstd-dev set to manually installed.
+2026-11-21T05:31:11.8465701Z libncurses-dev is already the newest version (6.4+20240113-1ubuntu2.2).
+2026-11-21T05:31:11.8466356Z libncurses-dev set to manually installed.
+2026-11-21T05:31:11.8466949Z libxml2-dev is already the newest version (2.9.14+dfsg-1.3ubuntu3.10).
+2026-11-21T05:31:11.8467771Z libxml2-dev set to manually installed.
+2026-11-21T05:31:11.8468454Z 0 upgraded, 0 newly installed, 0 to remove and 68 not upgraded.
+2026-11-21T05:31:11.8565575Z ##[group]Run actions/cache/restore@3edfce9056124e459a23f683a21433670d47daca
+2026-11-21T05:31:11.8566142Z with:
+2026-11-21T05:31:11.8566525Z   path: .deps/downloads/newlang-llvm-23.1.3-linux-x64-final.tar.zst
+2026-11-21T05:31:11.8567494Z   key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-21T05:31:11.8568050Z   enableCrossOsArchive: false
+2026-11-21T05:31:11.8568411Z   fail-on-cache-miss: false
+2026-11-21T05:31:11.8568791Z   lookup-only: false
+2026-11-21T05:31:11.8569111Z ##[endgroup]
+2026-11-21T05:31:12.2210468Z Cache hit for: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-21T05:31:13.5118022Z Received 33554432 of 126417585 (26.5%), 31.9 MBs/sec
+2026-11-21T05:31:14.1569643Z Received 126417585 of 126417585 (100.0%), 73.2 MBs/sec
+2026-11-21T05:31:14.1571007Z Cache Size: ~121 MB (126417585 B)
+2026-11-21T05:31:14.1794815Z [command]/usr/bin/tar -xf /home/runner/work/_temp/d84777ed-0da2-40f8-9eaa-3c5e2a569ec7/cache.tzst -P -C /home/runner/work/NewLang_Compiler/NewLang_Compiler --use-compress-program unzstd
+2026-11-21T05:31:14.3109820Z Cache restored successfully
+2026-11-21T05:31:14.7919172Z Cache restored from key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-21T05:31:14.8100048Z ##[group]Run set -euo pipefail
+2026-11-21T05:31:14.8100467Z [36;1mset -euo pipefail[0m
+2026-11-21T05:31:14.8100839Z [36;1mpython3 scripts/bootstrap.py[0m
+2026-11-21T05:31:14.8101243Z [36;1m. .deps/activate.sh[0m
+2026-11-21T05:31:14.8101615Z [36;1mclang-format-23 --version | grep -F '23.1.3'[0m
+2026-11-21T05:31:14.8115001Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-21T05:31:14.8115400Z ##[endgroup]
+2026-11-21T05:31:14.8676494Z SDK cache candidate: verify exact SHA and size
+2026-11-21T05:31:14.9727604Z SDK archive independently SHA256 verified (126520077 bytes) in 0.10s
+2026-11-21T05:31:15.5640421Z SDK authenticated decompression 448040960 bytes in 0.59s
+2026-11-21T05:31:15.8669250Z SDK fail-closed tar inspection and rootless extraction 570 members
+2026-11-21T05:31:16.0567757Z LLVM 23.1.3 exact curated SDK ready at /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64; total 1.19s
+2026-11-21T05:31:16.0672646Z clang-format version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)
+2026-11-21T05:31:16.0724489Z ##[group]Run set -euo pipefail
+2026-11-21T05:31:16.0724976Z [36;1mset -euo pipefail[0m
+2026-11-21T05:31:16.0725343Z [36;1m. .deps/activate.sh[0m
+2026-11-21T05:31:16.0725681Z [36;1mbash scripts/check-format.sh[0m
+2026-11-21T05:31:16.0726159Z [36;1mecho 'R-FAST FORMAT PASS (not semantics)'[0m
+2026-11-21T05:31:16.0739761Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-21T05:31:16.0740214Z env:
+2026-11-21T05:31:16.0740661Z   FORMAT_SUGGESTIONS_PATCH: /home/runner/work/_temp/r-fast-format-suggestions.patch
+2026-11-21T05:31:16.0741190Z ##[endgroup]
+2026-11-21T05:31:20.0336170Z tests/r1589/probe.c:109:61: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0337738Z static bool walk_fragment(const NLCheckedFragment *fragment,
+2026-11-21T05:31:20.0338614Z                                                             ^
+2026-11-21T05:31:20.0340053Z tests/r1589/probe.c:110:41: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0340874Z                           size_t parent, NLCheckedNodeId owner,
+2026-11-21T05:31:20.0342368Z                                         ^
+2026-11-21T05:31:20.0343060Z tests/r1589/probe.c:110:64: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0343848Z                           size_t parent, NLCheckedNodeId owner,
+2026-11-21T05:31:20.0344429Z                                                                ^
+2026-11-21T05:31:20.0345136Z tests/r1589/probe.c:111:48: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0345912Z                           const char *relation, unsigned depth,
+2026-11-21T05:31:20.0346461Z                                                ^
+2026-11-21T05:31:20.0347367Z tests/r1589/probe.c:111:64: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0348099Z                           const char *relation, unsigned depth,
+2026-11-21T05:31:20.0348718Z                                                                ^
+2026-11-21T05:31:20.0349457Z tests/r1589/probe.c:148:23: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0350289Z         bool visible = scalar(context, node->results[i], &known,
+2026-11-21T05:31:20.0350822Z                       ^
+2026-11-21T05:31:20.0351427Z tests/r1589/probe.c:148:65: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0352299Z         bool visible = scalar(context, node->results[i], &known,
+2026-11-21T05:31:20.0352922Z                                                                 ^
+2026-11-21T05:31:20.0353670Z tests/r1589/probe.c:153:63: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0354477Z         printf("VALUE\t%zu\t%zu\t%zu\t%zu\t%d\t%d\t%d\t%zu\n",
+2026-11-21T05:31:20.0355167Z                                                               ^
+2026-11-21T05:31:20.0355920Z tests/r1589/probe.c:154:32: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0356704Z                walk->label, id, i, node->results[i].value, kind,
+2026-11-21T05:31:20.0357693Z                                ^
+2026-11-21T05:31:20.0358366Z tests/r1589/probe.c:154:65: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0358911Z                walk->label, id, i, node->results[i].value, kind,
+2026-11-21T05:31:20.0359334Z                                                                 ^
+2026-11-21T05:31:20.0359856Z tests/r1589/probe.c:155:41: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0360361Z                (int)visible, (int)known, number);
+2026-11-21T05:31:20.0360730Z                                         ^
+2026-11-21T05:31:20.0361351Z tests/r1589/probe.c:166:26: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0361936Z                 visible = scalar(context, init->results[0], &known,
+2026-11-21T05:31:20.0362605Z                          ^
+2026-11-21T05:31:20.0363067Z tests/r1589/probe.c:166:68: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0363614Z                 visible = scalar(context, init->results[0], &known,
+2026-11-21T05:31:20.0364093Z                                                                    ^
+2026-11-21T05:31:20.0364578Z tests/r1589/probe.c:176:64: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0365169Z         printf("\t%zu\t%d\t%d\t%zu\t%d\n", count, (int)visible,
+2026-11-21T05:31:20.0365630Z                                                                ^
+2026-11-21T05:31:20.0366252Z tests/r1589/probe.c:177:27: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0366810Z                (int)known, number, kind);
+2026-11-21T05:31:20.0367364Z                           ^
+2026-11-21T05:31:20.0367871Z tests/r1589/probe.c:181:69: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0368406Z         bool valid = nl_checked_usize_division_valid(walk->fragment,
+2026-11-21T05:31:20.0368819Z                                                                     ^
+2026-11-21T05:31:20.0369421Z tests/r1589/probe.c:183:23: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0369962Z         bool visible = nl_checked_usize_division_view(walk->fragment,
+2026-11-21T05:31:20.0370375Z                       ^
+2026-11-21T05:31:20.0370802Z tests/r1589/probe.c:183:70: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0371388Z         bool visible = nl_checked_usize_division_view(walk->fragment,
+2026-11-21T05:31:20.0371832Z                                                                      ^
+2026-11-21T05:31:20.0372321Z tests/r1589/probe.c:185:66: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0372908Z         printf("DIV_STATUS\t%zu\t%zu\t%d\t%d\n", walk->label, id,
+2026-11-21T05:31:20.0373332Z                                                                  ^
+2026-11-21T05:31:20.0373844Z tests/r1589/probe.c:186:27: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0374335Z                (int)valid, (int)visible);
+2026-11-21T05:31:20.0374695Z                           ^
+2026-11-21T05:31:20.0375168Z tests/r1589/probe.c:190:62: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0375741Z         printf("DIV\t%zu\t%zu\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n",
+2026-11-21T05:31:20.0376179Z                                                              ^
+2026-11-21T05:31:20.0376716Z tests/r1589/probe.c:191:32: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0377358Z                walk->label, id, (int)view.numerator_known,
+2026-11-21T05:31:20.0377910Z                                ^
+2026-11-21T05:31:20.0378512Z tests/r1589/probe.c:191:59: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0379044Z                walk->label, id, (int)view.numerator_known,
+2026-11-21T05:31:20.0379431Z                                                           ^
+2026-11-21T05:31:20.0379901Z tests/r1589/probe.c:192:41: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0380480Z                (int)view.quotient_known, view.numbers[0],
+2026-11-21T05:31:20.0380881Z                                         ^
+2026-11-21T05:31:20.0381360Z tests/r1589/probe.c:192:58: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0381858Z                (int)view.quotient_known, view.numbers[0],
+2026-11-21T05:31:20.0382277Z                                                          ^
+2026-11-21T05:31:20.0382765Z tests/r1589/probe.c:193:47: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0383314Z                view.numbers[1], view.quotient, view.target_max);
+2026-11-21T05:31:20.0383883Z                                               ^
+2026-11-21T05:31:20.0384355Z tests/r1589/probe.c:207:70: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0384912Z         bool valid = nl_checked_usize_remainder_valid(walk->fragment,
+2026-11-21T05:31:20.0385373Z                                                                      ^
+2026-11-21T05:31:20.0385894Z tests/r1589/probe.c:209:23: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0386478Z         bool visible = nl_checked_usize_remainder_view(walk->fragment,
+2026-11-21T05:31:20.0386879Z                       ^
+2026-11-21T05:31:20.0387620Z tests/r1589/probe.c:209:71: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0388233Z         bool visible = nl_checked_usize_remainder_view(walk->fragment,
+2026-11-21T05:31:20.0388656Z                                                                       ^
+2026-11-21T05:31:20.0389188Z tests/r1589/probe.c:211:66: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0389760Z         printf("REM_STATUS\t%zu\t%zu\t%d\t%d\n", walk->label, id,
+2026-11-21T05:31:20.0390218Z                                                                  ^
+2026-11-21T05:31:20.0390707Z tests/r1589/probe.c:212:27: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0391173Z                (int)valid, (int)visible);
+2026-11-21T05:31:20.0391588Z                           ^
+2026-11-21T05:31:20.0392030Z tests/r1589/probe.c:216:62: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0392594Z         printf("REM\t%zu\t%zu\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n",
+2026-11-21T05:31:20.0392995Z                                                              ^
+2026-11-21T05:31:20.0393527Z tests/r1589/probe.c:217:32: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0394082Z                walk->label, id, (int)view.numerator_known,
+2026-11-21T05:31:20.0394476Z                                ^
+2026-11-21T05:31:20.0395092Z tests/r1589/probe.c:217:59: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0395608Z                walk->label, id, (int)view.numerator_known,
+2026-11-21T05:31:20.0395997Z                                                           ^
+2026-11-21T05:31:20.0396526Z tests/r1589/probe.c:218:42: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0397010Z                (int)view.remainder_known, view.numbers[0],
+2026-11-21T05:31:20.0397743Z                                          ^
+2026-11-21T05:31:20.0398222Z tests/r1589/probe.c:218:59: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0398774Z                (int)view.remainder_known, view.numbers[0],
+2026-11-21T05:31:20.0399155Z                                                           ^
+2026-11-21T05:31:20.0399643Z tests/r1589/probe.c:219:48: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0400239Z                view.numbers[1], view.remainder, view.target_max);
+2026-11-21T05:31:20.0400646Z                                                ^
+2026-11-21T05:31:20.0401132Z tests/r1589/probe.c:258:66: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0401729Z             printf("LIMIT\tCALL_BODY_NOT_OBSERVABLE\t%zu\t%zu\n",
+2026-11-21T05:31:20.0402171Z                                                                  ^
+2026-11-21T05:31:20.0402664Z tests/r1589/probe.c:259:32: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0403143Z                    walk->label, id);
+2026-11-21T05:31:20.0403537Z                                ^
+2026-11-21T05:31:20.0403978Z tests/r1589/probe.c:264:62: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0404520Z             if (!walk_fragment(body, walk->label, id, "call",
+2026-11-21T05:31:20.0405063Z                                                              ^
+2026-11-21T05:31:20.0405532Z tests/r1589/probe.c:265:48: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0406061Z                                walk->depth + 1, false,
+2026-11-21T05:31:20.0406456Z                                                ^
+2026-11-21T05:31:20.0406980Z tests/r1589/probe.c:265:55: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0407564Z                                walk->depth + 1, false,
+2026-11-21T05:31:20.0407930Z                                                       ^
+2026-11-21T05:31:20.0408520Z tests/r1589/probe.c:272:55: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0409085Z         printf("IF\t%zu\t%zu\t%zu\n", walk->label, id,
+2026-11-21T05:31:20.0409487Z                                                       ^
+2026-11-21T05:31:20.0409966Z tests/r1589/probe.c:281:64: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0410507Z                                       i == 0 ? "then" : "else",
+2026-11-21T05:31:20.0410928Z                                                                ^
+2026-11-21T05:31:20.0411416Z tests/r1589/probe.c:282:55: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0411949Z                                       walk->depth + 1, false, true)) {
+2026-11-21T05:31:20.0412371Z                                                       ^
+2026-11-21T05:31:20.0412847Z tests/r1589/probe.c:290:61: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0413424Z static bool walk_fragment(const NLCheckedFragment *fragment,
+2026-11-21T05:31:20.0413852Z                                                             ^
+2026-11-21T05:31:20.0414389Z tests/r1589/probe.c:291:41: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0414897Z                           size_t parent, NLCheckedNodeId owner,
+2026-11-21T05:31:20.0415280Z                                         ^
+2026-11-21T05:31:20.0415821Z tests/r1589/probe.c:291:64: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0416314Z                           size_t parent, NLCheckedNodeId owner,
+2026-11-21T05:31:20.0416732Z                                                                ^
+2026-11-21T05:31:20.0417293Z tests/r1589/probe.c:292:48: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0417888Z                           const char *relation, unsigned depth,
+2026-11-21T05:31:20.0418268Z                                                ^
+2026-11-21T05:31:20.0418726Z tests/r1589/probe.c:292:64: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0419258Z                           const char *relation, unsigned depth,
+2026-11-21T05:31:20.0419679Z                                                                ^
+2026-11-21T05:31:20.0420210Z tests/r1589/probe.c:310:65: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0420743Z     printf("FRAGMENT\t%zu\t%zu\t%zu\t%s\t%d\t%zu\n", walk.label,
+2026-11-21T05:31:20.0421197Z                                                                 ^
+2026-11-21T05:31:20.0421692Z tests/r1589/probe.c:311:26: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0422214Z            parent, owner, relation, (int)hypothetical, count);
+2026-11-21T05:31:20.0422649Z                          ^
+2026-11-21T05:31:20.0423123Z tests/r1589/probe.c:345:19: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0423796Z     parse_status = nl_parser_parse_function_unit(parser, &tree,
+2026-11-21T05:31:20.0424198Z                   ^
+2026-11-21T05:31:20.0424620Z tests/r1589/probe.c:345:64: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0425318Z     parse_status = nl_parser_parse_function_unit(parser, &tree,
+2026-11-21T05:31:20.0425729Z                                                                ^
+2026-11-21T05:31:20.0426221Z tests/r1589/probe.c:360:74: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0426834Z     check_status = nl_semantic_register_function_unit(context, inputs, 1,
+2026-11-21T05:31:20.0427453Z                                                                          ^
+2026-11-21T05:31:20.0428128Z tests/r1589/probe.c:366:57: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0428648Z         (void)nl_check_diagnostic_render(stderr, source,
+2026-11-21T05:31:20.0429168Z                                                         ^
+2026-11-21T05:31:20.0429674Z tests/r1589/probe.c:377:20: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0430226Z     source_status = nl_source_create(adapter, sizeof(adapter) - 1,
+2026-11-21T05:31:20.0430701Z                    ^
+2026-11-21T05:31:20.0431129Z tests/r1589/probe.c:377:67: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0431690Z     source_status = nl_source_create(adapter, sizeof(adapter) - 1,
+2026-11-21T05:31:20.0432146Z                                                                   ^
+2026-11-21T05:31:20.0432878Z tests/r1589/probe.c:378:69: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0433392Z                                      "R1589_SYNTHETIC_MAIN_ADAPTER",
+2026-11-21T05:31:20.0433784Z                                                                     ^
+2026-11-21T05:31:20.0434281Z tests/r1589/probe.c:388:56: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0434897Z     parse_status = nl_parser_parse_expression_fragment(adapter_parser,
+2026-11-21T05:31:20.0435335Z                                                        ^
+2026-11-21T05:31:20.0435826Z tests/r1589/probe.c:388:71: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0436393Z     parse_status = nl_parser_parse_expression_fragment(adapter_parser,
+2026-11-21T05:31:20.0436882Z                                                                       ^
+2026-11-21T05:31:20.0437612Z tests/r1589/probe.c:389:70: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0438234Z                                                        &adapter_tree,
+2026-11-21T05:31:20.0438674Z                                                                      ^
+2026-11-21T05:31:20.0439141Z tests/r1589/probe.c:393:65: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0439723Z         (void)nl_parse_diagnostic_render(stderr, adapter_source,
+2026-11-21T05:31:20.0440136Z                                                                 ^
+2026-11-21T05:31:20.0440665Z tests/r1589/probe.c:398:71: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0441216Z     check_status = nl_semantic_check_expression(context, adapter_tree,
+2026-11-21T05:31:20.0441639Z                                                                       ^
+2026-11-21T05:31:20.0442210Z tests/r1589/probe.c:399:58: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0442718Z                                                 &checked, &check_diagnostic);
+2026-11-21T05:31:20.0443134Z                                                          ^
+2026-11-21T05:31:20.0443603Z tests/r1589/probe.c:403:65: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0444160Z         (void)nl_check_diagnostic_render(stderr, adapter_source,
+2026-11-21T05:31:20.0444603Z                                                                 ^
+2026-11-21T05:31:20.0445083Z tests/r1589/probe.c:428:64: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0445738Z     result = walk_fragment(body, 0, root, "registered_main", 0,
+2026-11-21T05:31:20.0446155Z                                                                ^
+2026-11-21T05:31:20.0446665Z tests/r1589/probe.c:429:40: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0447307Z                            true, false) ? 0 : 71;
+2026-11-21T05:31:20.0447843Z                                        ^
+2026-11-21T05:31:20.0448339Z tests/r1589/probe.c:429:44: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T05:31:20.0448827Z                            true, false) ? 0 : 71;
+2026-11-21T05:31:20.0449217Z                                            ^
+2026-11-21T05:31:20.5168429Z clang-format failed (exit 1); generating exact suggestions with /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-format-23
+2026-11-21T05:31:20.5184511Z Checked checkout: 5b826d158b6b88e88f2c08905ff0d71df4e2dd35
+2026-11-21T05:31:20.5203598Z clang-format version: clang-format version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)
+2026-11-21T05:31:27.8241065Z Suggested patch for 1 C/H file(s): /home/runner/work/_temp/r-fast-format-suggestions.patch
+2026-11-21T05:31:27.8242845Z Review the complete patch, then: git apply --check '/home/runner/work/_temp/r-fast-format-suggestions.patch' && git apply '/home/runner/work/_temp/r-fast-format-suggestions.patch'
+2026-11-21T05:31:27.8243659Z Alternative after review: bash scripts/format.sh
+2026-11-21T05:31:27.8244112Z ----- BEGIN EXACT clang-format SUGGESTIONS -----
+2026-11-21T05:31:27.8248611Z --- a/tests/r1589/probe.c
+2026-11-21T05:31:27.8249281Z +++ b/tests/r1589/probe.c
+2026-11-21T05:31:27.8249721Z @@ -106,10 +106,9 @@
+2026-11-21T05:31:27.8250156Z      return true;
+2026-11-21T05:31:27.8250652Z  }
+2026-11-21T05:31:27.8251047Z  
+2026-11-21T05:31:27.8251532Z -static bool walk_fragment(const NLCheckedFragment *fragment,
+2026-11-21T05:31:27.8252198Z -                          size_t parent, NLCheckedNodeId owner,
+2026-11-21T05:31:27.8252824Z -                          const char *relation, unsigned depth,
+2026-11-21T05:31:27.8253419Z -                          bool main_body, bool hypothetical);
+2026-11-21T05:31:27.8253948Z +static bool walk_fragment(const NLCheckedFragment *fragment, size_t parent,
+2026-11-21T05:31:27.8254459Z +                          NLCheckedNodeId owner, const char *relation,
+2026-11-21T05:31:27.8255022Z +                          unsigned depth, bool main_body, bool hypothetical);
+2026-11-21T05:31:27.8255419Z  
+2026-11-21T05:31:27.8255788Z  static bool walk_node(Walk *walk, NLCheckedNodeId id, unsigned depth)
+2026-11-21T05:31:27.8256256Z  {
+2026-11-21T05:31:27.8256551Z @@ -145,14 +144,14 @@
+2026-11-21T05:31:27.8256896Z          bool known;
+2026-11-21T05:31:27.8257440Z          size_t number;
+2026-11-21T05:31:27.8257793Z          int kind;
+2026-11-21T05:31:27.8258233Z -        bool visible = scalar(context, node->results[i], &known,
+2026-11-21T05:31:27.8258652Z -                              &number, &kind);
+2026-11-21T05:31:27.8259045Z +        bool visible =
+2026-11-21T05:31:27.8259420Z +            scalar(context, node->results[i], &known, &number, &kind);
+2026-11-21T05:31:27.8259908Z          if (scalar_conflict) {
+2026-11-21T05:31:27.8260287Z              return failure("RESULT_VALUE_TYPE_INCONSISTENCY");
+2026-11-21T05:31:27.8260656Z          }
+2026-11-21T05:31:27.8261040Z -        printf("VALUE\t%zu\t%zu\t%zu\t%zu\t%d\t%d\t%d\t%zu\n",
+2026-11-21T05:31:27.8261529Z -               walk->label, id, i, node->results[i].value, kind,
+2026-11-21T05:31:27.8262004Z -               (int)visible, (int)known, number);
+2026-11-21T05:31:27.8262478Z +        printf("VALUE\t%zu\t%zu\t%zu\t%zu\t%d\t%d\t%d\t%zu\n", walk->label, id,
+2026-11-21T05:31:27.8263027Z +               i, node->results[i].value, kind, (int)visible, (int)known,
+2026-11-21T05:31:27.8263456Z +               number);
+2026-11-21T05:31:27.8263802Z      }
+2026-11-21T05:31:27.8264606Z      if (node->kind == NL_CHECKED_BINDING) {
+2026-11-21T05:31:27.8265186Z          const NLCheckedNodeView *init;
+2026-11-21T05:31:27.8265665Z @@ -163,8 +162,8 @@
+2026-11-21T05:31:27.8266109Z          if (init != NULL) {
+2026-11-21T05:31:27.8266566Z              count = init->result_count;
+2026-11-21T05:31:27.8267084Z              if (count == 1) {
+2026-11-21T05:31:27.8267729Z -                visible = scalar(context, init->results[0], &known,
+2026-11-21T05:31:27.8268165Z -                                 &number, &kind);
+2026-11-21T05:31:27.8268551Z +                visible =
+2026-11-21T05:31:27.8269067Z +                    scalar(context, init->results[0], &known, &number, &kind);
+2026-11-21T05:31:27.8269819Z              }
+2026-11-21T05:31:27.8270231Z          }
+2026-11-21T05:31:27.8270647Z          if (scalar_conflict) {
+2026-11-21T05:31:27.8271199Z @@ -173,24 +172,23 @@
+2026-11-21T05:31:27.8271645Z          printf("BINDING\t%zu\t%zu\t%d\t%zu\t", walk->label, id,
+2026-11-21T05:31:27.8272102Z                 (int)walk->main_body, node->initializer);
+2026-11-21T05:31:27.8272577Z          print_name(nl_checked_source(walk->fragment), node->name);
+2026-11-21T05:31:27.8273120Z -        printf("\t%zu\t%d\t%d\t%zu\t%d\n", count, (int)visible,
+2026-11-21T05:31:27.8273534Z -               (int)known, number, kind);
+2026-11-21T05:31:27.8274051Z +        printf("\t%zu\t%d\t%d\t%zu\t%d\n", count, (int)visible, (int)known,
+2026-11-21T05:31:27.8274530Z +               number, kind);
+2026-11-21T05:31:27.8274881Z      }
+2026-11-21T05:31:27.8275216Z      if (node->kind == NL_CHECKED_USIZE_DIVISION) {
+2026-11-21T05:31:27.8275613Z          NLUsizeDivisionView view;
+2026-11-21T05:31:27.8276148Z -        bool valid = nl_checked_usize_division_valid(walk->fragment,
+2026-11-21T05:31:27.8276623Z -                                                    id, NULL);
+2026-11-21T05:31:27.8277103Z -        bool visible = nl_checked_usize_division_view(walk->fragment,
+2026-11-21T05:31:27.8277762Z -                                                     id, &view);
+2026-11-21T05:31:27.8278299Z -        printf("DIV_STATUS\t%zu\t%zu\t%d\t%d\n", walk->label, id,
+2026-11-21T05:31:27.8278746Z -               (int)valid, (int)visible);
+2026-11-21T05:31:27.8279221Z +        bool valid = nl_checked_usize_division_valid(walk->fragment, id, NULL);
+2026-11-21T05:31:27.8279697Z +        bool visible =
+2026-11-21T05:31:27.8280136Z +            nl_checked_usize_division_view(walk->fragment, id, &view);
+2026-11-21T05:31:27.8280683Z +        printf("DIV_STATUS\t%zu\t%zu\t%d\t%d\n", walk->label, id, (int)valid,
+2026-11-21T05:31:27.8281144Z +               (int)visible);
+2026-11-21T05:31:27.8281499Z          if (!valid || !visible) {
+2026-11-21T05:31:27.8281992Z              return failure("GENUINE_DIVISION_VALIDATION_OR_VIEW_FAILED");
+2026-11-21T05:31:27.8282429Z          }
+2026-11-21T05:31:27.8282816Z -        printf("DIV\t%zu\t%zu\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n",
+2026-11-21T05:31:27.8283286Z -               walk->label, id, (int)view.numerator_known,
+2026-11-21T05:31:27.8283769Z -               (int)view.quotient_known, view.numbers[0],
+2026-11-21T05:31:27.8284262Z -               view.numbers[1], view.quotient, view.target_max);
+2026-11-21T05:31:27.8284754Z +        printf("DIV\t%zu\t%zu\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n", walk->label, id,
+2026-11-21T05:31:27.8285337Z +               (int)view.numerator_known, (int)view.quotient_known,
+2026-11-21T05:31:27.8285802Z +               view.numbers[0], view.numbers[1], view.quotient,
+2026-11-21T05:31:27.8286201Z +               view.target_max);
+2026-11-21T05:31:27.8286641Z          if (view.origin != walk->fragment || view.node != id) {
+2026-11-21T05:31:27.8287299Z              return failure("DIVISION_ORIGIN_MISMATCH");
+2026-11-21T05:31:27.8287728Z          }
+2026-11-21T05:31:27.8288035Z @@ -204,19 +202,18 @@
+2026-11-21T05:31:27.8288327Z      }
+2026-11-21T05:31:27.8288738Z      if (node->kind == NL_CHECKED_USIZE_REMAINDER) {
+2026-11-21T05:31:27.8289177Z          NLUsizeRemainderView view;
+2026-11-21T05:31:27.8289749Z -        bool valid = nl_checked_usize_remainder_valid(walk->fragment,
+2026-11-21T05:31:27.8290199Z -                                                     id, NULL);
+2026-11-21T05:31:27.8291183Z -        bool visible = nl_checked_usize_remainder_view(walk->fragment,
+2026-11-21T05:31:27.8291717Z -                                                      id, &view);
+2026-11-21T05:31:27.8292172Z -        printf("REM_STATUS\t%zu\t%zu\t%d\t%d\n", walk->label, id,
+2026-11-21T05:31:27.8292624Z -               (int)valid, (int)visible);
+2026-11-21T05:31:27.8293133Z +        bool valid = nl_checked_usize_remainder_valid(walk->fragment, id, NULL);
+2026-11-21T05:31:27.8293601Z +        bool visible =
+2026-11-21T05:31:27.8294158Z +            nl_checked_usize_remainder_view(walk->fragment, id, &view);
+2026-11-21T05:31:27.8294680Z +        printf("REM_STATUS\t%zu\t%zu\t%d\t%d\n", walk->label, id, (int)valid,
+2026-11-21T05:31:27.8295191Z +               (int)visible);
+2026-11-21T05:31:27.8295607Z          if (!valid || !visible) {
+2026-11-21T05:31:27.8296178Z              return failure("GENUINE_REMAINDER_VALIDATION_OR_VIEW_FAILED");
+2026-11-21T05:31:27.8296695Z          }
+2026-11-21T05:31:27.8297036Z -        printf("REM\t%zu\t%zu\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n",
+2026-11-21T05:31:27.8297745Z -               walk->label, id, (int)view.numerator_known,
+2026-11-21T05:31:27.8298199Z -               (int)view.remainder_known, view.numbers[0],
+2026-11-21T05:31:27.8298753Z -               view.numbers[1], view.remainder, view.target_max);
+2026-11-21T05:31:27.8299236Z +        printf("REM\t%zu\t%zu\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n", walk->label, id,
+2026-11-21T05:31:27.8299712Z +               (int)view.numerator_known, (int)view.remainder_known,
+2026-11-21T05:31:27.8300214Z +               view.numbers[0], view.numbers[1], view.remainder,
+2026-11-21T05:31:27.8300660Z +               view.target_max);
+2026-11-21T05:31:27.8301100Z          if (view.origin != walk->fragment || view.node != id ||
+2026-11-21T05:31:27.8301548Z              view.source != nl_checked_source(walk->fragment)) {
+2026-11-21T05:31:27.8301969Z              return failure("REMAINDER_ORIGIN_MISMATCH");
+2026-11-21T05:31:27.8302423Z @@ -255,22 +252,20 @@
+2026-11-21T05:31:27.8302760Z          const NLCheckedFragment *body;
+2026-11-21T05:31:27.8303195Z          body = nl_checked_call_body(walk->fragment, id);
+2026-11-21T05:31:27.8303579Z          if (body == NULL) {
+2026-11-21T05:31:27.8304004Z -            printf("LIMIT\tCALL_BODY_NOT_OBSERVABLE\t%zu\t%zu\n",
+2026-11-21T05:31:27.8304427Z -                   walk->label, id);
+2026-11-21T05:31:27.8304950Z +            printf("LIMIT\tCALL_BODY_NOT_OBSERVABLE\t%zu\t%zu\n", walk->label,
+2026-11-21T05:31:27.8305454Z +                   id);
+2026-11-21T05:31:27.8305766Z          } else {
+2026-11-21T05:31:27.8306166Z              if (nl_checked_context(body) != context) {
+2026-11-21T05:31:27.8306604Z                  return failure("CALL_BODY_CONTEXT_CONTRACT_MISMATCH");
+2026-11-21T05:31:27.8307013Z              }
+2026-11-21T05:31:27.8307550Z -            if (!walk_fragment(body, walk->label, id, "call",
+2026-11-21T05:31:27.8308079Z -                               walk->depth + 1, false,
+2026-11-21T05:31:27.8308500Z -                               walk->hypothetical)) {
+2026-11-21T05:31:27.8308994Z +            if (!walk_fragment(body, walk->label, id, "call", walk->depth + 1,
+2026-11-21T05:31:27.8309492Z +                               false, walk->hypothetical)) {
+2026-11-21T05:31:27.8309896Z                  return false;
+2026-11-21T05:31:27.8310213Z              }
+2026-11-21T05:31:27.8310561Z          }
+2026-11-21T05:31:27.8310846Z      }
+2026-11-21T05:31:27.8311187Z      if (node->kind == NL_CHECKED_IF) {
+2026-11-21T05:31:27.8311592Z -        printf("IF\t%zu\t%zu\t%zu\n", walk->label, id,
+2026-11-21T05:31:27.8312005Z -               node->normal_arms);
+2026-11-21T05:31:27.8312469Z +        printf("IF\t%zu\t%zu\t%zu\n", walk->label, id, node->normal_arms);
+2026-11-21T05:31:27.8312932Z          for (size_t i = 0; i < 2; ++i) {
+2026-11-21T05:31:27.8313432Z              const NLCheckedFragment *arm;
+2026-11-21T05:31:27.8313894Z              arm = nl_checked_if_arm(walk->fragment, id, i);
+2026-11-21T05:31:27.8314268Z @@ -278,8 +273,8 @@
+2026-11-21T05:31:27.8314676Z                  printf("LIMIT\tIF_ARM_NOT_OBSERVABLE\t%zu\t%zu\t%zu\n",
+2026-11-21T05:31:27.8315132Z                         walk->label, id, i);
+2026-11-21T05:31:27.8315584Z              } else if (!walk_fragment(arm, walk->label, id,
+2026-11-21T05:31:27.8315997Z -                                      i == 0 ? "then" : "else",
+2026-11-21T05:31:27.8316407Z -                                      walk->depth + 1, false, true)) {
+2026-11-21T05:31:27.8316890Z +                                      i == 0 ? "then" : "else", walk->depth + 1,
+2026-11-21T05:31:27.8317779Z +                                      false, true)) {
+2026-11-21T05:31:27.8318178Z                  return false;
+2026-11-21T05:31:27.8318505Z              }
+2026-11-21T05:31:27.8318785Z          }
+2026-11-21T05:31:27.8319171Z @@ -287,10 +282,9 @@
+2026-11-21T05:31:27.8319492Z      return true;
+2026-11-21T05:31:27.8319806Z  }
+2026-11-21T05:31:27.8320073Z  
+2026-11-21T05:31:27.8320470Z -static bool walk_fragment(const NLCheckedFragment *fragment,
+2026-11-21T05:31:27.8320974Z -                          size_t parent, NLCheckedNodeId owner,
+2026-11-21T05:31:27.8321401Z -                          const char *relation, unsigned depth,
+2026-11-21T05:31:27.8321838Z -                          bool main_body, bool hypothetical)
+2026-11-21T05:31:27.8322373Z +static bool walk_fragment(const NLCheckedFragment *fragment, size_t parent,
+2026-11-21T05:31:27.8322896Z +                          NLCheckedNodeId owner, const char *relation,
+2026-11-21T05:31:27.8323406Z +                          unsigned depth, bool main_body, bool hypothetical)
+2026-11-21T05:31:27.8323827Z  {
+2026-11-21T05:31:27.8324182Z      size_t count = nl_checked_node_count(fragment);
+2026-11-21T05:31:27.8324598Z      if (depth > 64 || count > 16384 || count == 0) {
+2026-11-21T05:31:27.8324998Z @@ -307,8 +301,8 @@
+2026-11-21T05:31:27.8325389Z      if (walk.seen == NULL) {
+2026-11-21T05:31:27.8325756Z          return failure("R_APPARATUS_OUT_OF_MEMORY");
+2026-11-21T05:31:27.8326160Z      }
+2026-11-21T05:31:27.8326523Z -    printf("FRAGMENT\t%zu\t%zu\t%zu\t%s\t%d\t%zu\n", walk.label,
+2026-11-21T05:31:27.8327073Z -           parent, owner, relation, (int)hypothetical, count);
+2026-11-21T05:31:27.8327909Z +    printf("FRAGMENT\t%zu\t%zu\t%zu\t%s\t%d\t%zu\n", walk.label, parent, owner,
+2026-11-21T05:31:27.8328374Z +           relation, (int)hypothetical, count);
+2026-11-21T05:31:27.8328836Z      bool ok = walk_node(&walk, nl_checked_root(fragment), 0);
+2026-11-21T05:31:27.8329281Z      free(walk.seen);
+2026-11-21T05:31:27.8329642Z      return ok;
+2026-11-21T05:31:27.8329937Z @@ -342,8 +336,8 @@
+2026-11-21T05:31:27.8330241Z      if (parse_status != NL_PARSE_OK) {
+2026-11-21T05:31:27.8330658Z          goto done;
+2026-11-21T05:31:27.8330947Z      }
+2026-11-21T05:31:27.8331361Z -    parse_status = nl_parser_parse_function_unit(parser, &tree,
+2026-11-21T05:31:27.8331804Z -                                                &parse_diagnostic);
+2026-11-21T05:31:27.8332223Z +    parse_status =
+2026-11-21T05:31:27.8332615Z +        nl_parser_parse_function_unit(parser, &tree, &parse_diagnostic);
+2026-11-21T05:31:27.8333123Z      printf("STAGE\tparse_unit\t%s\n", parse_name(parse_status));
+2026-11-21T05:31:27.8333538Z      fflush(stdout);
+2026-11-21T05:31:27.8333884Z      if (parse_status != NL_PARSE_OK) {
+2026-11-21T05:31:27.8334213Z @@ -358,13 +352,13 @@
+2026-11-21T05:31:27.8334512Z      }
+2026-11-21T05:31:27.8334843Z      const NLSyntaxTree *inputs[] = {tree};
+2026-11-21T05:31:27.8335332Z      check_status = nl_semantic_register_function_unit(context, inputs, 1,
+2026-11-21T05:31:27.8335793Z -                                                     &unit_diagnostic);
+2026-11-21T05:31:27.8336210Z +                                                      &unit_diagnostic);
+2026-11-21T05:31:27.8336775Z      printf("STAGE\tregister_unit\t%s\n", check_name(check_status));
+2026-11-21T05:31:27.8337414Z      fflush(stdout);
+2026-11-21T05:31:27.8337773Z      if (check_status != NL_CHECK_OK) {
+2026-11-21T05:31:27.8338199Z          printf("DIAGNOSTIC_INPUT\t%zu\n", unit_diagnostic.input_index);
+2026-11-21T05:31:27.8338666Z          (void)nl_check_diagnostic_render(stderr, source,
+2026-11-21T05:31:27.8339163Z -                                       &unit_diagnostic.diagnostic);
+2026-11-21T05:31:27.8339568Z +                                         &unit_diagnostic.diagnostic);
+2026-11-21T05:31:27.8340067Z          result = check_status <= NL_CHECK_ANALYSIS_PRECISION_LIMIT ? 10 : 70;
+2026-11-21T05:31:27.8340485Z          goto done;
+2026-11-21T05:31:27.8340910Z      }
+2026-11-21T05:31:27.8341207Z @@ -374,9 +368,9 @@
+2026-11-21T05:31:27.8341486Z          goto done;
+2026-11-21T05:31:27.8341804Z      }
+2026-11-21T05:31:27.8342424Z      const char adapter[] = "main()\n";
+2026-11-21T05:31:27.8342866Z -    source_status = nl_source_create(adapter, sizeof(adapter) - 1,
+2026-11-21T05:31:27.8343344Z -                                     "R1589_SYNTHETIC_MAIN_ADAPTER",
+2026-11-21T05:31:27.8343728Z -                                     &adapter_source);
+2026-11-21T05:31:27.8344160Z +    source_status =
+2026-11-21T05:31:27.8344502Z +        nl_source_create(adapter, sizeof(adapter) - 1,
+2026-11-21T05:31:27.8344965Z +                         "R1589_SYNTHETIC_MAIN_ADAPTER", &adapter_source);
+2026-11-21T05:31:27.8345426Z      printf("STAGE\tadapter_source\t%d\n", (int)source_status);
+2026-11-21T05:31:27.8345873Z      if (source_status != NL_SOURCE_OK) {
+2026-11-21T05:31:27.8346234Z          goto done;
+2026-11-21T05:31:27.8346525Z @@ -385,23 +379,22 @@
+2026-11-21T05:31:27.8346883Z      if (parse_status != NL_PARSE_OK) {
+2026-11-21T05:31:27.8347474Z          goto done;
+2026-11-21T05:31:27.8347768Z      }
+2026-11-21T05:31:27.8348135Z -    parse_status = nl_parser_parse_expression_fragment(adapter_parser,
+2026-11-21T05:31:27.8348592Z -                                                       &adapter_tree,
+2026-11-21T05:31:27.8349073Z -                                                       &parse_diagnostic);
+2026-11-21T05:31:27.8349503Z +    parse_status = nl_parser_parse_expression_fragment(
+2026-11-21T05:31:27.8349935Z +        adapter_parser, &adapter_tree, &parse_diagnostic);
+2026-11-21T05:31:27.8350437Z      printf("STAGE\tadapter_parse\t%s\n", parse_name(parse_status));
+2026-11-21T05:31:27.8350838Z      if (parse_status != NL_PARSE_OK) {
+2026-11-21T05:31:27.8351295Z          (void)nl_parse_diagnostic_render(stderr, adapter_source,
+2026-11-21T05:31:27.8351719Z -                                       &parse_diagnostic);
+2026-11-21T05:31:27.8352170Z +                                         &parse_diagnostic);
+2026-11-21T05:31:27.8352528Z          result = 30;
+2026-11-21T05:31:27.8352810Z          goto done;
+2026-11-21T05:31:27.8353149Z      }
+2026-11-21T05:31:27.8353538Z -    check_status = nl_semantic_check_expression(context, adapter_tree,
+2026-11-21T05:31:27.8354011Z -                                                &checked, &check_diagnostic);
+2026-11-21T05:31:27.8354502Z +    check_status = nl_semantic_check_expression(context, adapter_tree, &checked,
+2026-11-21T05:31:27.8354989Z +                                                &check_diagnostic);
+2026-11-21T05:31:27.8355498Z      printf("STAGE\tadapter_check\t%s\n", check_name(check_status));
+2026-11-21T05:31:27.8355896Z      fflush(stdout);
+2026-11-21T05:31:27.8356224Z      if (check_status != NL_CHECK_OK) {
+2026-11-21T05:31:27.8356621Z          (void)nl_check_diagnostic_render(stderr, adapter_source,
+2026-11-21T05:31:27.8357101Z -                                       &check_diagnostic);
+2026-11-21T05:31:27.8357689Z +                                         &check_diagnostic);
+2026-11-21T05:31:27.8358091Z          result = 30;
+2026-11-21T05:31:27.8358407Z          goto done;
+2026-11-21T05:31:27.8358726Z      }
+2026-11-21T05:31:27.8359150Z @@ -425,8 +418,9 @@
+2026-11-21T05:31:27.8359456Z          result = 71;
+2026-11-21T05:31:27.8359864Z          goto done;
+2026-11-21T05:31:27.8360209Z      }
+2026-11-21T05:31:27.8360582Z -    result = walk_fragment(body, 0, root, "registered_main", 0,
+2026-11-21T05:31:27.8361004Z -                           true, false) ? 0 : 71;
+2026-11-21T05:31:27.8361473Z +    result = walk_fragment(body, 0, root, "registered_main", 0, true, false)
+2026-11-21T05:31:27.8361925Z +                 ? 0
+2026-11-21T05:31:27.8362251Z +                 : 71;
+2026-11-21T05:31:27.8362661Z      printf("LIMIT\tWHOLE_CALL_RESULT_WORLD_CUSTODY\tNOT_OBSERVABLE\n");
+2026-11-21T05:31:27.8363169Z      printf("LIMIT\tSELECTED_RUNTIME_ARM_AND_QUANTITY\tNOT_OBSERVABLE\n");
+2026-11-21T05:31:27.8363710Z  done:
+2026-11-21T05:31:27.8364009Z ----- END EXACT clang-format SUGGESTIONS -----
+2026-11-21T05:31:27.8375954Z ##[error]Process completed with exit code 1.
+2026-11-21T05:31:27.8468647Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-11-21T05:31:27.8469138Z with:
+2026-11-21T05:31:27.8469708Z   name: r-fast-format-suggestions-5b826d158b6b88e88f2c08905ff0d71df4e2dd35-attempt1
+2026-11-21T05:31:27.8470345Z   path: /home/runner/work/_temp/r-fast-format-suggestions.patch
+2026-11-21T05:31:27.8470858Z   if-no-files-found: ignore
+2026-11-21T05:31:27.8471213Z   retention-days: 7
+2026-11-21T05:31:27.8471590Z   compression-level: 6
+2026-11-21T05:31:27.8471933Z   overwrite: false
+2026-11-21T05:31:27.8472266Z   include-hidden-files: false
+2026-11-21T05:31:27.8472664Z ##[endgroup]
+2026-11-21T05:31:28.0129238Z (node:3951) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-21T05:31:28.0130067Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-21T05:31:28.0179994Z With the provided path, there will be 1 file uploaded
+2026-11-21T05:31:28.0184869Z Artifact name is valid!
+2026-11-21T05:31:28.0185770Z Root directory input is valid!
+2026-11-21T05:31:28.3898899Z Beginning upload of artifact content to blob storage
+2026-11-21T05:31:28.4066929Z (node:3951) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-21T05:31:28.6951500Z Uploaded bytes 2647
+2026-11-21T05:31:28.7684181Z Finished uploading artifact content to blob storage!
+2026-11-21T05:31:28.7685141Z SHA256 digest of uploaded artifact zip is 17c4f1c0af49f907a3b2b39c6172042d8d5e796cbf88d0e82c6475651eb0ca32
+2026-11-21T05:31:28.7686097Z Finalizing artifact upload
+2026-11-21T05:31:29.1217685Z Artifact r-fast-format-suggestions-5b826d158b6b88e88f2c08905ff0d71df4e2dd35-attempt1.zip successfully finalized. Artifact ID 14694051884
+2026-11-21T05:31:29.1219501Z Artifact r-fast-format-suggestions-5b826d158b6b88e88f2c08905ff0d71df4e2dd35-attempt1 has been successfully uploaded! Final size is 2647 bytes. Artifact ID is 14694051884
+2026-11-21T05:31:29.1225107Z Artifact download URL: https://github.com/wakairo/NewLang_Compiler/actions/runs/44871224370/artifacts/14694051884
+2026-11-21T05:31:29.1429074Z Post job cleanup.
+2026-11-21T05:31:29.2273920Z [command]/usr/bin/git version
+2026-11-21T05:31:29.2315216Z git version 2.56.1
+2026-11-21T05:31:29.2359626Z Temporarily overriding HOME='/home/runner/work/_temp/471cba4a-0589-403f-a9b5-9c380767b4f3' before making global git config changes
+2026-11-21T05:31:29.2360725Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-21T05:31:29.2369053Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-21T05:31:29.2413128Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-21T05:31:29.2446919Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-21T05:31:29.2682358Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-21T05:31:29.2718725Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-21T05:31:29.3102858Z Cleaning up orphan processes
+2026-11-21T05:31:29.3442308Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

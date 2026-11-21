@@ -1,0 +1,269 @@
+{
+  "classification": "Historical original natural set; failed observation evidence preserved before admitted repair",
+  "head": "3665d616239a610648d1773bc1bd0b012a34c759",
+  "tree": "4191111a0b0f808a8282c712dd31401bc22be29e",
+  "actual_checkout": "533433df74182e2d66d80571609207e36208d6bc",
+  "original_full_run": 44872178507,
+  "original_partial_run": 44872178565,
+  "attempt": 1,
+  "first_observation_comment": 7058236491,
+  "repair_release_comment": 7058271047,
+  "pre_execution_expectations_comment": 7058324589,
+  "completed": [
+    {
+      "job_id": 136748927412,
+      "name": "Clang",
+      "conclusion": "failure",
+      "log_file": "original-set-136748927412.log",
+      "log_sha256": "388bf504160b1dac440cc62d3a9ac465c478567dfd161d324eb734c72ec15744",
+      "log_utf8_bytes": 501677,
+      "checkout": [
+        {
+          "attempt": "1",
+          "github_sha": "533433df74182e2d66d80571609207e36208d6bc",
+          "head": "533433df74182e2d66d80571609207e36208d6bc",
+          "head_ref": "r-fast/r1589-if-quantity",
+          "ordered_commit_and_parents": [
+            "533433df74182e2d66d80571609207e36208d6bc"
+          ],
+          "run_id": "44872178507",
+          "tree": "4191111a0b0f808a8282c712dd31401bc22be29e"
+        }
+      ],
+      "inventory": [
+        {
+          "original_bytes": 25104,
+          "own": [
+            "r1589.original_invalid_arm_type",
+            "r1589.original_invalid_condition",
+            "r1589.original_invalid_zero_divisor",
+            "r1589.original_lawful_no_if_control",
+            "r1589.original_positive_parcel",
+            "r1589.original_positive_receipt"
+          ],
+          "semantic_native_verdict": "NOT_TESTED",
+          "tests_executed": 0,
+          "total": 1266,
+          "unique": 1266
+        }
+      ],
+      "own_verdicts": [
+        "   3/1266 Test    #1: r1589.original_positive_parcel .........................***Failed    0.06 sec",
+        "   4/1266 Test    #2: r1589.original_positive_receipt ........................***Failed    0.05 sec",
+        "   5/1266 Test    #3: r1589.original_invalid_condition .......................   Passed    0.06 sec",
+        "   8/1266 Test    #6: r1589.original_lawful_no_if_control ....................***Failed    0.05 sec",
+        "   9/1266 Test    #5: r1589.original_invalid_zero_divisor ....................   Passed    0.05 sec",
+        "  12/1266 Test    #4: r1589.original_invalid_arm_type ........................   Passed    0.06 sec"
+      ],
+      "positive_stop": "CHECK0 then public71 PUBLIC_ITEM_RELATION_UNAVAILABLE; C17/native not run",
+      "control": "CLI3/public20 syntax unsupported; lawful coverage not reached",
+      "invalids": "three Passed CTest verdicts; successful child raw suppressed"
+    },
+    {
+      "job_id": 136748927447,
+      "name": "GCC",
+      "conclusion": "failure",
+      "log_file": "original-set-136748927447.log",
+      "log_sha256": "0114b0a564a96239b8921dbc48492171710bcb8ef06666d79e1bc9c7e6201079",
+      "log_utf8_bytes": 496279,
+      "checkout": [
+        {
+          "attempt": "1",
+          "github_sha": "533433df74182e2d66d80571609207e36208d6bc",
+          "head": "533433df74182e2d66d80571609207e36208d6bc",
+          "head_ref": "r-fast/r1589-if-quantity",
+          "ordered_commit_and_parents": [
+            "533433df74182e2d66d80571609207e36208d6bc"
+          ],
+          "run_id": "44872178507",
+          "tree": "4191111a0b0f808a8282c712dd31401bc22be29e"
+        }
+      ],
+      "inventory": [
+        {
+          "original_bytes": 25104,
+          "own": [
+            "r1589.original_invalid_arm_type",
+            "r1589.original_invalid_condition",
+            "r1589.original_invalid_zero_divisor",
+            "r1589.original_lawful_no_if_control",
+            "r1589.original_positive_parcel",
+            "r1589.original_positive_receipt"
+          ],
+          "semantic_native_verdict": "NOT_TESTED",
+          "tests_executed": 0,
+          "total": 1266,
+          "unique": 1266
+        }
+      ],
+      "own_verdicts": [
+        "   3/1266 Test    #1: r1589.original_positive_parcel .........................***Failed    0.06 sec",
+        "   4/1266 Test    #2: r1589.original_positive_receipt ........................***Failed    0.06 sec",
+        "   5/1266 Test    #3: r1589.original_invalid_condition .......................   Passed    0.06 sec",
+        "   8/1266 Test    #4: r1589.original_invalid_arm_type ........................   Passed    0.05 sec",
+        "   9/1266 Test    #5: r1589.original_invalid_zero_divisor ....................   Passed    0.06 sec",
+        "  12/1266 Test    #6: r1589.original_lawful_no_if_control ....................***Failed    0.06 sec"
+      ],
+      "positive_stop": "CHECK0 then public71 PUBLIC_ITEM_RELATION_UNAVAILABLE; C17/native not run",
+      "control": "CLI3/public20 syntax unsupported; lawful coverage not reached",
+      "invalids": "three Passed CTest verdicts; successful child raw suppressed"
+    },
+    {
+      "job_id": 136748927464,
+      "name": "GCC Release",
+      "conclusion": "failure",
+      "log_file": "original-set-136748927464.log",
+      "log_sha256": "053006ccf6ec89c360580244168db7da0375dc79397b3b98f02277ea8949dcde",
+      "log_utf8_bytes": 538951,
+      "checkout": [
+        {
+          "attempt": "1",
+          "github_sha": "533433df74182e2d66d80571609207e36208d6bc",
+          "head": "533433df74182e2d66d80571609207e36208d6bc",
+          "head_ref": "r-fast/r1589-if-quantity",
+          "ordered_commit_and_parents": [
+            "533433df74182e2d66d80571609207e36208d6bc"
+          ],
+          "run_id": "44872178507",
+          "tree": "4191111a0b0f808a8282c712dd31401bc22be29e"
+        }
+      ],
+      "inventory": [
+        {
+          "original_bytes": 25104,
+          "own": [
+            "r1589.original_invalid_arm_type",
+            "r1589.original_invalid_condition",
+            "r1589.original_invalid_zero_divisor",
+            "r1589.original_lawful_no_if_control",
+            "r1589.original_positive_parcel",
+            "r1589.original_positive_receipt"
+          ],
+          "semantic_native_verdict": "NOT_TESTED",
+          "tests_executed": 0,
+          "total": 1266,
+          "unique": 1266
+        }
+      ],
+      "own_verdicts": [
+        "   3/1266 Test    #1: r1589.original_positive_parcel .........................***Failed    0.07 sec",
+        "   4/1266 Test    #2: r1589.original_positive_receipt ........................***Failed    0.07 sec",
+        "   5/1266 Test    #3: r1589.original_invalid_condition .......................   Passed    0.07 sec",
+        "   8/1266 Test    #4: r1589.original_invalid_arm_type ........................   Passed    0.07 sec",
+        "   9/1266 Test    #6: r1589.original_lawful_no_if_control ....................***Failed    0.07 sec",
+        "  12/1266 Test    #5: r1589.original_invalid_zero_divisor ....................   Passed    0.08 sec"
+      ],
+      "positive_stop": "CHECK0 then public71 PUBLIC_ITEM_RELATION_UNAVAILABLE; C17/native not run",
+      "control": "CLI3/public20 syntax unsupported; lawful coverage not reached",
+      "invalids": "three Passed CTest verdicts; successful child raw suppressed"
+    },
+    {
+      "job_id": 136748927220,
+      "name": "UBSan",
+      "conclusion": "failure",
+      "log_file": "original-set-136748927220.log",
+      "log_sha256": "2c9eee40f60ba6e2f705db7d9b388080391fe913d90a58a7a83756de21ab7989",
+      "log_utf8_bytes": 499790,
+      "checkout": [
+        {
+          "attempt": "1",
+          "github_sha": "533433df74182e2d66d80571609207e36208d6bc",
+          "head": "533433df74182e2d66d80571609207e36208d6bc",
+          "head_ref": "r-fast/r1589-if-quantity",
+          "ordered_commit_and_parents": [
+            "533433df74182e2d66d80571609207e36208d6bc"
+          ],
+          "run_id": "44872178507",
+          "tree": "4191111a0b0f808a8282c712dd31401bc22be29e"
+        }
+      ],
+      "inventory": [
+        {
+          "original_bytes": 25104,
+          "own": [
+            "r1589.original_invalid_arm_type",
+            "r1589.original_invalid_condition",
+            "r1589.original_invalid_zero_divisor",
+            "r1589.original_lawful_no_if_control",
+            "r1589.original_positive_parcel",
+            "r1589.original_positive_receipt"
+          ],
+          "semantic_native_verdict": "NOT_TESTED",
+          "tests_executed": 0,
+          "total": 1266,
+          "unique": 1266
+        }
+      ],
+      "own_verdicts": [
+        "   2/1266 Test    #1: r1589.original_positive_parcel .........................***Failed    0.04 sec",
+        "   3/1266 Test    #2: r1589.original_positive_receipt ........................***Failed    0.05 sec",
+        "   4/1266 Test    #3: r1589.original_invalid_condition .......................   Passed    0.06 sec",
+        "   5/1266 Test    #4: r1589.original_invalid_arm_type ........................   Passed    0.04 sec",
+        "   8/1266 Test    #5: r1589.original_invalid_zero_divisor ....................   Passed    0.04 sec",
+        "  10/1266 Test    #6: r1589.original_lawful_no_if_control ....................***Failed    0.05 sec"
+      ],
+      "positive_stop": "CHECK0 then public71 PUBLIC_ITEM_RELATION_UNAVAILABLE; C17/native not run",
+      "control": "CLI3/public20 syntax unsupported; lawful coverage not reached",
+      "invalids": "three Passed CTest verdicts; successful child raw suppressed"
+    },
+    {
+      "job_id": 136748927232,
+      "name": "NO-LLVM PARTIAL",
+      "conclusion": "failure",
+      "log_file": "original-set-136748927232.log",
+      "log_sha256": "0820399fe5fd913280a7756ef222210071ca0129ccc0d5f8e4a3b3f70474ff39",
+      "log_utf8_bytes": 579435,
+      "checkout": [
+        {
+          "attempt": "1",
+          "github_sha": "533433df74182e2d66d80571609207e36208d6bc",
+          "head": "533433df74182e2d66d80571609207e36208d6bc",
+          "head_ref": "r-fast/r1589-if-quantity",
+          "ordered_commit_and_parents": [
+            "533433df74182e2d66d80571609207e36208d6bc"
+          ],
+          "run_id": "44872178565",
+          "tree": "4191111a0b0f808a8282c712dd31401bc22be29e"
+        }
+      ],
+      "inventory": [
+        {
+          "original_bytes": 25104,
+          "own": [
+            "r1589.original_invalid_arm_type",
+            "r1589.original_invalid_condition",
+            "r1589.original_invalid_zero_divisor",
+            "r1589.original_lawful_no_if_control",
+            "r1589.original_positive_parcel",
+            "r1589.original_positive_receipt"
+          ],
+          "semantic_native_verdict": "NOT_TESTED",
+          "tests_executed": 0,
+          "total": 1265,
+          "unique": 1265
+        }
+      ],
+      "own_verdicts": [
+        "   3/1265 Test    #1: r1589.original_positive_parcel .........................***Failed    0.08 sec",
+        "   4/1265 Test    #3: r1589.original_invalid_condition .......................   Passed    0.08 sec",
+        "   5/1265 Test    #2: r1589.original_positive_receipt ........................***Failed    0.08 sec",
+        "   8/1265 Test    #5: r1589.original_invalid_zero_divisor ....................   Passed    0.08 sec",
+        "   9/1265 Test    #4: r1589.original_invalid_arm_type ........................   Passed    0.08 sec",
+        "  10/1265 Test    #6: r1589.original_lawful_no_if_control ....................***Failed    0.08 sec"
+      ],
+      "positive_stop": "CHECK0 then public71 PUBLIC_ITEM_RELATION_UNAVAILABLE; C17/native not run",
+      "control": "CLI3/public20 syntax unsupported; lawful coverage not reached",
+      "invalids": "three Passed CTest verdicts; successful child raw suppressed"
+    }
+  ],
+  "pending_at_freeze": [
+    {
+      "job_id": 136748927454,
+      "name": "ASan",
+      "state": "in_progress",
+      "run": 44872178507,
+      "collection": "Collect later without cancel/omission; release permits overlap with exactly one repaired natural set."
+    }
+  ],
+  "observation_limits": "Historical failed probe did not complete public quantity comparison, IF-arm traversal or C17/native; no compiler unsoundness or deeper correctness is certified."
+}

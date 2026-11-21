@@ -1,0 +1,563 @@
+{
+  "record": "R1589 independent source-FIRST PREP ONLY",
+  "canonical": {
+    "repository": "wakairo/NewLang_Compiler",
+    "commit": "7326dc2e83bcc6246b2ab57a135aed6eb108c9c5",
+    "tree": "8b90a4d31cd4cda30ab8f6022354388308b9e41f",
+    "selector": "docs/reference/CURRENT_SPEC.md",
+    "selected_draft": "docs/reference/NewLang_v0_spec_Draft17_38.md",
+    "status": "Canonical text is authority; producer expectations and implementation coverage are not oracle inputs."
+  },
+  "status": {
+    "source_selection": "FROZEN BEFORE IMPLEMENTATION EXPOSURE",
+    "source_execution": "NOT_RUN",
+    "check": "NOT_RUN",
+    "public": "NOT_RUN; API AND OBSERVABILITY UNRELEASED",
+    "c17": "NOT_RUN",
+    "native": "NOT_RUN",
+    "lean": "NOT_RUN",
+    "build_sdk_actions_ci": "NOT_RUN",
+    "git_object_ref_branch_pr_changes": 0,
+    "production_test_spec_changes": 0,
+    "new_workers": 0,
+    "future_environment": "GitHub dedicated branch + Actions ONLY; P-equivalent local execution environment prohibited.",
+    "stop": "Verified PREP FINAL, then STOP C. No current P/F/R/D additional gate.",
+    "next_release_needed": "Exact target and branch, R-owned apparatus, finite FAST/FULL budgets and allowed public-interface read."
+  },
+  "source_laws": [
+    {
+      "id": "L1",
+      "sections": "Draft 18.1, 28.1-28.2",
+      "rule": "Each source is a complete single unit of ordinary nongeneric functions with explicit signatures. Same-unit function visibility is independent of textual order. No overload, multiple formal, recursion or new source mechanism is selected."
+    },
+    {
+      "id": "L2",
+      "sections": "Draft 19.1, 27.1",
+      "rule": "Let bindings have initializers and semicolons; a normal block's semicolon-free final expression is its result. Non-tail binding or expression items use semicolons. Main has explicit unit result."
+    },
+    {
+      "id": "L3",
+      "sections": "Draft 4.2-4.4, 4.7, 18.2, 18.5",
+      "rule": "Ordinary usize/bool/unit values are Copy and Discardable. A value-use of a binding copies the actual value; a function argument/result and let/tail flow do not replace it with a different value. Main may leave these Copy/Discardable locals available at normal exit."
+    },
+    {
+      "id": "L4",
+      "sections": "Draft 5.1-5.2, 6, 8.1",
+      "rule": "U denotes the selected target's USIZE_MAX. Literals and ordinary plus/minus mathematical results must be representable. No wrapping, saturation, host-width assumption or new range proof is used. All plus/minus operands in these sources are literal-known."
+    },
+    {
+      "id": "L5",
+      "sections": "Draft 5.2, 5.4",
+      "rule": "Usize comparisons yield bool. With b > 0, q=floor(a/b), a=q*b+r and 0<=r<b. Every positive/control division or remainder uses a nonzero typed literal divisor. The zero-divisor negative has no mathematical result."
+    },
+    {
+      "id": "L6",
+      "sections": "Draft 7.1, 7.4, 27.4",
+      "rule": "An if condition is evaluated exactly once and has static bool type. Exactly the selected lexical arm is evaluated. Explicit parenthesized condition and else lexical block are required. Both selected arms are normal and have exactly usize type; no implicit numeric conversion is permitted at the join."
+    },
+    {
+      "id": "L7",
+      "sections": "Draft 13.5a, 13.5c, 27.3-27.4",
+      "rule": "Result and any semantic dependencies follow the same normal incoming-edge relation. Known ordinary calls substitute actual arguments through body semantics; summaries, inlining or other sound implementations are allowed. Unknown is an honest precision state, not a numeric zero or evidence of identity."
+    },
+    {
+      "id": "L8",
+      "sections": "Draft 21.8; Value 1.1, 1.3; Process 4.3.1, 7",
+      "rule": "Chosen names avoid structural/distinguished reserved spellings. Canonical source eligibility, current implementation coverage, finite capability evidence, general soundness and product value remain separate."
+    }
+  ],
+  "target_policy": {
+    "selected_target": "UNRELEASED",
+    "representability": "Verify U against the per-case minimum before later interpretation. All listed literals and nonnegative intermediate results are within the stated bound. If a target fails the bound, report TARGET_INELIGIBLE; do not silently change source or classify literal rejection as the intended negative.",
+    "no_abi_assumption": "No usize bit width, size_t equivalence, physical ID, C symbol, code string, public schema or diagnostic code/location is frozen.",
+    "total_helpers": "Every unary helper used in positives is safe for all representable formal values under its stated target bound: copying, comparison, or division/remainder by a nonzero typed literal. No caller-dependent unknown plus/minus precondition is hidden in a definition.",
+    "per_source_minimum_U": {
+      "positive_parcel.nl": 101,
+      "positive_receipt.nl": 108,
+      "invalid_condition.nl": 13,
+      "invalid_arm_type.nl": 5,
+      "invalid_zero_divisor.nl": 35,
+      "lawful_no_if_control.nl": 29
+    }
+  },
+  "positives": [
+    {
+      "source": "positive_parcel.nl",
+      "role": "Forward-declared calls, bool local condition, two normal usize arms, let/Copy join, remainder, known call, helper tail result and unit main.",
+      "source_law_prediction": "CANONICAL_ELIGIBLE under U>=101; current compiler acceptance is not assumed.",
+      "shared_math": [
+        "37+6=43",
+        "101-8=93",
+        "All divisors 17,19,3 are positive."
+      ],
+      "invocations": [
+        {
+          "occurrence": "main.small <- parcel(41)",
+          "condition": {
+            "expression": "amount < cutoff",
+            "operands": [
+              41,
+              43
+            ],
+            "value": true,
+            "selected_arm": "then"
+          },
+          "executed_flow": [
+            [
+              "parcel.amount",
+              41
+            ],
+            [
+              "parcel.cutoff",
+              43
+            ],
+            [
+              "then.relay.actual",
+              41
+            ],
+            [
+              "relay.duplicate",
+              41
+            ],
+            [
+              "relay.tail",
+              41
+            ],
+            [
+              "then.copied",
+              41
+            ],
+            [
+              "then.tail:41%17",
+              7
+            ],
+            [
+              "parcel.joined",
+              7
+            ],
+            [
+              "parcel.retained",
+              7
+            ],
+            [
+              "parcel.reduced:7%19",
+              7
+            ],
+            [
+              "seal.actual",
+              7
+            ],
+            [
+              "seal.duplicate",
+              7
+            ],
+            [
+              "seal.tail:floor(7/3)",
+              2
+            ],
+            [
+              "parcel.tail",
+              2
+            ],
+            [
+              "main.small",
+              2
+            ]
+          ],
+          "unselected_arm": "else is not evaluated for this occurrence; its 93 is a separately derived counterfactual value, not an observed event."
+        },
+        {
+          "occurrence": "main.large <- parcel(57)",
+          "condition": {
+            "expression": "amount < cutoff",
+            "operands": [
+              57,
+              43
+            ],
+            "value": false,
+            "selected_arm": "else"
+          },
+          "executed_flow": [
+            [
+              "parcel.amount",
+              57
+            ],
+            [
+              "parcel.cutoff",
+              43
+            ],
+            [
+              "else.prepared:101-8",
+              93
+            ],
+            [
+              "else.relay.actual",
+              93
+            ],
+            [
+              "relay.duplicate",
+              93
+            ],
+            [
+              "relay.tail",
+              93
+            ],
+            [
+              "else.tail",
+              93
+            ],
+            [
+              "parcel.joined",
+              93
+            ],
+            [
+              "parcel.retained",
+              93
+            ],
+            [
+              "parcel.reduced:93%19",
+              17
+            ],
+            [
+              "seal.actual",
+              17
+            ],
+            [
+              "seal.duplicate",
+              17
+            ],
+            [
+              "seal.tail:floor(17/3)",
+              5
+            ],
+            [
+              "parcel.tail",
+              5
+            ],
+            [
+              "main.large",
+              5
+            ]
+          ],
+          "unselected_arm": "then is not evaluated for this occurrence."
+        }
+      ],
+      "main_result": "unit",
+      "discrimination": "The expected scalar results 2 and 5 differ, but their equality to an oracle alone does not certify source/call/arm provenance."
+    },
+    {
+      "source": "positive_receipt.nl",
+      "role": "If is a helper's tail; joined function result crosses caller let/Copy, literal division and remainder, a further known call, tail/final result and unit main.",
+      "source_law_prediction": "CANONICAL_ELIGIBLE under U>=108; current compiler acceptance is not assumed.",
+      "shared_math": [
+        "6-6=0",
+        "All divisors 3,4,9 are positive."
+      ],
+      "invocations": [
+        {
+          "occurrence": "main.zero <- receipt(0) <- bucket(0)",
+          "condition": {
+            "expression": "amount == usize(0)",
+            "operands": [
+              0,
+              0
+            ],
+            "value": true,
+            "selected_arm": "then"
+          },
+          "executed_flow": [
+            [
+              "bucket.amount",
+              0
+            ],
+            [
+              "then.exactzero:6-6",
+              0
+            ],
+            [
+              "bucket.if_join_and_tail",
+              0
+            ],
+            [
+              "receipt.joined",
+              0
+            ],
+            [
+              "receipt.copied",
+              0
+            ],
+            [
+              "receipt.quotient:floor(0/4)",
+              0
+            ],
+            [
+              "echo.actual:0%9",
+              0
+            ],
+            [
+              "echo.kept",
+              0
+            ],
+            [
+              "echo.tail",
+              0
+            ],
+            [
+              "receipt.tail",
+              0
+            ],
+            [
+              "main.zero",
+              0
+            ]
+          ],
+          "unselected_arm": "else/third is not evaluated for this occurrence."
+        },
+        {
+          "occurrence": "main.ordinary <- receipt(84) <- bucket(84)",
+          "condition": {
+            "expression": "amount == usize(0)",
+            "operands": [
+              84,
+              0
+            ],
+            "value": false,
+            "selected_arm": "else"
+          },
+          "executed_flow": [
+            [
+              "bucket.amount",
+              84
+            ],
+            [
+              "third.actual",
+              84
+            ],
+            [
+              "third.tail:floor(84/3)",
+              28
+            ],
+            [
+              "bucket.if_join_and_tail",
+              28
+            ],
+            [
+              "receipt.joined",
+              28
+            ],
+            [
+              "receipt.copied",
+              28
+            ],
+            [
+              "receipt.quotient:floor(28/4)",
+              7
+            ],
+            [
+              "echo.actual:7%9",
+              7
+            ],
+            [
+              "echo.kept",
+              7
+            ],
+            [
+              "echo.tail",
+              7
+            ],
+            [
+              "receipt.tail",
+              7
+            ],
+            [
+              "main.ordinary",
+              7
+            ]
+          ],
+          "unselected_arm": "then/exactzero is not evaluated for this occurrence."
+        },
+        {
+          "occurrence": "main.collision <- receipt(108) <- bucket(108)",
+          "condition": {
+            "expression": "amount == usize(0)",
+            "operands": [
+              108,
+              0
+            ],
+            "value": false,
+            "selected_arm": "else"
+          },
+          "executed_flow": [
+            [
+              "bucket.amount",
+              108
+            ],
+            [
+              "third.actual",
+              108
+            ],
+            [
+              "third.tail:floor(108/3)",
+              36
+            ],
+            [
+              "bucket.if_join_and_tail",
+              36
+            ],
+            [
+              "receipt.joined",
+              36
+            ],
+            [
+              "receipt.copied",
+              36
+            ],
+            [
+              "receipt.quotient:floor(36/4)",
+              9
+            ],
+            [
+              "echo.actual:9%9",
+              0
+            ],
+            [
+              "echo.kept",
+              0
+            ],
+            [
+              "echo.tail",
+              0
+            ],
+            [
+              "receipt.tail",
+              0
+            ],
+            [
+              "main.collision",
+              0
+            ]
+          ],
+          "unselected_arm": "then/exactzero is not evaluated for this occurrence."
+        }
+      ],
+      "main_result": "unit",
+      "discrimination": "zero and collision both finish at numeric 0 but have different call inputs, conditions, arms, join values and quotient values. They are not the same world/result occurrence. ordinary must be 7, never a fabricated zero for Unknown."
+    }
+  ],
+  "controls": [
+    {
+      "source": "invalid_condition.nl",
+      "classification": "TRUE_INVALID",
+      "laws": [
+        "L6"
+      ],
+      "target": "U>=13",
+      "intended_defect": "The if condition is a usize formal, not bool. The actual value 1 does not authorize truthiness conversion.",
+      "expected": "Reject no later than successful typed semantic acceptance. Do not certify a checked ordinary-safe program.",
+      "numeric_result": null,
+      "limit": "A syntax/profile rejection before the condition is typed is only earlier implementation-boundary evidence, not observation of the intended bool check."
+    },
+    {
+      "source": "invalid_arm_type.nl",
+      "classification": "TRUE_INVALID",
+      "laws": [
+        "L6"
+      ],
+      "target": "U>=5; u8(5) is representable",
+      "intended_defect": "Both arms normally complete, but their result types are usize and u8. Equal numeric 5 does not make the types equal or permit implicit join conversion.",
+      "expected": "Reject no later than successful typed semantic acceptance. No valid usize if-join result is available.",
+      "numeric_result": null,
+      "limit": "Do not accept because main supplies 1 or because either numeric arm value equals 5. Earlier unrelated rejection does not exercise the intended join-type check."
+    },
+    {
+      "source": "invalid_zero_divisor.nl",
+      "classification": "TRUE_INVALID",
+      "laws": [
+        "L4",
+        "L5",
+        "L6"
+      ],
+      "target": "U>=35",
+      "intended_defect": "The post-join ordinary division has the literal divisor usize(0), so its required nonzero precondition is false.",
+      "mathematical_prefix_only": {
+        "actual": 7,
+        "condition": "7<11 is true",
+        "selected_arm": "then",
+        "arm_value": 22,
+        "joined": 22,
+        "copied": 22,
+        "attempted": "22/0"
+      },
+      "expected": "Reject the checked operation; division by zero has no result. Do not substitute 0, wrap, treat Unknown as 0, or replace semantic rejection with a purported successful ordinary-safe native run.",
+      "numeric_result": null,
+      "limit": "The prefix is a paper prediction, not an executed prefix. The defect also remains for the else value 35. No remainder-by-zero source is included, so no such coverage is claimed."
+    },
+    {
+      "source": "lawful_no_if_control.nl",
+      "classification": "LAWFUL_COVERAGE_CONTROL",
+      "laws": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5"
+      ],
+      "target": "U>=29",
+      "source_law_prediction": "CANONICAL_ELIGIBLE; no mandatory-reject expectation and no promise of current compiler support.",
+      "expected_values": {
+        "realzero": 0,
+        "relay(realzero)": 0,
+        "quotient=floor(0/7)": 0,
+        "relay(29)": 29,
+        "remainder=29%6": 5
+      },
+      "main_result": "unit",
+      "coverage_boundary": "This is an ordinary quantity/copy/call baseline with no if. It is excluded from normal-if coverage and cannot replace either positive or establish branch/join provenance. If a later implementation excludes it, record lawful coverage exclusion rather than inventing a source-law rejection."
+    }
+  ],
+  "planned_layer_questions": {
+    "SOURCE": {
+      "question": "Do these exact full bytes parse, resolve the exact declarations and type as the selected canonical forms? Are any rejections grammar/type errors or a narrower implementation profile?",
+      "evidence_required": "Identify actual input bytes/hash, target and first reached/rejected layer. Preserve original bytes and original rejection.",
+      "limit": "No parsing or compiler run has occurred. Canonical eligibility is a source-law conclusion, not observed compiler support."
+    },
+    "CHECK": {
+      "question": "Are normal-join types, Copy/call/tail value flow and true arithmetic preconditions handled soundly, with no Unknown-to-zero collapse?",
+      "evidence_required": "Later genuine checks on the frozen exact source and immutable target. If abstract state is Unknown, record it as Unknown.",
+      "limit": "Successful CHECK may not expose numeric results or branch histories. It does not imply public authenticity, lowering or native values. No diagnostic codes or coordinates are prescribed."
+    },
+    "public": {
+      "question": "Can source-issued checked evidence authenticate the actual input/unit, resolved declaration, argument occurrence, condition and appropriate normal arm/result relationship through each call and join?",
+      "evidence_required": "Use only the later released public interface and genuine issuer output. Independently relate observations to the frozen source without fabricating guest facts or repackaging R arithmetic as issued proof.",
+      "limit": "API/schema/observability are unreleased. No physical ID, serialized shape, per-if world count or demand for a constant-valued public summary is imposed. Numeric equality, equal IDs or checker success alone do not establish authentic lineage. Missing visibility stays UNOBSERVABLE/UNMEASURED."
+    },
+    "C17": {
+      "question": "Does actual lowering preserve canonical conditional evaluation and the joined quantity/copy/call/tail semantics for the same checked source?",
+      "evidence_required": "Actual authorized emission and strict compilation under the future release, tied to the exact input and target.",
+      "limit": "No fixed C names, strings, instruction order, literal branch count or runtime phi/tag is required. Correct folding/inlining/optimization is allowed. Pure numerical agreement alone does not establish that an unselected arm was never evaluated."
+    },
+    "native": {
+      "question": "Can independently authorized read-only observation compare actual guest-derived quantity results at the listed occurrences with this mathematical oracle?",
+      "evidence_required": "Actual values returned/computed by the guest on an authenticated run, separately from source/call/arm provenance. Observer must not inject/overwrite values or substitute an R-computed answer. A fresh helper call is a new occurrence, not evidence about an earlier main call.",
+      "limit": "The sources expose only main()->unit and no I/O/contract assertion. Exit 0 proves neither any listed scalar value nor chosen arm/world/result identity. Usable observation is not yet established. If values or lineage cannot be observed, leave the relevant claim UNOBSERVABLE/NOT_VERIFIED; no end-to-end numeric PASS."
+    }
+  },
+  "independence_and_stop": {
+    "pre_first_inputs": "Own Issue plus pinned canonical navigation/authority text only. No producer or other-R original Issues/PRs/reports/fixtures/oracles/results, no implementation headers/code, no aggregate C, shared scratch/worktree or actor inventory/list_agents.",
+    "incidental_exposure": [
+      "Root/docs navigation returned filename metadata, including report filenames; no report file body was fetched.",
+      "Compass, Value and Process contain historical track/issue/PR references, operational examples and status descriptions.",
+      "Required CURRENT_SPEC contains historical producer/review descriptions, selected-source snippets and implementation-status metadata; Draft heading navigation and relevant canonical sections contain historical names and canonical illustrative snippets.",
+      "Those original historical links were not followed. Independence does not mean zero canonical-history exposure; it means this source/oracle was independently chosen before producer/candidate artifact exposure."
+    ],
+    "corrections": "FIRST is immutable. Any future correction needs a new identified source/hash and pre-execution prediction, with the original preserved; no adapting FIRST to implementation output.",
+    "immediate_stop_later": "Unexpected semantic/issued-proof/lowering/native behavior, authenticity inconsistency, independence breach, required oracle/scope/target change, or exhausted release budget must return to C without grading toward PASS."
+  },
+  "goal_alignment_separate_from_technical": {
+    "goal": "Reusable ordinary conditional quantity computation and reuse through normal functions and values.",
+    "concern": "Per-if fixture profiles, specialized public validators or world duplication can increase maintenance/human audit closure while producing finite green results. This is a design-cost concern to assess separately; no implementation inspection or cost measurement has occurred.",
+    "alternatives": "These sources use existing ordinary functions, copies, typed literals and nonzero literal division/remainder. The no-if control isolates the baseline but is not a substitute for conditional computation. No new range/source/API/authority mechanism or broad CFG is requested.",
+    "no_claims": "ProductGO PAUSED; H1 HOLD; author plus ordinary-safe-caller audit-locality versus well-factored C UNMEASURED. No general soundness, product suitability, C advantage, comparative effort or current P/F/R/D extra gate is asserted."
+  },
+  "encoding": "Every artifact is exact UTF-8 without BOM, LF-only, with one final LF. The .nl files and this JSON use ASCII characters, a subset of UTF-8. Code fences and headings are not artifact bytes."
+}

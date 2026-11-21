@@ -1,0 +1,54 @@
+{
+  "kind": "R-only static stop-classification repair before PR",
+  "original_failure_preserved": "initial FAST1 remains failed in 5b826d158b6b88e88f2c08905ff0d71df4e2dd35; raw log/patch retained in predecessor f1ab58",
+  "prior_head": "f1ab58b5d2c037448b39d800fc29bc1bfda9020e",
+  "prior_tree": "f7c07c4c51a654d554b7234d4899ba4fdcf7c53a",
+  "fast2": {
+    "names_count": 1263,
+    "unique_count": 1263,
+    "totals": [
+      1263
+    ],
+    "own": [
+      "r1589.original_positive_parcel",
+      "r1589.original_positive_receipt",
+      "r1589.original_invalid_condition",
+      "r1589.original_invalid_arm_type",
+      "r1589.original_invalid_zero_divisor",
+      "r1589.original_lawful_no_if_control"
+    ],
+    "hasPinnedFormat": true,
+    "ctest_executed": 0,
+    "head": "f1ab58b5d2c037448b39d800fc29bc1bfda9020e",
+    "run_id": 44871402444,
+    "job_id": 136746520197
+  },
+  "fast2_log": {
+    "bytes_utf8": 205246,
+    "sha256": "7b93117946117c4c3e33ec491c617d92b0908771d7c13ed6f77f1db7b7dd3c88"
+  },
+  "hazards": [
+    "driver successful result could survive final MeasurementStop; all stop handlers now explicitly nonzero",
+    "adapter all-non-OK result 30 masked OOM/resource/internal/semantic errors; exact public enum maps now separate unsupported gaps from stops"
+  ],
+  "scope": "R apparatus only; original seven artifacts and oracle unchanged; no guest execution or PR before repair",
+  "repair": {
+    "driver_sha256": "4d0b850948eddbe65d9312b777876a54bf57edd708e412085b1fa8fe47612f47",
+    "probe_sha256": "0b4fd8bbf85dcd33a619e1ddaf78effb4a6fec88ee8b0de91c5ec56e7cec46d6"
+  },
+  "observed_proof_limit": "FAST2 format/build/registration only; not semantic/native validation",
+  "budget": {
+    "consumed_fast_before_repair": 2,
+    "max_fast": 6,
+    "remaining_fast_after_next_push": 3,
+    "PR": 0,
+    "FULL": 0,
+    "PARTIAL": 0
+  },
+  "validation": "Text inspection against exact released parser.h/semantic.h enums; next natural FAST verifies pinned format and compilation. No local compiler/test execution.",
+  "late_apparatus_exposure": {
+    "comment_id": 7058032402,
+    "url": "https://github.com/wakairo/NewLang_Compiler/issues/1589#issuecomment-7058032402",
+    "scope": "R-only static failure paths; no producer findings or original oracle selection supplied"
+  }
+}
