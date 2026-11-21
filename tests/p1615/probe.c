@@ -68,18 +68,22 @@ static NLCheckStatus check(Program *p)
 typedef enum {
     NO_FAULT,
     SECOND_FORMAL,
-    RESULT_SEAL
+    RESULT_SEAL,
+    LATER_SIBLING_SEAL,
+    NESTED_ENTRY_WORLD
 } Fault;
 static Fault fault;
-static bool fail_next, reached;
-static size_t hits, bytes;
+static bool reached;
+static size_t fail_after, visits, hits, bytes;
 
 void *__real_malloc(size_t);
 void *__wrap_malloc(size_t size)
 {
-    if (!fail_next)
+    if (!fail_after)
         return __real_malloc(size);
-    fail_next = false;
+    ++visits;
+    if (--fail_after)
+        return __real_malloc(size);
     ++hits;
     bytes = size;
     return NULL;
@@ -99,12 +103,12 @@ NLCheckStatus __wrap_nl_sem_bind_in_scope(NLSemanticContext *c,
                   c->bindings[floor].view.value != value &&
                   c->bindings[floor].view.availability == NL_AVAILABLE &&
                   c->values[value - 1].carrier == NL_CARRIER_LOOSE;
-        fail_next = true;
+        fail_after = 1;
     }
     const NLCheckStatus status =
         __real_nl_sem_bind_in_scope(c, name, value, floor, symbol);
     if (target)
-        fail_next = false;
+        fail_after = 0;
     return status;
 }
 
@@ -118,17 +122,39 @@ NLCheckStatus __wrap_nl_h_custody_seal_result(NLCheckedFragment *parent,
                                               const NLSemanticContext *world)
 {
     const NLCheckedNodeView *call = nl_checked_node_view(parent, id);
-    const bool target = fault == RESULT_SEAL && !hits && !world && call &&
-                        call->argument_count == 2;
-    if (target) {
+    const bool result =
+        fault == RESULT_SEAL && !world && call && call->argument_count == 2;
+    const bool sibling = fault == LATER_SIBLING_SEAL && !world && call &&
+                         call->argument_count == 1 && parent->body_count == 1;
+    const bool entry = fault == NESTED_ENTRY_WORLD && world && call &&
+                       !call->argument_count && child->body_count >= 3;
+    if (!hits && result) {
         reached = call->result_count == 1 && call->results[0].value &&
                   !nl_h_custody_result_valid(parent, id);
-        fail_next = true;
+        fail_after = 1;
+    } else if (!hits && sibling) {
+        const NLCheckedNodeId first = parent->body_calls[0];
+        const NLCheckedNodeView *a = nl_checked_node_view(parent, first);
+        reached = a && !a->next_argument &&
+                  nl_h_custody_result_valid(parent, first) &&
+                  !nl_h_custody_result_valid(parent, id);
+        fail_after = 1;
+    } else if (!hits && entry) {
+        const NLCheckedNodeView *outer =
+            nl_checked_node_view(child, child->body_calls[2]);
+        const NLCheckedNodeView *a =
+            outer ? nl_checked_node_view(child, outer->first_argument) : NULL;
+        reached = outer && outer->argument_count == 2 && a &&
+                  a->next_argument == child->body_calls[1] &&
+                  nl_h_custody_result_valid(child, outer->first_argument) &&
+                  nl_h_custody_result_valid(child, a->next_argument) &&
+                  !nl_h_custody_result_valid(parent, id);
+        /* The entry body's nodes are followed by its semantic world bytes. */
+        fail_after = 2;
     }
     const NLCheckStatus status =
         __real_nl_h_custody_seal_result(parent, child, id, world);
-    if (target)
-        fail_next = false;
+    fail_after = 0;
     return status;
 }
 
@@ -175,11 +201,43 @@ static bool trace_positions(const NLCheckedFragment *caller, NLCheckedNodeId id,
                name, i, actual, formal->view.value, symbols[i], formal->name,
                formal->view.place, place.incarnation, value.scalar_known,
                value.scalar_value);
+        if (i == 0 && arg->kind == NL_CHECKED_REGISTERED_CALL) {
+            REQUIRE(arg->next_argument > actual &&
+                    nl_h_custody_result_valid(caller, actual));
+            printf("NESTED %s first=%zu sibling=%zu\n", name, actual,
+                   arg->next_argument);
+        }
         earlier = formal->view.value;
         previous = actual;
         actual = arg->next_argument;
     }
     return !actual;
+}
+
+static bool trace_discard(const NLDivisionUsizePlan *plan,
+                          const NLCheckedNodeView *statement)
+{
+    const NLCheckedFragment *f = plan->body;
+    const NLSemanticContext *c = f->context;
+    const NLCheckedNodeView *copy =
+        nl_checked_node_view(f, statement->initializer);
+    REQUIRE(!statement->result_count && !statement->results[0].value &&
+            statement->type == nl_semantic_unit_type(c) && copy &&
+            copy->kind == NL_CHECKED_IDENTIFIER &&
+            copy->value_use == NL_VALUE_COPIED && copy->result_count == 1 &&
+            copy->symbol && copy->symbol <= c->binding_count);
+    const NLBindingEntry *binding = &c->bindings[copy->symbol - 1];
+    NLSemanticValueView original, discarded;
+    REQUIRE(binding->view.value < copy->results[0].value &&
+            nl_semantic_value_view(c, binding->view.value, &original) &&
+            nl_semantic_value_view(c, copy->results[0].value, &discarded) &&
+            discarded.carrier == NL_CARRIER_ENDED && !discarded.owner_place &&
+            original.scalar_known == discarded.scalar_known &&
+            original.scalar_value == discarded.scalar_value);
+    printf("DISCARD %zu %zu %s known=%d number=%zu\n", plan->function,
+           copy->symbol, binding->name, discarded.scalar_known,
+           discarded.scalar_value);
+    return true;
 }
 
 static bool trace(const NLCheckedFragment *caller, bool entry)
@@ -211,6 +269,8 @@ static bool trace(const NLCheckedFragment *caller, bool entry)
                     !value.scalar_known && !value.scalar_value);
                 printf("JOIN %s %zu Unknown\n", name, j);
             }
+            if (n->kind == NL_CHECKED_STATEMENT)
+                REQUIRE(trace_discard(&plan, n));
         }
         REQUIRE(trace(plan.body, false));
     }
@@ -351,6 +411,57 @@ static bool identity(Program *p)
            result && restored;
 }
 
+static bool nested_identity(const NLCheckedFragment *root)
+{
+    REQUIRE(root->body_count == 1 && root->bodies[0]->body_count == 9);
+    NLCheckedFragment *body = root->bodies[0];
+    const NLCheckedNodeId id = body->body_calls[8];
+    NLCheckedNodeView *call = &body->nodes[id - 1];
+    const NLCheckedNodeId first = call->first_argument;
+    REQUIRE(first == body->body_calls[6]);
+    NLCheckedNodeView *a = &body->nodes[first - 1];
+    const NLCheckedNodeId second = a->next_argument;
+    REQUIRE(second == body->body_calls[7]);
+    NLCheckedNodeView *b = &body->nodes[second - 1];
+    const NLCheckedNodeView *foreign =
+        nl_checked_node_view(body, body->body_calls[0]);
+    const NLValueId original = a->results[0].value;
+    REQUIRE(!b->next_argument && foreign &&
+            equal_number(body->context, original, b->results[0].value) &&
+            equal_number(body->context, original, foreign->results[0].value) &&
+            nl_h_custody_result_valid(body, first) &&
+            nl_h_custody_result_valid(body, second));
+    char *pristine = NULL;
+    size_t size = 0;
+    REQUIRE(nl_quantity_usize_c17(root, &pristine, &size) == NL_CHECK_OK);
+
+    a->next_argument = 0;
+    const bool removed = rejected(root, body, first);
+    a->next_argument = second;
+    a->results[0].value = foreign->results[0].value;
+    const bool substituted = rejected(root, body, first);
+    a->results[0].value = original;
+
+    call->first_argument = second;
+    a->next_argument = 0;
+    b->next_argument = first;
+    const bool swapped = rejected(root, body, id);
+    b->next_argument = 0;
+    a->next_argument = second;
+    call->first_argument = first;
+
+    const bool closed =
+        nl_h_custody_link_usize_actual(body, id, first, second) ==
+            NL_CHECK_INTERNAL_ERROR &&
+        a->next_argument == second && nl_h_custody_result_valid(body, first);
+    const bool restored = retry(root, pristine, size);
+    free(pristine);
+    printf("NESTED IDENTITY remove_sibling=%d equal_foreign_result=%d "
+           "equal_swap=%d publication_closed=%d byte_retry=%d\n",
+           removed, substituted, swapped, closed, restored);
+    return removed && substituted && swapped && closed && restored;
+}
+
 static bool check_fault(Program *p, Fault at)
 {
     NLSemanticContext *c = p->context;
@@ -372,9 +483,10 @@ static bool check_fault(Program *p, Fault at)
     fault = at;
     const NLCheckStatus status = check(p);
     fault = NO_FAULT;
-    printf("OOM reached=%d hits=%zu bytes=%zu status=%d\n", reached, hits,
-           bytes, status);
-    REQUIRE(reached && hits == 1 && bytes && status == NL_CHECK_OUT_OF_MEMORY &&
+    printf("OOM reached=%d allocations=%zu hits=%zu bytes=%zu status=%d\n",
+           reached, visits, hits, bytes, status);
+    REQUIRE(reached && visits == (at == NESTED_ENTRY_WORLD ? 2 : 1) &&
+            hits == 1 && bytes && status == NL_CHECK_OUT_OF_MEMORY &&
             !p->root && !memcmp(context, c, sizeof(context)) &&
             !memcmp(binding, c->bindings + symbol - 1, sizeof(binding)) &&
             !memcmp(place, c->places + anchor.place - 1, sizeof(place)) &&
@@ -391,14 +503,14 @@ static bool stage_fault(const NLCheckedFragment *root)
     char *pristine = NULL;
     size_t size = 0;
     REQUIRE(nl_quantity_usize_c17(root, &pristine, &size) == NL_CHECK_OK);
-    fail_next = true;
+    fail_after = 1;
     const bool preserved = withheld(root, NL_CHECK_OUT_OF_MEMORY);
-    fail_next = false;
+    fail_after = 0;
     const bool restored = retry(root, pristine, size);
     free(pristine);
     printf("OOM staging hits=%zu bytes=%zu no_clobber=%d byte_retry=%d\n", hits,
            bytes, preserved, restored);
-    return hits == 1 && bytes > size && preserved && restored;
+    return visits == 1 && hits == 1 && bytes > size && preserved && restored;
 }
 
 int main(int argc, char **argv)
@@ -412,12 +524,18 @@ int main(int argc, char **argv)
         ok = check_fault(&p, SECOND_FORMAL);
     else if (ok && !strcmp(mode, "result-seal-oom"))
         ok = check_fault(&p, RESULT_SEAL);
+    else if (ok && !strcmp(mode, "later-sibling-seal-oom"))
+        ok = check_fault(&p, LATER_SIBLING_SEAL);
+    else if (ok && !strcmp(mode, "nested-entry-world-oom"))
+        ok = check_fault(&p, NESTED_ENTRY_WORLD);
     else if (ok) {
         ok = check(&p) == NL_CHECK_OK && nl_h_custody_validate(p.root);
         if (ok && !strcmp(mode, "trace"))
             ok = trace(p.root, true);
         else if (ok && !strcmp(mode, "identity"))
             ok = identity(&p);
+        else if (ok && !strcmp(mode, "nested-identity"))
+            ok = nested_identity(p.root);
         else if (ok && !strcmp(mode, "c17-staging-oom"))
             ok = stage_fault(p.root);
         else

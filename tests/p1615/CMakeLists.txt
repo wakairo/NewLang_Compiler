@@ -13,3 +13,10 @@ foreach(mode identity second-formal-oom result-seal-oom c17-staging-oom)
     add_test(NAME p1615_${mode}.unit COMMAND p1615_probe "${mode}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1615/source/evaluated-unused.nl")
 endforeach()
+
+foreach(mode nested-identity later-sibling-seal-oom nested-entry-world-oom)
+    add_test(NAME p1615_${mode}.unit COMMAND p1615_probe "${mode}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1615/source/ordered-unused.nl")
+endforeach()
+add_test(NAME p1615_nested-c17-staging-oom.unit COMMAND p1615_probe c17-staging-oom
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1615/source/ordered-unused.nl")

@@ -28,6 +28,9 @@ bool nl_division_usize_call_valid(const NLCheckedFragment *, NLCheckedNodeId,
                                   NLDivisionUsizePlan *);
 bool nl_remainder_usize_call_valid(const NLCheckedFragment *, NLCheckedNodeId,
                                    NLDivisionUsizePlan *);
+const NLFunctionEntry *nl_quantity_usize_function(const NLSemanticContext *,
+                                                  size_t function,
+                                                  size_t parameters);
 bool nl_quantity_usize_body_at(const NLCheckedFragment *,
                                const NLSemanticContext *, size_t, bool entry,
                                NLDivisionUsizePlan *);

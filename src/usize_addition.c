@@ -644,8 +644,8 @@ static bool quantity(const NLSemanticContext *c, NLValueId id, NLTypeId type)
            !v.occupancy.start && !v.occupancy.length && !v.aggregate_owner &&
            !v.field_count && !v.sum_owner && !v.sum_payload && !v.variant;
 }
-static const NLFunctionEntry *quantity_function(const NLSemanticContext *c,
-                                                size_t id, size_t count)
+const NLFunctionEntry *nl_quantity_usize_function(const NLSemanticContext *c,
+                                                  size_t id, size_t count)
 {
     if (!c || !c->functions || !id || id > c->function_count ||
         count > NL_QUANTITY_MAX_ARGUMENTS)
@@ -723,7 +723,7 @@ static bool guard_shape(const NLCheckedFragment *f, const NLSemanticContext *c,
                         const NLSyntaxNode *syntax, NLCheckedNodeId left,
                         NLCheckedNodeId right, size_t *limit, size_t *step)
 {
-    const NLFunctionEntry *fn = quantity_function(c, function, 1);
+    const NLFunctionEntry *fn = nl_quantity_usize_function(c, function, 1);
     const NLCheckedFragment *parent = f ? f->if_parent : NULL;
     const NLCheckedNodeView *choice =
         parent ? nl_checked_node_view(parent, f->if_parent_node) : NULL;
@@ -1032,9 +1032,9 @@ bool nl_guarded_usize_body_at(const NLCheckedFragment *f,
                               const NLSemanticContext *c, size_t function,
                               NLGuardedUsizePlan *out)
 {
-    const NLFunctionEntry *fn = quantity_function(c, function, 1);
+    const NLFunctionEntry *fn = nl_quantity_usize_function(c, function, 1);
     if (!fn)
-        fn = quantity_function(c, function, 0);
+        fn = nl_quantity_usize_function(c, function, 0);
     if (!f || !fn || !out || f->body_owner != fn->body ||
         f->source != fn->body->source)
         return false;
@@ -1070,7 +1070,7 @@ bool nl_guarded_usize_body_at(const NLCheckedFragment *f,
                     init->terminates)
                     return false;
                 const NLFunctionEntry *target =
-                    quantity_function(c, init->function, 1);
+                    nl_quantity_usize_function(c, init->function, 1);
                 const NLCheckedFragment *body =
                     nl_checked_call_body(f, n->initializer);
                 NLGuardedUsizePlan nested = {.body = body,
@@ -1342,7 +1342,7 @@ static bool division_helper(const NLCheckedFragment *f,
                             NLUsizeOperation operation,
                             NLDivisionUsizePlan *out)
 {
-    const NLFunctionEntry *fn = quantity_function(c, function, 1);
+    const NLFunctionEntry *fn = nl_quantity_usize_function(c, function, 1);
     if (!f || !fn || f->body_owner != fn->body ||
         f->source != fn->body->source || f->body_count || f->arm_count)
         return false;
@@ -1984,8 +1984,8 @@ static bool quantity_helper_at(const NLCheckedFragment *f,
            (operation == NL_USIZE_ANY_FIXED_DIVISOR &&
             composed_quantity_body(
                 f, c,
-                quantity_function(c, function,
-                                  c->functions[function - 1].count),
+                nl_quantity_usize_function(c, function,
+                                           c->functions[function - 1].count),
                 function, depth, remaining, out));
 }
 
@@ -2216,8 +2216,8 @@ bool nl_quantity_usize_body_at(const NLCheckedFragment *f,
                                const NLSemanticContext *c, size_t function,
                                bool entry, NLDivisionUsizePlan *out)
 {
-    if (entry || quantity_function(c, function, 1) ||
-        quantity_function(c, function, NL_QUANTITY_MAX_ARGUMENTS))
+    if (entry || nl_quantity_usize_function(c, function, 1) ||
+        nl_quantity_usize_function(c, function, NL_QUANTITY_MAX_ARGUMENTS))
         return literal_divisor_body_at(f, c, function,
                                        NL_USIZE_ANY_FIXED_DIVISOR, out);
     return literal_divisor_body_at(f, c, function, NL_USIZE_DIVIDE, out) ||

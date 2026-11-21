@@ -27,6 +27,12 @@ NLCheckStatus nl_h_custody_seal_result(NLCheckedFragment *parent,
                                        NLCheckedFragment *child,
                                        NLCheckedNodeId call,
                                        const NLSemanticContext *result_world);
+/* CHECK appends the second actual after both evaluations. Complete that one
+ * link in the original first actual and its existing node-only result seal. */
+NLCheckStatus nl_h_custody_link_usize_actual(NLCheckedFragment *,
+                                             NLCheckedNodeId enclosing_call,
+                                             NLCheckedNodeId first,
+                                             NLCheckedNodeId second);
 bool nl_h_custody_result_valid(const NLCheckedFragment *parent,
                                NLCheckedNodeId call);
 /* Coverage observation of this same canonical receipt, not validation or a
