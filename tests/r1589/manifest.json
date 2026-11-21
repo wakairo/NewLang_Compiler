@@ -1,0 +1,51 @@
+{
+  "original_first_comment": 7055394999,
+  "original_canonical": "7326dc2e83bcc6246b2ab57a135aed6eb108c9c5",
+  "original_tree": "8b90a4d31cd4cda30ab8f6022354388308b9e41f",
+  "encoding": "UTF-8/ASCII, LF-only, exactly one final LF",
+  "total_bytes": 25104,
+  "artifacts": [
+    {
+      "name": "positive_parcel.nl",
+      "classification": "positive",
+      "bytes": 668,
+      "sha256": "a45c5040f5d8d3cbdeea6542aca1961c853f44187c8dfa31ce39f6aae0ad19ff"
+    },
+    {
+      "name": "positive_receipt.nl",
+      "classification": "positive",
+      "bytes": 609,
+      "sha256": "694f5b37e9a31d3a3f55941b21a12bb3354c3bd40e88205f83e4062d2d9c3ac0"
+    },
+    {
+      "name": "invalid_condition.nl",
+      "classification": "true-invalid",
+      "bytes": 177,
+      "sha256": "179d903b20154997726e41ce496df87ab19ee43e655fa8f6fe3f144a8a4fe581"
+    },
+    {
+      "name": "invalid_arm_type.nl",
+      "classification": "true-invalid",
+      "bytes": 185,
+      "sha256": "43c91b3d3cf44dd563d46a23481bba54065e26c06210afdd6f2807edcccf5fc8"
+    },
+    {
+      "name": "invalid_zero_divisor.nl",
+      "classification": "true-invalid",
+      "bytes": 251,
+      "sha256": "4b23558460ec92460ca1f58091275cde7840ab9b5cabbc2f7580a98d49c75455"
+    },
+    {
+      "name": "lawful_no_if_control.nl",
+      "classification": "lawful-coverage-control",
+      "bytes": 247,
+      "sha256": "b6047d85619b3e157d6de4029d664ff685b13e769a96e3592ef3f8efafc4ed89"
+    },
+    {
+      "name": "oracle.json",
+      "classification": "oracle",
+      "bytes": 22967,
+      "sha256": "08b70a3a4ae6a0f81754e2a148489217b49ae226c6bf0abb5b9980681924c841"
+    }
+  ]
+}
