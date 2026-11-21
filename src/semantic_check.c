@@ -2042,6 +2042,9 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax,
     const NLSyntaxNode *argument_syntax = syntax->data.call.arguments;
     NLCheckedNodeId tail = 0;
     NLTypeId destination_parameter = 0;
+    const bool quantity_pair =
+        !check->definition &&
+        nl_quantity_usize_function(c, function_id, NL_QUANTITY_MAX_ARGUMENTS);
     for (size_t i = 0; i < function.count; ++i) {
         NLTypeId expected = function.kind == NL_CHECKED_REGISTERED_CALL
                                 ? function.parameters[i]
@@ -2141,7 +2144,19 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax,
         if (tail == 0) {
             view(check, id)->first_argument = arguments[i];
         } else {
-            view(check, tail)->next_argument = arguments[i];
+            NLCheckedNodeView *earlier = view(check, tail);
+            if (quantity_pair && earlier->kind == NL_CHECKED_REGISTERED_CALL &&
+                earlier->body_backed && earlier->argument_count &&
+                nl_quantity_usize_function(c, earlier->function,
+                                           earlier->argument_count)) {
+                if (!host(check,
+                          nl_h_custody_link_usize_actual(check->artifact, id,
+                                                         tail, arguments[i]),
+                          syntax->span))
+                    return 0;
+            } else {
+                earlier->next_argument = arguments[i];
+            }
         }
         tail = arguments[i];
         ++view(check, id)->argument_count;
