@@ -1,0 +1,7 @@
+{
+  "arithmetic-actual": {
+    "check": 3,
+    "emit": 3,
+    "diagnostic": "USIZE-DIVISION-SOURCE-PRECISION"
+  }
+}
