@@ -21,6 +21,14 @@ static bool division_text_append(DivisionText *t, const char *format, ...)
     t->length += (size_t)count;
     return true;
 }
+static const char *division_scalar_type(const NLSemanticContext *c,
+                                        NLTypeId type)
+{
+    if (type == nl_semantic_core_type(c, NL_TYPE_USIZE))
+        return "size_t";
+    return type == nl_semantic_core_type(c, NL_TYPE_BOOL) ? "_Bool" : NULL;
+}
+
 static bool division_emit_atom(DivisionText *t, const NLCheckedFragment *f,
                                NLCheckedNodeId id)
 {
@@ -143,13 +151,16 @@ static bool division_emit_evaluation(DivisionText *t,
     if (n->argument_count != 2)
         return false;
     for (size_t i = 0; i < n->argument_count; ++i) {
-        if (!division_emit_evaluation(t, f, arg, indent) ||
-            !division_text_append(t, "%*ssize_t nl_actual_%zu_%zu = ", indent,
-                                  "", id, i) ||
+        const NLCheckedNodeView *actual = nl_checked_node_view(f, arg);
+        const char *type =
+            actual ? division_scalar_type(f->context, actual->type) : NULL;
+        if (!type || !division_emit_evaluation(t, f, arg, indent) ||
+            !division_text_append(t, "%*s%s nl_actual_%zu_%zu = ", indent, "",
+                                  type, id, i) ||
             !division_emit_expression(t, f, arg) ||
             !division_text_append(t, ";\n"))
             return false;
-        arg = nl_checked_node_view(f, arg)->next_argument;
+        arg = actual->next_argument;
     }
     return !arg;
 }
@@ -157,7 +168,6 @@ static bool division_emit_evaluation(DivisionText *t,
 static bool division_emit_items(DivisionText *t, const NLCheckedFragment *f,
                                 NLCheckedNodeId block, int indent)
 {
-    const NLTypeId boolean = nl_semantic_core_type(f->context, NL_TYPE_BOOL);
     const NLCheckedNodeView *root = nl_checked_node_view(f, block);
     for (NLCheckedNodeId id = root->first_item; id;) {
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
@@ -174,8 +184,8 @@ static bool division_emit_items(DivisionText *t, const NLCheckedFragment *f,
         if (n->kind != NL_CHECKED_BINDING)
             return false;
         const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
-        const char *type = init->type == boolean ? "_Bool" : "size_t";
-        if (!division_emit_evaluation(t, f, n->initializer, indent) ||
+        const char *type = division_scalar_type(f->context, init->type);
+        if (!type || !division_emit_evaluation(t, f, n->initializer, indent) ||
             !division_text_append(t, "%*s%s nl_local_%zu = ", indent, "", type,
                                   n->symbol) ||
             !division_emit_expression(t, f, n->initializer) ||
@@ -190,11 +200,22 @@ static bool division_emit_items(DivisionText *t, const NLCheckedFragment *f,
 static bool division_emit_helper(DivisionText *text,
                                  const NLDivisionUsizePlan *helper)
 {
-    return division_text_append(
-               text, "static size_t nl_qty_fn_%zu(size_t nl_local_%zu",
-               helper->function, helper->formal) &&
+    const NLSemanticContext *c = helper->body->context;
+    const size_t count = helper->second_formal ? 2 : 1;
+    const NLFunctionEntry *fn =
+        nl_quantity_usize_function(c, helper->function, count);
+    if (!fn)
+        return false;
+    const char *first = division_scalar_type(c, fn->parameters[0]);
+    const char *second =
+        count == 2 ? division_scalar_type(c, fn->parameters[1]) : NULL;
+    if (!first || (count == 2 && !second))
+        return false;
+    return division_text_append(text,
+                                "static size_t nl_qty_fn_%zu(%s nl_local_%zu",
+                                helper->function, first, helper->formal) &&
            (!helper->second_formal ||
-            division_text_append(text, ", size_t nl_local_%zu",
+            division_text_append(text, ", %s nl_local_%zu", second,
                                  helper->second_formal)) &&
            division_text_append(text, ")\n{\n") &&
            (!helper->second_formal ||
