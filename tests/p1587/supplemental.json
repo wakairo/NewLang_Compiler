@@ -1,0 +1,7 @@
+{
+  "tail-choice": {
+    "entry_bindings": {"at": 42, "away": 91, "count": 21, "retained": 1},
+    "conditions": [true, false],
+    "runtime_calls": [["choose", 42], ["choose", 68], ["forward", 91]]
+  }
+}
