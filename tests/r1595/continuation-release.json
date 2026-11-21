@@ -1,0 +1,41 @@
+{
+  "phase": "C1307_FOUR_CASE_CONTINUATION",
+  "execution_enabled": true,
+  "mode": "github-dedicated-branch-actions-only",
+  "forbidden_mode": "P-equivalent local execution",
+  "target_sha": "b897249af64ef985646e1a062ffcc22080704f59",
+  "branch": "r-fast/r1595-continuation",
+  "cases": [
+    "c03",
+    "c01",
+    "p01",
+    "p02"
+  ],
+  "max_children": 19,
+  "per_child_timeout_seconds": 30,
+  "raw_log_route": "actions-job-log-v2",
+  "log_transport_prep_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058345950",
+  "public_cli_contract_read_addendum": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058503746",
+  "logging_workflow_delta_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058943026",
+  "successful_raw_log_retrieval_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7059307060",
+  "fast_budget": 4,
+  "full_budget": 1,
+  "note": "Separate forward-only four-case continuation explicitly authorized by C7059307060. Original source/oracle/observer/run.py/release.json and original PR1604 remain immutable. All original gates and max19/time30 bounds unchanged; selected cases require at most17 children. Original c02 is never passed by this continuation. Existing fixed-path publisher is reused unchanged in distinct run/attempt/job checkout namespaces. One natural FULL5 plus one PARTIAL set after exact-head FAST success; no retries, post-PR push, READY or merge.",
+  "partial_budget": 1,
+  "full_jobs_per_set": 5,
+  "canonical_main": "6287fcb4cb94df3da1c67f57d7d717b29c25ecf9",
+  "execution_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7059307060",
+  "combined_fast_budget": 6,
+  "original_fast_used": 2,
+  "original_parent_sha": "c08a8b015a70939c734b3cbad9752db54cc3a147",
+  "original_pr": 1604,
+  "original_c02": {
+    "continuation": "NOT_RUN_IN_CONTINUATION",
+    "original": "INCONCLUSIVE",
+    "reason": "SEMANTIC_UNSUPPORTED did not meet original SEMANTIC_ERROR gate",
+    "receipts": [
+      7059264629,
+      7059282754
+    ]
+  }
+}

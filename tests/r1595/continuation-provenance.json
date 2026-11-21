@@ -1,0 +1,274 @@
+{
+  "schema": "r1595.continuation.provenance.v1",
+  "release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7059307060",
+  "actual_resume": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7059355576",
+  "mode": "GitHub dedicated branch + Actions ONLY",
+  "forbidden_mode": "P-equivalent local execution",
+  "local_execution_count": 0,
+  "new_worker_count": 0,
+  "canonical_main": "6287fcb4cb94df3da1c67f57d7d717b29c25ecf9",
+  "canonical_draft": "Draft17.38",
+  "target_sha": "b897249af64ef985646e1a062ffcc22080704f59",
+  "target_tree": "d6faf52a55e1242df7b4e1bbbd8218103665a216",
+  "sole_parent_sha": "c08a8b015a70939c734b3cbad9752db54cc3a147",
+  "parent_tree": "b6d1dcae9fe82f959b4795c55cfe37a231abfba5",
+  "branch": "r-fast/r1595-continuation",
+  "future_pr_base": "p1592-nested-quantity-public",
+  "selection": [
+    "c03",
+    "c01",
+    "p01",
+    "p02"
+  ],
+  "original_c02": {
+    "continuation": "NOT_RUN_IN_CONTINUATION",
+    "original": "INCONCLUSIVE",
+    "first_set": "STOP_RED",
+    "receipts": [
+      7059264629,
+      7059282754
+    ]
+  },
+  "source_oracle_expected_values": "UNCHANGED_ORIGINAL_FIRST7057942326; NO_EXPECTED_UNVISITED_RESULT_SUPPLIED_BY_C",
+  "original_pr": {
+    "number": 1604,
+    "head": "c08a8b015a70939c734b3cbad9752db54cc3a147",
+    "branch": "r-fast/r1595-nested-actuals",
+    "state": "DRAFT_NEVER_MERGE_IMMUTABLE"
+  },
+  "original_artifact_comments": {
+    "FIRST7": 7057942326,
+    "V1_apparatus": 7058278615,
+    "V1_plan": 7058285790,
+    "V2_apparatus": 7058598657,
+    "V2_plan": 7058604279
+  },
+  "immutable_inherited_files": [
+    {
+      "path": "tests/r1595/original/c1306_p01_nested_arithmetic.nl",
+      "bytes": 354,
+      "sha256": "2493c6ad048a0f6113c24331c567da26d6c016eebde11f5fbe2854c6dee57331"
+    },
+    {
+      "path": "tests/r1595/original/c1306_p02_nested_branch_result.nl",
+      "bytes": 330,
+      "sha256": "a013ce04b600d52b9bc0ae12f36a0332606d7cc43e3566e66e9ed9a2ea8d2009"
+    },
+    {
+      "path": "tests/r1595/original/c1306_c01_explicit_intermediates.nl",
+      "bytes": 524,
+      "sha256": "9c3674fd577a7ced2a6193a90b7a8fb947e9f9cee39c0edaee104016b92ebe24"
+    },
+    {
+      "path": "tests/r1595/original/c1306_c02_unit_actual_invalid.nl",
+      "bytes": 188,
+      "sha256": "dfcdff735d33d5c1dd49fc86ece097bfa63b40f39bb8eef8f95643d3622fad41"
+    },
+    {
+      "path": "tests/r1595/original/c1306_c03_zero_divisor_invalid.nl",
+      "bytes": 198,
+      "sha256": "75aab90e0c43c2e86281f9ebe9b7971b8ee86ebbd65125969a0bfbe7d1f972a4"
+    },
+    {
+      "path": "tests/r1595/original/c1306_oracle_v1.md",
+      "bytes": 21612,
+      "sha256": "1bfa41e14f268e8166d3740c7ffbdb61ff9e365798736ef9124407329d66fec5"
+    },
+    {
+      "path": "tests/r1595/original/c1306_manifest_v1.txt",
+      "bytes": 829,
+      "sha256": "5caee8b4e889390eaa8615aff2e0c62aaf0b94be9d312b4bf8740f625a5815e2"
+    },
+    {
+      "path": "tests/r1595/observe.c",
+      "bytes": 22290,
+      "sha256": "91a43d7658f0bb2af83f556aa96b74ac813d07ab89e8bb53b5fa6fc8642bdc5f"
+    },
+    {
+      "path": "tests/r1595/run.py",
+      "bytes": 23207,
+      "sha256": "ae2f4592fc3434e1b38fb3902caa6469166cf05bf71cc4b54aaf186a7ceb5b83"
+    },
+    {
+      "path": "tests/r1595/release.json",
+      "bytes": 1560,
+      "sha256": "4eb420908144f29cedd08ccd48d329a465da0a4670c5519e4b48779cda71b1a3"
+    },
+    {
+      "path": "tests/r1595/publish_logs.py",
+      "bytes": 11010,
+      "sha256": "213aedb80f4c9a621364bce5de3313d7936f9187ebdc47529f7b7eaec95e3419"
+    },
+    {
+      "path": "tests/r1595/entry_expression.nl",
+      "bytes": 7,
+      "sha256": "a8b6c5ba40d39d59b1f8f55b823765e05fb67439986c02df6bcaee2310ddf791"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "bytes": 156509,
+      "sha256": "eec4e067e214fbc26300f1f57c396e5a0dad16bec0f0a0871bee0fa8515f8fad"
+    },
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "bytes": 7296,
+      "sha256": "83f4ce10acde285bc5a7835935c1d13c2703413de1cb3061a99485d8667d1ac0"
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "bytes": 6744,
+      "sha256": "71db4a0a574730e5396f1e7b0dba34a62ef656e38b4d5bf27f062c1a85639a0a"
+    }
+  ],
+  "driver_base": {
+    "path": "tests/r1595/run.py",
+    "bytes": 23207,
+    "sha256": "ae2f4592fc3434e1b38fb3902caa6469166cf05bf71cc4b54aaf186a7ceb5b83"
+  },
+  "driver_copy": {
+    "path": "tests/r1595/run-continuation.py",
+    "bytes": 23153,
+    "sha256": "c8e63ecd4ce7cbc0519c2ce794c5f647633e5be8ed040232657b40591e8524d8",
+    "only_four_text_operations": [
+      {
+        "reason": "Separate continuation identity, no apparatus-rule change",
+        "old": "\"\"\"R1595 V2 apparatus draft: text only, never executed during preparation.\"\"\"",
+        "new": "\"\"\"R1595 separate four-case continuation; C release7059307060.\"\"\""
+      },
+      {
+        "reason": "Explicit forward-only four-case selection; all seven FROZEN entries remain",
+        "old": "    (\"c02\", \"c1306_c02_unit_actual_invalid.nl\", \"invalid\", {}, []),\n",
+        "new": ""
+      },
+      {
+        "reason": "Separate C-authorized release; original release.json remains unchanged",
+        "old": "root / \"release.json\"",
+        "new": "root / \"continuation-release.json\""
+      },
+      {
+        "reason": "Separate report phase in independent run/job output namespace",
+        "old": "\"phase\": \"R1595_V2\"",
+        "new": "\"phase\": \"R1595_CONTINUATION_V1\""
+      }
+    ],
+    "reverse_operations_reconstruct_original_exact": true
+  },
+  "cmake": {
+    "only_inherited_path_changed": "tests/r1595/CMakeLists.txt",
+    "preserved_original": "tests/r1595/CMakeLists.first-pass-c08a.txt",
+    "test": "r1595_continuation.integration",
+    "registration_target": "r1595_registration_inventory",
+    "metadata_command": "ctest --test-dir configured-build-dir -N -R \"^r1595_continuation[.]integration$\"",
+    "depends_on": [
+      "r1595_public_observe",
+      "newlangc"
+    ],
+    "tests_executed_during_fast": 0
+  },
+  "unchanged_gates": [
+    "all7 original byte/SHA/LF integrity checks",
+    "original source unchanged checks",
+    "true-invalid unit_register OK immediate STOP",
+    "true-invalid unit_register SEMANTIC_ERROR required",
+    "ordinary CLI rejection exactly3 with matching nonempty public diagnostic and empty stdout",
+    "all signal/resource/sanitizer/internal/abnormal child checks",
+    "public source/type/quantity/nested relation gates",
+    "pristine C17 emission, strict compile and native checks",
+    "first failure stops and preserves raw/status"
+  ],
+  "process_bounds": {
+    "max_children": 19,
+    "per_child_timeout_seconds": 30,
+    "selected_cases_at_most_children": 17,
+    "ctest_timeout_seconds": 600
+  },
+  "output_namespace": {
+    "fixed_roots": [
+      "build/r1595-records",
+      "build-frontend/r1595-records"
+    ],
+    "publisher_unchanged": true,
+    "workflow_delta_from_c08a": 0,
+    "distinguished_by": [
+      "new branch",
+      "new PR",
+      "new run id",
+      "attempt",
+      "job id",
+      "checkout merge SHA",
+      "R1595_CONTINUATION_V1 phase",
+      "continuation release identity"
+    ],
+    "existing_output_reuse_forbidden": "output.mkdir(parents=True, exist_ok=False) unchanged",
+    "old_job_outputs": "Never opened or overwritten by continuation"
+  },
+  "pre_ref_fast_ledger": {
+    "original": {
+      "total_count": 2,
+      "runs": [
+        {
+          "id": 44879047416,
+          "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/44879047416",
+          "name": "R-FAST self-service pre-PR preparation (NOT R validation)",
+          "path": ".github/workflows/r-preflight.yml",
+          "head_sha": "c08a8b015a70939c734b3cbad9752db54cc3a147",
+          "head_branch": "r-fast/r1595-nested-actuals",
+          "event": "push",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 44878742790,
+          "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/44878742790",
+          "name": "R-FAST self-service pre-PR preparation (NOT R validation)",
+          "path": ".github/workflows/r-preflight.yml",
+          "head_sha": "c2242c12c95d873aa3e786d3754be777b5a5a354",
+          "head_branch": "r-fast/r1595-nested-actuals",
+          "event": "push",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure"
+        }
+      ]
+    },
+    "continuation": {
+      "total_count": 0,
+      "runs": []
+    },
+    "pages_each": 1,
+    "all_runs_accounted": true
+  },
+  "budgets": {
+    "original_fast_used": 2,
+    "new_fast_maximum": 4,
+    "combined_fast_maximum": 6,
+    "combined4_informational_checkpoint": true,
+    "additional_natural_full_sets": 1,
+    "full_jobs_per_set": 5,
+    "additional_natural_partial_sets": 1,
+    "manual_retry": 0,
+    "dispatch": 0,
+    "post_pr_push": 0,
+    "rebase": 0,
+    "ready": 0,
+    "merge": 0
+  },
+  "original_set_retrieval": "Continues independently; all6 actual jobs required, never substituted by continuation.",
+  "exposure": {
+    "classification": "BLIND_PRESERVED_FOR_UNVISITED_CASES",
+    "new_material": "Own Issue adjudication and C release only; canonical authorities reread",
+    "producer_implementation_tests_fixtures_oracles_reports_pr_body": "UNREAD",
+    "F_other_R_originals": "UNREAD",
+    "aggregate_C": "UNREAD",
+    "shared_scratch_worktree_actor_inventory": "UNREAD"
+  },
+  "limits": {
+    "complete_generic_call_result_auth": "NOT_OBSERVABLE_IN_PERMITTED_HEADERS",
+    "quantity_runtime": "NOT_OBSERVED_BY_UNIT_EXIT",
+    "order_runtime": "NOT_OBSERVED_BY_UNIT_EXIT",
+    "product_go": "PAUSED",
+    "h1": "HOLD",
+    "audit_locality": "UNMEASURED"
+  }
+}

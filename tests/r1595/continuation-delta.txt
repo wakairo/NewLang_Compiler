@@ -1,0 +1,115 @@
+# R1595 continuation copy deltas and the sole changed inherited file
+# The immutable-c08a inputs are retained byte-identically; their paired outputs are additive.
+# CMakeLists.txt is the only inherited path changed. Root CMake, all workflows and publisher remain unchanged.
+
+--- immutable-c08a/tests/r1595/run.py
++++ additive/tests/r1595/run-continuation.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
++"""R1595 separate four-case continuation; C release7059307060."""
+-"""R1595 V2 apparatus draft: text only, never executed during preparation."""
+ import argparse
+ import base64
+ import hashlib
+@@ -23,7 +23,6 @@
+     "c1306_manifest_v1.txt": [829, "5caee8b4e889390eaa8615aff2e0c62aaf0b94be9d312b4bf8740f625a5815e2"],
+ }
+ CASES = [
+-    ("c02", "c1306_c02_unit_actual_invalid.nl", "invalid", {}, []),
+     ("c03", "c1306_c03_zero_divisor_invalid.nl", "invalid", {}, []),
+     ("c01", "c1306_c01_explicit_intermediates.nl", "lawful_control",
+      {"first_argument": 36, "first": 3, "second_argument": 3, "second": 0,
+@@ -64,7 +63,7 @@
+          "APPARATUS_ENTRY_INTEGRITY_STOP")
+ 
+ def authorize(root):
++    release = json.loads((root / "continuation-release.json").read_text(encoding="utf-8"))
+-    release = json.loads((root / "release.json").read_text(encoding="utf-8"))
+     need(release.get("execution_enabled") is True,
+          "NOT_RELEASED: draft apparatus has execution budget zero")
+     need(release.get("mode") == "github-dedicated-branch-actions-only",
+@@ -448,7 +447,7 @@
+     parser.add_argument("--out", required=True)
+     args = parser.parse_args()
+     output = Path(args.out).resolve()
++    report = {"phase": "R1595_CONTINUATION_V1", "children": [], "cases": [],
+-    report = {"phase": "R1595_V2", "children": [], "cases": [],
+               "verdict": "NOT_STARTED"}
+     exit_status = 3
+     output_created = False
+
+--- a/tests/r1595/CMakeLists.txt
++++ b/tests/r1595/CMakeLists.txt
+@@ -8,8 +8,8 @@
+ add_executable(r1595_public_observe "${CMAKE_CURRENT_LIST_DIR}/observe.c")
+ target_link_libraries(r1595_public_observe PRIVATE newlang_semantic newlang_parser)
+ 
++add_test(NAME r1595_continuation.integration
++    COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/run-continuation.py"
+-add_test(NAME r1595_original_pipeline.integration
+-    COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/run.py"
+         --newlangc "$<TARGET_FILE:newlangc>"
+         --observer "$<TARGET_FILE:r1595_public_observe>"
+         --cc "${CMAKE_C_COMPILER}"
+@@ -18,11 +18,11 @@
+         "--sanitizer=${NEWLANG_SANITIZER}"
+         --root "${CMAKE_CURRENT_LIST_DIR}"
+         --out "${CMAKE_CURRENT_BINARY_DIR}/r1595-records")
++set_tests_properties(r1595_continuation.integration PROPERTIES TIMEOUT 600)
+-set_tests_properties(r1595_original_pipeline.integration PROPERTIES TIMEOUT 600)
+ 
+ # Registration visibility only: CTest -N runs zero tests.
+ add_custom_target(r1595_registration_inventory ALL
+     COMMAND "${CMAKE_CTEST_COMMAND}" --test-dir "${CMAKE_BINARY_DIR}"
++        -N -R "^r1595_continuation[.]integration$"
+-        -N -R "^r1595_original_pipeline[.]integration$"
+     DEPENDS r1595_public_observe newlangc
+     VERBATIM)
+
+--- immutable-c08a/tests/r1595/release.json
++++ additive/tests/r1595/continuation-release.json
+@@ -1,12 +1,11 @@
+ {
++  "phase": "C1307_FOUR_CASE_CONTINUATION",
+-  "phase": "C1307_FIRST_PASS_EXECUTION",
+   "execution_enabled": true,
+   "mode": "github-dedicated-branch-actions-only",
+   "forbidden_mode": "P-equivalent local execution",
+   "target_sha": "b897249af64ef985646e1a062ffcc22080704f59",
++  "branch": "r-fast/r1595-continuation",
+-  "branch": "r-fast/r1595-nested-actuals",
+   "cases": [
+-    "c02",
+     "c03",
+     "c01",
+     "p01",
+@@ -18,12 +17,25 @@
+   "log_transport_prep_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058345950",
+   "public_cli_contract_read_addendum": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058503746",
+   "logging_workflow_delta_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058943026",
++  "successful_raw_log_retrieval_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7059307060",
++  "fast_budget": 4,
+-  "successful_raw_log_retrieval_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058943026",
+-  "fast_budget": 6,
+   "full_budget": 1,
++  "note": "Separate forward-only four-case continuation explicitly authorized by C7059307060. Original source/oracle/observer/run.py/release.json and original PR1604 remain immutable. All original gates and max19/time30 bounds unchanged; selected cases require at most17 children. Original c02 is never passed by this continuation. Existing fixed-path publisher is reused unchanged in distinct run/attempt/job checkout namespaces. One natural FULL5 plus one PARTIAL set after exact-head FAST success; no retries, post-PR push, READY or merge.",
+-  "note": "C1307 explicitly released finite Actions-only execution and logging/retrieval procedure. Original disabled V2 release is preserved in release.prep-v2.json and immutable Issue7058598657. Retrieval authorization is not a successful-retrieval claim. One natural FULL5 plus one PARTIAL set after exact-head FAST success; no retries, post-PR push, READY or merge.",
+   "partial_budget": 1,
+   "full_jobs_per_set": 5,
+   "canonical_main": "6287fcb4cb94df3da1c67f57d7d717b29c25ecf9",
++  "execution_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7059307060",
++  "combined_fast_budget": 6,
++  "original_fast_used": 2,
++  "original_parent_sha": "c08a8b015a70939c734b3cbad9752db54cc3a147",
++  "original_pr": 1604,
++  "original_c02": {
++    "continuation": "NOT_RUN_IN_CONTINUATION",
++    "original": "INCONCLUSIVE",
++    "reason": "SEMANTIC_UNSUPPORTED did not meet original SEMANTIC_ERROR gate",
++    "receipts": [
++      7059264629,
++      7059282754
++    ]
++  }
+-  "execution_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058943026"
+ }

@@ -8,8 +8,8 @@ include_guard(GLOBAL)
 add_executable(r1595_public_observe "${CMAKE_CURRENT_LIST_DIR}/observe.c")
 target_link_libraries(r1595_public_observe PRIVATE newlang_semantic newlang_parser)
 
-add_test(NAME r1595_original_pipeline.integration
-    COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/run.py"
+add_test(NAME r1595_continuation.integration
+    COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/run-continuation.py"
         --newlangc "$<TARGET_FILE:newlangc>"
         --observer "$<TARGET_FILE:r1595_public_observe>"
         --cc "${CMAKE_C_COMPILER}"
@@ -18,11 +18,11 @@ add_test(NAME r1595_original_pipeline.integration
         "--sanitizer=${NEWLANG_SANITIZER}"
         --root "${CMAKE_CURRENT_LIST_DIR}"
         --out "${CMAKE_CURRENT_BINARY_DIR}/r1595-records")
-set_tests_properties(r1595_original_pipeline.integration PROPERTIES TIMEOUT 600)
+set_tests_properties(r1595_continuation.integration PROPERTIES TIMEOUT 600)
 
 # Registration visibility only: CTest -N runs zero tests.
 add_custom_target(r1595_registration_inventory ALL
     COMMAND "${CMAKE_CTEST_COMMAND}" --test-dir "${CMAKE_BINARY_DIR}"
-        -N -R "^r1595_original_pipeline[.]integration$"
+        -N -R "^r1595_continuation[.]integration$"
     DEPENDS r1595_public_observe newlangc
     VERBATIM)
