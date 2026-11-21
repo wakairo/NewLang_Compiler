@@ -1,0 +1,32 @@
+{
+  "direct-main": {
+    "calls": [["trays", 15], ["trays", 15], ["trays", 20], ["trays", 23]],
+    "bindings": {"quotient": 7, "remainder": 7, "added": 4, "subtracted": 7},
+    "arithmetic_actuals": [["/", true, 15], ["%", true, 15], ["+", true, 20], ["-", true, 23]]
+  },
+  "named-main": {
+    "calls": [["trays", 15], ["trays", 15], ["trays", 20], ["trays", 23]],
+    "bindings": {"quotient": 7, "remainder": 7, "added": 4, "subtracted": 7}
+  },
+  "direct-helper": {
+    "calls": [["demand", 47], ["bins", 9], ["bins", 3], ["demand", 82], ["bins", 16], ["bins", 5]],
+    "bindings": {"small": 3, "large": 5},
+    "conditions": [true, false],
+    "arithmetic_actuals": [["/", true, 9], ["%", false, 0], ["/", true, 16], ["%", false, 0]]
+  },
+  "named-helper": {
+    "calls": [["demand", 47], ["bins", 9], ["bins", 3], ["demand", 82], ["bins", 16], ["bins", 5]],
+    "bindings": {"small": 3, "large": 5},
+    "conditions": [true, false]
+  },
+  "nested-chain": {
+    "calls": [["retail", 16], ["stock", 5]],
+    "bindings": {"value": 5},
+    "calls_as_actuals": 1,
+    "arithmetic_actuals": [["%", true, 16]]
+  },
+  "zero-actual": {"check": 3, "emit": 3, "diagnostic": "USIZE-REMAINDER-ZERO"},
+  "fresh-numerator": {"check": 3, "emit": 3, "diagnostic": "P5-EXPRESSION-UNSUPPORTED"},
+  "unknown-plus-actual": {"check": 3, "emit": 3, "diagnostic": "USIZE-ADDITION-PRECISION"},
+  "arm-actual": {"check": 0, "emit": 4, "diagnostic": "V1-BACKEND-UNSUPPORTED"}
+}

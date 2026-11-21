@@ -1482,6 +1482,32 @@ static QuantityOrigin quantity_condition_at(QuantityBody *b, NLCheckedNodeId id,
     return left_origin > right_origin ? left_origin : right_origin;
 }
 
+static QuantityOrigin quantity_arithmetic_at(QuantityBody *b,
+                                             NLCheckedNodeId id,
+                                             const NLSyntaxNode *syntax)
+{
+    const NLUsizeAdditionProof *proof = find(b->body, id);
+    if (b->in_arm || !proof || proof->syntax != syntax ||
+        !operation_valid_at(b->body, id, proof->operation, NULL, b->context))
+        return QUANTITY_UNSEEN;
+    const NLSyntaxView *src = nl_syntax_node_view(syntax);
+    const QuantityOrigin left =
+        quantity_atom_at(b, proof->issued.operands[0], src->data.equality.left);
+    if (!left)
+        return QUANTITY_UNSEEN;
+    if (fixed_divisor(proof->operation))
+        return !b->function->count || left >= QUANTITY_FROM_FORMAL
+                   ? QUANTITY_FROM_RESULT
+                   : QUANTITY_UNSEEN;
+    const QuantityOrigin right = quantity_atom_at(b, proof->issued.operands[1],
+                                                  src->data.equality.right);
+    if (!right)
+        return QUANTITY_UNSEEN;
+    return left >= QUANTITY_FROM_FORMAL || right >= QUANTITY_FROM_FORMAL
+               ? QUANTITY_FROM_RESULT
+               : QUANTITY_INDEPENDENT;
+}
+
 static QuantityOrigin quantity_call_chain_at(QuantityBody *b,
                                              NLCheckedNodeId id,
                                              const NLSyntaxNode *syntax,
@@ -1504,13 +1530,17 @@ static QuantityOrigin quantity_call_chain_at(QuantityBody *b,
         return QUANTITY_UNSEEN;
     const NLSyntaxNode *actual_source = src->data.call.arguments;
     QuantityOrigin actual;
-    if (arg->kind == NL_CHECKED_REGISTERED_CALL) {
+    if (arg->kind == NL_CHECKED_IDENTIFIER ||
+        arg->kind == NL_CHECKED_USIZE_LITERAL) {
+        actual = quantity_atom_at(b, call->first_argument, actual_source);
+    } else {
         if (arg->parameter_type != nl_semantic_core_type(c, NL_TYPE_USIZE))
             return QUANTITY_UNSEEN;
-        actual = quantity_call_chain_at(b, call->first_argument, actual_source,
-                                        nesting + 1);
-    } else {
-        actual = quantity_atom_at(b, call->first_argument, actual_source);
+        actual = arg->kind == NL_CHECKED_REGISTERED_CALL
+                     ? quantity_call_chain_at(b, call->first_argument,
+                                              actual_source, nesting + 1)
+                     : quantity_arithmetic_at(b, call->first_argument,
+                                              actual_source);
     }
     /* Node allocation reserves the outer call first. Owned bodies complete
      * in evaluation order, and each inner result is used by the next call. */
@@ -1528,7 +1558,6 @@ static QuantityOrigin quantity_expression_at(QuantityBody *b,
                                              const NLSyntaxNode *syntax)
 {
     const NLCheckedFragment *f = b->body;
-    const NLSemanticContext *c = b->context;
     const NLCheckedNodeView *node = nl_checked_node_view(f, id);
     const NLSyntaxView *src = nl_syntax_node_view(syntax);
     if (!node || !src)
@@ -1540,25 +1569,7 @@ static QuantityOrigin quantity_expression_at(QuantityBody *b,
         return quantity_if_at(b, id, src);
     if (node->kind == NL_CHECKED_REGISTERED_CALL)
         return quantity_call_chain_at(b, id, syntax, 0);
-    const NLUsizeAdditionProof *proof = find(f, id);
-    if (b->in_arm || !proof || proof->syntax != syntax ||
-        !operation_valid_at(f, id, proof->operation, NULL, c))
-        return QUANTITY_UNSEEN;
-    const QuantityOrigin left =
-        quantity_atom_at(b, proof->issued.operands[0], src->data.equality.left);
-    if (!left)
-        return QUANTITY_UNSEEN;
-    if (fixed_divisor(proof->operation))
-        return !b->function->count || left >= QUANTITY_FROM_FORMAL
-                   ? QUANTITY_FROM_RESULT
-                   : QUANTITY_UNSEEN;
-    const QuantityOrigin right = quantity_atom_at(b, proof->issued.operands[1],
-                                                  src->data.equality.right);
-    if (!right)
-        return QUANTITY_UNSEEN;
-    return left >= QUANTITY_FROM_FORMAL || right >= QUANTITY_FROM_FORMAL
-               ? QUANTITY_FROM_RESULT
-               : QUANTITY_INDEPENDENT;
+    return quantity_arithmetic_at(b, id, syntax);
 }
 
 static bool quantity_bindings_at(QuantityBody *b, const NLCheckedNodeView *root,
@@ -1779,14 +1790,15 @@ static bool division_unit_return(const NLCheckedFragment *f,
            !exit->values[0].value;
 }
 
-static bool has_nested_actual(const NLCheckedFragment *f)
+static bool has_composed_actual(const NLCheckedFragment *f)
 {
     for (size_t i = 0; i < f->body_count; ++i) {
         const NLCheckedNodeView *call =
             nl_checked_node_view(f, f->body_calls[i]);
         const NLCheckedNodeView *arg =
             call ? nl_checked_node_view(f, call->first_argument) : NULL;
-        if (arg && arg->kind == NL_CHECKED_REGISTERED_CALL)
+        if (arg && (arg->kind == NL_CHECKED_REGISTERED_CALL ||
+                    find(f, call->first_argument)))
             return true;
     }
     return false;
@@ -1814,7 +1826,7 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
         fn->hidden_dependencies || fn->owner_receiver || fn->owner_producer ||
         fn->custody_recipient)
         return false;
-    if (f->arm_count || has_nested_actual(f))
+    if (f->arm_count || has_composed_actual(f))
         return operation == NL_USIZE_ANY_FIXED_DIVISOR &&
                !strcmp(fn->name, "main") &&
                composed_quantity_body(f, c, fn, function, 0, &remaining, out);
