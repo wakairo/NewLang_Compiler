@@ -647,20 +647,22 @@ static bool quantity(const NLSemanticContext *c, NLValueId id, NLTypeId type)
 static const NLFunctionEntry *quantity_function(const NLSemanticContext *c,
                                                 size_t id, size_t count)
 {
-    if (!c || !c->functions || !id || id > c->function_count)
+    if (!c || !c->functions || !id || id > c->function_count ||
+        count > NL_QUANTITY_MAX_ARGUMENTS)
         return NULL;
     const NLFunctionEntry *fn = &c->functions[id - 1];
     const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
-    return fn->kind == NL_CHECKED_REGISTERED_CALL && fn->count == count &&
-                   fn->result == type && fn->body && fn->body->syntax &&
-                   fn->body->source && fn->body->count == count &&
-                   (!count || (fn->parameters && fn->parameters[0] == type &&
-                               fn->body->parameter_names[0])) &&
-                   !fn->caller_effects && !fn->hidden_dependencies &&
-                   !fn->owner_receiver && !fn->owner_producer &&
-                   !fn->custody_recipient
-               ? fn
-               : NULL;
+    if (fn->kind != NL_CHECKED_REGISTERED_CALL || fn->count != count ||
+        fn->result != type || !fn->body || !fn->body->syntax ||
+        !fn->body->source || fn->body->count != count || fn->caller_effects ||
+        fn->hidden_dependencies || fn->owner_receiver || fn->owner_producer ||
+        fn->custody_recipient)
+        return NULL;
+    for (size_t i = 0; i < count; ++i)
+        if (!fn->parameters || fn->parameters[i] != type ||
+            !fn->body->parameter_names[i])
+            return NULL;
+    return fn;
 }
 static const NLSyntaxNode *source_node(const NLFunctionBody *body,
                                        NLSyntaxKind kind, NLSourceSpan span)
@@ -1408,21 +1410,91 @@ static bool division_helper(const NLCheckedFragment *f,
     return true;
 }
 
+/* run_body binds each already evaluated loose package once, in parameter
+ * order, by creating a fresh lexical place. The historical rows survive
+ * scope exit. Use those rows only in the actual caller's reserved/owned BODY
+ * invocation and original world, with both registered parameter names.
+ * There is no lookup by numeric fact, or borrowing from another invocation. */
+static bool quantity_pair_formals(const NLCheckedFragment *body,
+                                  const NLSemanticContext *c,
+                                  const NLFunctionEntry *fn, size_t function,
+                                  NLSymbolId formals[NL_QUANTITY_MAX_ARGUMENTS])
+{
+    NLCheckedNodeId id = 0;
+    const NLCheckedFragment *caller = nl_h_custody_body_caller(body, c, &id);
+    const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
+    if (!call || call->kind != NL_CHECKED_REGISTERED_CALL ||
+        !call->body_backed || call->terminates || call->function != function ||
+        call->argument_count != NL_QUANTITY_MAX_ARGUMENTS ||
+        call->first_argument <= id ||
+        c->binding_count > NL_SEMANTIC_MAX_ENTRIES)
+        return false;
+    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    NLValueId values[NL_QUANTITY_MAX_ARGUMENTS];
+    NLCheckedNodeId actual = call->first_argument;
+    for (size_t i = 0; i < NL_QUANTITY_MAX_ARGUMENTS; ++i) {
+        const NLCheckedNodeView *arg = nl_checked_node_view(caller, actual);
+        if (!arg || (arg->next_argument && arg->next_argument <= actual) ||
+            arg->parameter_type != type ||
+            !node_value(caller, c, actual, &values[i]) ||
+            c->values[values[i] - 1].carrier != NL_CARRIER_ENDED ||
+            c->values[values[i] - 1].owner_place)
+            return false;
+        actual = arg->next_argument;
+    }
+    if (actual || values[0] >= values[1])
+        return false;
+    NLPlaceId places[NL_QUANTITY_MAX_ARGUMENTS];
+    NLIncarnationId incarnations[NL_QUANTITY_MAX_ARGUMENTS];
+    for (size_t i = 0; i < c->binding_count; ++i) {
+        const NLBindingEntry *binding = &c->bindings[i];
+        for (size_t j = 0; j < NL_QUANTITY_MAX_ARGUMENTS; ++j) {
+            if (binding->view.value != values[j])
+                continue;
+            NLSemanticPlaceView place;
+            if (formals[j] || !binding->hidden ||
+                binding->view.availability != NL_CONSUMED ||
+                binding->view.type != type ||
+                strcmp(binding->name, fn->body->parameter_names[j]) ||
+                !nl_semantic_place_view(c, binding->view.place, &place) ||
+                place.type != type || !place.independent_root ||
+                !place.incarnation || place.live || place.current_value ||
+                place.current_fact)
+                return false;
+            formals[j] = i + 1;
+            places[j] = binding->view.place;
+            incarnations[j] = place.incarnation;
+        }
+    }
+    return formals[0] && formals[0] + 1 == formals[1] &&
+           places[0] + 1 == places[1] && incarnations[0] + 1 == incarnations[1];
+}
+
 static bool division_call_values(const NLCheckedFragment *f,
                                  const NLSemanticContext *c, NLCheckedNodeId id,
                                  const NLDivisionUsizePlan *helper)
 {
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
-    const NLCheckedNodeView *arg =
-        nl_checked_node_view(f, call->first_argument);
-    NLValueId actual, result, body_result;
-    return call->kind == NL_CHECKED_REGISTERED_CALL && call->body_backed &&
-           call->argument_count == 1 && arg && !arg->next_argument &&
-           helper->formal && call->function == helper->function &&
-           node_value(f, c, call->first_argument, &actual) &&
-           c->bindings[helper->formal - 1].view.value == actual &&
-           (!arg->symbol || arg->symbol < helper->formal) &&
-           node_value(f, c, id, &result) &&
+    const NLSymbolId formals[] = {helper->formal, helper->second_formal};
+    const size_t count = helper->second_formal ? 2 : 1;
+    if (!call || call->kind != NL_CHECKED_REGISTERED_CALL ||
+        !call->body_backed || call->argument_count != count ||
+        call->function != helper->function ||
+        (helper->second_formal && f->context != helper->body->context))
+        return false;
+    NLCheckedNodeId argument = call->first_argument;
+    for (size_t i = 0; i < count; ++i) {
+        const NLCheckedNodeView *arg = nl_checked_node_view(f, argument);
+        NLValueId actual;
+        if (!arg || !formals[i] || formals[i] > c->binding_count ||
+            !node_value(f, c, argument, &actual) ||
+            c->bindings[formals[i] - 1].view.value != actual ||
+            (arg->symbol && arg->symbol >= helper->formal))
+            return false;
+        argument = arg->next_argument;
+    }
+    NLValueId result, body_result;
+    return !argument && node_value(f, c, id, &result) &&
            node_value(helper->body, c, helper->result, &body_result) &&
            result == body_result;
 }
@@ -1444,7 +1516,6 @@ static bool quantity_invocation_at(const NLCheckedFragment *f,
     NLDivisionUsizePlan helper;
     return n && n->kind == NL_CHECKED_REGISTERED_CALL && src &&
            src->kind == NL_SYNTAX_EXPR_CALL && src->data.call.arguments &&
-           !nl_syntax_next_argument(src->data.call.arguments) &&
            span_equal(n->span, src->span) &&
            span_equal(n->name, src->data.call.callee) && n->function &&
            n->function <= c->function_count &&
@@ -1463,7 +1534,10 @@ static bool division_call_at(const NLCheckedFragment *f,
 {
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
     const NLCheckedNodeView *first = nl_checked_node_view(f, first_call);
-    if (!n ||
+    const NLSyntaxView *src = nl_syntax_node_view(syntax);
+    if (!n || n->argument_count != 1 || !src ||
+        src->kind != NL_SYNTAX_EXPR_CALL ||
+        nl_syntax_next_argument(src->data.call.arguments) ||
         (first && operation != NL_USIZE_ANY_FIXED_DIVISOR &&
          first->function != n->function) ||
         !quantity_invocation_at(f, c, id, syntax, operation, 1, remaining))
@@ -1551,7 +1625,7 @@ static QuantityOrigin quantity_atom_at(QuantityBody *b, NLCheckedNodeId id,
         return QUANTITY_UNSEEN;
     if (b->origins[symbol - 1])
         return (QuantityOrigin)b->origins[symbol - 1];
-    if (!b->function->count || (b->formal && b->formal != symbol) ||
+    if (b->function->count != 1 || (b->formal && b->formal != symbol) ||
         !token(f->source, atom->name, b->function->body->parameter_names[0]))
         return QUANTITY_UNSEEN;
     b->formal = symbol;
@@ -1639,34 +1713,39 @@ static QuantityOrigin quantity_call_chain_at(QuantityBody *b,
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLSyntaxView *src = nl_syntax_node_view(syntax);
     if (!call || call->kind != NL_CHECKED_REGISTERED_CALL || !src ||
-        src->kind != NL_SYNTAX_EXPR_CALL || !src->data.call.arguments ||
-        nl_syntax_next_argument(src->data.call.arguments) ||
-        call->argument_count != 1 || call->first_argument <= id ||
-        !f->body_calls || nesting >= f->body_count ||
+        src->kind != NL_SYNTAX_EXPR_CALL || !call->argument_count ||
+        call->argument_count > NL_QUANTITY_MAX_ARGUMENTS || !f->body_calls ||
+        nesting >= f->body_count ||
         b->depth + nesting >= NL_SEMANTIC_MAX_DEPTH || !*b->remaining)
         return QUANTITY_UNSEEN;
-    const NLCheckedNodeView *arg =
-        nl_checked_node_view(f, call->first_argument);
-    if (!arg || arg->next_argument)
-        return QUANTITY_UNSEEN;
     const NLSyntaxNode *actual_source = src->data.call.arguments;
-    QuantityOrigin actual;
-    if (arg->kind == NL_CHECKED_IDENTIFIER ||
-        arg->kind == NL_CHECKED_USIZE_LITERAL) {
-        actual = quantity_atom_at(b, call->first_argument, actual_source);
-    } else {
-        if (arg->parameter_type != nl_semantic_core_type(c, NL_TYPE_USIZE))
+    NLCheckedNodeId argument = call->first_argument, previous = id;
+    for (size_t i = 0; i < call->argument_count; ++i) {
+        const NLCheckedNodeView *arg = nl_checked_node_view(f, argument);
+        if (!arg || !actual_source || argument <= previous)
             return QUANTITY_UNSEEN;
-        actual = arg->kind == NL_CHECKED_REGISTERED_CALL
-                     ? quantity_call_chain_at(b, call->first_argument,
-                                              actual_source, nesting + 1)
-                     : quantity_arithmetic_at(b, call->first_argument,
-                                              actual_source);
+        QuantityOrigin actual;
+        if (arg->kind == NL_CHECKED_IDENTIFIER ||
+            arg->kind == NL_CHECKED_USIZE_LITERAL) {
+            actual = quantity_atom_at(b, argument, actual_source);
+        } else {
+            if (arg->parameter_type != nl_semantic_core_type(c, NL_TYPE_USIZE))
+                return QUANTITY_UNSEEN;
+            actual = arg->kind == NL_CHECKED_REGISTERED_CALL
+                         ? quantity_call_chain_at(b, argument, actual_source,
+                                                  nesting + 1)
+                         : quantity_arithmetic_at(b, argument, actual_source);
+        }
+        if (!actual || (b->function->count && actual < QUANTITY_FROM_FORMAL))
+            return QUANTITY_UNSEEN;
+        previous = argument;
+        argument = arg->next_argument;
+        actual_source = nl_syntax_next_argument(actual_source);
     }
     /* Node allocation reserves the outer call first. Owned bodies complete
      * in evaluation order, and each inner result is used by the next call. */
-    if (!actual || (b->function->count && actual < QUANTITY_FROM_FORMAL) ||
-        b->calls >= f->body_count || f->body_calls[b->calls] != id ||
+    if (argument || actual_source || b->calls >= f->body_count ||
+        f->body_calls[b->calls] != id ||
         !quantity_invocation_at(f, c, id, syntax, NL_USIZE_ANY_FIXED_DIVISOR,
                                 b->depth + nesting + 1, b->remaining))
         return QUANTITY_UNSEEN;
@@ -1849,6 +1928,14 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
                       .function = fn,
                       .depth = depth,
                       .remaining = remaining};
+    NLSymbolId formals[NL_QUANTITY_MAX_ARGUMENTS] = {0};
+    if (fn->count == NL_QUANTITY_MAX_ARGUMENTS) {
+        if (!quantity_pair_formals(f, c, fn, function, formals))
+            return false;
+        b.formal = formals[0];
+        for (size_t i = 0; i < NL_QUANTITY_MAX_ARGUMENTS; ++i)
+            b.origins[formals[i] - 1] = QUANTITY_FROM_FORMAL;
+    }
     QuantityResult result;
     if (!quantity_items_at(&b, root, source, &result))
         return false;
@@ -1879,6 +1966,7 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
     *out = (NLDivisionUsizePlan){.body = f,
                                  .function = function,
                                  .formal = b.formal,
+                                 .second_formal = formals[1],
                                  .result = result.id};
     return true;
 }
@@ -1888,13 +1976,17 @@ static bool quantity_helper_at(const NLCheckedFragment *f,
                                NLUsizeOperation operation, size_t depth,
                                size_t *remaining, NLDivisionUsizePlan *out)
 {
-    if (!*remaining || depth >= NL_SEMANTIC_MAX_DEPTH)
+    if (!*remaining || depth >= NL_SEMANTIC_MAX_DEPTH || !c || !c->functions ||
+        !function || function > c->function_count)
         return false;
     --*remaining;
     return division_helper(f, c, function, operation, out) ||
            (operation == NL_USIZE_ANY_FIXED_DIVISOR &&
-            composed_quantity_body(f, c, quantity_function(c, function, 1),
-                                   function, depth, remaining, out));
+            composed_quantity_body(
+                f, c,
+                quantity_function(c, function,
+                                  c->functions[function - 1].count),
+                function, depth, remaining, out));
 }
 
 static bool division_unit_expression(const NLCheckedFragment *f,
@@ -1935,6 +2027,8 @@ static bool has_composed_actual(const NLCheckedFragment *f)
     for (size_t i = 0; i < f->body_count; ++i) {
         const NLCheckedNodeView *call =
             nl_checked_node_view(f, f->body_calls[i]);
+        if (call && call->argument_count > 1)
+            return true;
         const NLCheckedNodeView *arg =
             call ? nl_checked_node_view(f, call->first_argument) : NULL;
         if (arg && (arg->kind == NL_CHECKED_REGISTERED_CALL ||
@@ -1955,7 +2049,7 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
         return false;
     const NLFunctionEntry *fn = &c->functions[function - 1];
     size_t remaining = NL_SEMANTIC_MAX_ENTRIES;
-    if (fn->count == 1)
+    if (fn->count)
         return quantity_helper_at(f, c, function, operation, 0, &remaining,
                                   out);
     const NLTypeId unit = nl_semantic_unit_type(c);
@@ -2122,7 +2216,8 @@ bool nl_quantity_usize_body_at(const NLCheckedFragment *f,
                                const NLSemanticContext *c, size_t function,
                                bool entry, NLDivisionUsizePlan *out)
 {
-    if (entry || quantity_function(c, function, 1))
+    if (entry || quantity_function(c, function, 1) ||
+        quantity_function(c, function, NL_QUANTITY_MAX_ARGUMENTS))
         return literal_divisor_body_at(f, c, function,
                                        NL_USIZE_ANY_FIXED_DIVISOR, out);
     return literal_divisor_body_at(f, c, function, NL_USIZE_DIVIDE, out) ||

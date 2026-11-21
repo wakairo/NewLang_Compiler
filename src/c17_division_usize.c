@@ -46,9 +46,14 @@ static bool division_emit_expression(DivisionText *t,
     const char *operator_text;
     switch (n->kind) {
     case NL_CHECKED_REGISTERED_CALL: {
+        if (n->argument_count == 2)
+            return division_text_append(t,
+                                        "nl_qty_fn_%zu(nl_actual_%zu_0, "
+                                        "nl_actual_%zu_1)",
+                                        n->function, id, id);
         const NLCheckedNodeView *arg =
             nl_checked_node_view(f, n->first_argument);
-        return arg && n->first_argument > id &&
+        return n->argument_count == 1 && arg && n->first_argument > id &&
                division_text_append(t, "nl_qty_fn_%zu(", n->function) &&
                division_emit_expression(t, f, n->first_argument) &&
                division_text_append(t, ")");
@@ -84,6 +89,8 @@ static bool division_emit_expression(DivisionText *t,
 
 static bool division_emit_items(DivisionText *, const NLCheckedFragment *,
                                 NLCheckedNodeId, int);
+static bool division_emit_evaluation(DivisionText *, const NLCheckedFragment *,
+                                     NLCheckedNodeId, int);
 
 /* The plan matches both owned arms. Evaluate the checked condition once and
  * initialize a single result from just the selected lexical block. */
@@ -91,8 +98,6 @@ static bool division_emit_if(DivisionText *t, const NLCheckedFragment *f,
                              NLCheckedNodeId id, int indent)
 {
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-    if (n->kind != NL_CHECKED_IF)
-        return true;
     if (!division_text_append(t,
                               "%*ssize_t nl_if_%zu;\n"
                               "%*s_Bool nl_condition_%zu = ",
@@ -109,6 +114,7 @@ static bool division_emit_if(DivisionText *t, const NLCheckedFragment *f,
         const NLCheckedNodeView *block =
             nl_checked_node_view(arm, root->initializer);
         if (!division_emit_items(t, arm, root->initializer, indent + 4) ||
+            !division_emit_evaluation(t, arm, block->tail, indent + 4) ||
             !division_text_append(t, "%*snl_if_%zu = ", indent + 4, "", id) ||
             !division_emit_expression(t, arm, block->tail) ||
             !division_text_append(t, ";\n%*s%s\n", indent, "",
@@ -116,6 +122,36 @@ static bool division_emit_if(DivisionText *t, const NLCheckedFragment *f,
             return false;
     }
     return true;
+}
+
+/* C17 does not order call arguments. Materialize the checked expressions
+ * once, left to right, in the lexical block that evaluates the call. */
+static bool division_emit_evaluation(DivisionText *t,
+                                     const NLCheckedFragment *f,
+                                     NLCheckedNodeId id, int indent)
+{
+    const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+    if (!n)
+        return false;
+    if (n->kind == NL_CHECKED_IF)
+        return division_emit_if(t, f, id, indent);
+    if (n->kind != NL_CHECKED_REGISTERED_CALL)
+        return true;
+    NLCheckedNodeId arg = n->first_argument;
+    if (n->argument_count == 1)
+        return division_emit_evaluation(t, f, arg, indent);
+    if (n->argument_count != 2)
+        return false;
+    for (size_t i = 0; i < n->argument_count; ++i) {
+        if (!division_emit_evaluation(t, f, arg, indent) ||
+            !division_text_append(t, "%*ssize_t nl_actual_%zu_%zu = ", indent,
+                                  "", id, i) ||
+            !division_emit_expression(t, f, arg) ||
+            !division_text_append(t, ";\n"))
+            return false;
+        arg = nl_checked_node_view(f, arg)->next_argument;
+    }
+    return !arg;
 }
 
 static bool division_emit_items(DivisionText *t, const NLCheckedFragment *f,
@@ -139,7 +175,7 @@ static bool division_emit_items(DivisionText *t, const NLCheckedFragment *f,
             return false;
         const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
         const char *type = init->type == boolean ? "_Bool" : "size_t";
-        if (!division_emit_if(t, f, n->initializer, indent) ||
+        if (!division_emit_evaluation(t, f, n->initializer, indent) ||
             !division_text_append(t, "%*s%s nl_local_%zu = ", indent, "", type,
                                   n->symbol) ||
             !division_emit_expression(t, f, n->initializer) ||
@@ -155,15 +191,24 @@ static bool division_emit_helper(DivisionText *text,
                                  const NLDivisionUsizePlan *helper)
 {
     return division_text_append(
-               text, "static size_t nl_qty_fn_%zu(size_t nl_local_%zu)\n{\n",
+               text, "static size_t nl_qty_fn_%zu(size_t nl_local_%zu",
                helper->function, helper->formal) &&
+           (!helper->second_formal ||
+            division_text_append(text, ", size_t nl_local_%zu",
+                                 helper->second_formal)) &&
+           division_text_append(text, ")\n{\n") &&
+           (!helper->second_formal ||
+            division_text_append(text,
+                                 "    (void)nl_local_%zu;\n"
+                                 "    (void)nl_local_%zu;\n",
+                                 helper->formal, helper->second_formal)) &&
            (!helper->division ||
             division_text_append(text,
                                  "    _Static_assert(UINTMAX_C(%zu) != 0, "
                                  "\"nonzero divisor\");\n",
                                  helper->divisor)) &&
            division_emit_items(text, helper->body, helper->body->root, 4) &&
-           division_emit_if(text, helper->body, helper->result, 4) &&
+           division_emit_evaluation(text, helper->body, helper->result, 4) &&
            division_text_append(text, "    return ") &&
            division_emit_expression(text, helper->body, helper->result) &&
            division_text_append(text, ";\n}\n\n");
