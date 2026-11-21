@@ -1,0 +1,19 @@
+{
+  "phase": "V2_PREP_ONLY",
+  "execution_enabled": false,
+  "mode": "github-dedicated-branch-actions-only",
+  "forbidden_mode": "P-equivalent local execution",
+  "target_sha": null,
+  "branch": null,
+  "cases": [],
+  "max_children": 0,
+  "per_child_timeout_seconds": 30,
+  "raw_log_route": "actions-job-log-v2",
+  "log_transport_prep_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058345950",
+  "public_cli_contract_read_addendum": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058503746",
+  "logging_workflow_delta_release": null,
+  "successful_raw_log_retrieval_release": null,
+  "fast_budget": 0,
+  "full_budget": 0,
+  "note": "Draft only. Separate C RELEASE and prompt must identify immutable target, own branch, reviewed write scope including the two logging-only workflow deltas, finite FAST/FULL and case/child budgets, and exact-job raw-log retrieval binding. PREP route selection is not execution permission."
+}

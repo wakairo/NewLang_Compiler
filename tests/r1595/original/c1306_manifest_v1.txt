@@ -1,0 +1,10 @@
+# C1306 FIRST v1 bytes/SHA-256 manifest
+# Encoding: UTF-8; line endings: LF; final LF included in every artifact
+# This manifest lists source/oracle artifacts; its own digest is recorded outside this file.
+# bytes sha256 name
+354 2493c6ad048a0f6113c24331c567da26d6c016eebde11f5fbe2854c6dee57331 c1306_p01_nested_arithmetic.nl
+330 a013ce04b600d52b9bc0ae12f36a0332606d7cc43e3566e66e9ed9a2ea8d2009 c1306_p02_nested_branch_result.nl
+524 9c3674fd577a7ced2a6193a90b7a8fb947e9f9cee39c0edaee104016b92ebe24 c1306_c01_explicit_intermediates.nl
+188 dfcdff735d33d5c1dd49fc86ece097bfa63b40f39bb8eef8f95643d3622fad41 c1306_c02_unit_actual_invalid.nl
+198 75aab90e0c43c2e86281f9ebe9b7971b8ee86ebbd65125969a0bfbe7d1f972a4 c1306_c03_zero_divisor_invalid.nl
+21612 1bfa41e14f268e8166d3740c7ffbdb61ff9e365798736ef9124407329d66fec5 c1306_oracle_v1.md

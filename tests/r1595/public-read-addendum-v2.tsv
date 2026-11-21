@@ -1,0 +1,16 @@
+# R1595 V2 bounded read addendum
+# Fixed main 3d2c0e05a206c905d5f5cfab12659d1b90b63456; reading base, not an execution target.
+# Text digests use exactly returned UTF-8 content without normalization.
+# README range has no returned final LF; its hash is NOT a whole-file digest.
+# Other unchanged allowed headers/integration blobs remain recorded in V1 public-read-manifest.tsv.
+# No private implementation, producer/other-R originals, fixtures, hook bodies or run logs were followed.
+path	range	git_blob_sha1	returned_utf8_bytes	sha256	returned_final_LF	scope
+docs/NewLang_Project_Compass.md	full returned text	0f9b170ce26504a16acec8e4b84beab11f9fbd4e	9043	402a124c6fa7b7867891ac8290bc4e358efccfcedd9e1c0df95e2359c76e756c	yes	canonical navigation; relevant authority routing
+docs/NewLang_Product_Value_Strategy.md	full returned text	c75f1601f13070bc5a588bd78957b54662bdfd23	51375	f1afe4845487654d2e11a9f159bd0128149d93caf5c1cd5f9fad2ed29cc0d7ca	yes	canonical Value 1.1/1.3
+docs/NewLang_Project_Development_Process.md	full returned text	a4c3df91cffd5d6fe0c97787de56499f5608312d	74091	673d9b7df9f504acfb0fd34bf5f513330673953b4c5060277d9677fc254b8399	yes	canonical Process 7/7.6
+docs/reference/CURRENT_SPEC.md	full returned text	5ff1e4a460848472e8ef832168e6f25d9c7b65e0	17219	6f5391cd9513142b49fb9ad0e317dc3ced425edfc63f771d1bbea153ff6cefaf	yes	canonical current pointer; fixed main
+docs/reference/NewLang_v0_spec_Draft17_38.md	full returned text	25951270752c9e6499a1dcefc99ab7b17115bcee	639477	1a40abd7f8b404c61eaa0e0d65a3095f0d6198db71478a92a14f2ca54ad66aa8	yes	canonical relevant clauses 5.2/5.4/7.1/18.1/18.2/27.4; source law unchanged
+include/newlang/semantic.h	full returned text	a2b4e786878617d048335db51ca0f7ea0d877bd5	22089	928f892877c99cedbb5bf919efb28e09e7b1f98ef3f4d245aa1557e44a1a27c6	yes	previously released public contract; original unit registration
+.github/workflows/compiler-ci.yml	full returned text	23655288e60f0d3d08a12c9a542346bf31829a08	6976	811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742	yes	previously released integration metadata; exact post-CTest insertion
+.github/workflows/compiler-frontend-ci.yml	full returned text	0c2fac71ee2d67d4f3009b4031946d0dec3560b5	6418	33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74	yes	previously released integration metadata; exact post-CTest insertion
+README.md	391-402 only	c0f2e0d7a91c55951a4fcc402acc7f42be70d12e	698	aa4784f6e118f1e855c90aa636c8e27ce4876063400962b1df3604ec95444f02	no	C addendum 7058503746; exact ranged API text, not whole README

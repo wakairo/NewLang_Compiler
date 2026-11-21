@@ -1,0 +1,29 @@
+{
+  "phase": "C1307_FIRST_PASS_EXECUTION",
+  "execution_enabled": true,
+  "mode": "github-dedicated-branch-actions-only",
+  "forbidden_mode": "P-equivalent local execution",
+  "target_sha": "b897249af64ef985646e1a062ffcc22080704f59",
+  "branch": "r-fast/r1595-nested-actuals",
+  "cases": [
+    "c02",
+    "c03",
+    "c01",
+    "p01",
+    "p02"
+  ],
+  "max_children": 19,
+  "per_child_timeout_seconds": 30,
+  "raw_log_route": "actions-job-log-v2",
+  "log_transport_prep_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058345950",
+  "public_cli_contract_read_addendum": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058503746",
+  "logging_workflow_delta_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058943026",
+  "successful_raw_log_retrieval_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058943026",
+  "fast_budget": 6,
+  "full_budget": 1,
+  "note": "C1307 explicitly released finite Actions-only execution and logging/retrieval procedure. Original disabled V2 release is preserved in release.prep-v2.json and immutable Issue7058598657. Retrieval authorization is not a successful-retrieval claim. One natural FULL5 plus one PARTIAL set after exact-head FAST success; no retries, post-PR push, READY or merge.",
+  "partial_budget": 1,
+  "full_jobs_per_set": 5,
+  "canonical_main": "6287fcb4cb94df3da1c67f57d7d717b29c25ecf9",
+  "execution_release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058943026"
+}

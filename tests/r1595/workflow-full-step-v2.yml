@@ -1,0 +1,11 @@
+# DRAFT TEXT ONLY; insert after existing FULL Configure, build, and test step.
+# Preserve the existing CTest command and its exit status.
+      - name: Publish saved R1595 evidence (data only)
+        if: ${{ always() }}
+        shell: bash
+        env:
+          R1595_EVIDENCE_LANE: "FULL:${{ matrix.name }}"
+        run: |
+          python3 tests/r1595/publish_logs.py \
+            --root build/r1595-records \
+            --lane "$R1595_EVIDENCE_LANE"

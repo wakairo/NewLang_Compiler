@@ -127,6 +127,16 @@ jobs:
           if test -r /sys/fs/cgroup/memory.peak; then echo "T753 memory_peak_bytes=$(cat /sys/fs/cgroup/memory.peak)"; fi
           exit "$ctest_status"
 
+      - name: Publish saved R1595 evidence (data only)
+        if: ${{ always() }}
+        shell: bash
+        env:
+          R1595_EVIDENCE_LANE: "PARTIAL:frontend-c17"
+        run: |
+          python3 tests/r1595/publish_logs.py \
+            --root build-frontend/r1595-records \
+            --lane "$R1595_EVIDENCE_LANE"
+
       - name: Verify real Production source/checker CLI path (NO LLVM; PARTIAL)
         shell: bash
         run: |

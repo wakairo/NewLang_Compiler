@@ -1,0 +1,88 @@
+{
+  "schema": "r1595.execution-preparation.v1",
+  "phase": "C1307_FIRST_PASS",
+  "actor": "/root/r1595_nested_actual_prep",
+  "new_workers": 0,
+  "release": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058943026",
+  "actual_resume": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7058953845",
+  "registration_metadata_addendum": "https://github.com/wakairo/NewLang_Compiler/issues/1595#issuecomment-7059009077",
+  "mode": "github-dedicated-branch-actions-only",
+  "forbidden_mode": "P-equivalent local execution",
+  "canonical_main": "6287fcb4cb94df3da1c67f57d7d717b29c25ecf9",
+  "canonical_draft": "Draft17.38",
+  "target_sha": "b897249af64ef985646e1a062ffcc22080704f59",
+  "target_tree": "d6faf52a55e1242df7b4e1bbbd8218103665a216",
+  "target_ordered_parents": [
+    "6287fcb4cb94df3da1c67f57d7d717b29c25ecf9",
+    "92aa5274f248beb79d84662d23bbaaaad21184c0"
+  ],
+  "branch": "r-fast/r1595-nested-actuals",
+  "required_initial_commit_parent": "b897249af64ef985646e1a062ffcc22080704f59",
+  "frozen_snapshots": {
+    "first": 7057942326,
+    "v1_apparatus": 7058278615,
+    "v1_plan": 7058285790,
+    "v2_apparatus": 7058598657,
+    "v2_plan": 7058604279,
+    "v2_final": 7058614993
+  },
+  "frozen_file_counts_verified": {
+    "first": 7,
+    "v1": 9,
+    "v2": 9
+  },
+  "changes": [
+    {
+      "path": "tests/r1595/release.json",
+      "reason": "Explicit C1307 activation; only target/branch/cases/finite budgets and released logging/retrieval procedure",
+      "frozen_copy": "tests/r1595/release.prep-v2.json"
+    },
+    {
+      "path": "tests/r1595/CMakeLists.txt",
+      "reason": "Explicit addendum: one build metadata target prints exact R CTest -N name; no tests/program execution",
+      "frozen_copy": "tests/r1595/CMakeLists.prep-v1.txt"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "reason": "One minimal BUILD_TESTING include after Python3 discovery",
+      "target_blob": "0a23e38d8790de9ed781863c1ad49aadfaca6455"
+    },
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "reason": "Only reviewed FULL always data publisher step after existing CTest step"
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "reason": "Only reviewed PARTIAL always data publisher step after existing CTest step"
+    }
+  ],
+  "original_source_or_oracle_changes": 0,
+  "private_or_producer_material_read": false,
+  "budget": {
+    "fast_natural_push_runs": 6,
+    "checkpoint_after": 4,
+    "full_natural_sets": 1,
+    "full_jobs_per_set": 5,
+    "partial_natural_sets": 1,
+    "max_children_per_pipeline": 19,
+    "per_child_timeout_seconds": 30
+  },
+  "not_authorized": [
+    "manual retry",
+    "dispatch",
+    "post-PR push",
+    "second FULL set",
+    "rebase",
+    "READY",
+    "merge"
+  ],
+  "preparation_execution_outside_actions": 0,
+  "evidence_limits": {
+    "complete_generic_call_result_auth": "NOT_OBSERVABLE",
+    "native_scalar_quantity_or_order": "NOT_OBSERVED",
+    "printing_is_retrieval": false,
+    "product_go": "PAUSED",
+    "h1": "HOLD",
+    "audit_locality": "UNMEASURED"
+  }
+}

@@ -1,0 +1,21 @@
+# R1595 apparatus draft; root inclusion needs a separate write release.
+# An early unrelated hook must not prevent the later explicit include.
+if(NOT BUILD_TESTING OR NOT TARGET newlang_semantic OR NOT TARGET newlangc)
+    return()
+endif()
+include_guard(GLOBAL)
+
+add_executable(r1595_public_observe "${CMAKE_CURRENT_LIST_DIR}/observe.c")
+target_link_libraries(r1595_public_observe PRIVATE newlang_semantic newlang_parser)
+
+add_test(NAME r1595_original_pipeline.integration
+    COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/run.py"
+        --newlangc "$<TARGET_FILE:newlangc>"
+        --observer "$<TARGET_FILE:r1595_public_observe>"
+        --cc "${CMAKE_C_COMPILER}"
+        "--host-cflags=${CMAKE_C_FLAGS}"
+        "--build-type=$<CONFIG>"
+        "--sanitizer=${NEWLANG_SANITIZER}"
+        --root "${CMAKE_CURRENT_LIST_DIR}"
+        --out "${CMAKE_CURRENT_BINARY_DIR}/r1595-records")
+set_tests_properties(r1595_original_pipeline.integration PROPERTIES TIMEOUT 600)

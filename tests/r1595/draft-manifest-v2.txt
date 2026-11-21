@@ -1,0 +1,20 @@
+# R1595 V2 corrected-apparatus / selected raw-log TEXT PREP
+# UTF-8; LF only; final LF included for each V2 artifact.
+# No artifact parsing, compilation, formatting, mock, test or execution.
+# Original FIRST7 and frozen V1draft9 remain individually GET/hash verified unchanged.
+# bytes sha256 path; this manifest's own digest is recorded outside itself.
+21906 97cfaa6018c6a74234b4fbafb248152ccda57bc7cd4c95c974ef73daeed314be tests/r1595/observe.c
+23207 ae2f4592fc3434e1b38fb3902caa6469166cf05bf71cc4b54aaf186a7ceb5b83 tests/r1595/run.py
+11010 213aedb80f4c9a621364bce5de3313d7936f9187ebdc47529f7b7eaec95e3419 tests/r1595/publish_logs.py
+981 5dc540db6431877c5c23fab57a01b824860b9bde99f39e224b25de52a7f25c7e tests/r1595/release.json
+457 5aa23d37e9978b4143abf5b6ada4cad495e94e552cae19981c3487d218c88ae5 tests/r1595/workflow-full-step-v2.yml
+470 33b15cfb1ba1e6697704595d6490035ebf15f23cc9fc5ecb115493f6cf8e81bf tests/r1595/workflow-partial-step-v2.yml
+21598 d223edbb2ca37682afa3ad1712eee906b98989c6c534529f5c134adf17fade85 tests/r1595/PLAN-v2.md
+2545 30c4dc1c4cef0edba526d3cf232dbb41ce53bd28c4e38099429155627425d08d tests/r1595/public-read-addendum-v2.tsv
+# Unchanged V1 support text reused; these are references, not newly revised V2 files.
+# REUSE 2135 23c6f56166139a7e5e7263f2e34496aff845ffb94ed3938ebc453fef91a66270 tests/r1595/public-read-manifest.tsv
+# REUSE 981 915978211f80351e3208b2cb7439fe5d7557209601d1460e74dfd67d322c3c7d tests/r1595/CMakeLists.txt
+# REUSE 7 a8b6c5ba40d39d59b1f8f55b823765e05fb67439986c02df6bcaee2310ddf791 tests/r1595/entry_expression.nl
+# REUSE 40 04ddefe251690173ac936d8e7bad7f858ff403d738833b2071e6f2f924043e1b tests/r1595/root-cmake-include.txt
+# README range only: 698 aa4784f6e118f1e855c90aa636c8e27ce4876063400962b1df3604ec95444f02 README.md:391-402
+# The ranged README response has no final LF; its digest is not a whole-file digest.
