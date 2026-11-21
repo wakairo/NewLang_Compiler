@@ -138,3 +138,10 @@ jobs:
           test ! -s "$RUNNER_TEMP/newlang-check-stdout"
           test ! -s "$RUNNER_TEMP/newlang-check-stderr"
           echo "NO LLVM / PARTIAL: Production source/checker exit 0, zero stdout/stderr"
+
+      - name: Publish saved R1608 raw bytes (data only; primary result unchanged)
+        if: ${{ always() }}
+        continue-on-error: true
+        env:
+          R1608_MATRIX: NO-LLVM-PARTIAL
+        run: python3 tests/r1608/publish.py partial
