@@ -41,12 +41,20 @@ static bool division_emit_expression(DivisionText *t,
                                      NLCheckedNodeId id)
 {
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+    if (!n)
+        return false;
     const char *operator_text;
     switch (n->kind) {
-    case NL_CHECKED_REGISTERED_CALL:
-        return division_text_append(t, "nl_qty_fn_%zu(", n->function) &&
-               division_emit_atom(t, f, n->first_argument) &&
+    case NL_CHECKED_REGISTERED_CALL: {
+        const NLCheckedNodeView *arg =
+            nl_checked_node_view(f, n->first_argument);
+        return arg && n->first_argument > id &&
+               division_text_append(t, "nl_qty_fn_%zu(", n->function) &&
+               (arg->kind == NL_CHECKED_REGISTERED_CALL
+                    ? division_emit_expression(t, f, n->first_argument)
+                    : division_emit_atom(t, f, n->first_argument)) &&
                division_text_append(t, ")");
+    }
     case NL_CHECKED_IF:
         return division_text_append(t, "nl_if_%zu", id);
     case NL_CHECKED_USIZE_LESS_THAN:
