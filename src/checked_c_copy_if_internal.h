@@ -2,6 +2,12 @@
 #define NEWLANG_CHECKED_C_COPY_IF_INTERNAL_H
 #include "semantic_internal.h"
 
+static bool copy_if_raw_same(NLRawRepView a, NLRawRepView b)
+{
+    return a.validity == b.validity && a.value_known == b.value_known &&
+           (!a.value_known || a.value == b.value);
+}
+
 /* A consumer of an existing validated Copy call entry, not an IF issuer.
  * Literal-only forks must retain its complete original prefix. No fork-local
  * place or authority is imported into the C carrier environment. */
@@ -52,7 +58,7 @@ static bool copy_if_prefix_same(const NLSemanticContext *arm,
             NLRawRepView x, y;
             if (!nl_semantic_raw_rep_view(arm, j, offset, &x) ||
                 !nl_semantic_raw_rep_view(entry, j, offset, &y) ||
-                memcmp(&x, &y, sizeof(x)))
+                !copy_if_raw_same(x, y))
                 return false;
         }
     }
