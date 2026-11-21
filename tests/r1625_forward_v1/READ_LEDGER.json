@@ -1,0 +1,621 @@
+{
+  "format": "R1625_FORWARD_TEXT_READ_EXPOSURE_DELTA_V1",
+  "phase": "STATIC_TEXT_ONLY",
+  "apparatus_id": "R1625_FORWARD_OBSERVATION_V1",
+  "future_target": "NOT_RELEASED",
+  "mode": "GitHub dedicated branch + Actions ONLY; P-equivalent local environment prohibited",
+  "own_control": {
+    "url": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7063399569",
+    "body_sha256": "8a846cc5baff3840371afa04dfebc802d438b6c104c0516e4e5ee43179ba9535"
+  },
+  "actual_continuation": {
+    "id": 7063482914,
+    "url": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7063482914",
+    "created_at": "2026-11-21T13:40:39Z",
+    "body_bytes": 4361,
+    "body_sha256": "5c370f6fc0eff134808ef912e27dbffb9bc66fa48440e97982937a9b87f57764",
+    "individual_GET_exact": true,
+    "payload_sha256": "7cca7927da881c973dd64a1c8ba306caa14ec00c70e248c4cf91669fab0858d6",
+    "reextraction_hash_verified": true
+  },
+  "frozen_recoveries": [
+    {
+      "name": "first",
+      "url": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "body_bytes": 64528,
+      "body_sha256": "b724b8936c4790c2a4246b3fd414a37502f53f0c0cb66e472e212f7b3b1b9c12",
+      "json_bytes": 63172,
+      "json_sha256": "57ba65ef93e1e1adb129f7fddb113da58ef7347ad1f0b6ff4b08d953e45d3d1a",
+      "decoded_payload_count": 13,
+      "decoded_payload_bytes": 44296,
+      "individual_GET_reextracted_rehashed": true
+    },
+    {
+      "name": "boundary",
+      "url": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7063316897",
+      "body_bytes": 41223,
+      "body_sha256": "b37b8449fc3e84b95ac73b357cd9c2afdca7b5800084467bf9c43c1eeb3bde8e",
+      "json_bytes": 39963,
+      "json_sha256": "10f6ec70efe45871d8c2e98a78f66f7f63d34148eeecd3c66d367f9b1f40fdc0",
+      "decoded_payload_count": 2,
+      "decoded_payload_bytes": 24644,
+      "individual_GET_reextracted_rehashed": true
+    },
+    {
+      "name": "boundary_final",
+      "url": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7063320591",
+      "body_bytes": 4360,
+      "body_sha256": "405ee780374107acd23877d0bee51a5f36283712b38294e5c58386409a440f27",
+      "json_bytes": 3301,
+      "json_sha256": "614e5b1b6aa1d35010ba6861efee748146c801388a812f692171f148a087fcbe",
+      "decoded_payload_count": 0,
+      "decoded_payload_bytes": 0,
+      "individual_GET_reextracted_rehashed": true
+    }
+  ],
+  "immutable_first_manifest": "f03bbf4c65a0c759893379eb5aef26e3dc31b4e3694f259c4168a1b159ee9bb2",
+  "immutable_boundary_union_manifest": "7e69b4d5e16599a4dae532b06ff83d9d1ac1d42bcea825e5c76681bb33c93209",
+  "canonical": {
+    "ref": "43745d03f6f763b5a017e597bbb6825b1f3fadd9",
+    "spec": "Draft17.38",
+    "new_fetches": 0,
+    "retained_reference": "Accepted FIRST oracle/read ledger unchanged; original6 law6287 and supplement law43745 separately recorded."
+  },
+  "public_preparation_reference": {
+    "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+    "tree_from_control": "b51f1b2642aa5867afa2e9b59d153232e5d81f40",
+    "orderedparents_from_control": [
+      "43745d03f6f763b5a017e597bbb6825b1f3fadd9",
+      "95c043e561574d674a9704237ab5836cfd9933e9"
+    ],
+    "execution_target": false
+  },
+  "reads": [
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": ".github/workflows/compiler-ci.yml",
+      "kind": "scaffold",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/.github/workflows/compiler-ci.yml",
+      "bytes": 6976,
+      "sha256": "811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742",
+      "scope": "Existing trigger/environment/build/test primary exit/append position and R-FAST registration-only flow inspected. Referenced production/fixture/script bodies not followed."
+    },
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "kind": "scaffold",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/.github/workflows/compiler-frontend-ci.yml",
+      "bytes": 6418,
+      "sha256": "33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74",
+      "scope": "Existing trigger/environment/build/test primary exit/append position and R-FAST registration-only flow inspected. Referenced production/fixture/script bodies not followed."
+    },
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": ".github/workflows/r-preflight.yml",
+      "kind": "scaffold",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/.github/workflows/r-preflight.yml",
+      "bytes": 6749,
+      "sha256": "4e905e3abe62fffaf936824f53c4078d20dae1375b4f8f2b4d199c8da9048df9",
+      "scope": "Existing trigger/environment/build/test primary exit/append position and R-FAST registration-only flow inspected. Referenced production/fixture/script bodies not followed."
+    },
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": "CMakeLists.txt",
+      "kind": "scaffold",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/CMakeLists.txt",
+      "bytes": 156674,
+      "sha256": "c605453feeee77d4cf0f37212b6901c509502545519e2d076ac4b14430209f58",
+      "scope": "Full base retained for append hash; library/Python/build/sanitizer metadata, final include position and matching registration lines inspected. Incidental source/test names not followed."
+    },
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": "include/newlang/checked.h",
+      "kind": "public_header",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/include/newlang/checked.h",
+      "bytes": 17412,
+      "sha256": "86da04d0cf2f153421152abd53d124e2adf8e47b2cc9d2f3118a755ad5de1355",
+      "scope": "Exact released header reacquired/hash-matched to the frozen boundary review; declared source/syntax/registration/checked/type/value/diagnostic/arithmetic contracts only."
+    },
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": "include/newlang/diagnostic.h",
+      "kind": "public_header",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/include/newlang/diagnostic.h",
+      "bytes": 1225,
+      "sha256": "bb4820420edd48bfc83a6f4972363ea9c2b1462c429ec37ec8031b2bd5ccd649",
+      "scope": "Exact released header reacquired/hash-matched to the frozen boundary review; declared source/syntax/registration/checked/type/value/diagnostic/arithmetic contracts only."
+    },
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": "include/newlang/parser.h",
+      "kind": "public_header",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/include/newlang/parser.h",
+      "bytes": 4478,
+      "sha256": "6f22979df969ffe033a8c9a26b9bcb15e1a2cefad4d55a1e556e5a42ee29f126",
+      "scope": "Exact released header reacquired/hash-matched to the frozen boundary review; declared source/syntax/registration/checked/type/value/diagnostic/arithmetic contracts only."
+    },
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": "include/newlang/semantic.h",
+      "kind": "public_header",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/include/newlang/semantic.h",
+      "bytes": 22089,
+      "sha256": "928f892877c99cedbb5bf919efb28e09e7b1f98ef3f4d245aa1557e44a1a27c6",
+      "scope": "Exact released header reacquired/hash-matched to the frozen boundary review; declared source/syntax/registration/checked/type/value/diagnostic/arithmetic contracts only."
+    },
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": "include/newlang/source.h",
+      "kind": "public_header",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/include/newlang/source.h",
+      "bytes": 2813,
+      "sha256": "511238c5f041551906dc2a0d98429f2056acbc977b803e1dfc05e08c56a71524",
+      "scope": "Exact released header reacquired/hash-matched to the frozen boundary review; declared source/syntax/registration/checked/type/value/diagnostic/arithmetic contracts only."
+    },
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": "include/newlang/syntax.h",
+      "kind": "public_header",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/include/newlang/syntax.h",
+      "bytes": 7186,
+      "sha256": "bc9cafb6dffb93e556dba0a6125f411e2b19bbfe9d7248cb2e167f9dcb533172",
+      "scope": "Exact released header reacquired/hash-matched to the frozen boundary review; declared source/syntax/registration/checked/type/value/diagnostic/arithmetic contracts only."
+    },
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": "include/newlang/usize_division.h",
+      "kind": "public_header",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/include/newlang/usize_division.h",
+      "bytes": 1677,
+      "sha256": "7e3781d6bd32acb7dbd0833ec0cbe0fb1194da8348a5895bd1b3da69731983a1",
+      "scope": "Exact released header reacquired/hash-matched to the frozen boundary review; declared source/syntax/registration/checked/type/value/diagnostic/arithmetic contracts only."
+    },
+    {
+      "ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "path": "include/newlang/usize_remainder.h",
+      "kind": "public_header",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/include/newlang/usize_remainder.h",
+      "bytes": 1599,
+      "sha256": "4b16a602ef5d16176a3c6a66517971aedc87463db2dfb8df941d7cdc08cd55ef",
+      "scope": "Exact released header reacquired/hash-matched to the frozen boundary review; declared source/syntax/registration/checked/type/value/diagnostic/arithmetic contracts only."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/CMakeLists.txt",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/CMakeLists.txt",
+      "bytes": 1849,
+      "sha256": "e4df453375bd5fa4a37fe25d9d2e008e37cf4c52e59da7b0fded4af75abf4a19",
+      "scope": "Own accepted full bytes recovered; relevant bounded apparatus logic manually read as text. No execution."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/PLAN.md",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/PLAN.md",
+      "bytes": 30175,
+      "sha256": "df791977d0cad722c4511a2be5937acfb736db3ab30653f3bebb7ef7861a664e",
+      "scope": "Own historical text recovered/hash-bound as accepted baseline; historical preservation/identity references, no new semantic selection."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/READ_LEDGER.json",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/READ_LEDGER.json",
+      "bytes": 28378,
+      "sha256": "b11cc106e5caa84d964e621fe28196d928b1092e601303fa33814641acbfc9ad",
+      "scope": "Own historical text recovered/hash-bound as accepted baseline; historical preservation/identity references, no new semantic selection."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/driver.py",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/driver.py",
+      "bytes": 52790,
+      "sha256": "5a3849a17a09dd5b4a2538bc7b0eceb19e0332a3bf0dc74638222024bd02eb04",
+      "scope": "Own accepted full bytes recovered; relevant bounded apparatus logic manually read as text. No execution."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/entry_adapter.nl",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/entry_adapter.nl",
+      "bytes": 7,
+      "sha256": "a8b6c5ba40d39d59b1f8f55b823765e05fb67439986c02df6bcaee2310ddf791",
+      "scope": "Own accepted full bytes recovered; relevant bounded apparatus logic manually read as text. No execution."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/full_publisher.yml.txt",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/full_publisher.yml.txt",
+      "bytes": 247,
+      "sha256": "b1427c009bda1d56c1c854e9c9e912645c249fe189cfd2ad88d0d7b8789b8e72",
+      "scope": "Own accepted full bytes recovered; relevant bounded apparatus logic manually read as text. No execution."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/observe.c",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/observe.c",
+      "bytes": 23327,
+      "sha256": "18fb916e18408bed7c4dfc2158a914617089fc951fd9ef293bbb1663d2903586",
+      "scope": "Own accepted full bytes recovered; relevant bounded apparatus logic manually read as text. No execution."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/partial_publisher.yml.txt",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/partial_publisher.yml.txt",
+      "bytes": 247,
+      "sha256": "b79a072201620dda28e6d47b226f38a0b0bc4df5eed6d32b21d9c534cb8cf23c",
+      "scope": "Own accepted full bytes recovered; relevant bounded apparatus logic manually read as text. No execution."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/publish.py",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/publish.py",
+      "bytes": 3884,
+      "sha256": "747234373ce58e430163b4d0468391fc9e8be65311a3eb551047585f97ba7529",
+      "scope": "Own accepted full bytes recovered; relevant bounded apparatus logic manually read as text. No execution."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/rawio.py",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/rawio.py",
+      "bytes": 5325,
+      "sha256": "f2d530446dfc065a59808d23e367b8f9b7d02420ecc26c2ed7e7583322ea2bb9",
+      "scope": "Own accepted full bytes recovered; relevant bounded apparatus logic manually read as text. No execution."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/recover.py",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/recover.py",
+      "bytes": 7956,
+      "sha256": "64b15923c5839f848c08254fead0f7fc02e5903dff5d33ea1c0bd4cf585db31e",
+      "scope": "Own accepted full bytes recovered; relevant bounded apparatus logic manually read as text. No execution."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/registration.cmake",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/registration.cmake",
+      "bytes": 1583,
+      "sha256": "604c585a7b9fbc289586a536cb8362b23d9717d561f2e13667a94cd1869364f9",
+      "scope": "Own accepted full bytes recovered; relevant bounded apparatus logic manually read as text. No execution."
+    },
+    {
+      "ref": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+      "path": "tests/r1608/root_cmake_include.txt",
+      "kind": "own_accepted",
+      "url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/60746436d0d282fb9787d4e5fe53fb4a2f14ee7d/tests/r1608/root_cmake_include.txt",
+      "bytes": 36,
+      "sha256": "fc0e73f3140b770aeb5bf4e7eeacdd9f044e426696a638bbf2bfa532561bb3f4",
+      "scope": "Own accepted full bytes recovered; relevant bounded apparatus logic manually read as text. No execution."
+    }
+  ],
+  "public_include_closure": {
+    "new_dependencies": [],
+    "reason": "Every quoted project include closes within the same eight approved public headers; no internal/private header or extra project body."
+  },
+  "old_baseline": {
+    "head": "60746436d0d282fb9787d4e5fe53fb4a2f14ee7d",
+    "own_payloads": 21,
+    "total_bytes": 172339,
+    "manifest_sha256": "52ec8457b852b47d4bb15cb4550e1c550a3819f9050ed5801d21ef17b4a03d5e",
+    "all_bytes_recovered_and_verified": true,
+    "original_observer_sha256": "18fb916e18408bed7c4dfc2158a914617089fc951fd9ef293bbb1663d2903586",
+    "old_driver_sha256": "5a3849a17a09dd5b4a2538bc7b0eceb19e0332a3bf0dc74638222024bd02eb04"
+  },
+  "source_oracle_mapping": [
+    {
+      "path": "tests/r1625_forward_v1/first/SHA256SUMS",
+      "original_packet": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "original_payload_path": "tests/r1608/first/SHA256SUMS",
+      "bytes": 653,
+      "sha256": "91f79b36bc923673a2291a23195b285b19e6857950629d36d0120b771d836032",
+      "byte_identical": true
+    },
+    {
+      "path": "tests/r1625_forward_v1/first/r1608_c1_selected_div_zero.nl",
+      "original_packet": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "original_payload_path": "tests/r1608/first/r1608_c1_selected_div_zero.nl",
+      "bytes": 223,
+      "sha256": "9a668f0b475544e4e64262519916eb01115ae6d333c970c4ffc91beec6870d0b",
+      "byte_identical": true
+    },
+    {
+      "path": "tests/r1625_forward_v1/first/r1608_c2_selected_rem_zero.nl",
+      "original_packet": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "original_payload_path": "tests/r1608/first/r1608_c2_selected_rem_zero.nl",
+      "bytes": 223,
+      "sha256": "3edb789d72b295117f0e0500121a5e61cc79a10181c8b725fa13ce407e759d5a",
+      "byte_identical": true
+    },
+    {
+      "path": "tests/r1625_forward_v1/first/r1608_c3_unselected_unit_arm.nl",
+      "original_packet": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "original_payload_path": "tests/r1608/first/r1608_c3_unselected_unit_arm.nl",
+      "bytes": 210,
+      "sha256": "8a35c6fac4b353c49bfd7590784fa48d56868480fe2b13392a6be8e1923a1670",
+      "byte_identical": true
+    },
+    {
+      "path": "tests/r1625_forward_v1/first/r1608_c4_hoisted_alternative.nl",
+      "original_packet": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "original_payload_path": "tests/r1608/first/r1608_c4_hoisted_alternative.nl",
+      "bytes": 497,
+      "sha256": "f0e172aec2fd66566d5c14ceeb3d59e755823f3d81fd54d3f4e428ce1f33d1f2",
+      "byte_identical": true
+    },
+    {
+      "path": "tests/r1625_forward_v1/first/r1608_oracle.md",
+      "original_packet": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "original_payload_path": "tests/r1608/first/r1608_oracle.md",
+      "bytes": 14023,
+      "sha256": "8e75b130bd39e4fcbcec78920fdf8437eb292a9f4c2b26c2a87d4e812efed60c",
+      "byte_identical": true
+    },
+    {
+      "path": "tests/r1625_forward_v1/first/r1608_p1_main_zero_then.nl",
+      "original_packet": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "original_payload_path": "tests/r1608/first/r1608_p1_main_zero_then.nl",
+      "bytes": 269,
+      "sha256": "01980812c162c599bbb1d95a148f9e5c6f3de02798550156e545f5138a61e948",
+      "byte_identical": true
+    },
+    {
+      "path": "tests/r1625_forward_v1/first/r1608_p2_helper_else.nl",
+      "original_packet": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "original_payload_path": "tests/r1608/first/r1608_p2_helper_else.nl",
+      "bytes": 437,
+      "sha256": "4123b20b911149ffaaaf21bbd9184fba333e806cd61e0db61769132cc461e548",
+      "byte_identical": true
+    },
+    {
+      "path": "tests/r1625_forward_v1/first/r1625_s1_bool_first_two_calls_v1.nl",
+      "original_packet": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "original_payload_path": "r1625/first/r1625_s1_bool_first_two_calls_v1.nl",
+      "bytes": 775,
+      "sha256": "a1f8f716eaf5e198c6c6a6ffe857b251f142c8dd3e9bcd489f8631c72267ad04",
+      "byte_identical": true
+    },
+    {
+      "path": "tests/r1625_forward_v1/first/r1625_s2_unused_usize_actual_zero_v1.nl",
+      "original_packet": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "original_payload_path": "r1625/first/r1625_s2_unused_usize_actual_zero_v1.nl",
+      "bytes": 372,
+      "sha256": "76ae1743494f50696103af00a0b16f118139669d4c9acc529687c6c4bde84760",
+      "byte_identical": true
+    },
+    {
+      "path": "tests/r1625_forward_v1/first/r1625_oracle_v1.md",
+      "original_packet": "https://github.com/wakairo/NewLang_Compiler/issues/1625#issuecomment-7062990494",
+      "original_payload_path": "r1625/first/r1625_oracle_v1.md",
+      "bytes": 9624,
+      "sha256": "3bcef46c4e280051fc43b1b53ffc273026dcabc9daddf2832701918856ab3760",
+      "byte_identical": true
+    }
+  ],
+  "old_to_new_root_delta": [
+    {
+      "old_path": "tests/r1608/CMakeLists.txt",
+      "old_bytes": 1849,
+      "old_sha256": "e4df453375bd5fa4a37fe25d9d2e008e37cf4c52e59da7b0fded4af75abf4a19",
+      "new_path": "tests/r1625_forward_v1/CMakeLists.txt",
+      "change": "Separate target/test/registration namespace; NOT_RELEASED literal; same600s/RUN_SERIAL/five ENV and configured flags.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/PLAN.md",
+      "old_bytes": 30175,
+      "old_sha256": "df791977d0cad722c4511a2be5937acfb736db3ab30653f3bebb7ef7861a664e",
+      "new_path": "tests/r1625_forward_v1/PLAN.md",
+      "change": "New forward scope/gaps/resources/retrieval/manifests; old PLAN remains immutable.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/READ_LEDGER.json",
+      "old_bytes": 28378,
+      "old_sha256": "b11cc106e5caa84d964e621fe28196d928b1092e601303fa33814641acbfc9ad",
+      "new_path": "tests/r1625_forward_v1/READ_LEDGER.json",
+      "change": "This separate complete read/exposure/delta ledger; old ledger retained unchanged.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/driver.py",
+      "old_bytes": 52790,
+      "old_sha256": "5a3849a17a09dd5b4a2538bc7b0eceb19e0332a3bf0dc74638222024bd02eb04",
+      "new_path": "tests/r1625_forward_v1/driver.py",
+      "change": "Retains byte-identical bounded child capture and existing IO/reset audits;8 cases/max28; delegates call-associated classifier; reached stages preserved on exception; deletes all emission-refusal exceptions; ENV/natural attempt1 checks; explicitly missing exact numeric driver exit.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/entry_adapter.nl",
+      "old_bytes": 7,
+      "old_sha256": "a8b6c5ba40d39d59b1f8f55b823765e05fb67439986c02df6bcaee2310ddf791",
+      "new_path": "tests/r1625_forward_v1/entry_adapter.nl",
+      "change": "Byte-identical7-byte main() newline.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/observe.c",
+      "old_bytes": 23327,
+      "old_sha256": "18fb916e18408bed7c4dfc2158a914617089fc951fd9ef293bbb1663d2903586",
+      "new_path": "tests/r1625_forward_v1/observe.c",
+      "change": "New version only: public constants, node type views, source-order formal/result syntax, explicit missing-authentication field; original observer stays immutable.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/rawio.py",
+      "old_bytes": 5325,
+      "old_sha256": "f2d530446dfc065a59808d23e367b8f9b7d02420ecc26c2ed7e7583322ea2bb9",
+      "new_path": "tests/r1625_forward_v1/rawio.py",
+      "change": "8 cases, unchanged source/oracle hashes plus ALL_SHA256SUMS, isolated roots/protocol and204 names; original no-follow/exclusive primitives.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/publish.py",
+      "old_bytes": 3884,
+      "old_sha256": "747234373ce58e430163b4d0468391fc9e8be65311a3eb551047585f97ba7529",
+      "new_path": "tests/r1625_forward_v1/publish.py",
+      "change": "New namespace/matrix and bytecode suppression; same terminal30s bounded data-only publisher.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/recover.py",
+      "old_bytes": 7956,
+      "old_sha256": "64b15923c5839f848c08254fead0f7fc02e5903dff5d33ea1c0bd4cf585db31e",
+      "new_path": "tests/r1625_forward_v1/recover.py",
+      "change": "New namespace/bytecode suppression; terminal30s alarm added through finalization; existing bounded identity/hash decoder retained.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/registration.cmake",
+      "old_bytes": 1583,
+      "old_sha256": "604c585a7b9fbc289586a536cb8362b23d9717d561f2e13667a94cd1869364f9",
+      "new_path": "tests/r1625_forward_v1/registration.cmake",
+      "change": "Rename anchored test/variables; same30s -N and30s JSON metadata only; no semantic/native execution.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/root_cmake_include.txt",
+      "old_bytes": 36,
+      "old_sha256": "fc0e73f3140b770aeb5bf4e7eeacdd9f044e426696a638bbf2bfa532561bb3f4",
+      "new_path": "tests/r1625_forward_v1/root_cmake_include.txt",
+      "change": "Complete48-byte new include append, bound to immutable1dc base for preparation only.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/full_publisher.yml.txt",
+      "old_bytes": 247,
+      "old_sha256": "b1427c009bda1d56c1c854e9c9e912645c249fe189cfd2ad88d0d7b8789b8e72",
+      "new_path": "tests/r1625_forward_v1/full_publisher.yml.txt",
+      "change": "Complete new always data-only step, bytecode/hash env, primary status preserved.",
+      "historical_old_file_unchanged": true
+    },
+    {
+      "old_path": "tests/r1608/partial_publisher.yml.txt",
+      "old_bytes": 247,
+      "old_sha256": "b79a072201620dda28e6d47b226f38a0b0bc4df5eed6d32b21d9c534cb8cf23c",
+      "new_path": "tests/r1625_forward_v1/partial_publisher.yml.txt",
+      "change": "Equivalent PARTIAL append with exact matrix label.",
+      "historical_old_file_unchanged": true
+    }
+  ],
+  "additional_capsule_payloads": [
+    {
+      "path": "tests/r1625_forward_v1/classify.py",
+      "kind": "new public-record classifier",
+      "purpose": "Distinct source calls/contextual types43/26 and hypothetical arithmetic associations; no formal/substitution certificate."
+    },
+    {
+      "path": "tests/r1625_forward_v1/first/ALL_SHA256SUMS",
+      "kind": "new10-entry input/oracle inventory",
+      "sha256": "eb0125ac6cb7e9512082349847b4ed95c7fd39f70f96f24ea345c7025d397a05",
+      "purpose": "Separate from preserved original SHA256SUMS and original FIRST13 manifest."
+    }
+  ],
+  "inherited_capture_text_identity": {
+    "section": "Run.child",
+    "bytes": 8351,
+    "sha256": "b19503d5a8a3fe82e69d79773e309d11b78d38b4c1427950e91cff98e3bf2c73",
+    "byte_identical": true
+  },
+  "preparation_overlays": [
+    {
+      "path": "CMakeLists.txt",
+      "base_ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "base_url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/CMakeLists.txt",
+      "base_bytes": 156674,
+      "base_sha256": "c605453feeee77d4cf0f37212b6901c509502545519e2d076ac4b14430209f58",
+      "operation": "exact_base_bytes_plus_complete_append_payload",
+      "append_path": "tests/r1625_forward_v1/root_cmake_include.txt",
+      "append_bytes": 48,
+      "append_sha256": "5b4faaca97774b3e4e96fbafb59c976d48067eb9f8fdedd044192abdbcffe8da",
+      "resolved_preparation_bytes": 156722,
+      "resolved_preparation_sha256": "bb22e031963476da9c00f14a8c6e08fb980389a5d331c07723605524fafffbaa",
+      "execution_target": "NOT_RELEASED"
+    },
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "base_ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "base_url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/.github/workflows/compiler-ci.yml",
+      "base_bytes": 6976,
+      "base_sha256": "811d967241cf7e1991e4103af56b3c29d4d89037eb3d048b31a216144a4b8742",
+      "operation": "exact_base_bytes_plus_complete_append_payload",
+      "append_path": "tests/r1625_forward_v1/full_publisher.yml.txt",
+      "append_bytes": 341,
+      "append_sha256": "e275cd88ab9fa7ae310e0b676c018dfe02727b856a14ec90a434b78efb65aea8",
+      "resolved_preparation_bytes": 7317,
+      "resolved_preparation_sha256": "347fcbbdefa9e4800802e78a67f71d0e57a219db79e8996a57490f5f9b19b58f",
+      "execution_target": "NOT_RELEASED"
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "base_ref": "1dc585eee3176975580f81153e63f1eaa1f9d894",
+      "base_url": "https://raw.githubusercontent.com/wakairo/NewLang_Compiler/1dc585eee3176975580f81153e63f1eaa1f9d894/.github/workflows/compiler-frontend-ci.yml",
+      "base_bytes": 6418,
+      "base_sha256": "33152a0d9bdfc5ffbe1cbfd0aaea1793367972954e2163b4adf95b88081e2d74",
+      "operation": "exact_base_bytes_plus_complete_append_payload",
+      "append_path": "tests/r1625_forward_v1/partial_publisher.yml.txt",
+      "append_bytes": 341,
+      "append_sha256": "6eba35e294cd0eb11733def7e9eb448c6c42a6ab11b4bb6b4d1f808441b7578e",
+      "resolved_preparation_bytes": 6759,
+      "resolved_preparation_sha256": "a398bdf67ab94219f5be5ec766de43cae419924208dfe44a8b517e28fe3e479d",
+      "execution_target": "NOT_RELEASED"
+    }
+  ],
+  "manifest_scope": "External index covers all26 own payloads and separately all29 preparation-resolved paths. No circular embedded self-hash. Original FIRST13/old21 identities stay unchanged; no future target/tree/ref binding.",
+  "observability": {
+    "source_formal_syntax": "ALREADY_PUBLIC",
+    "call_body_arm_graph": "PROPOSED_BOUNDED_MEASUREMENT_NOT_RUN",
+    "formal_entry_substitution_authentication": "NOT_ESTABLISHED",
+    "whole_call_result_world_theorem": "NOT_ESTABLISHED",
+    "runtime_internal_quantities_order_arm_selection": "NOT_OBSERVED",
+    "completed_procedure_is_capability_PASS": false,
+    "known_unknown": "Known facts checked against each call's oracle; Unknown remains Unknown. No numeric/pointer uniqueness rule.",
+    "association_path_cap_per_call": 64
+  },
+  "continuation": {
+    "inherited_exception": false,
+    "new_exception": false,
+    "normal_only": "After complete lawful bounded measurement or expected original semantic rejection/CLI3/renderer equality; all discrepancies, unclassified outcomes, graph ambiguity and evidence/cleanup failures STOP."
+  },
+  "exposure": {
+    "same_original_actor": true,
+    "fresh_blind": false,
+    "prior": "Frozen FIRST and boundary ledgers preserve prior6287/088/3e/f03/1dc and all own outcomes.",
+    "incidental": "Allowed public headers/CMake/workflows expose historical profile/source/test names. No linked body, producer evidence, other-track original or aggregate C was followed.",
+    "new_candidate_or_outcome_supplied": false
+  },
+  "actual_phase": {
+    "own_Issue_text_publication_and_pure_memory_text_hash": true,
+    "project_execution": 0,
+    "Git_objects_refs_PR": 0,
+    "CI_Actions": 0,
+    "compiler_native_build_formatter_syntax_mock_apparatus_Lean": 0,
+    "original_workflow_log_downloads": 0,
+    "descendants": 0
+  },
+  "prohibited_reads": {
+    "production_internal_bodies": 0,
+    "producer_other_F_R_originals": 0,
+    "aggregate_C": 0,
+    "shared_scratch_worktrees": 0,
+    "personal_context": 0,
+    "actor_inventory": 0
+  },
+  "validation_claim": "Static text authorship, manual cross-file review and byte/hash integrity only. No proposed code imported/parsed/formatted/mock-run/compiled/built/executed; future syntax/build/registration/runtime support NOT_RUN.",
+  "goal": {
+    "ProductGO624": "PAUSED",
+    "H1": "HOLD",
+    "UB_audit_reaudit_locality_vs_well_factored_C": "UNMEASURED",
+    "type_order_maintenance_cost": "UNMEASURED",
+    "new_compiler_public_private_API_schema_change": false
+  },
+  "terminal": "Complete TEXT POSTGET/re-extraction/hash then TEXT FINAL STOP C; separate acceptance, exact target and execution GO required."
+}

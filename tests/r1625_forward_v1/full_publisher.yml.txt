@@ -1,0 +1,8 @@
+      - name: Publish saved R1625FORWARD raw bytes (data only; primary result unchanged)
+        if: ${{ always() }}
+        continue-on-error: true
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONHASHSEED: '0'
+          R1625FORWARD_MATRIX: ${{ matrix.name }}
+        run: python3 tests/r1625_forward_v1/publish.py full
