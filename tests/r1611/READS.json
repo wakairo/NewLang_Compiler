@@ -1,0 +1,345 @@
+{
+  "revision": "R1611_READS_V1",
+  "fixed_reading_authority": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+  "future_execution_target": "NOT_RELEASED",
+  "selected_canonical": "Draft17.38",
+  "current_own_issue": {
+    "url": "https://github.com/wakairo/NewLang_Compiler/issues/1611",
+    "body_sha256": "25c061d8f4833dab6f54d2951ebd5f39e328beb15f2feb43279940d6b6bd401e",
+    "body_utf8_bytes": 6173
+  },
+  "actual_text_start": {
+    "url": "https://github.com/wakairo/NewLang_Compiler/issues/1611#issuecomment-7060234527",
+    "body_sha256": "e5e0d3e0bfe96104d02fc4cb7469477fab0dd41e6cabf5db426bd997452d1482",
+    "created_at": "2026-11-21T08:55:29Z"
+  },
+  "authorized_c_controls": [
+    {
+      "id": 7060204507,
+      "url": "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060204507",
+      "body_utf8_bytes": 4404,
+      "body_sha256": "617fa94b3b19d81d48e290212e220cb80bcea54faf77f33c22a47671df128c00",
+      "read_scope": "authorized own C control only; no linked producer material followed"
+    },
+    {
+      "id": 7060396837,
+      "url": "https://github.com/wakairo/NewLang_Compiler/pull/1610#issuecomment-7060396837",
+      "body_utf8_bytes": 1909,
+      "body_sha256": "576c6b2871134910adb99a34a0928ec5eb13ee090e1fb5fdf0036cc06a363008",
+      "read_scope": "authorized own C control only; no linked producer material followed"
+    },
+    {
+      "id": 7060397638,
+      "url": "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060397638",
+      "body_utf8_bytes": 2246,
+      "body_sha256": "091f5f1cf61ce72aec653456501fc8d6ec9684c30ba72437f71cf3a011084701",
+      "read_scope": "authorized own C control only; no linked producer material followed"
+    }
+  ],
+  "canonical_rechecks": [
+    {
+      "path": "docs/NewLang_Project_Compass.md",
+      "git_blob_sha": "0f9b170ce26504a16acec8e4b84beab11f9fbd4e",
+      "returned_utf8_bytes": 9043,
+      "returned_text_sha256": "402a124c6fa7b7867891ac8290bc4e358efccfcedd9e1c0df95e2359c76e756c",
+      "final_lf": true,
+      "reviewed_sections": [
+        "full navigation and relevant goals/non-goals/alternatives"
+      ],
+      "same_blob_and_returned_text_hash_as_original_record": true
+    },
+    {
+      "path": "docs/NewLang_Product_Value_Strategy.md",
+      "git_blob_sha": "c75f1601f13070bc5a588bd78957b54662bdfd23",
+      "returned_utf8_bytes": 51375,
+      "returned_text_sha256": "f1afe4845487654d2e11a9f159bd0128149d93caf5c1cd5f9fad2ed29cc0d7ca",
+      "final_lf": true,
+      "reviewed_sections": [
+        "1",
+        "1.1",
+        "1.3"
+      ],
+      "same_blob_and_returned_text_hash_as_original_record": true
+    },
+    {
+      "path": "docs/NewLang_Project_Development_Process.md",
+      "git_blob_sha": "a4c3df91cffd5d6fe0c97787de56499f5608312d",
+      "returned_utf8_bytes": 74091,
+      "returned_text_sha256": "673d9b7df9f504acfb0fd34bf5f513330673953b4c5060277d9677fc254b8399",
+      "final_lf": true,
+      "reviewed_sections": [
+        "7.1-7.6 including R-FAST rules"
+      ],
+      "same_blob_and_returned_text_hash_as_original_record": true
+    },
+    {
+      "path": "docs/reference/CURRENT_SPEC.md",
+      "git_blob_sha": "5ff1e4a460848472e8ef832168e6f25d9c7b65e0",
+      "returned_utf8_bytes": 17219,
+      "returned_text_sha256": "6f5391cd9513142b49fb9ad0e317dc3ced425edfc63f771d1bbea153ff6cefaf",
+      "final_lf": true,
+      "reviewed_sections": [
+        "canonical selector and repository authority; embedded history incidental, no links followed"
+      ],
+      "same_blob_and_returned_text_hash_as_original_record": true
+    },
+    {
+      "path": "docs/reference/NewLang_v0_spec_Draft17_38.md",
+      "git_blob_sha": "25951270752c9e6499a1dcefc99ab7b17115bcee",
+      "returned_utf8_bytes": 639477,
+      "returned_text_sha256": "1a40abd7f8b404c61eaa0e0d65a3095f0d6198db71478a92a14f2ca54ad66aa8",
+      "final_lf": true,
+      "reviewed_sections": [
+        "4.2",
+        "4.4",
+        "4.7",
+        "4.9",
+        "5.1",
+        "5.2",
+        "5.4",
+        "6",
+        "7.1",
+        "8.1",
+        "13.5c",
+        "18.1",
+        "18.2-18.5",
+        "19.1",
+        "unchanged original FIRST law/origin reading retained"
+      ],
+      "same_blob_and_returned_text_hash_as_original_record": true
+    }
+  ],
+  "original_first": {
+    "url": "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7058681755",
+    "body_sha256": "813eb83085546f0573f8b7d7e7669fc0fc4afbca5c26a7b24458f3071810b791",
+    "body_utf8_bytes": 17457,
+    "all_six_source_blocks_individually_reextracted": true,
+    "source_bytes_and_manifest_identical_to_original": true,
+    "first_manifest_sha256": "e74cb47ae78d19b1ea30849293d1c79c78326e711228e5d9518a44050644b97d"
+  },
+  "inherited_public_contract_record": {
+    "file": "R1601_READS.json",
+    "sha256": "f38beab9753ec8ecc556786fd984bb292461e3af2a4505b901800d3cd81ee1f8",
+    "original_read_base": "6287fcb4cb94df3da1c67f57d7d717b29c25ecf9",
+    "meaning": "Historical own V1 public/header/CLI and integration reads; not a fresh R1611 target or interface release. The M1 observer and core V2 logic are reused from this own lineage. Future execution must independently rebind allowed public signatures/scaffolds at the actual released target.",
+    "eight_header_identities": [
+      {
+        "path": "include/newlang/source.h",
+        "git_blob_sha": "269b2723c07bed009455e5e3f2766b9086a33dd2",
+        "returned_utf8_bytes": 2813,
+        "returned_text_sha256": "511238c5f041551906dc2a0d98429f2056acbc977b803e1dfc05e08c56a71524",
+        "final_lf": true
+      },
+      {
+        "path": "include/newlang/syntax.h",
+        "git_blob_sha": "7c36b3be6b2679f4bdb98bb97d6bb923df8a30c1",
+        "returned_utf8_bytes": 7186,
+        "returned_text_sha256": "bc9cafb6dffb93e556dba0a6125f411e2b19bbfe9d7248cb2e167f9dcb533172",
+        "final_lf": true
+      },
+      {
+        "path": "include/newlang/parser.h",
+        "git_blob_sha": "20584427e155e88917a3a819ac24b9d7b0850eaf",
+        "returned_utf8_bytes": 4478,
+        "returned_text_sha256": "6f22979df969ffe033a8c9a26b9bcb15e1a2cefad4d55a1e556e5a42ee29f126",
+        "final_lf": true
+      },
+      {
+        "path": "include/newlang/semantic.h",
+        "git_blob_sha": "a2b4e786878617d048335db51ca0f7ea0d877bd5",
+        "returned_utf8_bytes": 22089,
+        "returned_text_sha256": "928f892877c99cedbb5bf919efb28e09e7b1f98ef3f4d245aa1557e44a1a27c6",
+        "final_lf": true
+      },
+      {
+        "path": "include/newlang/checked.h",
+        "git_blob_sha": "778f02797d815692183d4dea31072010d8ea24d3",
+        "returned_utf8_bytes": 17412,
+        "returned_text_sha256": "86da04d0cf2f153421152abd53d124e2adf8e47b2cc9d2f3118a755ad5de1355",
+        "final_lf": true
+      },
+      {
+        "path": "include/newlang/usize_division.h",
+        "git_blob_sha": "c5e45ff79fcb87dfdd8b371dfe530698bcf29d80",
+        "returned_utf8_bytes": 1677,
+        "returned_text_sha256": "7e3781d6bd32acb7dbd0833ec0cbe0fb1194da8348a5895bd1b3da69731983a1",
+        "final_lf": true
+      },
+      {
+        "path": "include/newlang/usize_remainder.h",
+        "git_blob_sha": "19f3e404d114e92d95f058a8f33b66bd92b67296",
+        "returned_utf8_bytes": 1599,
+        "returned_text_sha256": "4b16a602ef5d16176a3c6a66517971aedc87463db2dfb8df941d7cdc08cd55ef",
+        "final_lf": true
+      },
+      {
+        "path": "include/newlang/diagnostic.h",
+        "git_blob_sha": "8332bf9e2ffb8235c14f17472c73677c086f5c7f",
+        "returned_utf8_bytes": 1225,
+        "returned_text_sha256": "bb4820420edd48bfc83a6f4972363ea9c2b1462c429ec37ec8031b2bd5ccd649",
+        "final_lf": true
+      }
+    ],
+    "readme_range_identities": [
+      {
+        "path": "README.md",
+        "inclusive_lines": "391-402",
+        "git_blob_sha": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+        "returned_utf8_bytes": 698,
+        "returned_text_sha256": "aa4784f6e118f1e855c90aa636c8e27ce4876063400962b1df3604ec95444f02",
+        "final_lf": false,
+        "hash_scope": "returned range bytes only, not whole README"
+      },
+      {
+        "path": "README.md",
+        "inclusive_lines": "44-50",
+        "git_blob_sha": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+        "returned_utf8_bytes": 417,
+        "returned_text_sha256": "d797adb7d538476beb746715ee2cfc3d6d5197d5d5505acf46cfbff6de86c85c",
+        "final_lf": false,
+        "hash_scope": "returned range bytes only, not whole README"
+      },
+      {
+        "path": "README.md",
+        "inclusive_lines": "404-411",
+        "git_blob_sha": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+        "returned_utf8_bytes": 531,
+        "returned_text_sha256": "8b7b752a21edc3ea84d16605d029227cb92a4b6188da772bbecbd998a3775b11",
+        "final_lf": false,
+        "hash_scope": "returned range bytes only, not whole README"
+      }
+    ],
+    "additional_project_headers_read_for_R1611": [],
+    "new_candidate_implementation_or_header_read_for_R1611": false,
+    "integration_policy": "Only own CMake include and two data-only publisher snippets proposed. No old whole root/workflow file is copied over a future target."
+  },
+  "original_actual_evidence": {
+    "final_url": "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060379952",
+    "final_body_sha256": "eaece0fd4f207afc66f950135ec9d0ecd48ea1302b788642c3663252dadbd498",
+    "first_stop_url": "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060143045",
+    "fixed_original_base": "e72c61a7e032452cc12c1c8e443fe2810de4a91f",
+    "original_r_head": "f5cd0b6a07985d18473a6e522f493a630f9786df",
+    "original_merge_checkout": "3647ac16f528935a7f756570d56a8ac0db0a9742",
+    "all_six_jobs": [
+      {
+        "label": "GCC",
+        "run_id": 44885800135,
+        "job_id": 136790685673,
+        "attempt": 1,
+        "returned_log_sha256": "3ded72fc83f6d9624fcafa91c144228b3171469831ff25d1c99203e13808915f",
+        "raw_files": 43,
+        "raw_bytes": 41941,
+        "raw_archive_urls": [
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060158044",
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060158417"
+        ]
+      },
+      {
+        "label": "GCC Release",
+        "run_id": 44885800135,
+        "job_id": 136790685323,
+        "attempt": 1,
+        "returned_log_sha256": "aa58f2c59feff077b475eae42851fc1095cc8dcc0fbc49eb6d66427660d3622f",
+        "raw_files": 43,
+        "raw_bytes": 41957,
+        "raw_archive_urls": [
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060194626",
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060194964"
+        ]
+      },
+      {
+        "label": "Clang",
+        "run_id": 44885800135,
+        "job_id": 136790685653,
+        "attempt": 1,
+        "returned_log_sha256": "7e805dfb8b04daf9928385242dff3d30abab81f0c988f4a2047a8bba7f4451e9",
+        "raw_files": 43,
+        "raw_bytes": 42322,
+        "raw_archive_urls": [
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060175924",
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060176247"
+        ]
+      },
+      {
+        "label": "ASan",
+        "run_id": 44885800135,
+        "job_id": 136790685688,
+        "attempt": 1,
+        "returned_log_sha256": "301762ef18ff79f07b5f070feb91b8da1218d0502eef4cc1fe539b25178f25ff",
+        "raw_files": 43,
+        "raw_bytes": 42547,
+        "raw_archive_urls": [
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060356748",
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060357177"
+        ]
+      },
+      {
+        "label": "UBSan",
+        "run_id": 44885800135,
+        "job_id": 136790685633,
+        "attempt": 1,
+        "returned_log_sha256": "cd4e577e1cd59594f684fd4d7adb987b69a701ee940eb11f946f1a42dc9a2f9f",
+        "raw_files": 43,
+        "raw_bytes": 42553,
+        "raw_archive_urls": [
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060204882",
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060205294"
+        ]
+      },
+      {
+        "label": "NO-LLVM-PARTIAL",
+        "run_id": 44885800144,
+        "job_id": 136790685305,
+        "attempt": 1,
+        "returned_log_sha256": "21a786701ba4ab785e1b55cad78d268f168e334a0cf41ef80523c9ce98a3f232",
+        "raw_files": 43,
+        "raw_bytes": 42304,
+        "raw_archive_urls": [
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060195416",
+          "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7060195776"
+        ]
+      }
+    ],
+    "outcome": "All six original lanes stopped at c1 parser unsupported; c2/c3/c4 NOT_RUN. No result transfers to R1611.",
+    "c_administrative_receipts": "C closure7060396837 and assignment acceptance7060397638, individually read. C reports original PR closed without merge; original STOP and coverage gaps remain."
+  },
+  "exposure_timeline": [
+    "Original FIRST sources/oracles were frozen before candidate/public API and original run exposure.",
+    "R1611 start followed own five completed original lane results and C disposition; remaining original ASan later completed and was recovered before R1611 packet freeze.",
+    "C disposition disclosed static implementation attribution. No linked parser/producer PR/review/code was read, and no baseline execution was performed.",
+    "Canonical files contain incidental historical track/issue/PR statements; no linked original report was followed.",
+    "Own original build/job logs exposed existing file/test names and workflow metadata; no other test bodies or oracles were opened or reused.",
+    "Original final and C closure/acceptance were read before this R1611 freeze.",
+    "This is post-FIRST continuation, not new BLIND formation and not producer-calibrated source rewriting."
+  ],
+  "exclusions": [
+    "producer/F/other-R original issues/PRs/reports/code/fixtures/oracles/results",
+    "aggregateC",
+    "shared scratch/worktrees",
+    "actor inventory",
+    "descendants",
+    "local compiler/native/build/formatter/syntax/mock/apparatus/Lean/SDK execution",
+    "R1611 Git object/ref/branch/PR/push/CI execution"
+  ],
+  "target_maximum_limit": "The original target's observed maximum is not an oracle for a successor. U>=56 remains required; absence of a reached authentic arithmetic event is NOT_OBSERVED.",
+  "selected_keys": [
+    "c2",
+    "c3",
+    "c4"
+  ],
+  "current_new_execution_counts": {
+    "compiler": 0,
+    "native": 0,
+    "build": 0,
+    "formatter": 0,
+    "syntax": 0,
+    "mock": 0,
+    "apparatus": 0,
+    "lean": 0,
+    "git_objects": 0,
+    "refs": 0,
+    "branches": 0,
+    "pull_requests": 0,
+    "ci": 0
+  }
+}

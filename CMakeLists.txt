@@ -2332,6 +2332,7 @@ include(tests/p1455/CMakeLists.txt)
     foreach(profile 01-return-left 02-return-right 03-both-return 04-return-if)
         set_tests_properties(p1193_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
+    include(tests/r1611/CMakeLists.txt)
 endif()
 
 include(tests/p1335/CMakeLists.txt)

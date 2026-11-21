@@ -135,6 +135,18 @@ jobs:
           if test -r /sys/fs/cgroup/memory.peak; then echo "T753 memory_peak_bytes=$(cat /sys/fs/cgroup/memory.peak)"; fi
           exit "$ctest_status"
 
+      - name: R1611 bounded raw evidence (data only)
+        if: ${{ always() }}
+        shell: bash
+        env:
+          R1611_JOB_LABEL: ${{ matrix.name }}
+        run: |
+          if test -f tests/r1611/publish.py; then
+            python3 tests/r1611/publish.py full
+          else
+            echo 'R1611v1 STATUS {"status":"PUBLISHER_MISSING"}'
+          fi
+
       - name: Save verified original archive only on trusted successful main push
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.sdk-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@3edfce9056124e459a23f683a21433670d47daca

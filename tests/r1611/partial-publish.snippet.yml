@@ -1,0 +1,11 @@
+      - name: R1611 bounded raw evidence (data only)
+        if: ${{ always() }}
+        shell: bash
+        env:
+          R1611_JOB_LABEL: NO-LLVM-PARTIAL
+        run: |
+          if test -f tests/r1611/publish.py; then
+            python3 tests/r1611/publish.py partial
+          else
+            echo 'R1611v1 STATUS {"status":"PUBLISHER_MISSING"}'
+          fi

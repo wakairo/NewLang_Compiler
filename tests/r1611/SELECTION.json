@@ -1,0 +1,67 @@
+{
+  "revision": "R1611_SELECTION_V1",
+  "original_issue": 1601,
+  "original_first_url": "https://github.com/wakairo/NewLang_Compiler/issues/1601#issuecomment-7058681755",
+  "continuation_issue": 1611,
+  "execution_target": "NOT_RELEASED",
+  "reading_authority": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+  "canonical": "Draft17.38",
+  "exposure": "post-FIRST, own original run and C disposition; not new BLIND source formation",
+  "selected_keys": [
+    "c2",
+    "c3",
+    "c4"
+  ],
+  "original_keys_excluded_from_execution": [
+    "p1",
+    "p2",
+    "c1"
+  ],
+  "completion_scope": "R1611 selected c2/c3/c4 only; not R1601 original six-case completion",
+  "original_first_manifest_sha256": "e74cb47ae78d19b1ea30849293d1c79c78326e711228e5d9518a44050644b97d",
+  "target_profile": {
+    "usize_maximum_minimum_decimal": "56",
+    "future_target_width": "NOT_ASSUMED",
+    "actual_maximum_policy": "Only authentic reached arithmetic records on the later released target. A prefix without one is NOT_OBSERVED; do not copy R1601's observed maximum."
+  },
+  "selected": [
+    {
+      "key": "c2",
+      "source": "r1601_c2_underflow.nl",
+      "sha256": "8ad0be326d05c40e2a2776a38677e673914ccd82113b06c3bb8595276148c5c2",
+      "source_law": "INVALID",
+      "mathematical_oracle": "3 - 5 = -2 is outside [0,U]; no valid quotient call or result; no wrap/saturate",
+      "expected_binding_values": {}
+    },
+    {
+      "key": "c3",
+      "source": "r1601_c3_named_copy.nl",
+      "sha256": "a625bb17bf899cdf8f0d38fdcff318bb646e9ba0381fb87dbe0afd44aa8c1a27",
+      "source_law": "LAWFUL_UNDER_U_GE_56",
+      "mathematical_oracle": "31 + 6 = 37; Copy preserves quantity; two distinct fresh quotient calls each return floor(37/4) = 9",
+      "expected_binding_values": {
+        "quantity": 37,
+        "first": 9,
+        "second": 9
+      }
+    },
+    {
+      "key": "c4",
+      "source": "r1601_c4_symbolic_identity.nl",
+      "sha256": "7b10e78e2fc655655e8999898d9e71906199c966263e29be8e78038c0f7ac3d0",
+      "source_law": "LAWFUL_UNDER_U_GE_56",
+      "mathematical_oracle": "0 + 0 = 0; 5 + 2 = 7; for every n in [0,U], floor(n/1) = n and identity(n) = n",
+      "expected_binding_values": {
+        "zero_result": 0,
+        "nonzero_result": 7
+      }
+    }
+  ],
+  "preserved_limits": {
+    "unknown_is_not_zero": true,
+    "main_unit_exit_zero_is_not_internal_quantity_or_order": true,
+    "generic_whole_call_result_world_custody": "NOT_OBSERVABLE",
+    "definition_time_arbitrary_formals": "NOT_OBSERVABLE through inherited entered-main observation",
+    "law_specific_diagnostic_algorithm": "UNESTABLISHED by a bounded original rejection"
+  }
+}
