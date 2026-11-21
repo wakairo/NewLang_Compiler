@@ -1,0 +1,42 @@
+{
+  "oracle.json": {
+    "bytes": 1560,
+    "sha256": "2c59480e8e86e92e5fe11634b91eb0741fed2343bb905b6c6d6ffe29cc709e17"
+  },
+  "source/direct-arm.nl": {
+    "bytes": 438,
+    "sha256": "2fb828180d074ac64c5eaed2deb9a7cd0d2a5e0bc1620267fdf6fdd8aa2e6fcc"
+  },
+  "source/flat-control.nl": {
+    "bytes": 670,
+    "sha256": "4d7ae774dd85cbfcc71dcae9c3f918ccf35a6b33ebc149ae37e33c15f71005a5"
+  },
+  "source/route-return.nl": {
+    "bytes": 703,
+    "sha256": "b3485e67f5747c33284ad0b39e24b2e3964a13a720f8c3a4e53a58b60a9faa95"
+  },
+  "source/split-route.nl": {
+    "bytes": 941,
+    "sha256": "a23374590b7096c8b09522abdc3ccfb6dab2bdd33984627514be949be01cd5a6"
+  },
+  "source/tail-choice.nl": {
+    "bytes": 449,
+    "sha256": "ad4f304abd4d9f4deac447f6e340dce0a9aa4a8b32a20c17a2557c409512991d"
+  },
+  "source/unknown-plus.nl": {
+    "bytes": 218,
+    "sha256": "c966b9bf79bf2cdd9c4081be41ed8f33ac54d609bb0c9e229a067e6ee841a263"
+  },
+  "source/wrong-arm-type.nl": {
+    "bytes": 128,
+    "sha256": "b37aa11c2cb50c1673e29220ff69fe6f12b620bea982e20745a077817170e60f"
+  },
+  "source/zero-arm.nl": {
+    "bytes": 200,
+    "sha256": "8fb9f0ab0b9fd616c25628c80725c39990323458fdbe38c0bdd22059a243f0f5"
+  },
+  "supplemental.json": {
+    "bytes": 205,
+    "sha256": "7a7a5c5ce4325856109bb0aabc1d4ca5a55b800a84ff44476787a2cf8cc593dc"
+  }
+}

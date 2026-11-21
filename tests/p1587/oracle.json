@@ -1,0 +1,27 @@
+{
+  "split-route": {
+    "entry_bindings": {"chosen": 74, "forwarded": 74, "batches": 18, "residue": 4, "finish": 8, "reserve": 25, "copied": 25, "reserve_batches": 6, "reserve_finish": 3},
+    "conditions": [true, false],
+    "runtime_calls": [["tickets", 519], ["leftover", 74], ["scraps", 173], ["leftover", 25]],
+    "slots_checked": [["tickets", "scraps"], ["literal", "scraps"]]
+  },
+  "route-return": {
+    "entry_bindings": {"small": 3, "large": 5, "remainder": 1},
+    "conditions": [true, false],
+    "runtime_calls": [["route", 49], ["tickets", 49], ["wrap", 3], ["route", 221], ["scraps", 221], ["wrap", 18]]
+  },
+  "flat-control": {
+    "entry_bindings": {"chosen": 74, "copied": 74, "batches": 18, "residue": 4, "finish": 8, "reserve": 25, "forwarded": 25, "reserve_batches": 6, "reserve_finish": 3},
+    "runtime_calls": [["tickets", 519], ["leftover", 74], ["scraps", 173], ["leftover", 25]]
+  },
+  "direct-arm": {
+    "optional_if_existing_custody": true,
+    "entry_bindings": {"packed": 34, "held": 34, "groups": 6, "residue": 7, "measured": 11},
+    "conditions": [true],
+    "runtime_calls": [["measure", 34]],
+    "unselected_arm_result": 1
+  },
+  "wrong-arm-type": {"classification": "true-invalid different normal result types", "diagnostic_family": "P13-IF-RESULT"},
+  "zero-arm": {"classification": "true-invalid checked zero divisor in the other arm", "diagnostic_family": "zero divisor"},
+  "unknown-plus": {"classification": "source-lawful but unproved Known-only addition after join", "diagnostic_family": "analysis precision"}
+}
