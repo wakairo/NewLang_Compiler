@@ -82,8 +82,8 @@ static bool division_emit_expression(DivisionText *t,
            division_emit_atom(t, f, left->next_argument);
 }
 
-static bool division_emit_bindings(DivisionText *, const NLCheckedFragment *,
-                                   NLCheckedNodeId, int);
+static bool division_emit_items(DivisionText *, const NLCheckedFragment *,
+                                NLCheckedNodeId, int);
 
 /* The plan matches both owned arms. Evaluate the checked condition once and
  * initialize a single result from just the selected lexical block. */
@@ -108,7 +108,7 @@ static bool division_emit_if(DivisionText *t, const NLCheckedFragment *f,
         const NLCheckedNodeView *root = nl_checked_node_view(arm, arm->root);
         const NLCheckedNodeView *block =
             nl_checked_node_view(arm, root->initializer);
-        if (!division_emit_bindings(t, arm, root->initializer, indent + 4) ||
+        if (!division_emit_items(t, arm, root->initializer, indent + 4) ||
             !division_text_append(t, "%*snl_if_%zu = ", indent + 4, "", id) ||
             !division_emit_expression(t, arm, block->tail) ||
             !division_text_append(t, ";\n%*s%s\n", indent, "",
@@ -118,8 +118,8 @@ static bool division_emit_if(DivisionText *t, const NLCheckedFragment *f,
     return true;
 }
 
-static bool division_emit_bindings(DivisionText *t, const NLCheckedFragment *f,
-                                   NLCheckedNodeId block, int indent)
+static bool division_emit_items(DivisionText *t, const NLCheckedFragment *f,
+                                NLCheckedNodeId block, int indent)
 {
     const NLTypeId boolean = nl_semantic_core_type(f->context, NL_TYPE_BOOL);
     const NLCheckedNodeView *root = nl_checked_node_view(f, block);
@@ -127,6 +127,16 @@ static bool division_emit_bindings(DivisionText *t, const NLCheckedFragment *f,
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
         if (n->kind == NL_CHECKED_RETURN)
             break; /* The validated plan supplies the separate exit result. */
+        if (n->kind == NL_CHECKED_STATEMENT) {
+            if (!division_text_append(t, "%*s(void)(", indent, "") ||
+                !division_emit_expression(t, f, n->initializer) ||
+                !division_text_append(t, ");\n"))
+                return false;
+            id = n->next_item;
+            continue;
+        }
+        if (n->kind != NL_CHECKED_BINDING)
+            return false;
         const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
         const char *type = init->type == boolean ? "_Bool" : "size_t";
         if (!division_emit_if(t, f, n->initializer, indent) ||
@@ -152,7 +162,7 @@ static bool division_emit_helper(DivisionText *text,
                                  "    _Static_assert(UINTMAX_C(%zu) != 0, "
                                  "\"nonzero divisor\");\n",
                                  helper->divisor)) &&
-           division_emit_bindings(text, helper->body, helper->body->root, 4) &&
+           division_emit_items(text, helper->body, helper->body->root, 4) &&
            division_emit_if(text, helper->body, helper->result, 4) &&
            division_text_append(text, "    return ") &&
            division_emit_expression(text, helper->body, helper->result) &&
@@ -244,7 +254,7 @@ static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
     if (!emitted ||
         !division_text_append(&text, "static void nl_qty_fn_%zu(void)\n{\n",
                               main.function) ||
-        !division_emit_bindings(&text, main.body, main.body->root, 4) ||
+        !division_emit_items(&text, main.body, main.body->root, 4) ||
         !division_text_append(&text,
                               "    return;\n}\n\nint main(void)\n{\n"
                               "    nl_qty_fn_%zu();\n    return 0;\n}\n",

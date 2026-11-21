@@ -93,7 +93,8 @@ typedef enum {
     NO_FAULT,
     ARM_RESERVATION,
     HELPER_SEAL,
-    ARM_WORLD
+    ARM_WORLD,
+    COPY_ENTRY_WORLD
 } Fault;
 static Fault fault;
 static size_t fail_allocation, visits, hits, bytes, pre_events;
@@ -171,6 +172,19 @@ NLCheckStatus __wrap_nl_h_custody_seal_result(NLCheckedFragment *parent,
     if (events && world && fault == ARM_WORLD)
         /* Body nodes/world, then the next arm's nodes/world. */
         fail_allocation = 4;
+    if (world && fault == COPY_ENTRY_WORLD) {
+        const NLCheckedNodeView *root =
+            nl_checked_node_view(child, child->root);
+        for (NLCheckedNodeId item = root->first_item; item;) {
+            const NLCheckedNodeView *n = nl_checked_node_view(child, item);
+            if (n->kind == NL_CHECKED_STATEMENT) {
+                /* Entry body nodes, then the actual published-world bytes. */
+                fail_allocation = 2;
+                break;
+            }
+            item = n->next_item;
+        }
+    }
     const NLCheckStatus result =
         __real_nl_h_custody_seal_result(parent, child, id, world);
     fail_allocation = 0;
@@ -393,8 +407,11 @@ static bool check_fault(Program *p, Fault at)
     fault = NO_FAULT;
     printf("OOM allocations=%zu hits=%zu bytes=%zu status=%d\n", visits, hits,
            bytes, status);
+    const size_t allocations = at == ARM_WORLD          ? 4
+                               : at == COPY_ENTRY_WORLD ? 2
+                                                        : 1;
     REQUIRE(status == NL_CHECK_OUT_OF_MEMORY && !p->root && hits == 1 &&
-            bytes && visits == (at == ARM_WORLD ? 4 : 1) &&
+            bytes && visits == allocations &&
             !memcmp(context, c, sizeof(context)) &&
             !memcmp(binding, c->bindings + symbol - 1, sizeof(binding)) &&
             !memcmp(place, c->places + anchor.place - 1, sizeof(place)) &&
@@ -425,6 +442,142 @@ static bool stage_fault(const NLCheckedFragment *root)
     return preserved && visits == 1 && hits == 1 && bytes > length && restored;
 }
 
+static bool copy_layout(const NLCheckedFragment *, NLCheckedNodeId);
+
+static bool copy_choice(const NLCheckedFragment *f, NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+    if (!n || n->kind != NL_CHECKED_IF)
+        return true;
+    for (size_t i = 0; i < n->normal_arms; ++i) {
+        const NLCheckedFragment *arm = nl_checked_if_arm(f, id, i);
+        const NLCheckedNodeView *r =
+            arm ? nl_checked_node_view(arm, arm->root) : NULL;
+        REQUIRE(r && r->kind == NL_CHECKED_IF_ARM &&
+                arm->context != f->context && copy_layout(arm, r->initializer));
+    }
+    return true;
+}
+
+static bool copy_layout(const NLCheckedFragment *f, NLCheckedNodeId block)
+{
+    const NLSemanticContext *c = f->context;
+    const NLCheckedNodeView *root = nl_checked_node_view(f, block);
+    REQUIRE(root && root->kind == NL_CHECKED_BLOCK);
+    for (NLCheckedNodeId id = root->first_item; id;) {
+        const NLCheckedNodeView *item = nl_checked_node_view(f, id);
+        REQUIRE(item && (!item->next_item || item->next_item > id));
+        if (item->kind == NL_CHECKED_STATEMENT) {
+            const NLCheckedNodeView *read =
+                nl_checked_node_view(f, item->initializer);
+            REQUIRE(
+                !item->result_count && !item->results[0].value &&
+                !item->terminates && item->type == nl_semantic_unit_type(c) &&
+                item->initializer < id && read &&
+                read->kind == NL_CHECKED_IDENTIFIER &&
+                read->value_use == NL_VALUE_COPIED && read->result_count == 1 &&
+                read->symbol && read->symbol <= c->binding_count);
+            const NLBindingEntry *binding = &c->bindings[read->symbol - 1];
+            const NLValueId copied = read->results[0].value;
+            NLSemanticValueView original, discarded;
+            REQUIRE(read->type == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
+                    binding->view.value < copied &&
+                    nl_semantic_value_view(c, binding->view.value, &original) &&
+                    nl_semantic_value_view(c, copied, &discarded) &&
+                    !discarded.owner_place &&
+                    discarded.carrier == NL_CARRIER_ENDED &&
+                    original.scalar_known == discarded.scalar_known &&
+                    original.scalar_value == discarded.scalar_value);
+            printf("READ %zu %s %d %zu %zu %zu\n", read->symbol, binding->name,
+                   discarded.scalar_known, discarded.scalar_value,
+                   binding->view.value, copied);
+        } else {
+            REQUIRE(copy_choice(f, item->initializer));
+        }
+        id = item->next_item;
+    }
+    return copy_choice(f, root->tail);
+}
+
+static bool copy_layout_calls(const NLCheckedFragment *f)
+{
+    for (size_t i = 0; i < f->body_count; ++i) {
+        const NLCheckedNodeView *call =
+            nl_checked_node_view(f, f->body_calls[i]);
+        const NLCheckedFragment *body = f->bodies[i];
+        printf("READS %zu\n", call->function);
+        REQUIRE(copy_layout(body, body->root) && copy_layout_calls(body));
+    }
+    for (size_t i = 0; i < f->arm_count; ++i)
+        REQUIRE(copy_layout_calls(f->arms[i].artifact));
+    return true;
+}
+
+static bool copy_identity(const NLCheckedFragment *root)
+{
+    REQUIRE(root->body_count == 1 && root->bodies[0]->body_count == 2);
+    NLCheckedFragment *body = root->bodies[0]->bodies[0];
+    REQUIRE(body->arm_count == 2);
+    NLCheckedFragment *arm = body->arms[0].artifact;
+    const NLCheckedNodeView *arm_root = nl_checked_node_view(arm, arm->root);
+    REQUIRE(arm_root && arm_root->kind == NL_CHECKED_IF_ARM);
+    const NLCheckedNodeView *block =
+        nl_checked_node_view(arm, arm_root->initializer);
+    REQUIRE(block && block->kind == NL_CHECKED_BLOCK);
+    const NLCheckedNodeView *first =
+        nl_checked_node_view(arm, block->first_item);
+    REQUIRE(first && nl_checked_node_view(arm, first->next_item));
+    const NLCheckedNodeId statement = first->next_item;
+    NLCheckedNodeView *item = &arm->nodes[statement - 1];
+    const NLCheckedNodeId initializer = item->initializer;
+    REQUIRE(item->kind == NL_CHECKED_STATEMENT &&
+            nl_checked_node_view(arm, initializer));
+    NLCheckedNodeView *read = &arm->nodes[initializer - 1];
+    const NLCheckedNodeView *tail = nl_checked_node_view(arm, block->tail);
+    const NLValueId value = read->results[0].value;
+    NLSemanticValueView discarded, forwarded;
+    const NLSemanticContext *world = arm->context;
+    REQUIRE(tail && nl_semantic_value_view(world, value, &discarded) &&
+            nl_semantic_value_view(world, tail->results[0].value, &forwarded) &&
+            value != tail->results[0].value && discarded.scalar_known &&
+            forwarded.scalar_known &&
+            discarded.scalar_value == forwarded.scalar_value);
+    char *pristine = NULL;
+    size_t length = 0;
+    REQUIRE(nl_quantity_usize_c17(root, &pristine, &length) == NL_CHECK_OK);
+
+    item->initializer = block->tail;
+    const bool occurrence = withheld(root, NL_CHECK_SEMANTIC_UNSUPPORTED);
+    item->initializer = initializer;
+    read->results[0].value = tail->results[0].value;
+    const bool package = withheld(root, NL_CHECK_SEMANTIC_UNSUPPORTED);
+    read->results[0].value = value;
+
+    const NLCheckedNodeId next = item->next_item;
+    item->next_item = block->first_item;
+    const bool order = withheld(root, NL_CHECK_SEMANTIC_UNSUPPORTED);
+    item->next_item = next;
+    arm->context = body->arms[1].artifact->context;
+    const bool branch = withheld(root, NL_CHECK_SEMANTIC_UNSUPPORTED);
+    arm->context = world;
+
+    NLSemanticContext *clone = NULL;
+    const bool cloned = nl_sem_clone(world, &clone) == NL_CHECK_OK;
+    if (cloned)
+        arm->context = clone;
+    const bool foreign =
+        cloned && withheld(root, NL_CHECK_SEMANTIC_UNSUPPORTED);
+    arm->context = world;
+    nl_semantic_destroy(clone);
+
+    const bool restored = retry(root, pristine, length);
+    free(pristine);
+    printf("COPY IDENTITY occurrence=%d package=%d order=%d sibling=%d "
+           "clone=%d byte_retry=%d\n",
+           occurrence, package, order, branch, foreign, restored);
+    return occurrence && package && order && branch && foreign && restored;
+}
+
 int main(int argc, char **argv)
 {
     if (argc != 3)
@@ -438,12 +591,20 @@ int main(int argc, char **argv)
         ok = check_fault(&p, HELPER_SEAL);
     else if (ok && !strcmp(mode, "arm-world-oom"))
         ok = check_fault(&p, ARM_WORLD);
+    else if (ok && !strcmp(mode, "copy-world-oom"))
+        ok = check_fault(&p, COPY_ENTRY_WORLD);
     else if (ok) {
         ok = check(&p) == NL_CHECK_OK && nl_h_custody_validate(p.root);
         if (ok && !strcmp(mode, "trace")) {
             size_t events = 0;
             ok = trace(p.root, true, &events) && pre_ok && pre_events == events;
             printf("PRE events=%zu POST events=%zu\n", pre_events, events);
+        } else if (ok && !strcmp(mode, "copy-trace")) {
+            size_t events = 0;
+            ok = trace(p.root, true, &events) && pre_ok &&
+                 pre_events == events && copy_layout_calls(p.root);
+        } else if (ok && !strcmp(mode, "copy-identity")) {
+            ok = copy_identity(p.root);
         } else if (ok && !strcmp(mode, "identity"))
             ok = prepare(&other, argv[2]) && check(&other) == NL_CHECK_OK &&
                  pre_ok && identity(&p, &other);

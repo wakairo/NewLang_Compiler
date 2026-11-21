@@ -1,0 +1,33 @@
+{
+  "arm-statement": {
+    "owned": [
+      ["main", [["low", null], ["high", null], ["audit", null]]],
+      ["dispatch", [["original", 37], ["portions", 7], ["leftover", 1], ["selected", null], ["kept", null]]],
+      ["dispatch", [["original", 74], ["portions", 14], ["leftover", 2], ["selected", null], ["kept", null]]]
+    ],
+    "trace": [
+      "CALL dispatch 37", "READ original 37", "COND 1", "READ portions 7",
+      "READ selected 7", "READ kept 7", "READ low 7",
+      "CALL dispatch 74", "READ original 74", "COND 0", "READ leftover 2",
+      "READ selected 2", "READ kept 2", "READ high 2", "READ audit 2"
+    ]
+  },
+  "flat-statement": {
+    "owned": [
+      ["main", [["origin", 63], ["parts", 9], ["checked", 9], ["residue", 4]]],
+      ["forward", [["seed", 9], ["carried", 9]]]
+    ],
+    "trace": [
+      "READ origin 63", "READ parts 9", "CALL forward 9", "READ seed 9",
+      "READ carried 9", "READ checked 9", "READ residue 4"
+    ]
+  },
+  "source-alternative": {
+    "owned": [["main", []], ["dispatch", []], ["dispatch", []]],
+    "trace": ["CALL dispatch 37", "COND 1", "BIND low 7", "CALL dispatch 74", "COND 0", "BIND high 2", "BIND audit 2"]
+  },
+  "non-usize": {"check": 0, "emit": 4, "diagnostic": "[V1-BACKEND-UNSUPPORTED]"},
+  "discard-call": {"check": 0, "emit": 4, "diagnostic": "[V1-BACKEND-UNSUPPORTED]"},
+  "unbound": {"check": 3, "emit": 3, "diagnostic": "[P3-UNKNOWN-BINDING]"},
+  "zero-after-read": {"check": 3, "emit": 3, "diagnostic": "[USIZE-DIVISION-ZERO]"}
+}

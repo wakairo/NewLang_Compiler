@@ -1209,10 +1209,12 @@ static NLCheckedNodeId division_local_before(const NLCheckedFragment *f,
     const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
     for (NLCheckedNodeId id = root->first_item; id && id < before;) {
         const NLCheckedNodeView *binding = nl_checked_node_view(f, id);
-        if (!binding || binding->kind != NL_CHECKED_BINDING ||
+        if (!binding ||
+            (binding->kind != NL_CHECKED_BINDING &&
+             binding->kind != NL_CHECKED_STATEMENT) ||
             (binding->next_item && binding->next_item <= id))
             return 0;
-        if (binding->symbol == symbol)
+        if (binding->kind == NL_CHECKED_BINDING && binding->symbol == symbol)
             return id;
         id = binding->next_item;
     }
@@ -1238,6 +1240,34 @@ static bool division_copy_at(const NLCheckedFragment *f,
         use ? division_local_before(f, id, use->symbol) : 0;
     return binding && binding >= first_binding &&
            division_name_copy(f, c, id, syntax, use->symbol);
+}
+
+static const NLSyntaxNode *
+discarded_quantity_copy(const NLCheckedFragment *f, const NLSemanticContext *c,
+                        NLCheckedNodeId id, const NLCheckedNodeView *node,
+                        const NLSyntaxView *syntax)
+{
+    if (node->kind != NL_CHECKED_STATEMENT || node->terminates ||
+        node->type != nl_semantic_unit_type(c) || node->result_count ||
+        node->results[0].value || node->symbol || node->argument_count ||
+        node->first_argument || !node->initializer || node->initializer >= id ||
+        !span_equal(node->span, syntax->span))
+        return NULL;
+    const NLSyntaxNode *expression = syntax->data.statement.expression;
+    const NLSyntaxView *source = nl_syntax_node_view(expression);
+    NLValueId value;
+    if (!source || source->kind != NL_SYNTAX_EXPR_NAME ||
+        !node_value(f, c, node->initializer, &value))
+        return NULL;
+    const NLSemanticValueView *copy = &c->values[value - 1];
+    const NLSemanticTypeView *type = &c->types[copy->type - 1].view;
+    /* The statement owns no result. The original CHECK use is a separate
+     * package discharged by discard_results. The caller verifies its named
+     * Copy occurrence and lexical origin before accepting this item. */
+    return type->is_copy && type->is_discardable &&
+                   copy->carrier == NL_CARRIER_ENDED && !copy->owner_place
+               ? expression
+               : NULL;
 }
 
 /* Before the operation, each previously accepted local is rooted in this
@@ -1663,9 +1693,9 @@ static QuantityOrigin quantity_expression_at(QuantityBody *b,
     return quantity_arithmetic_at(b, id, syntax);
 }
 
-static bool quantity_bindings_at(QuantityBody *b, const NLCheckedNodeView *root,
-                                 const NLSyntaxView *source,
-                                 QuantityResult *result)
+static bool quantity_items_at(QuantityBody *b, const NLCheckedNodeView *root,
+                              const NLSyntaxView *source,
+                              QuantityResult *result)
 {
     const NLCheckedFragment *f = b->body;
     const NLSemanticContext *c = b->context;
@@ -1681,7 +1711,8 @@ static bool quantity_bindings_at(QuantityBody *b, const NLCheckedNodeView *root,
          item = nl_syntax_next_argument(item)) {
         const NLSyntaxView *src = nl_syntax_node_view(item);
         const NLCheckedNodeView *node = nl_checked_node_view(f, id);
-        if (++count > NL_PARSER_MAX_NODES || !src || !node)
+        if (++count > NL_PARSER_MAX_NODES || !src || !node ||
+            (node->next_item && node->next_item <= id))
             return false;
         if (src->kind == NL_SYNTAX_RETURN) {
             if (b->if_parent || nl_syntax_next_argument(item) ||
@@ -1697,10 +1728,17 @@ static bool quantity_bindings_at(QuantityBody *b, const NLCheckedNodeView *root,
             id = 0;
             break;
         }
+        if (src->kind == NL_SYNTAX_STATEMENT) {
+            const NLSyntaxNode *copy =
+                discarded_quantity_copy(f, c, id, node, src);
+            if (!copy || !quantity_atom_at(b, node->initializer, copy))
+                return false;
+            id = node->next_item;
+            continue;
+        }
         if (!binding_source(f, c, node, src) ||
             node->symbol > NL_SEMANTIC_MAX_ENTRIES ||
-            node->symbol == b->formal || b->origins[node->symbol - 1] ||
-            (node->next_item && node->next_item <= id))
+            node->symbol == b->formal || b->origins[node->symbol - 1])
             return false;
         const NLSyntaxNode *init_source = src->data.binding.initializer;
         const NLCheckedNodeView *init =
@@ -1774,9 +1812,9 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
         branch.calls = branch.arms = 0;
         branch.if_parent = f;
         QuantityResult result;
-        if (!quantity_bindings_at(&branch,
-                                  nl_checked_node_view(arm, root->initializer),
-                                  block, &result) ||
+        if (!quantity_items_at(&branch,
+                               nl_checked_node_view(arm, root->initializer),
+                               block, &result) ||
             !quantity_tail_at(&branch, root->initializer, result.id, &tail) ||
             tail != arm_value)
             return QUANTITY_UNSEEN;
@@ -1812,7 +1850,7 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
                       .depth = depth,
                       .remaining = remaining};
     QuantityResult result;
-    if (!quantity_bindings_at(&b, root, source, &result))
+    if (!quantity_items_at(&b, root, source, &result))
         return false;
     if (fn->count) {
         NLValueId value;
@@ -1951,7 +1989,8 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
          item = nl_syntax_next_argument(item)) {
         const NLSyntaxView *src = nl_syntax_node_view(item);
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-        if (++count > NL_PARSER_MAX_NODES || !src || !n)
+        if (++count > NL_PARSER_MAX_NODES || !src || !n ||
+            (n->next_item && n->next_item <= id))
             return false;
         if (src->kind == NL_SYNTAX_RETURN) {
             if (!scalar_entry || nl_syntax_next_argument(item) ||
@@ -1962,8 +2001,16 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
             id = 0;
             break;
         }
-        if (!binding_source(f, c, n, src) ||
-            (n->next_item && n->next_item <= id))
+        if (src->kind == NL_SYNTAX_STATEMENT) {
+            const NLSyntaxNode *copy =
+                discarded_quantity_copy(f, c, id, n, src);
+            if (!scalar_entry || !copy ||
+                !division_copy_at(f, c, n->initializer, copy, 0))
+                return false;
+            id = n->next_item;
+            continue;
+        }
+        if (!binding_source(f, c, n, src))
             return false;
         const NLSyntaxNode *syntax = src->data.binding.initializer;
         const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
