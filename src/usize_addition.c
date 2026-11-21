@@ -1720,11 +1720,16 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
         return false;
     if (fn->count) {
         NLValueId value;
-        if ((!result.returned &&
-             !quantity_tail_at(&b, f->root, result.id, &value)) ||
-            quantity_expression_at(&b, result.id, result.syntax) !=
-                QUANTITY_FROM_RESULT ||
-            !b.formal)
+        if (!result.returned &&
+            !quantity_tail_at(&b, f->root, result.id, &value))
+            return false;
+        const QuantityOrigin origin =
+            quantity_expression_at(&b, result.id, result.syntax);
+        /* A Copy of this formal (possibly through checked lets) also has
+         * a formal origin. The caller still matches the actual to this
+         * formal and the call result to the checked body result. */
+        if (!b.formal ||
+            (origin != QUANTITY_FROM_FORMAL && origin != QUANTITY_FROM_RESULT))
             return false;
     } else {
         const NLTypeId unit = nl_semantic_unit_type(c);
