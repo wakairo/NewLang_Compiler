@@ -52,6 +52,8 @@ add_custom_command(
     OUTPUT "${_r1581_stamp}"
     COMMAND "${Python3_EXECUTABLE}" "${_r1581_driver}"
         --group preflight ${_r1581_args}
+    COMMAND "${Python3_EXECUTABLE}" "${_r1581_driver}"
+        --group c17-diagnostic ${_r1581_args}
     COMMAND "${CMAKE_COMMAND}" -E touch "${_r1581_stamp}"
     DEPENDS r1581_public_probe newlangc
         "${_r1581_driver}" ${_r1581_inputs}

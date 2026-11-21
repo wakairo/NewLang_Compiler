@@ -327,6 +327,63 @@ class Driver:
         self.reports.append(row)
         print("R1581_NATIVE " + json.dumps(row, sort_keys=True), flush=True)
 
+    def c17_diagnostic(self):
+        """C1303: record actual P2 commands; no native acceptance change."""
+        name = POSITIVE[1]
+        source = SOURCES / name
+        raw_source = source.read_bytes()
+        compiler = Path(self.args.compiler).resolve()
+        compiler_bytes = compiler.read_bytes()
+        print("R1581_C17_DIAGNOSTIC_INPUT " + json.dumps({
+            "case": name, "source": str(source),
+            "source_bytes": len(raw_source),
+            "source_sha256": digest(raw_source),
+            "source_hex": raw_source.hex(),
+            "compiler": str(compiler),
+            "compiler_bytes": len(compiler_bytes),
+            "compiler_sha256": digest(compiler_bytes),
+            "cwd": str(Path.cwd()), "build": self.args.build,
+            "config": self.args.config, "cflags": self.args.cflags,
+            "sanitizer": self.args.sanitizer,
+            "python": sys.version,
+            "compile_native": "NOT_RUN",
+        }, sort_keys=True), flush=True)
+        commands = [
+            ("check", [self.args.compiler, "--check", str(source)]),
+            ("emit", [self.args.compiler, str(source)]),
+        ]
+        for stage, argv in commands:
+            result = self.run(name + ".diagnostic-" + stage, argv, timeout=30)
+            exact_stdout = result.returncode != 0 or len(result.stdout) <= 16384
+            row = {
+                "case": name, "stage": stage, "argv": argv,
+                "source_bytes": len(raw_source),
+                "source_sha256": digest(raw_source),
+                "returncode": result.returncode,
+                "stdout_bytes": len(result.stdout),
+                "stdout_sha256": digest(result.stdout),
+                "stdout_hex": result.stdout.hex() if exact_stdout else None,
+                "stdout_runner_file": str(
+                    self.out / (name + ".diagnostic-" + stage + ".stdout")),
+                "stdout_transport": (
+                    "EXACT_HEX" if exact_stdout else
+                    "LARGE_SUCCESS_HASH_ONLY_RUNNER_FILE_NOT_RETRIEVED"),
+                "stderr_bytes": len(result.stderr),
+                "stderr_sha256": digest(result.stderr),
+                "stderr_hex": result.stderr.hex(),
+                "stderr_text": result.stderr.decode("utf-8", errors="backslashreplace"),
+                "verdict": "RECORDED_ONLY_NOT_LANGUAGE_CAPABILITY_PASS",
+                "compile_native": "NOT_RUN",
+            }
+            self.reports.append(row)
+            print("R1581_C17_DIAGNOSTIC " + json.dumps(row, sort_keys=True),
+                  flush=True)
+            if stage == "check":
+                need(result.returncode == 0 and not result.stdout and not result.stderr,
+                     "DIAGNOSTIC_UNEXPECTED_POSITIVE_CHECK: " + name)
+            need(result.returncode >= 0,
+                 "DIAGNOSTIC_PROCESS_SIGNAL: " + name)
+
     def inventory(self):
         result = self.run(
             "own-inventory",
@@ -370,7 +427,8 @@ class Driver:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--group", required=True,
-                        choices=["preflight", "public", "invalid", "coverage", "native"])
+                        choices=["preflight", "public", "invalid", "coverage", "native",
+                                 "c17-diagnostic"])
     for name in ("probe", "compiler", "cc", "ctest", "build"):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--config", default="Debug")
@@ -391,6 +449,8 @@ def main():
                 driver.control(name, True, False)
             for name in COVERAGE:
                 driver.control(name, False, False)
+        elif args.group == "c17-diagnostic":
+            driver.c17_diagnostic()
         elif args.group == "public":
             for name in POSITIVE:
                 driver.positive(name)
