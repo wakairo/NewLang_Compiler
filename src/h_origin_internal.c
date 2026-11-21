@@ -438,6 +438,54 @@ static bool custody_storage_matches(const struct NLHOriginOwner *o,
            p->body_count <= p->body_capacity &&
            p->body_count <= p->call_capacity;
 }
+NLCheckStatus nl_h_custody_link_usize_actual(NLCheckedFragment *f,
+                                             NLCheckedNodeId enclosing_call,
+                                             NLCheckedNodeId first,
+                                             NLCheckedNodeId second)
+{
+    const struct NLHOriginOwner *o = f ? f->h_origin : NULL;
+    const CustodyParent *p = custody_parent(o, f);
+    if (!p || o->published || o->aborted || p->nodes_sealed ||
+        !custody_storage_matches(o, p) || !enclosing_call ||
+        enclosing_call >= first || first >= second)
+        return NL_CHECK_INTERNAL_ERROR;
+    const NLCheckedNodeView *outer = nl_checked_node_view(f, enclosing_call);
+    const NLCheckedNodeView *early = nl_checked_node_view(f, first);
+    const NLCheckedNodeView *later = nl_checked_node_view(f, second);
+    const NLTypeId type = nl_semantic_core_type(f->context, NL_TYPE_USIZE);
+    if (!type || !outer || outer->kind != NL_CHECKED_REGISTERED_CALL ||
+        !outer->body_backed || outer->terminates || outer->result_count ||
+        outer->argument_count != 1 || outer->first_argument != first ||
+        !early || early->kind != NL_CHECKED_REGISTERED_CALL ||
+        !early->body_backed || early->next_argument || early->terminates ||
+        early->type != type || early->parameter_type != type ||
+        early->result_count != 1 || early->results[0].type != type || !later ||
+        later->next_argument || later->terminates || later->type != type ||
+        later->parameter_type != type || later->result_count != 1 ||
+        later->results[0].type != type)
+        return NL_CHECK_INTERNAL_ERROR;
+
+    for (CustodyEdge *e = p->edges; e; e = e->next) {
+        if (e->role != NL_CUSTODY_BODY || e->site != first)
+            continue;
+        if (e->state != COMMITTED || e->slot >= p->body_count ||
+            p->calls[e->slot] != first || p->bodies[e->slot] != e->child ||
+            e->world != p->world)
+            return NL_CHECK_INTERNAL_ERROR;
+        if (e->result_sealed && !e->call_nodes) {
+            /* The callee result was sealed at return, before the caller
+             * evaluated the next argument. Authenticate every original byte
+             * before completing the same one-time link in both views. */
+            if (!same_node(f, first, &e->call_view))
+                return NL_CHECK_INTERNAL_ERROR;
+            e->call_view.next_argument = second;
+        }
+        f->nodes[first - 1].next_argument = second;
+        return NL_CHECK_OK;
+    }
+    return NL_CHECK_INTERNAL_ERROR;
+}
+
 static bool validate_custody(const NLCheckedFragment *root, bool observation,
                              const NLSemanticContext *candidate)
 {
@@ -527,6 +575,63 @@ static const CustodyEdge *incoming_edge(const CustodyParent *child,
     return NULL;
 }
 
+static const CustodyEdge *body_invocation(const struct NLHOriginOwner *o,
+                                          const CustodyParent *body,
+                                          const CustodyParent **caller)
+{
+    const CustodyEdge *e = incoming_edge(body, caller);
+    if (!e || e->role != NL_CUSTODY_BODY ||
+        !custody_storage_matches(o, *caller) || e->world != body->world ||
+        (*caller)->world != body->world)
+        return NULL;
+    const CustodyParent *p = *caller;
+    if (e->state == COMMITTED)
+        return e->slot < p->body_count &&
+                       p->bodies[e->slot] == body->fragment &&
+                       p->calls[e->slot] == e->site
+                   ? e
+                   : NULL;
+    return !o->published && e->state == PENDING && e->slot == p->body_count &&
+                   e->slot < p->body_capacity && e->slot < p->call_capacity
+               ? e
+               : NULL;
+}
+
+static bool custody_reaches_root(const struct NLHOriginOwner *o,
+                                 const CustodyParent *p)
+{
+    while (p->fragment != o->root) {
+        const CustodyEdge *link = incoming_edge(p, &p);
+        if (!link || link->state != COMMITTED)
+            return false;
+    }
+    return true;
+}
+
+const NLCheckedFragment *
+nl_h_custody_body_caller(const NLCheckedFragment *f,
+                         const NLSemanticContext *working,
+                         NLCheckedNodeId *call)
+{
+    const struct NLHOriginOwner *o = f ? f->h_origin : NULL;
+    const CustodyParent *body = custody_parent(o, f);
+    if (!body || !working || !call || o->aborted ||
+        !custody_storage_matches(o, body) || !custody_parent(o, o->root))
+        return NULL;
+    if (o->published &&
+        (body->world != working || !custody_reaches_root(o, body) ||
+         !nl_h_custody_validate(o->root) ||
+         !nl_h_custody_result_world_present(o->root, o->root->root)))
+        return NULL;
+    const CustodyParent *caller = NULL;
+    const CustodyEdge *e = body_invocation(o, body, &caller);
+    if (!e || (e->state == COMMITTED &&
+               !nl_h_custody_result_valid(caller->fragment, e->site)))
+        return NULL;
+    *call = e->site;
+    return caller->fragment;
+}
+
 bool nl_h_custody_is_body(const NLCheckedFragment *f)
 {
     const struct NLHOriginOwner *o = f ? f->h_origin : NULL;
@@ -599,32 +704,14 @@ nl_h_custody_if_body(const NLCheckedFragment *arm,
         return NULL;
 
     const CustodyParent *caller = NULL;
-    const CustodyEdge *invocation = incoming_edge(body, &caller);
-    if (!invocation || invocation->role != NL_CUSTODY_BODY ||
-        !custody_storage_matches(o, caller) ||
-        invocation->world != body->world || caller->world != body->world)
+    const CustodyEdge *invocation = body_invocation(o, body, &caller);
+    if (!invocation)
         return NULL;
-    if (invocation->state == COMMITTED) {
-        if (invocation->slot >= caller->body_count ||
-            caller->bodies[invocation->slot] != body->fragment ||
-            caller->calls[invocation->slot] != invocation->site)
-            return NULL;
-    } else if (o->published || invocation->state != PENDING ||
-               invocation->slot != caller->body_count ||
-               invocation->slot >= caller->body_capacity ||
-               invocation->slot >= caller->call_capacity) {
-        return NULL;
-    }
     /* An outer invocation can still be under construction during CHECK. Once
      * published, the authenticated call must be reachable from the real root.
      */
-    if (o->published) {
-        for (const CustodyParent *p = caller; p->fragment != o->root;) {
-            const CustodyEdge *link = incoming_edge(p, &p);
-            if (!link || link->state != COMMITTED)
-                return NULL;
-        }
-    }
+    if (o->published && !custody_reaches_root(o, caller))
+        return NULL;
     const NLCheckedNodeView *call =
         nl_checked_node_view(caller->fragment, invocation->site);
     if (!call || call->kind != NL_CHECKED_REGISTERED_CALL ||

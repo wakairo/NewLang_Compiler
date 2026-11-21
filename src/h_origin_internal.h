@@ -27,6 +27,12 @@ NLCheckStatus nl_h_custody_seal_result(NLCheckedFragment *parent,
                                        NLCheckedFragment *child,
                                        NLCheckedNodeId call,
                                        const NLSemanticContext *result_world);
+/* CHECK appends the second actual after both evaluations. Complete that one
+ * link in the original first actual and its existing node-only result seal. */
+NLCheckStatus nl_h_custody_link_usize_actual(NLCheckedFragment *,
+                                             NLCheckedNodeId enclosing_call,
+                                             NLCheckedNodeId first,
+                                             NLCheckedNodeId second);
 bool nl_h_custody_result_valid(const NLCheckedFragment *parent,
                                NLCheckedNodeId call);
 /* Coverage observation of this same canonical receipt, not validation or a
@@ -46,6 +52,12 @@ bool nl_h_custody_validate_candidate(const NLCheckedFragment *root,
 /* Recognize the canonical BODY and its attached CHECK state before reserve.
  * The arithmetic caller still authenticates the registered source event. */
 bool nl_h_custody_is_body(const NLCheckedFragment *);
+/* Resolve the existing BODY edge. CHECK may inspect its pending reservation.
+ * Published consumers read the original world through the existing seals. */
+const NLCheckedFragment *
+nl_h_custody_body_caller(const NLCheckedFragment *,
+                         const NLSemanticContext *working,
+                         NLCheckedNodeId *call);
 /* Locate the owning registered BODY invocation of a canonical normal IF arm.
  * The CHECK planner supplies its exact parent while the graph is unpublished.
  * Callers verify the registered source, IF and exact syntax event separately.
