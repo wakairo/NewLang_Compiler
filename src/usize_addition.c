@@ -658,10 +658,18 @@ const NLFunctionEntry *nl_quantity_usize_function(const NLSemanticContext *c,
         fn->hidden_dependencies || fn->owner_receiver || fn->owner_producer ||
         fn->custody_recipient)
         return NULL;
-    for (size_t i = 0; i < count; ++i)
-        if (!fn->parameters || fn->parameters[i] != type ||
-            !fn->body->parameter_names[i])
+    const NLTypeId boolean = nl_semantic_core_type(c, NL_TYPE_BOOL);
+    bool has_boolean = false;
+    for (size_t i = 0; i < count; ++i) {
+        if (!fn->parameters || !fn->body->parameter_names[i])
             return NULL;
+        if (fn->parameters[i] == type)
+            continue;
+        if (count != NL_QUANTITY_MAX_ARGUMENTS || has_boolean ||
+            fn->parameters[i] != boolean)
+            return NULL;
+        has_boolean = true;
+    }
     return fn;
 }
 static const NLSyntaxNode *source_node(const NLFunctionBody *body,
@@ -893,7 +901,9 @@ static bool scalar_node_value(const NLCheckedFragment *f,
 {
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
     if (!n || n->terminates || n->result_count != 1 || n->type != type ||
-        n->results[0].type != type || !quantity(c, n->results[0].value, type))
+        n->results[0].type != type || !quantity(c, n->results[0].value, type) ||
+        (type == nl_semantic_core_type(c, NL_TYPE_BOOL) &&
+         c->values[n->results[0].value - 1].scalar_value > 1))
         return false;
     *value = n->results[0].value;
     return true;
@@ -1429,14 +1439,14 @@ static bool quantity_pair_formals(const NLCheckedFragment *body,
         call->first_argument <= id ||
         c->binding_count > NL_SEMANTIC_MAX_ENTRIES)
         return false;
-    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
     NLValueId values[NL_QUANTITY_MAX_ARGUMENTS];
     NLCheckedNodeId actual = call->first_argument;
     for (size_t i = 0; i < NL_QUANTITY_MAX_ARGUMENTS; ++i) {
         const NLCheckedNodeView *arg = nl_checked_node_view(caller, actual);
+        const NLTypeId type = fn->parameters[i];
         if (!arg || (arg->next_argument && arg->next_argument <= actual) ||
             arg->parameter_type != type ||
-            !node_value(caller, c, actual, &values[i]) ||
+            !scalar_node_value(caller, c, actual, type, &values[i]) ||
             c->values[values[i] - 1].carrier != NL_CARRIER_ENDED ||
             c->values[values[i] - 1].owner_place)
             return false;
@@ -1451,6 +1461,7 @@ static bool quantity_pair_formals(const NLCheckedFragment *body,
         for (size_t j = 0; j < NL_QUANTITY_MAX_ARGUMENTS; ++j) {
             if (binding->view.value != values[j])
                 continue;
+            const NLTypeId type = fn->parameters[j];
             NLSemanticPlaceView place;
             if (formals[j] || !binding->hidden ||
                 binding->view.availability != NL_CONSUMED ||
@@ -1477,7 +1488,9 @@ static bool division_call_values(const NLCheckedFragment *f,
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLSymbolId formals[] = {helper->formal, helper->second_formal};
     const size_t count = helper->second_formal ? 2 : 1;
-    if (!call || call->kind != NL_CHECKED_REGISTERED_CALL ||
+    const NLFunctionEntry *fn =
+        nl_quantity_usize_function(c, helper->function, count);
+    if (!fn || !call || call->kind != NL_CHECKED_REGISTERED_CALL ||
         !call->body_backed || call->argument_count != count ||
         call->function != helper->function ||
         (helper->second_formal && f->context != helper->body->context))
@@ -1487,7 +1500,8 @@ static bool division_call_values(const NLCheckedFragment *f,
         const NLCheckedNodeView *arg = nl_checked_node_view(f, argument);
         NLValueId actual;
         if (!arg || !formals[i] || formals[i] > c->binding_count ||
-            !node_value(f, c, argument, &actual) ||
+            c->bindings[formals[i] - 1].view.type != fn->parameters[i] ||
+            !scalar_node_value(f, c, argument, fn->parameters[i], &actual) ||
             c->bindings[formals[i] - 1].view.value != actual ||
             (arg->symbol && arg->symbol >= helper->formal))
             return false;
@@ -1642,7 +1656,6 @@ static QuantityOrigin quantity_condition_at(QuantityBody *b, NLCheckedNodeId id,
     const NLTypeId boolean = nl_semantic_core_type(c, NL_TYPE_BOOL);
     NLValueId value;
     if (!src || !scalar_node_value(f, c, id, boolean, &value) ||
-        c->values[value - 1].scalar_value > 1 ||
         !span_equal(node->span, src->span))
         return QUANTITY_UNSEEN;
     if (node->kind == NL_CHECKED_IDENTIFIER) {
@@ -1720,13 +1733,16 @@ static QuantityOrigin quantity_call_chain_at(QuantityBody *b,
         return QUANTITY_UNSEEN;
     const NLSyntaxNode *actual_source = src->data.call.arguments;
     NLCheckedNodeId argument = call->first_argument, previous = id;
+    const NLTypeId boolean = nl_semantic_core_type(c, NL_TYPE_BOOL);
     for (size_t i = 0; i < call->argument_count; ++i) {
         const NLCheckedNodeView *arg = nl_checked_node_view(f, argument);
         if (!arg || !actual_source || argument <= previous)
             return QUANTITY_UNSEEN;
         QuantityOrigin actual;
-        if (arg->kind == NL_CHECKED_IDENTIFIER ||
-            arg->kind == NL_CHECKED_USIZE_LITERAL) {
+        if (arg->parameter_type == boolean) {
+            actual = quantity_condition_at(b, argument, actual_source);
+        } else if (arg->kind == NL_CHECKED_IDENTIFIER ||
+                   arg->kind == NL_CHECKED_USIZE_LITERAL) {
             actual = quantity_atom_at(b, argument, actual_source);
         } else {
             if (arg->parameter_type != nl_semantic_core_type(c, NL_TYPE_USIZE))
@@ -1823,7 +1839,7 @@ static bool quantity_items_at(QuantityBody *b, const NLCheckedNodeView *root,
         const NLCheckedNodeView *init =
             nl_checked_node_view(f, node->initializer);
         const QuantityOrigin origin =
-            f->arm_count && init->type == nl_semantic_core_type(c, NL_TYPE_BOOL)
+            init->type == nl_semantic_core_type(c, NL_TYPE_BOOL)
                 ? quantity_condition_at(b, node->initializer, init_source)
                 : quantity_expression_at(b, node->initializer, init_source);
         if (!origin || node->symbol == b->formal)
