@@ -63,6 +63,42 @@ static const char *check_name(NLCheckStatus status)
     return "UNKNOWN_STATUS";
 }
 
+static int parse_failure_result(NLParseStatus status, bool adapter)
+{
+    switch (status) {
+    case NL_PARSE_LEXICALLY_UNSUPPORTED:
+    case NL_PARSE_SYNTAX_UNSUPPORTED:
+        return adapter ? 30 : 20;
+    case NL_PARSE_SYNTAX_ERROR:
+        return adapter ? 71 : 20;
+    case NL_PARSE_OUT_OF_MEMORY:
+    case NL_PARSE_RESOURCE_LIMIT:
+        return 70;
+    case NL_PARSE_OK:
+    case NL_PARSE_INTERNAL_ERROR:
+        return 71;
+    }
+    return 71;
+}
+
+static int check_failure_result(NLCheckStatus status, bool adapter)
+{
+    switch (status) {
+    case NL_CHECK_SEMANTIC_ERROR:
+        return adapter ? 71 : 10;
+    case NL_CHECK_SEMANTIC_UNSUPPORTED:
+    case NL_CHECK_ANALYSIS_PRECISION_LIMIT:
+        return adapter ? 30 : 10;
+    case NL_CHECK_OUT_OF_MEMORY:
+    case NL_CHECK_RESOURCE_LIMIT:
+        return 70;
+    case NL_CHECK_OK:
+    case NL_CHECK_INTERNAL_ERROR:
+        return 71;
+    }
+    return 71;
+}
+
 static bool failure(const char *reason)
 {
     printf("STOP\t%s\n", reason);
@@ -334,6 +370,7 @@ int main(int argc, char **argv)
     NLParseStatus parse_status = nl_parser_create(source, &parser);
     printf("STAGE\tparser_create\t%s\n", parse_name(parse_status));
     if (parse_status != NL_PARSE_OK) {
+        result = parse_status == NL_PARSE_OUT_OF_MEMORY ? 70 : 71;
         goto done;
     }
     parse_status =
@@ -342,12 +379,13 @@ int main(int argc, char **argv)
     fflush(stdout);
     if (parse_status != NL_PARSE_OK) {
         (void)nl_parse_diagnostic_render(stderr, source, &parse_diagnostic);
-        result = parse_status <= NL_PARSE_SYNTAX_ERROR ? 20 : 70;
+        result = parse_failure_result(parse_status, false);
         goto done;
     }
     NLCheckStatus check_status = nl_semantic_create(&context);
     printf("STAGE\tcontext_create\t%s\n", check_name(check_status));
     if (check_status != NL_CHECK_OK) {
+        result = check_status == NL_CHECK_OUT_OF_MEMORY ? 70 : 71;
         goto done;
     }
     const NLSyntaxTree *inputs[] = {tree};
@@ -359,7 +397,7 @@ int main(int argc, char **argv)
         printf("DIAGNOSTIC_INPUT\t%zu\n", unit_diagnostic.input_index);
         (void)nl_check_diagnostic_render(stderr, source,
                                          &unit_diagnostic.diagnostic);
-        result = check_status <= NL_CHECK_ANALYSIS_PRECISION_LIMIT ? 10 : 70;
+        result = check_failure_result(check_status, false);
         goto done;
     }
     if (strcmp(argv[2], "invalid") == 0) {
@@ -376,7 +414,9 @@ int main(int argc, char **argv)
         goto done;
     }
     parse_status = nl_parser_create(adapter_source, &adapter_parser);
+    printf("STAGE\tadapter_parser_create\t%s\n", parse_name(parse_status));
     if (parse_status != NL_PARSE_OK) {
+        result = parse_status == NL_PARSE_OUT_OF_MEMORY ? 70 : 71;
         goto done;
     }
     parse_status = nl_parser_parse_expression_fragment(
@@ -385,7 +425,7 @@ int main(int argc, char **argv)
     if (parse_status != NL_PARSE_OK) {
         (void)nl_parse_diagnostic_render(stderr, adapter_source,
                                          &parse_diagnostic);
-        result = 30;
+        result = parse_failure_result(parse_status, true);
         goto done;
     }
     check_status = nl_semantic_check_expression(context, adapter_tree, &checked,
@@ -395,7 +435,7 @@ int main(int argc, char **argv)
     if (check_status != NL_CHECK_OK) {
         (void)nl_check_diagnostic_render(stderr, adapter_source,
                                          &check_diagnostic);
-        result = 30;
+        result = check_failure_result(check_status, true);
         goto done;
     }
     NLCheckedNodeId root = nl_checked_root(checked);

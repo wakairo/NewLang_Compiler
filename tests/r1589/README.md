@@ -59,6 +59,13 @@ failure. An accepted invalid, wrong Known quantity, broken public arithmetic
 relation, unexplained identity discrepancy or native/sanitizer anomaly stops
 that case before deeper operations and is handed to Coordination.
 
+All caught stop paths explicitly return a nonzero result, including a final
+original-byte/hash failure after earlier successful operations. The synthetic
+adapter treats only explicit unsupported/analysis-precision statuses as an
+observation limit. OOM/resource statuses stop execution; syntax/semantic errors,
+internal errors and unknown statuses stop to Coordination. Exact public status
+names and first diagnostics are retained. No such failure permits native work.
+
 ## Inventory and trace transport
 
 r1589_inventory is an ALL build target that runs only text/hash verification,

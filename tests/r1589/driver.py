@@ -384,6 +384,7 @@ def measure(name, compiler, probe, cc, sanitizer, build_type, output_root):
             result = 0
         verify_originals()
     except CoverageStop as failure:
+        result = 1
         record["outcome"] = "LAWFUL_COVERAGE_NOT_REACHED"
         record["stop"] = str(failure)
         record["classification_limit"] = (
@@ -394,6 +395,7 @@ def measure(name, compiler, probe, cc, sanitizer, build_type, output_root):
         record["stop"] = str(failure)
         result = 2
     except MeasurementStop as failure:
+        result = 1
         record["outcome"] = "STOP_TO_COORDINATION"
         record["stop"] = str(failure)
     finally:
