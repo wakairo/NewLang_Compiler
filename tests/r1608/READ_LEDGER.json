@@ -1,0 +1,171 @@
+{
+  "interface_commit": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+  "verified_tree": "d6faf52a55e1242df7b4e1bbbd8218103665a216",
+  "first_source_law_commit": "6287fcb4cb94df3da1c67f57d7d717b29c25ecf9",
+  "execution_target": "NOT_RELEASED",
+  "entries": [
+    {
+      "path": "docs/NewLang_Project_Compass.md",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "0f9b170ce26504a16acec8e4b84beab11f9fbd4e",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Required navigation at the interface base; blob unchanged from FIRST."
+    },
+    {
+      "path": "docs/NewLang_Product_Value_Strategy.md",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "c75f1601f13070bc5a588bd78957b54662bdfd23",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Relevant goals, non-goals and alternatives; 1.1 and 1.3; blob unchanged."
+    },
+    {
+      "path": "docs/NewLang_Project_Development_Process.md",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "a4c3df91cffd5d6fe0c97787de56499f5608312d",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Process 7 independence, preservation and finite STOP; blob unchanged."
+    },
+    {
+      "path": "docs/reference/CURRENT_SPEC.md",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "5ff1e4a460848472e8ef832168e6f25d9c7b65e0",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Resolve current canonical Draft; selects Draft17.38; blob unchanged."
+    },
+    {
+      "path": "docs/reference/NewLang_v0_spec_Draft17_38.md",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "25951270752c9e6499a1dcefc99ab7b17115bcee",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Relevant already-read source laws; blob unchanged; FIRST law anchor remains 6287."
+    },
+    {
+      "path": "include/newlang/source.h",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "269b2723c07bed009455e5e3f2766b9086a33dd2",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "NLSource lifecycle, exact bytes, span and borrowed-view contracts."
+    },
+    {
+      "path": "include/newlang/syntax.h",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "7c36b3be6b2679f4bdb98bb97d6bb923df8a30c1",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Own original function declarations/body spans and source-order children."
+    },
+    {
+      "path": "include/newlang/parser.h",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "20584427e155e88917a3a819ac24b9d7b0850eaf",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Function-unit parse, adapter expression parse, status and diagnostic renderer."
+    },
+    {
+      "path": "include/newlang/semantic.h",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "a2b4e786878617d048335db51ca0f7ea0d877bd5",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Normal source registration/check, original versus adapter statuses, qualified read-only values."
+    },
+    {
+      "path": "include/newlang/checked.h",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "778f02797d815692183d4dea31072010d8ea24d3",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Borrowed checked graph, actual call body/context and hypothetical IF arm contexts; no scalar whole-call validator assumed."
+    },
+    {
+      "path": "include/newlang/usize_division.h",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "c5e45ff79fcb87dfdd8b371dfe530698bcf29d80",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Genuine division view, known flags, isolated validator and candidate-copy audit."
+    },
+    {
+      "path": "include/newlang/usize_remainder.h",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "19f3e404d114e92d95f058a8f33b66bd92b67296",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Genuine remainder view/source, known flags, isolated validator and candidate-copy audit."
+    },
+    {
+      "path": "include/newlang/diagnostic.h",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "8332bf9e2ffb8235c14f17472c73677c086f5c7f",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Structured severity/category/code/message; no invented law-reason enum."
+    },
+    {
+      "path": "CMakeLists.txt",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "0a23e38d8790de9ed781863c1ad49aadfaca6455",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Existing library linkage/options, BUILD_TESTING/Python3 and registration/global-timeout metadata only."
+    },
+    {
+      "path": ".github/workflows/r-preflight.yml",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "9fea1afeeef948127c73e9ca86c476091036116e",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Push trigger, immutable checkout, formatter/GCC build/CTest-N-only scaffolding."
+    },
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "23655288e60f0d3d08a12c9a542346bf31829a08",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Natural FULL5 matrix, host/sanitizer flags, primary ctest exit and publisher insertion."
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Natural NO-LLVM PARTIAL job, build root, all-test selection and publisher insertion."
+    },
+    {
+      "path": ".github/workflows/compiler-early-ci.yml",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "81c611c81bc8d0d5125bedaaf8d5db617a9f6846",
+      "range": "whole file fetched; only authorized role used",
+      "purpose": "Existing selected 84 tests; no R1608 execution or workflow change proposed."
+    },
+    {
+      "path": "README.md",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+      "range": "44-50",
+      "purpose": "Only the expressly allowed documented CLI/C17/output range; no fixture link followed."
+    },
+    {
+      "path": "README.md",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+      "range": "391-402",
+      "purpose": "Only the expressly allowed documented CLI/C17/output range; no fixture link followed."
+    },
+    {
+      "path": "README.md",
+      "ref": "088ccdef7d18620f1d5dd698e46c1aae0613bf52",
+      "blob": "c0f2e0d7a91c55951a4fcc402acc7f42be70d12e",
+      "range": "404-411",
+      "purpose": "Only the expressly allowed documented CLI/C17/output range; no fixture link followed."
+    }
+  ],
+  "include_closure": {
+    "additional_project_headers": [],
+    "reason": "All quoted project-local includes resolve inside the eight expressly allowed public headers; standard C headers are toolchain declarations, not additional repository reads."
+  },
+  "incidental_metadata": [
+    "Canonical files contain historical identifiers/status prose; no linked original was followed.",
+    "Permitted Git commit metadata names merge PR1602 and F1594/R1595. It was recorded only as incidental metadata; their originals/results were not read or used to select this apparatus.",
+    "Root CMake and workflow scaffolds expose source/test/hook filenames and historical comments; no referenced body was opened or reused."
+  ],
+  "own_issue_reads": [
+    "https://github.com/wakairo/NewLang_Compiler/issues/1608#issuecomment-7059799139",
+    "https://github.com/wakairo/NewLang_Compiler/issues/1608#issuecomment-7059957192",
+    "https://github.com/wakairo/NewLang_Compiler/issues/1608#issuecomment-7059734025"
+  ],
+  "prohibited_reads": "No src implementation, other P/M/F/R originals, fixtures, raw evidence, reports, aggregate C, shared scratch/worktree, actor inventory or descendant; no Personal Context.",
+  "computation": "String/data extraction and hash integrity only; proposed code not compiled, parsed, formatted, built, mocked, executed or transported."
+}
