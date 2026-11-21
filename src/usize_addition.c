@@ -1401,7 +1401,7 @@ typedef struct {
 typedef struct {
     const NLSyntaxNode *syntax;
     NLCheckedNodeId id;
-    bool returned;
+    bool returned, formal_copies_only;
 } QuantityResult;
 
 static bool division_unit_expression(const NLCheckedFragment *, NLCheckedNodeId,
@@ -1581,8 +1581,9 @@ static bool quantity_bindings_at(QuantityBody *b, const NLCheckedNodeView *root,
     if (!source || source->kind != NL_SYNTAX_BLOCK || !root ||
         root->kind != NL_CHECKED_BLOCK || !span_equal(root->span, source->span))
         return false;
-    *result =
-        (QuantityResult){.syntax = source->data.block.tail, .id = root->tail};
+    *result = (QuantityResult){.syntax = source->data.block.tail,
+                               .id = root->tail,
+                               .formal_copies_only = true};
     NLCheckedNodeId id = root->first_item;
     size_t count = 0;
     for (const NLSyntaxNode *item = source->data.block.items; item;
@@ -1598,9 +1599,9 @@ static bool quantity_bindings_at(QuantityBody *b, const NLCheckedNodeView *root,
                       : division_unit_return(f, root, node, src,
                                              nl_semantic_unit_type(c))))
                 return false;
-            *result = (QuantityResult){.syntax = src->data.statement.expression,
-                                       .id = node->initializer,
-                                       .returned = true};
+            result->syntax = src->data.statement.expression;
+            result->id = node->initializer;
+            result->returned = true;
             id = 0;
             break;
         }
@@ -1619,6 +1620,9 @@ static bool quantity_bindings_at(QuantityBody *b, const NLCheckedNodeView *root,
         if (!origin || node->symbol == b->formal)
             return false;
         b->origins[node->symbol - 1] = (unsigned char)origin;
+        if (init->kind != NL_CHECKED_IDENTIFIER ||
+            origin != QUANTITY_FROM_FORMAL)
+            result->formal_copies_only = false;
         id = node->next_item;
     }
     return id == 0 && count == root->item_count;
@@ -1725,11 +1729,12 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
             return false;
         const QuantityOrigin origin =
             quantity_expression_at(&b, result.id, result.syntax);
-        /* A Copy of this formal (possibly through checked lets) also has
-         * a formal origin. The caller still matches the actual to this
-         * formal and the call result to the checked body result. */
-        if (!b.formal ||
-            (origin != QUANTITY_FROM_FORMAL && origin != QUANTITY_FROM_RESULT))
+        /* A Copy-only helper may return its own formal through checked
+         * lets. Arithmetic and composed helpers keep their existing
+         * computed-result requirement. */
+        const bool formal_copy =
+            result.formal_copies_only && origin == QUANTITY_FROM_FORMAL;
+        if (!b.formal || (origin != QUANTITY_FROM_RESULT && !formal_copy))
             return false;
     } else {
         const NLTypeId unit = nl_semantic_unit_type(c);
