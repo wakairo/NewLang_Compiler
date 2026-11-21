@@ -109,8 +109,7 @@ static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
 {
     NLDivisionUsizePlan main;
     if (!out || !length || !call_valid(entry, nl_checked_root(entry), &main) ||
-        main.formal || !main.call ||
-        main.body->body_count > NL_CHECKED_MAX_BODY_CALLS)
+        main.formal || main.body->body_count > NL_CHECKED_MAX_BODY_CALLS)
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     const size_t node_limit = (SIZE_MAX - 2048) / 512;
     size_t nodes = main.body->count;

@@ -1,0 +1,31 @@
+{
+  "turns-tail": {
+    "exit": "tail",
+    "bindings": {"trips": 74, "carried": 74, "full": 9, "spill": 2, "saved": 9, "slots": 11, "final_count": 10},
+    "direct": [["full", "/", "carried", 74, 8, 9], ["spill", "%", "carried", 74, 8, 2]],
+    "calls": []
+  },
+  "turns-return": {
+    "exit": "return",
+    "bindings": {"trips": 74, "carried": 74, "full": 9, "spill": 2, "saved": 9, "slots": 11, "final_count": 10},
+    "direct": [["full", "/", "carried", 74, 8, 9], ["spill", "%", "carried", 74, 8, 2]],
+    "calls": []
+  },
+  "stock-mixed": {
+    "exit": "return",
+    "bindings": {"load": 205, "full": 34, "prior": 34, "remainder": 1, "carry": 7, "bins": 1, "odd": 6, "repeats": 6, "from_leaf": 1, "combined": 2, "kept": 6},
+    "direct": [["full", "/", "load", 205, 6, 34], ["carry", "%", "full", 34, 9, 7], ["odd", "%", "prior", 34, 7, 6], ["from_leaf", "/", "repeats", 6, 4, 1]],
+    "calls": [["remainder", "offset", "prior", 34, "%", 11, 1], ["bins", "portions", "carry", 7, "/", 4, 1], ["repeats", "offset", "odd", 6, "%", 11, 6]]
+  },
+  "helper-tail": {
+    "exit": "tail",
+    "bindings": {"inventory": 61, "qty": 10, "room": 12},
+    "direct": [],
+    "calls": [["qty", "fold", "inventory", 61, "/", 6, 10]]
+  },
+  "equal-helper": {"check": "PASS", "direct": 29, "helper": 7, "emit": "V1-BACKEND-UNSUPPORTED"},
+  "divisor-zero": {"check": "USIZE-DIVISION-ZERO"},
+  "operand-type": {"check": "USIZE-REMAINDER-TYPE"},
+  "dynamic-divisor": {"check": "USIZE-REMAINDER-PRECISION"},
+  "invalid-return": {"check": "P9-RETURN-TYPE"}
+}
