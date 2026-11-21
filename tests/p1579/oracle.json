@@ -1,0 +1,53 @@
+{
+  "parcels-flat": {
+    "exit": "tail",
+    "bindings": {"parcels": 271, "stamped": 271, "racks": 38, "transferred": 38, "slots": 2, "saved": 2, "observed": 6},
+    "visits": [],
+    "events": [["main", "/", 271, 7, 38], ["main", "%", 38, 9, 2], ["main", "+", 2, 4, 6]]
+  },
+  "parcels-extracted": {
+    "exit": "tail",
+    "bindings": {"parcels": 271, "slots": 2, "saved": 2, "observed": 6},
+    "visits": [["main", "packed", 271, 2, "tail"]],
+    "events": [["packed", "/", 271, 7, 38], ["packed", "%", 38, 9, 2], ["main", "+", 2, 4, 6]]
+  },
+  "ledger-shared": {
+    "exit": "return",
+    "bindings": {"start": 817, "total": 3, "repeated": 2, "direct": 3, "balance": 50, "observed": 2, "sum": 5},
+    "visits": [
+      ["main", "ledger", 817, 3, "tail"],
+      ["ledger", "parts", 817, 78, "tail"],
+      ["ledger", "basket", 78, 3, "return"],
+      ["basket", "parts", 78, 26, "tail"],
+      ["basket", "parts", 26, 8, "tail"],
+      ["main", "ledger", 348, 2, "tail"],
+      ["ledger", "parts", 348, 19, "tail"],
+      ["ledger", "basket", 19, 2, "return"],
+      ["basket", "parts", 19, 6, "tail"],
+      ["basket", "parts", 6, 2, "tail"],
+      ["main", "basket", 164, 3, "return"],
+      ["basket", "parts", 164, 54, "tail"],
+      ["basket", "parts", 54, 18, "tail"],
+      ["main", "parts", 734, 50, "tail"]
+    ],
+    "parts_known_independent": [["+",
+      19, 11, 30], ["-", 30, 4, 26]]
+  },
+  "return-call": {
+    "exit": "tail",
+    "bindings": {"initial": 143, "first": 4, "extra": 0, "summed": 4},
+    "visits": [
+      ["main", "recover", 143, 4, "return"],
+      ["recover", "sieve", 143, 4, "tail"],
+      ["main", "recover", 95, 0, "return"],
+      ["recover", "sieve", 95, 0, "tail"]
+    ],
+    "events": [["sieve", "%", 143, 31, 19], ["sieve", "/", 19, 4, 4],
+               ["sieve", "%", 95, 31, 2], ["sieve", "/", 2, 4, 0], ["main", "+", 4, 0, 4]]
+  },
+  "equal-unrelated": {"check": "PASS", "result": 4, "emit": "V1-BACKEND-UNSUPPORTED"},
+  "unknown-plus": {"check": "USIZE-ADDITION-PRECISION"},
+  "zero-inner": {"check": "USIZE-REMAINDER-ZERO"},
+  "named-divisor": {"check": "USIZE-REMAINDER-SOURCE-PRECISION"},
+  "recursive-call": {"check": "P11-RECURSIVE-ANALYSIS-PRECISION"}
+}

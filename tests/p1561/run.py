@@ -212,6 +212,16 @@ def negative():
         assert not checked.stdout
         assert (not checked.stderr if stage == "C17" else diagnostic in checked.stderr)
         dest = WORK / (name + ".c")
+        # P1579 selects this formerly excluded legal composition. The old
+        # source and oracle remain frozen with their original rejection.
+        if name == "nested-helper.nl":
+            assert stage == "C17" and diagnostic == b"V1-BACKEND-UNSUPPORTED"
+            emitted = run([CLI, "--emit-c17-to", dest, source(name)])
+            assert not emitted.stdout and not emitted.stderr
+            c17 = dest.read_text()
+            assert " / ((size_t)UINTMAX_C(8))" in c17 and " % ((size_t)UINTMAX_C(7))" in c17
+            print(f"{name} C1298 lawful helper composition C17 PASS")
+            continue
         sentinel = b"P1561 pre-existing named output\n"
         dest.write_bytes(sentinel)
         before = dest.stat()
