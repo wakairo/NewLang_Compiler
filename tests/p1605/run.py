@@ -59,6 +59,32 @@ def verify_native(raw, pristine, graph, expected, compilers, common):
     assert pristine.read_bytes() == code
 
 
+def p1587_direct_arm(root):
+    # The original oracle already describes the lawful result. Run the same
+    # source through the required owned-arm path, using its frozen values.
+    freeze = json.loads((root / "freeze.json").read_bytes())
+    for path in ("oracle.json", "source/direct-arm.nl"):
+        data = (root / path).read_bytes()
+        assert freeze[path] == {"bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+    old = json.loads((root / "oracle.json").read_bytes())["direct-arm"]
+    bindings = old["entry_bindings"]
+    calls = old["runtime_calls"]
+    return root / "source" / "direct-arm.nl", {
+        "bindings": bindings,
+        "calls": calls,
+        "conditions": old["conditions"],
+        "arm_facts": [["/", True, bindings["packed"]],
+                      ["%", True, old["unselected_arm_result"]]],
+        "trace": [
+            f"COND {int(old['conditions'][0])}",
+            f"ARM / {bindings['packed']}",
+            *(f"BIND {name} {bindings[name]}" for name in ("packed", "held", "groups", "residue")),
+            *(f"CALL {name} {value}" for name, value in calls),
+            f"BIND measured {bindings['measured']}",
+        ],
+    }
+
+
 def main():
     cli, probe, evidence = sys.argv[1:]
     fixtures = Path(__file__).resolve().parent
@@ -71,9 +97,11 @@ def main():
     raw = Path(tempfile.mkdtemp(dir=evidence))
     print(f"evidence={raw}", flush=True)
     common = common_runner()
-    cases = json.loads((fixtures / "oracle.json").read_bytes())
-    for name, expected in cases.items():
-        source = fixtures / "source" / f"{name}.nl"
+    own = json.loads((fixtures / "oracle.json").read_bytes())
+    cases = [(fixtures / "source" / f"{name}.nl", expected) for name, expected in own.items()]
+    cases.append(p1587_direct_arm(fixtures.parent / "p1587"))
+    for source, expected in cases:
+        name = source.stem
         case = raw / name
         case.mkdir()
         check = common.run([cli, "--check", source], expected.get("check", 0), case / "check")
