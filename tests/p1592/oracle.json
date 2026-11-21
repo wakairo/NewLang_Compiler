@@ -1,0 +1,32 @@
+{
+  "named-actuals": {
+    "baseline": {"check": 0, "emit": 0},
+    "bindings": {"left": 2, "stock": 3, "copied": 3, "parity": 1},
+    "runtime_calls": [["batch", 173], ["overflow", 28], ["batch", 446], ["overflow", 74], ["rack", 9]]
+  },
+  "direct-actuals": {
+    "baseline": {"check": 0, "emit": 4},
+    "bindings": {"left": 2, "stock": 3, "copied": 3, "parity": 1},
+    "runtime_calls": [["batch", 173], ["overflow", 28], ["batch", 446], ["overflow", 74], ["rack", 9]]
+  },
+  "branch-and-return": {
+    "baseline": {"check": 0, "emit": 4},
+    "bindings": {"local": 7, "remote": 2, "last": 3, "residue": 2},
+    "conditions": [true, false],
+    "runtime_calls": [
+      ["through", 139], ["rack", 139], ["overflow", 46],
+      ["through", 857], ["batch", 857], ["rack", 142], ["rack", 47], ["overflow", 15],
+      ["finish", 305], ["batch", 305], ["overflow", 50], ["rack", 11]
+    ]
+  },
+  "arithmetic-actual": {
+    "baseline": {"check": 0, "emit": 4},
+    "final": {"check": 0, "emit": 4},
+    "diagnostic": "V1-BACKEND-UNSUPPORTED"
+  },
+  "nested-zero": {
+    "baseline": {"check": 3, "emit": 3},
+    "final": {"check": 3, "emit": 3},
+    "diagnostic": "USIZE-REMAINDER-ZERO"
+  }
+}

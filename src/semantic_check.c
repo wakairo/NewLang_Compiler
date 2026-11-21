@@ -647,6 +647,8 @@ static bool ref_compatible(NLSemanticTypeView actual,
 }
 
 static NLCheckedNodeId expression(Check *, const NLSyntaxNode *);
+static NLCheckedNodeId expression_for_parameter(Check *, const NLSyntaxNode *,
+                                                NLTypeId);
 
 static NLCheckedNodeId binding_argument(Check *check, NLSymbolId symbol,
                                         NLTypeId expected, NLSourceSpan span,
@@ -771,7 +773,7 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
         id = binding_argument(check, symbol, expected, node->span,
                               node->data.name);
     } else {
-        id = expression(check, syntax);
+        id = expression_for_parameter(check, syntax, expected);
     }
     if (check->terminated)
         return id;
@@ -1500,7 +1502,7 @@ static bool primitive(Check *check, NLCheckedNodeId call,
 
 static NLCheckedNodeId source_block(Check *, const NLSyntaxView *);
 static bool run_body(Check *, NLCheckedNodeId, const NLFunctionEntry *,
-                     const NLCheckedNodeId *);
+                     const NLCheckedNodeId *, NLTypeId);
 
 static NLCheckedNodeId allocated_raw(Check *, const NLSyntaxView *,
                                      NLRawOperationKind);
@@ -1889,7 +1891,8 @@ static bool custody_preflight(Check *check, const NLSyntaxView *syntax,
     return true;
 }
 
-static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
+static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax,
+                            NLTypeId expected_parameter)
 {
     if (qualified_active(check) &&
         !equal_name(check, syntax->data.call.callee, "read")) {
@@ -2150,8 +2153,9 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
     if (function.owner_receiver &&
         !owner_entry(check, id, &function, arguments))
         return 0;
-    if (!(function.body != NULL ? run_body(check, id, &function, arguments)
-                                : primitive(check, id, arguments))) {
+    if (!(function.body != NULL
+              ? run_body(check, id, &function, arguments, expected_parameter)
+              : primitive(check, id, arguments))) {
         return 0;
     }
     /* Finish each call-local child only at the call's return, after all later
@@ -2974,6 +2978,13 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
 
 static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
 {
+    return expression_for_parameter(check, syntax, 0);
+}
+
+static NLCheckedNodeId expression_for_parameter(Check *check,
+                                                const NLSyntaxNode *syntax,
+                                                NLTypeId expected_parameter)
+{
     /* Seed before any branch copies Check, so distinct syntactic trials in
      * sibling worlds share the finite source-profile counter. */
     if (check->allocation_budget == NULL)
@@ -3057,7 +3068,7 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
              "fallible allocation requires direct consuming outcome match in "
              "this slice");
     } else if (node->kind == NL_SYNTAX_EXPR_CALL) {
-        result = call(check, node);
+        result = call(check, node, expected_parameter);
     } else if (node->kind == NL_SYNTAX_BLOCK) {
         result = source_block(check, node);
     } else if (node->kind == NL_SYNTAX_SUM_CONSTRUCTOR) {
@@ -4245,7 +4256,8 @@ static bool readonly_local_body(const NLFunctionEntry *fn,
 
 static bool run_body(Check *caller, NLCheckedNodeId call_id,
                      const NLFunctionEntry *function,
-                     const NLCheckedNodeId *arguments)
+                     const NLCheckedNodeId *arguments,
+                     NLTypeId expected_parameter)
 {
     if (caller->branch_budget == NULL)
         caller->branch_budget = &caller->branch_steps;
@@ -4614,6 +4626,14 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                                   &quantity_plan) ||
          nl_quantity_usize_body_at(body.artifact, c, body.body_function,
                                    entry_body, &division_plan));
+    /* A direct quantity actual has an exact contextual type. Complete that
+     * annotation before the existing seal snapshots this call node. The later
+     * parameter check still verifies the result and writes the same type. */
+    NLCheckedNodeView *call_view = view(caller, call_id);
+    if (quantity_result && expected_parameter &&
+        expected_parameter == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
+        call_view->type == expected_parameter && call_view->result_count == 1)
+        call_view->parameter_type = expected_parameter;
     if ((predicate_result || scalar_h_read || current_result || result_world ||
          quantity_result) &&
         !host(&body,
