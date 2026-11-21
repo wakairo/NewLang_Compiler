@@ -240,23 +240,113 @@ static bool arithmetic_result(NLUsizeOperation operation, size_t lhs,
     return false;
 }
 
+/* Match a checked lexical block's tail or item's initializer to its exact
+ * retained expression. Identical text in another item is a different event. */
+static const NLSyntaxNode *block_expression_source(const NLCheckedFragment *f,
+                                                   NLCheckedNodeId block,
+                                                   const NLSyntaxNode *syntax,
+                                                   NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *root = nl_checked_node_view(f, block);
+    const NLSyntaxView *src = nl_syntax_node_view(syntax);
+    if (!root || root->kind != NL_CHECKED_BLOCK || !src ||
+        src->kind != NL_SYNTAX_BLOCK || !span_equal(root->span, src->span))
+        return NULL;
+    if (root->tail == id)
+        return src->data.block.tail;
+    NLCheckedNodeId next = root->first_item;
+    const NLSyntaxNode *item = src->data.block.items;
+    for (size_t i = 0; item && i < root->item_count; ++i) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, next);
+        const NLSyntaxView *s = nl_syntax_node_view(item);
+        if (!s || !n || !span_equal(n->span, s->span))
+            return NULL;
+        if (n->initializer == id) {
+            if (n->kind == NL_CHECKED_BINDING && s->kind == NL_SYNTAX_BINDING)
+                return s->data.binding.initializer;
+            if (n->kind == NL_CHECKED_RETURN && s->kind == NL_SYNTAX_RETURN)
+                return s->data.statement.expression;
+            return NULL;
+        }
+        next = n->next_item;
+        item = nl_syntax_next_argument(item);
+    }
+    return NULL;
+}
+
+static const NLFunctionBody *
+arm_arithmetic_owner(const NLCheckedFragment *arm, NLCheckedNodeId id,
+                     const NLSyntaxNode *event, const NLSemanticContext *c,
+                     const NLCheckedFragment *if_parent)
+{
+    if (c != arm->context || arm->body_owner || arm->arm_count ||
+        nl_control_exits_count(arm->exits))
+        return NULL;
+    size_t function;
+    const NLCheckedFragment *body =
+        nl_h_custody_if_body(arm, if_parent, &function);
+    if (!body || !body->body_owner || !body->body_owner->syntax ||
+        function > c->function_count)
+        return NULL;
+    const NLFunctionEntry *fn = &c->functions[function - 1];
+    if (fn->kind != NL_CHECKED_REGISTERED_CALL ||
+        fn->body != body->body_owner || fn->body->source != arm->source)
+        return NULL;
+    const NLCheckedNodeId site = arm->if_parent_node;
+    const NLCheckedNodeView *conditional = nl_checked_node_view(body, site);
+    const NLSyntaxView *src = nl_syntax_node_view(block_expression_source(
+        body, body->root, nl_syntax_tree_root(fn->body->syntax), site));
+    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    if (!conditional || conditional->kind != NL_CHECKED_IF ||
+        conditional->normal_arms != 2 || conditional->item_count != 2 ||
+        conditional->terminates || conditional->tail ||
+        conditional->result_count != 1 || conditional->type != type || !src ||
+        src->kind != NL_SYNTAX_IF || !span_equal(conditional->span, src->span))
+        return NULL;
+    const NLCheckedNodeView *condition =
+        nl_checked_node_view(body, conditional->initializer);
+    const NLSyntaxView *test =
+        nl_syntax_node_view(src->data.conditional.condition);
+    if (!test || !condition || condition->result_count != 1 ||
+        condition->type != nl_semantic_core_type(c, NL_TYPE_BOOL) ||
+        !span_equal(condition->span, test->span) ||
+        arm->branch_value_prefix != condition->results[0].value)
+        return NULL;
+    const NLSyntaxNode *block = arm->if_arm_index == 0
+                                    ? src->data.conditional.then_block
+                                    : src->data.conditional.else_block;
+    const NLSyntaxView *block_src = nl_syntax_node_view(block);
+    const NLCheckedNodeView *root = nl_checked_node_view(arm, arm->root);
+    if (!root || root->kind != NL_CHECKED_IF_ARM || root->terminates ||
+        root->type != type || root->result_count != 1 || !block_src ||
+        !span_equal(root->span, block_src->span) ||
+        block_expression_source(arm, root->initializer, block, id) != event)
+        return NULL;
+    return fn->body;
+}
+
 static bool operation_valid_at(const NLCheckedFragment *f, NLCheckedNodeId id,
                                NLUsizeOperation operation,
                                const NLUsizeArithmeticView *candidate,
-                               const NLSemanticContext *c)
+                               const NLSemanticContext *c,
+                               const NLCheckedFragment *if_parent)
 {
     const NLUsizeAdditionProof *p = find(f, id);
-    if (!p || p->guarded || p->operation != operation || !f->body_owner ||
-        f->source != f->body_owner->source || p->context != f->context || !c ||
-        p->issued.origin != f || (candidate && !same(candidate, &p->issued)))
+    if (!p || p->guarded || p->operation != operation ||
+        p->context != f->context || !c || p->issued.origin != f ||
+        (candidate && !same(candidate, &p->issued)))
+        return false;
+    const NLFunctionBody *owner = f->body_owner;
+    if (fixed_divisor(operation) && (if_parent || !nl_h_custody_is_body(f)))
+        owner = arm_arithmetic_owner(f, id, p->syntax, c, if_parent);
+    if (!owner || f->source != owner->source)
         return false;
     bool registered = false, retained = false;
     for (size_t i = 0; i < c->function_count; ++i)
-        if (c->functions[i].body == f->body_owner &&
+        if (c->functions[i].body == owner &&
             c->functions[i].kind == NL_CHECKED_REGISTERED_CALL)
             registered = true;
-    for (const NLSyntaxNode *n = f->body_owner->syntax->nodes; n;
-         n = n->owned_next)
+    for (const NLSyntaxNode *n = owner->syntax->nodes; n; n = n->owned_next)
         if (n == p->syntax)
             retained = true;
     if (!registered || !retained || nl_sem_validate(c) != NL_CHECK_OK)
@@ -383,7 +473,7 @@ static bool arithmetic_valid(const NLCheckedFragment *f, NLCheckedNodeId id,
 {
     return (operation == NL_USIZE_ADD || operation == NL_USIZE_SUBTRACT) &&
            operation_valid_at(f, id, operation, candidate,
-                              f ? f->context : NULL);
+                              f ? f->context : NULL, NULL);
 }
 
 /* Conversion only: no public layout casts, union punning or API migration.
@@ -490,7 +580,7 @@ bool nl_checked_usize_division_valid(const NLCheckedFragment *f,
         v.answer = candidate->quotient;
     }
     return operation_valid_at(f, id, NL_USIZE_DIVIDE, candidate ? &v : NULL,
-                              f ? f->context : NULL);
+                              f->context, NULL);
 }
 
 bool nl_checked_usize_remainder_view(const NLCheckedFragment *f,
@@ -533,7 +623,7 @@ bool nl_checked_usize_remainder_valid(const NLCheckedFragment *f,
         v.answer = candidate->remainder;
     }
     return operation_valid_at(f, id, NL_USIZE_REMAINDER, candidate ? &v : NULL,
-                              f->context);
+                              f->context, NULL);
 }
 #undef COPY_METADATA
 
@@ -1182,7 +1272,7 @@ static bool division_event_at(const NLCheckedFragment *f,
         !fixed_divisor(receipt->operation) ||
         (operation != NL_USIZE_ANY_FIXED_DIVISOR &&
          operation != receipt->operation) ||
-        !operation_valid_at(f, id, receipt->operation, NULL, c) ||
+        !operation_valid_at(f, id, receipt->operation, NULL, c, NULL) ||
         !division_input_copy(f, c, fn, receipt->issued.operands[0],
                              nl_syntax_node_view(src)->data.equality.left, p))
         return false;
@@ -1365,7 +1455,7 @@ static bool division_caller_arithmetic(const NLCheckedFragment *f,
 {
     const NLUsizeAdditionProof *p = find(f, id);
     if (!p || p->syntax != syntax ||
-        !operation_valid_at(f, id, operation, NULL, c))
+        !operation_valid_at(f, id, operation, NULL, c, NULL))
         return false;
     if (fixed_divisor(operation))
         return division_copy_at(f, c, p->issued.operands[0],
@@ -1389,12 +1479,11 @@ typedef enum {
 /* A source-order working set for this invocation. The checked packages and
  * their existing arithmetic receipts and custody remain the evidence. */
 typedef struct {
-    const NLCheckedFragment *body;
+    const NLCheckedFragment *body, *if_parent;
     const NLSemanticContext *context;
     const NLFunctionEntry *function;
     size_t depth, calls, arms, *remaining;
     NLSymbolId formal;
-    bool in_arm;
     unsigned char origins[NL_SEMANTIC_MAX_ENTRIES];
 } QuantityBody;
 
@@ -1487,8 +1576,10 @@ static QuantityOrigin quantity_arithmetic_at(QuantityBody *b,
                                              const NLSyntaxNode *syntax)
 {
     const NLUsizeAdditionProof *proof = find(b->body, id);
-    if (b->in_arm || !proof || proof->syntax != syntax ||
-        !operation_valid_at(b->body, id, proof->operation, NULL, b->context))
+    if (!proof || proof->syntax != syntax ||
+        (b->if_parent && !fixed_divisor(proof->operation)) ||
+        !operation_valid_at(b->body, id, proof->operation, NULL, b->context,
+                            b->if_parent))
         return QUANTITY_UNSEEN;
     const NLSyntaxView *src = nl_syntax_node_view(syntax);
     const QuantityOrigin left =
@@ -1593,7 +1684,8 @@ static bool quantity_bindings_at(QuantityBody *b, const NLCheckedNodeView *root,
         if (++count > NL_PARSER_MAX_NODES || !src || !node)
             return false;
         if (src->kind == NL_SYNTAX_RETURN) {
-            if (b->in_arm || nl_syntax_next_argument(item) || result->syntax ||
+            if (b->if_parent || nl_syntax_next_argument(item) ||
+                result->syntax ||
                 !(b->function->count
                       ? division_return_package(f, c, root, node, src)
                       : division_unit_return(f, root, node, src,
@@ -1644,7 +1736,7 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
     const NLCheckedFragment *f = b->body;
     const NLCheckedNodeView *node = nl_checked_node_view(f, id);
     NLValueId joined;
-    if (b->in_arm || src->kind != NL_SYNTAX_IF ||
+    if (b->if_parent || src->kind != NL_SYNTAX_IF ||
         !span_equal(node->span, src->span) || node->normal_arms != 2 ||
         node->item_count != 2 || node->tail ||
         !node_value(f, b->context, id, &joined) ||
@@ -1680,7 +1772,7 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
         branch.body = arm;
         branch.context = arm->context;
         branch.calls = branch.arms = 0;
-        branch.in_arm = true;
+        branch.if_parent = f;
         QuantityResult result;
         if (!quantity_bindings_at(&branch,
                                   nl_checked_node_view(arm, root->initializer),

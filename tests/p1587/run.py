@@ -200,7 +200,6 @@ def negative():
         ("wrong-arm-type", 3, 3, b"error(semantic)[P13-IF-RESULT]"),
         ("zero-arm", 3, 3, b"error(semantic)[USIZE-REMAINDER-ZERO]"),
         ("unknown-plus", 3, 3, b"error(precision)[USIZE-ADDITION-PRECISION]"),
-        ("direct-arm", 0, 4, b"V1-BACKEND-UNSUPPORTED"),
     ):
         checked = run([CLI, "--check", source(name)], checking)
         assert diagnostic in checked.stderr if checking else not checked.stderr

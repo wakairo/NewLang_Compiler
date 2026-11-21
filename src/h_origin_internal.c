@@ -422,6 +422,22 @@ static bool observed_arm(const struct NLHOriginOwner *o, const CustodyEdge *e,
             return false;
     return true;
 }
+static bool custody_storage_matches(const struct NLHOriginOwner *o,
+                                    const CustodyParent *p)
+{
+    const NLCheckedFragment *f = p->fragment;
+    /* Entry wrappers can release their synthetic call spelling after taking
+     * the context. Retained function and arm sources are still live. */
+    const bool source_matches = (f == o->root && !f->source &&
+                                 f->destroy_context == nl_semantic_destroy) ||
+                                f->source == p->source;
+    return f->h_origin == o && f->context == p->world && source_matches &&
+           f->arm_count == p->arm_count && f->body_count == p->body_count &&
+           f->arms == p->arms && f->bodies == p->bodies &&
+           f->body_calls == p->calls && p->arm_count <= p->arm_capacity &&
+           p->body_count <= p->body_capacity &&
+           p->body_count <= p->call_capacity;
+}
 static bool validate_custody(const NLCheckedFragment *root, bool observation,
                              const NLSemanticContext *candidate)
 {
@@ -431,22 +447,9 @@ static bool validate_custody(const NLCheckedFragment *root, bool observation,
         return false;
     for (const CustodyParent *p = o->parents; p; p = p->next) {
         const NLCheckedFragment *f = p->fragment;
-        /* Self-contained entry wrappers may release only the synthetic call
-         * spelling after taking ownership of the context. The actual CHECK
-         * root and all retained function/arm sources stay authenticated. Test
-         * this state first: the released spelling itself is no longer live. */
-        const bool source_matches =
-            (f == o->root && !f->source &&
-             f->destroy_context == nl_semantic_destroy) ||
-            f->source == p->source;
         /* Counts and allocation bases precede every view access. Canonical
          * endpoints alone select the next parent, never a challenged getter. */
-        if (f->h_origin != o || f->context != p->world || !source_matches ||
-            f->arm_count != p->arm_count || f->body_count != p->body_count ||
-            f->arms != p->arms || f->bodies != p->bodies ||
-            f->body_calls != p->calls || p->arm_count > p->arm_capacity ||
-            p->body_count > p->body_capacity ||
-            p->body_count > p->call_capacity)
+        if (!custody_storage_matches(o, p))
             return false;
         /* A published result seal cannot fall back to an unsealed emitter
          * profile when its displayed nodes are changed. Historical getters
@@ -510,6 +513,127 @@ bool nl_h_custody_validate_candidate(const NLCheckedFragment *root,
      */
     return candidate && validate_custody(root, false, candidate);
 }
+/* CHECK attaches parents before their BODY and ARM children. Looking only at
+ * older members follows the canonical ownership order and cannot cycle. */
+static const CustodyEdge *incoming_edge(const CustodyParent *child,
+                                        const CustodyParent **parent)
+{
+    for (const CustodyParent *p = child->next; p; p = p->next)
+        for (const CustodyEdge *e = p->edges; e; e = e->next)
+            if (e->state != DETACHED && e->child == child->fragment) {
+                *parent = p;
+                return e;
+            }
+    return NULL;
+}
+
+bool nl_h_custody_is_body(const NLCheckedFragment *f)
+{
+    const struct NLHOriginOwner *o = f ? f->h_origin : NULL;
+    const CustodyParent *body = custody_parent(o, f);
+    if (!body || !custody_storage_matches(o, body))
+        return false;
+    const CustodyParent *caller = NULL;
+    const CustodyEdge *edge = incoming_edge(body, &caller);
+    if (edge)
+        return edge->role == NL_CUSTODY_BODY;
+    /* A registered body can recheck its retained event during definition
+     * checking, before run_body reserves the call edge. Its still-attached
+     * fragment borrows an existing world. An IF arm owns a distinct fork. */
+    if (o->published || o->root == f || f->destroy_context || !body->world)
+        return false;
+    for (const CustodyParent *p = body->next; p; p = p->next)
+        if (p->world == body->world && custody_storage_matches(o, p))
+            return true;
+    return false;
+}
+
+static bool custody_if_arm_edge(const CustodyParent *body, const CustodyEdge *e)
+{
+    if (e->state != COMMITTED || e->slot >= body->arm_count)
+        return false;
+    const NLCheckedArm *arm = &body->arms[e->slot];
+    return arm->artifact == e->child && arm->match == e->site &&
+           arm->context_origin == e->world;
+}
+
+const NLCheckedFragment *
+nl_h_custody_if_body(const NLCheckedFragment *arm,
+                     const NLCheckedFragment *if_parent, size_t *function)
+{
+    const struct NLHOriginOwner *o = arm ? arm->h_origin : NULL;
+    const CustodyParent *child = custody_parent(o, arm);
+    if (!child || !custody_parent(o, o->root) ||
+        !custody_storage_matches(o, child) || !child->world ||
+        (o->published && !nl_h_custody_validate(o->root)))
+        return NULL;
+    const CustodyParent *body = NULL;
+    const CustodyEdge *edge = incoming_edge(child, &body);
+    if (!edge || edge->role != NL_CUSTODY_ARM ||
+        !custody_storage_matches(o, body) || !custody_if_arm_edge(body, edge) ||
+        edge->world != child->world || body->world == child->world ||
+        body->source != child->source || arm->if_parent != body->fragment ||
+        arm->if_parent_node != edge->site || arm->if_arm_index >= 2 ||
+        (if_parent && if_parent != body->fragment) ||
+        (!o->published && (!if_parent || o->aborted)))
+        return NULL;
+
+    /* source_if commits then and else in consecutive slots of this site.
+     * The displayed arm index cannot choose another canonical child. */
+    const CustodyEdge *sibling = NULL;
+    for (const CustodyEdge *e = body->edges; e; e = e->next) {
+        if (e == edge || e->role != NL_CUSTODY_ARM || e->site != edge->site)
+            continue;
+        if (sibling || !custody_if_arm_edge(body, e))
+            return NULL;
+        sibling = e;
+    }
+    if (!sibling || !sibling->world || sibling->world == child->world ||
+        sibling->world == body->world ||
+        (arm->if_arm_index == 0 ? edge->slot + 1 != sibling->slot
+                                : sibling->slot + 1 != edge->slot))
+        return NULL;
+    const CustodyParent *other = custody_parent(o, sibling->child);
+    if (!other || !custody_storage_matches(o, other) ||
+        other->world != sibling->world || other->source != body->source)
+        return NULL;
+
+    const CustodyParent *caller = NULL;
+    const CustodyEdge *invocation = incoming_edge(body, &caller);
+    if (!invocation || invocation->role != NL_CUSTODY_BODY ||
+        !custody_storage_matches(o, caller) ||
+        invocation->world != body->world || caller->world != body->world)
+        return NULL;
+    if (invocation->state == COMMITTED) {
+        if (invocation->slot >= caller->body_count ||
+            caller->bodies[invocation->slot] != body->fragment ||
+            caller->calls[invocation->slot] != invocation->site)
+            return NULL;
+    } else if (o->published || invocation->state != PENDING ||
+               invocation->slot != caller->body_count ||
+               invocation->slot >= caller->body_capacity ||
+               invocation->slot >= caller->call_capacity) {
+        return NULL;
+    }
+    /* An outer invocation can still be under construction during CHECK. Once
+     * published, the authenticated call must be reachable from the real root.
+     */
+    if (o->published) {
+        for (const CustodyParent *p = caller; p->fragment != o->root;) {
+            const CustodyEdge *link = incoming_edge(p, &p);
+            if (!link || link->state != COMMITTED)
+                return NULL;
+        }
+    }
+    const NLCheckedNodeView *call =
+        nl_checked_node_view(caller->fragment, invocation->site);
+    if (!call || call->kind != NL_CHECKED_REGISTERED_CALL ||
+        !call->body_backed || call->terminates || !call->function)
+        return NULL;
+    *function = call->function;
+    return body->fragment;
+}
+
 bool nl_h_origin_has_sites(const NLCheckedFragment *root)
 {
     return root && root->h_origin && root->h_origin->count != 0;

@@ -43,6 +43,16 @@ bool nl_h_custody_validate(const NLCheckedFragment *root);
  * Published validation always follows the canonical recorded world. */
 bool nl_h_custody_validate_candidate(const NLCheckedFragment *root,
                                      const NLSemanticContext *candidate);
+/* Recognize the canonical BODY and its attached CHECK state before reserve.
+ * The arithmetic caller still authenticates the registered source event. */
+bool nl_h_custody_is_body(const NLCheckedFragment *);
+/* Locate the owning registered BODY invocation of a canonical normal IF arm.
+ * The CHECK planner supplies its exact parent while the graph is unpublished.
+ * Callers verify the registered source, IF and exact syntax event separately.
+ */
+const NLCheckedFragment *
+nl_h_custody_if_body(const NLCheckedFragment *arm,
+                     const NLCheckedFragment *if_parent, size_t *function);
 /* Borrowed structural views only; never an owner/source-authority receipt. */
 bool nl_h_custody_borrow_valid(const NLCheckedFragment *fragment);
 bool nl_h_origin_has_sites(const NLCheckedFragment *root);

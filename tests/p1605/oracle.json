@@ -1,0 +1,56 @@
+{
+  "arm-main": {
+    "calls": [],
+    "bindings": {"selected": 13, "saved": 13, "receipt": 3},
+    "conditions": [true],
+    "arm_facts": [["/", true, 13], ["%", true, 13]],
+    "trace": ["COND 1", "ARM / 13", "BIND selected 13", "BIND saved 13", "BIND receipt 3"]
+  },
+  "arm-dispatch": {
+    "calls": [["dispatch", 43], ["dispatch", 71]],
+    "bindings": {"early": 3, "late": 4},
+    "conditions": [true, false],
+    "arm_facts": [["/", true, 6], ["%", true, 7], ["/", true, 10], ["%", true, 8]],
+    "trace": [
+      "CALL dispatch 43", "COND 1", "ARM / 6", "BIND early 3",
+      "CALL dispatch 71", "COND 0", "ARM % 8", "BIND late 4"
+    ]
+  },
+  "helper-in-arm": {
+    "calls": [["dispatch", 43], ["groups", 43], ["dispatch", 71], ["leftover", 71]],
+    "bindings": {"early": 3, "late": 4},
+    "conditions": [true, false],
+    "arm_facts": [],
+    "trace": [
+      "CALL dispatch 43", "COND 1", "CALL groups 43", "BIND early 3",
+      "CALL dispatch 71", "COND 0", "CALL leftover 71", "BIND late 4"
+    ]
+  },
+  "named-main": {
+    "calls": [],
+    "bindings": {"groups": 13, "spare": 13, "selected": 13, "saved": 13, "receipt": 3},
+    "conditions": [true],
+    "arm_facts": [],
+    "trace": [
+      "BIND groups 13", "BIND spare 13", "COND 1",
+      "BIND selected 13", "BIND saved 13", "BIND receipt 3"
+    ]
+  },
+  "arm-copy-unknown": {
+    "calls": [["route", 0], ["route", 9], ["route", 26]],
+    "bindings": {"zero": 0, "near": 1, "far": 1},
+    "conditions": [true, true, true, true, false, false],
+    "arm_facts": [
+      ["/", true, 0], ["/", false, 0], ["%", false, 0],
+      ["/", true, 1], ["/", false, 0], ["%", false, 0],
+      ["/", true, 5], ["/", false, 0], ["%", false, 0]
+    ],
+    "trace": [
+      "CALL route 0", "COND 1", "COND 1", "ARM / 0", "ARM / 0", "BIND zero 0",
+      "CALL route 9", "COND 1", "COND 1", "ARM / 1", "ARM / 1", "BIND near 1",
+      "CALL route 26", "COND 0", "COND 0", "ARM % 1", "BIND far 1"
+    ]
+  },
+  "zero-arm": {"check": 3, "emit": 3, "diagnostic": "USIZE-DIVISION-ZERO"},
+  "wrong-arm-type": {"check": 3, "emit": 3, "diagnostic": "USIZE-REMAINDER-TYPE"}
+}
