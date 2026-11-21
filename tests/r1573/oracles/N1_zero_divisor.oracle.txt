@@ -1,0 +1,13 @@
+Case: N1_zero_divisor.nl
+Class: TRUE INVALID ordinary checked semantics.
+Target premise: M >= 14 so this is not a literal-range test.
+mass = 14 is representable; the direct divisor usize(0) is exactly zero.
+The division precondition b != 0 is false. No quotient is predicted.
+The complete unit must not receive valid ordinary checked acceptance.
+Discarding broken later or returning unit does not discharge the invalid
+operation. No unchecked escape is used or selected.
+This case tests / by zero only; it does not independently test % by zero.
+An earlier profile/parser rejection is not evidence that the false
+division precondition was checked. No diagnostic identity is prescribed.
+Future/native expectation: no accepted checked execution of this unit.
+Actual compiler/public/native status: NOT_RUN.

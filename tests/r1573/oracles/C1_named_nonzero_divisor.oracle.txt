@@ -1,0 +1,13 @@
+Case: C1_named_nonzero_divisor.nl
+Class: CANONICALLY LEGAL EXCLUDED CONTROL, not a negative validity oracle.
+Target premise: M >= 43.
+parcel=43; divisor=5; count=floor(43/5)=8; spare=43%5=3.
+Both divisors name the same immutable Copy binding with known nonzero
+value. The ordinary preconditions are true, and the unit tail matches.
+This is a name-valued divisor, not a direct typed decimal literal at the
+/ or % site. It is excluded from Issue 1573's selected direct-literal
+coverage, despite being statically known rather than actually dynamic.
+NO mandatory-reject oracle. Candidate acceptance can be sound; bounded
+coverage rejection can also be reported without inventing source law.
+If accepted, the expected arithmetic and genuine source flow still apply.
+Actual compiler/public/native status: NOT_RUN; mapping NOT_OBSERVABLE.

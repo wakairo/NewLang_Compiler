@@ -1,0 +1,53 @@
+R1573 FIRST common semantic oracle, version 1.
+Canonical commit: dd577445343da04cb5039a89d9dfa228e98cbb54.
+Authority: CURRENT_SPEC selects NewLang_v0_spec_Draft17_38.md.
+These are independent predictions before implementation/interface reading.
+Each .nl block is one complete, separate semantic compilation unit.
+The six units must not be concatenated: each independently declares main.
+Encoding for every source/oracle/manifest: ASCII UTF-8, no BOM, LF only,
+no trailing spaces, exactly one LF after the last line. Code fences are
+not bytes of the named artifact. No source file has been written or run.
+
+Let M be the actual target's largest representable usize value.
+usize is a non-negative quantity type; no global minimum width is assumed.
+Each case states its sufficient target premise. If it fails, report the
+literal/range boundary separately; do not count it as the intended
+division, remainder, call, or entry test. No wrap or saturation is allowed.
+For a representable nonzero divisor b, division is floor(a/b), and
+a = q*b + r with 0 <= r < b. The quantities used below are mathematical
+values, not promises of a public numeric payload or an implementation ID.
+
+Source law, future candidate coverage, and actual execution are separate.
+Positive means canonically valid under the stated premises and a question
+within Issue 1573's selected goal. It is not a claim that present main or
+an unseen candidate accepts. SOURCE/CHECK/public-owned/C17/native are all
+NOT_RUN. Exact future public/interface coverage is NOT_OBSERVABLE now.
+For truly invalid cases, ordinary checked acceptance would contradict
+the identified rule; an earlier failure cannot show the intended check.
+A legal excluded control has NO mandatory-reject oracle. Its rejection
+may be a bounded implementation limit; its acceptance is not unsoundness.
+Do not infer any fixed diagnostic code, location, first-error ordering,
+table layout, row count, physical ID numbering, or traversal order.
+
+Copy value-use keeps the source binding available. Equal mathematical
+values do not authenticate the source, operation occurrence, selected
+callee, actual argument, callee parameter, or returned result.
+If a later released interface exposes the needed source/public/native
+correspondence, require it to relate this exact source's actual values
+and call/body/world obligations. Do not substitute equal unrelated
+values, a producer fixture, or observer-created facts for that relation.
+This does not prescribe a new authority, schema, issuer, or world machine.
+
+Both positive main functions have zero parameters and unit result.
+One normally completes with unit; the other has one final return unit.
+An empty numeric unit payload does not remove the actual main() call and
+body/world obligations. Unit has no numeric exit-value interpretation.
+A normal native termination or an empty payload alone cannot certify
+the internal numeric/call correspondence. Such correspondence is
+NOT_OBSERVABLE until an adequate exact interface/observer is released.
+Legal optimization is allowed; this oracle demands no physical
+instruction count, runtime helper-call count, or unoptimized layout.
+
+Freeze these original predictions. Later profile or implementation
+findings must be reported alongside them, not silently used to retune
+the source, numerical values, acceptance class, or expected semantics.
