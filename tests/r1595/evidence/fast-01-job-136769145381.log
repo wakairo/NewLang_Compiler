@@ -1,0 +1,903 @@
+﻿2026-11-21T07:07:23.7476356Z Current runner version: '2.338.2'
+2026-11-21T07:07:23.7491435Z ##[group]Runner Image Provisioner
+2026-11-21T07:07:23.7491942Z Hosted Compute Agent
+2026-11-21T07:07:23.7492277Z Version: 20261111.635
+2026-11-21T07:07:23.7492741Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+2026-11-21T07:07:23.7493159Z Build Date: 2026-11-11T01:49:01Z
+2026-11-21T07:07:23.7493611Z Worker ID: {5c3a06ef-d231-4fcc-8135-779bfffe48af}
+2026-11-21T07:07:23.7494028Z Region: southcentralus
+2026-11-21T07:07:23.7494650Z Cloud: Azure
+2026-11-21T07:07:23.7495263Z ##[endgroup]
+2026-11-21T07:07:23.7496285Z ##[group]Operating System
+2026-11-21T07:07:23.7496700Z Ubuntu
+2026-11-21T07:07:23.7497024Z 24.04.5
+2026-11-21T07:07:23.7497330Z LTS
+2026-11-21T07:07:23.7497696Z ##[endgroup]
+2026-11-21T07:07:23.7498021Z ##[group]Runner Image
+2026-11-21T07:07:23.7498412Z Image: ubuntu-24.04
+2026-11-21T07:07:23.7498758Z Version: 20261116.376.1
+2026-11-21T07:07:23.7499505Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261116.376/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-21T07:07:23.7500366Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261116.376
+2026-11-21T07:07:23.7500953Z ##[endgroup]
+2026-11-21T07:07:23.7501592Z ##[group]GITHUB_TOKEN Permissions
+2026-11-21T07:07:23.7502879Z Contents: read
+2026-11-21T07:07:23.7503230Z Metadata: read
+2026-11-21T07:07:23.7503586Z ##[endgroup]
+2026-11-21T07:07:23.7505122Z Secret source: Actions
+2026-11-21T07:07:23.7505675Z Cache mode: write
+2026-11-21T07:07:23.7506131Z Prepare workflow directory
+2026-11-21T07:07:23.7705573Z Prepare all required actions
+2026-11-21T07:07:23.7735125Z Getting action download info
+2026-11-21T07:07:24.0180815Z Download action repository 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
+2026-11-21T07:07:24.1286956Z Download action repository 'actions/cache@3edfce9056124e459a23f683a21433670d47daca' (SHA:3edfce9056124e459a23f683a21433670d47daca)
+2026-11-21T07:07:24.5790244Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-21T07:07:25.2268278Z Complete job name: R-FAST pinned format + GCC build + CTest registration only
+2026-11-21T07:07:25.3079609Z ##[group]Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+2026-11-21T07:07:25.3079964Z with:
+2026-11-21T07:07:25.3080120Z   ref: c2242c12c95d873aa3e786d3754be777b5a5a354
+2026-11-21T07:07:25.3080301Z   fetch-depth: 3
+2026-11-21T07:07:25.3080450Z   persist-credentials: false
+2026-11-21T07:07:25.3080616Z   repository: wakairo/NewLang_Compiler
+2026-11-21T07:07:25.3082177Z   token: ***
+2026-11-21T07:07:25.3082311Z   ssh-strict: true
+2026-11-21T07:07:25.3082445Z   ssh-user: git
+2026-11-21T07:07:25.3082577Z   clean: true
+2026-11-21T07:07:25.3082722Z   sparse-checkout-cone-mode: true
+2026-11-21T07:07:25.3082890Z   fetch-tags: false
+2026-11-21T07:07:25.3083032Z   show-progress: true
+2026-11-21T07:07:25.3083175Z   lfs: false
+2026-11-21T07:07:25.3083328Z   submodules: false
+2026-11-21T07:07:25.3083471Z   set-safe-directory: true
+2026-11-21T07:07:25.3083693Z ##[endgroup]
+2026-11-21T07:07:25.5135943Z Syncing repository: wakairo/NewLang_Compiler
+2026-11-21T07:07:25.5136871Z ##[group]Getting Git version info
+2026-11-21T07:07:25.5137135Z Working directory is '/home/runner/work/NewLang_Compiler/NewLang_Compiler'
+2026-11-21T07:07:25.5137509Z [command]/usr/bin/git version
+2026-11-21T07:07:25.5219213Z git version 2.56.1
+2026-11-21T07:07:25.5227806Z ##[endgroup]
+2026-11-21T07:07:25.5237744Z Temporarily overriding HOME='/home/runner/work/_temp/417219df-8669-48ea-acf1-efcc871577f6' before making global git config changes
+2026-11-21T07:07:25.5238439Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-21T07:07:25.5240873Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-21T07:07:25.5628313Z Deleting the contents of '/home/runner/work/NewLang_Compiler/NewLang_Compiler'
+2026-11-21T07:07:25.5635233Z ##[group]Initializing the repository
+2026-11-21T07:07:25.5645084Z [command]/usr/bin/git init /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-21T07:07:25.6613306Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-21T07:07:25.6613992Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-21T07:07:25.6614685Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-21T07:07:25.6615158Z hint: call:
+2026-11-21T07:07:25.6615476Z hint:
+2026-11-21T07:07:25.6615896Z hint: 	git config --global init.defaultBranch <name>
+2026-11-21T07:07:25.6616309Z hint:
+2026-11-21T07:07:25.6616713Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-21T07:07:25.6617271Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-21T07:07:25.6617695Z hint:
+2026-11-21T07:07:25.6618027Z hint: 	git branch -m <name>
+2026-11-21T07:07:25.6618444Z hint:
+2026-11-21T07:07:25.6618763Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-21T07:07:25.6619247Z Initialized empty Git repository in /home/runner/work/NewLang_Compiler/NewLang_Compiler/.git/
+2026-11-21T07:07:25.6627033Z [command]/usr/bin/git remote add origin https://github.com/wakairo/NewLang_Compiler
+2026-11-21T07:07:25.7152694Z ##[endgroup]
+2026-11-21T07:07:25.7153256Z ##[group]Disabling automatic garbage collection
+2026-11-21T07:07:25.7155874Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-21T07:07:25.7611029Z ##[endgroup]
+2026-11-21T07:07:25.7611382Z ##[group]Setting up auth
+2026-11-21T07:07:25.7616964Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-21T07:07:25.7651915Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-21T07:07:25.8644526Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-21T07:07:25.8678130Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-21T07:07:25.8858413Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-21T07:07:26.0096674Z ##[endgroup]
+2026-11-21T07:07:26.0119467Z ##[group]Fetching the repository
+2026-11-21T07:07:26.0119959Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=3 origin c2242c12c95d873aa3e786d3754be777b5a5a354
+2026-11-21T07:07:28.9251932Z From https://github.com/wakairo/NewLang_Compiler
+2026-11-21T07:07:28.9252944Z  * branch            c2242c12c95d873aa3e786d3754be777b5a5a354 -> FETCH_HEAD
+2026-11-21T07:07:28.9255821Z ##[endgroup]
+2026-11-21T07:07:28.9256191Z ##[group]Determining the checkout info
+2026-11-21T07:07:28.9258012Z ##[endgroup]
+2026-11-21T07:07:28.9263318Z [command]/usr/bin/git sparse-checkout disable
+2026-11-21T07:07:28.9317605Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-21T07:07:28.9348572Z ##[group]Checking out the ref
+2026-11-21T07:07:28.9351234Z [command]/usr/bin/git checkout --progress --force c2242c12c95d873aa3e786d3754be777b5a5a354
+2026-11-21T07:07:29.4480813Z Note: switching to 'c2242c12c95d873aa3e786d3754be777b5a5a354'.
+2026-11-21T07:07:29.4481162Z 
+2026-11-21T07:07:29.4481359Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-21T07:07:29.4481762Z changes and commit them, and you can discard any commits you make in this
+2026-11-21T07:07:29.4482182Z state without impacting any branches by switching back to a branch.
+2026-11-21T07:07:29.4482644Z 
+2026-11-21T07:07:29.4482876Z If you want to create a new branch to retain commits you create, you may
+2026-11-21T07:07:29.4483338Z do so (now or later) by using -c with the switch command. Example:
+2026-11-21T07:07:29.4484051Z 
+2026-11-21T07:07:29.4484486Z   git switch -c <new-branch-name>
+2026-11-21T07:07:29.4484649Z 
+2026-11-21T07:07:29.4484769Z Or undo this operation with:
+2026-11-21T07:07:29.4484936Z 
+2026-11-21T07:07:29.4485024Z   git switch -
+2026-11-21T07:07:29.4485272Z 
+2026-11-21T07:07:29.4487783Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-21T07:07:29.4488265Z 
+2026-11-21T07:07:29.4488573Z HEAD is now at c2242c1 R1595 C1307: assemble independent nested-actual evidence before FAST ref
+2026-11-21T07:07:29.4550136Z ##[endgroup]
+2026-11-21T07:07:29.4601857Z [command]/usr/bin/git log -1 --format=%H
+2026-11-21T07:07:29.4631367Z c2242c12c95d873aa3e786d3754be777b5a5a354
+2026-11-21T07:07:29.4637939Z ##[group]Removing auth
+2026-11-21T07:07:29.4640112Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-21T07:07:29.4671661Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-21T07:07:29.4856500Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-21T07:07:29.4883749Z http.https://github.com/.extraheader
+2026-11-21T07:07:29.4889086Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-21T07:07:29.4946498Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-21T07:07:29.5123757Z ##[endgroup]
+2026-11-21T07:07:29.5286489Z ##[group]Run set -euo pipefail
+2026-11-21T07:07:29.5286729Z [36;1mset -euo pipefail[0m
+2026-11-21T07:07:29.5286909Z [36;1mtest "$GITHUB_EVENT_NAME" = "push"[0m
+2026-11-21T07:07:29.5287101Z [36;1mcase "$GITHUB_REF" in[0m
+2026-11-21T07:07:29.5287266Z [36;1m  refs/heads/r-fast/*) ;;[0m
+2026-11-21T07:07:29.5287477Z [36;1m  *) echo "STOP: not an opt-in R-FAST ref"; exit 1 ;;[0m
+2026-11-21T07:07:29.5287671Z [36;1mesac[0m
+2026-11-21T07:07:29.5287817Z [36;1mtest "$GITHUB_REF_TYPE" = "branch"[0m
+2026-11-21T07:07:29.5288011Z [36;1mtest "$(git rev-parse HEAD)" = "$GITHUB_SHA"[0m
+2026-11-21T07:07:29.5288213Z [36;1mtest "$(git status --porcelain)" = ""[0m
+2026-11-21T07:07:29.5288433Z [36;1mtest "wakairo/NewLang_Compiler" = "$GITHUB_REPOSITORY"[0m
+2026-11-21T07:07:29.5288744Z [36;1mecho "R-FAST event=$GITHUB_EVENT_NAME repository=$GITHUB_REPOSITORY branch=$GITHUB_REF"[0m
+2026-11-21T07:07:29.5289137Z [36;1mecho "R-FAST immutable_HEAD=$(git rev-parse HEAD) event_SHA=$GITHUB_SHA attempt=$GITHUB_RUN_ATTEMPT"[0m
+2026-11-21T07:07:29.5289582Z [36;1mecho "R-FAST preparation only: semantic CHECK execution, source-issued owned proof, native/C17, negative/OOM, ASan and UBSan NOT TESTED"[0m
+2026-11-21T07:07:29.5307579Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-21T07:07:29.5307798Z ##[endgroup]
+2026-11-21T07:07:29.9099037Z R-FAST event=push repository=wakairo/NewLang_Compiler branch=refs/heads/r-fast/r1595-nested-actuals
+2026-11-21T07:07:29.9114580Z R-FAST immutable_HEAD=c2242c12c95d873aa3e786d3754be777b5a5a354 event_SHA=c2242c12c95d873aa3e786d3754be777b5a5a354 attempt=1
+2026-11-21T07:07:29.9115250Z R-FAST preparation only: semantic CHECK execution, source-issued owned proof, native/C17, negative/OOM, ASan and UBSan NOT TESTED
+2026-11-21T07:07:29.9145347Z ##[group]Run set -euo pipefail
+2026-11-21T07:07:29.9145558Z [36;1mset -euo pipefail[0m
+2026-11-21T07:07:29.9145694Z [36;1mcmake_before=$(command -v cmake)[0m
+2026-11-21T07:07:29.9145893Z [36;1mcmake_version=$(cmake --version | sed -n '1s/^cmake version //p')[0m
+2026-11-21T07:07:29.9146097Z [36;1mpython3 - "$cmake_version" <<'PY'[0m
+2026-11-21T07:07:29.9146234Z [36;1mimport re[0m
+2026-11-21T07:07:29.9146343Z [36;1mimport sys[0m
+2026-11-21T07:07:29.9146495Z [36;1mmatch = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", sys.argv[1])[0m
+2026-11-21T07:07:29.9146798Z [36;1mif not match:[0m
+2026-11-21T07:07:29.9146939Z [36;1m    sys.exit("STOP: unexpected CMake version")[0m
+2026-11-21T07:07:29.9147124Z [36;1mmajor, minor, patch = map(int, match.groups())[0m
+2026-11-21T07:07:29.9147300Z [36;1mif not ((3, 28) <= (major, minor) < (4, 0)):[0m
+2026-11-21T07:07:29.9147479Z [36;1m    sys.exit("STOP: CMake outside reviewed interval")[0m
+2026-11-21T07:07:29.9147641Z [36;1mPY[0m
+2026-11-21T07:07:29.9147774Z [36;1msudo apt-get update[0m
+2026-11-21T07:07:29.9147932Z [36;1msudo apt-get install --no-install-recommends -y \[0m
+2026-11-21T07:07:29.9148110Z [36;1m  gcc-13 g++-13 make python3 zstd \[0m
+2026-11-21T07:07:29.9148299Z [36;1m  libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev[0m
+2026-11-21T07:07:29.9148501Z [36;1mtest "$(command -v cmake)" = "$cmake_before"[0m
+2026-11-21T07:07:29.9148717Z [36;1mtest "$(cmake --version | sed -n '1s/^cmake version //p')" = "$cmake_version"[0m
+2026-11-21T07:07:29.9163874Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-21T07:07:29.9164044Z ##[endgroup]
+2026-11-21T07:07:30.0039510Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-21T07:07:30.0485224Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-11-21T07:07:30.0505109Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-11-21T07:07:30.0514860Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-11-21T07:07:30.0574667Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-11-21T07:07:30.0596038Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-11-21T07:07:30.1403571Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [832 kB]
+2026-11-21T07:07:30.1564596Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [762 kB]
+2026-11-21T07:07:30.1754957Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1475 kB]
+2026-11-21T07:07:30.1825772Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [319 kB]
+2026-11-21T07:07:30.1864803Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1716 kB]
+2026-11-21T07:07:30.1915525Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [346 kB]
+2026-11-21T07:07:30.1930365Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1922 kB]
+2026-11-21T07:07:30.1992751Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [443 kB]
+2026-11-21T07:07:30.2524751Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1198 kB]
+2026-11-21T07:07:30.2565620Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [239 kB]
+2026-11-21T07:07:30.2579661Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1231 kB]
+2026-11-21T07:07:30.2620528Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1792 kB]
+2026-11-21T07:07:30.3129218Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [414 kB]
+2026-11-21T07:07:34.5652235Z Fetched 13.1 MB in 1s (13.9 MB/s)
+2026-11-21T07:07:35.2663083Z Reading package lists...
+2026-11-21T07:07:35.2959579Z Reading package lists...
+2026-11-21T07:07:35.4580713Z Building dependency tree...
+2026-11-21T07:07:35.4585452Z Reading state information...
+2026-11-21T07:07:35.5817522Z gcc-13 is already the newest version (13.3.0-6ubuntu2~24.04.1).
+2026-11-21T07:07:35.5817856Z gcc-13 set to manually installed.
+2026-11-21T07:07:35.5818110Z g++-13 is already the newest version (13.3.0-6ubuntu2~24.04.1).
+2026-11-21T07:07:35.5818402Z make is already the newest version (4.3-4.1build2).
+2026-11-21T07:07:35.5818691Z python3 is already the newest version (3.12.3-0ubuntu2.1).
+2026-11-21T07:07:35.5818992Z zstd is already the newest version (1.5.5+dfsg2-2build1.1).
+2026-11-21T07:07:35.5819538Z zstd set to manually installed.
+2026-11-21T07:07:35.5819787Z libstdc++6 is already the newest version (14.2.0-4ubuntu2~24.04.1).
+2026-11-21T07:07:35.5820126Z zlib1g-dev is already the newest version (1:1.3.dfsg-3.1ubuntu2.3).
+2026-11-21T07:07:35.5820487Z libzstd-dev is already the newest version (1.5.5+dfsg2-2build1.1).
+2026-11-21T07:07:35.5820769Z libzstd-dev set to manually installed.
+2026-11-21T07:07:35.5821061Z libncurses-dev is already the newest version (6.4+20240113-1ubuntu2.2).
+2026-11-21T07:07:35.5821356Z libncurses-dev set to manually installed.
+2026-11-21T07:07:35.5821650Z libxml2-dev is already the newest version (2.9.14+dfsg-1.3ubuntu3.10).
+2026-11-21T07:07:35.5821949Z libxml2-dev set to manually installed.
+2026-11-21T07:07:35.5822222Z 0 upgraded, 0 newly installed, 0 to remove and 68 not upgraded.
+2026-11-21T07:07:35.5904323Z ##[group]Run actions/cache/restore@3edfce9056124e459a23f683a21433670d47daca
+2026-11-21T07:07:35.5904549Z with:
+2026-11-21T07:07:35.5904707Z   path: .deps/downloads/newlang-llvm-23.1.3-linux-x64-final.tar.zst
+2026-11-21T07:07:35.5905047Z   key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-21T07:07:35.5905291Z   enableCrossOsArchive: false
+2026-11-21T07:07:35.5905428Z   fail-on-cache-miss: false
+2026-11-21T07:07:35.5905554Z   lookup-only: false
+2026-11-21T07:07:35.5905668Z ##[endgroup]
+2026-11-21T07:07:35.8169973Z Cache hit for: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-21T07:07:37.0078939Z Received 126417585 of 126417585 (100.0%), 119.8 MBs/sec
+2026-11-21T07:07:37.0079986Z Cache Size: ~121 MB (126417585 B)
+2026-11-21T07:07:37.0124863Z [command]/usr/bin/tar -xf /home/runner/work/_temp/90afdaf8-42c3-4541-a7fc-81f9b242ce7b/cache.tzst -P -C /home/runner/work/NewLang_Compiler/NewLang_Compiler --use-compress-program unzstd
+2026-11-21T07:07:37.1437369Z Cache restored successfully
+2026-11-21T07:07:37.1607342Z Cache restored from key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-21T07:07:37.1827588Z ##[group]Run set -euo pipefail
+2026-11-21T07:07:37.1827778Z [36;1mset -euo pipefail[0m
+2026-11-21T07:07:37.1827926Z [36;1mpython3 scripts/bootstrap.py[0m
+2026-11-21T07:07:37.1828081Z [36;1m. .deps/activate.sh[0m
+2026-11-21T07:07:37.1828244Z [36;1mclang-format-23 --version | grep -F '23.1.3'[0m
+2026-11-21T07:07:37.1844354Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-21T07:07:37.1844550Z ##[endgroup]
+2026-11-21T07:07:37.2228880Z SDK cache candidate: verify exact SHA and size
+2026-11-21T07:07:37.2909485Z SDK archive independently SHA256 verified (126520077 bytes) in 0.07s
+2026-11-21T07:07:37.6294634Z SDK authenticated decompression 448040960 bytes in 0.34s
+2026-11-21T07:07:37.9122771Z SDK fail-closed tar inspection and rootless extraction 570 members
+2026-11-21T07:07:37.9658542Z LLVM 23.1.3 exact curated SDK ready at /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64; total 0.74s
+2026-11-21T07:07:37.9747701Z clang-format version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)
+2026-11-21T07:07:37.9781897Z ##[group]Run set -euo pipefail
+2026-11-21T07:07:37.9782091Z [36;1mset -euo pipefail[0m
+2026-11-21T07:07:37.9782223Z [36;1m. .deps/activate.sh[0m
+2026-11-21T07:07:37.9782363Z [36;1mbash scripts/check-format.sh[0m
+2026-11-21T07:07:37.9782532Z [36;1mecho 'R-FAST FORMAT PASS (not semantics)'[0m
+2026-11-21T07:07:37.9797737Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-21T07:07:37.9797911Z env:
+2026-11-21T07:07:37.9798096Z   FORMAT_SUGGESTIONS_PATCH: /home/runner/work/_temp/r-fast-format-suggestions.patch
+2026-11-21T07:07:37.9798314Z ##[endgroup]
+2026-11-21T07:07:40.1505124Z tests/r1595/observe.c:13:7: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1505584Z enum { MAX_OBJECTS = 128, MAX_VISITS = 8192, MAX_DEPTH = 64 };
+2026-11-21T07:07:40.1506192Z       ^
+2026-11-21T07:07:40.1506492Z tests/r1595/observe.c:13:26: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1506962Z enum { MAX_OBJECTS = 128, MAX_VISITS = 8192, MAX_DEPTH = 64 };
+2026-11-21T07:07:40.1507222Z                          ^
+2026-11-21T07:07:40.1507544Z tests/r1595/observe.c:13:45: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1507956Z enum { MAX_OBJECTS = 128, MAX_VISITS = 8192, MAX_DEPTH = 64 };
+2026-11-21T07:07:40.1508225Z                                             ^
+2026-11-21T07:07:40.1508567Z tests/r1595/observe.c:13:60: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1508984Z enum { MAX_OBJECTS = 128, MAX_VISITS = 8192, MAX_DEPTH = 64 };
+2026-11-21T07:07:40.1509264Z                                                            ^
+2026-11-21T07:07:40.1509625Z tests/r1595/observe.c:29:35: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1510065Z static const char *yes(bool value) { return value ? "true" : "false"; }
+2026-11-21T07:07:40.1510358Z                                   ^
+2026-11-21T07:07:40.1510703Z tests/r1595/observe.c:29:37: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1511119Z static const char *yes(bool value) { return value ? "true" : "false"; }
+2026-11-21T07:07:40.1511411Z                                     ^
+2026-11-21T07:07:40.1511744Z tests/r1595/observe.c:29:70: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1512158Z static const char *yes(bool value) { return value ? "true" : "false"; }
+2026-11-21T07:07:40.1512464Z                                                                      ^
+2026-11-21T07:07:40.1512832Z tests/r1595/observe.c:35:36: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1513188Z            "\"message\":\"%s\"}\n", message);
+2026-11-21T07:07:40.1513431Z                                    ^
+2026-11-21T07:07:40.1513761Z tests/r1595/observe.c:59:22: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1514206Z     case NL_PARSE_OK: return "OK";
+2026-11-21T07:07:40.1514407Z                      ^
+2026-11-21T07:07:40.1514711Z tests/r1595/observe.c:60:41: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1515140Z     case NL_PARSE_LEXICALLY_UNSUPPORTED: return "LEXICALLY_UNSUPPORTED";
+2026-11-21T07:07:40.1515432Z                                         ^
+2026-11-21T07:07:40.1515765Z tests/r1595/observe.c:61:38: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1516177Z     case NL_PARSE_SYNTAX_UNSUPPORTED: return "SYNTAX_UNSUPPORTED";
+2026-11-21T07:07:40.1516450Z                                      ^
+2026-11-21T07:07:40.1516840Z tests/r1595/observe.c:62:32: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1517244Z     case NL_PARSE_SYNTAX_ERROR: return "SYNTAX_ERROR";
+2026-11-21T07:07:40.1517491Z                                ^
+2026-11-21T07:07:40.1518042Z tests/r1595/observe.c:63:33: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1518426Z     case NL_PARSE_OUT_OF_MEMORY: return "OUT_OF_MEMORY";
+2026-11-21T07:07:40.1518673Z                                 ^
+2026-11-21T07:07:40.1518997Z tests/r1595/observe.c:64:34: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1519385Z     case NL_PARSE_RESOURCE_LIMIT: return "RESOURCE_LIMIT";
+2026-11-21T07:07:40.1519636Z                                  ^
+2026-11-21T07:07:40.1519958Z tests/r1595/observe.c:65:34: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1520348Z     case NL_PARSE_INTERNAL_ERROR: return "INTERNAL_ERROR";
+2026-11-21T07:07:40.1520596Z                                  ^
+2026-11-21T07:07:40.1520922Z tests/r1595/observe.c:73:22: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1521365Z     case NL_CHECK_OK: return "OK";
+2026-11-21T07:07:40.1521560Z                      ^
+2026-11-21T07:07:40.1521873Z tests/r1595/observe.c:74:34: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1522257Z     case NL_CHECK_SEMANTIC_ERROR: return "SEMANTIC_ERROR";
+2026-11-21T07:07:40.1522504Z                                  ^
+2026-11-21T07:07:40.1522827Z tests/r1595/observe.c:75:40: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1523243Z     case NL_CHECK_SEMANTIC_UNSUPPORTED: return "SEMANTIC_UNSUPPORTED";
+2026-11-21T07:07:40.1523533Z                                        ^
+2026-11-21T07:07:40.1523867Z tests/r1595/observe.c:76:44: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1524389Z     case NL_CHECK_ANALYSIS_PRECISION_LIMIT: return "ANALYSIS_PRECISION_LIMIT";
+2026-11-21T07:07:40.1524704Z                                            ^
+2026-11-21T07:07:40.1525042Z tests/r1595/observe.c:77:33: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1525429Z     case NL_CHECK_OUT_OF_MEMORY: return "OUT_OF_MEMORY";
+2026-11-21T07:07:40.1525673Z                                 ^
+2026-11-21T07:07:40.1526021Z tests/r1595/observe.c:78:34: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1526468Z     case NL_CHECK_RESOURCE_LIMIT: return "RESOURCE_LIMIT";
+2026-11-21T07:07:40.1526719Z                                  ^
+2026-11-21T07:07:40.1527042Z tests/r1595/observe.c:79:34: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1527431Z     case NL_CHECK_INTERNAL_ERROR: return "INTERNAL_ERROR";
+2026-11-21T07:07:40.1527680Z                                  ^
+2026-11-21T07:07:40.1528015Z tests/r1595/observe.c:101:37: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1528400Z     case NL_CHECKED_REGISTERED_CALL: return "CALL";
+2026-11-21T07:07:40.1528641Z                                     ^
+2026-11-21T07:07:40.1528977Z tests/r1595/observe.c:102:27: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1529345Z     case NL_CHECKED_BLOCK: return "BLOCK";
+2026-11-21T07:07:40.1529561Z                           ^
+2026-11-21T07:07:40.1529879Z tests/r1595/observe.c:103:29: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1530250Z     case NL_CHECKED_BINDING: return "BINDING";
+2026-11-21T07:07:40.1530480Z                             ^
+2026-11-21T07:07:40.1530801Z tests/r1595/observe.c:104:32: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1531186Z     case NL_CHECKED_IDENTIFIER: return "IDENTIFIER";
+2026-11-21T07:07:40.1531426Z                                ^
+2026-11-21T07:07:40.1531754Z tests/r1595/observe.c:105:31: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1532134Z     case NL_CHECKED_STATEMENT: return "STATEMENT";
+2026-11-21T07:07:40.1532370Z                               ^
+2026-11-21T07:07:40.1532779Z tests/r1595/observe.c:106:24: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1533012Z     case NL_CHECKED_IF: return "IF";
+2026-11-21T07:07:40.1533146Z                        ^
+2026-11-21T07:07:40.1533347Z tests/r1595/observe.c:107:28: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1533583Z     case NL_CHECKED_IF_ARM: return "IF_ARM";
+2026-11-21T07:07:40.1533731Z                            ^
+2026-11-21T07:07:40.1533938Z tests/r1595/observe.c:108:26: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1534343Z     case NL_CHECKED_UNIT: return "UNIT";
+2026-11-21T07:07:40.1534483Z                          ^
+2026-11-21T07:07:40.1534692Z tests/r1595/observe.c:109:35: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1535023Z     case NL_CHECKED_USIZE_LITERAL: return "USIZE_LITERAL";
+2026-11-21T07:07:40.1535188Z                                   ^
+2026-11-21T07:07:40.1535407Z tests/r1595/observe.c:110:37: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1535666Z     case NL_CHECKED_USIZE_LESS_THAN: return "USIZE_LESS_THAN";
+2026-11-21T07:07:40.1535836Z                                     ^
+2026-11-21T07:07:40.1536049Z tests/r1595/observe.c:111:36: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1536312Z     case NL_CHECKED_USIZE_DIVISION: return "USIZE_DIVISION";
+2026-11-21T07:07:40.1536481Z                                    ^
+2026-11-21T07:07:40.1536693Z tests/r1595/observe.c:112:37: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1536947Z     case NL_CHECKED_USIZE_REMAINDER: return "USIZE_REMAINDER";
+2026-11-21T07:07:40.1537119Z                                     ^
+2026-11-21T07:07:40.1537340Z tests/r1595/observe.c:113:13: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1537568Z     default: return "OTHER";
+2026-11-21T07:07:40.1537692Z             ^
+2026-11-21T07:07:40.1537885Z tests/r1595/observe.c:132:29: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1538120Z            "\"bytes_hex\":", id, all.end_byte);
+2026-11-21T07:07:40.1538270Z                             ^
+2026-11-21T07:07:40.1538477Z tests/r1595/observe.c:167:52: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1538720Z            result.type, result.value, yes(present),
+2026-11-21T07:07:40.1538884Z                                                    ^
+2026-11-21T07:07:40.1539111Z tests/r1595/observe.c:169:47: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1539346Z            yes(present && value.scalar_known),
+2026-11-21T07:07:40.1539495Z                                               ^
+2026-11-21T07:07:40.1539725Z tests/r1595/observe.c:170:45: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1539977Z            present ? value.scalar_value : 0, yes(type_present),
+2026-11-21T07:07:40.1540149Z                                             ^
+2026-11-21T07:07:40.1540370Z tests/r1595/observe.c:170:64: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1540619Z            present ? value.scalar_value : 0, yes(type_present),
+2026-11-21T07:07:40.1540794Z                                                                ^
+2026-11-21T07:07:40.1541029Z tests/r1595/observe.c:177:12: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1541257Z static void arithmetic_relation(
+2026-11-21T07:07:40.1541384Z            ^
+2026-11-21T07:07:40.1541570Z tests/r1595/observe.c:177:33: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1541801Z static void arithmetic_relation(
+2026-11-21T07:07:40.1541935Z                                 ^
+2026-11-21T07:07:40.1542141Z tests/r1595/observe.c:178:54: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1542477Z     NLTypeId type, const NLCheckedNodeId operands[2],
+2026-11-21T07:07:40.1542650Z                                                      ^
+2026-11-21T07:07:40.1542876Z tests/r1595/observe.c:179:49: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1543112Z     const NLValueId values[2], NLValueId result,
+2026-11-21T07:07:40.1543272Z                                                 ^
+2026-11-21T07:07:40.1543512Z tests/r1595/observe.c:180:60: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1543767Z     const NLSymbolId symbols[2], const NLPlaceId places[2],
+2026-11-21T07:07:40.1543948Z                                                            ^
+2026-11-21T07:07:40.1544309Z tests/r1595/observe.c:181:43: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1544663Z     const NLIncarnationId incarnations[2], const NLValueFactId facts[2],
+2026-11-21T07:07:40.1544853Z                                           ^
+2026-11-21T07:07:40.1545074Z tests/r1595/observe.c:181:73: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1545348Z     const NLIncarnationId incarnations[2], const NLValueFactId facts[2],
+2026-11-21T07:07:40.1545551Z                                                                         ^
+2026-11-21T07:07:40.1545787Z tests/r1595/observe.c:182:23: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1546030Z     NLSourceSpan span, NLSourceSpan operation,
+2026-11-21T07:07:40.1546178Z                       ^
+2026-11-21T07:07:40.1546376Z tests/r1595/observe.c:182:47: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1546612Z     NLSourceSpan span, NLSourceSpan operation,
+2026-11-21T07:07:40.1546771Z                                               ^
+2026-11-21T07:07:40.1546991Z tests/r1595/observe.c:192:57: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1547236Z            symbols[0], symbols[1], places[0], places[1],
+2026-11-21T07:07:40.1547400Z                                                         ^
+2026-11-21T07:07:40.1547630Z tests/r1595/observe.c:193:28: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1547882Z            incarnations[0], incarnations[1], facts[0], facts[1],
+2026-11-21T07:07:40.1548045Z                            ^
+2026-11-21T07:07:40.1548248Z tests/r1595/observe.c:193:65: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1548497Z            incarnations[0], incarnations[1], facts[0], facts[1],
+2026-11-21T07:07:40.1548671Z                                                                 ^
+2026-11-21T07:07:40.1548902Z tests/r1595/observe.c:194:43: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1549159Z            span.start_byte, span.end_byte, operation.start_byte,
+2026-11-21T07:07:40.1549333Z                                           ^
+2026-11-21T07:07:40.1549555Z tests/r1595/observe.c:194:65: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1549803Z            span.start_byte, span.end_byte, operation.start_byte,
+2026-11-21T07:07:40.1549980Z                                                                 ^
+2026-11-21T07:07:40.1550211Z tests/r1595/observe.c:195:31: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1550458Z            operation.end_byte, operand_spans[0].start_byte,
+2026-11-21T07:07:40.1564080Z                               ^
+2026-11-21T07:07:40.1564531Z tests/r1595/observe.c:195:60: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1564935Z            operation.end_byte, operand_spans[0].start_byte,
+2026-11-21T07:07:40.1565210Z                                                            ^
+2026-11-21T07:07:40.1565471Z tests/r1595/observe.c:196:38: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1565859Z            operand_spans[0].end_byte, operand_spans[1].start_byte,
+2026-11-21T07:07:40.1566041Z                                      ^
+2026-11-21T07:07:40.1566264Z tests/r1595/observe.c:196:67: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1566523Z            operand_spans[0].end_byte, operand_spans[1].start_byte,
+2026-11-21T07:07:40.1566711Z                                                                   ^
+2026-11-21T07:07:40.1566958Z tests/r1595/observe.c:219:64: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1567212Z                view.numbers[0], view.numbers[1], view.quotient,
+2026-11-21T07:07:40.1567389Z                                                                ^
+2026-11-21T07:07:40.1567698Z tests/r1595/observe.c:220:32: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1567941Z                view.target_max, yes(math_ok));
+2026-11-21T07:07:40.1568090Z                                ^
+2026-11-21T07:07:40.1568308Z tests/r1595/observe.c:286:28: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1568563Z            "\"name_hex\":", fid, node, kind_name(view->kind),
+2026-11-21T07:07:40.1568726Z                            ^
+2026-11-21T07:07:40.1568934Z tests/r1595/observe.c:286:62: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1569180Z            "\"name_hex\":", fid, node, kind_name(view->kind),
+2026-11-21T07:07:40.1569355Z                                                              ^
+2026-11-21T07:07:40.1569587Z tests/r1595/observe.c:287:28: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1569860Z            (int)view->kind, view->span.start_byte, view->span.end_byte);
+2026-11-21T07:07:40.1570048Z                            ^
+2026-11-21T07:07:40.1570261Z tests/r1595/observe.c:318:74: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1570540Z     NLCheckedNodeId edges[] = {view->first_argument, view->next_argument,
+2026-11-21T07:07:40.1570748Z                                                                          ^
+2026-11-21T07:07:40.1570991Z tests/r1595/observe.c:319:49: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1571242Z                               view->initializer, view->first_item,
+2026-11-21T07:07:40.1571409Z                                                 ^
+2026-11-21T07:07:40.1571638Z tests/r1595/observe.c:319:67: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1571881Z                               view->initializer, view->first_item,
+2026-11-21T07:07:40.1572059Z                                                                   ^
+2026-11-21T07:07:40.1572296Z tests/r1595/observe.c:320:47: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1572540Z                               view->next_item, view->tail};
+2026-11-21T07:07:40.1572704Z                                               ^
+2026-11-21T07:07:40.1572934Z tests/r1595/observe.c:330:44: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1573183Z                "\"child_fragment\":%zu}\n", fid, node, child);
+2026-11-21T07:07:40.1573348Z                                            ^
+2026-11-21T07:07:40.1573573Z tests/r1595/observe.c:333:43: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1573807Z             const NLCheckedFragment *arm =
+2026-11-21T07:07:40.1573954Z                                           ^
+2026-11-21T07:07:40.1574317Z tests/r1595/observe.c:372:31: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1574553Z     const NLSyntaxView *unit =
+2026-11-21T07:07:40.1574690Z                               ^
+2026-11-21T07:07:40.1574899Z tests/r1595/observe.c:376:75: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1575268Z     for (const NLSyntaxNode *node = unit->data.function_unit.declarations;
+2026-11-21T07:07:40.1575487Z                                                                           ^
+2026-11-21T07:07:40.1575729Z tests/r1595/observe.c:377:15: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1575974Z          node; node = nl_syntax_next_argument(node)) {
+2026-11-21T07:07:40.1576127Z               ^
+2026-11-21T07:07:40.1576322Z tests/r1595/observe.c:388:46: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1576559Z                function->data.function.count,
+2026-11-21T07:07:40.1576713Z                                              ^
+2026-11-21T07:07:40.1576935Z tests/r1595/observe.c:404:73: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1577333Z         fputs("usage: r1595_public_observe ORIGINAL ENTRY_EXPRESSION\n", stderr);
+2026-11-21T07:07:40.1577552Z                                                                         ^
+2026-11-21T07:07:40.1577793Z tests/r1595/observe.c:409:31: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1578029Z            "\"number\":%d}\n", (int)loaded);
+2026-11-21T07:07:40.1578178Z                               ^
+2026-11-21T07:07:40.1578405Z tests/r1595/observe.c:414:35: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1578655Z            "\"status\":\"%s\"}\n", parse_name(parsed));
+2026-11-21T07:07:40.1578815Z                                   ^
+2026-11-21T07:07:40.1579028Z tests/r1595/observe.c:420:35: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1579269Z            "\"status\":\"%s\"}\n", parse_name(parsed));
+2026-11-21T07:07:40.1579431Z                                   ^
+2026-11-21T07:07:40.1579647Z tests/r1595/observe.c:429:35: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1579889Z            "\"status\":\"%s\"}\n", check_name(status));
+2026-11-21T07:07:40.1580042Z                                   ^
+2026-11-21T07:07:40.1580259Z tests/r1595/observe.c:448:31: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1580488Z            "\"number\":%d}\n", (int)loaded);
+2026-11-21T07:07:40.1580629Z                               ^
+2026-11-21T07:07:40.1580836Z tests/r1595/observe.c:460:35: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1581076Z            "\"status\":\"%s\"}\n", parse_name(parsed));
+2026-11-21T07:07:40.1581229Z                                   ^
+2026-11-21T07:07:40.1581441Z tests/r1595/observe.c:469:35: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1581680Z            "\"status\":\"%s\"}\n", check_name(status));
+2026-11-21T07:07:40.1581834Z                                   ^
+2026-11-21T07:07:40.1582049Z tests/r1595/observe.c:482:62: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1582309Z     printf("{\"event\":\"original_input\",\"source\":%zu}\n",
+2026-11-21T07:07:40.1582494Z                                                              ^
+2026-11-21T07:07:40.1582725Z tests/r1595/observe.c:488:31: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-21T07:07:40.1582985Z            "\"failed\":%s}\n", root_fragment, yes(observer->failed));
+2026-11-21T07:07:40.1583155Z                               ^
+2026-11-21T07:07:40.4156215Z clang-format failed (exit 1); generating exact suggestions with /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-format-23
+2026-11-21T07:07:40.4172971Z Checked checkout: c2242c12c95d873aa3e786d3754be777b5a5a354
+2026-11-21T07:07:40.4191149Z clang-format version: clang-format version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)
+2026-11-21T07:07:45.0111419Z Suggested patch for 1 C/H file(s): /home/runner/work/_temp/r-fast-format-suggestions.patch
+2026-11-21T07:07:45.0112297Z Review the complete patch, then: git apply --check '/home/runner/work/_temp/r-fast-format-suggestions.patch' && git apply '/home/runner/work/_temp/r-fast-format-suggestions.patch'
+2026-11-21T07:07:45.0112710Z Alternative after review: bash scripts/format.sh
+2026-11-21T07:07:45.0112896Z ----- BEGIN EXACT clang-format SUGGESTIONS -----
+2026-11-21T07:07:45.0118474Z --- a/tests/r1595/observe.c
+2026-11-21T07:07:45.0118685Z +++ b/tests/r1595/observe.c
+2026-11-21T07:07:45.0118875Z @@ -10,7 +10,11 @@
+2026-11-21T07:07:45.0119043Z  #include <stdio.h>
+2026-11-21T07:07:45.0119220Z  #include <stdlib.h>
+2026-11-21T07:07:45.0119392Z  
+2026-11-21T07:07:45.0119611Z -enum { MAX_OBJECTS = 128, MAX_VISITS = 8192, MAX_DEPTH = 64 };
+2026-11-21T07:07:45.0120233Z +enum {
+2026-11-21T07:07:45.0120391Z +    MAX_OBJECTS = 128,
+2026-11-21T07:07:45.0120576Z +    MAX_VISITS = 8192,
+2026-11-21T07:07:45.0120762Z +    MAX_DEPTH = 64
+2026-11-21T07:07:45.0120927Z +};
+2026-11-21T07:07:45.0121082Z  
+2026-11-21T07:07:45.0121263Z  typedef struct {
+2026-11-21T07:07:45.0121541Z      const NLCheckedFragment *fragment;
+2026-11-21T07:07:45.0121879Z @@ -26,13 +30,17 @@
+2026-11-21T07:07:45.0122085Z      bool failed;
+2026-11-21T07:07:45.0122245Z  } Observer;
+2026-11-21T07:07:45.0122396Z  
+2026-11-21T07:07:45.0122631Z -static const char *yes(bool value) { return value ? "true" : "false"; }
+2026-11-21T07:07:45.0122942Z +static const char *yes(bool value)
+2026-11-21T07:07:45.0123144Z +{
+2026-11-21T07:07:45.0123304Z +    return value ? "true" : "false";
+2026-11-21T07:07:45.0123505Z +}
+2026-11-21T07:07:45.0123649Z  
+2026-11-21T07:07:45.0123860Z  static void problem(Observer *observer, const char *message)
+2026-11-21T07:07:45.0124236Z  {
+2026-11-21T07:07:45.0124395Z      observer->failed = true;
+2026-11-21T07:07:45.0124656Z      printf("{\"event\":\"apparatus_or_public_contract_failure\","
+2026-11-21T07:07:45.0124940Z -           "\"message\":\"%s\"}\n", message);
+2026-11-21T07:07:45.0125169Z +           "\"message\":\"%s\"}\n",
+2026-11-21T07:07:45.0125371Z +           message);
+2026-11-21T07:07:45.0125532Z  }
+2026-11-21T07:07:45.0125671Z  
+2026-11-21T07:07:45.0125881Z  static void hex_bytes(const unsigned char *bytes, size_t length)
+2026-11-21T07:07:45.0126152Z @@ -56,13 +64,20 @@
+2026-11-21T07:07:45.0126358Z  static const char *parse_name(NLParseStatus status)
+2026-11-21T07:07:45.0126598Z  {
+2026-11-21T07:07:45.0126743Z      switch (status) {
+2026-11-21T07:07:45.0126931Z -    case NL_PARSE_OK: return "OK";
+2026-11-21T07:07:45.0127277Z -    case NL_PARSE_LEXICALLY_UNSUPPORTED: return "LEXICALLY_UNSUPPORTED";
+2026-11-21T07:07:45.0127644Z -    case NL_PARSE_SYNTAX_UNSUPPORTED: return "SYNTAX_UNSUPPORTED";
+2026-11-21T07:07:45.0127886Z -    case NL_PARSE_SYNTAX_ERROR: return "SYNTAX_ERROR";
+2026-11-21T07:07:45.0128074Z -    case NL_PARSE_OUT_OF_MEMORY: return "OUT_OF_MEMORY";
+2026-11-21T07:07:45.0128264Z -    case NL_PARSE_RESOURCE_LIMIT: return "RESOURCE_LIMIT";
+2026-11-21T07:07:45.0128458Z -    case NL_PARSE_INTERNAL_ERROR: return "INTERNAL_ERROR";
+2026-11-21T07:07:45.0128619Z +    case NL_PARSE_OK:
+2026-11-21T07:07:45.0128735Z +        return "OK";
+2026-11-21T07:07:45.0128861Z +    case NL_PARSE_LEXICALLY_UNSUPPORTED:
+2026-11-21T07:07:45.0129014Z +        return "LEXICALLY_UNSUPPORTED";
+2026-11-21T07:07:45.0129161Z +    case NL_PARSE_SYNTAX_UNSUPPORTED:
+2026-11-21T07:07:45.0129305Z +        return "SYNTAX_UNSUPPORTED";
+2026-11-21T07:07:45.0129446Z +    case NL_PARSE_SYNTAX_ERROR:
+2026-11-21T07:07:45.0129583Z +        return "SYNTAX_ERROR";
+2026-11-21T07:07:45.0129715Z +    case NL_PARSE_OUT_OF_MEMORY:
+2026-11-21T07:07:45.0129850Z +        return "OUT_OF_MEMORY";
+2026-11-21T07:07:45.0129982Z +    case NL_PARSE_RESOURCE_LIMIT:
+2026-11-21T07:07:45.0130119Z +        return "RESOURCE_LIMIT";
+2026-11-21T07:07:45.0130256Z +    case NL_PARSE_INTERNAL_ERROR:
+2026-11-21T07:07:45.0130391Z +        return "INTERNAL_ERROR";
+2026-11-21T07:07:45.0130515Z      }
+2026-11-21T07:07:45.0130618Z      return "UNKNOWN_STATUS";
+2026-11-21T07:07:45.0130948Z  }
+2026-11-21T07:07:45.0131089Z @@ -70,13 +85,20 @@
+2026-11-21T07:07:45.0131292Z  static const char *check_name(NLCheckStatus status)
+2026-11-21T07:07:45.0131526Z  {
+2026-11-21T07:07:45.0131672Z      switch (status) {
+2026-11-21T07:07:45.0131856Z -    case NL_CHECK_OK: return "OK";
+2026-11-21T07:07:45.0132106Z -    case NL_CHECK_SEMANTIC_ERROR: return "SEMANTIC_ERROR";
+2026-11-21T07:07:45.0132432Z -    case NL_CHECK_SEMANTIC_UNSUPPORTED: return "SEMANTIC_UNSUPPORTED";
+2026-11-21T07:07:45.0132849Z -    case NL_CHECK_ANALYSIS_PRECISION_LIMIT: return "ANALYSIS_PRECISION_LIMIT";
+2026-11-21T07:07:45.0133205Z -    case NL_CHECK_OUT_OF_MEMORY: return "OUT_OF_MEMORY";
+2026-11-21T07:07:45.0133492Z -    case NL_CHECK_RESOURCE_LIMIT: return "RESOURCE_LIMIT";
+2026-11-21T07:07:45.0133850Z -    case NL_CHECK_INTERNAL_ERROR: return "INTERNAL_ERROR";
+2026-11-21T07:07:45.0134011Z +    case NL_CHECK_OK:
+2026-11-21T07:07:45.0134257Z +        return "OK";
+2026-11-21T07:07:45.0134403Z +    case NL_CHECK_SEMANTIC_ERROR:
+2026-11-21T07:07:45.0134541Z +        return "SEMANTIC_ERROR";
+2026-11-21T07:07:45.0134678Z +    case NL_CHECK_SEMANTIC_UNSUPPORTED:
+2026-11-21T07:07:45.0134829Z +        return "SEMANTIC_UNSUPPORTED";
+2026-11-21T07:07:45.0134982Z +    case NL_CHECK_ANALYSIS_PRECISION_LIMIT:
+2026-11-21T07:07:45.0135136Z +        return "ANALYSIS_PRECISION_LIMIT";
+2026-11-21T07:07:45.0135280Z +    case NL_CHECK_OUT_OF_MEMORY:
+2026-11-21T07:07:45.0135416Z +        return "OUT_OF_MEMORY";
+2026-11-21T07:07:45.0135570Z +    case NL_CHECK_RESOURCE_LIMIT:
+2026-11-21T07:07:45.0135704Z +        return "RESOURCE_LIMIT";
+2026-11-21T07:07:45.0135834Z +    case NL_CHECK_INTERNAL_ERROR:
+2026-11-21T07:07:45.0136015Z +        return "INTERNAL_ERROR";
+2026-11-21T07:07:45.0136208Z      }
+2026-11-21T07:07:45.0136363Z      return "UNKNOWN_STATUS";
+2026-11-21T07:07:45.0136545Z  }
+2026-11-21T07:07:45.0136689Z @@ -98,19 +120,32 @@
+2026-11-21T07:07:45.0136893Z  static const char *kind_name(NLCheckedKind kind)
+2026-11-21T07:07:45.0137108Z  {
+2026-11-21T07:07:45.0137243Z      switch (kind) {
+2026-11-21T07:07:45.0137444Z -    case NL_CHECKED_REGISTERED_CALL: return "CALL";
+2026-11-21T07:07:45.0137702Z -    case NL_CHECKED_BLOCK: return "BLOCK";
+2026-11-21T07:07:45.0137940Z -    case NL_CHECKED_BINDING: return "BINDING";
+2026-11-21T07:07:45.0138148Z -    case NL_CHECKED_IDENTIFIER: return "IDENTIFIER";
+2026-11-21T07:07:45.0138320Z -    case NL_CHECKED_STATEMENT: return "STATEMENT";
+2026-11-21T07:07:45.0138484Z -    case NL_CHECKED_IF: return "IF";
+2026-11-21T07:07:45.0138632Z -    case NL_CHECKED_IF_ARM: return "IF_ARM";
+2026-11-21T07:07:45.0138786Z -    case NL_CHECKED_UNIT: return "UNIT";
+2026-11-21T07:07:45.0138953Z -    case NL_CHECKED_USIZE_LITERAL: return "USIZE_LITERAL";
+2026-11-21T07:07:45.0139153Z -    case NL_CHECKED_USIZE_LESS_THAN: return "USIZE_LESS_THAN";
+2026-11-21T07:07:45.0139352Z -    case NL_CHECKED_USIZE_DIVISION: return "USIZE_DIVISION";
+2026-11-21T07:07:45.0139554Z -    case NL_CHECKED_USIZE_REMAINDER: return "USIZE_REMAINDER";
+2026-11-21T07:07:45.0139725Z -    default: return "OTHER";
+2026-11-21T07:07:45.0139861Z +    case NL_CHECKED_REGISTERED_CALL:
+2026-11-21T07:07:45.0139997Z +        return "CALL";
+2026-11-21T07:07:45.0140117Z +    case NL_CHECKED_BLOCK:
+2026-11-21T07:07:45.0140242Z +        return "BLOCK";
+2026-11-21T07:07:45.0140366Z +    case NL_CHECKED_BINDING:
+2026-11-21T07:07:45.0140493Z +        return "BINDING";
+2026-11-21T07:07:45.0140618Z +    case NL_CHECKED_IDENTIFIER:
+2026-11-21T07:07:45.0140748Z +        return "IDENTIFIER";
+2026-11-21T07:07:45.0140876Z +    case NL_CHECKED_STATEMENT:
+2026-11-21T07:07:45.0141009Z +        return "STATEMENT";
+2026-11-21T07:07:45.0141133Z +    case NL_CHECKED_IF:
+2026-11-21T07:07:45.0141248Z +        return "IF";
+2026-11-21T07:07:45.0141365Z +    case NL_CHECKED_IF_ARM:
+2026-11-21T07:07:45.0141492Z +        return "IF_ARM";
+2026-11-21T07:07:45.0141613Z +    case NL_CHECKED_UNIT:
+2026-11-21T07:07:45.0141734Z +        return "UNIT";
+2026-11-21T07:07:45.0141954Z +    case NL_CHECKED_USIZE_LITERAL:
+2026-11-21T07:07:45.0142092Z +        return "USIZE_LITERAL";
+2026-11-21T07:07:45.0142229Z +    case NL_CHECKED_USIZE_LESS_THAN:
+2026-11-21T07:07:45.0142368Z +        return "USIZE_LESS_THAN";
+2026-11-21T07:07:45.0142506Z +    case NL_CHECKED_USIZE_DIVISION:
+2026-11-21T07:07:45.0142644Z +        return "USIZE_DIVISION";
+2026-11-21T07:07:45.0142782Z +    case NL_CHECKED_USIZE_REMAINDER:
+2026-11-21T07:07:45.0142919Z +        return "USIZE_REMAINDER";
+2026-11-21T07:07:45.0143046Z +    default:
+2026-11-21T07:07:45.0143151Z +        return "OTHER";
+2026-11-21T07:07:45.0143266Z      }
+2026-11-21T07:07:45.0143358Z  }
+2026-11-21T07:07:45.0143448Z  
+2026-11-21T07:07:45.0143541Z @@ -129,7 +164,8 @@
+2026-11-21T07:07:45.0143658Z      observer->sources[id - 1] = source;
+2026-11-21T07:07:45.0143920Z      NLSourceSpan all = {0, nl_source_length(source)};
+2026-11-21T07:07:45.0144223Z      printf("{\"event\":\"source\",\"id\":%zu,\"length\":%zu,"
+2026-11-21T07:07:45.0144409Z -           "\"bytes_hex\":", id, all.end_byte);
+2026-11-21T07:07:45.0144556Z +           "\"bytes_hex\":",
+2026-11-21T07:07:45.0144686Z +           id, all.end_byte);
+2026-11-21T07:07:45.0144819Z      span_hex(source, all);
+2026-11-21T07:07:45.0144945Z      fputs("}\n", stdout);
+2026-11-21T07:07:45.0145062Z      return id;
+2026-11-21T07:07:45.0145169Z @@ -164,23 +200,21 @@
+2026-11-21T07:07:45.0145305Z             "\"view_type\":%zu,\"known\":%s,\"number\":%zu,"
+2026-11-21T07:07:45.0145481Z             "\"type_view_present\":%s,\"type_is_usize\":%s,"
+2026-11-21T07:07:45.0145679Z             "\"type_copy\":%s,\"type_discardable\":%s,\"types_match\":%s}",
+2026-11-21T07:07:45.0145877Z -           result.type, result.value, yes(present),
+2026-11-21T07:07:45.0146037Z -           present ? value.type : 0,
+2026-11-21T07:07:45.0146188Z -           yes(present && value.scalar_known),
+2026-11-21T07:07:45.0146367Z -           present ? value.scalar_value : 0, yes(type_present),
+2026-11-21T07:07:45.0146559Z -           yes(type_present && type.kind == NL_TYPE_USIZE),
+2026-11-21T07:07:45.0146769Z +           result.type, result.value, yes(present), present ? value.type : 0,
+2026-11-21T07:07:45.0147012Z +           yes(present && value.scalar_known), present ? value.scalar_value : 0,
+2026-11-21T07:07:45.0147251Z +           yes(type_present), yes(type_present && type.kind == NL_TYPE_USIZE),
+2026-11-21T07:07:45.0147451Z             yes(type_present && type.is_copy),
+2026-11-21T07:07:45.0147612Z             yes(type_present && type.is_discardable),
+2026-11-21T07:07:45.0147781Z             yes(present && value.type == result.type));
+2026-11-21T07:07:45.0147929Z  }
+2026-11-21T07:07:45.0148020Z  
+2026-11-21T07:07:45.0148121Z -static void arithmetic_relation(
+2026-11-21T07:07:45.0148283Z -    NLTypeId type, const NLCheckedNodeId operands[2],
+2026-11-21T07:07:45.0148461Z -    const NLValueId values[2], NLValueId result,
+2026-11-21T07:07:45.0148642Z -    const NLSymbolId symbols[2], const NLPlaceId places[2],
+2026-11-21T07:07:45.0148864Z -    const NLIncarnationId incarnations[2], const NLValueFactId facts[2],
+2026-11-21T07:07:45.0149070Z -    NLSourceSpan span, NLSourceSpan operation,
+2026-11-21T07:07:45.0149228Z -    const NLSourceSpan operand_spans[2])
+2026-11-21T07:07:45.0149366Z +static void
+2026-11-21T07:07:45.0149528Z +arithmetic_relation(NLTypeId type, const NLCheckedNodeId operands[2],
+2026-11-21T07:07:45.0149746Z +                    const NLValueId values[2], NLValueId result,
+2026-11-21T07:07:45.0149945Z +                    const NLSymbolId symbols[2], const NLPlaceId places[2],
+2026-11-21T07:07:45.0150139Z +                    const NLIncarnationId incarnations[2],
+2026-11-21T07:07:45.0150324Z +                    const NLValueFactId facts[2], NLSourceSpan span,
+2026-11-21T07:07:45.0150534Z +                    NLSourceSpan operation, const NLSourceSpan operand_spans[2])
+2026-11-21T07:07:45.0150713Z  {
+2026-11-21T07:07:45.0150828Z      printf(",\"type\":%zu,\"operands\":[%zu,%zu],"
+2026-11-21T07:07:45.0151090Z             "\"values\":[%zu,%zu],\"result_id\":%zu,"
+2026-11-21T07:07:45.0151234Z @@ -189,12 +223,11 @@
+2026-11-21T07:07:45.0151368Z             "\"span\":[%zu,%zu],\"operator_span\":[%zu,%zu],"
+2026-11-21T07:07:45.0151539Z             "\"operand_spans\":[[%zu,%zu],[%zu,%zu]]}\n",
+2026-11-21T07:07:45.0151731Z             type, operands[0], operands[1], values[0], values[1], result,
+2026-11-21T07:07:45.0151925Z -           symbols[0], symbols[1], places[0], places[1],
+2026-11-21T07:07:45.0152108Z -           incarnations[0], incarnations[1], facts[0], facts[1],
+2026-11-21T07:07:45.0152304Z -           span.start_byte, span.end_byte, operation.start_byte,
+2026-11-21T07:07:45.0152497Z -           operation.end_byte, operand_spans[0].start_byte,
+2026-11-21T07:07:45.0152689Z -           operand_spans[0].end_byte, operand_spans[1].start_byte,
+2026-11-21T07:07:45.0153006Z -           operand_spans[1].end_byte);
+2026-11-21T07:07:45.0153182Z +           symbols[0], symbols[1], places[0], places[1], incarnations[0],
+2026-11-21T07:07:45.0153412Z +           incarnations[1], facts[0], facts[1], span.start_byte, span.end_byte,
+2026-11-21T07:07:45.0153619Z +           operation.start_byte, operation.end_byte,
+2026-11-21T07:07:45.0153803Z +           operand_spans[0].start_byte, operand_spans[0].end_byte,
+2026-11-21T07:07:45.0154004Z +           operand_spans[1].start_byte, operand_spans[1].end_byte);
+2026-11-21T07:07:45.0154288Z  }
+2026-11-21T07:07:45.0154378Z  
+2026-11-21T07:07:45.0154539Z  static void arithmetic(Observer *observer, const NLCheckedFragment *fragment,
+2026-11-21T07:07:45.0154737Z @@ -216,8 +249,8 @@
+2026-11-21T07:07:45.0154869Z                 fid, node, yes(present), yes(valid),
+2026-11-21T07:07:45.0155057Z                 yes(present && view.origin == fragment),
+2026-11-21T07:07:45.0155243Z                 yes(view.numerator_known), yes(view.quotient_known),
+2026-11-21T07:07:45.0155440Z -               view.numbers[0], view.numbers[1], view.quotient,
+2026-11-21T07:07:45.0155613Z -               view.target_max, yes(math_ok));
+2026-11-21T07:07:45.0155811Z +               view.numbers[0], view.numbers[1], view.quotient, view.target_max,
+2026-11-21T07:07:45.0156000Z +               yes(math_ok));
+2026-11-21T07:07:45.0156190Z          arithmetic_relation(view.type, view.operands, view.values, view.result,
+2026-11-21T07:07:45.0156417Z                              view.symbols, view.places, view.incarnations,
+2026-11-21T07:07:45.0156614Z                              view.facts, view.span, view.operator_span,
+2026-11-21T07:07:45.0156773Z @@ -283,8 +316,9 @@
+2026-11-21T07:07:45.0156937Z      const NLSemanticContext *context = nl_checked_context(fragment);
+2026-11-21T07:07:45.0157149Z      printf("{\"event\":\"node\",\"fragment\":%zu,\"id\":%zu,"
+2026-11-21T07:07:45.0157338Z             "\"kind\":\"%s\",\"kind_number\":%d,\"span\":[%zu,%zu],"
+2026-11-21T07:07:45.0157524Z -           "\"name_hex\":", fid, node, kind_name(view->kind),
+2026-11-21T07:07:45.0157728Z -           (int)view->kind, view->span.start_byte, view->span.end_byte);
+2026-11-21T07:07:45.0157909Z +           "\"name_hex\":",
+2026-11-21T07:07:45.0158057Z +           fid, node, kind_name(view->kind), (int)view->kind,
+2026-11-21T07:07:45.0158244Z +           view->span.start_byte, view->span.end_byte);
+2026-11-21T07:07:45.0158409Z      span_hex(source, view->name);
+2026-11-21T07:07:45.0158581Z      printf(",\"symbol\":%zu,\"function\":%zu,\"body_backed\":%s,"
+2026-11-21T07:07:45.0158774Z             "\"first_argument\":%zu,\"next_argument\":%zu,"
+2026-11-21T07:07:45.0158929Z @@ -316,8 +350,8 @@
+2026-11-21T07:07:45.0159035Z      }
+2026-11-21T07:07:45.0159167Z      arithmetic(observer, fragment, fid, node, view->kind);
+2026-11-21T07:07:45.0159384Z      NLCheckedNodeId edges[] = {view->first_argument, view->next_argument,
+2026-11-21T07:07:45.0159599Z -                              view->initializer, view->first_item,
+2026-11-21T07:07:45.0159776Z -                              view->next_item, view->tail};
+2026-11-21T07:07:45.0160047Z +                               view->initializer,    view->first_item,
+2026-11-21T07:07:45.0160228Z +                               view->next_item,      view->tail};
+2026-11-21T07:07:45.0160418Z      for (size_t i = 0; i < sizeof(edges) / sizeof(edges[0]); ++i)
+2026-11-21T07:07:45.0160620Z          visit_node(observer, fragment, fid, edges[i], depth + 1);
+2026-11-21T07:07:45.0160809Z      if (view->kind == NL_CHECKED_REGISTERED_CALL) {
+2026-11-21T07:07:45.0160960Z @@ -327,11 +361,11 @@
+2026-11-21T07:07:45.0161106Z          size_t child = visit_fragment(observer, body, depth + 1);
+2026-11-21T07:07:45.0161304Z          printf("{\"event\":\"edge\",\"relation\":\"call_body\","
+2026-11-21T07:07:45.0161490Z                 "\"parent_fragment\":%zu,\"parent_node\":%zu,"
+2026-11-21T07:07:45.0161670Z -               "\"child_fragment\":%zu}\n", fid, node, child);
+2026-11-21T07:07:45.0161924Z +               "\"child_fragment\":%zu}\n",
+2026-11-21T07:07:45.0162074Z +               fid, node, child);
+2026-11-21T07:07:45.0162217Z      } else if (view->kind == NL_CHECKED_IF) {
+2026-11-21T07:07:45.0162373Z          for (size_t i = 0; i < 2; ++i) {
+2026-11-21T07:07:45.0162520Z -            const NLCheckedFragment *arm =
+2026-11-21T07:07:45.0162686Z -                nl_checked_if_arm(fragment, node, i);
+2026-11-21T07:07:45.0162893Z +            const NLCheckedFragment *arm = nl_checked_if_arm(fragment, node, i);
+2026-11-21T07:07:45.0163120Z              size_t child = visit_fragment(observer, arm, depth + 1);
+2026-11-21T07:07:45.0163315Z              printf("{\"event\":\"edge\",\"relation\":\"if_arm\","
+2026-11-21T07:07:45.0163500Z                     "\"parent_fragment\":%zu,\"parent_node\":%zu,"
+2026-11-21T07:07:45.0163655Z @@ -369,12 +403,11 @@
+2026-11-21T07:07:45.0163790Z  static void declarations(const NLSyntaxTree *tree)
+2026-11-21T07:07:45.0163943Z  {
+2026-11-21T07:07:45.0164074Z      const NLSource *source = nl_syntax_tree_source(tree);
+2026-11-21T07:07:45.0164423Z -    const NLSyntaxView *unit =
+2026-11-21T07:07:45.0164633Z -        nl_syntax_node_view(nl_syntax_tree_root(tree));
+2026-11-21T07:07:45.0164854Z +    const NLSyntaxView *unit = nl_syntax_node_view(nl_syntax_tree_root(tree));
+2026-11-21T07:07:45.0165075Z      if (!unit || unit->kind != NL_SYNTAX_FUNCTION_UNIT)
+2026-11-21T07:07:45.0165225Z          return;
+2026-11-21T07:07:45.0165390Z -    for (const NLSyntaxNode *node = unit->data.function_unit.declarations;
+2026-11-21T07:07:45.0165610Z -         node; node = nl_syntax_next_argument(node)) {
+2026-11-21T07:07:45.0165829Z +    for (const NLSyntaxNode *node = unit->data.function_unit.declarations; node;
+2026-11-21T07:07:45.0166042Z +         node = nl_syntax_next_argument(node)) {
+2026-11-21T07:07:45.0166226Z          const NLSyntaxView *function = nl_syntax_node_view(node);
+2026-11-21T07:07:45.0166425Z          if (!function || function->kind != NL_SYNTAX_FUNCTION)
+2026-11-21T07:07:45.0166592Z              continue;
+2026-11-21T07:07:45.0166705Z @@ -385,8 +418,7 @@
+2026-11-21T07:07:45.0166843Z          printf(",\"span\":[%zu,%zu],\"parameter_count\":%zu,"
+2026-11-21T07:07:45.0167017Z                 "\"body_span\":[%zu,%zu]}\n",
+2026-11-21T07:07:45.0167191Z                 function->span.start_byte, function->span.end_byte,
+2026-11-21T07:07:45.0167370Z -               function->data.function.count,
+2026-11-21T07:07:45.0167530Z -               body ? body->span.start_byte : 0,
+2026-11-21T07:07:45.0167731Z +               function->data.function.count, body ? body->span.start_byte : 0,
+2026-11-21T07:07:45.0167936Z                 body ? body->span.end_byte : 0);
+2026-11-21T07:07:45.0168079Z      }
+2026-11-21T07:07:45.0168172Z  }
+2026-11-21T07:07:45.0168268Z @@ -401,23 +433,27 @@
+2026-11-21T07:07:45.0168389Z      Observer *observer = NULL;
+2026-11-21T07:07:45.0168517Z      int result = 3;
+2026-11-21T07:07:45.0168629Z      if (argc != 3) {
+2026-11-21T07:07:45.0168807Z -        fputs("usage: r1595_public_observe ORIGINAL ENTRY_EXPRESSION\n", stderr);
+2026-11-21T07:07:45.0169045Z +        fputs("usage: r1595_public_observe ORIGINAL ENTRY_EXPRESSION\n",
+2026-11-21T07:07:45.0169314Z +              stderr);
+2026-11-21T07:07:45.0169428Z          return 3;
+2026-11-21T07:07:45.0169534Z      }
+2026-11-21T07:07:45.0169671Z      NLSourceStatus loaded = nl_source_load(argv[1], &source);
+2026-11-21T07:07:45.0169876Z      printf("{\"event\":\"status\",\"stage\":\"source_load\","
+2026-11-21T07:07:45.0170048Z -           "\"number\":%d}\n", (int)loaded);
+2026-11-21T07:07:45.0170191Z +           "\"number\":%d}\n",
+2026-11-21T07:07:45.0170315Z +           (int)loaded);
+2026-11-21T07:07:45.0170440Z      if (loaded != NL_SOURCE_OK)
+2026-11-21T07:07:45.0170568Z          goto cleanup;
+2026-11-21T07:07:45.0170720Z      NLParseStatus parsed = nl_parser_create(source, &parser);
+2026-11-21T07:07:45.0170921Z      printf("{\"event\":\"status\",\"stage\":\"parser_create\","
+2026-11-21T07:07:45.0171188Z -           "\"status\":\"%s\"}\n", parse_name(parsed));
+2026-11-21T07:07:45.0171346Z +           "\"status\":\"%s\"}\n",
+2026-11-21T07:07:45.0171481Z +           parse_name(parsed));
+2026-11-21T07:07:45.0171616Z      if (parsed != NL_PARSE_OK)
+2026-11-21T07:07:45.0171742Z          goto cleanup;
+2026-11-21T07:07:45.0171879Z      NLParseDiagnostic parse_diagnostic = {0};
+2026-11-21T07:07:45.0172089Z      parsed = nl_parser_parse_function_unit(parser, &tree, &parse_diagnostic);
+2026-11-21T07:07:45.0172315Z      printf("{\"event\":\"status\",\"stage\":\"unit_parse\","
+2026-11-21T07:07:45.0172494Z -           "\"status\":\"%s\"}\n", parse_name(parsed));
+2026-11-21T07:07:45.0172652Z +           "\"status\":\"%s\"}\n",
+2026-11-21T07:07:45.0172788Z +           parse_name(parsed));
+2026-11-21T07:07:45.0172921Z      if (parsed != NL_PARSE_OK) {
+2026-11-21T07:07:45.0173096Z          nl_parse_diagnostic_render(stderr, source, &parse_diagnostic);
+2026-11-21T07:07:45.0173300Z          result = parse_host_failure(parsed) ? 3 : 0;
+2026-11-21T07:07:45.0173450Z @@ -426,7 +462,8 @@
+2026-11-21T07:07:45.0173562Z      declarations(tree);
+2026-11-21T07:07:45.0173709Z      NLCheckStatus status = nl_semantic_create(&context);
+2026-11-21T07:07:45.0173909Z      printf("{\"event\":\"status\",\"stage\":\"semantic_create\","
+2026-11-21T07:07:45.0174092Z -           "\"status\":\"%s\"}\n", check_name(status));
+2026-11-21T07:07:45.0174395Z +           "\"status\":\"%s\"}\n",
+2026-11-21T07:07:45.0174527Z +           check_name(status));
+2026-11-21T07:07:45.0174657Z      if (status != NL_CHECK_OK)
+2026-11-21T07:07:45.0174783Z          goto cleanup;
+2026-11-21T07:07:45.0174910Z      const NLSyntaxTree *inputs[] = {tree};
+2026-11-21T07:07:45.0175049Z @@ -445,7 +482,8 @@
+2026-11-21T07:07:45.0175154Z      }
+2026-11-21T07:07:45.0175274Z      loaded = nl_source_load(argv[2], &entry_source);
+2026-11-21T07:07:45.0175467Z      printf("{\"event\":\"status\",\"stage\":\"apparatus_entry_load\","
+2026-11-21T07:07:45.0175737Z -           "\"number\":%d}\n", (int)loaded);
+2026-11-21T07:07:45.0175916Z +           "\"number\":%d}\n",
+2026-11-21T07:07:45.0176040Z +           (int)loaded);
+2026-11-21T07:07:45.0176162Z      if (loaded != NL_SOURCE_OK)
+2026-11-21T07:07:45.0176291Z          goto cleanup;
+2026-11-21T07:07:45.0176435Z      parsed = nl_parser_create(entry_source, &entry_parser);
+2026-11-21T07:07:45.0176603Z @@ -457,7 +495,8 @@
+2026-11-21T07:07:45.0176768Z      parsed = nl_parser_parse_expression_fragment(entry_parser, &entry_tree,
+2026-11-21T07:07:45.0176977Z                                                   &parse_diagnostic);
+2026-11-21T07:07:45.0177171Z      printf("{\"event\":\"status\",\"stage\":\"apparatus_entry_parse\","
+2026-11-21T07:07:45.0177368Z -           "\"status\":\"%s\"}\n", parse_name(parsed));
+2026-11-21T07:07:45.0177520Z +           "\"status\":\"%s\"}\n",
+2026-11-21T07:07:45.0177654Z +           parse_name(parsed));
+2026-11-21T07:07:45.0177786Z      if (parsed != NL_PARSE_OK) {
+2026-11-21T07:07:45.0177973Z          nl_parse_diagnostic_render(stderr, entry_source, &parse_diagnostic);
+2026-11-21T07:07:45.0178159Z          goto cleanup;
+2026-11-21T07:07:45.0178270Z @@ -466,7 +505,8 @@
+2026-11-21T07:07:45.0178521Z      status = nl_semantic_check_expression(context, entry_tree, &checked,
+2026-11-21T07:07:45.0178723Z                                            &check_diagnostic);
+2026-11-21T07:07:45.0178915Z      printf("{\"event\":\"status\",\"stage\":\"apparatus_entry_check\","
+2026-11-21T07:07:45.0179107Z -           "\"status\":\"%s\"}\n", check_name(status));
+2026-11-21T07:07:45.0179258Z +           "\"status\":\"%s\"}\n",
+2026-11-21T07:07:45.0179394Z +           check_name(status));
+2026-11-21T07:07:45.0179523Z      if (status != NL_CHECK_OK) {
+2026-11-21T07:07:45.0179703Z          nl_check_diagnostic_render(stderr, entry_source, &check_diagnostic);
+2026-11-21T07:07:45.0179907Z          result = check_host_failure(status) ? 3 : 0;
+2026-11-21T07:07:45.0180058Z @@ -479,13 +519,13 @@
+2026-11-21T07:07:45.0180245Z      if (!observer)
+2026-11-21T07:07:45.0180352Z          goto cleanup;
+2026-11-21T07:07:45.0180496Z      size_t original_source = source_id(observer, source);
+2026-11-21T07:07:45.0180690Z -    printf("{\"event\":\"original_input\",\"source\":%zu}\n",
+2026-11-21T07:07:45.0180864Z -           original_source);
+2026-11-21T07:07:45.0181042Z +    printf("{\"event\":\"original_input\",\"source\":%zu}\n", original_source);
+2026-11-21T07:07:45.0181267Z      size_t root_fragment = visit_fragment(observer, checked, 0);
+2026-11-21T07:07:45.0181483Z      printf("{\"event\":\"observation_complete\",\"root_fragment\":%zu,"
+2026-11-21T07:07:45.0181699Z             "\"public_scope\":\"PARTIAL\",\"complete_call_result_auth\":"
+2026-11-21T07:07:45.0181909Z             "\"NOT_OBSERVABLE\",\"quantity_runtime\":\"NOT_OBSERVED\","
+2026-11-21T07:07:45.0182109Z -           "\"failed\":%s}\n", root_fragment, yes(observer->failed));
+2026-11-21T07:07:45.0182288Z +           "\"failed\":%s}\n",
+2026-11-21T07:07:45.0182427Z +           root_fragment, yes(observer->failed));
+2026-11-21T07:07:45.0182587Z      result = observer->failed ? 4 : 0;
+2026-11-21T07:07:45.0182716Z  
+2026-11-21T07:07:45.0182815Z  cleanup:
+2026-11-21T07:07:45.0182936Z ----- END EXACT clang-format SUGGESTIONS -----
+2026-11-21T07:07:45.0191688Z ##[error]Process completed with exit code 1.
+2026-11-21T07:07:45.0243750Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-11-21T07:07:45.0243960Z with:
+2026-11-21T07:07:45.0244332Z   name: r-fast-format-suggestions-c2242c12c95d873aa3e786d3754be777b5a5a354-attempt1
+2026-11-21T07:07:45.0244610Z   path: /home/runner/work/_temp/r-fast-format-suggestions.patch
+2026-11-21T07:07:45.0244794Z   if-no-files-found: ignore
+2026-11-21T07:07:45.0244922Z   retention-days: 7
+2026-11-21T07:07:45.0245041Z   compression-level: 6
+2026-11-21T07:07:45.0245157Z   overwrite: false
+2026-11-21T07:07:45.0245275Z   include-hidden-files: false
+2026-11-21T07:07:45.0245404Z ##[endgroup]
+2026-11-21T07:07:45.1270489Z (node:3761) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-21T07:07:45.1271153Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-21T07:07:45.1299193Z With the provided path, there will be 1 file uploaded
+2026-11-21T07:07:45.1301980Z Artifact name is valid!
+2026-11-21T07:07:45.1302396Z Root directory input is valid!
+2026-11-21T07:07:45.3828265Z Beginning upload of artifact content to blob storage
+2026-11-21T07:07:45.3931860Z (node:3761) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-21T07:07:45.5595070Z Uploaded bytes 3801
+2026-11-21T07:07:45.6050189Z Finished uploading artifact content to blob storage!
+2026-11-21T07:07:45.6050943Z SHA256 digest of uploaded artifact zip is bda97e994a6297e7e82f7a8c93f9a3d3e098bc758fc0e4254ea8271d79cb4d22
+2026-11-21T07:07:45.6052120Z Finalizing artifact upload
+2026-11-21T07:07:45.9901145Z Artifact r-fast-format-suggestions-c2242c12c95d873aa3e786d3754be777b5a5a354-attempt1.zip successfully finalized. Artifact ID 14696713952
+2026-11-21T07:07:45.9902219Z Artifact r-fast-format-suggestions-c2242c12c95d873aa3e786d3754be777b5a5a354-attempt1 has been successfully uploaded! Final size is 3801 bytes. Artifact ID is 14696713952
+2026-11-21T07:07:45.9903179Z Artifact download URL: https://github.com/wakairo/NewLang_Compiler/actions/runs/44878742790/artifacts/14696713952
+2026-11-21T07:07:46.0056151Z Post job cleanup.
+2026-11-21T07:07:46.0571578Z [command]/usr/bin/git version
+2026-11-21T07:07:46.0605443Z git version 2.56.1
+2026-11-21T07:07:46.0626979Z Temporarily overriding HOME='/home/runner/work/_temp/bb12e2a0-3c05-47e7-a3b0-6de7cfdd2a0d' before making global git config changes
+2026-11-21T07:07:46.0627856Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-21T07:07:46.0629933Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-21T07:07:46.0659994Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-21T07:07:46.0686438Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-21T07:07:46.0896324Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-21T07:07:46.0935891Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-21T07:07:46.1256218Z Cleaning up orphan processes
+2026-11-21T07:07:46.1490153Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

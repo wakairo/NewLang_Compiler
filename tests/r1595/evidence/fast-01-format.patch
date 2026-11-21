@@ -1,0 +1,363 @@
+--- a/tests/r1595/observe.c
++++ b/tests/r1595/observe.c
+@@ -10,7 +10,11 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
+-enum { MAX_OBJECTS = 128, MAX_VISITS = 8192, MAX_DEPTH = 64 };
++enum {
++    MAX_OBJECTS = 128,
++    MAX_VISITS = 8192,
++    MAX_DEPTH = 64
++};
+ 
+ typedef struct {
+     const NLCheckedFragment *fragment;
+@@ -26,13 +30,17 @@
+     bool failed;
+ } Observer;
+ 
+-static const char *yes(bool value) { return value ? "true" : "false"; }
++static const char *yes(bool value)
++{
++    return value ? "true" : "false";
++}
+ 
+ static void problem(Observer *observer, const char *message)
+ {
+     observer->failed = true;
+     printf("{\"event\":\"apparatus_or_public_contract_failure\","
+-           "\"message\":\"%s\"}\n", message);
++           "\"message\":\"%s\"}\n",
++           message);
+ }
+ 
+ static void hex_bytes(const unsigned char *bytes, size_t length)
+@@ -56,13 +64,20 @@
+ static const char *parse_name(NLParseStatus status)
+ {
+     switch (status) {
+-    case NL_PARSE_OK: return "OK";
+-    case NL_PARSE_LEXICALLY_UNSUPPORTED: return "LEXICALLY_UNSUPPORTED";
+-    case NL_PARSE_SYNTAX_UNSUPPORTED: return "SYNTAX_UNSUPPORTED";
+-    case NL_PARSE_SYNTAX_ERROR: return "SYNTAX_ERROR";
+-    case NL_PARSE_OUT_OF_MEMORY: return "OUT_OF_MEMORY";
+-    case NL_PARSE_RESOURCE_LIMIT: return "RESOURCE_LIMIT";
+-    case NL_PARSE_INTERNAL_ERROR: return "INTERNAL_ERROR";
++    case NL_PARSE_OK:
++        return "OK";
++    case NL_PARSE_LEXICALLY_UNSUPPORTED:
++        return "LEXICALLY_UNSUPPORTED";
++    case NL_PARSE_SYNTAX_UNSUPPORTED:
++        return "SYNTAX_UNSUPPORTED";
++    case NL_PARSE_SYNTAX_ERROR:
++        return "SYNTAX_ERROR";
++    case NL_PARSE_OUT_OF_MEMORY:
++        return "OUT_OF_MEMORY";
++    case NL_PARSE_RESOURCE_LIMIT:
++        return "RESOURCE_LIMIT";
++    case NL_PARSE_INTERNAL_ERROR:
++        return "INTERNAL_ERROR";
+     }
+     return "UNKNOWN_STATUS";
+ }
+@@ -70,13 +85,20 @@
+ static const char *check_name(NLCheckStatus status)
+ {
+     switch (status) {
+-    case NL_CHECK_OK: return "OK";
+-    case NL_CHECK_SEMANTIC_ERROR: return "SEMANTIC_ERROR";
+-    case NL_CHECK_SEMANTIC_UNSUPPORTED: return "SEMANTIC_UNSUPPORTED";
+-    case NL_CHECK_ANALYSIS_PRECISION_LIMIT: return "ANALYSIS_PRECISION_LIMIT";
+-    case NL_CHECK_OUT_OF_MEMORY: return "OUT_OF_MEMORY";
+-    case NL_CHECK_RESOURCE_LIMIT: return "RESOURCE_LIMIT";
+-    case NL_CHECK_INTERNAL_ERROR: return "INTERNAL_ERROR";
++    case NL_CHECK_OK:
++        return "OK";
++    case NL_CHECK_SEMANTIC_ERROR:
++        return "SEMANTIC_ERROR";
++    case NL_CHECK_SEMANTIC_UNSUPPORTED:
++        return "SEMANTIC_UNSUPPORTED";
++    case NL_CHECK_ANALYSIS_PRECISION_LIMIT:
++        return "ANALYSIS_PRECISION_LIMIT";
++    case NL_CHECK_OUT_OF_MEMORY:
++        return "OUT_OF_MEMORY";
++    case NL_CHECK_RESOURCE_LIMIT:
++        return "RESOURCE_LIMIT";
++    case NL_CHECK_INTERNAL_ERROR:
++        return "INTERNAL_ERROR";
+     }
+     return "UNKNOWN_STATUS";
+ }
+@@ -98,19 +120,32 @@
+ static const char *kind_name(NLCheckedKind kind)
+ {
+     switch (kind) {
+-    case NL_CHECKED_REGISTERED_CALL: return "CALL";
+-    case NL_CHECKED_BLOCK: return "BLOCK";
+-    case NL_CHECKED_BINDING: return "BINDING";
+-    case NL_CHECKED_IDENTIFIER: return "IDENTIFIER";
+-    case NL_CHECKED_STATEMENT: return "STATEMENT";
+-    case NL_CHECKED_IF: return "IF";
+-    case NL_CHECKED_IF_ARM: return "IF_ARM";
+-    case NL_CHECKED_UNIT: return "UNIT";
+-    case NL_CHECKED_USIZE_LITERAL: return "USIZE_LITERAL";
+-    case NL_CHECKED_USIZE_LESS_THAN: return "USIZE_LESS_THAN";
+-    case NL_CHECKED_USIZE_DIVISION: return "USIZE_DIVISION";
+-    case NL_CHECKED_USIZE_REMAINDER: return "USIZE_REMAINDER";
+-    default: return "OTHER";
++    case NL_CHECKED_REGISTERED_CALL:
++        return "CALL";
++    case NL_CHECKED_BLOCK:
++        return "BLOCK";
++    case NL_CHECKED_BINDING:
++        return "BINDING";
++    case NL_CHECKED_IDENTIFIER:
++        return "IDENTIFIER";
++    case NL_CHECKED_STATEMENT:
++        return "STATEMENT";
++    case NL_CHECKED_IF:
++        return "IF";
++    case NL_CHECKED_IF_ARM:
++        return "IF_ARM";
++    case NL_CHECKED_UNIT:
++        return "UNIT";
++    case NL_CHECKED_USIZE_LITERAL:
++        return "USIZE_LITERAL";
++    case NL_CHECKED_USIZE_LESS_THAN:
++        return "USIZE_LESS_THAN";
++    case NL_CHECKED_USIZE_DIVISION:
++        return "USIZE_DIVISION";
++    case NL_CHECKED_USIZE_REMAINDER:
++        return "USIZE_REMAINDER";
++    default:
++        return "OTHER";
+     }
+ }
+ 
+@@ -129,7 +164,8 @@
+     observer->sources[id - 1] = source;
+     NLSourceSpan all = {0, nl_source_length(source)};
+     printf("{\"event\":\"source\",\"id\":%zu,\"length\":%zu,"
+-           "\"bytes_hex\":", id, all.end_byte);
++           "\"bytes_hex\":",
++           id, all.end_byte);
+     span_hex(source, all);
+     fputs("}\n", stdout);
+     return id;
+@@ -164,23 +200,21 @@
+            "\"view_type\":%zu,\"known\":%s,\"number\":%zu,"
+            "\"type_view_present\":%s,\"type_is_usize\":%s,"
+            "\"type_copy\":%s,\"type_discardable\":%s,\"types_match\":%s}",
+-           result.type, result.value, yes(present),
+-           present ? value.type : 0,
+-           yes(present && value.scalar_known),
+-           present ? value.scalar_value : 0, yes(type_present),
+-           yes(type_present && type.kind == NL_TYPE_USIZE),
++           result.type, result.value, yes(present), present ? value.type : 0,
++           yes(present && value.scalar_known), present ? value.scalar_value : 0,
++           yes(type_present), yes(type_present && type.kind == NL_TYPE_USIZE),
+            yes(type_present && type.is_copy),
+            yes(type_present && type.is_discardable),
+            yes(present && value.type == result.type));
+ }
+ 
+-static void arithmetic_relation(
+-    NLTypeId type, const NLCheckedNodeId operands[2],
+-    const NLValueId values[2], NLValueId result,
+-    const NLSymbolId symbols[2], const NLPlaceId places[2],
+-    const NLIncarnationId incarnations[2], const NLValueFactId facts[2],
+-    NLSourceSpan span, NLSourceSpan operation,
+-    const NLSourceSpan operand_spans[2])
++static void
++arithmetic_relation(NLTypeId type, const NLCheckedNodeId operands[2],
++                    const NLValueId values[2], NLValueId result,
++                    const NLSymbolId symbols[2], const NLPlaceId places[2],
++                    const NLIncarnationId incarnations[2],
++                    const NLValueFactId facts[2], NLSourceSpan span,
++                    NLSourceSpan operation, const NLSourceSpan operand_spans[2])
+ {
+     printf(",\"type\":%zu,\"operands\":[%zu,%zu],"
+            "\"values\":[%zu,%zu],\"result_id\":%zu,"
+@@ -189,12 +223,11 @@
+            "\"span\":[%zu,%zu],\"operator_span\":[%zu,%zu],"
+            "\"operand_spans\":[[%zu,%zu],[%zu,%zu]]}\n",
+            type, operands[0], operands[1], values[0], values[1], result,
+-           symbols[0], symbols[1], places[0], places[1],
+-           incarnations[0], incarnations[1], facts[0], facts[1],
+-           span.start_byte, span.end_byte, operation.start_byte,
+-           operation.end_byte, operand_spans[0].start_byte,
+-           operand_spans[0].end_byte, operand_spans[1].start_byte,
+-           operand_spans[1].end_byte);
++           symbols[0], symbols[1], places[0], places[1], incarnations[0],
++           incarnations[1], facts[0], facts[1], span.start_byte, span.end_byte,
++           operation.start_byte, operation.end_byte,
++           operand_spans[0].start_byte, operand_spans[0].end_byte,
++           operand_spans[1].start_byte, operand_spans[1].end_byte);
+ }
+ 
+ static void arithmetic(Observer *observer, const NLCheckedFragment *fragment,
+@@ -216,8 +249,8 @@
+                fid, node, yes(present), yes(valid),
+                yes(present && view.origin == fragment),
+                yes(view.numerator_known), yes(view.quotient_known),
+-               view.numbers[0], view.numbers[1], view.quotient,
+-               view.target_max, yes(math_ok));
++               view.numbers[0], view.numbers[1], view.quotient, view.target_max,
++               yes(math_ok));
+         arithmetic_relation(view.type, view.operands, view.values, view.result,
+                             view.symbols, view.places, view.incarnations,
+                             view.facts, view.span, view.operator_span,
+@@ -283,8 +316,9 @@
+     const NLSemanticContext *context = nl_checked_context(fragment);
+     printf("{\"event\":\"node\",\"fragment\":%zu,\"id\":%zu,"
+            "\"kind\":\"%s\",\"kind_number\":%d,\"span\":[%zu,%zu],"
+-           "\"name_hex\":", fid, node, kind_name(view->kind),
+-           (int)view->kind, view->span.start_byte, view->span.end_byte);
++           "\"name_hex\":",
++           fid, node, kind_name(view->kind), (int)view->kind,
++           view->span.start_byte, view->span.end_byte);
+     span_hex(source, view->name);
+     printf(",\"symbol\":%zu,\"function\":%zu,\"body_backed\":%s,"
+            "\"first_argument\":%zu,\"next_argument\":%zu,"
+@@ -316,8 +350,8 @@
+     }
+     arithmetic(observer, fragment, fid, node, view->kind);
+     NLCheckedNodeId edges[] = {view->first_argument, view->next_argument,
+-                              view->initializer, view->first_item,
+-                              view->next_item, view->tail};
++                               view->initializer,    view->first_item,
++                               view->next_item,      view->tail};
+     for (size_t i = 0; i < sizeof(edges) / sizeof(edges[0]); ++i)
+         visit_node(observer, fragment, fid, edges[i], depth + 1);
+     if (view->kind == NL_CHECKED_REGISTERED_CALL) {
+@@ -327,11 +361,11 @@
+         size_t child = visit_fragment(observer, body, depth + 1);
+         printf("{\"event\":\"edge\",\"relation\":\"call_body\","
+                "\"parent_fragment\":%zu,\"parent_node\":%zu,"
+-               "\"child_fragment\":%zu}\n", fid, node, child);
++               "\"child_fragment\":%zu}\n",
++               fid, node, child);
+     } else if (view->kind == NL_CHECKED_IF) {
+         for (size_t i = 0; i < 2; ++i) {
+-            const NLCheckedFragment *arm =
+-                nl_checked_if_arm(fragment, node, i);
++            const NLCheckedFragment *arm = nl_checked_if_arm(fragment, node, i);
+             size_t child = visit_fragment(observer, arm, depth + 1);
+             printf("{\"event\":\"edge\",\"relation\":\"if_arm\","
+                    "\"parent_fragment\":%zu,\"parent_node\":%zu,"
+@@ -369,12 +403,11 @@
+ static void declarations(const NLSyntaxTree *tree)
+ {
+     const NLSource *source = nl_syntax_tree_source(tree);
+-    const NLSyntaxView *unit =
+-        nl_syntax_node_view(nl_syntax_tree_root(tree));
++    const NLSyntaxView *unit = nl_syntax_node_view(nl_syntax_tree_root(tree));
+     if (!unit || unit->kind != NL_SYNTAX_FUNCTION_UNIT)
+         return;
+-    for (const NLSyntaxNode *node = unit->data.function_unit.declarations;
+-         node; node = nl_syntax_next_argument(node)) {
++    for (const NLSyntaxNode *node = unit->data.function_unit.declarations; node;
++         node = nl_syntax_next_argument(node)) {
+         const NLSyntaxView *function = nl_syntax_node_view(node);
+         if (!function || function->kind != NL_SYNTAX_FUNCTION)
+             continue;
+@@ -385,8 +418,7 @@
+         printf(",\"span\":[%zu,%zu],\"parameter_count\":%zu,"
+                "\"body_span\":[%zu,%zu]}\n",
+                function->span.start_byte, function->span.end_byte,
+-               function->data.function.count,
+-               body ? body->span.start_byte : 0,
++               function->data.function.count, body ? body->span.start_byte : 0,
+                body ? body->span.end_byte : 0);
+     }
+ }
+@@ -401,23 +433,27 @@
+     Observer *observer = NULL;
+     int result = 3;
+     if (argc != 3) {
+-        fputs("usage: r1595_public_observe ORIGINAL ENTRY_EXPRESSION\n", stderr);
++        fputs("usage: r1595_public_observe ORIGINAL ENTRY_EXPRESSION\n",
++              stderr);
+         return 3;
+     }
+     NLSourceStatus loaded = nl_source_load(argv[1], &source);
+     printf("{\"event\":\"status\",\"stage\":\"source_load\","
+-           "\"number\":%d}\n", (int)loaded);
++           "\"number\":%d}\n",
++           (int)loaded);
+     if (loaded != NL_SOURCE_OK)
+         goto cleanup;
+     NLParseStatus parsed = nl_parser_create(source, &parser);
+     printf("{\"event\":\"status\",\"stage\":\"parser_create\","
+-           "\"status\":\"%s\"}\n", parse_name(parsed));
++           "\"status\":\"%s\"}\n",
++           parse_name(parsed));
+     if (parsed != NL_PARSE_OK)
+         goto cleanup;
+     NLParseDiagnostic parse_diagnostic = {0};
+     parsed = nl_parser_parse_function_unit(parser, &tree, &parse_diagnostic);
+     printf("{\"event\":\"status\",\"stage\":\"unit_parse\","
+-           "\"status\":\"%s\"}\n", parse_name(parsed));
++           "\"status\":\"%s\"}\n",
++           parse_name(parsed));
+     if (parsed != NL_PARSE_OK) {
+         nl_parse_diagnostic_render(stderr, source, &parse_diagnostic);
+         result = parse_host_failure(parsed) ? 3 : 0;
+@@ -426,7 +462,8 @@
+     declarations(tree);
+     NLCheckStatus status = nl_semantic_create(&context);
+     printf("{\"event\":\"status\",\"stage\":\"semantic_create\","
+-           "\"status\":\"%s\"}\n", check_name(status));
++           "\"status\":\"%s\"}\n",
++           check_name(status));
+     if (status != NL_CHECK_OK)
+         goto cleanup;
+     const NLSyntaxTree *inputs[] = {tree};
+@@ -445,7 +482,8 @@
+     }
+     loaded = nl_source_load(argv[2], &entry_source);
+     printf("{\"event\":\"status\",\"stage\":\"apparatus_entry_load\","
+-           "\"number\":%d}\n", (int)loaded);
++           "\"number\":%d}\n",
++           (int)loaded);
+     if (loaded != NL_SOURCE_OK)
+         goto cleanup;
+     parsed = nl_parser_create(entry_source, &entry_parser);
+@@ -457,7 +495,8 @@
+     parsed = nl_parser_parse_expression_fragment(entry_parser, &entry_tree,
+                                                  &parse_diagnostic);
+     printf("{\"event\":\"status\",\"stage\":\"apparatus_entry_parse\","
+-           "\"status\":\"%s\"}\n", parse_name(parsed));
++           "\"status\":\"%s\"}\n",
++           parse_name(parsed));
+     if (parsed != NL_PARSE_OK) {
+         nl_parse_diagnostic_render(stderr, entry_source, &parse_diagnostic);
+         goto cleanup;
+@@ -466,7 +505,8 @@
+     status = nl_semantic_check_expression(context, entry_tree, &checked,
+                                           &check_diagnostic);
+     printf("{\"event\":\"status\",\"stage\":\"apparatus_entry_check\","
+-           "\"status\":\"%s\"}\n", check_name(status));
++           "\"status\":\"%s\"}\n",
++           check_name(status));
+     if (status != NL_CHECK_OK) {
+         nl_check_diagnostic_render(stderr, entry_source, &check_diagnostic);
+         result = check_host_failure(status) ? 3 : 0;
+@@ -479,13 +519,13 @@
+     if (!observer)
+         goto cleanup;
+     size_t original_source = source_id(observer, source);
+-    printf("{\"event\":\"original_input\",\"source\":%zu}\n",
+-           original_source);
++    printf("{\"event\":\"original_input\",\"source\":%zu}\n", original_source);
+     size_t root_fragment = visit_fragment(observer, checked, 0);
+     printf("{\"event\":\"observation_complete\",\"root_fragment\":%zu,"
+            "\"public_scope\":\"PARTIAL\",\"complete_call_result_auth\":"
+            "\"NOT_OBSERVABLE\",\"quantity_runtime\":\"NOT_OBSERVED\","
+-           "\"failed\":%s}\n", root_fragment, yes(observer->failed));
++           "\"failed\":%s}\n",
++           root_fragment, yes(observer->failed));
+     result = observer->failed ? 4 : 0;
+ 
+ cleanup:

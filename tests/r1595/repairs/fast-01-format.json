@@ -1,0 +1,34 @@
+{
+  "schema": "r1595.mechanical-repair.v1",
+  "fault": "R-owned observer formatting",
+  "run_id": 44878742790,
+  "run_attempt": 1,
+  "job_id": 136769145381,
+  "commit": "c2242c12c95d873aa3e786d3754be777b5a5a354",
+  "job_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/44878742790/job/136769145381",
+  "tool": "clang-format23.1.3 inside Actions only",
+  "raw_log": {
+    "bytes": 75020,
+    "sha256": "8b6dd62091a3952c80a84bf7b960e630b80e311115af5e9e0af1f3a5104a478c"
+  },
+  "retrieved_patch": {
+    "bytes": 15614,
+    "sha256": "bf3f7c32b8b7ddb9eb0f10df3f971a01f63cc6e5d4a9bb9f62acd36606c4247d"
+  },
+  "changed_file": "tests/r1595/observe.c",
+  "before": {
+    "bytes": 21906,
+    "sha256": "97cfaa6018c6a74234b4fbafb248152ccda57bc7cd4c95c974ef73daeed314be"
+  },
+  "after": {
+    "bytes": 22290,
+    "sha256": "91a43d7658f0bb2af83f556aa96b74ac813d07ab89e8bb53b5fa6fc8642bdc5f"
+  },
+  "hunks": 20,
+  "non_whitespace_characters_unchanged": true,
+  "string_literal_texts_unchanged": true,
+  "guest_source_or_oracle_changes": 0,
+  "method": "Exact own-file unified suggestions from retrieved job log applied as text with every old hunk context/count verified; no local formatter/compiler/syntax execution",
+  "first_result": "FAST FORMAT FAILURE; frontend build and CTest registration skipped; guest CHECK/public/C17/native NOT_RUN",
+  "next_expectation": "Same independent source/oracle and observer behavior; only pinned format should now accept this file. Actual host-build/registration remains to be measured by a new natural FAST push within the6-run budget."
+}
