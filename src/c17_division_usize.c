@@ -88,11 +88,13 @@ static bool division_emit_helper(DivisionText *text,
                                  const NLDivisionUsizePlan *helper)
 {
     return division_text_append(
-               text,
-               "static size_t nl_qty_fn_%zu(size_t nl_local_%zu)\n{\n"
-               "    _Static_assert(UINTMAX_C(%zu) != 0, \"nonzero "
-               "divisor\");\n",
-               helper->function, helper->formal, helper->divisor) &&
+               text, "static size_t nl_qty_fn_%zu(size_t nl_local_%zu)\n{\n",
+               helper->function, helper->formal) &&
+           (!helper->division ||
+            division_text_append(text,
+                                 "    _Static_assert(UINTMAX_C(%zu) != 0, "
+                                 "\"nonzero divisor\");\n",
+                                 helper->divisor)) &&
            division_emit_bindings(text, helper->body) &&
            division_text_append(text, "    return ") &&
            division_emit_expression(text, helper->body, helper->result) &&
@@ -101,6 +103,46 @@ static bool division_emit_helper(DivisionText *text,
 
 typedef bool (*QuantityCallValidator)(const NLCheckedFragment *,
                                       NLCheckedNodeId, NLDivisionUsizePlan *);
+
+typedef struct {
+    NLDivisionUsizePlan definitions[NL_SEMANTIC_MAX_ENTRIES];
+    bool seen[NL_SEMANTIC_MAX_ENTRIES];
+    size_t count, nodes, remaining;
+} DivisionProgram;
+
+static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
+                                              QuantityCallValidator valid,
+                                              size_t depth,
+                                              DivisionProgram *program)
+{
+    if (depth >= NL_SEMANTIC_MAX_DEPTH ||
+        body->body_count > NL_CHECKED_MAX_BODY_CALLS)
+        return NL_CHECK_RESOURCE_LIMIT;
+    const size_t node_limit = (SIZE_MAX - 2048) / 512;
+    for (size_t i = 0; i < body->body_count; ++i) {
+        if (!program->remaining)
+            return NL_CHECK_RESOURCE_LIMIT;
+        --program->remaining;
+        NLDivisionUsizePlan helper;
+        if (!valid(body, body->body_calls[i], &helper) || !helper.formal ||
+            !helper.function || helper.function > NL_SEMANTIC_MAX_ENTRIES)
+            return NL_CHECK_SEMANTIC_UNSUPPORTED;
+        /* Walk each actual, including repeated calls. Share only the C
+         * definition, after visiting its callees in source order. */
+        const NLCheckStatus status =
+            division_collect_helpers(helper.body, valid, depth + 1, program);
+        if (status != NL_CHECK_OK)
+            return status;
+        if (program->seen[helper.function - 1])
+            continue;
+        if (helper.body->count > node_limit - program->nodes)
+            return NL_CHECK_RESOURCE_LIMIT;
+        program->nodes += helper.body->count;
+        program->seen[helper.function - 1] = true;
+        program->definitions[program->count++] = helper;
+    }
+    return NL_CHECK_OK;
+}
 
 static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
                                          const char *profile,
@@ -112,31 +154,15 @@ static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
         main.formal || main.body->body_count > NL_CHECKED_MAX_BODY_CALLS)
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     const size_t node_limit = (SIZE_MAX - 2048) / 512;
-    size_t nodes = main.body->count;
-    if (nodes > node_limit)
+    if (main.body->count > node_limit)
         return NL_CHECK_RESOURCE_LIMIT;
-
-    /* Authenticate every invocation. One representative of each registered
-     * declaration supplies code shape only, in first-use order. */
-    NLDivisionUsizePlan helpers[NL_CHECKED_MAX_BODY_CALLS];
-    size_t helper_count = 0;
-    for (size_t i = 0; i < main.body->body_count; ++i) {
-        NLDivisionUsizePlan helper;
-        if (!call_valid(main.body, main.body->body_calls[i], &helper) ||
-            !helper.formal)
-            return NL_CHECK_SEMANTIC_UNSUPPORTED;
-        size_t j = 0;
-        while (j < helper_count && helpers[j].function != helper.function)
-            ++j;
-        if (j == helper_count) {
-            if (helper.body->count > node_limit - nodes)
-                return NL_CHECK_RESOURCE_LIMIT;
-            nodes += helper.body->count;
-            helpers[helper_count++] = helper;
-        }
-    }
-
-    DivisionText text = {.capacity = nodes * 512 + 2048};
+    DivisionProgram program = {.nodes = main.body->count,
+                               .remaining = NL_SEMANTIC_MAX_ENTRIES};
+    const NLCheckStatus status =
+        division_collect_helpers(main.body, call_valid, 0, &program);
+    if (status != NL_CHECK_OK)
+        return status;
+    DivisionText text = {.capacity = program.nodes * 512 + 2048};
     text.bytes = malloc(text.capacity);
     if (!text.bytes)
         return NL_CHECK_OUT_OF_MEMORY;
@@ -147,8 +173,8 @@ static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
                              "_Static_assert(SIZE_MAX == UINTMAX_C(%zu), "
                              "\"NewLang usize target mismatch\");\n\n",
                              profile, SIZE_MAX);
-    for (size_t i = 0; emitted && i < helper_count; ++i)
-        emitted = division_emit_helper(&text, &helpers[i]);
+    for (size_t i = 0; emitted && i < program.count; ++i)
+        emitted = division_emit_helper(&text, &program.definitions[i]);
     if (!emitted ||
         !division_text_append(&text, "static void nl_qty_fn_%zu(void)\n{\n",
                               main.function) ||

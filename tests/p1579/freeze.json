@@ -1,0 +1,42 @@
+{
+  "equal-unrelated.nl": {
+    "bytes": 224,
+    "sha256": "11a22160f23e09eb4c4816319be1c93002f9c3f872604568bab3d69e15b5a3d0"
+  },
+  "ledger-shared.nl": {
+    "bytes": 879,
+    "sha256": "ee522d01dadd33cea89f6f11df338b85590703b7c34319d38118984c0dd3f7bf"
+  },
+  "named-divisor.nl": {
+    "bytes": 187,
+    "sha256": "52e90199936ddb84a4c2bb480c63d5113fe330a1e97419016309bf25bee681f7"
+  },
+  "oracle.json": {
+    "bytes": 2210,
+    "sha256": "70e156db20873102567b76a2dfbde7e6fff76cff58db66500c5bf3f47f6c73fc"
+  },
+  "parcels-extracted.nl": {
+    "bytes": 359,
+    "sha256": "59094e4b64798bd8cbdbaf2d7b449643f58f82bdd524b1fad6c7cd578687bc88"
+  },
+  "parcels-flat.nl": {
+    "bytes": 253,
+    "sha256": "bd48a4795cfb8fcc075074ee3939329598565d4b2d6355737ee24371c5873cb1"
+  },
+  "recursive-call.nl": {
+    "bytes": 170,
+    "sha256": "8d83a23b3b33ed1482a72d87b9b5d89f62cfb990ef417e07e1e3a5d68883a6b7"
+  },
+  "return-call.nl": {
+    "bytes": 341,
+    "sha256": "cbb1c327faeace694872673d2953ca912cbda4128134df0435713bacef16a0bd"
+  },
+  "unknown-plus.nl": {
+    "bytes": 174,
+    "sha256": "d9b5519cb48a3fe3301ea0c33b3a84924cdbbe284b961ab846f456b1e4b9b3a6"
+  },
+  "zero-inner.nl": {
+    "bytes": 160,
+    "sha256": "f29cd316613cc891043cd7560c5aad75ff779debc38b05c8193a4787f5b96fbd"
+  }
+}
