@@ -1,0 +1,19 @@
+{
+  "run": 44871224370,
+  "job": 136745976187,
+  "attempt": 1,
+  "head": "5b826d158b6b88e88f2c08905ff0d71df4e2dd35",
+  "first_fault_layer": "R-owned pinned formatting",
+  "build": "SKIPPED",
+  "ctests_executed": 0,
+  "guest_executions": 0,
+  "log_sha256": "35eb2bfa42f47cdc8e1b7e35a08167f412bc5cc0293a6baa2f20e2b47c06b8f6",
+  "formatter": "Clang 23.1.3",
+  "patch_sha256": "3d79fc1c83fc933373d203252de1fc657894a630f8cbfa771d46101e892ec27d",
+  "before_probe_sha256": "3a0c0203c47477a97663c0771a8bf97d4b1a61feb18eb0132495b4493c94ffae",
+  "after_probe_sha256": "b254263d5f0cc559517f057358070012ff18956dde9d28f101131db6a532eb14",
+  "hunks": 14,
+  "whitespace_only": true,
+  "string_char_literals_unchanged": true,
+  "original_7_artifacts_unchanged": true
+}

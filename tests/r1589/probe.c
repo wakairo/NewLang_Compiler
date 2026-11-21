@@ -106,10 +106,9 @@ static bool scalar(const NLSemanticContext *context, NLCheckedResult result,
     return true;
 }
 
-static bool walk_fragment(const NLCheckedFragment *fragment,
-                          size_t parent, NLCheckedNodeId owner,
-                          const char *relation, unsigned depth,
-                          bool main_body, bool hypothetical);
+static bool walk_fragment(const NLCheckedFragment *fragment, size_t parent,
+                          NLCheckedNodeId owner, const char *relation,
+                          unsigned depth, bool main_body, bool hypothetical);
 
 static bool walk_node(Walk *walk, NLCheckedNodeId id, unsigned depth)
 {
@@ -145,14 +144,14 @@ static bool walk_node(Walk *walk, NLCheckedNodeId id, unsigned depth)
         bool known;
         size_t number;
         int kind;
-        bool visible = scalar(context, node->results[i], &known,
-                              &number, &kind);
+        bool visible =
+            scalar(context, node->results[i], &known, &number, &kind);
         if (scalar_conflict) {
             return failure("RESULT_VALUE_TYPE_INCONSISTENCY");
         }
-        printf("VALUE\t%zu\t%zu\t%zu\t%zu\t%d\t%d\t%d\t%zu\n",
-               walk->label, id, i, node->results[i].value, kind,
-               (int)visible, (int)known, number);
+        printf("VALUE\t%zu\t%zu\t%zu\t%zu\t%d\t%d\t%d\t%zu\n", walk->label, id,
+               i, node->results[i].value, kind, (int)visible, (int)known,
+               number);
     }
     if (node->kind == NL_CHECKED_BINDING) {
         const NLCheckedNodeView *init;
@@ -163,8 +162,8 @@ static bool walk_node(Walk *walk, NLCheckedNodeId id, unsigned depth)
         if (init != NULL) {
             count = init->result_count;
             if (count == 1) {
-                visible = scalar(context, init->results[0], &known,
-                                 &number, &kind);
+                visible =
+                    scalar(context, init->results[0], &known, &number, &kind);
             }
         }
         if (scalar_conflict) {
@@ -173,24 +172,23 @@ static bool walk_node(Walk *walk, NLCheckedNodeId id, unsigned depth)
         printf("BINDING\t%zu\t%zu\t%d\t%zu\t", walk->label, id,
                (int)walk->main_body, node->initializer);
         print_name(nl_checked_source(walk->fragment), node->name);
-        printf("\t%zu\t%d\t%d\t%zu\t%d\n", count, (int)visible,
-               (int)known, number, kind);
+        printf("\t%zu\t%d\t%d\t%zu\t%d\n", count, (int)visible, (int)known,
+               number, kind);
     }
     if (node->kind == NL_CHECKED_USIZE_DIVISION) {
         NLUsizeDivisionView view;
-        bool valid = nl_checked_usize_division_valid(walk->fragment,
-                                                    id, NULL);
-        bool visible = nl_checked_usize_division_view(walk->fragment,
-                                                     id, &view);
-        printf("DIV_STATUS\t%zu\t%zu\t%d\t%d\n", walk->label, id,
-               (int)valid, (int)visible);
+        bool valid = nl_checked_usize_division_valid(walk->fragment, id, NULL);
+        bool visible =
+            nl_checked_usize_division_view(walk->fragment, id, &view);
+        printf("DIV_STATUS\t%zu\t%zu\t%d\t%d\n", walk->label, id, (int)valid,
+               (int)visible);
         if (!valid || !visible) {
             return failure("GENUINE_DIVISION_VALIDATION_OR_VIEW_FAILED");
         }
-        printf("DIV\t%zu\t%zu\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n",
-               walk->label, id, (int)view.numerator_known,
-               (int)view.quotient_known, view.numbers[0],
-               view.numbers[1], view.quotient, view.target_max);
+        printf("DIV\t%zu\t%zu\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n", walk->label, id,
+               (int)view.numerator_known, (int)view.quotient_known,
+               view.numbers[0], view.numbers[1], view.quotient,
+               view.target_max);
         if (view.origin != walk->fragment || view.node != id) {
             return failure("DIVISION_ORIGIN_MISMATCH");
         }
@@ -204,19 +202,18 @@ static bool walk_node(Walk *walk, NLCheckedNodeId id, unsigned depth)
     }
     if (node->kind == NL_CHECKED_USIZE_REMAINDER) {
         NLUsizeRemainderView view;
-        bool valid = nl_checked_usize_remainder_valid(walk->fragment,
-                                                     id, NULL);
-        bool visible = nl_checked_usize_remainder_view(walk->fragment,
-                                                      id, &view);
-        printf("REM_STATUS\t%zu\t%zu\t%d\t%d\n", walk->label, id,
-               (int)valid, (int)visible);
+        bool valid = nl_checked_usize_remainder_valid(walk->fragment, id, NULL);
+        bool visible =
+            nl_checked_usize_remainder_view(walk->fragment, id, &view);
+        printf("REM_STATUS\t%zu\t%zu\t%d\t%d\n", walk->label, id, (int)valid,
+               (int)visible);
         if (!valid || !visible) {
             return failure("GENUINE_REMAINDER_VALIDATION_OR_VIEW_FAILED");
         }
-        printf("REM\t%zu\t%zu\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n",
-               walk->label, id, (int)view.numerator_known,
-               (int)view.remainder_known, view.numbers[0],
-               view.numbers[1], view.remainder, view.target_max);
+        printf("REM\t%zu\t%zu\t%d\t%d\t%zu\t%zu\t%zu\t%zu\n", walk->label, id,
+               (int)view.numerator_known, (int)view.remainder_known,
+               view.numbers[0], view.numbers[1], view.remainder,
+               view.target_max);
         if (view.origin != walk->fragment || view.node != id ||
             view.source != nl_checked_source(walk->fragment)) {
             return failure("REMAINDER_ORIGIN_MISMATCH");
@@ -255,22 +252,20 @@ static bool walk_node(Walk *walk, NLCheckedNodeId id, unsigned depth)
         const NLCheckedFragment *body;
         body = nl_checked_call_body(walk->fragment, id);
         if (body == NULL) {
-            printf("LIMIT\tCALL_BODY_NOT_OBSERVABLE\t%zu\t%zu\n",
-                   walk->label, id);
+            printf("LIMIT\tCALL_BODY_NOT_OBSERVABLE\t%zu\t%zu\n", walk->label,
+                   id);
         } else {
             if (nl_checked_context(body) != context) {
                 return failure("CALL_BODY_CONTEXT_CONTRACT_MISMATCH");
             }
-            if (!walk_fragment(body, walk->label, id, "call",
-                               walk->depth + 1, false,
-                               walk->hypothetical)) {
+            if (!walk_fragment(body, walk->label, id, "call", walk->depth + 1,
+                               false, walk->hypothetical)) {
                 return false;
             }
         }
     }
     if (node->kind == NL_CHECKED_IF) {
-        printf("IF\t%zu\t%zu\t%zu\n", walk->label, id,
-               node->normal_arms);
+        printf("IF\t%zu\t%zu\t%zu\n", walk->label, id, node->normal_arms);
         for (size_t i = 0; i < 2; ++i) {
             const NLCheckedFragment *arm;
             arm = nl_checked_if_arm(walk->fragment, id, i);
@@ -278,8 +273,8 @@ static bool walk_node(Walk *walk, NLCheckedNodeId id, unsigned depth)
                 printf("LIMIT\tIF_ARM_NOT_OBSERVABLE\t%zu\t%zu\t%zu\n",
                        walk->label, id, i);
             } else if (!walk_fragment(arm, walk->label, id,
-                                      i == 0 ? "then" : "else",
-                                      walk->depth + 1, false, true)) {
+                                      i == 0 ? "then" : "else", walk->depth + 1,
+                                      false, true)) {
                 return false;
             }
         }
@@ -287,10 +282,9 @@ static bool walk_node(Walk *walk, NLCheckedNodeId id, unsigned depth)
     return true;
 }
 
-static bool walk_fragment(const NLCheckedFragment *fragment,
-                          size_t parent, NLCheckedNodeId owner,
-                          const char *relation, unsigned depth,
-                          bool main_body, bool hypothetical)
+static bool walk_fragment(const NLCheckedFragment *fragment, size_t parent,
+                          NLCheckedNodeId owner, const char *relation,
+                          unsigned depth, bool main_body, bool hypothetical)
 {
     size_t count = nl_checked_node_count(fragment);
     if (depth > 64 || count > 16384 || count == 0) {
@@ -307,8 +301,8 @@ static bool walk_fragment(const NLCheckedFragment *fragment,
     if (walk.seen == NULL) {
         return failure("R_APPARATUS_OUT_OF_MEMORY");
     }
-    printf("FRAGMENT\t%zu\t%zu\t%zu\t%s\t%d\t%zu\n", walk.label,
-           parent, owner, relation, (int)hypothetical, count);
+    printf("FRAGMENT\t%zu\t%zu\t%zu\t%s\t%d\t%zu\n", walk.label, parent, owner,
+           relation, (int)hypothetical, count);
     bool ok = walk_node(&walk, nl_checked_root(fragment), 0);
     free(walk.seen);
     return ok;
@@ -342,8 +336,8 @@ int main(int argc, char **argv)
     if (parse_status != NL_PARSE_OK) {
         goto done;
     }
-    parse_status = nl_parser_parse_function_unit(parser, &tree,
-                                                &parse_diagnostic);
+    parse_status =
+        nl_parser_parse_function_unit(parser, &tree, &parse_diagnostic);
     printf("STAGE\tparse_unit\t%s\n", parse_name(parse_status));
     fflush(stdout);
     if (parse_status != NL_PARSE_OK) {
@@ -358,13 +352,13 @@ int main(int argc, char **argv)
     }
     const NLSyntaxTree *inputs[] = {tree};
     check_status = nl_semantic_register_function_unit(context, inputs, 1,
-                                                     &unit_diagnostic);
+                                                      &unit_diagnostic);
     printf("STAGE\tregister_unit\t%s\n", check_name(check_status));
     fflush(stdout);
     if (check_status != NL_CHECK_OK) {
         printf("DIAGNOSTIC_INPUT\t%zu\n", unit_diagnostic.input_index);
         (void)nl_check_diagnostic_render(stderr, source,
-                                       &unit_diagnostic.diagnostic);
+                                         &unit_diagnostic.diagnostic);
         result = check_status <= NL_CHECK_ANALYSIS_PRECISION_LIMIT ? 10 : 70;
         goto done;
     }
@@ -374,9 +368,9 @@ int main(int argc, char **argv)
         goto done;
     }
     const char adapter[] = "main()\n";
-    source_status = nl_source_create(adapter, sizeof(adapter) - 1,
-                                     "R1589_SYNTHETIC_MAIN_ADAPTER",
-                                     &adapter_source);
+    source_status =
+        nl_source_create(adapter, sizeof(adapter) - 1,
+                         "R1589_SYNTHETIC_MAIN_ADAPTER", &adapter_source);
     printf("STAGE\tadapter_source\t%d\n", (int)source_status);
     if (source_status != NL_SOURCE_OK) {
         goto done;
@@ -385,23 +379,22 @@ int main(int argc, char **argv)
     if (parse_status != NL_PARSE_OK) {
         goto done;
     }
-    parse_status = nl_parser_parse_expression_fragment(adapter_parser,
-                                                       &adapter_tree,
-                                                       &parse_diagnostic);
+    parse_status = nl_parser_parse_expression_fragment(
+        adapter_parser, &adapter_tree, &parse_diagnostic);
     printf("STAGE\tadapter_parse\t%s\n", parse_name(parse_status));
     if (parse_status != NL_PARSE_OK) {
         (void)nl_parse_diagnostic_render(stderr, adapter_source,
-                                       &parse_diagnostic);
+                                         &parse_diagnostic);
         result = 30;
         goto done;
     }
-    check_status = nl_semantic_check_expression(context, adapter_tree,
-                                                &checked, &check_diagnostic);
+    check_status = nl_semantic_check_expression(context, adapter_tree, &checked,
+                                                &check_diagnostic);
     printf("STAGE\tadapter_check\t%s\n", check_name(check_status));
     fflush(stdout);
     if (check_status != NL_CHECK_OK) {
         (void)nl_check_diagnostic_render(stderr, adapter_source,
-                                       &check_diagnostic);
+                                         &check_diagnostic);
         result = 30;
         goto done;
     }
@@ -425,8 +418,9 @@ int main(int argc, char **argv)
         result = 71;
         goto done;
     }
-    result = walk_fragment(body, 0, root, "registered_main", 0,
-                           true, false) ? 0 : 71;
+    result = walk_fragment(body, 0, root, "registered_main", 0, true, false)
+                 ? 0
+                 : 71;
     printf("LIMIT\tWHOLE_CALL_RESULT_WORLD_CUSTODY\tNOT_OBSERVABLE\n");
     printf("LIMIT\tSELECTED_RUNTIME_ARM_AND_QUANTITY\tNOT_OBSERVABLE\n");
 done:
