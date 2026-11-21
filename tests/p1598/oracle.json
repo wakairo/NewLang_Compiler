@@ -1,0 +1,29 @@
+{
+  "bare-formal": {
+    "leaf": "tag",
+    "copies": [[1, true, 143]],
+    "calls": [["tag", 143]],
+    "bindings": {"saved": 143, "flag": 11}
+  },
+  "caller-copy": {
+    "calls": [],
+    "bindings": {"saved": 143, "flag": 11}
+  },
+  "copy-final-return": {
+    "leaf": "carry",
+    "copies": [[3, true, 211], [3, true, 211]],
+    "calls": [["carry", 211], ["carry", 211]],
+    "bindings": {"loaded": 211, "again": 211}
+  },
+  "join-and-nesting": {
+    "leaf": "deliver",
+    "copies": [[1, false, 0], [1, false, 0], [1, false, 0], [1, false, 0]],
+    "calls": [["relay", 34], ["deliver", 34], ["deliver", 34], ["relay", 76], ["deliver", 38], ["deliver", 38]],
+    "bindings": {"early": 8, "late": 12},
+    "conditions": [true, false],
+    "calls_as_actuals": 2
+  },
+  "constant-only": {"check": 0, "emit": 4, "diagnostic": "V1-BACKEND-UNSUPPORTED"},
+  "independent-result": {"check": 0, "emit": 4, "diagnostic": "V1-BACKEND-UNSUPPORTED"},
+  "wrong-actual": {"check": 3, "emit": 3, "diagnostic": "P3-TYPE-MISMATCH"}
+}
