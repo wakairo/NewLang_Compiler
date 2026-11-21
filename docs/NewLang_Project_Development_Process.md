@@ -224,7 +224,7 @@ AI実行環境による作業中断が発生した場合は、実際の作業範
 #### 4.1.2 各Trackの裁量と認可scope内の自律反復
 
 **基本原則：各Trackが元から持つ裁量を活かす。** Coordinationが目的・担当・scope・
-独立性・費用／CI上限・受入条件を認可したら、その内側での作業の進め方、
+独立性・受入条件・STOPと、必要な場合の個別予算を定めたら、その内側での作業の進め方、
 局所的な不具合の調査・修復、検証順序は**担当Track自身が判断してよい**。
 失敗した候補ごと、formatterやfixtureの修正ごと、private実装の小変更ごとに
 Coordinationの再RELEASEを求めることを既定にしない。
@@ -271,6 +271,25 @@ current／loan／owner／provenanceの権限偽造、C17/nativeのUB、OOM・rol
 SHA／rawを上書きせず**、不正受理や独立R findingを隠すための縮小は認めない。
 RはPの最終宣言範囲内だけでなく、範囲外の危険な誤受理も独立に検証できる。
 
+**Pの通常裁量と実資源管理：** 認可済みcanonical／能力scope内の実装方式、
+暫定source family・予測／テスト設計、build／probe／selected CLI／C17/native／
+OOM等の検証順序・回数、局所診断・修復、合理的なNO CHANGEはPが判断する。
+通常のP Issue／RELEASEでは種類別の試行回数や公開push／自然CIセット数に
+**根拠のない固定hard capを既定にしない**。Pは実CPU／runner時間、
+ディスク・課金、外部副作用・第三者limit、他Trackとの資源競合、
+診断価値と必要な安全性証拠を見て調整する。PUBLIC pushは意味ある変更をまとめ、
+無意味なrerunやGREENの反復を避けるが、試行回数の最小化を優先して
+安全性検証を省略しない。回数は消費目標でも、証拠保全の代用品でもない。
+
+**相談と例外予算：** 予想外の費用、相反する実装案、再利用性／長期保守に
+影響する兆候はPがCへ簡潔に共有する。**相談は再GOの承認待ちではなく**、
+認可scope内の安全な作業は継続できる。Cは課金・runner／容量・外部副作用・
+第三者limit・他Trackとの干渉など、実際に大きな資源／競合リスクがある場合だけ、
+根拠・適用範囲・STOPをIssueに記した例外的な総資源／費用予算
+（必要時のみ回数上限）を設定できる。**既存P Issueの明示上限・STOPは
+Cの別個のforward-only裁定まで有効**。§7のR固有予算や他Trackの認可、
+FIRST/RED/rawの保存、required CIの実行条件を変更しない。
+
 Pは認可scope内のprivate実装・test・局所修復・再検証を自律的に進め、
 元FIRST/RED・source／oracle／SHA／rawを後続結果と区別して保持する。
 **選択済み意味論に従う通常の言語実装PR**では、実装・テスト・最終対応範囲を
@@ -289,14 +308,23 @@ Cは採用直前のHEAD・base・証拠を確認し、review済みHEADとの一�
 詳細はReview Guidelines §27に従い、§4.2のsource／issuer変更審査、
 §4.3の投資裁定、§7のR独立性、既存STOP・scope・予算を維持する。
 
+**private先行とPUBLIC／採用の分離：** Cが依存先と並走scopeを明示的に
+認可した場合、Pは先行候補のreview／自然CIと独立のprivate実装を並走できる。
+これは先行候補のPASS、別のPUBLIC branch／PRや独立F/Rの起動、
+READY／merge／main採用を自動許可しない。それぞれ既存Issueの公開認可、
+§7、Review Guidelines §27に従い、Issue上のRELEASEをACTUAL STARTと混同しない。
+未採用DRAFTを無目的に積み重ねず、Cは適格な次scopeを先に準備して待機を減らす。
+
 **Coordinationへ戻す境界：** canonical／公開source・API・ABI・意味論・権限の
-変更が必要な場合、認可scope・固定SHA・実行環境・CI／費用上限を超える場合、
+変更が必要な場合、認可scope・固定SHA・実行環境・明示済みの個別CI／資源・費用予算を超える場合、
 証拠やBLIND独立性が損なわれた場合、根本的な所有権・provenance・
 lifetimeの矛盾をscope内で安全に解消できない場合、および
 優先順位の変更、他Trackへの新規RELEASE、PRのREADY／merge、
 Product GO等の採用判断が必要な場合は、作業を保全してCoordinationへ報告・裁定を求める。
-**実際の安全性違反やunsoundness疑いは隠さず速やかに報告し、
-未解決の候補を安全性PASSとして公開・採用しない。**
+**unsafe CHECK誤受理・wrong-code・C17/nativeのUB・OOM／rollback／no-clobber等の
+安全性違反やunsoundness疑いは影響候補をSTOPし、速やかに報告する。
+required CI／安全性証拠が未実行・不足の場合も、未立証候補を
+安全性PASSとして公開・採用しない。**
 危険な実行を停止した事実だけを理由に、通常のscope内修復まで禁止する必要はない。
 
 Coordinationは**境界を設定し、証拠を評価し、track間を裁定する役割**に集中する。
@@ -387,7 +415,7 @@ NewLangの不完全な実装地図を改善する**探索投資（Exploration）
 
 **安全性と昇格の境界：** CHECK / NATIVE / FORMAL / EXPERIMENT / PRODUCTは異なる証拠階層であり、探索成功・CI green・Pythonモデルの成功を新しいsource規則、soundな権限、mainへの採用、製品PASSに読み替えない。精度不足は保守的に拒否し、`unchecked`やCopy pointerからAllocation/Domain/生存証明を創出しない。既存canonical規則の忠実な有限実装は、新しいProduct GOを待たずにCoordinationが限定認可できるが、**大きな新機構・投資の拡大には本§4.3**、source/API/意味論の選択・変更には**§4.2**を適用する。成果を製品化へ昇格するときは別途Product GOを判断する。
 
-新しい審査会、独立した申請書、全Track必須sign-offは設けない。Coordinationが探索と製品化のGOを区別し、費用上限と次の裁定を決める。仕様と安全性要求はどちらのGOでも不変とする。
+新しい審査会、独立した申請書、全Track必須sign-offは設けない。Coordinationが探索と製品化のGOを区別し、必要な場合だけ§4.1.2の根拠ある個別資源予算と次の裁定を定める。仕様と安全性要求はどちらのGOでも不変とする。
 
 **当面の運用裁定 — v0 compiler-first / Product GO能動判定の一時保留（[Issue #624](https://github.com/wakairo/NewLang_Compiler/issues/624)、2026-10-19）：** 通常の開発優先順位はPによるproduction v0 compilerの**普通のCLI経路**（source→CHECK→必要なsource-issued公開owned→strict C17/native）と、診断・負例・失敗時のclean-up・再現可能性に置く。test-only opt-in、fixture専用の緑、未マージ機構は通常利用可能とは数えない。Mは実装中に発見した最小のsource/semantic gapを裁定し、F/Rは安全上重要な真正性・権限・負例を必要な独立性で検証する。Vを廃止せず、実際の利用・保守・代替から得られ、投資判断を変える事実を扱う。ただし**v0通常利用の次工程ごとにProduct GOの机上の再採点・新たな市場／競合調査を必須gateとすることは一時停止**する。既存の§1.1二段階判定とこの節のProduct GO表は凍結して保存し、判定保留をProduct PASS／全面的な実装GOに読み替えない。新しい高額なowner／proof／encapsulationやsource ruleは従来通り§4.2・§4.3で個別に許可し、§7 blind R／fail-closed／OOM・rollback等の証拠基準を緩めない。
 
