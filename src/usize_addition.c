@@ -277,13 +277,14 @@ static const NLSyntaxNode *block_expression_source(const NLCheckedFragment *f,
     return NULL;
 }
 
-/* The retained tail is one call with this exact division as its sole actual.
+/* The retained tail is one call with this exact fixed-divisor expression as
+ * its sole actual.
  * Its own callee seal is already committed when the enclosing body is planned.
  */
-static bool arm_division_tail_actual(const NLCheckedFragment *arm,
-                                     NLCheckedNodeId block_id,
-                                     const NLSyntaxNode *block_source,
-                                     const NLUsizeAdditionProof *proof)
+static bool arm_fixed_divisor_tail_actual(const NLCheckedFragment *arm,
+                                          NLCheckedNodeId block_id,
+                                          const NLSyntaxNode *block_source,
+                                          const NLUsizeAdditionProof *proof)
 {
     const NLCheckedNodeView *block = nl_checked_node_view(arm, block_id);
     const NLSyntaxView *src = nl_syntax_node_view(block_source);
@@ -310,8 +311,8 @@ static bool arm_division_tail_actual(const NLCheckedFragment *arm,
     const NLCheckedNodeView *actual = nl_checked_node_view(arm, id);
     NLValueId actual_value, call_result, block_result, arm_result;
     if (!fn || !token(arm->source, call->name, fn->name) || !actual ||
-        actual->kind != NL_CHECKED_USIZE_DIVISION || actual->next_argument ||
-        actual->parameter_type != fn->parameters[0] ||
+        actual->kind != arithmetic_operation[proof->operation].checked ||
+        actual->next_argument || actual->parameter_type != fn->parameters[0] ||
         !node_value(arm, c, id, &actual_value) ||
         actual_value != proof->issued.result ||
         !node_value(arm, c, tail, &call_result) ||
@@ -382,8 +383,8 @@ static const NLFunctionBody *arm_arithmetic_owner(
         arm, root->initializer, block, proof->issued.node);
     if (event != proof->syntax &&
         (event || conditional->normal_arms != 2 ||
-         proof->operation != NL_USIZE_DIVIDE ||
-         !arm_division_tail_actual(arm, root->initializer, block, proof)))
+         !fixed_divisor(proof->operation) ||
+         !arm_fixed_divisor_tail_actual(arm, root->initializer, block, proof)))
         return NULL;
     return fn->body;
 }

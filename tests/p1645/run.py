@@ -24,7 +24,7 @@ def check(cli, source, raw):
     assert not checked.stdout and not checked.stderr
 
 
-def verify_arm_order(c, divisors, direct_actuals):
+def verify_arm_order(c, divisors, direct_actuals, operator=b"/"):
     branches = re.findall(
         rb"    _Bool nl_condition_(\d+) = [^\n]+;\n"
         rb"    if \(nl_condition_\1\) \{\n(.*?)"
@@ -34,14 +34,15 @@ def verify_arm_order(c, divisors, direct_actuals):
     )
     assert len(branches) == 1
     _, *arms = branches[0]
+    token = b" " + operator + b" "
     for arm, expected_divisors, direct in zip(arms, divisors, direct_actuals, strict=True):
-        occurrences = re.findall(rb" / \(\(size_t\)UINTMAX_C\((\d+)\)\)", arm)
+        occurrences = re.findall(re.escape(token) + rb"\(\(size_t\)UINTMAX_C\((\d+)\)\)", arm)
         assert tuple(map(int, occurrences)) == expected_divisors
         calls = re.findall(rb"        nl_if_\d+ = nl_qty_fn_\d+\((.+)\);\n", arm)
-        assert len(calls) == 1 and (b" / " in calls[0]) == direct
+        assert len(calls) == 1 and (token in calls[0]) == direct
         assert arm.count(b"nl_qty_fn_") == 1
         if expected_divisors and not direct:
-            assert arm.find(b" / ") < arm.find(b"nl_qty_fn_")
+            assert arm.find(token) < arm.find(b"nl_qty_fn_")
 
 
 def observe_main(c):
@@ -60,41 +61,45 @@ def observe_main(c):
     return prefix.replace(marker, marker + b"#include <stdio.h>\n") + observed
 
 
+def native_case(cli, source, work, divisors, direct, values, operator=b"/"):
+    compilers = (shutil.which("gcc"), shutil.which("clang-23") or shutil.which("clang"))
+    assert all(compilers), compilers
+    check(cli, source, work)
+    emitted = run(work, "stdout-c17", [cli, source], 0)
+    assert emitted.stdout and not emitted.stderr
+    pristine = work / "pristine.c"
+    named = run(work, "named-c17", [cli, "--emit-c17-to", pristine, source], 0)
+    assert not named.stdout and not named.stderr
+    assert pristine.read_bytes() == emitted.stdout
+    verify_arm_order(emitted.stdout, divisors, direct, operator)
+    observed = work / "observed.c"
+    observed.write_bytes(observe_main(emitted.stdout))
+    for cc in compilers:
+        for level in ("-O0", "-O2"):
+            for program, output in ((pristine, b""), (observed, values)):
+                label = f"{program.stem}-{Path(cc).name}-{level[1:]}"
+                binary = work / label
+                built = run(work, f"{label}-compile",
+                            [cc, "-std=c17", "-pedantic-errors", "-Wall",
+                             "-Wextra", "-Werror", level, program, "-o", binary], 0)
+                assert not built.stdout and not built.stderr
+                executed = run(work, f"{label}-native", [binary], 0)
+                assert executed.stdout == output and not executed.stderr
+    first, second = values.decode().splitlines()
+    print(f"{source.stem} strict native true={first} false={second}, order and named=PASS")
+
+
 def native(cli, source_dir, raw):
     cases = (
         ("arm-direct", ((3,), ()), (True, False), b"2\n11\n"),
         ("arm-named-copy", ((3,), ()), (False, False), b"2\n11\n"),
         ("arm-both", ((4, 4), (9,)), (True, True), b"11\n12\n"),
     )
-    compilers = (shutil.which("gcc"), shutil.which("clang-23") or shutil.which("clang"))
-    assert all(compilers), compilers
     for name, divisors, direct, values in cases:
         source = source_dir / f"{name}.nl"
         work = raw / name
         work.mkdir()
-        check(cli, source, work)
-        emitted = run(work, "stdout-c17", [cli, source], 0)
-        assert emitted.stdout and not emitted.stderr
-        pristine = work / "pristine.c"
-        named = run(work, "named-c17", [cli, "--emit-c17-to", pristine, source], 0)
-        assert not named.stdout and not named.stderr
-        assert pristine.read_bytes() == emitted.stdout
-        verify_arm_order(emitted.stdout, divisors, direct)
-        observed = work / "observed.c"
-        observed.write_bytes(observe_main(emitted.stdout))
-        for cc in compilers:
-            for level in ("-O0", "-O2"):
-                for program, output in ((pristine, b""), (observed, values)):
-                    label = f"{program.stem}-{Path(cc).name}-{level[1:]}"
-                    binary = work / label
-                    built = run(work, f"{label}-compile",
-                                [cc, "-std=c17", "-pedantic-errors", "-Wall",
-                                 "-Wextra", "-Werror", level, program, "-o", binary], 0)
-                    assert not built.stdout and not built.stderr
-                    executed = run(work, f"{label}-native", [binary], 0)
-                    assert executed.stdout == output and not executed.stderr
-        first, second = values.decode().splitlines()
-        print(f"{name} strict native true={first} false={second}, order and named=PASS")
+        native_case(cli, source, work, divisors, direct, values)
 
 
 def replace_once(text, old, new):
@@ -133,6 +138,12 @@ def scope(cli, source_dir, raw):
         work.mkdir()
         source = work / f"{name}.nl"
         source.write_text(text, encoding="utf-8")
+        # P1650 admits only this previous refusal. The original fixture and
+        # rejection are frozen in the P1645/P1650 evidence.
+        if name == "remainder":
+            native_case(cli, source, work, ((3,), ()), (True, False),
+                        b"2\n11\n", operator=b"%")
+            continue
         check(cli, source, work)
         diagnostic = b"error(cli)[V1-BACKEND-UNSUPPORTED]:"
         emitted = run(work, "stdout-c17", [cli, source], 4)
