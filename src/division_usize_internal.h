@@ -14,6 +14,7 @@ typedef struct {
     size_t function;
     NLSymbolId formal, second_formal;
     NLCheckedNodeId division, result,
+        joined_result, /* optional function-exit join; result is normal path */
         call; /* division identifies the specialized single operation */
     size_t divisor;
 } NLDivisionUsizePlan;

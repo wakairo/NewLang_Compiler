@@ -4624,6 +4624,11 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
               nl_producer_local_seal(body.artifact, caller->artifact, call_id),
               call_span))
         goto failure;
+    if (!host(&body,
+              nl_control_quantity_return_receipt_issue(
+                  body.artifact, caller->artifact, call_id, c),
+              call_span))
+        goto failure;
     bool current_result =
         body.artifact->copy_body && (body.artifact->copy_body->current_loop ||
                                      body.artifact->copy_body->current_call ||

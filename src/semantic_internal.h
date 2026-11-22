@@ -194,6 +194,8 @@ struct NLCheckedFragment {
     NLControlExits *loop_returns; /* owned early loop Return evidence */
     NLControlExits *exits;        /* owned complete finite control evidence */
     NLControlTarget *function_target; /* owned boundary identity, if any */
+    NLQuantityReturnReceipt
+        *quantity_return_receipt; /* owned private CHECK issuance record */
     const NLSource *source;
     const NLSemanticContext *context;
     NLCheckedNodeView *nodes;
