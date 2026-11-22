@@ -1,0 +1,101 @@
+{
+  "caller-discard": {
+    "parse": true,
+    "gate0Check": 0,
+    "gate0Emit": 4,
+    "finalEmit": 0,
+    "boolDiscardUses": [
+      [
+        "main",
+        "permit",
+        true,
+        1,
+        0
+      ],
+      [
+        "main",
+        "hold",
+        false,
+        0,
+        0
+      ]
+    ],
+    "native": {
+      "packed_count": 12,
+      "leftovers": 10,
+      "audit": 1
+    },
+    "termination": "implicit unit"
+  },
+  "caller-control": {
+    "parse": true,
+    "gate0Check": 0,
+    "gate0Emit": 0,
+    "finalEmit": 0,
+    "native": {
+      "packed_count": 12,
+      "leftovers": 10,
+      "audit": 1
+    },
+    "termination": "implicit unit"
+  },
+  "helper-discard": {
+    "parse": true,
+    "gate0Check": 0,
+    "gate0Emit": 4,
+    "finalEmit": 0,
+    "boolDiscardUses": [
+      [
+        "band",
+        "permit",
+        true,
+        1,
+        0
+      ],
+      [
+        "band",
+        "permit",
+        false,
+        0,
+        0
+      ]
+    ],
+    "native": {
+      "first": 2,
+      "later": 6
+    },
+    "termination": "explicit unit return"
+  },
+  "helper-control": {
+    "parse": true,
+    "gate0Check": 0,
+    "gate0Emit": 0,
+    "finalEmit": 0,
+    "native": {
+      "first": 2,
+      "later": 6
+    },
+    "termination": "explicit unit return"
+  },
+  "comparison-statement": {
+    "parse": true,
+    "gate0Check": 0,
+    "gate0Emit": 4,
+    "finalEmit": 4,
+    "refused": "non-name expression statement outside the finite quantity path"
+  },
+  "discard-missing-result": {
+    "parse": true,
+    "gate0Check": 3,
+    "gate0Emit": 3,
+    "finalEmit": 3,
+    "refused": "ordinary usize helper has normal unit result after the Bool discard"
+  },
+  "zero-after-discard": {
+    "parse": true,
+    "gate0Check": 3,
+    "gate0Emit": 3,
+    "finalEmit": 3,
+    "refused": "zero remainder divisor in the helper after the Bool discard"
+  }
+}
