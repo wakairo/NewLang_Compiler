@@ -8,9 +8,12 @@ set(p1654_source "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1654/selection.nl")
 add_test(NAME p1654_custody_rollback.unit COMMAND p1654_probe
     "${p1654_source}" "UINTMAX_C(19)")
 set(p1654_discard "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1654/discard.nl")
+set(p1658_source "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1658/local-let.nl")
 add_test(NAME p1654_discard_custody_rollback.unit COMMAND p1654_probe
     "${p1654_discard}" "UINTMAX_C(41)")
+add_test(NAME p1658_local_numerator_rollback.unit COMMAND p1654_probe
+    "${p1658_source}" "UINTMAX_C(8)")
 add_test(NAME p1654_native_scope.unit COMMAND "${Python3_EXECUTABLE}" -B
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1654/run.py"
     "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_BINARY_DIR}/p1654-native"
-    "${p1654_source}" "${p1654_discard}")
+    "${p1654_source}" "${p1654_discard}" "${p1658_source}")
