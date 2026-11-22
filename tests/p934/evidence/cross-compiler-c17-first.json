@@ -1,0 +1,92 @@
+[
+  {
+    "source": "tests/p930/sources/budget_true.nl",
+    "sha256": "7c05e858eeaefdcf19c99c6a1c4ad184e2349a4b14d55b5b1b74094e0a509a4d",
+    "initializer_indices": [
+      [
+        1,
+        0
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "same_unmodified_C_across_GCC_Clang_local_builds": true
+  },
+  {
+    "source": "tests/p930/sources/budget_false.nl",
+    "sha256": "eb4a8c2acfefa07d3253399a10d36a33358485c0be608be15d0c81834baf6da8",
+    "initializer_indices": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        0
+      ]
+    ],
+    "same_unmodified_C_across_GCC_Clang_local_builds": true
+  },
+  {
+    "source": "tests/p930/sources/order_only.nl",
+    "sha256": "2421f0b88db6a521f9d60c7c0bb0d2e273ebacc345c1170f65d3f8e80722fca5",
+    "initializer_indices": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "same_unmodified_C_across_GCC_Clang_local_builds": true
+  },
+  {
+    "source": "tests/p930/sources/root_values_swapped.nl",
+    "sha256": "025c3eb5385de06c546ecc9d282989bbd0244676104ef31692c470004a39a38c",
+    "initializer_indices": [
+      [
+        1,
+        0
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "same_unmodified_C_across_GCC_Clang_local_builds": true
+  },
+  {
+    "source": "tests/p934/sources/quota_equal.nl",
+    "sha256": "78c8190b37d0386c4c6eb47adc83f97ae447f8e1624c619b17896e65960dc497",
+    "initializer_indices": [
+      [
+        1,
+        0
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "same_unmodified_C_across_GCC_Clang_local_builds": true
+  },
+  {
+    "source": "tests/p934/sources/band_less.nl",
+    "sha256": "adb258cc794cea2c6a8a8d7ca55a641668379c47675eb4b3326c8cbe28aea1ca",
+    "initializer_indices": [
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        0
+      ]
+    ],
+    "same_unmodified_C_across_GCC_Clang_local_builds": true
+  }
+]

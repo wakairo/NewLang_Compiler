@@ -1,0 +1,7 @@
+warning: opening /proc/self/mem file failed: Read-only file system (30)
+warning: opening /proc/PID/mem file for lwp 45132.45132 failed: Read-only file system (30)
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p934-gate-a/source/tests/p930/sources/root_values_swapped.nl
+[Inferior 1 (process 45132) exited with code 04]
