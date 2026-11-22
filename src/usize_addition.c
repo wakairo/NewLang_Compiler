@@ -1257,7 +1257,7 @@ static bool division_copy_at(const NLCheckedFragment *f,
 static const NLSyntaxNode *
 discarded_quantity_copy(const NLCheckedFragment *f, const NLSemanticContext *c,
                         NLCheckedNodeId id, const NLCheckedNodeView *node,
-                        const NLSyntaxView *syntax)
+                        const NLSyntaxView *syntax, NLTypeId type)
 {
     if (node->kind != NL_CHECKED_STATEMENT || node->terminates ||
         node->type != nl_semantic_unit_type(c) || node->result_count ||
@@ -1269,14 +1269,14 @@ discarded_quantity_copy(const NLCheckedFragment *f, const NLSemanticContext *c,
     const NLSyntaxView *source = nl_syntax_node_view(expression);
     NLValueId value;
     if (!source || source->kind != NL_SYNTAX_EXPR_NAME ||
-        !node_value(f, c, node->initializer, &value))
+        !scalar_node_value(f, c, node->initializer, type, &value))
         return NULL;
     const NLSemanticValueView *copy = &c->values[value - 1];
-    const NLSemanticTypeView *type = &c->types[copy->type - 1].view;
+    const NLSemanticTypeView *properties = &c->types[type - 1].view;
     /* The statement owns no result. The original CHECK use is a separate
      * package discharged by discard_results. The caller verifies its named
      * Copy occurrence and lexical origin before accepting this item. */
-    return type->is_copy && type->is_discardable &&
+    return properties->is_copy && properties->is_discardable &&
                    copy->carrier == NL_CARRIER_ENDED && !copy->owner_place
                ? expression
                : NULL;
@@ -1827,9 +1827,21 @@ static bool quantity_items_at(QuantityBody *b, const NLCheckedNodeView *root,
             break;
         }
         if (src->kind == NL_SYNTAX_STATEMENT) {
+            const NLCheckedNodeView *use =
+                nl_checked_node_view(f, node->initializer);
+            const NLTypeId boolean = nl_semantic_core_type(c, NL_TYPE_BOOL);
+            const NLTypeId usize = nl_semantic_core_type(c, NL_TYPE_USIZE);
+            if (!use || (use->type != boolean && use->type != usize))
+                return false;
             const NLSyntaxNode *copy =
-                discarded_quantity_copy(f, c, id, node, src);
-            if (!copy || !quantity_atom_at(b, node->initializer, copy))
+                discarded_quantity_copy(f, c, id, node, src, use->type);
+            if (!copy)
+                return false;
+            const QuantityOrigin origin =
+                use->type == boolean
+                    ? quantity_condition_at(b, node->initializer, copy)
+                    : quantity_atom_at(b, node->initializer, copy);
+            if (!origin)
                 return false;
             id = node->next_item;
             continue;
@@ -2126,8 +2138,8 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
             break;
         }
         if (src->kind == NL_SYNTAX_STATEMENT) {
-            const NLSyntaxNode *copy =
-                discarded_quantity_copy(f, c, id, n, src);
+            const NLSyntaxNode *copy = discarded_quantity_copy(
+                f, c, id, n, src, nl_semantic_core_type(c, NL_TYPE_USIZE));
             if (!scalar_entry || !copy ||
                 !division_copy_at(f, c, n->initializer, copy, 0))
                 return false;
