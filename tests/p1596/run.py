@@ -11,6 +11,16 @@ import sys
 import tempfile
 
 
+# P1645 selects this exact frozen source's normal arm tail call.
+# Keep the original refusal and all other P1596 cases in oracle.json.
+ARM_ACTUAL_EXPECTED = {
+    "calls": [["bins", 3]],
+    "bindings": {"chosen": 3},
+    "conditions": [True],
+    "arithmetic_actuals": [["/", True, 3]],
+}
+
+
 def run(command, expected, raw):
     args = list(map(str, command))
     with raw.with_suffix(".command.json").open("x") as record:
@@ -136,6 +146,12 @@ def main():
     raw = Path(tempfile.mkdtemp(dir=evidence))
     print(f"evidence={raw}", flush=True)
     for name, expected in expected_results.items():
+        mode = "strict"
+        if name == "arm-actual":
+            assert expected == {"check": 0, "emit": 4,
+                                "diagnostic": "V1-BACKEND-UNSUPPORTED"}
+            expected = ARM_ACTUAL_EXPECTED
+            mode = "arm-strict"
         case = raw / name
         case.mkdir()
         source = fixtures / "source" / f"{name}.nl"
@@ -155,7 +171,7 @@ def main():
             print(f"{name}: fail-closed; named output preserved")
         else:
             assert not checked.stderr and not checked.stdout
-            graph = run([probe, "strict", source], 0, case / "proof")
+            graph = run([probe, mode, source], 0, case / "proof")
             emitted = run([cli, "--emit-c17-to", pristine, source], 0, case / "emit")
             assert not emitted.stderr and not emitted.stdout
             observed = case / "observed.c"

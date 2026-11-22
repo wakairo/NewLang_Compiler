@@ -80,7 +80,8 @@ static const char *arithmetic_receipt(const NLCheckedFragment *f,
     }
 }
 
-static bool observe(const NLCheckedFragment *f, size_t depth, bool strict)
+static bool observe(const NLCheckedFragment *f, size_t depth, bool strict,
+                    bool visit_arms)
 {
     REQUIRE(f && depth < NL_SEMANTIC_MAX_DEPTH);
     const NLSemanticContext *c = f->context;
@@ -140,7 +141,7 @@ static bool observe(const NLCheckedFragment *f, size_t depth, bool strict)
                    function->name, op, actual, arg->results[0].value, formal,
                    value.scalar_known, value.scalar_value, body_result.value);
         }
-        REQUIRE(observe(body, depth + 1, strict));
+        REQUIRE(observe(body, depth + 1, strict, visit_arms));
     }
     for (NLCheckedNodeId id = 1; id <= f->count; ++id) {
         const NLCheckedNodeView *node = nl_checked_node_view(f, id);
@@ -155,6 +156,10 @@ static bool observe(const NLCheckedFragment *f, size_t depth, bool strict)
                 joined.type == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
                 !joined.scalar_known);
             printf("JOIN %zu Unknown\n", id);
+            if (visit_arms)
+                for (size_t a = 0; a < node->normal_arms; ++a)
+                    REQUIRE(observe(nl_checked_if_arm(f, id, a), depth + 1,
+                                    strict, visit_arms));
         }
     }
     return true;
@@ -318,7 +323,8 @@ static bool seal_oom(Program *p, Fault site)
             !memcmp(value, c->values + before.value - 1, sizeof(value)) &&
             nl_sem_validate(c) == NL_CHECK_OK);
     REQUIRE(check(p) == NL_CHECK_OK && nl_h_custody_validate(p->checked) &&
-            observe(p->checked, 0, true) && matches_c(p->checked, NULL, 0));
+            observe(p->checked, 0, true, false) &&
+            matches_c(p->checked, NULL, 0));
     puts("OOM rollback context/binding/place/value, no artifact, retry PASS");
     return true;
 }
@@ -353,7 +359,9 @@ int main(int argc, char **argv)
     else if (ok) {
         ok = check(&p) == NL_CHECK_OK && nl_h_custody_validate(p.checked);
         if (ok && (!strcmp(mode, "baseline") || !strcmp(mode, "strict")))
-            ok = observe(p.checked, 0, !strcmp(mode, "strict"));
+            ok = observe(p.checked, 0, !strcmp(mode, "strict"), false);
+        else if (ok && !strcmp(mode, "arm-strict"))
+            ok = observe(p.checked, 0, true, true);
         else if (ok && !strcmp(mode, "identity"))
             ok = other_origin(&p);
         else if (ok && !strcmp(mode, "staging-oom"))
