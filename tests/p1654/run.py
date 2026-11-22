@@ -1,5 +1,6 @@
 """Check the unary Bool quantity selector and its strict native output."""
 
+from functools import partial
 from pathlib import Path
 import re
 import shutil
@@ -19,43 +20,59 @@ def run(raw, name, command, expected):
     return result
 
 
-def observe(c):
+def observe(c, discard):
     helper = re.search(rb"static size_t (nl_qty_fn_\d+)\(_Bool (nl_local_\d+)\)", c)
     entry = re.search(rb"^static void nl_qty_fn_\d+\(void\)\n\{\n", c, re.MULTILINE)
     assert helper and entry and helper.end() < entry.start()
     assert re.search(rb"_Bool nl_condition_\d+ = " + helper[2] + rb";", c)
     prefix, main = c[:entry.end()], c[entry.end():]
     assert main.count(helper[1] + b"(") == 2
+    flags = re.findall(rb"^    _Bool (nl_local_\d+) = ", main, re.MULTILINE)
+    marker = b"#include <stdint.h>\n"
+    assert prefix.count(marker) == 1
+    prefix = prefix.replace(marker, marker + b"#include <stdio.h>\n")
+    if discard:
+        actuals = re.findall(
+            rb"^    \(void\)\(" + helper[1] + rb"\((nl_local_\d+)\)\);$",
+            main, re.MULTILINE,
+        )
+        assert len(actuals) == 2 and actuals == flags
+        # Observe the result held in the existing IF temporary. Leave both
+        # call sites and their discarded results untouched.
+        prefix, count = re.subn(
+            rb"^(    return (nl_if_\d+);)$",
+            rb'    printf("%zu\\n", \2);\n\1', prefix, flags=re.MULTILINE,
+        )
+        assert count == 1
+        return prefix + main
     calls = re.findall(
         rb"^    size_t (nl_local_\d+) = " + helper[1] + rb"\((nl_local_\d+)\);$",
         main, re.MULTILINE,
     )
-    flags = re.findall(rb"^    _Bool (nl_local_\d+) = ", main, re.MULTILINE)
     assert len(calls) == len(flags) == 2
     assert [arg for _, arg in calls] == flags
-    marker = b"#include <stdint.h>\n"
-    assert prefix.count(marker) == 1
     observed, count = re.subn(
         rb"^(    size_t (nl_local_\d+) = " + helper[1] + rb"\(nl_local_\d+\);)\n",
         rb'\1\n    printf("%zu\\n", \2);\n', main, flags=re.MULTILINE,
     )
     assert count == 2
-    return prefix.replace(marker, marker + b"#include <stdio.h>\n") + observed
+    return prefix + observed
 
 
-def native(cli, source, raw):
+def native(cli, source, raw, *, discard=False):
     c = run(raw, "stdout-c17", [cli, source], 0)
     assert c.stdout and not c.stderr
     pristine = raw / "pristine.c"
     named = run(raw, "named-c17", [cli, "--emit-c17-to", pristine, source], 0)
     assert not named.stdout and not named.stderr and pristine.read_bytes() == c.stdout
     observed = raw / "observed.c"
-    observed.write_bytes(observe(c.stdout))
+    observed.write_bytes(observe(c.stdout, discard))
     compilers = (shutil.which("gcc"), shutil.which("clang-23") or shutil.which("clang"))
     assert all(compilers), compilers
+    values = b"23\n41\n" if discard else b"11\n19\n"
     for compiler in compilers:
         for opt in ("O0", "O2"):
-            for unit, stdout in ((pristine, b""), (observed, b"11\n19\n")):
+            for unit, stdout in ((pristine, b""), (observed, values)):
                 label = f"{Path(compiler).name}-{opt}-{unit.stem}"
                 binary = raw / label
                 run(raw, label + "-compile", [
@@ -64,7 +81,8 @@ def native(cli, source, raw):
                 ], 0)
                 result = run(raw, label + "-native", [binary], 0)
                 assert result.stdout == stdout and not result.stderr, label
-    print(f"{raw.name} strict native 11 then 19; named C17 identical")
+    first, second = values.decode().splitlines()
+    print(f"{raw.name} strict native {first} then {second}; named C17 identical")
 
 
 def state(path):
@@ -92,11 +110,24 @@ def scope(cli, source, raw):
     print(f"{raw.name} CHECK=0 C17=4, named output preserved")
 
 
-def fixtures(selection):
+def fixtures(selection, discard):
     before, original = selection.split("\n\n", 1)
     body = before.replace("let amount = if", "if").replace("};\n    amount", "}")
     yield "let-copy", selection, native
     yield "direct-tail", f"{body}\n\n{original}", native
+    yield "discard", discard, partial(native, discard=True)
+    yield "inline-discard", discard.replace(
+        "select_mark(first_flag);", "select_mark(usize(30) < stock);"
+    ), scope
+    yield "arm-discard", discard.replace(
+        "    select_mark(first_flag);",
+        "    let guarded = if (first_flag) {\n"
+        "        select_mark(first_flag);\n"
+        "        usize(7)\n"
+        "    } else {\n"
+        "        usize(9)\n"
+        "    };",
+    ), scope
     yield "inline-actual", selection.replace(
         "choose(select_first)", "choose(usize(50) < stock)"
     ), scope
@@ -109,12 +140,14 @@ def fixtures(selection):
 
 
 def main():
-    cli, root, selection = map(Path, sys.argv[1:])
+    cli, root, selection, discard = map(Path, sys.argv[1:])
     root.mkdir(parents=True, exist_ok=True)
     raw = Path(tempfile.mkdtemp(dir=root))
     print(f"raw={raw}", flush=True)
     cases = []
-    for name, text, verify in fixtures(selection.read_text(encoding="utf-8")):
+    for name, text, verify in fixtures(
+        selection.read_text(encoding="utf-8"), discard.read_text(encoding="utf-8")
+    ):
         work = raw / name
         work.mkdir()
         source = work / "source.nl"

@@ -1338,10 +1338,10 @@ static bool division_copy_at(const NLCheckedFragment *f,
            division_name_copy(f, c, id, syntax, use->symbol);
 }
 
-static const NLSyntaxNode *
-discarded_quantity_copy(const NLCheckedFragment *f, const NLSemanticContext *c,
-                        NLCheckedNodeId id, const NLCheckedNodeView *node,
-                        const NLSyntaxView *syntax, NLTypeId type)
+static const NLSyntaxNode *discarded_quantity_expression(
+    const NLCheckedFragment *f, const NLSemanticContext *c, NLCheckedNodeId id,
+    const NLCheckedNodeView *node, const NLSyntaxView *syntax, NLTypeId type,
+    NLSyntaxKind kind)
 {
     if (node->kind != NL_CHECKED_STATEMENT || node->terminates ||
         node->type != nl_semantic_unit_type(c) || node->result_count ||
@@ -1352,16 +1352,15 @@ discarded_quantity_copy(const NLCheckedFragment *f, const NLSemanticContext *c,
     const NLSyntaxNode *expression = syntax->data.statement.expression;
     const NLSyntaxView *source = nl_syntax_node_view(expression);
     NLValueId value;
-    if (!source || source->kind != NL_SYNTAX_EXPR_NAME ||
+    if (!source || source->kind != kind ||
         !scalar_node_value(f, c, node->initializer, type, &value))
         return NULL;
-    const NLSemanticValueView *copy = &c->values[value - 1];
+    const NLSemanticValueView *result = &c->values[value - 1];
     const NLSemanticTypeView *properties = &c->types[type - 1].view;
-    /* The statement owns no result. The original CHECK use is a separate
-     * package discharged by discard_results. The caller verifies its named
-     * Copy occurrence and lexical origin before accepting this item. */
+    /* The statement owns no result. CHECK discharged the expression's
+     * package; the caller still authenticates the Copy or call itself. */
     return properties->is_copy && properties->is_discardable &&
-                   copy->carrier == NL_CARRIER_ENDED && !copy->owner_place
+                   result->carrier == NL_CARRIER_ENDED && !result->owner_place
                ? expression
                : NULL;
 }
@@ -2045,14 +2044,22 @@ static bool quantity_items_at(QuantityBody *b, const NLCheckedNodeView *root,
             const NLTypeId usize = nl_semantic_core_type(c, NL_TYPE_USIZE);
             if (!use || (use->type != boolean && use->type != usize))
                 return false;
-            const NLSyntaxNode *copy =
-                discarded_quantity_copy(f, c, id, node, src, use->type);
-            if (!copy)
+            const bool call = use->kind == NL_CHECKED_REGISTERED_CALL;
+            if (call &&
+                (b->function->count || b->if_parent || use->type != usize ||
+                 !nl_quantity_bool_function(c, use->function)))
+                return false;
+            const NLSyntaxNode *expression = discarded_quantity_expression(
+                f, c, id, node, src, use->type,
+                call ? NL_SYNTAX_EXPR_CALL : NL_SYNTAX_EXPR_NAME);
+            if (!expression)
                 return false;
             const QuantityOrigin origin =
-                use->type == boolean
-                    ? quantity_condition_at(b, node->initializer, copy)
-                    : quantity_atom_at(b, node->initializer, copy);
+                call ? quantity_call_chain_at(b, node->initializer, expression,
+                                              0)
+                : use->type == boolean
+                    ? quantity_condition_at(b, node->initializer, expression)
+                    : quantity_atom_at(b, node->initializer, expression);
             if (!origin)
                 return false;
             id = node->next_item;
@@ -2455,8 +2462,9 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
             break;
         }
         if (src->kind == NL_SYNTAX_STATEMENT) {
-            const NLSyntaxNode *copy = discarded_quantity_copy(
-                f, c, id, n, src, nl_semantic_core_type(c, NL_TYPE_USIZE));
+            const NLSyntaxNode *copy = discarded_quantity_expression(
+                f, c, id, n, src, nl_semantic_core_type(c, NL_TYPE_USIZE),
+                NL_SYNTAX_EXPR_NAME);
             if (!scalar_entry || !copy ||
                 !division_copy_at(f, c, n->initializer, copy, 0))
                 return false;

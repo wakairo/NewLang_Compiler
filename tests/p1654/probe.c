@@ -122,7 +122,7 @@ static bool custody(const NLCheckedFragment *entry)
 }
 
 static bool rollback(NLSemanticContext *c, const NLSyntaxTree *expression,
-                     NLCheckedFragment **entry)
+                     NLCheckedFragment **entry, const char *expected_literal)
 {
     NLSymbolId symbol = 0;
     const NLScalarValue seed = {nl_semantic_core_type(c, NL_TYPE_USIZE), true,
@@ -171,7 +171,7 @@ static bool rollback(NLSemanticContext *c, const NLSyntaxTree *expression,
     const bool emitted =
         nl_quantity_usize_c17(*entry, &text, &length) == NL_CHECK_OK && text &&
         length && strstr(text, "(_Bool nl_local_") &&
-        strstr(text, "UINTMAX_C(19)");
+        strstr(text, expected_literal);
     free(text);
     REQUIRE(emitted);
     puts("CHECK/C17 retry PASS");
@@ -180,7 +180,7 @@ static bool rollback(NLSemanticContext *c, const NLSyntaxTree *expression,
 
 int main(int argc, char **argv)
 {
-    if (argc != 2)
+    if (argc != 3)
         return 2;
     NLSource *source = NULL, *entry_source = NULL;
     NLParser *parser = NULL, *entry_parser = NULL;
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
             nl_parser_create(entry_source, &entry_parser) == NL_PARSE_OK &&
             nl_parser_parse_expression_fragment(entry_parser, &expression,
                                                 NULL) == NL_PARSE_OK;
-    const bool ok = ready && rollback(context, expression, &entry);
+    const bool ok = ready && rollback(context, expression, &entry, argv[2]);
     nl_checked_destroy(entry);
     nl_syntax_tree_destroy(expression);
     nl_parser_destroy(entry_parser);
