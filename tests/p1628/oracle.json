@@ -1,0 +1,103 @@
+{
+  "homogeneous-implicit": {
+    "implicit": true,
+    "owned": [
+      ["apportion", [["usize", 66], ["usize", 15]], 11]
+    ],
+    "trace": [
+      "ARG 0 usize 66",
+      "ARG 1 usize 15",
+      "CALL apportion 66 15",
+      "DISCARD 5"
+    ]
+  },
+  "homogeneous-tail": {
+    "owned": [
+      ["apportion", [["usize", 66], ["usize", 15]], 11]
+    ],
+    "trace": [
+      "ARG 0 usize 66",
+      "ARG 1 usize 15",
+      "CALL apportion 66 15",
+      "DISCARD 5"
+    ]
+  },
+  "mixed-implicit": {
+    "implicit": true,
+    "owned": [
+      ["pick_band", [["bool", 1], ["usize", 31]], null],
+      ["pick_band", [["bool", null], ["usize", 52]], null]
+    ],
+    "bools": [
+      ["main", "high", 1],
+      ["main", "flag", null]
+    ],
+    "joins": ["pick_band", "pick_band"],
+    "trace": [
+      "ARG 0 bool 1",
+      "CALL scale 93",
+      "ARG 1 usize 31",
+      "CALL pick_band 1 31",
+      "COND 1",
+      "ARG 0 bool 0",
+      "CALL scale 156",
+      "ARG 1 usize 52",
+      "CALL pick_band 0 52",
+      "COND 0",
+      "DISCARD 4",
+      "DISCARD 8"
+    ]
+  },
+  "mixed-return": {
+    "owned": [
+      ["pick_band", [["bool", 1], ["usize", 31]], null],
+      ["pick_band", [["bool", null], ["usize", 52]], null]
+    ],
+    "bools": [
+      ["main", "high", 1],
+      ["main", "flag", null]
+    ],
+    "joins": ["pick_band", "pick_band"],
+    "trace": [
+      "ARG 0 bool 1",
+      "CALL scale 93",
+      "ARG 1 usize 31",
+      "CALL pick_band 1 31",
+      "COND 1",
+      "ARG 0 bool 0",
+      "CALL scale 156",
+      "ARG 1 usize 52",
+      "CALL pick_band 0 52",
+      "COND 0",
+      "DISCARD 4",
+      "DISCARD 8"
+    ]
+  },
+  "direct-implicit": {
+    "implicit": true,
+    "trace": ["DISCARD 1"]
+  },
+  "empty-control": {
+    "plain": true
+  },
+  "homogeneous-wrong-tail": {
+    "check": 3,
+    "emit": 3,
+    "diagnostic": "P8-BODY-RESULT"
+  },
+  "wrong-helper": {
+    "check": 3,
+    "emit": 3,
+    "diagnostic": "P8-BODY-RESULT"
+  },
+  "zero-before-completion": {
+    "check": 3,
+    "emit": 3,
+    "diagnostic": "USIZE-REMAINDER-ZERO"
+  },
+  "bare-return": {
+    "check": 3,
+    "emit": 3,
+    "diagnostic": "P9-BARE-RETURN"
+  }
+}
