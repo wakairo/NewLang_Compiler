@@ -1613,6 +1613,8 @@ typedef struct {
 
 static bool division_unit_expression(const NLCheckedFragment *, NLCheckedNodeId,
                                      const NLSyntaxNode *, NLTypeId);
+static bool division_unit_completion(const NLCheckedFragment *, NLCheckedNodeId,
+                                     const NLSyntaxNode *, NLTypeId);
 static bool division_unit_return(const NLCheckedFragment *,
                                  const NLCheckedNodeView *,
                                  const NLCheckedNodeView *,
@@ -1974,7 +1976,7 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
         if (!result.returned &&
             (root->terminates || root->type != unit || root->result_count ||
              root->results[0].value || nl_control_exits_count(f->exits) ||
-             !division_unit_expression(f, result.id, result.syntax, unit)))
+             !division_unit_completion(f, result.id, result.syntax, unit)))
             return false;
     }
     if (b.calls != f->body_count || b.arms != f->arm_count)
@@ -2016,6 +2018,17 @@ static bool division_unit_expression(const NLCheckedFragment *f,
            !node->terminates && src && src->kind == NL_SYNTAX_EXPR_NAME &&
            token(f->source, src->data.name, "unit") &&
            span_equal(src->span, node->span);
+}
+
+/* Draft17.38 §19.1 gives a normally completed block without a tail
+ * expression the unit result. Keep that absence exact on both the source
+ * and checked sides. An explicit unit tail remains authenticated by its
+ * existing source event. */
+static bool division_unit_completion(const NLCheckedFragment *f,
+                                     NLCheckedNodeId id,
+                                     const NLSyntaxNode *syntax, NLTypeId unit)
+{
+    return (!id && !syntax) || division_unit_expression(f, id, syntax, unit);
 }
 
 static bool division_unit_return(const NLCheckedFragment *f,
@@ -2163,7 +2176,7 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
     if (!returned &&
         (root->terminates || root->type != unit || root->result_count ||
          root->results[0].value || nl_control_exits_count(f->exits) ||
-         !division_unit_expression(f, root->tail, s->data.block.tail, unit)))
+         !division_unit_completion(f, root->tail, s->data.block.tail, unit)))
         return false;
     *out = plan;
     return true;
