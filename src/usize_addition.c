@@ -1,4 +1,5 @@
 #include "newlang/usize_addition.h"
+#include "copy_body_internal.h"
 #include "division_usize_internal.h"
 #include "guarded_usize_internal.h"
 #include "h_origin_internal.h"
@@ -280,7 +281,7 @@ arm_arithmetic_owner(const NLCheckedFragment *arm, NLCheckedNodeId id,
                      const NLCheckedFragment *if_parent)
 {
     if (c != arm->context || arm->body_owner || arm->arm_count ||
-        nl_control_exits_count(arm->exits))
+        (!if_parent && nl_control_exits_count(arm->exits)))
         return NULL;
     size_t function;
     const NLCheckedFragment *body =
@@ -298,8 +299,11 @@ arm_arithmetic_owner(const NLCheckedFragment *arm, NLCheckedNodeId id,
         body, body->root, nl_syntax_tree_root(fn->body->syntax), site));
     const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
     if (!conditional || conditional->kind != NL_CHECKED_IF ||
-        conditional->normal_arms != 2 || conditional->item_count != 2 ||
-        conditional->terminates || conditional->tail ||
+        (!if_parent && conditional->normal_arms != 2) ||
+        (if_parent && conditional->normal_arms != 1 &&
+         conditional->normal_arms != 2) ||
+        conditional->item_count != 2 || conditional->terminates ||
+        (conditional->normal_arms == 1) != (conditional->tail != 0) ||
         conditional->result_count != 1 || conditional->type != type || !src ||
         src->kind != NL_SYNTAX_IF || !span_equal(conditional->span, src->span))
         return NULL;
@@ -317,9 +321,13 @@ arm_arithmetic_owner(const NLCheckedFragment *arm, NLCheckedNodeId id,
                                     : src->data.conditional.else_block;
     const NLSyntaxView *block_src = nl_syntax_node_view(block);
     const NLCheckedNodeView *root = nl_checked_node_view(arm, arm->root);
-    if (!root || root->kind != NL_CHECKED_IF_ARM || root->terminates ||
-        root->type != type || root->result_count != 1 || !block_src ||
+    if (!root || root->kind != NL_CHECKED_IF_ARM || !block_src ||
         !span_equal(root->span, block_src->span) ||
+        (root->terminates
+             ? !if_parent || conditional->normal_arms != 1 || root->type ||
+                   root->result_count || !nl_control_exits_count(arm->exits)
+             : root->type != type || root->result_count != 1 ||
+                   nl_control_exits_count(arm->exits)) ||
         block_expression_source(arm, root->initializer, block, id) != event)
         return NULL;
     return fn->body;
@@ -1508,8 +1516,10 @@ static bool division_call_values(const NLCheckedFragment *f,
         argument = arg->next_argument;
     }
     NLValueId result, body_result;
+    const NLCheckedNodeId body_node =
+        helper->joined_result ? helper->joined_result : helper->result;
     return !argument && node_value(f, c, id, &result) &&
-           node_value(helper->body, c, helper->result, &body_result) &&
+           node_value(helper->body, c, body_node, &body_result) &&
            result == body_result;
 }
 
@@ -1600,7 +1610,7 @@ typedef struct {
     const NLCheckedFragment *body, *if_parent;
     const NLSemanticContext *context;
     const NLFunctionEntry *function;
-    size_t depth, calls, arms, *remaining;
+    size_t depth, calls, arms, returns, *remaining;
     NLSymbolId formal;
     unsigned char origins[NL_SEMANTIC_MAX_ENTRIES];
 } QuantityBody;
@@ -1790,6 +1800,98 @@ static QuantityOrigin quantity_expression_at(QuantityBody *b,
     return quantity_arithmetic_at(b, id, syntax);
 }
 
+static bool quantity_same_state(const NLSemanticContext *a,
+                                const NLSemanticContext *b)
+{
+    if (!a || !b || a->domain_count || b->domain_count || a->region_count ||
+        b->region_count || a->type_count != b->type_count ||
+        a->place_count != b->place_count ||
+        a->binding_count != b->binding_count ||
+        a->value_count != b->value_count || a->scope_count != b->scope_count ||
+        a->function_count != b->function_count || !nl_copy_same_types(a, b) ||
+        nl_sem_validate(a) != NL_CHECK_OK || nl_sem_validate(b) != NL_CHECK_OK)
+        return false;
+    if ((a->place_count &&
+         memcmp(a->places, b->places, a->place_count * sizeof(*a->places))) ||
+        (a->value_count &&
+         memcmp(a->values, b->values, a->value_count * sizeof(*a->values))) ||
+        (a->scope_count &&
+         memcmp(a->scopes, b->scopes, a->scope_count * sizeof(*a->scopes))))
+        return false;
+    for (size_t i = 0; i < a->binding_count; ++i)
+        if (memcmp(&a->bindings[i].view, &b->bindings[i].view,
+                   sizeof(a->bindings[i].view)))
+            return false;
+    return true;
+}
+
+static bool quantity_same_scalar(const NLSemanticContext *a, NLValueId x,
+                                 const NLSemanticContext *b, NLValueId y)
+{
+    const NLTypeId a_type = nl_semantic_core_type(a, NL_TYPE_USIZE);
+    const NLTypeId b_type = nl_semantic_core_type(b, NL_TYPE_USIZE);
+    NLSemanticValueView first, second;
+    return quantity(a, x, a_type) && quantity(b, y, b_type) &&
+           nl_semantic_value_view(a, x, &first) &&
+           nl_semantic_value_view(b, y, &second) &&
+           first.scalar_known == second.scalar_known &&
+           first.scalar_value == second.scalar_value;
+}
+
+static bool quantity_return_arm_package(const NLCheckedFragment *arm,
+                                        const NLSemanticContext *c,
+                                        const NLCheckedNodeView *root,
+                                        const NLCheckedNodeView *ret,
+                                        const NLSyntaxView *source,
+                                        const NLCheckedFragment *parent,
+                                        const NLFunctionEntry *expected)
+{
+    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLTypeId boolean = nl_semantic_core_type(c, NL_TYPE_BOOL);
+    const NLControlExitView *edge = nl_control_exit_view(arm->exits, 0);
+    const NLControlExitView *outer =
+        parent ? nl_control_exit_view(parent->exits, 0) : NULL;
+    const NLSemanticContext *edge_world =
+        edge ? nl_control_state_context((NLControlState *)edge->state) : NULL;
+    const NLSemanticContext *outer_world =
+        outer ? nl_control_state_context((NLControlState *)outer->state) : NULL;
+    NLValueId value;
+    size_t function = 0;
+    const NLCheckedFragment *owner =
+        nl_h_custody_if_body(arm, parent, &function);
+    const NLFunctionEntry *local =
+        owner ? nl_quantity_usize_function(c, function, 2) : NULL;
+    /* Only this ordered signature admits the one-normal Return path. */
+    return parent && parent->context && parent->function_target &&
+           owner == parent && local && expected &&
+           local->parameters[0] == type && local->parameters[1] == boolean &&
+           local->body == parent->body_owner && local->body == expected->body &&
+           local->count == expected->count && parent->source == arm->source &&
+           local->body->source == arm->source && arm->if_parent == parent &&
+           root->terminates && !root->tail && !root->type &&
+           !root->result_count && ret && ret->kind == NL_CHECKED_RETURN &&
+           ret->terminates && !ret->next_item && !ret->result_count &&
+           span_equal(ret->span, source->span) &&
+           nl_control_exits_count(arm->exits) == 1 &&
+           nl_control_exits_count(parent->exits) == 1 && edge && outer &&
+           edge->kind == NL_EXIT_RETURN && outer->kind == NL_EXIT_RETURN &&
+           nl_control_target_same(edge->target, parent->function_target) &&
+           nl_control_target_same(outer->target, parent->function_target) &&
+           edge->count == 1 && outer->count == 1 && edge_world && outer_world &&
+           edge->values[0].type ==
+               nl_semantic_core_type(edge_world, NL_TYPE_USIZE) &&
+           outer->values[0].type ==
+               nl_semantic_core_type(outer_world, NL_TYPE_USIZE) &&
+           node_value(arm, c, ret->initializer, &value) &&
+           ret->returned.type == type && ret->returned.value == value &&
+           root->returned.type == type && root->returned.value == value &&
+           quantity_same_state(c, edge_world) &&
+           quantity_same_state(edge_world, outer_world) &&
+           quantity_same_scalar(c, value, edge_world, edge->values[0].value) &&
+           quantity_same_scalar(edge_world, edge->values[0].value, outer_world,
+                                outer->values[0].value);
+}
+
 static bool quantity_items_at(QuantityBody *b, const NLCheckedNodeView *root,
                               const NLSyntaxView *source,
                               QuantityResult *result)
@@ -1812,9 +1914,11 @@ static bool quantity_items_at(QuantityBody *b, const NLCheckedNodeView *root,
             (node->next_item && node->next_item <= id))
             return false;
         if (src->kind == NL_SYNTAX_RETURN) {
-            if (b->if_parent || nl_syntax_next_argument(item) ||
-                result->syntax ||
-                !(b->function->count
+            if (nl_syntax_next_argument(item) || result->syntax ||
+                !(b->if_parent
+                      ? quantity_return_arm_package(f, c, root, node, src,
+                                                    b->if_parent, b->function)
+                  : b->function->count
                       ? division_return_package(f, c, root, node, src)
                       : division_unit_return(f, root, node, src,
                                              nl_semantic_unit_type(c))))
@@ -1871,10 +1975,23 @@ static bool quantity_tail_at(const QuantityBody *b, NLCheckedNodeId block,
                              NLCheckedNodeId tail, NLValueId *value)
 {
     NLValueId tail_value;
-    return !nl_control_exits_count(b->body->exits) &&
-           node_value(b->body, b->context, block, value) &&
-           node_value(b->body, b->context, tail, &tail_value) &&
-           *value == tail_value;
+    if (nl_control_exits_count(b->body->exits) != b->returns ||
+        !node_value(b->body, b->context, block, value) ||
+        !node_value(b->body, b->context, tail, &tail_value))
+        return false;
+    if (!b->returns)
+        return *value == tail_value;
+    NLSemanticValueView joined, normal;
+    const NLTypeId type = nl_semantic_core_type(b->context, NL_TYPE_USIZE);
+    return b->returns == 1 && tail_value != SIZE_MAX &&
+           *value == tail_value + 1 && quantity(b->context, *value, type) &&
+           quantity(b->context, tail_value, type) &&
+           nl_semantic_value_view(b->context, *value, &joined) &&
+           nl_semantic_value_view(b->context, tail_value, &normal) &&
+           (joined.carrier == NL_CARRIER_LOOSE ||
+            joined.carrier == NL_CARRIER_ENDED) &&
+           !joined.scalar_known && !joined.scalar_value &&
+           normal.carrier == NL_CARRIER_ENDED;
 }
 
 static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
@@ -1884,10 +2001,15 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
     const NLCheckedNodeView *node = nl_checked_node_view(f, id);
     NLValueId joined;
     if (b->if_parent || src->kind != NL_SYNTAX_IF ||
-        !span_equal(node->span, src->span) || node->normal_arms != 2 ||
-        node->item_count != 2 || node->tail ||
+        !span_equal(node->span, src->span) ||
+        (node->normal_arms != 1 && node->normal_arms != 2) ||
+        node->item_count != 2 ||
+        (node->normal_arms == 1) != (node->tail != 0) ||
+        (node->normal_arms == 1 && b->returns) ||
         !node_value(f, b->context, id, &joined) ||
-        b->context->values[joined - 1].scalar_known || *b->remaining < 2)
+        (node->normal_arms == 2 &&
+         b->context->values[joined - 1].scalar_known) ||
+        *b->remaining < 2)
         return QUANTITY_UNSEEN;
     QuantityOrigin origin = quantity_condition_at(
         b, node->initializer, src->data.conditional.condition);
@@ -1898,6 +2020,7 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
     const NLSyntaxNode *blocks[] = {src->data.conditional.then_block,
                                     src->data.conditional.else_block};
     *b->remaining -= 2;
+    size_t returned = 0, normal = 0, normal_index = 0;
     for (size_t index = 0; index < 2; ++index) {
         const NLCheckedFragment *arm = nl_checked_if_arm(f, id, index);
         if (!arm || arm->if_parent != f || arm->if_parent_node != id ||
@@ -1908,10 +2031,9 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
             return QUANTITY_UNSEEN;
         const NLCheckedNodeView *root = nl_checked_node_view(arm, arm->root);
         const NLSyntaxView *block = nl_syntax_node_view(blocks[index]);
-        NLValueId arm_value, tail;
+        NLValueId arm_value = 0, tail;
         if (!root || root->kind != NL_CHECKED_IF_ARM || !block ||
-            !span_equal(root->span, block->span) ||
-            !node_value(arm, arm->context, arm->root, &arm_value))
+            !span_equal(root->span, block->span))
             return QUANTITY_UNSEEN;
         /* Reuse only the prefix locals in the fork. Each arm validates its
          * own bindings and calls, and exports its runtime value alone. */
@@ -1923,10 +2045,21 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
         QuantityResult result;
         if (!quantity_items_at(&branch,
                                nl_checked_node_view(arm, root->initializer),
-                               block, &result) ||
-            !quantity_tail_at(&branch, root->initializer, result.id, &tail) ||
-            tail != arm_value)
+                               block, &result))
             return QUANTITY_UNSEEN;
+        if (result.returned) {
+            if (!root->terminates || ++returned != 1)
+                return QUANTITY_UNSEEN;
+        } else {
+            if (root->terminates ||
+                !node_value(arm, arm->context, arm->root, &arm_value) ||
+                !quantity_tail_at(&branch, root->initializer, result.id,
+                                  &tail) ||
+                tail != arm_value)
+                return QUANTITY_UNSEEN;
+            ++normal;
+            normal_index = index;
+        }
         const QuantityOrigin incoming =
             quantity_expression_at(&branch, result.id, result.syntax);
         if (!incoming || branch.calls != arm->body_count)
@@ -1934,6 +2067,31 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
         if (incoming > origin)
             origin = incoming;
         b->formal = branch.formal;
+    }
+    if ((node->normal_arms == 2 && (normal != 2 || returned)) ||
+        (node->normal_arms == 1 && (normal != 1 || returned != 1)))
+        return QUANTITY_UNSEEN;
+    if (node->normal_arms == 1) {
+        const NLSyntaxNode *block = blocks[normal_index];
+        const NLCheckedNodeView *replay_root =
+            nl_checked_node_view(f, node->tail);
+        QuantityBody replay = *b;
+        replay.calls = replay.arms = 0;
+        replay.if_parent = NULL;
+        QuantityResult result;
+        NLValueId replay_value, result_value;
+        if (!replay_root || replay_root->kind != NL_CHECKED_BLOCK ||
+            !quantity_items_at(&replay, replay_root, nl_syntax_node_view(block),
+                               &result) ||
+            result.returned ||
+            !node_value(f, b->context, node->tail, &replay_value) ||
+            !node_value(f, b->context, result.id, &result_value) ||
+            replay_value != result_value || replay_value != joined ||
+            quantity_expression_at(&replay, result.id, result.syntax) ==
+                QUANTITY_UNSEEN ||
+            replay.calls || replay.arms)
+            return QUANTITY_UNSEEN;
+        ++b->returns;
     }
     b->arms += 2;
     return origin >= QUANTITY_FROM_FORMAL ? QUANTITY_FROM_RESULT
@@ -1997,7 +2155,8 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
                                  .function = function,
                                  .formal = b.formal,
                                  .second_formal = formals[1],
-                                 .result = result.id};
+                                 .result = result.id,
+                                 .joined_result = b.returns ? f->root : 0};
     return true;
 }
 

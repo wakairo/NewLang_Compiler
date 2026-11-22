@@ -121,11 +121,32 @@ static bool division_emit_if(DivisionText *t, const NLCheckedFragment *f,
         const NLCheckedNodeView *root = nl_checked_node_view(arm, arm->root);
         const NLCheckedNodeView *block =
             nl_checked_node_view(arm, root->initializer);
-        if (!division_emit_items(t, arm, root->initializer, indent + 4) ||
-            !division_emit_evaluation(t, arm, block->tail, indent + 4) ||
-            !division_text_append(t, "%*snl_if_%zu = ", indent + 4, "", id) ||
-            !division_emit_expression(t, arm, block->tail) ||
-            !division_text_append(t, ";\n%*s%s\n", indent, "",
+        if (!block ||
+            !division_emit_items(t, arm, root->initializer, indent + 4))
+            return false;
+        if (root->terminates) {
+            NLCheckedNodeId item = block->first_item;
+            const NLCheckedNodeView *ret = NULL;
+            while (item) {
+                ret = nl_checked_node_view(arm, item);
+                if (!ret)
+                    return false;
+                item = ret->next_item;
+            }
+            if (n->normal_arms != 1 || !ret || ret->kind != NL_CHECKED_RETURN ||
+                !division_emit_evaluation(t, arm, ret->initializer,
+                                          indent + 4) ||
+                !division_text_append(t, "%*sreturn ", indent + 4, "") ||
+                !division_emit_expression(t, arm, ret->initializer) ||
+                !division_text_append(t, ";\n"))
+                return false;
+        } else if (!division_emit_evaluation(t, arm, block->tail, indent + 4) ||
+                   !division_text_append(t, "%*snl_if_%zu = ", indent + 4, "",
+                                         id) ||
+                   !division_emit_expression(t, arm, block->tail) ||
+                   !division_text_append(t, ";\n"))
+            return false;
+        if (!division_text_append(t, "%*s%s\n", indent, "",
                                   a == 0 ? "} else {" : "}"))
             return false;
     }
