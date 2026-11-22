@@ -72,6 +72,8 @@ static bool span_equal(NLSourceSpan a, NLSourceSpan b)
 }
 
 static bool quantity(const NLSemanticContext *, NLValueId, NLTypeId);
+static bool node_value(const NLCheckedFragment *, const NLSemanticContext *,
+                       NLCheckedNodeId, NLValueId *);
 
 static bool fixed_divisor(NLUsizeOperation operation)
 {
@@ -275,10 +277,57 @@ static const NLSyntaxNode *block_expression_source(const NLCheckedFragment *f,
     return NULL;
 }
 
-static const NLFunctionBody *
-arm_arithmetic_owner(const NLCheckedFragment *arm, NLCheckedNodeId id,
-                     const NLSyntaxNode *event, const NLSemanticContext *c,
-                     const NLCheckedFragment *if_parent)
+/* The retained tail is one call with this exact division as its sole actual.
+ * Its own callee seal is already committed when the enclosing body is planned.
+ */
+static bool arm_division_tail_actual(const NLCheckedFragment *arm,
+                                     NLCheckedNodeId block_id,
+                                     const NLSyntaxNode *block_source,
+                                     const NLUsizeAdditionProof *proof)
+{
+    const NLCheckedNodeView *block = nl_checked_node_view(arm, block_id);
+    const NLSyntaxView *src = nl_syntax_node_view(block_source);
+    if (!block || block->kind != NL_CHECKED_BLOCK || block->terminates ||
+        !src || src->kind != NL_SYNTAX_BLOCK ||
+        !span_equal(block->span, src->span))
+        return false;
+    const NLCheckedNodeId tail = block->tail;
+    const NLCheckedNodeId id = proof->issued.node;
+    const NLCheckedNodeView *call = nl_checked_node_view(arm, tail);
+    const NLSyntaxView *call_source = nl_syntax_node_view(src->data.block.tail);
+    if (!call || call->kind != NL_CHECKED_REGISTERED_CALL ||
+        !call->body_backed || call->argument_count != 1 ||
+        call->first_argument != id || tail >= id || !call_source ||
+        call_source->kind != NL_SYNTAX_EXPR_CALL ||
+        call_source->data.call.arguments != proof->syntax ||
+        nl_syntax_next_argument(proof->syntax) ||
+        !span_equal(call->span, call_source->span) ||
+        !span_equal(call->name, call_source->data.call.callee))
+        return false;
+    const NLSemanticContext *c = arm->context;
+    const NLFunctionEntry *fn =
+        nl_quantity_usize_function(c, call->function, 1);
+    const NLCheckedNodeView *actual = nl_checked_node_view(arm, id);
+    NLValueId actual_value, call_result, block_result, arm_result;
+    if (!fn || !token(arm->source, call->name, fn->name) || !actual ||
+        actual->kind != NL_CHECKED_USIZE_DIVISION || actual->next_argument ||
+        actual->parameter_type != fn->parameters[0] ||
+        !node_value(arm, c, id, &actual_value) ||
+        actual_value != proof->issued.result ||
+        !node_value(arm, c, tail, &call_result) ||
+        !node_value(arm, c, block_id, &block_result) ||
+        !node_value(arm, c, arm->root, &arm_result) ||
+        call_result != block_result || block_result != arm_result ||
+        !nl_h_custody_result_valid(arm, tail))
+        return false;
+    const NLCheckedFragment *callee = nl_h_custody_observe_body(arm, tail);
+    return callee && callee->context == c && callee->body_owner == fn->body &&
+           callee->source == fn->body->source;
+}
+
+static const NLFunctionBody *arm_arithmetic_owner(
+    const NLCheckedFragment *arm, const NLUsizeAdditionProof *proof,
+    const NLSemanticContext *c, const NLCheckedFragment *if_parent)
 {
     if (c != arm->context || arm->body_owner || arm->arm_count ||
         (!if_parent && nl_control_exits_count(arm->exits)))
@@ -327,8 +376,14 @@ arm_arithmetic_owner(const NLCheckedFragment *arm, NLCheckedNodeId id,
              ? !if_parent || conditional->normal_arms != 1 || root->type ||
                    root->result_count || !nl_control_exits_count(arm->exits)
              : root->type != type || root->result_count != 1 ||
-                   nl_control_exits_count(arm->exits)) ||
-        block_expression_source(arm, root->initializer, block, id) != event)
+                   nl_control_exits_count(arm->exits)))
+        return NULL;
+    const NLSyntaxNode *event = block_expression_source(
+        arm, root->initializer, block, proof->issued.node);
+    if (event != proof->syntax &&
+        (event || conditional->normal_arms != 2 ||
+         proof->operation != NL_USIZE_DIVIDE ||
+         !arm_division_tail_actual(arm, root->initializer, block, proof)))
         return NULL;
     return fn->body;
 }
@@ -346,7 +401,7 @@ static bool operation_valid_at(const NLCheckedFragment *f, NLCheckedNodeId id,
         return false;
     const NLFunctionBody *owner = f->body_owner;
     if (fixed_divisor(operation) && (if_parent || !nl_h_custody_is_body(f)))
-        owner = arm_arithmetic_owner(f, id, p->syntax, c, if_parent);
+        owner = arm_arithmetic_owner(f, p, c, if_parent);
     if (!owner || f->source != owner->source)
         return false;
     bool registered = false, retained = false;
