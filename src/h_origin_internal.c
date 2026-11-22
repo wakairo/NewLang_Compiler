@@ -453,16 +453,19 @@ NLCheckStatus nl_h_custody_link_usize_actual(NLCheckedFragment *f,
     const NLCheckedNodeView *early = nl_checked_node_view(f, first);
     const NLCheckedNodeView *later = nl_checked_node_view(f, second);
     const NLTypeId type = nl_semantic_core_type(f->context, NL_TYPE_USIZE);
-    if (!type || !outer || outer->kind != NL_CHECKED_REGISTERED_CALL ||
-        !outer->body_backed || outer->terminates || outer->result_count ||
+    const NLTypeId boolean = nl_semantic_core_type(f->context, NL_TYPE_BOOL);
+    if (!type || !boolean || !outer ||
+        outer->kind != NL_CHECKED_REGISTERED_CALL || !outer->body_backed ||
+        outer->terminates || outer->result_count ||
         outer->argument_count != 1 || outer->first_argument != first ||
         !early || early->kind != NL_CHECKED_REGISTERED_CALL ||
         !early->body_backed || early->next_argument || early->terminates ||
         early->type != type || early->parameter_type != type ||
         early->result_count != 1 || early->results[0].type != type || !later ||
-        later->next_argument || later->terminates || later->type != type ||
-        later->parameter_type != type || later->result_count != 1 ||
-        later->results[0].type != type)
+        later->next_argument || later->terminates ||
+        (later->type != type && later->type != boolean) ||
+        later->parameter_type != later->type || later->result_count != 1 ||
+        later->results[0].type != later->type)
         return NL_CHECK_INTERNAL_ERROR;
 
     for (CustodyEdge *e = p->edges; e; e = e->next) {

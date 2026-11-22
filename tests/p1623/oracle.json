@@ -1,0 +1,58 @@
+{
+  "typed-selection": {
+    "owned": [
+      ["route_stock", [["usize", 46], ["bool", 1]], null],
+      ["route_stock", [["usize", 46], ["bool", 0]], null]
+    ],
+    "bools": [["main", "pick", 1], ["main", "backup", 1],
+              ["route_stock", "mode", 1], ["route_stock", "mode", 0]],
+    "joins": ["route_stock", "route_stock"],
+    "trace": [
+      "ARG 0 usize 46", "ARG 1 bool 1", "CALL route_stock 46 1", "COND 1",
+      "DISCARD 9", "DISCARD 9",
+      "ARG 0 usize 46", "ARG 1 bool 0", "CALL route_stock 46 0", "COND 0",
+      "DISCARD 1", "DISCARD 9", "DISCARD 1", "DISCARD 1"
+    ]
+  },
+  "nested-mixed": {
+    "owned": [
+      ["choose", [["bool", 0], ["usize", 15]], null],
+      ["choose", [["bool", null], ["usize", 23]], null],
+      ["choose", [["bool", 1], ["usize", 15]], null],
+      ["downstream", [["usize", null], ["bool", 1]], null]
+    ],
+    "bools": [["main", "sense", null]],
+    "joins": ["choose", "choose", "choose"],
+    "linked": ["downstream"],
+    "trace": [
+      "ARG 0 bool 0", "CALL split 62", "ARG 1 usize 15", "CALL choose 0 15", "COND 0",
+      "ARG 0 bool 1", "ARG 1 usize 23", "CALL choose 1 23", "COND 1",
+      "ARG 0 bool 1", "CALL split 62", "ARG 1 usize 15", "CALL choose 1 15", "COND 1",
+      "ARG 0 usize 15", "ARG 1 bool 1", "CALL downstream 15 1", "DISCARD 15",
+      "DISCARD 1", "DISCARD 23", "DISCARD 15", "DISCARD 7"
+    ]
+  },
+  "caller-policy": {
+    "bools": [["main", "pick", 1], ["main", "backup", 1], ["main", "try_other", 0]],
+    "joins": ["main", "main"],
+    "trace": ["COND 1", "CALL sections 46", "COND 0", "DISCARD 9", "DISCARD 1", "DISCARD 1"]
+  },
+  "equal-typed": {
+    "owned": [
+      ["keep_edge", [["usize", 1], ["bool", 1]], null],
+      ["keep_edge", [["usize", 1], ["bool", 1]], null]
+    ],
+    "bools": [["main", "request", 1], ["main", "copied", 1]],
+    "joins": ["keep_edge", "keep_edge"],
+    "trace": [
+      "ARG 0 usize 1", "ARG 1 bool 1", "CALL keep_edge 1 1", "COND 1",
+      "ARG 0 usize 1", "ARG 1 bool 1", "CALL keep_edge 1 1", "COND 1",
+      "DISCARD 1", "DISCARD 1"
+    ]
+  },
+  "swapped-types": {"check": 3, "emit": 3, "diagnostic": "[P3-TYPE-MISMATCH]"},
+  "integer-as-bool": {"check": 3, "emit": 3, "diagnostic": "[P3-TYPE-MISMATCH]"},
+  "wrong-arity": {"check": 3, "emit": 3, "diagnostic": "[P3-ARITY]"},
+  "invalid-other-arm": {"check": 3, "emit": 3, "diagnostic": "[USIZE-REMAINDER-ZERO]"},
+  "two-bools": {"check": 0, "emit": 4, "diagnostic": "[V1-BACKEND-UNSUPPORTED]"}
+}
