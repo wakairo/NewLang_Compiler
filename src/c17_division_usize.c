@@ -225,6 +225,8 @@ static bool division_emit_helper(DivisionText *text,
     const size_t count = helper->second_formal ? 2 : 1;
     const NLFunctionEntry *fn =
         nl_quantity_usize_function(c, helper->function, count);
+    if (!fn && count == 1)
+        fn = nl_quantity_bool_function(c, helper->function);
     if (!fn)
         return false;
     const char *first = division_scalar_type(c, fn->parameters[0]);

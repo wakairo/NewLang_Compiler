@@ -32,6 +32,9 @@ bool nl_remainder_usize_call_valid(const NLCheckedFragment *, NLCheckedNodeId,
 const NLFunctionEntry *nl_quantity_usize_function(const NLSemanticContext *,
                                                   size_t function,
                                                   size_t parameters);
+/* Signature only. Admission still requires the complete composed plan. */
+const NLFunctionEntry *nl_quantity_bool_function(const NLSemanticContext *,
+                                                 size_t function);
 bool nl_quantity_usize_body_at(const NLCheckedFragment *,
                                const NLSemanticContext *, size_t, bool entry,
                                NLDivisionUsizePlan *);
