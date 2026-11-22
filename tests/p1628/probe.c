@@ -90,18 +90,16 @@ static bool implicit_entry(Program *p)
             nl_quantity_usize_call_valid(p->entry, site, &plan) &&
             plan.body == body && plan.function == call->function &&
             !plan.formal && !plan.second_formal && !plan.result &&
-            call->kind == NL_CHECKED_REGISTERED_CALL &&
-            !call->argument_count && !call->first_argument &&
+            call->kind == NL_CHECKED_REGISTERED_CALL && !call->argument_count &&
+            !call->first_argument &&
             call->type == nl_semantic_unit_type(p->context) &&
             !call->result_count && !call->results[0].value &&
-            body->context == p->context && body->source &&
-            body->body_owner);
+            body->context == p->context && body->source && body->body_owner);
     const NLFunctionEntry *function =
         &p->context->functions[call->function - 1];
     const NLSyntaxView *source =
         nl_syntax_node_view(nl_syntax_tree_root(function->body->syntax));
-    const NLCheckedNodeView *block =
-        nl_checked_node_view(body, body->root);
+    const NLCheckedNodeView *block = nl_checked_node_view(body, body->root);
     REQUIRE(!strcmp(function->name, "main") && !function->count &&
             function->result == nl_semantic_unit_type(p->context) &&
             body->body_owner == function->body &&
@@ -126,11 +124,9 @@ static bool withheld(const NLCheckedFragment *entry, NLCheckStatus expected)
     memcpy(original, sentinel, sizeof(original));
     char *output = sentinel;
     size_t length = sizeof(sentinel);
-    const NLCheckStatus status =
-        nl_quantity_usize_c17(entry, &output, &length);
-    const bool unchanged =
-        output == sentinel && length == sizeof(sentinel) &&
-        !memcmp(sentinel, original, sizeof(sentinel));
+    const NLCheckStatus status = nl_quantity_usize_c17(entry, &output, &length);
+    const bool unchanged = output == sentinel && length == sizeof(sentinel) &&
+                           !memcmp(sentinel, original, sizeof(sentinel));
     if (output != sentinel)
         free(output);
     return status == expected && unchanged;
@@ -190,15 +186,15 @@ static bool identity(Program *p)
 
     char *retry = NULL;
     size_t retry_size = 0;
-    const bool restored =
-        implicit_entry(p) && emit(p->entry, &retry, &retry_size) &&
-        retry_size == size && !memcmp(retry, pristine, size);
+    const bool restored = implicit_entry(p) &&
+                          emit(p->entry, &retry, &retry_size) &&
+                          retry_size == size && !memcmp(retry, pristine, size);
     free(retry);
     free(pristine);
     printf("IDENTITY fake_tail=%d foreign_source=%d missing_owner=%d "
            "foreign_world=%d fake_result=%d byte_retry=%d\n",
-           fake_tail, foreign_source, missing_owner, foreign_world,
-           fake_result, restored);
+           fake_tail, foreign_source, missing_owner, foreign_world, fake_result,
+           restored);
     return fake_tail && foreign_source && missing_owner && foreign_world &&
            fake_result && restored;
 }
@@ -229,9 +225,8 @@ static bool staging_oom(Program *p)
     fail_after = 0;
     char *retry = NULL;
     size_t retry_size = 0;
-    const bool restored =
-        emit(p->entry, &retry, &retry_size) && retry_size == size &&
-        !memcmp(retry, pristine, size);
+    const bool restored = emit(p->entry, &retry, &retry_size) &&
+                          retry_size == size && !memcmp(retry, pristine, size);
     free(retry);
     free(pristine);
     printf("OOM staging visits=%zu hits=%zu bytes=%zu no_clobber=%d "

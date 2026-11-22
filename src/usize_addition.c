@@ -1613,9 +1613,8 @@ typedef struct {
 
 static bool division_unit_expression(const NLCheckedFragment *, NLCheckedNodeId,
                                      const NLSyntaxNode *, NLTypeId);
-static bool division_unit_completion(const NLCheckedFragment *,
-                                     NLCheckedNodeId, const NLSyntaxNode *,
-                                     NLTypeId);
+static bool division_unit_completion(const NLCheckedFragment *, NLCheckedNodeId,
+                                     const NLSyntaxNode *, NLTypeId);
 static bool division_unit_return(const NLCheckedFragment *,
                                  const NLCheckedNodeView *,
                                  const NLCheckedNodeView *,
