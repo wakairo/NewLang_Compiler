@@ -26,6 +26,17 @@ READ_DECLS = (b'NLCheckStatus nl_captured_read_begin(NLCheckedFragment *, NLChec
               b'bool nl_node_unit_arm_frame(const NLSemanticContext *,\n'
               b'                            const NLSemanticContext *, NLValueId,\n'
               b'                            const NLCheckedNodeView *);\n')
+RETURN_RECEIPT_FIELD = (
+    b'    NLQuantityReturnReceipt\n'
+    b'        *quantity_return_receipt; /* owned private CHECK issuance record */\n'
+)
+RETURN_RECEIPT_PRECEDING = (
+    b'    NLControlTarget *function_target; /* owned boundary identity, if any */\n'
+)
+RETURN_RECEIPT_FOLLOWING = b'    const NLSource *source;\n'
+RETURN_RECEIPT_PLACEMENT = (
+    RETURN_RECEIPT_PRECEDING + RETURN_RECEIPT_FIELD + RETURN_RECEIPT_FOLLOWING
+)
 
 # The adopted arithmetic file was byte-identical from P605 through this base.
 # Keep its real Git blob in the test tree for offline/shallow CI. It is used only
@@ -54,6 +65,10 @@ def historical_addition(repo, frozen):
     return historical
 
 def project(data):
+    # P1643 adds one private attachment to NLCheckedFragment. Admit it only
+    # between the original function target and source, for this checksum view.
+    assert data.count(RETURN_RECEIPT_FIELD) == data.count(RETURN_RECEIPT_PLACEMENT) == 1
+    data = data.replace(RETURN_RECEIPT_FIELD, b'', 1)
     # P1387 changes only private storage spelling here. This projection is
     # confined to old checksum fixtures, never CHECK or the live compiler.
     # Keep their original full-header digest and every old corruption gate.
@@ -93,6 +108,17 @@ def main():
         'duplicate_capture_storage': header + CAPTURED_FIELD,
         'misplaced_capture_storage': header.replace(CAPTURED_FIELD, b'', 1) + CAPTURED_FIELD,
         'wrong_capture_capacity': header.replace(CAPTURED_FIELD, CAPTURED_FIELD.replace(b'NL_CAPTURED_CHANGE_CAPACITY', b'8'), 1),
+        'missing_return_receipt': header.replace(RETURN_RECEIPT_FIELD, b'', 1),
+        'duplicate_return_receipt': header + RETURN_RECEIPT_FIELD,
+        'misplaced_return_receipt': header.replace(
+            RETURN_RECEIPT_PLACEMENT,
+            RETURN_RECEIPT_PRECEDING + RETURN_RECEIPT_FOLLOWING + RETURN_RECEIPT_FIELD, 1),
+        'wrong_return_receipt_spelling': header.replace(
+            RETURN_RECEIPT_FIELD,
+            RETURN_RECEIPT_FIELD.replace(b'quantity_return_receipt', b'quantity_return_proof'), 1),
+        'wrong_return_receipt_type': header.replace(
+            RETURN_RECEIPT_FIELD,
+            RETURN_RECEIPT_FIELD.replace(b'NLQuantityReturnReceipt', b'NLForeignReturnReceipt'), 1),
     }.items():
         try:
             project(bad)
