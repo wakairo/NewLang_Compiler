@@ -1827,7 +1827,6 @@ static QuantityOrigin quantity_arithmetic_at(QuantityBody *b,
         const NLCheckedNodeView *numerator =
             nl_checked_node_view(b->body, proof->issued.operands[0]);
         return b->if_parent && b->local_numerator &&
-                       proof->operation == NL_USIZE_DIVIDE &&
                        numerator->kind == NL_CHECKED_IDENTIFIER &&
                        numerator->symbol == b->local_numerator
                    ? QUANTITY_FROM_RESULT
@@ -2226,7 +2225,8 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
 }
 
 /* The unary Bool selector has two literal arms, optionally bound before
- * return, or two divisions after its one literal numerator binding. */
+ * return, or a matching fixed-divisor operation in both arms after its
+ * one literal numerator binding. */
 static bool quantity_bool_choice(const NLCheckedFragment *f,
                                  const NLCheckedNodeView *root,
                                  NLSymbolId formal, NLSymbolId *local_numerator)
@@ -2260,6 +2260,7 @@ static bool quantity_bool_choice(const NLCheckedFragment *f,
     if (!condition || condition->kind != NL_CHECKED_IDENTIFIER ||
         condition->symbol != formal)
         return false;
+    NLCheckedKind tail_kind = NL_CHECKED_USIZE_LITERAL;
     for (size_t i = 0; i != 2; ++i) {
         const NLCheckedFragment *arm = nl_checked_if_arm(f, id, i);
         const NLCheckedNodeView *arm_root =
@@ -2268,9 +2269,15 @@ static bool quantity_bool_choice(const NLCheckedFragment *f,
             arm_root ? nl_checked_node_view(arm, arm_root->initializer) : NULL;
         const NLCheckedNodeView *tail =
             block ? nl_checked_node_view(arm, block->tail) : NULL;
-        if (!block || block->item_count || !tail ||
-            tail->kind != (*local_numerator ? NL_CHECKED_USIZE_DIVISION
-                                            : NL_CHECKED_USIZE_LITERAL))
+        if (!block || block->item_count || !tail)
+            return false;
+        if (*local_numerator && i == 0) {
+            if (tail->kind != NL_CHECKED_USIZE_DIVISION &&
+                tail->kind != NL_CHECKED_USIZE_REMAINDER)
+                return false;
+            tail_kind = tail->kind;
+        }
+        if (tail->kind != tail_kind)
             return false;
     }
     return true;
