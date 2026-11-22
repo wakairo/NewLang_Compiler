@@ -44,6 +44,7 @@ typedef enum {
     NL_EXIT_BREAK
 } NLControlExitKind;
 typedef struct NLControlExits NLControlExits;
+typedef struct NLQuantityReturnReceipt NLQuantityReturnReceipt;
 const NLControlExits *
 nl_checked_control_exits(const NLCheckedFragment *); /* borrowed */
 typedef struct {
@@ -84,6 +85,17 @@ NLCheckStatus nl_control_exits_union(NLControlExits **, const NLControlExits *);
 size_t nl_control_exits_count(const NLControlExits *);
 const NLControlExitView *nl_control_exit_view(const NLControlExits *, size_t);
 void nl_control_exits_destroy(NLControlExits *);
+/* CHECK-only receipt for the bounded one-Return quantity profile. The body
+ * owns this opaque record. It retains the original target and private control
+ * lineage, while borrowing the caller/body/arm tree that dominates it. */
+NLCheckStatus nl_control_quantity_return_receipt_issue(
+    NLCheckedFragment *body, const NLCheckedFragment *caller,
+    NLCheckedNodeId call, const NLSemanticContext *working);
+bool nl_control_quantity_return_receipt_valid(
+    const NLCheckedFragment *body, const NLSemanticContext *working,
+    const NLCheckedFragment *arm, const NLCheckedNodeView *root,
+    const NLCheckedNodeView *returned);
+void nl_control_quantity_return_receipt_destroy(NLCheckedFragment *body);
 typedef struct {
     bool normal;
     NLControlExits *exits;

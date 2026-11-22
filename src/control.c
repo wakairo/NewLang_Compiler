@@ -1,4 +1,5 @@
 #include "control.h"
+#include "h_origin_internal.h"
 #include "semantic_internal.h"
 #include "stutter_control_internal.h"
 
@@ -42,6 +43,20 @@ typedef struct {
 struct NLControlExits {
     size_t count;
     Exit *edges;
+};
+struct NLQuantityReturnReceipt {
+    const NLCheckedFragment *owner, *caller, *arm;
+    const NLFunctionBody *plan;
+    const NLSource *source;
+    const NLSemanticContext *working, *arm_world;
+    const NLCheckedNodeView *arm_nodes;
+    NLControlTarget *target;
+    Origin *origin;
+    NLCheckedNodeId call, conditional, arm_root, block, returned, operand;
+    size_t function, arm_index;
+    NLCheckedResult slot;
+    unsigned char return_seal[sizeof(NLCheckedNodeView)];
+    unsigned char operand_seal[sizeof(NLCheckedNodeView)];
 };
 struct NLLoopHeader {
     NLControlState *entry;
@@ -598,6 +613,290 @@ bool nl_control_exits_only_return(const NLControlExits *s,
             return false;
     return true;
 }
+
+typedef struct {
+    const NLCheckedFragment *arm;
+    const NLCheckedNodeView *returned, *operand;
+    const NLControlExitView *arm_edge;
+    NLCheckedNodeId conditional, block_id, returned_id, operand_id;
+    size_t arm_index;
+    NLCheckedResult slot;
+} QuantityReturnShape;
+
+static bool quantity_return_signature(const NLCheckedFragment *body,
+                                      const NLCheckedFragment *caller,
+                                      NLCheckedNodeId call,
+                                      const NLSemanticContext *working,
+                                      const NLFunctionEntry **out)
+{
+    const NLCheckedNodeView *node = nl_checked_node_view(caller, call);
+    if (!body || !caller || !working || !node ||
+        node->kind != NL_CHECKED_REGISTERED_CALL || !node->body_backed ||
+        node->function == 0 || node->function > working->function_count)
+        return false;
+    const NLFunctionEntry *fn = &working->functions[node->function - 1];
+    const NLTypeId usize = nl_semantic_core_type(working, NL_TYPE_USIZE);
+    const NLTypeId boolean = nl_semantic_core_type(working, NL_TYPE_BOOL);
+    if (fn->kind != NL_CHECKED_REGISTERED_CALL || fn->count != 2 ||
+        !fn->parameters || fn->parameters[0] != usize ||
+        fn->parameters[1] != boolean || fn->result != usize ||
+        fn->caller_effects || fn->hidden_dependencies || fn->owner_receiver ||
+        fn->owner_producer || fn->custody_recipient || !fn->body ||
+        body->body_owner != fn->body || body->source != fn->body->source ||
+        !body->context)
+        return false;
+    *out = fn;
+    return true;
+}
+
+static bool quantity_return_shape(const NLCheckedFragment *body,
+                                  const NLCheckedFragment *caller,
+                                  NLCheckedNodeId call,
+                                  const NLSemanticContext *working,
+                                  QuantityReturnShape *out)
+{
+    const NLFunctionEntry *fn = NULL;
+    if (!quantity_return_signature(body, caller, call, working, &fn) ||
+        body->arm_count != 2 || !body->function_target ||
+        nl_control_exits_count(body->exits) != 1)
+        return false;
+    NLCheckedNodeId conditional = 0;
+    for (NLCheckedNodeId id = 1; id <= body->count; ++id) {
+        const NLCheckedNodeView *node = nl_checked_node_view(body, id);
+        if (node && node->kind == NL_CHECKED_IF && node->normal_arms == 1) {
+            if (conditional)
+                return false;
+            conditional = id;
+        }
+    }
+    if (!conditional)
+        return false;
+    const NLCheckedFragment *arms[2] = {
+        nl_checked_if_arm(body, conditional, 0),
+        nl_checked_if_arm(body, conditional, 1)};
+    if (!arms[0] || !arms[1] || arms[0] == arms[1])
+        return false;
+    const NLCheckedNodeView *roots[2] = {
+        nl_checked_node_view(arms[0], arms[0]->root),
+        nl_checked_node_view(arms[1], arms[1]->root)};
+    if (!roots[0] || !roots[1] || roots[0]->kind != NL_CHECKED_IF_ARM ||
+        roots[1]->kind != NL_CHECKED_IF_ARM ||
+        roots[0]->terminates == roots[1]->terminates)
+        return false;
+    const size_t arm_index = roots[0]->terminates ? 0 : 1;
+    const size_t normal_index = arm_index ^ 1u;
+    const NLCheckedFragment *arm = arms[arm_index];
+    const NLCheckedNodeView *block =
+        nl_checked_node_view(arm, roots[arm_index]->initializer);
+    if (nl_control_exits_count(arm->exits) != 1 ||
+        nl_control_exits_count(arms[normal_index]->exits) != 0 ||
+        arm->if_parent != body || arm->if_parent_node != conditional ||
+        arm->if_arm_index != arm_index || arm->source != body->source ||
+        roots[arm_index]->initializer == 0 ||
+        roots[arm_index]->initializer >= arm->root || !block ||
+        block->kind != NL_CHECKED_BLOCK || !block->terminates)
+        return false;
+    NLCheckedNodeId returned_id = 0;
+    for (NLCheckedNodeId id = 1; id <= arm->count; ++id) {
+        const NLCheckedNodeView *node = nl_checked_node_view(arm, id);
+        if (node && node->kind == NL_CHECKED_RETURN) {
+            if (returned_id)
+                return false;
+            returned_id = id;
+        }
+    }
+    const NLCheckedNodeView *returned = nl_checked_node_view(arm, returned_id);
+    const NLCheckedNodeView *operand =
+        returned ? nl_checked_node_view(arm, returned->initializer) : NULL;
+    const NLCheckedResult slot =
+        returned ? returned->returned : (NLCheckedResult){0};
+    const NLControlExitView *arm_edge = nl_control_exit_view(arm->exits, 0);
+    const NLControlExitView *outer_edge = nl_control_exit_view(body->exits, 0);
+    NLCheckedNodeId invocation = 0;
+    size_t function = 0;
+    const NLCheckedFragment *actual_caller =
+        nl_h_custody_body_caller(body, body->context, &invocation);
+    const NLCheckedFragment *actual_body =
+        nl_h_custody_if_body(arm, body, &function);
+    if (!returned_id || !returned || !operand || !returned->terminates ||
+        returned->initializer == 0 || returned->initializer >= returned_id ||
+        returned->result_count || returned->next_item ||
+        operand->result_count != 1 || slot.type == 0 || slot.value == 0 ||
+        operand->results[0].type != slot.type ||
+        operand->results[0].value != slot.value ||
+        roots[arm_index]->returned.type != slot.type ||
+        roots[arm_index]->returned.value != slot.value ||
+        slot.type != nl_semantic_core_type(arm->context, NL_TYPE_USIZE) ||
+        !arm_edge || !outer_edge || arm_edge->kind != NL_EXIT_RETURN ||
+        outer_edge->kind != NL_EXIT_RETURN || arm_edge->count != 1 ||
+        outer_edge->count != 1 || arm_edge->values[0].type != slot.type ||
+        arm_edge->values[0].value != slot.value ||
+        outer_edge->values[0].type != slot.type ||
+        outer_edge->values[0].value != slot.value ||
+        arm_edge->target != body->function_target ||
+        outer_edge->target != body->function_target || !arm_edge->state ||
+        !outer_edge->state ||
+        ((const NLControlState *)arm_edge->state)->origin !=
+            ((const NLControlState *)outer_edge->state)->origin ||
+        actual_caller != caller || invocation != call || actual_body != body ||
+        function != nl_checked_node_view(caller, call)->function ||
+        fn->body != body->body_owner)
+        return false;
+    *out = (QuantityReturnShape){.arm = arm,
+                                 .returned = returned,
+                                 .operand = operand,
+                                 .arm_edge = arm_edge,
+                                 .conditional = conditional,
+                                 .block_id = roots[arm_index]->initializer,
+                                 .returned_id = returned_id,
+                                 .operand_id = returned->initializer,
+                                 .arm_index = arm_index,
+                                 .slot = slot};
+    return true;
+}
+
+NLCheckStatus nl_control_quantity_return_receipt_issue(
+    NLCheckedFragment *body, const NLCheckedFragment *caller,
+    NLCheckedNodeId call, const NLSemanticContext *working)
+{
+    QuantityReturnShape shape;
+    if (!quantity_return_shape(body, caller, call, working, &shape))
+        return NL_CHECK_OK;
+    if (body->quantity_return_receipt)
+        return NL_CHECK_INTERNAL_ERROR;
+    NLQuantityReturnReceipt *receipt = malloc(sizeof(*receipt));
+    if (!receipt)
+        return NL_CHECK_OUT_OF_MEMORY;
+    *receipt = (NLQuantityReturnReceipt){
+        .owner = body,
+        .caller = caller,
+        .arm = shape.arm,
+        .plan = body->body_owner,
+        .source = body->source,
+        .working = body->context,
+        .arm_world = shape.arm->context,
+        .arm_nodes = shape.arm->nodes,
+        .call = call,
+        .conditional = shape.conditional,
+        .arm_root = shape.arm->root,
+        .block = shape.block_id,
+        .returned = shape.returned_id,
+        .operand = shape.operand_id,
+        .function = nl_checked_node_view(caller, call)->function,
+        .arm_index = shape.arm_index,
+        .slot = shape.slot};
+    memcpy(receipt->return_seal, shape.returned, sizeof(receipt->return_seal));
+    memcpy(receipt->operand_seal, shape.operand, sizeof(receipt->operand_seal));
+    NLCheckStatus status = retain_target(body->function_target);
+    if (status != NL_CHECK_OK) {
+        free(receipt);
+        return status;
+    }
+    receipt->target = body->function_target;
+    Origin *origin = ((const NLControlState *)shape.arm_edge->state)->origin;
+    if (!origin || origin->owners == SIZE_MAX) {
+        nl_control_target_destroy(receipt->target);
+        free(receipt);
+        return origin ? NL_CHECK_RESOURCE_LIMIT : NL_CHECK_INTERNAL_ERROR;
+    }
+    ++origin->owners;
+    receipt->origin = origin;
+    body->quantity_return_receipt = receipt;
+    return NL_CHECK_OK;
+}
+
+static bool quantity_return_slot_valid(const NLControlExitView *edge,
+                                       const NLQuantityReturnReceipt *receipt)
+{
+    if (!edge || edge->kind != NL_EXIT_RETURN || edge->count != 1 ||
+        edge->target != receipt->target || !edge->state ||
+        edge->values[0].type != receipt->slot.type ||
+        edge->values[0].value != receipt->slot.value)
+        return false;
+    const NLControlState *state = (const NLControlState *)edge->state;
+    const NLSemanticContext *world = state->context;
+    return state->origin == receipt->origin && world &&
+           receipt->slot.value <= world->value_count &&
+           world->values[receipt->slot.value - 1].type == receipt->slot.type &&
+           world->values[receipt->slot.value - 1].carrier == NL_CARRIER_LOOSE;
+}
+
+bool nl_control_quantity_return_receipt_valid(const NLCheckedFragment *body,
+                                              const NLSemanticContext *working,
+                                              const NLCheckedFragment *arm,
+                                              const NLCheckedNodeView *root,
+                                              const NLCheckedNodeView *returned)
+{
+    const NLQuantityReturnReceipt *receipt =
+        body ? body->quantity_return_receipt : NULL;
+    if (!working || !arm || !receipt || receipt->owner != body ||
+        receipt->working != body->context || receipt->caller == NULL ||
+        receipt->arm != arm || receipt->plan != body->body_owner ||
+        receipt->source != body->source ||
+        receipt->target != body->function_target ||
+        receipt->arm_world != arm->context ||
+        receipt->arm_nodes != arm->nodes || receipt->arm_root != arm->root ||
+        root != nl_checked_node_view(arm, receipt->block) ||
+        returned != nl_checked_node_view(arm, receipt->returned) ||
+        nl_checked_if_arm(body, receipt->conditional, receipt->arm_index) !=
+            arm)
+        return false;
+    NLCheckedNodeId call = 0;
+    size_t function = 0;
+    const NLCheckedFragment *caller =
+        nl_h_custody_body_caller(body, body->context, &call);
+    const NLCheckedFragment *owner = nl_h_custody_if_body(arm, body, &function);
+    const NLCheckedNodeView *call_node =
+        caller ? nl_checked_node_view(caller, call) : NULL;
+    const NLCheckedNodeView *operand =
+        nl_checked_node_view(arm, receipt->operand);
+    const NLCheckedNodeView *arm_root =
+        nl_checked_node_view(arm, receipt->arm_root);
+    if (caller != receipt->caller || call != receipt->call || owner != body ||
+        function != receipt->function || !call_node ||
+        !call_node->body_backed ||
+        call_node->kind != NL_CHECKED_REGISTERED_CALL ||
+        call_node->function != receipt->function || receipt->function == 0 ||
+        receipt->function > working->function_count ||
+        working->functions[receipt->function - 1].body != receipt->plan ||
+        arm->if_parent != body || arm->if_parent_node != receipt->conditional ||
+        arm->if_arm_index != receipt->arm_index || !root || !returned ||
+        !operand || !arm_root || arm_root->kind != NL_CHECKED_IF_ARM ||
+        !arm_root->terminates || arm_root->initializer != receipt->block ||
+        arm_root->returned.type != receipt->slot.type ||
+        arm_root->returned.value != receipt->slot.value ||
+        memcmp(receipt->return_seal, returned, sizeof(receipt->return_seal)) ||
+        memcmp(receipt->operand_seal, operand, sizeof(receipt->operand_seal)) ||
+        returned->initializer != receipt->operand ||
+        returned->returned.type != receipt->slot.type ||
+        returned->returned.value != receipt->slot.value ||
+        operand->result_count != 1 ||
+        operand->results[0].type != receipt->slot.type ||
+        operand->results[0].value != receipt->slot.value ||
+        root->returned.type != receipt->slot.type ||
+        root->returned.value != receipt->slot.value ||
+        !quantity_return_slot_valid(nl_control_exit_view(arm->exits, 0),
+                                    receipt) ||
+        !quantity_return_slot_valid(nl_control_exit_view(body->exits, 0),
+                                    receipt))
+        return false;
+    return nl_control_exits_count(arm->exits) == 1 &&
+           nl_control_exits_count(body->exits) == 1;
+}
+
+void nl_control_quantity_return_receipt_destroy(NLCheckedFragment *body)
+{
+    NLQuantityReturnReceipt *receipt =
+        body ? body->quantity_return_receipt : NULL;
+    if (!receipt)
+        return;
+    body->quantity_return_receipt = NULL;
+    nl_control_target_destroy(receipt->target);
+    if (--receipt->origin->owners == 0)
+        free(receipt->origin);
+    free(receipt);
+}
+
 NLCheckStatus nl_control_function_boundary(const NLControlExits *s,
                                            const NLControlTarget *target,
                                            NLTypeId result, size_t scopes,

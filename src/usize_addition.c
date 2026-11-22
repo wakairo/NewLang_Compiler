@@ -1819,8 +1819,7 @@ static bool quantity_same_state(const NLSemanticContext *a,
          memcmp(a->scopes, b->scopes, a->scope_count * sizeof(*a->scopes))))
         return false;
     for (size_t i = 0; i < a->binding_count; ++i)
-        if (memcmp(&a->bindings[i].view, &b->bindings[i].view,
-                   sizeof(a->bindings[i].view)))
+        if (!same_binding(a->bindings[i].view, b->bindings[i].view))
             return false;
     return true;
 }
@@ -1872,6 +1871,8 @@ static bool quantity_return_arm_package(const NLCheckedFragment *arm,
            !root->result_count && ret && ret->kind == NL_CHECKED_RETURN &&
            ret->terminates && !ret->next_item && !ret->result_count &&
            span_equal(ret->span, source->span) &&
+           nl_control_quantity_return_receipt_valid(parent, c, arm, root,
+                                                    ret) &&
            nl_control_exits_count(arm->exits) == 1 &&
            nl_control_exits_count(parent->exits) == 1 && edge && outer &&
            edge->kind == NL_EXIT_RETURN && outer->kind == NL_EXIT_RETURN &&

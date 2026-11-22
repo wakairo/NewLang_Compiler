@@ -52,6 +52,7 @@ void nl_checked_destroy(NLCheckedFragment *fragment)
             fragment->destroy_owner_entry(fragment->owner_entry);
         if (fragment->destroy_captured_post != NULL)
             fragment->destroy_captured_post(fragment->captured_post);
+        nl_control_quantity_return_receipt_destroy(fragment);
         nl_control_exits_destroy(fragment->loop_returns);
         nl_control_exits_destroy(fragment->exits);
         nl_control_target_destroy(fragment->function_target);
