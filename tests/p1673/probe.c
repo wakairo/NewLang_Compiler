@@ -207,7 +207,8 @@ typedef enum {
     ENTRY_PRODUCT,
     HELPER_PRODUCT,
     LOCAL_PRODUCT,
-    COMPOSED_PRODUCT
+    COMPOSED_PRODUCT,
+    GUARDED_PRODUCT
 } ProductRoute;
 
 static bool composed_product_result(const NLDivisionUsizePlan *helper)
@@ -233,12 +234,49 @@ static bool composed_product_result(const NLDivisionUsizePlan *helper)
            receipt.remainder == 19;
 }
 
+static bool guarded_product_result(const NLCheckedFragment *caller,
+                                   NLCheckedNodeId id,
+                                   const NLDivisionUsizePlan *helper)
+{
+    const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
+    const NLCheckedNodeView *arg =
+        call ? nl_checked_node_view(caller, call->first_argument) : NULL;
+    const NLCheckedFragment *body = helper->body;
+    const NLCheckedFragment *arm = nl_checked_if_arm(body, helper->result, 0);
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(arm, nl_checked_root(arm));
+    const NLCheckedNodeView *block =
+        root ? nl_checked_node_view(arm, root->initializer) : NULL;
+    const NLCheckedNodeView *product =
+        block ? nl_checked_node_view(arm, block->tail) : NULL;
+    const NLCheckedNodeView *left =
+        product ? nl_checked_node_view(arm, product->first_argument) : NULL;
+    NLSemanticBindingView formal;
+    NLSemanticValueView input, result;
+    return arg && left && product->kind == NL_CHECKED_USIZE_MULTIPLICATION &&
+           left->symbol == helper->formal &&
+           left->value_use == NL_VALUE_COPIED &&
+           nl_semantic_binding_view(body->context, helper->formal, &formal) &&
+           formal.value == arg->results[0].value &&
+           nl_semantic_value_view(body->context, formal.value, &input) &&
+           !input.scalar_known &&
+           nl_semantic_value_view(arm->context, product->results[0].value,
+                                  &result) &&
+           product->has_scalar_result && !product->scalar_result.known &&
+           !result.scalar_known && formal.type == result.type &&
+           nl_h_custody_result_valid(caller, id) &&
+           !nl_usize_multiplication_valid(arm, block->tail);
+}
+
 static bool retry_product(const NLCheckedFragment *body, ProductRoute route)
 {
     NLDivisionUsizePlan helper;
     if (body->body_count != 1 ||
-        !nl_quantity_usize_call_valid(body, body->body_calls[0], &helper) ||
-        helper.formal)
+        !nl_quantity_usize_call_valid(body, body->body_calls[0], &helper))
+        return false;
+    if (route == GUARDED_PRODUCT)
+        return guarded_product_result(body, body->body_calls[0], &helper);
+    if (helper.formal)
         return false;
     if (route == HELPER_PRODUCT)
         return nl_usize_multiplication_valid(helper.body, helper.result);
@@ -428,6 +466,8 @@ int main(int argc, char **argv)
         route = LOCAL_PRODUCT;
     else if (!strcmp(argv[1], "composed-product-oom"))
         route = COMPOSED_PRODUCT;
+    else if (!strcmp(argv[1], "guarded-product-oom"))
+        route = GUARDED_PRODUCT;
     else
         return 2;
     return check_oom(argv[2], route) && named_oom(argv[2]) ? 0 : 1;

@@ -2915,11 +2915,11 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
      * successor. Keep even concrete replays conservative: CHECK visits both
      * arms, including the unselected x==MAX true arm. */
     const NLSymbolId formal = check->function_binding_floor + 1;
-    const bool guarded = !subtraction && !multiplication && !check->loop &&
-                         check->in_function_body &&
-                         nl_guarded_usize_permitted(
-                             check->artifact, c, check->guard_entry,
-                             check->body_function, formal, source, left, right);
+    const bool guarded =
+        !subtraction && !check->loop && check->in_function_body &&
+        nl_guarded_usize_permitted(check->artifact, c, check->guard_entry,
+                                   check->body_function, formal, source, left,
+                                   right);
     const bool known = !guarded && a.scalar_known && b.scalar_known;
     if (a.dependencies != NL_DEPENDENCY_FREE ||
         b.dependencies != NL_DEPENDENCY_FREE || a.value_dependency_count != 0 ||
