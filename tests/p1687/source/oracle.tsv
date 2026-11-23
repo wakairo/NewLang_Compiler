@@ -1,0 +1,12 @@
+case	CHECK	BASE_C17	CANDIDATE_C17	native helper results in call order	refusal diagnostic
+copy-tail	0	4	0	589	-
+copy-chain	0	4	0	589,589,589	-
+zero	0	4	0	0	-
+boundary	0	4	0	18446744073709551615	-
+direct-control	0	0	0	589	-
+overflow	3	3	3	-	USIZE-MULTIPLICATION-OVERFLOW
+wrong-type	3	3	3	-	USIZE-MULTIPLICATION-TYPE
+unknown	3	3	3	-	USIZE-MULTIPLICATION-PRECISION
+same-value-decoy	0	4	4	-	V1-BACKEND-UNSUPPORTED
+two-products	0	4	4	-	V1-BACKEND-UNSUPPORTED
+explicit-return	0	4	4	-	V1-BACKEND-UNSUPPORTED

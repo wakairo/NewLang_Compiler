@@ -2356,9 +2356,8 @@ static bool quantity_bool_choice(const NLCheckedFragment *f,
                                   : QUANTITY_BOOL_MATCHING_ARITHMETIC);
 }
 
-/* The zero-formal helper uses local atom declarations and one direct normal
- * product tail. The ordinary walker and receipt validator check their IDs,
- * Copy origins, source, numeric facts and result in the same invocation. */
+/* A zero-formal helper has one product, either at the tail or in a let
+ * reached by the normal tail. All other initializers are ordinary atoms. */
 static bool quantity_product_shape(const NLCheckedFragment *f,
                                    const NLCheckedNodeView *root,
                                    const NLSyntaxView *source)
@@ -2367,21 +2366,58 @@ static bool quantity_product_shape(const NLCheckedFragment *f,
         source->kind != NL_SYNTAX_BLOCK)
         return false;
     const NLSyntaxView *tail = nl_syntax_node_view(source->data.block.tail);
-    if (!tail || tail->kind != NL_SYNTAX_USIZE_MULTIPLICATION)
+    if (!tail || (tail->kind != NL_SYNTAX_USIZE_MULTIPLICATION &&
+                  tail->kind != NL_SYNTAX_EXPR_NAME))
         return false;
+    bool product = tail->kind == NL_SYNTAX_USIZE_MULTIPLICATION;
     size_t count = 0;
     for (const NLSyntaxNode *item = source->data.block.items; item;
          item = nl_syntax_next_argument(item)) {
         const NLSyntaxView *binding = nl_syntax_node_view(item);
-        if (++count > root->item_count || binding->kind != NL_SYNTAX_BINDING)
+        if (++count > root->item_count || !binding ||
+            binding->kind != NL_SYNTAX_BINDING)
             return false;
         const NLSyntaxView *init =
             nl_syntax_node_view(binding->data.binding.initializer);
-        if (!init || (init->kind != NL_SYNTAX_USIZE_LITERAL &&
-                      init->kind != NL_SYNTAX_EXPR_NAME))
+        if (!init)
+            return false;
+        if (init->kind == NL_SYNTAX_USIZE_MULTIPLICATION && !product)
+            product = true;
+        else if (init->kind != NL_SYNTAX_USIZE_LITERAL &&
+                 init->kind != NL_SYNTAX_EXPR_NAME)
             return false;
     }
-    return true;
+    return product;
+}
+
+static bool quantity_product_tail(QuantityBody *b, const QuantityResult *result)
+{
+    NLValueId value;
+    if (!quantity_tail_at(b, b->body->root, result->id, &value))
+        return false;
+    const NLSyntaxView *tail = nl_syntax_node_view(result->syntax);
+    if (tail->kind == NL_SYNTAX_USIZE_MULTIPLICATION)
+        return quantity_arithmetic_at(b, result->id, result->syntax) ==
+               QUANTITY_INDEPENDENT;
+    if (quantity_atom_at(b, result->id, result->syntax) != QUANTITY_INDEPENDENT)
+        return false;
+
+    /* The item walker has matched each initializer to its actual binding
+     * and validated its Copy or arithmetic receipt in this invocation.
+     * Follow the selected tail back through those bindings by identity. */
+    const NLCheckedFragment *f = b->body;
+    NLCheckedNodeId id = result->id;
+    const NLCheckedNodeView *node = nl_checked_node_view(f, id);
+    while (node && node->kind == NL_CHECKED_IDENTIFIER) {
+        const NLCheckedNodeId binding =
+            division_local_before(f, id, node->symbol);
+        const NLCheckedNodeView *item = nl_checked_node_view(f, binding);
+        if (!item || item->initializer >= binding)
+            return false;
+        id = item->initializer;
+        node = nl_checked_node_view(f, id);
+    }
+    return node && node->kind == NL_CHECKED_USIZE_MULTIPLICATION;
 }
 
 static bool composed_quantity_body(const NLCheckedFragment *f,
@@ -2420,10 +2456,7 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
         !quantity_items_at(&b, root, source, &result))
         return false;
     if (product) {
-        NLValueId value;
-        if (!quantity_tail_at(&b, f->root, result.id, &value) ||
-            quantity_arithmetic_at(&b, result.id, result.syntax) !=
-                QUANTITY_INDEPENDENT)
+        if (!quantity_product_tail(&b, &result))
             return false;
     } else if (fn->count) {
         NLValueId value;

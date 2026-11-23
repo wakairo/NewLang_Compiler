@@ -201,7 +201,36 @@ static bool dependencies(const char *path)
     return true;
 }
 
-static bool check_oom(const char *path, bool helper_product)
+static bool retry_product(const NLCheckedFragment *body, bool local)
+{
+    NLDivisionUsizePlan helper;
+    if (body->body_count != 1 ||
+        !nl_quantity_usize_call_valid(body, body->body_calls[0], &helper) ||
+        helper.formal)
+        return false;
+    if (!local)
+        return nl_usize_multiplication_valid(helper.body, helper.result);
+
+    const NLCheckedNodeView *tail =
+        nl_checked_node_view(helper.body, helper.result);
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(helper.body, nl_checked_root(helper.body));
+    if (!tail || tail->kind != NL_CHECKED_IDENTIFIER || !root)
+        return false;
+    for (NLCheckedNodeId id = root->first_item; id;) {
+        const NLCheckedNodeView *item = nl_checked_node_view(helper.body, id);
+        if (!item)
+            return false;
+        if (item->symbol == tail->symbol)
+            return item->kind == NL_CHECKED_BINDING &&
+                   nl_usize_multiplication_valid(helper.body,
+                                                 item->initializer);
+        id = item->next_item;
+    }
+    return false;
+}
+
+static bool check_oom(const char *path, bool helper_product, bool local)
 {
     TestNode original = {0};
     CHECK(node_checked_load(path, &original));
@@ -239,12 +268,7 @@ static bool check_oom(const char *path, bool helper_product)
             nl_checked_call_body(out, nl_checked_root(out));
         CHECK(body);
         if (helper_product) {
-            CHECK(body->body_count == 1);
-            const NLCheckedNodeId id = body->body_calls[0];
-            NLDivisionUsizePlan helper;
-            CHECK(nl_quantity_usize_call_valid(body, id, &helper) &&
-                  !helper.formal &&
-                  nl_usize_multiplication_valid(helper.body, helper.result));
+            CHECK(retry_product(body, local));
         } else {
             CHECK(body->usize_additions);
         }
@@ -360,8 +384,11 @@ int main(int argc, char **argv)
         return 2;
     if (!strcmp(argv[1], "receipt"))
         return receipts(argv[2]) && dependencies(argv[3]) ? 0 : 1;
-    const bool helper_product = !strcmp(argv[1], "helper-oom");
+    const bool local = !strcmp(argv[1], "local-product-oom");
+    const bool helper_product = local || !strcmp(argv[1], "helper-oom");
     if (helper_product || !strcmp(argv[1], "oom"))
-        return check_oom(argv[2], helper_product) && named_oom(argv[2]) ? 0 : 1;
+        return check_oom(argv[2], helper_product, local) && named_oom(argv[2])
+                   ? 0
+                   : 1;
     return 2;
 }
