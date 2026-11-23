@@ -29,3 +29,8 @@ add_test(NAME p1654_native_scope.unit COMMAND "${Python3_EXECUTABLE}" -B
     "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_BINARY_DIR}/p1654-native"
     "${p1654_source}" "${p1654_discard}" "${p1658_source}" "${p1662_source}"
     "${p1668_divide}" "${p1668_remainder}")
+
+foreach(case mixed mixed-reverse)
+    add_test(NAME p1677_${case}_rollback.unit COMMAND p1654_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1677/${case}.nl" "UINTMAX_C(8)" "joined")
+endforeach()

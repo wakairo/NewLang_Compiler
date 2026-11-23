@@ -2256,10 +2256,18 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
                                           : QUANTITY_INDEPENDENT;
 }
 
-/* A private shape check. The ordinary IF planner still validates both
- * source arms, branch worlds, conditions, and the joined result. */
+typedef enum {
+    QUANTITY_BOOL_LITERAL_TAILS,
+    QUANTITY_BOOL_MATCHING_ARITHMETIC,
+    QUANTITY_BOOL_JOINED_NUMERATOR_ARITHMETIC
+} QuantityBoolArmProfile;
+
+/* A private shape check. The ordinary IF planner still validates each
+ * source operation, operands, branch world, condition, and the joined result.
+ */
 static bool quantity_bool_arms(const NLCheckedFragment *f, NLCheckedNodeId id,
-                               NLSymbolId formal, bool arithmetic)
+                               NLSymbolId formal,
+                               QuantityBoolArmProfile profile)
 {
     const NLCheckedNodeView *choice = nl_checked_node_view(f, id);
     if (!choice || choice->kind != NL_CHECKED_IF || choice->normal_arms != 2)
@@ -2280,14 +2288,18 @@ static bool quantity_bool_arms(const NLCheckedFragment *f, NLCheckedNodeId id,
             block ? nl_checked_node_view(arm, block->tail) : NULL;
         if (!block || block->item_count || !tail)
             return false;
-        if (arithmetic && i == 0) {
+        if (profile == QUANTITY_BOOL_LITERAL_TAILS) {
+            if (tail->kind != NL_CHECKED_USIZE_LITERAL)
+                return false;
+        } else {
             if (tail->kind != NL_CHECKED_USIZE_DIVISION &&
                 tail->kind != NL_CHECKED_USIZE_REMAINDER)
                 return false;
+            if (profile == QUANTITY_BOOL_MATCHING_ARITHMETIC && i != 0 &&
+                tail->kind != tail_kind)
+                return false;
             tail_kind = tail->kind;
         }
-        if (tail->kind != tail_kind)
-            return false;
     }
     return true;
 }
@@ -2311,7 +2323,8 @@ static bool quantity_bool_choice(const NLCheckedFragment *f,
         const NLCheckedNodeView *init =
             nl_checked_node_view(f, item->initializer);
         if (joined_numerator) {
-            if (!quantity_bool_arms(f, item->initializer, formal, false))
+            if (!quantity_bool_arms(f, item->initializer, formal,
+                                    QUANTITY_BOOL_LITERAL_TAILS))
                 return false;
             *local_numerator = item->symbol;
         } else if (init && init->kind == NL_CHECKED_USIZE_LITERAL) {
@@ -2323,8 +2336,13 @@ static bool quantity_bool_choice(const NLCheckedFragment *f,
             return false;
         }
     }
-    return (!joined_numerator || *local_numerator) &&
-           quantity_bool_arms(f, id, formal, *local_numerator != 0);
+    if (!*local_numerator)
+        return !joined_numerator &&
+               quantity_bool_arms(f, id, formal, QUANTITY_BOOL_LITERAL_TAILS);
+    return quantity_bool_arms(f, id, formal,
+                              joined_numerator
+                                  ? QUANTITY_BOOL_JOINED_NUMERATOR_ARITHMETIC
+                                  : QUANTITY_BOOL_MATCHING_ARITHMETIC);
 }
 
 static bool composed_quantity_body(const NLCheckedFragment *f,

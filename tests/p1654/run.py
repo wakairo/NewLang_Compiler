@@ -79,12 +79,13 @@ def native(cli, source, raw, *, discard=False, fixed=None, values=None):
                 c.stdout,
             )
         assert numerator
+        if isinstance(operator, bytes):
+            operator = (operator,) * len(divisors)
         actual = re.findall(
-            numerator[1] + b" " + re.escape(operator)
-            + rb" \(\(size_t\)UINTMAX_C\((\d+)\)\);",
+            numerator[1] + rb" ([/%]) \(\(size_t\)UINTMAX_C\((\d+)\)\);",
             c.stdout,
         )
-        assert actual == divisors
+        assert actual == list(zip(operator, divisors, strict=True))
     observed = raw / "observed.c"
     observed.write_bytes(observe(c.stdout, discard))
     compilers = (shutil.which("gcc"), shutil.which("clang-23") or shutil.which("clang"))
@@ -199,7 +200,17 @@ def joined_fixtures(divide, remainder):
         yield name + "-discard", text.replace("let first = ", "").replace(
             "let second = ", ""
         ), partial(observer, discard=True)
-    yield "joined-mixed-arms", divide.replace("stock / usize(5)", "stock % usize(5)"), scope
+    for name, text, operators, values in (
+        ("joined-mixed-arms", divide.replace("stock / usize(5)", "stock % usize(5)"),
+         (b"/", b"%"), b"13\n4\n"),
+        ("joined-reverse-mixed-arms", remainder.replace("stock % usize(5)", "stock / usize(5)"),
+         (b"%", b"/"), b"6\n10\n"),
+    ):
+        observer = partial(native, fixed=(None, operators, [b"7", b"5"]), values=values)
+        yield name, text, observer
+        yield name + "-discard", text.replace("let first = ", "").replace(
+            "let second = ", ""
+        ), partial(observer, discard=True)
     yield "joined-alias", divide.replace(
         "    };", "    };\n    let alias = stock;", 1
     ).replace("stock /", "alias /"), scope
