@@ -1714,7 +1714,7 @@ typedef struct {
     const NLSemanticContext *context;
     const NLFunctionEntry *function;
     size_t depth, calls, arms, returns, *remaining;
-    NLSymbolId formal;
+    NLSymbolId formal, local_numerator;
     unsigned char origins[NL_SEMANTIC_MAX_ENTRIES];
 } QuantityBody;
 
@@ -1818,10 +1818,21 @@ static QuantityOrigin quantity_arithmetic_at(QuantityBody *b,
         quantity_atom_at(b, proof->issued.operands[0], src->data.equality.left);
     if (!left)
         return QUANTITY_UNSEEN;
-    if (fixed_divisor(proof->operation))
-        return !b->function->count || left >= QUANTITY_FROM_FORMAL
+    if (fixed_divisor(proof->operation)) {
+        if (!b->function->count || left >= QUANTITY_FROM_FORMAL)
+            return QUANTITY_FROM_RESULT;
+        /* This symbol names the unary Bool helper's sole literal binding.
+         * The atom and the issued operation above still verify this arm's use.
+         */
+        const NLCheckedNodeView *numerator =
+            nl_checked_node_view(b->body, proof->issued.operands[0]);
+        return b->if_parent && b->local_numerator &&
+                       proof->operation == NL_USIZE_DIVIDE &&
+                       numerator->kind == NL_CHECKED_IDENTIFIER &&
+                       numerator->symbol == b->local_numerator
                    ? QUANTITY_FROM_RESULT
                    : QUANTITY_UNSEEN;
+    }
     const QuantityOrigin right = quantity_atom_at(b, proof->issued.operands[1],
                                                   src->data.equality.right);
     if (!right)
@@ -2214,11 +2225,11 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
                                           : QUANTITY_INDEPENDENT;
 }
 
-/* The sole-bool profile is one normal IF, optionally held in one result
- * binding. The generic quantity planner still authenticates all its nodes. */
+/* The unary Bool selector has two literal arms, optionally bound before
+ * return, or two divisions after its one literal numerator binding. */
 static bool quantity_bool_choice(const NLCheckedFragment *f,
                                  const NLCheckedNodeView *root,
-                                 NLSymbolId formal)
+                                 NLSymbolId formal, NLSymbolId *local_numerator)
 {
     if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
         f->arm_count != 2 || f->body_count || root->item_count > 1 ||
@@ -2229,10 +2240,17 @@ static bool quantity_bool_choice(const NLCheckedFragment *f,
         const NLCheckedNodeView *item =
             nl_checked_node_view(f, root->first_item);
         const NLCheckedNodeView *tail = nl_checked_node_view(f, id);
-        if (!item || item->kind != NL_CHECKED_BINDING || !tail ||
-            tail->kind != NL_CHECKED_IDENTIFIER || tail->symbol != item->symbol)
+        if (!item || item->kind != NL_CHECKED_BINDING || !tail)
             return false;
-        id = item->initializer;
+        const NLCheckedNodeView *init =
+            nl_checked_node_view(f, item->initializer);
+        if (init && init->kind == NL_CHECKED_USIZE_LITERAL)
+            *local_numerator = item->symbol;
+        else if (tail->kind == NL_CHECKED_IDENTIFIER &&
+                 tail->symbol == item->symbol)
+            id = item->initializer;
+        else
+            return false;
     }
     const NLCheckedNodeView *choice = nl_checked_node_view(f, id);
     if (!choice || choice->kind != NL_CHECKED_IF || choice->normal_arms != 2)
@@ -2251,7 +2269,8 @@ static bool quantity_bool_choice(const NLCheckedFragment *f,
         const NLCheckedNodeView *tail =
             block ? nl_checked_node_view(arm, block->tail) : NULL;
         if (!block || block->item_count || !tail ||
-            tail->kind != NL_CHECKED_USIZE_LITERAL)
+            tail->kind != (*local_numerator ? NL_CHECKED_USIZE_DIVISION
+                                            : NL_CHECKED_USIZE_LITERAL))
             return false;
     }
     return true;
@@ -2279,7 +2298,8 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
     const bool boolean = fn == nl_quantity_bool_function(c, function);
     if (boolean || fn->count == NL_QUANTITY_MAX_ARGUMENTS) {
         if (!quantity_copy_formals(f, c, fn, function, formals) ||
-            (boolean && !quantity_bool_choice(f, root, formals[0])))
+            (boolean &&
+             !quantity_bool_choice(f, root, formals[0], &b.local_numerator)))
             return false;
         b.formal = formals[0];
         for (size_t i = 0; i < fn->count; ++i)
