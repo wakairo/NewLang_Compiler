@@ -1715,6 +1715,8 @@ typedef struct {
     const NLFunctionEntry *function;
     size_t depth, calls, arms, returns, *remaining;
     NLSymbolId formal, local_numerator;
+    NLValueId local_numerator_value;
+    NLPlaceId local_numerator_place;
     unsigned char origins[NL_SEMANTIC_MAX_ENTRIES];
 } QuantityBody;
 
@@ -1819,16 +1821,23 @@ static QuantityOrigin quantity_arithmetic_at(QuantityBody *b,
     if (!left)
         return QUANTITY_UNSEEN;
     if (fixed_divisor(proof->operation)) {
-        if (!b->function->count || left >= QUANTITY_FROM_FORMAL)
+        if (!b->function->count)
             return QUANTITY_FROM_RESULT;
-        /* This symbol names the unary Bool helper's sole literal binding.
-         * The atom and the issued operation above still verify this arm's use.
-         */
+        if (!b->if_parent || !b->local_numerator)
+            return left >= QUANTITY_FROM_FORMAL ? QUANTITY_FROM_RESULT
+                                                : QUANTITY_UNSEEN;
+        /* The checked binding in the parent supplied these exact slot and
+         * place IDs. The operation and atom verified this ARM's Copy. */
         const NLCheckedNodeView *numerator =
             nl_checked_node_view(b->body, proof->issued.operands[0]);
-        return b->if_parent && b->local_numerator &&
-                       numerator->kind == NL_CHECKED_IDENTIFIER &&
-                       numerator->symbol == b->local_numerator
+        if (numerator->kind != NL_CHECKED_IDENTIFIER ||
+            numerator->symbol != b->local_numerator ||
+            !b->local_numerator_value || !b->local_numerator_place)
+            return QUANTITY_UNSEEN;
+        const NLSemanticBindingView binding =
+            b->context->bindings[b->local_numerator - 1].view;
+        return binding.value == b->local_numerator_value &&
+                       binding.place == b->local_numerator_place
                    ? QUANTITY_FROM_RESULT
                    : QUANTITY_UNSEEN;
     }
@@ -2088,6 +2097,12 @@ static bool quantity_items_at(QuantityBody *b, const NLCheckedNodeView *root,
                 : quantity_expression_at(b, node->initializer, init_source);
         if (!origin || node->symbol == b->formal)
             return false;
+        if (node->symbol == b->local_numerator) {
+            const NLSemanticBindingView binding =
+                c->bindings[node->symbol - 1].view;
+            b->local_numerator_value = binding.value;
+            b->local_numerator_place = binding.place;
+        }
         b->origins[node->symbol - 1] = (unsigned char)origin;
         if (init->kind != NL_CHECKED_IDENTIFIER ||
             origin != QUANTITY_FROM_FORMAL)
@@ -2224,34 +2239,11 @@ static QuantityOrigin quantity_if_at(QuantityBody *b, NLCheckedNodeId id,
                                           : QUANTITY_INDEPENDENT;
 }
 
-/* The unary Bool selector has two literal arms, optionally bound before
- * return, or a matching fixed-divisor operation in both arms after its
- * one literal numerator binding. */
-static bool quantity_bool_choice(const NLCheckedFragment *f,
-                                 const NLCheckedNodeView *root,
-                                 NLSymbolId formal, NLSymbolId *local_numerator)
+/* A private shape check. The ordinary IF planner still validates both
+ * source arms, branch worlds, conditions, and the joined result. */
+static bool quantity_bool_arms(const NLCheckedFragment *f, NLCheckedNodeId id,
+                               NLSymbolId formal, bool arithmetic)
 {
-    if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
-        f->arm_count != 2 || f->body_count || root->item_count > 1 ||
-        nl_control_exits_count(f->exits))
-        return false;
-    NLCheckedNodeId id = root->tail;
-    if (root->first_item) {
-        const NLCheckedNodeView *item =
-            nl_checked_node_view(f, root->first_item);
-        const NLCheckedNodeView *tail = nl_checked_node_view(f, id);
-        if (!item || item->kind != NL_CHECKED_BINDING || !tail)
-            return false;
-        const NLCheckedNodeView *init =
-            nl_checked_node_view(f, item->initializer);
-        if (init && init->kind == NL_CHECKED_USIZE_LITERAL)
-            *local_numerator = item->symbol;
-        else if (tail->kind == NL_CHECKED_IDENTIFIER &&
-                 tail->symbol == item->symbol)
-            id = item->initializer;
-        else
-            return false;
-    }
     const NLCheckedNodeView *choice = nl_checked_node_view(f, id);
     if (!choice || choice->kind != NL_CHECKED_IF || choice->normal_arms != 2)
         return false;
@@ -2271,7 +2263,7 @@ static bool quantity_bool_choice(const NLCheckedFragment *f,
             block ? nl_checked_node_view(arm, block->tail) : NULL;
         if (!block || block->item_count || !tail)
             return false;
-        if (*local_numerator && i == 0) {
+        if (arithmetic && i == 0) {
             if (tail->kind != NL_CHECKED_USIZE_DIVISION &&
                 tail->kind != NL_CHECKED_USIZE_REMAINDER)
                 return false;
@@ -2281,6 +2273,41 @@ static bool quantity_bool_choice(const NLCheckedFragment *f,
             return false;
     }
     return true;
+}
+
+static bool quantity_bool_choice(const NLCheckedFragment *f,
+                                 const NLCheckedNodeView *root,
+                                 NLSymbolId formal, NLSymbolId *local_numerator)
+{
+    const bool joined_numerator = f->arm_count == 4;
+    if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
+        (!joined_numerator && f->arm_count != 2) || f->body_count ||
+        root->item_count > 1 || nl_control_exits_count(f->exits))
+        return false;
+    NLCheckedNodeId id = root->tail;
+    if (root->first_item) {
+        const NLCheckedNodeView *item =
+            nl_checked_node_view(f, root->first_item);
+        const NLCheckedNodeView *tail = nl_checked_node_view(f, id);
+        if (!item || item->kind != NL_CHECKED_BINDING || !tail)
+            return false;
+        const NLCheckedNodeView *init =
+            nl_checked_node_view(f, item->initializer);
+        if (joined_numerator) {
+            if (!quantity_bool_arms(f, item->initializer, formal, false))
+                return false;
+            *local_numerator = item->symbol;
+        } else if (init && init->kind == NL_CHECKED_USIZE_LITERAL) {
+            *local_numerator = item->symbol;
+        } else if (tail->kind == NL_CHECKED_IDENTIFIER &&
+                   tail->symbol == item->symbol) {
+            id = item->initializer;
+        } else {
+            return false;
+        }
+    }
+    return (!joined_numerator || *local_numerator) &&
+           quantity_bool_arms(f, id, formal, *local_numerator != 0);
 }
 
 static bool composed_quantity_body(const NLCheckedFragment *f,

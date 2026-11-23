@@ -1,6 +1,7 @@
 """Check the unary Bool quantity selector and its strict native output."""
 
 from functools import partial
+from itertools import chain
 from pathlib import Path
 import re
 import shutil
@@ -67,10 +68,16 @@ def native(cli, source, raw, *, discard=False, fixed=None, values=None):
     assert not named.stdout and not named.stderr and pristine.read_bytes() == c.stdout
     if fixed:
         number, operator, divisors = fixed
-        numerator = re.search(
-            rb"size_t (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(" + number + rb"\)\);",
-            c.stdout,
-        )
+        if number is None:
+            numerator = re.search(rb"size_t (nl_local_\d+) = (nl_if_\d+);", c.stdout)
+            assert numerator
+            first_join = c.stdout[:numerator.start()]
+            assert first_join.count(numerator[2] + b" = ") == 2
+        else:
+            numerator = re.search(
+                rb"size_t (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(" + number + rb"\)\);",
+                c.stdout,
+            )
         assert numerator
         actual = re.findall(
             numerator[1] + b" " + re.escape(operator)
@@ -120,6 +127,9 @@ def scope(cli, source, raw):
     after = state(target)
     (raw / "named-stat.txt").write_text(f"{before}\n{after}\n", encoding="ascii")
     assert target.read_bytes() == sentinel and before == after
+    absent = named_dir / "absent.c"
+    run(raw, "absent-c17", [cli, "--emit-c17-to", absent, source], 4)
+    assert not absent.exists()
     assert list(named_dir.iterdir()) == [target]
     print(f"{raw.name} CHECK=0 C17=4, named output preserved")
 
@@ -179,15 +189,55 @@ def fixtures(selection, discard, local, remainder):
     ).replace("        stock /", "        let stock = usize(95);\n        stock /"), scope
 
 
+def joined_fixtures(divide, remainder):
+    for name, text, op, values in (
+        ("joined-divide", divide, b"/", b"13\n10\n"),
+        ("joined-remainder", remainder, b"%", b"6\n4\n"),
+    ):
+        observer = partial(native, fixed=(None, op, [b"7", b"5"]), values=values)
+        yield name, text, observer
+        yield name + "-discard", text.replace("let first = ", "").replace(
+            "let second = ", ""
+        ), partial(observer, discard=True)
+    yield "joined-mixed-arms", divide.replace("stock / usize(5)", "stock % usize(5)"), scope
+    yield "joined-alias", divide.replace(
+        "    };", "    };\n    let alias = stock;", 1
+    ).replace("stock /", "alias /"), scope
+    yield "joined-different-numerator", divide.replace(
+        "    };", "    };\n    let other = usize(54);", 1
+    ).replace("stock / usize(5)", "other / usize(5)"), scope
+    yield "joined-arm-local", divide.replace(
+        "        stock / usize(5)", "        let local = stock;\n        local / usize(5)"
+    ), scope
+    yield "joined-extra-root-item", divide.replace(
+        "    };", "    };\n    let spacer = usize(3);", 1
+    ), scope
+    yield "joined-terminating-first-arm", divide.replace(
+        "        usize(97)", "        return usize(97);", 1
+    ), scope
+    prefix = divide.index("    if (flag) {", divide.index("    };"))
+    yield "joined-call-initializer", (
+        "fn provide(value: usize) -> usize { value }\n\n"
+        + divide[:divide.index("    let stock")] + "    let stock = provide(usize(97));\n"
+        + divide[prefix:]
+    ), scope
+
+
 def main():
-    cli, root, selection, discard, local, remainder = map(Path, sys.argv[1:])
+    cli, root, selection, discard, local, remainder, joined_divide, joined_remainder = map(
+        Path, sys.argv[1:]
+    )
     root.mkdir(parents=True, exist_ok=True)
     raw = Path(tempfile.mkdtemp(dir=root))
     print(f"raw={raw}", flush=True)
     cases = []
-    for name, text, verify in fixtures(
+    regular = fixtures(
         *(path.read_text(encoding="utf-8") for path in (selection, discard, local, remainder))
-    ):
+    )
+    joined = joined_fixtures(
+        joined_divide.read_text(encoding="utf-8"), joined_remainder.read_text(encoding="utf-8")
+    )
+    for name, text, verify in chain(regular, joined):
         work = raw / name
         work.mkdir()
         source = work / "source.nl"

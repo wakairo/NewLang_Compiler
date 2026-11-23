@@ -1,5 +1,6 @@
 #include "division_usize_internal.h"
 #include "h_origin_internal.h"
+#include "if_field_internal.h"
 #include "newlang/parser.h"
 
 #include <stdio.h>
@@ -16,11 +17,16 @@
 
 typedef enum {
     NO_FAULT,
+    PRIOR_FORK,
+    JOIN_VALUE,
+    TAIL_FORK,
     HELPER_SEAL,
     ENTRY_WORLD
 } Fault;
 static Fault fault;
 static size_t allocation, visits, hits, failed_bytes;
+static size_t if_index, forks_left;
+static const NLSemanticContext *pending_world;
 
 void *__real_malloc(size_t);
 void *__wrap_malloc(size_t size)
@@ -30,6 +36,77 @@ void *__wrap_malloc(size_t size)
     ++hits;
     failed_bytes = size;
     return NULL;
+}
+
+void *__real_realloc(void *, size_t);
+void *__wrap_realloc(void *old, size_t size)
+{
+    if (fault != JOIN_VALUE || !allocation || --allocation)
+        return __real_realloc(old, size);
+    ++hits;
+    failed_bytes = size;
+    return NULL;
+}
+
+NLCheckStatus __real_nl_if_field_prepare(NLCheckedFragment *, NLCheckedNodeId,
+                                         const NLSemanticContext *);
+NLCheckStatus __wrap_nl_if_field_prepare(NLCheckedFragment *body,
+                                         NLCheckedNodeId id,
+                                         const NLSemanticContext *world)
+{
+    const NLCheckStatus status = __real_nl_if_field_prepare(body, id, world);
+    ++if_index;
+    if (status == NL_CHECK_OK && ((fault == PRIOR_FORK && if_index == 1) ||
+                                  (fault == TAIL_FORK && if_index == 2))) {
+        pending_world = world;
+        forks_left = 2; /* Fail after the first sibling already exists. */
+    }
+    return status;
+}
+
+NLCheckStatus __real_nl_sem_clone(const NLSemanticContext *,
+                                  NLSemanticContext **);
+NLCheckStatus __wrap_nl_sem_clone(const NLSemanticContext *source,
+                                  NLSemanticContext **out)
+{
+    if (source != pending_world || !forks_left || --forks_left)
+        return __real_nl_sem_clone(source, out);
+    pending_world = NULL;
+    ++visits;
+    allocation = 1;
+    const NLCheckStatus status = __real_nl_sem_clone(source, out);
+    allocation = 0;
+    return status;
+}
+
+NLCheckStatus __real_nl_if_field_plan(NLCheckedFragment *, NLCheckedNodeId,
+                                      const NLSemanticContext *, NLPlaceId *);
+NLCheckStatus __wrap_nl_if_field_plan(NLCheckedFragment *body,
+                                      NLCheckedNodeId id,
+                                      const NLSemanticContext *world,
+                                      NLPlaceId *place)
+{
+    const NLCheckStatus status =
+        __real_nl_if_field_plan(body, id, world, place);
+    if (status == NL_CHECK_OK && fault == JOIN_VALUE && if_index == 1)
+        pending_world = world;
+    return status;
+}
+
+NLCheckStatus __real_nl_sem_new_value(NLSemanticContext *, NLSemanticValueView,
+                                      NLValueId *);
+NLCheckStatus __wrap_nl_sem_new_value(NLSemanticContext *world,
+                                      NLSemanticValueView value, NLValueId *out)
+{
+    if (fault != JOIN_VALUE || world != pending_world || value.scalar_known ||
+        value.type != nl_semantic_core_type(world, NL_TYPE_USIZE))
+        return __real_nl_sem_new_value(world, value, out);
+    pending_world = NULL;
+    ++visits;
+    allocation = 1;
+    const NLCheckStatus status = __real_nl_sem_new_value(world, value, out);
+    allocation = 0;
+    return status;
 }
 
 NLCheckStatus __real_nl_h_custody_seal_result(NLCheckedFragment *,
@@ -122,7 +199,8 @@ static bool custody(const NLCheckedFragment *entry)
 }
 
 static bool rollback(NLSemanticContext *c, const NLSyntaxTree *expression,
-                     NLCheckedFragment **entry, const char *expected_literal)
+                     NLCheckedFragment **entry, const char *expected_literal,
+                     bool joined)
 {
     NLSymbolId symbol = 0;
     const NLScalarValue seed = {nl_semantic_core_type(c, NL_TYPE_USIZE), true,
@@ -137,9 +215,18 @@ static bool rollback(NLSemanticContext *c, const NLSyntaxTree *expression,
     memcpy(binding, &c->bindings[symbol - 1], sizeof(binding));
     memcpy(place, &c->places[b.place - 1], sizeof(place));
     memcpy(value, &c->values[b.value - 1], sizeof(value));
-    for (Fault site = HELPER_SEAL; site <= ENTRY_WORLD; ++site) {
+    static const char *const sites[] = {
+        [PRIOR_FORK] = "prior-if-world",
+        [JOIN_VALUE] = "joined-numerator-value",
+        [TAIL_FORK] = "tail-if-world",
+        [HELPER_SEAL] = "bool-helper-seal",
+        [ENTRY_WORLD] = "entry-result-world",
+    };
+    for (Fault site = joined ? PRIOR_FORK : HELPER_SEAL; site <= ENTRY_WORLD;
+         ++site) {
         fault = site;
-        visits = hits = failed_bytes = 0;
+        visits = hits = failed_bytes = if_index = forks_left = 0;
+        pending_world = NULL;
         const NLCheckStatus status =
             nl_semantic_check_expression(c, expression, entry, NULL);
         fault = NO_FAULT;
@@ -151,8 +238,7 @@ static bool rollback(NLSemanticContext *c, const NLSyntaxTree *expression,
                 !memcmp(value, &c->values[b.value - 1], sizeof(value)) &&
                 nl_sem_validate(c) == NL_CHECK_OK);
         printf("OOM %s reached=%zu hit=%zu bytes=%zu rollback=PASS\n",
-               site == HELPER_SEAL ? "bool-helper-seal" : "entry-result-world",
-               visits, hits, failed_bytes);
+               sites[site], visits, hits, failed_bytes);
     }
     REQUIRE(nl_semantic_check_expression(c, expression, entry, NULL) ==
                 NL_CHECK_OK &&
@@ -180,7 +266,7 @@ static bool rollback(NLSemanticContext *c, const NLSyntaxTree *expression,
 
 int main(int argc, char **argv)
 {
-    if (argc != 3)
+    if (argc != 3 && (argc != 4 || strcmp(argv[3], "joined")))
         return 2;
     NLSource *source = NULL, *entry_source = NULL;
     NLParser *parser = NULL, *entry_parser = NULL;
@@ -201,7 +287,8 @@ int main(int argc, char **argv)
             nl_parser_create(entry_source, &entry_parser) == NL_PARSE_OK &&
             nl_parser_parse_expression_fragment(entry_parser, &expression,
                                                 NULL) == NL_PARSE_OK;
-    const bool ok = ready && rollback(context, expression, &entry, argv[2]);
+    const bool ok =
+        ready && rollback(context, expression, &entry, argv[2], argc == 4);
     nl_checked_destroy(entry);
     nl_syntax_tree_destroy(expression);
     nl_parser_destroy(entry_parser);
