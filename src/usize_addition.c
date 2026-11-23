@@ -1756,6 +1756,127 @@ static bool guarded_addition_decision(const NLCheckedFragment *caller,
     return false;
 }
 
+static const NLCheckedNodeView *
+guarded_named_actual(const NLCheckedFragment *caller,
+                     const NLSemanticContext *c, NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
+    const NLCheckedNodeView *actual =
+        call ? nl_checked_node_view(caller, call->first_argument) : NULL;
+    NLValueId value;
+    return call && call->kind == NL_CHECKED_REGISTERED_CALL &&
+                   call->body_backed && call->argument_count == 1 &&
+                   call->first_argument > id && actual &&
+                   actual->kind == NL_CHECKED_IDENTIFIER &&
+                   actual->value_use == NL_VALUE_COPIED &&
+                   !actual->next_argument &&
+                   node_value(caller, c, call->first_argument, &value) &&
+                   !c->values[value - 1].scalar_known
+               ? actual
+               : NULL;
+}
+
+static bool literal_usize_arm(const NLSyntaxNode *syntax)
+{
+    const NLSyntaxView *block = nl_syntax_node_view(syntax);
+    const NLSyntaxView *tail = block && block->kind == NL_SYNTAX_BLOCK
+                                   ? nl_syntax_node_view(block->data.block.tail)
+                                   : NULL;
+    return tail && !block->data.block.items &&
+           tail->kind == NL_SYNTAX_USIZE_LITERAL;
+}
+
+/* Stage the existing inner result seal while this selector is still being
+ * checked. Only the retained single-let/IF source may request it. A complete
+ * selector must also have the checked binding and actual unit-main entry. */
+static bool guarded_product_selector(const NLCheckedFragment *f,
+                                     const NLSemanticContext *c,
+                                     NLCheckedNodeId id,
+                                     const NLCheckedNodeView *actual)
+{
+    const NLFunctionBody *owner = f->body_owner;
+    if (!owner || owner->count != 1 || f->source != owner->source)
+        return false;
+    size_t function = 0;
+    for (size_t i = 0; i < c->function_count; ++i)
+        if (c->functions[i].body == owner) {
+            function = i + 1;
+            break;
+        }
+    if (!nl_quantity_usize_function(c, function, 1))
+        return false;
+
+    const NLSyntaxView *source =
+        nl_syntax_node_view(nl_syntax_tree_root(owner->syntax));
+    if (!source || source->kind != NL_SYNTAX_BLOCK)
+        return false;
+    const NLSyntaxNode *item = source->data.block.items;
+    const NLSyntaxView *binding = nl_syntax_node_view(item);
+    const NLSyntaxView *tail = nl_syntax_node_view(source->data.block.tail);
+    if (!binding || binding->kind != NL_SYNTAX_BINDING ||
+        nl_syntax_next_argument(item) || !tail || tail->kind != NL_SYNTAX_IF ||
+        !literal_usize_arm(tail->data.conditional.then_block) ||
+        !literal_usize_arm(tail->data.conditional.else_block))
+        return false;
+    const NLSyntaxView *call_source =
+        nl_syntax_node_view(binding->data.binding.initializer);
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    if (!call_source || call_source->kind != NL_SYNTAX_EXPR_CALL ||
+        !span_equal(call->span, call_source->span) ||
+        !span_equal(call->name, call_source->data.call.callee) ||
+        nl_syntax_next_argument(call_source->data.call.arguments) ||
+        !token(f->source, actual->name, owner->parameter_names[0]) ||
+        !name_copy(f, c, call->first_argument, call_source->data.call.arguments,
+                   actual->symbol))
+        return false;
+    const NLSyntaxView *condition =
+        nl_syntax_node_view(tail->data.conditional.condition);
+    if (!condition || condition->kind != NL_SYNTAX_USIZE_LESS_THAN)
+        return false;
+    const NLSyntaxView *left =
+        nl_syntax_node_view(condition->data.equality.left);
+    const NLSyntaxView *right =
+        nl_syntax_node_view(condition->data.equality.right);
+    NLSourceView name, comparison;
+    if (!left || left->kind != NL_SYNTAX_EXPR_NAME || !right ||
+        right->kind != NL_SYNTAX_USIZE_LITERAL ||
+        !nl_source_view(f->source, binding->data.binding.name, &name) ||
+        !nl_source_view(f->source, left->data.name, &comparison) ||
+        name.length != comparison.length ||
+        memcmp(name.bytes, comparison.bytes, name.length))
+        return false;
+    if (!f->root)
+        /* The custody lookup already required a valid seal for a committed
+         * inner call. Here only the pending, unsealed call can proceed. */
+        return !nl_h_custody_result_valid(f, id);
+
+    const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
+    const NLCheckedNodeView *local =
+        root ? nl_checked_node_view(f, root->first_item) : NULL;
+    const NLCheckedNodeView *choice =
+        root ? nl_checked_node_view(f, root->tail) : NULL;
+    const NLCheckedNodeView *test =
+        choice ? nl_checked_node_view(f, choice->initializer) : NULL;
+    if (!root || root->kind != NL_CHECKED_BLOCK || root->item_count != 1 ||
+        !binding_source(f, c, local, binding) || local->initializer != id ||
+        !choice || choice->kind != NL_CHECKED_IF || choice->normal_arms != 2 ||
+        !test || test->kind != NL_CHECKED_USIZE_LESS_THAN ||
+        !name_copy(f, c, test->first_argument, condition->data.equality.left,
+                   local->symbol))
+        return false;
+    NLCheckedNodeId invocation = 0;
+    const NLCheckedFragment *entry =
+        nl_h_custody_body_caller(f, c, &invocation);
+    const NLCheckedNodeView *input = guarded_named_actual(entry, c, invocation);
+    const NLCheckedNodeView *call_selector =
+        nl_checked_node_view(entry, invocation);
+    return input && entry->context == f->context &&
+           quantity_main_body(entry, c) &&
+           call_selector->function == function &&
+           c->bindings[actual->symbol - 1].view.value ==
+               input->results[0].value;
+}
+
 /* The unit composition planner borrows the authenticated guarded result.
  * The legacy scalar guarded-addition caller keeps its own admission path. */
 static bool guarded_unit_plan(const NLCheckedFragment *f,
@@ -1768,21 +1889,16 @@ static bool guarded_unit_plan(const NLCheckedFragment *f,
         return false;
     NLCheckedNodeId id = 0;
     const NLCheckedFragment *caller = nl_h_custody_body_caller(f, c, &id);
-    const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
-    const NLCheckedNodeView *actual =
-        call ? nl_checked_node_view(caller, call->first_argument) : NULL;
-    NLValueId input;
-    if (!call || !actual || caller->context != f->context ||
-        !quantity_main_body(caller, c) || call->first_argument <= id ||
-        actual->kind != NL_CHECKED_IDENTIFIER ||
-        actual->value_use != NL_VALUE_COPIED ||
-        !node_value(caller, c, call->first_argument, &input) ||
-        c->values[input - 1].scalar_known)
+    const NLCheckedNodeView *actual = guarded_named_actual(caller, c, id);
+    if (!actual || caller->context != f->context)
+        return false;
+    const bool unit_main = quantity_main_body(caller, c);
+    if (!unit_main && !guarded_product_selector(caller, c, id, actual))
         return false;
 
     NLGuardedUsizePlan guard = {.body = f, .function = function};
     if (!helper_body(f, c, fn, NL_USIZE_MULTIPLY, &guard) &&
-        (!guarded_addition_decision(caller, c, id) ||
+        (!unit_main || !guarded_addition_decision(caller, c, id) ||
          !helper_body(f, c, fn, NL_USIZE_ADD, &guard)))
         return false;
     const NLDivisionUsizePlan plan = {.body = f,
