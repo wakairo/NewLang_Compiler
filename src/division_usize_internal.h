@@ -17,6 +17,7 @@ typedef struct {
         joined_result, /* optional function-exit join; result is normal path */
         call; /* division identifies the specialized single operation */
     NLCheckedNodeId byte_selector; /* guarded product to pure u8, entry only */
+    NLCheckedNodeId byte_descriptor; /* first binding of the validated suffix */
     size_t divisor;
 } NLDivisionUsizePlan;
 /* Known multiplication shares the existing usize arithmetic receipt. */

@@ -1,6 +1,7 @@
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 700
 #endif
+#include "c17_local_field_internal.h"
 #include "checked_c_target.h"
 #include "copy_body_internal.h"
 #include "division_usize_internal.h"
@@ -153,24 +154,8 @@ static bool current_caller_value(const NLCheckedFragment *f, NLCheckedNodeId id)
 static bool bounded_field(const NLCheckedFragment *f, const NLCheckedField *e,
                           const V0Program *p)
 {
-    if (!e->present || !e->dependency_compatible || e->base == 0 ||
-        e->type != p->u8 || e->nominal != p->aggregate || e->index >= 2 ||
-        e->parent == 0 || e->child == 0 || e->parent == e->child ||
-        e->parent_incarnation == 0 || e->child_incarnation == 0 ||
-        e->parent_fact == 0 || e->child_fact == 0)
-        return false;
-    NLAggregateField field;
-    if (!nl_semantic_aggregate_field_view(nl_checked_context(f), e->nominal,
-                                          e->index, &field) ||
-        field.type != p->u8)
-        return false;
-    for (size_t i = 1; i <= nl_checked_node_count(f); ++i) {
-        const NLCheckedNodeView *v = nl_checked_node_view(f, i);
-        if (v->kind == NL_CHECKED_RECEIVER && v->symbol == e->base &&
-            v->type == e->nominal)
-            return true;
-    }
-    return false;
+    return nl_c17_resolved_field(f, nl_checked_context(f), e, p->aggregate,
+                                 p->u8);
 }
 
 /* V1 consumes only immutable checked evidence. Neither syntax trees nor
@@ -1011,19 +996,9 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
 static bool avs_shape(const NLCheckedFragment *fragment, NLTypeId type,
                       V0Program *program)
 {
-    const NLSemanticContext *context = nl_checked_context(fragment);
-    NLSemanticTypeView t;
-    if (!nl_semantic_type_view(context, type, &t) ||
-        t.kind != NL_TYPE_NOMINAL || t.field_count != 2 || !t.is_copy ||
-        !t.is_discardable ||
-        (program->aggregate != 0 && program->aggregate != type))
+    if ((program->aggregate != 0 && program->aggregate != type) ||
+        !nl_c17_pair_type(nl_checked_context(fragment), type, program->u8))
         return false;
-    for (size_t i = 0; i < 2; ++i) {
-        NLAggregateField field;
-        if (!nl_semantic_aggregate_field_view(context, type, i, &field) ||
-            field.type != program->u8)
-            return false;
-    }
     program->aggregate = type;
     return true;
 }
@@ -1140,10 +1115,7 @@ static bool v0_validate_call(const NLCheckedFragment *, NLCheckedNodeId,
 static bool gate_ref_type(const NLCheckedFragment *f, NLTypeId id,
                           NLAccessSyntax access, const V0Program *p)
 {
-    NLSemanticTypeView t;
-    return nl_semantic_type_view(nl_checked_context(f), id, &t) &&
-           t.kind == NL_TYPE_REF && t.target == p->u8 && !t.is_exclusive &&
-           t.access == access;
+    return nl_c17_scalar_ref(nl_checked_context(f), id, p->u8, access);
 }
 static bool gate_type(const NLCheckedFragment *f, NLTypeId id,
                       NLSemanticTypeKind kind, const V0Program *p)
@@ -1200,12 +1172,7 @@ static bool gate_replace(const NLCheckedFragment *f, NLCheckedNodeId id,
     if (v->type != p->u8 || v->results[0].type != p->u8)
         return false;
     if (v->field.present &&
-        (!bounded_field(f, &v->field, p) ||
-         v->field.access != NL_ACCESS_WRITE ||
-         v->field.old_value != v->results[0].value ||
-         v->field.parent_post_fact == 0 || v->field.child_post_fact == 0 ||
-         v->field.parent_post_fact == v->field.parent_fact ||
-         v->field.child_post_fact == v->field.child_fact))
+        !nl_c17_field_change(f, nl_checked_context(f), v, p->aggregate, p->u8))
         return false;
     const NLCheckedNodeView *ref = nl_checked_node_view(f, v->first_argument);
     const NLCheckedNodeView *value =
@@ -1221,14 +1188,7 @@ static bool gate_loan(const NLCheckedFragment *f, const NLCheckedNodeView *v,
 {
     const NLCheckedNodeView *body = nl_checked_node_view(f, v->initializer);
     const bool write = v->loan.access == NL_ACCESS_WRITE;
-    if (!v->loan.implicit_local || !v->loan.body_nonescape_proved ||
-        !v->loan.normal_result_forwarded || v->loan.ref_symbol == 0 ||
-        v->loan.scope == 0 || v->loan.place == 0 || v->loan.incarnation == 0 ||
-        (v->loan.access != NL_ACCESS_READ &&
-         v->loan.access != NL_ACCESS_WRITE) ||
-        v->loan.is_exclusive || (write && v->loan.from_ptr) || body == NULL ||
-        body->kind != NL_CHECKED_BLOCK || body->terminates ||
-        body->result_count != v->result_count || v->result_count > 1)
+    if (!nl_c17_completed_loan(v, body))
         return false;
     if (v->field.present &&
         (!write || !bounded_field(f, &v->field, p) ||

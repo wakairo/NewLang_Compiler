@@ -1,4 +1,5 @@
 #include "newlang/usize_addition.h"
+#include "c17_local_field_internal.h"
 #include "copy_body_internal.h"
 #include "division_usize_internal.h"
 #include "guarded_usize_internal.h"
@@ -1068,9 +1069,10 @@ static bool node_value(const NLCheckedFragment *f, const NLSemanticContext *c,
     return scalar_node_value(f, c, id, nl_semantic_core_type(c, NL_TYPE_USIZE),
                              value);
 }
-static bool binding_source(const NLCheckedFragment *f,
-                           const NLSemanticContext *c,
-                           const NLCheckedNodeView *n, const NLSyntaxView *s)
+static bool binding_source_shape(const NLCheckedFragment *f,
+                                 const NLSemanticContext *c,
+                                 const NLCheckedNodeView *n,
+                                 const NLSyntaxView *s)
 {
     if (!s || s->kind != NL_SYNTAX_BINDING || !n ||
         n->kind != NL_CHECKED_BINDING || n->terminates || n->result_count ||
@@ -1088,8 +1090,15 @@ static bool binding_source(const NLCheckedFragment *f,
            token(f->source, s->data.binding.name,
                  c->bindings[n->symbol - 1].name) &&
            span_equal(r->name, s->data.binding.name) &&
-           c->bindings[n->symbol - 1].view.type == init->type &&
-           c->bindings[n->symbol - 1].view.value == init->results[0].value;
+           c->bindings[n->symbol - 1].view.type == init->type;
+}
+static bool binding_source(const NLCheckedFragment *f,
+                           const NLSemanticContext *c,
+                           const NLCheckedNodeView *n, const NLSyntaxView *s)
+{
+    return binding_source_shape(f, c, n, s) &&
+           c->bindings[n->symbol - 1].view.value ==
+               nl_checked_node_view(f, n->initializer)->results[0].value;
 }
 static bool scalar_name_copy(const NLCheckedFragment *f,
                              const NLSemanticContext *c, NLCheckedNodeId id,
@@ -2961,12 +2970,279 @@ static bool guarded_byte_selector(const NLCheckedFragment *f,
            right->kind == NL_CHECKED_USIZE_LITERAL;
 }
 
+static bool descriptor_field_source(const NLCheckedFragment *f,
+                                    const NLSemanticContext *c,
+                                    const NLSyntaxView *source,
+                                    const NLCheckedField *field,
+                                    const NLCheckedNodeView *original,
+                                    NLTypeId nominal, NLTypeId u8)
+{
+    NLAggregateField declared;
+    return source && source->kind == NL_SYNTAX_FIELD_DESIGNATOR &&
+           field->base == original->symbol && !field->payload_occurrence &&
+           !field->post_payload_occurrence &&
+           nl_c17_resolved_field(f, c, field, nominal, u8) &&
+           nl_semantic_aggregate_field_view(c, nominal, field->index,
+                                            &declared) &&
+           token(f->source, source->data.field_designator.base,
+                 c->bindings[original->symbol - 1].name) &&
+           token(f->source, source->data.field_designator.field, declared.name);
+}
+
+static bool descriptor_constructor(const NLCheckedFragment *f,
+                                   const NLSemanticContext *c,
+                                   const NLCheckedNodeView *node,
+                                   const NLSyntaxView *source, NLTypeId u8,
+                                   NLSemanticValueView *initial)
+{
+    if (node->kind != NL_CHECKED_AGGREGATE || node->terminates ||
+        node->argument_count != 2 || !source ||
+        source->kind != NL_SYNTAX_AGGREGATE ||
+        source->data.aggregate.count != 2 ||
+        !nl_c17_pair_type(c, node->type, u8) ||
+        !span_equal(node->name, source->data.aggregate.type_name) ||
+        !token(f->source, node->name, c->types[node->type - 1].name) ||
+        node->results[0].type != node->type ||
+        !nl_semantic_value_view(c, node->results[0].value, initial) ||
+        initial->type != node->type || initial->field_count != 2)
+        return false;
+
+    bool seen[2] = {false, false};
+    NLCheckedNodeId id = node->first_argument;
+    const NLSyntaxNode *item = source->data.aggregate.fields;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedNodeView *field = nl_checked_node_view(f, id);
+        const NLSyntaxView *member = nl_syntax_node_view(item);
+        const NLCheckedNodeView *value =
+            field ? nl_checked_node_view(f, field->initializer) : NULL;
+        NLAggregateField declared;
+        if (!field || field->kind != NL_CHECKED_AGGREGATE_FIELD ||
+            field->field_index >= 2 || seen[field->field_index] ||
+            field->type != u8 || !member || member->kind != NL_SYNTAX_FIELD ||
+            !span_equal(field->span, member->span) ||
+            !span_equal(field->name, member->data.binding.name) ||
+            !nl_semantic_aggregate_field_view(c, node->type, field->field_index,
+                                              &declared) ||
+            !token(f->source, field->name, declared.name) || !value ||
+            value->type != u8 || value->results[0].type != u8 ||
+            !span_equal(
+                value->span,
+                nl_syntax_node_view(member->data.binding.initializer)->span) ||
+            !copy_if_literal_at(f, c, value) ||
+            initial->fields[field->field_index] != value->results[0].value)
+            return false;
+        seen[field->field_index] = true;
+        id = field->next_argument;
+        item = nl_syntax_next_argument(item);
+    }
+    return !id && !item;
+}
+
+static const NLCheckedNodeView *
+descriptor_replace(const NLCheckedFragment *f, const NLSemanticContext *c,
+                   const NLCheckedNodeView *loan, const NLSyntaxView *source,
+                   const NLCheckedNodeView *original, NLSymbolId selected,
+                   NLTypeId nominal, NLTypeId u8)
+{
+    const NLCheckedNodeView *body = nl_checked_node_view(f, loan->initializer);
+    if (loan->kind != NL_CHECKED_LOAN_HEADER || loan->type != u8 ||
+        loan->result_count != 1 || loan->results[0].type != u8 ||
+        !nl_c17_completed_loan(loan, body) || body->item_count ||
+        body->first_item || loan->loan.access != NL_ACCESS_WRITE ||
+        !loan->loan.prevent_lifetime_end || !source ||
+        source->kind != NL_SYNTAX_LOCAL_WRITE_LOAN ||
+        source->data.loan.from_ptr ||
+        source->data.loan.access != NL_ACCESS_WRITE ||
+        source->data.loan.is_exclusive || source->data.loan.stability ||
+        !descriptor_field_source(f, c,
+                                 nl_syntax_node_view(source->data.loan.source),
+                                 &loan->field, original, nominal, u8))
+        return NULL;
+
+    const NLSyntaxView *src_body = nl_syntax_node_view(source->data.loan.body);
+    const NLSyntaxView *src =
+        src_body && src_body->kind == NL_SYNTAX_BLOCK &&
+                !src_body->data.block.items
+            ? nl_syntax_node_view(src_body->data.block.tail)
+            : NULL;
+    const NLCheckedNodeView *store = nl_checked_node_view(f, body->tail);
+    NLValueId old_value;
+    if (!src || src->kind != NL_SYNTAX_EXPR_CALL ||
+        src->data.call.argument_count != 2 ||
+        !token(f->source, src->data.call.callee, "replace") ||
+        !span_equal(body->span, src_body->span) || !store ||
+        store->kind != NL_CHECKED_REPLACE || store->argument_count != 2 ||
+        !span_equal(store->span, src->span) ||
+        !scalar_node_value(f, c, body->tail, u8, &old_value) ||
+        !nl_c17_field_change(f, c, store, nominal, u8) ||
+        old_value != body->results[0].value ||
+        old_value != loan->results[0].value)
+        return NULL;
+
+    const NLCheckedField *before = &loan->field;
+    const NLCheckedField *change = &store->field;
+    if (before->access != NL_ACCESS_WRITE ||
+        loan->loan.source != before->base || before->base != change->base ||
+        before->index != change->index || before->parent != change->parent ||
+        before->child != change->child ||
+        before->parent_incarnation != change->parent_incarnation ||
+        before->child_incarnation != change->child_incarnation ||
+        before->parent_fact != change->parent_fact ||
+        before->child_fact != change->child_fact ||
+        before->old_value != change->old_value || change->payload_occurrence ||
+        change->post_payload_occurrence || loan->loan.place != change->child ||
+        loan->loan.incarnation != change->child_incarnation)
+        return NULL;
+
+    const NLCheckedNodeView *ref =
+        nl_checked_node_view(f, store->first_argument);
+    const NLSyntaxNode *first = src->data.call.arguments;
+    const NLSyntaxView *ref_source = nl_syntax_node_view(first);
+    const NLCheckedNodeView *arg =
+        ref ? nl_checked_node_view(f, ref->next_argument) : NULL;
+    NLSemanticValueView value;
+    if (!ref || ref->kind != NL_CHECKED_IDENTIFIER ||
+        ref->value_use != NL_VALUE_COPIED || ref->result_count != 1 ||
+        ref->symbol != loan->loan.ref_symbol ||
+        ref->symbol > c->binding_count || !ref_source ||
+        ref_source->kind != NL_SYNTAX_EXPR_NAME ||
+        !span_equal(ref->span, ref_source->span) ||
+        !token(f->source, ref->name, c->bindings[ref->symbol - 1].name) ||
+        !span_equal(ref_source->data.name, ref->name) ||
+        !token(f->source, source->data.loan.binding,
+               c->bindings[ref->symbol - 1].name) ||
+        !nl_c17_scalar_ref(c, ref->type, u8, NL_ACCESS_WRITE) ||
+        !nl_semantic_value_view(c, ref->results[0].value, &value) ||
+        value.type != ref->type || value.reference_count ||
+        value.reference.provenance != NL_PROVENANCE_VALID ||
+        !value.reference.readable || !value.reference.writable ||
+        value.reference.place != change->child ||
+        value.reference.incarnation != change->child_incarnation ||
+        value.reference.scope != loan->loan.scope || !arg ||
+        arg->next_argument ||
+        !scalar_name_copy(f, c, ref->next_argument,
+                          nl_syntax_next_argument(first), selected, u8) ||
+        change->new_value != arg->results[0].value)
+        return NULL;
+    return store;
+}
+
+static bool descriptor_read(const NLCheckedFragment *f,
+                            const NLSemanticContext *c, NLCheckedNodeId id,
+                            const NLSyntaxView *source,
+                            const NLCheckedNodeView *original,
+                            const NLCheckedField *change, NLTypeId u8)
+{
+    const NLCheckedNodeView *read = nl_checked_node_view(f, id);
+    NLValueId value;
+    return read && read->kind == NL_CHECKED_FIELD_READ &&
+           read->value_use == NL_VALUE_COPIED &&
+           read->field.access == NL_ACCESS_READ &&
+           descriptor_field_source(f, c, source, &read->field, original,
+                                   change->nominal, u8) &&
+           read->field.parent == change->parent &&
+           read->field.parent_incarnation == change->parent_incarnation &&
+           read->field.parent_fact == change->parent_post_fact &&
+           scalar_node_value(f, c, id, u8, &value) &&
+           quantity(c, read->field.old_value, u8) &&
+           c->values[value - 1].scalar_known ==
+               c->values[read->field.old_value - 1].scalar_known &&
+           c->values[value - 1].scalar_value ==
+               c->values[read->field.old_value - 1].scalar_value;
+}
+
+/* This exact continuation has no later calls, alternate owners, or second
+ * store. The ended root's recorded packages and projection facts match the
+ * constructor and full Change in this actual CHECK transaction. */
+static bool
+guarded_byte_descriptor(const NLCheckedFragment *f, const NLSemanticContext *c,
+                        const NLCheckedNodeView *root,
+                        const NLSyntaxView *source, NLCheckedNodeId id,
+                        const NLSyntaxNode *item, NLSymbolId selected)
+{
+    const NLCheckedNodeView *bindings[5];
+    const NLSyntaxNode *initializer_sources[5];
+    NLSymbolId previous = selected;
+    for (size_t i = 0; i < 5; ++i) {
+        const NLSyntaxView *s = nl_syntax_node_view(item);
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        if (!(i ? binding_source(f, c, n, s)
+                : binding_source_shape(f, c, n, s)) ||
+            n->next_item <= id || n->symbol <= previous)
+            return false;
+        bindings[i] = n;
+        initializer_sources[i] = s->data.binding.initializer;
+        previous = n->symbol;
+        id = n->next_item;
+        item = nl_syntax_next_argument(item);
+    }
+    const NLSyntaxView *ret = nl_syntax_node_view(item);
+    const NLCheckedNodeView *end = nl_checked_node_view(f, id);
+    const NLTypeId unit = nl_semantic_unit_type(c);
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    if (!ret || ret->kind != NL_SYNTAX_RETURN || !end ||
+        nl_syntax_next_argument(item) || source->data.block.tail ||
+        !division_unit_return(f, root, end, ret, unit))
+        return false;
+
+    const NLCheckedNodeView *original = bindings[0];
+    const NLCheckedNodeView *ctor =
+        nl_checked_node_view(f, original->initializer);
+    const NLCheckedNodeView *loan =
+        nl_checked_node_view(f, bindings[1]->initializer);
+    const NLCheckedNodeView *updated =
+        nl_checked_node_view(f, bindings[2]->initializer);
+    const NLCheckedNodeView *sibling =
+        nl_checked_node_view(f, bindings[3]->initializer);
+    NLSemanticValueView initial, final;
+    if (!descriptor_constructor(f, c, ctor,
+                                nl_syntax_node_view(initializer_sources[0]), u8,
+                                &initial))
+        return false;
+    const NLCheckedNodeView *store = descriptor_replace(
+        f, c, loan, nl_syntax_node_view(initializer_sources[1]), original,
+        selected, ctor->type, u8);
+    if (!store)
+        return false;
+    const NLCheckedField *change = &store->field;
+    const NLCheckedField *sibling_field = &sibling->field;
+    const NLSemanticBindingView local = c->bindings[original->symbol - 1].view;
+    NLSemanticPlaceView place;
+    if (local.place != change->parent ||
+        !nl_semantic_place_view(c, local.place, &place) ||
+        place.incarnation != change->parent_incarnation ||
+        place.type != ctor->type ||
+        !nl_semantic_value_view(c, local.value, &final) ||
+        final.type != ctor->type || final.field_count != 2 ||
+        !descriptor_read(f, c, bindings[2]->initializer,
+                         nl_syntax_node_view(initializer_sources[2]), original,
+                         change, u8) ||
+        !descriptor_read(f, c, bindings[3]->initializer,
+                         nl_syntax_node_view(initializer_sources[3]), original,
+                         change, u8))
+        return false;
+
+    return updated->field.index == change->index &&
+           updated->field.child == change->child &&
+           updated->field.child_incarnation == change->child_incarnation &&
+           updated->field.child_fact == change->child_post_fact &&
+           updated->field.old_value == change->new_value &&
+           sibling_field->index != change->index &&
+           sibling_field->child != change->child &&
+           initial.fields[change->index] == change->old_value &&
+           final.fields[change->index] == change->new_value &&
+           initial.fields[sibling_field->index] == sibling_field->old_value &&
+           final.fields[sibling_field->index] == sibling_field->old_value &&
+           scalar_name_copy(f, c, bindings[4]->initializer,
+                            initializer_sources[4], bindings[1]->symbol, u8);
+}
+
 /* This whole entry is also walked before CHECK seals its result. The normal
  * published call validator still requires the original complete entry world. */
 static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                                     const NLSemanticContext *c,
                                     const NLFunctionEntry *fn, size_t function,
-                                    NLDivisionUsizePlan *out)
+                                    bool entry, NLDivisionUsizePlan *out)
 {
     if (f->body_count != 2 || f->arm_count != 2)
         return false;
@@ -2976,7 +3252,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
     if (!source || source->kind != NL_SYNTAX_BLOCK || !root ||
         root->kind != NL_CHECKED_BLOCK ||
         !span_equal(root->span, source->span) || root->item_count < 4 ||
-        root->item_count > 6)
+        (root->item_count > 6 && (!entry || root->item_count != 10)))
         return false;
 
     const NLCheckedKind kinds[] = {NL_CHECKED_USIZE_LITERAL, NL_CHECKED_IF,
@@ -3022,6 +3298,17 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         !guarded_byte_selector(f, c, selector))
         return false;
 
+    if (root->item_count == 10) {
+        if (!guarded_byte_descriptor(f, c, root, source, id, item,
+                                     bindings[3]->symbol))
+            return false;
+        *out = (NLDivisionUsizePlan){.body = f,
+                                     .function = function,
+                                     .byte_selector = selector,
+                                     .byte_descriptor = id};
+        return true;
+    }
+
     size_t count = 4;
     const NLTypeId unit = nl_semantic_unit_type(c);
     const NLSyntaxView *end = nl_syntax_node_view(item);
@@ -3060,7 +3347,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
 
 static bool literal_divisor_body_at(const NLCheckedFragment *f,
                                     const NLSemanticContext *c, size_t function,
-                                    NLUsizeOperation operation,
+                                    NLUsizeOperation operation, bool entry,
                                     NLDivisionUsizePlan *out)
 {
     if (!f || !c || !out || !function || function > c->function_count ||
@@ -3085,7 +3372,7 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
                !strcmp(fn->name, "main") &&
                (composed_quantity_body(f, c, fn, function, 0, &remaining,
                                        out) ||
-                guarded_byte_mode_entry(f, c, fn, function, out));
+                guarded_byte_mode_entry(f, c, fn, function, entry, out));
     const NLSyntaxView *s =
         nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
     const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
@@ -3190,6 +3477,7 @@ static bool literal_divisor_call_valid(const NLCheckedFragment *f,
     if (!n || !body || n->kind != NL_CHECKED_REGISTERED_CALL ||
         !n->body_backed || n->terminates ||
         !literal_divisor_body_at(body, f->context, n->function, operation,
+                                 !f->body_owner && call == nl_checked_root(f),
                                  &plan))
         return false;
     if (plan.formal ||
@@ -3245,9 +3533,11 @@ bool nl_quantity_usize_body_at(const NLCheckedFragment *f,
         nl_quantity_bool_function(c, function) ||
         nl_quantity_usize_function(c, function, NL_QUANTITY_MAX_ARGUMENTS))
         return literal_divisor_body_at(f, c, function,
-                                       NL_USIZE_ANY_FIXED_DIVISOR, out);
-    return literal_divisor_body_at(f, c, function, NL_USIZE_DIVIDE, out) ||
-           literal_divisor_body_at(f, c, function, NL_USIZE_REMAINDER, out);
+                                       NL_USIZE_ANY_FIXED_DIVISOR, entry, out);
+    return literal_divisor_body_at(f, c, function, NL_USIZE_DIVIDE, false,
+                                   out) ||
+           literal_divisor_body_at(f, c, function, NL_USIZE_REMAINDER, false,
+                                   out);
 }
 
 bool nl_quantity_usize_call_valid(const NLCheckedFragment *f,
