@@ -1,6 +1,7 @@
 #define main newlang_driver_main
 #include "../../src/main.c"
 #undef main
+#include "../../src/guarded_usize_internal.h"
 #include "../support/node_checked.h"
 #include "newlang/usize_division.h"
 #include "newlang/usize_remainder.h"
@@ -208,7 +209,8 @@ typedef enum {
     HELPER_PRODUCT,
     LOCAL_PRODUCT,
     COMPOSED_PRODUCT,
-    GUARDED_PRODUCT
+    GUARDED_PRODUCT,
+    GUARDED_ADDITION_DECISION
 } ProductRoute;
 
 static bool composed_product_result(const NLDivisionUsizePlan *helper)
@@ -268,6 +270,37 @@ static bool guarded_product_result(const NLCheckedFragment *caller,
            !nl_usize_multiplication_valid(arm, block->tail);
 }
 
+static bool guarded_addition_result(const NLCheckedFragment *caller,
+                                    NLCheckedNodeId id,
+                                    const NLDivisionUsizePlan *helper)
+{
+    NLGuardedUsizePlan addition;
+    if (!nl_guarded_usize_call_valid(caller, id, &addition) ||
+        addition.body != helper->body || addition.formal != helper->formal ||
+        addition.conditional != helper->result)
+        return false;
+    const NLCheckedFragment *arm =
+        nl_checked_if_arm(addition.body, addition.conditional, 0);
+    const NLCheckedNodeView *sum = nl_checked_node_view(arm, addition.addition);
+    const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
+    const NLCheckedNodeView *actual =
+        nl_checked_node_view(caller, call->first_argument);
+    NLSemanticBindingView formal;
+    NLSemanticValueView input, result;
+    return sum && sum->kind == NL_CHECKED_USIZE_ADDITION &&
+           !sum->scalar_result.known &&
+           !nl_checked_usize_addition_valid(arm, addition.addition, NULL) &&
+           actual && actual->kind == NL_CHECKED_IDENTIFIER &&
+           nl_semantic_binding_view(caller->context, addition.formal,
+                                    &formal) &&
+           formal.value == actual->results[0].value &&
+           nl_semantic_value_view(caller->context, formal.value, &input) &&
+           nl_semantic_value_view(caller->context, call->results[0].value,
+                                  &result) &&
+           !input.scalar_known && !result.scalar_known &&
+           input.type == result.type && nl_h_custody_result_valid(caller, id);
+}
+
 static bool retry_product(const NLCheckedFragment *body, ProductRoute route)
 {
     NLDivisionUsizePlan helper;
@@ -276,6 +309,8 @@ static bool retry_product(const NLCheckedFragment *body, ProductRoute route)
         return false;
     if (route == GUARDED_PRODUCT)
         return guarded_product_result(body, body->body_calls[0], &helper);
+    if (route == GUARDED_ADDITION_DECISION)
+        return guarded_addition_result(body, body->body_calls[0], &helper);
     if (helper.formal)
         return false;
     if (route == HELPER_PRODUCT)
@@ -468,6 +503,8 @@ int main(int argc, char **argv)
         route = COMPOSED_PRODUCT;
     else if (!strcmp(argv[1], "guarded-product-oom"))
         route = GUARDED_PRODUCT;
+    else if (!strcmp(argv[1], "guarded-addition-decision-oom"))
+        route = GUARDED_ADDITION_DECISION;
     else
         return 2;
     return check_oom(argv[2], route) && named_oom(argv[2]) ? 0 : 1;
