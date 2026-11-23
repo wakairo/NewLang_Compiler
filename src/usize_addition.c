@@ -20,6 +20,7 @@ typedef enum {
     NL_USIZE_SUBTRACT,
     NL_USIZE_DIVIDE,
     NL_USIZE_REMAINDER,
+    NL_USIZE_MULTIPLY,
     NL_USIZE_ANY_FIXED_DIVISOR /* Caller matching only. Receipts name one op. */
 } NLUsizeOperation;
 static const struct {
@@ -33,7 +34,9 @@ static const struct {
     [NL_USIZE_DIVIDE] = {NL_SYNTAX_USIZE_DIVISION, NL_CHECKED_USIZE_DIVISION,
                          "/"},
     [NL_USIZE_REMAINDER] = {NL_SYNTAX_USIZE_REMAINDER,
-                            NL_CHECKED_USIZE_REMAINDER, "%"}};
+                            NL_CHECKED_USIZE_REMAINDER, "%"},
+    [NL_USIZE_MULTIPLY] = {NL_SYNTAX_USIZE_MULTIPLICATION,
+                           NL_CHECKED_USIZE_MULTIPLICATION, "*"}};
 typedef struct {
     const NLCheckedFragment *origin;
     NLCheckedNodeId node, operands[2];
@@ -229,6 +232,11 @@ static bool token(const NLSource *s, NLSourceSpan span, const char *text)
            memcmp(bytes.bytes, text, bytes.length) == 0;
 }
 
+bool nl_usize_product_fits(size_t lhs, size_t rhs)
+{
+    return lhs == 0 || rhs <= SIZE_MAX / lhs;
+}
+
 static bool arithmetic_result(NLUsizeOperation operation, size_t lhs,
                               size_t rhs, size_t answer)
 {
@@ -236,6 +244,8 @@ static bool arithmetic_result(NLUsizeOperation operation, size_t lhs,
         return rhs <= SIZE_MAX - lhs && answer == lhs + rhs;
     if (operation == NL_USIZE_SUBTRACT)
         return lhs >= rhs && answer == lhs - rhs;
+    if (operation == NL_USIZE_MULTIPLY)
+        return nl_usize_product_fits(lhs, rhs) && answer == lhs * rhs;
     if (operation == NL_USIZE_DIVIDE)
         return rhs && answer == lhs / rhs;
     if (operation == NL_USIZE_REMAINDER)
@@ -537,6 +547,13 @@ static bool arithmetic_valid(const NLCheckedFragment *f, NLCheckedNodeId id,
 {
     return (operation == NL_USIZE_ADD || operation == NL_USIZE_SUBTRACT) &&
            operation_valid_at(f, id, operation, candidate,
+                              f ? f->context : NULL, NULL);
+}
+
+bool nl_usize_multiplication_valid(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id)
+{
+    return operation_valid_at(f, id, NL_USIZE_MULTIPLY, NULL,
                               f ? f->context : NULL, NULL);
 }
 
