@@ -201,7 +201,7 @@ static bool dependencies(const char *path)
     return true;
 }
 
-static bool check_oom(const char *path)
+static bool check_oom(const char *path, bool helper_product)
 {
     TestNode original = {0};
     CHECK(node_checked_load(path, &original));
@@ -237,7 +237,17 @@ static bool check_oom(const char *path)
               out);
         const NLCheckedFragment *body =
             nl_checked_call_body(out, nl_checked_root(out));
-        CHECK(body && body->usize_additions);
+        CHECK(body);
+        if (helper_product) {
+            CHECK(body->body_count == 1);
+            const NLCheckedNodeId id = body->body_calls[0];
+            NLDivisionUsizePlan helper;
+            CHECK(nl_quantity_usize_call_valid(body, id, &helper) &&
+                  !helper.formal &&
+                  nl_usize_multiplication_valid(helper.body, helper.result));
+        } else {
+            CHECK(body->usize_additions);
+        }
         nl_checked_destroy(out);
         nl_semantic_destroy(c);
     }
@@ -350,7 +360,8 @@ int main(int argc, char **argv)
         return 2;
     if (!strcmp(argv[1], "receipt"))
         return receipts(argv[2]) && dependencies(argv[3]) ? 0 : 1;
-    if (!strcmp(argv[1], "oom"))
-        return check_oom(argv[2]) && named_oom(argv[2]) ? 0 : 1;
+    const bool helper_product = !strcmp(argv[1], "helper-oom");
+    if (helper_product || !strcmp(argv[1], "oom"))
+        return check_oom(argv[2], helper_product) && named_oom(argv[2]) ? 0 : 1;
     return 2;
 }

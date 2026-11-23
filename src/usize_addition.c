@@ -1609,7 +1609,7 @@ static bool division_call_values(const NLCheckedFragment *f,
 {
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLSymbolId formals[] = {helper->formal, helper->second_formal};
-    const size_t count = helper->second_formal ? 2 : 1;
+    const size_t count = helper->second_formal ? 2 : helper->formal != 0;
     const NLFunctionEntry *fn =
         nl_quantity_usize_function(c, helper->function, count);
     if (!fn && count == 1)
@@ -1620,7 +1620,7 @@ static bool division_call_values(const NLCheckedFragment *f,
     if (!fn || !call || call->kind != NL_CHECKED_REGISTERED_CALL ||
         !call->body_backed || call->argument_count != count ||
         call->function != helper->function ||
-        ((helper->second_formal || boolean) &&
+        ((!count || helper->second_formal || boolean) &&
          f->context != helper->body->context))
         return false;
     NLCheckedNodeId argument = call->first_argument;
@@ -1659,7 +1659,8 @@ static bool quantity_invocation_at(const NLCheckedFragment *f,
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
     NLDivisionUsizePlan helper;
     return n && n->kind == NL_CHECKED_REGISTERED_CALL && src &&
-           src->kind == NL_SYNTAX_EXPR_CALL && src->data.call.arguments &&
+           src->kind == NL_SYNTAX_EXPR_CALL &&
+           (n->argument_count == 0) == (src->data.call.arguments == NULL) &&
            span_equal(n->span, src->span) &&
            span_equal(n->name, src->data.call.callee) && n->function &&
            n->function <= c->function_count &&
@@ -1828,6 +1829,10 @@ static QuantityOrigin quantity_arithmetic_at(QuantityBody *b,
 {
     const NLUsizeAdditionProof *proof = find(b->body, id);
     if (!proof || proof->syntax != syntax ||
+        (proof->operation == NL_USIZE_MULTIPLY &&
+         (b->function->count ||
+          b->function->result !=
+              nl_semantic_core_type(b->context, NL_TYPE_USIZE))) ||
         (b->if_parent && !fixed_divisor(proof->operation)) ||
         !operation_valid_at(b->body, id, proof->operation, NULL, b->context,
                             b->if_parent))
@@ -1877,10 +1882,15 @@ static QuantityOrigin quantity_call_chain_at(QuantityBody *b,
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLSyntaxView *src = nl_syntax_node_view(syntax);
     if (!call || call->kind != NL_CHECKED_REGISTERED_CALL || !src ||
-        src->kind != NL_SYNTAX_EXPR_CALL || !call->argument_count ||
+        src->kind != NL_SYNTAX_EXPR_CALL ||
         call->argument_count > NL_QUANTITY_MAX_ARGUMENTS || !f->body_calls ||
         nesting >= f->body_count ||
         b->depth + nesting >= NL_SEMANTIC_MAX_DEPTH || !*b->remaining)
+        return QUANTITY_UNSEEN;
+    if (!call->argument_count &&
+        (b->depth || b->if_parent || nesting ||
+         strcmp(b->function->name, "main") ||
+         b->function->result != nl_semantic_unit_type(c)))
         return QUANTITY_UNSEEN;
     if ((b->function->count || b->if_parent || nesting) &&
         call->argument_count == 1 &&
@@ -2083,7 +2093,8 @@ static bool quantity_items_at(QuantityBody *b, const NLCheckedNodeView *root,
             const bool call = use->kind == NL_CHECKED_REGISTERED_CALL;
             if (call &&
                 (b->function->count || b->if_parent || use->type != usize ||
-                 !nl_quantity_bool_function(c, use->function)))
+                 (use->argument_count &&
+                  !nl_quantity_bool_function(c, use->function))))
                 return false;
             const NLSyntaxNode *expression = discarded_quantity_expression(
                 f, c, id, node, src, use->type,
@@ -2345,6 +2356,34 @@ static bool quantity_bool_choice(const NLCheckedFragment *f,
                                   : QUANTITY_BOOL_MATCHING_ARITHMETIC);
 }
 
+/* The zero-formal helper uses local atom declarations and one direct normal
+ * product tail. The ordinary walker and receipt validator check their IDs,
+ * Copy origins, source, numeric facts and result in the same invocation. */
+static bool quantity_product_shape(const NLCheckedFragment *f,
+                                   const NLCheckedNodeView *root,
+                                   const NLSyntaxView *source)
+{
+    if (f->body_count || f->arm_count || !root || root->terminates || !source ||
+        source->kind != NL_SYNTAX_BLOCK)
+        return false;
+    const NLSyntaxView *tail = nl_syntax_node_view(source->data.block.tail);
+    if (!tail || tail->kind != NL_SYNTAX_USIZE_MULTIPLICATION)
+        return false;
+    size_t count = 0;
+    for (const NLSyntaxNode *item = source->data.block.items; item;
+         item = nl_syntax_next_argument(item)) {
+        const NLSyntaxView *binding = nl_syntax_node_view(item);
+        if (++count > root->item_count || binding->kind != NL_SYNTAX_BINDING)
+            return false;
+        const NLSyntaxView *init =
+            nl_syntax_node_view(binding->data.binding.initializer);
+        if (!init || (init->kind != NL_SYNTAX_USIZE_LITERAL &&
+                      init->kind != NL_SYNTAX_EXPR_NAME))
+            return false;
+    }
+    return true;
+}
+
 static bool composed_quantity_body(const NLCheckedFragment *f,
                                    const NLSemanticContext *c,
                                    const NLFunctionEntry *fn, size_t function,
@@ -2374,10 +2413,19 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
         for (size_t i = 0; i < fn->count; ++i)
             b.origins[formals[i] - 1] = QUANTITY_FROM_FORMAL;
     }
+    const bool product =
+        !fn->count && fn->result == nl_semantic_core_type(c, NL_TYPE_USIZE);
     QuantityResult result;
-    if (!quantity_items_at(&b, root, source, &result))
+    if ((product && !quantity_product_shape(f, root, source)) ||
+        !quantity_items_at(&b, root, source, &result))
         return false;
-    if (fn->count) {
+    if (product) {
+        NLValueId value;
+        if (!quantity_tail_at(&b, f->root, result.id, &value) ||
+            quantity_arithmetic_at(&b, result.id, result.syntax) !=
+                QUANTITY_INDEPENDENT)
+            return false;
+    } else if (fn->count) {
         NLValueId value;
         if (!result.returned &&
             !quantity_tail_at(&b, f->root, result.id, &value))
@@ -2480,7 +2528,9 @@ static bool has_composed_actual(const NLCheckedFragment *f,
     for (size_t i = 0; i < f->body_count; ++i) {
         const NLCheckedNodeView *call =
             nl_checked_node_view(f, f->body_calls[i]);
-        if (call && (call->argument_count > 1 ||
+        if (call && ((!call->argument_count &&
+                      nl_quantity_usize_function(c, call->function, 0)) ||
+                     call->argument_count > 1 ||
                      (call->argument_count == 1 &&
                       nl_quantity_bool_function(c, call->function))))
             return true;
@@ -2504,7 +2554,7 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
         return false;
     const NLFunctionEntry *fn = &c->functions[function - 1];
     size_t remaining = NL_SEMANTIC_MAX_ENTRIES;
-    if (fn->count)
+    if (fn->count || fn->result == nl_semantic_core_type(c, NL_TYPE_USIZE))
         return quantity_helper_at(f, c, function, operation, 0, &remaining,
                                   out);
     const NLTypeId unit = nl_semantic_unit_type(c);
@@ -2625,7 +2675,8 @@ static bool literal_divisor_call_valid(const NLCheckedFragment *f,
         !literal_divisor_body_at(body, f->context, n->function, operation,
                                  &plan))
         return false;
-    if (plan.formal) {
+    if (plan.formal ||
+        n->type == nl_semantic_core_type(f->context, NL_TYPE_USIZE)) {
         if (!division_call_values(f, f->context, call, &plan))
             return false;
         if (plan.division) {
@@ -2672,7 +2723,8 @@ bool nl_quantity_usize_body_at(const NLCheckedFragment *f,
                                const NLSemanticContext *c, size_t function,
                                bool entry, NLDivisionUsizePlan *out)
 {
-    if (entry || nl_quantity_usize_function(c, function, 1) ||
+    if (entry || nl_quantity_usize_function(c, function, 0) ||
+        nl_quantity_usize_function(c, function, 1) ||
         nl_quantity_bool_function(c, function) ||
         nl_quantity_usize_function(c, function, NL_QUANTITY_MAX_ARGUMENTS))
         return literal_divisor_body_at(f, c, function,

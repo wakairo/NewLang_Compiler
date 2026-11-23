@@ -54,6 +54,9 @@ static bool division_emit_expression(DivisionText *t,
     const char *operator_text;
     switch (n->kind) {
     case NL_CHECKED_REGISTERED_CALL: {
+        if (!n->argument_count)
+            return !n->first_argument &&
+                   division_text_append(t, "nl_qty_fn_%zu()", n->function);
         if (n->argument_count == 2)
             return division_text_append(t,
                                         "nl_qty_fn_%zu(nl_actual_%zu_0, "
@@ -167,6 +170,8 @@ static bool division_emit_evaluation(DivisionText *t,
     if (n->kind != NL_CHECKED_REGISTERED_CALL)
         return true;
     NLCheckedNodeId arg = n->first_argument;
+    if (!n->argument_count)
+        return !arg;
     if (n->argument_count == 1)
         return division_emit_evaluation(t, f, arg, indent);
     if (n->argument_count != 2)
@@ -218,17 +223,45 @@ static bool division_emit_items(DivisionText *t, const NLCheckedFragment *f,
     return true;
 }
 
+/* Only the zero-formal helper planner supplies a product tail here. Stage
+ * the already validated atom values in source order before multiplying. */
+static bool division_emit_product_tail(DivisionText *text,
+                                       const NLDivisionUsizePlan *helper)
+{
+    const NLCheckedFragment *f = helper->body;
+    const NLCheckedNodeView *product = nl_checked_node_view(f, helper->result);
+    if (!product || product->kind != NL_CHECKED_USIZE_MULTIPLICATION)
+        return false;
+    const NLCheckedNodeView *left =
+        nl_checked_node_view(f, product->first_argument);
+    return left &&
+           division_text_append(text, "    const size_t nl_product_left = ") &&
+           division_emit_atom(text, f, product->first_argument) &&
+           division_text_append(text,
+                                ";\n    const size_t nl_product_right = ") &&
+           division_emit_atom(text, f, left->next_argument) &&
+           division_text_append(
+               text, ";\n    return nl_product_left * nl_product_right;\n");
+}
+
 static bool division_emit_helper(DivisionText *text,
                                  const NLDivisionUsizePlan *helper)
 {
     const NLSemanticContext *c = helper->body->context;
-    const size_t count = helper->second_formal ? 2 : 1;
+    const size_t count = helper->second_formal ? 2 : helper->formal != 0;
     const NLFunctionEntry *fn =
         nl_quantity_usize_function(c, helper->function, count);
     if (!fn && count == 1)
         fn = nl_quantity_bool_function(c, helper->function);
     if (!fn)
         return false;
+    if (!count)
+        return division_text_append(text,
+                                    "static size_t nl_qty_fn_%zu(void)\n{\n",
+                                    helper->function) &&
+               division_emit_items(text, helper->body, helper->body->root, 4) &&
+               division_emit_product_tail(text, helper) &&
+               division_text_append(text, "}\n\n");
     const char *first = division_scalar_type(c, fn->parameters[0]);
     const char *second =
         count == 2 ? division_scalar_type(c, fn->parameters[1]) : NULL;
@@ -286,8 +319,10 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
             return NL_CHECK_RESOURCE_LIMIT;
         --program->remaining;
         NLDivisionUsizePlan helper;
-        if (!valid(body, body->body_calls[i], &helper) || !helper.formal ||
-            !helper.function || helper.function > NL_SEMANTIC_MAX_ENTRIES)
+        if (!valid(body, body->body_calls[i], &helper) || !helper.function ||
+            helper.function > NL_SEMANTIC_MAX_ENTRIES ||
+            (!helper.formal && !nl_quantity_usize_function(helper.body->context,
+                                                           helper.function, 0)))
             return NL_CHECK_SEMANTIC_UNSUPPORTED;
         /* Walk each actual, including repeated calls. Share only the C
          * definition, after visiting its callees in source order. */
