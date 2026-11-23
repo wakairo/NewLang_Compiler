@@ -2,6 +2,8 @@
 #include "../../src/main.c"
 #undef main
 #include "../support/node_checked.h"
+#include "newlang/usize_division.h"
+#include "newlang/usize_remainder.h"
 
 #include <dirent.h>
 
@@ -201,15 +203,48 @@ static bool dependencies(const char *path)
     return true;
 }
 
-static bool retry_product(const NLCheckedFragment *body, bool local)
+typedef enum {
+    ENTRY_PRODUCT,
+    HELPER_PRODUCT,
+    LOCAL_PRODUCT,
+    COMPOSED_PRODUCT
+} ProductRoute;
+
+static bool composed_product_result(const NLDivisionUsizePlan *helper)
+{
+    const NLCheckedFragment *f = helper->body;
+    const NLCheckedNodeId id = helper->result;
+    const NLCheckedNodeView *result = nl_checked_node_view(f, id);
+    if (!result)
+        return false;
+    if (result->kind == NL_CHECKED_USIZE_DIVISION) {
+        NLUsizeDivisionView receipt;
+        return nl_checked_usize_division_view(f, id, &receipt) &&
+               nl_checked_usize_division_valid(f, id, &receipt) &&
+               receipt.numerator_known && receipt.quotient_known &&
+               receipt.numbers[0] == 1073 && receipt.numbers[1] == 31 &&
+               receipt.quotient == 34;
+    }
+    NLUsizeRemainderView receipt;
+    return nl_checked_usize_remainder_view(f, id, &receipt) &&
+           nl_checked_usize_remainder_valid(f, id, &receipt) &&
+           receipt.numerator_known && receipt.remainder_known &&
+           receipt.numbers[0] == 1073 && receipt.numbers[1] == 31 &&
+           receipt.remainder == 19;
+}
+
+static bool retry_product(const NLCheckedFragment *body, ProductRoute route)
 {
     NLDivisionUsizePlan helper;
     if (body->body_count != 1 ||
         !nl_quantity_usize_call_valid(body, body->body_calls[0], &helper) ||
         helper.formal)
         return false;
-    if (!local)
+    if (route == HELPER_PRODUCT)
         return nl_usize_multiplication_valid(helper.body, helper.result);
+    if (route == COMPOSED_PRODUCT)
+        return nl_h_custody_result_valid(body, body->body_calls[0]) &&
+               composed_product_result(&helper);
 
     const NLCheckedNodeView *tail =
         nl_checked_node_view(helper.body, helper.result);
@@ -230,7 +265,7 @@ static bool retry_product(const NLCheckedFragment *body, bool local)
     return false;
 }
 
-static bool check_oom(const char *path, bool helper_product, bool local)
+static bool check_oom(const char *path, ProductRoute route)
 {
     TestNode original = {0};
     CHECK(node_checked_load(path, &original));
@@ -267,8 +302,8 @@ static bool check_oom(const char *path, bool helper_product, bool local)
         const NLCheckedFragment *body =
             nl_checked_call_body(out, nl_checked_root(out));
         CHECK(body);
-        if (helper_product) {
-            CHECK(retry_product(body, local));
+        if (route != ENTRY_PRODUCT) {
+            CHECK(retry_product(body, route));
         } else {
             CHECK(body->usize_additions);
         }
@@ -384,11 +419,16 @@ int main(int argc, char **argv)
         return 2;
     if (!strcmp(argv[1], "receipt"))
         return receipts(argv[2]) && dependencies(argv[3]) ? 0 : 1;
-    const bool local = !strcmp(argv[1], "local-product-oom");
-    const bool helper_product = local || !strcmp(argv[1], "helper-oom");
-    if (helper_product || !strcmp(argv[1], "oom"))
-        return check_oom(argv[2], helper_product, local) && named_oom(argv[2])
-                   ? 0
-                   : 1;
-    return 2;
+    ProductRoute route;
+    if (!strcmp(argv[1], "oom"))
+        route = ENTRY_PRODUCT;
+    else if (!strcmp(argv[1], "helper-oom"))
+        route = HELPER_PRODUCT;
+    else if (!strcmp(argv[1], "local-product-oom"))
+        route = LOCAL_PRODUCT;
+    else if (!strcmp(argv[1], "composed-product-oom"))
+        route = COMPOSED_PRODUCT;
+    else
+        return 2;
+    return check_oom(argv[2], route) && named_oom(argv[2]) ? 0 : 1;
 }
