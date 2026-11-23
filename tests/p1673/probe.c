@@ -210,7 +210,8 @@ typedef enum {
     LOCAL_PRODUCT,
     COMPOSED_PRODUCT,
     GUARDED_PRODUCT,
-    GUARDED_ADDITION_DECISION
+    GUARDED_ADDITION_DECISION,
+    GUARDED_SELECTOR
 } ProductRoute;
 
 static bool composed_product_result(const NLDivisionUsizePlan *helper)
@@ -301,6 +302,44 @@ static bool guarded_addition_result(const NLCheckedFragment *caller,
            input.type == result.type && nl_h_custody_result_valid(caller, id);
 }
 
+static bool guarded_selector_result(const NLDivisionUsizePlan *selector)
+{
+    const NLCheckedFragment *body = selector->body;
+    NLDivisionUsizePlan guarded;
+    if (body->body_count != 1 ||
+        !nl_quantity_usize_call_valid(body, body->body_calls[0], &guarded) ||
+        !guarded_product_result(body, body->body_calls[0], &guarded))
+        return false;
+    const NLCheckedNodeView *root = nl_checked_node_view(body, body->root);
+    const NLCheckedNodeView *binding =
+        root ? nl_checked_node_view(body, root->first_item) : NULL;
+    const NLCheckedNodeView *call =
+        nl_checked_node_view(body, body->body_calls[0]);
+    const NLCheckedNodeView *actual =
+        call ? nl_checked_node_view(body, call->first_argument) : NULL;
+    const NLCheckedNodeView *choice =
+        nl_checked_node_view(body, selector->result);
+    const NLCheckedNodeView *condition =
+        choice ? nl_checked_node_view(body, choice->initializer) : NULL;
+    const NLCheckedNodeView *left =
+        condition ? nl_checked_node_view(body, condition->first_argument)
+                  : NULL;
+    NLSemanticBindingView bytes;
+    NLSemanticValueView mode;
+    return binding && actual && left && root->tail == selector->result &&
+           binding->initializer == body->body_calls[0] &&
+           actual->symbol == selector->formal &&
+           choice->kind == NL_CHECKED_IF && choice->normal_arms == 2 &&
+           condition->kind == NL_CHECKED_USIZE_LESS_THAN &&
+           left->symbol == binding->symbol &&
+           left->value_use == NL_VALUE_COPIED &&
+           nl_semantic_binding_view(body->context, binding->symbol, &bytes) &&
+           bytes.value == call->results[0].value &&
+           nl_semantic_value_view(body->context, choice->results[0].value,
+                                  &mode) &&
+           !mode.scalar_known;
+}
+
 static bool retry_product(const NLCheckedFragment *body, ProductRoute route)
 {
     NLDivisionUsizePlan helper;
@@ -311,6 +350,9 @@ static bool retry_product(const NLCheckedFragment *body, ProductRoute route)
         return guarded_product_result(body, body->body_calls[0], &helper);
     if (route == GUARDED_ADDITION_DECISION)
         return guarded_addition_result(body, body->body_calls[0], &helper);
+    if (route == GUARDED_SELECTOR)
+        return nl_h_custody_result_valid(body, body->body_calls[0]) &&
+               guarded_selector_result(&helper);
     if (helper.formal)
         return false;
     if (route == HELPER_PRODUCT)
@@ -505,6 +547,8 @@ int main(int argc, char **argv)
         route = GUARDED_PRODUCT;
     else if (!strcmp(argv[1], "guarded-addition-decision-oom"))
         route = GUARDED_ADDITION_DECISION;
+    else if (!strcmp(argv[1], "guarded-selector-oom"))
+        route = GUARDED_SELECTOR;
     else
         return 2;
     return check_oom(argv[2], route) && named_oom(argv[2]) ? 0 : 1;
