@@ -158,8 +158,8 @@ static bool division_emit_if(DivisionText *t, const NLCheckedFragment *f,
     return true;
 }
 
-/* Each validated zero-formal helper has a single product. Stage its
- * already validated atoms in source order before evaluating the product. */
+/* Stage the already validated atoms in source order in the product's block.
+ * A guarded product is staged only inside its true arm. */
 static bool division_emit_product_operands(DivisionText *t,
                                            const NLCheckedFragment *f,
                                            const NLCheckedNodeView *product,
