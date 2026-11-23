@@ -2885,6 +2885,7 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
 {
     const NLSyntaxView *syntax = nl_syntax_node_view(source);
     const bool subtraction = syntax->kind == NL_SYNTAX_USIZE_SUBTRACTION;
+    const bool multiplication = syntax->kind == NL_SYNTAX_USIZE_MULTIPLICATION;
     const NLCheckedNodeId left = expression(check, syntax->data.equality.left);
     if (left == 0)
         return 0;
@@ -2900,9 +2901,12 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
         lhs.results[0].type != quantity || rhs.results[0].type != quantity) {
         fail(check, NL_CHECK_SEMANTIC_ERROR,
              syntax->data.equality.operator_span,
-             subtraction ? "USIZE-SUBTRACTION-TYPE" : "USIZE-ADDITION-TYPE",
-             subtraction ? "- requires two exact core usize operands"
-                         : "+ requires two exact core usize operands");
+             multiplication ? "USIZE-MULTIPLICATION-TYPE"
+             : subtraction  ? "USIZE-SUBTRACTION-TYPE"
+                            : "USIZE-ADDITION-TYPE",
+             multiplication ? "* requires two exact core usize operands"
+             : subtraction  ? "- requires two exact core usize operands"
+                            : "+ requires two exact core usize operands");
         return 0;
     }
     const NLSemanticValueView a = c->values[lhs.results[0].value - 1];
@@ -2911,29 +2915,42 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
      * successor. Keep even concrete replays conservative: CHECK visits both
      * arms, including the unselected x==MAX true arm. */
     const NLSymbolId formal = check->function_binding_floor + 1;
-    const bool guarded =
-        !subtraction && !check->loop && check->in_function_body &&
-        nl_guarded_usize_permitted(check->artifact, c, check->guard_entry,
-                                   check->body_function, formal, source, left,
-                                   right);
+    const bool guarded = !subtraction && !multiplication && !check->loop &&
+                         check->in_function_body &&
+                         nl_guarded_usize_permitted(
+                             check->artifact, c, check->guard_entry,
+                             check->body_function, formal, source, left, right);
     const bool known = !guarded && a.scalar_known && b.scalar_known;
     if (a.dependencies != NL_DEPENDENCY_FREE ||
         b.dependencies != NL_DEPENDENCY_FREE || a.value_dependency_count != 0 ||
         b.value_dependency_count != 0 ||
-        (!known && !guarded && !stutter_quantity(check, source, left, right) &&
-         !current_quantity(check, source, left, right))) {
+        (!known && !guarded &&
+         (multiplication || (!stutter_quantity(check, source, left, right) &&
+                             !current_quantity(check, source, left, right))))) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
              syntax->data.equality.operator_span,
-             subtraction ? "USIZE-SUBTRACTION-PRECISION"
-                         : "USIZE-ADDITION-PRECISION",
-             subtraction ? "subtraction needs known dependency-free quantity "
-                           "operands in this profile"
-                         : "addition needs known dependency-free quantity "
-                           "operands in this profile");
+             multiplication ? "USIZE-MULTIPLICATION-PRECISION"
+             : subtraction  ? "USIZE-SUBTRACTION-PRECISION"
+                            : "USIZE-ADDITION-PRECISION",
+             multiplication ? "multiplication needs known dependency-free "
+                              "quantity operands in this profile"
+             : subtraction  ? "subtraction needs known dependency-free "
+                              "quantity operands in this profile"
+                            : "addition needs known dependency-free quantity "
+                              "operands in this profile");
         return 0;
     }
-    if (known && (subtraction ? a.scalar_value < b.scalar_value
-                              : b.scalar_value > SIZE_MAX - a.scalar_value)) {
+    if (multiplication &&
+        !nl_usize_product_fits(a.scalar_value, b.scalar_value)) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR,
+             syntax->data.equality.operator_span,
+             "USIZE-MULTIPLICATION-OVERFLOW",
+             "mathematical usize product is outside target range");
+        return 0;
+    }
+    if (known && !multiplication &&
+        (subtraction ? a.scalar_value < b.scalar_value
+                     : b.scalar_value > SIZE_MAX - a.scalar_value)) {
         fail(check, NL_CHECK_SEMANTIC_ERROR,
              syntax->data.equality.operator_span,
              subtraction ? "USIZE-SUBTRACTION-UNDERFLOW"
@@ -2944,9 +2961,13 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
         return 0;
     }
     const NLTypeId type = quantity;
-    const size_t answer = !known        ? 0
-                          : subtraction ? a.scalar_value - b.scalar_value
-                                        : a.scalar_value + b.scalar_value;
+    const size_t answer = !known           ? 0
+                          : multiplication ? a.scalar_value * b.scalar_value
+                          : subtraction    ? a.scalar_value - b.scalar_value
+                                           : a.scalar_value + b.scalar_value;
+    const NLCheckedKind kind = multiplication ? NL_CHECKED_USIZE_MULTIPLICATION
+                               : subtraction  ? NL_CHECKED_USIZE_SUBTRACTION
+                                              : NL_CHECKED_USIZE_ADDITION;
     const NLValueId value = new_value(
         check,
         (NLSemanticValueView){
@@ -2958,18 +2979,16 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
     end_temporary(check, rhs.results[0].value);
     view(check, left)->next_argument = right;
     const NLCheckedNodeId id = add(
-        check,
-        (NLCheckedNodeView){.kind = subtraction ? NL_CHECKED_USIZE_SUBTRACTION
-                                                : NL_CHECKED_USIZE_ADDITION,
-                            .span = syntax->span,
-                            .name = syntax->data.equality.operator_span,
-                            .type = type,
-                            .first_argument = left,
-                            .argument_count = 2,
-                            .result_count = 1,
-                            .results = {{type, value}},
-                            .has_scalar_result = true,
-                            .scalar_result = {type, known, answer}});
+        check, (NLCheckedNodeView){.kind = kind,
+                                   .span = syntax->span,
+                                   .name = syntax->data.equality.operator_span,
+                                   .type = type,
+                                   .first_argument = left,
+                                   .argument_count = 2,
+                                   .result_count = 1,
+                                   .results = {{type, value}},
+                                   .has_scalar_result = true,
+                                   .scalar_result = {type, known, answer}});
     if (id && known &&
         !host(check,
               nl_usize_arithmetic_capture(check->artifact, id, source, c),
@@ -3020,6 +3039,7 @@ static NLCheckedNodeId expression_for_parameter(Check *check,
         node->kind != NL_SYNTAX_USIZE_LESS_THAN &&
         node->kind != NL_SYNTAX_USIZE_ADDITION &&
         node->kind != NL_SYNTAX_USIZE_SUBTRACTION &&
+        node->kind != NL_SYNTAX_USIZE_MULTIPLICATION &&
         node->kind != NL_SYNTAX_USIZE_DIVISION &&
         node->kind != NL_SYNTAX_USIZE_REMAINDER &&
         node->kind != NL_SYNTAX_ARRAY4_CONSTRUCTOR &&
@@ -3064,7 +3084,8 @@ static NLCheckedNodeId expression_for_parameter(Check *check,
     } else if (node->kind == NL_SYNTAX_USIZE_REMAINDER) {
         result = usize_literal_divisor(check, syntax);
     } else if (node->kind == NL_SYNTAX_USIZE_ADDITION ||
-               node->kind == NL_SYNTAX_USIZE_SUBTRACTION) {
+               node->kind == NL_SYNTAX_USIZE_SUBTRACTION ||
+               node->kind == NL_SYNTAX_USIZE_MULTIPLICATION) {
         result = usize_arithmetic(check, syntax);
     } else if (node->kind == NL_SYNTAX_U8_LITERAL ||
                node->kind == NL_SYNTAX_USIZE_LITERAL) {
@@ -11364,6 +11385,7 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
          root->kind != NL_SYNTAX_USIZE_LESS_THAN &&
          root->kind != NL_SYNTAX_USIZE_ADDITION &&
          root->kind != NL_SYNTAX_USIZE_SUBTRACTION &&
+         root->kind != NL_SYNTAX_USIZE_MULTIPLICATION &&
          root->kind != NL_SYNTAX_USIZE_DIVISION &&
          root->kind != NL_SYNTAX_USIZE_REMAINDER &&
          root->kind != NL_SYNTAX_LOCAL_READ_LOAN &&

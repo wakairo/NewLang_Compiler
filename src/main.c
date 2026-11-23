@@ -3,6 +3,7 @@
 #endif
 #include "checked_c_target.h"
 #include "copy_body_internal.h"
+#include "division_usize_internal.h"
 #include "h_origin_internal.h"
 #include "if_field_internal.h"
 #include "linear_break_internal.h"
@@ -259,12 +260,15 @@ static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
             return true;
         }
         if (v->kind == NL_CHECKED_USIZE_ADDITION ||
-            v->kind == NL_CHECKED_USIZE_SUBTRACTION) {
+            v->kind == NL_CHECKED_USIZE_SUBTRACTION ||
+            v->kind == NL_CHECKED_USIZE_MULTIPLICATION) {
             if (!known)
                 return false;
             if (!(v->kind == NL_CHECKED_USIZE_ADDITION
                       ? nl_checked_usize_addition_valid(f, id, NULL)
-                      : nl_checked_usize_subtraction_valid(f, id, NULL)))
+                  : v->kind == NL_CHECKED_USIZE_SUBTRACTION
+                      ? nl_checked_usize_subtraction_valid(f, id, NULL)
+                      : nl_usize_multiplication_valid(f, id)))
                 return false;
             p->uses_usize = true;
             return true;
@@ -378,7 +382,8 @@ static bool bool_quantity_origin(const NLCheckedFragment *f, NLCheckedNodeId id,
         const NLCheckedNodeView *v = nl_checked_node_view(f, id);
         if (v->kind == NL_CHECKED_USIZE_LITERAL ||
             v->kind == NL_CHECKED_USIZE_ADDITION ||
-            v->kind == NL_CHECKED_USIZE_SUBTRACTION)
+            v->kind == NL_CHECKED_USIZE_SUBTRACTION ||
+            v->kind == NL_CHECKED_USIZE_MULTIPLICATION)
             return true;
         id = bool_source_origin(f, id);
     }
@@ -1104,15 +1109,19 @@ static bool emit_quantity_bool(FILE *stream, const NLCheckedFragment *f,
     if (value->kind != NL_CHECKED_USIZE_EQUALITY &&
         value->kind != NL_CHECKED_USIZE_LESS_THAN &&
         value->kind != NL_CHECKED_USIZE_ADDITION &&
-        value->kind != NL_CHECKED_USIZE_SUBTRACTION)
+        value->kind != NL_CHECKED_USIZE_SUBTRACTION &&
+        value->kind != NL_CHECKED_USIZE_MULTIPLICATION)
         return v1_emit_scalar(stream, value);
+    if (value->kind == NL_CHECKED_USIZE_LESS_THAN)
+        return fprintf(stream, "(nl_less_left_%zu < nl_less_right_%zu)",
+                       value->first_argument, value->first_argument) >= 0;
+    if (value->kind == NL_CHECKED_USIZE_MULTIPLICATION)
+        return fprintf(stream, "(nl_mul_left_%zu * nl_mul_right_%zu)",
+                       value->first_argument, value->first_argument) >= 0;
     const NLCheckedNodeView *left =
         nl_checked_node_view(f, value->first_argument);
     const NLCheckedNodeView *right =
         nl_checked_node_view(f, left->next_argument);
-    if (value->kind == NL_CHECKED_USIZE_LESS_THAN)
-        return fprintf(stream, "(nl_less_left_%zu < nl_less_right_%zu)",
-                       value->first_argument, value->first_argument) >= 0;
     return fputc('(', stream) != EOF && v1_emit_scalar(stream, left) &&
            fputs(value->kind == NL_CHECKED_USIZE_ADDITION      ? " + "
                  : value->kind == NL_CHECKED_USIZE_SUBTRACTION ? " - "
@@ -2791,6 +2800,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
     case NL_CHECKED_USIZE_LITERAL:
     case NL_CHECKED_USIZE_ADDITION:
     case NL_CHECKED_USIZE_SUBTRACTION:
+    case NL_CHECKED_USIZE_MULTIPLICATION:
     case NL_CHECKED_USIZE_EQUALITY:
     case NL_CHECKED_USIZE_LESS_THAN:
     case NL_CHECKED_IDENTIFIER:
@@ -3205,26 +3215,27 @@ static bool v1_emit_call(FILE *stream, const NLCheckedFragment *f,
                        fprintf(stream, "(void)nl_call_%zu;\n", id) >= 0);
 }
 
-/* The validated flat comparison has two pure literal/identifier operands.
- * Sequence their actual guest size_t values before comparing, rather than
- * spelling an unsigned constant < 0 that GCC13 rejects under -Wtype-limits.
- * Do not substitute the checker's known truth or change the target guard. */
-static bool emit_less_operands(FILE *stream, const NLCheckedFragment *f,
-                               const NLCheckedNodeView *value, size_t depth)
+/* Stage the actual left and right operands in source order. Less-than also
+ * needs locals for the existing unsigned constant diagnostics on GCC. */
+static bool emit_quantity_operands(FILE *stream, const NLCheckedFragment *f,
+                                   const NLCheckedNodeView *value, size_t depth)
 {
-    if (value->kind != NL_CHECKED_USIZE_LESS_THAN)
+    const char *prefix = value->kind == NL_CHECKED_USIZE_LESS_THAN ? "less"
+                         : value->kind == NL_CHECKED_USIZE_MULTIPLICATION
+                             ? "mul"
+                             : NULL;
+    if (!prefix)
         return true;
     const NLCheckedNodeView *left =
         nl_checked_node_view(f, value->first_argument);
     const NLCheckedNodeView *right =
         nl_checked_node_view(f, left->next_argument);
     return v0_indent(stream, depth) &&
-           fprintf(stream,
-                   "const size_t nl_less_left_%zu = ", value->first_argument) >=
-               0 &&
+           fprintf(stream, "const size_t nl_%s_left_%zu = ", prefix,
+                   value->first_argument) >= 0 &&
            v1_emit_scalar(stream, left) && fputs(";\n", stream) >= 0 &&
            v0_indent(stream, depth) &&
-           fprintf(stream, "const size_t nl_less_right_%zu = ",
+           fprintf(stream, "const size_t nl_%s_right_%zu = ", prefix,
                    value->first_argument) >= 0 &&
            v1_emit_scalar(stream, right) && fputs(";\n", stream) >= 0;
 }
@@ -3240,7 +3251,7 @@ static bool emit_if_field(FILE *stream, const NLCheckedFragment *f,
     NLIfFieldView joined;
     const bool observe =
         nl_if_call_two_normal_view(f, &joined) && joined.conditional == id;
-    if (!emit_less_operands(stream, f, condition, depth))
+    if (!emit_quantity_operands(stream, f, condition, depth))
         return false;
     if (choice->result_count &&
         (!v0_indent(stream, depth) ||
@@ -3735,11 +3746,12 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     case NL_CHECKED_USIZE_LITERAL:
     case NL_CHECKED_USIZE_ADDITION:
     case NL_CHECKED_USIZE_SUBTRACTION:
+    case NL_CHECKED_USIZE_MULTIPLICATION:
     case NL_CHECKED_USIZE_EQUALITY:
     case NL_CHECKED_USIZE_LESS_THAN:
     case NL_CHECKED_IDENTIFIER:
     case NL_CHECKED_PTR_FROM_REF:
-        return emit_less_operands(stream, fragment, view, depth) &&
+        return emit_quantity_operands(stream, fragment, view, depth) &&
                v0_indent(stream, depth) && fputs("(void)", stream) >= 0 &&
                (view->kind == NL_CHECKED_PTR_FROM_REF
                     ? gate_emit_ptr(stream, fragment, view)
@@ -3875,7 +3887,7 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
         if (initializer->kind == NL_CHECKED_LOAN_HEADER &&
             !gate_emit_loan(stream, fragment, initializer, depth))
             return false;
-        if (!emit_less_operands(stream, fragment, initializer, depth) ||
+        if (!emit_quantity_operands(stream, fragment, initializer, depth) ||
             !v0_indent(stream, depth))
             return false;
         if (initializer->kind == NL_CHECKED_AGGREGATE) {
@@ -4035,7 +4047,7 @@ static bool predicate_emit_return(FILE *stream, const NLCheckedFragment *f,
 {
     const NLCheckedNodeView *condition =
         nl_checked_node_view(f, value->initializer);
-    if (!emit_less_operands(stream, f, condition, 1) ||
+    if (!emit_quantity_operands(stream, f, condition, 1) ||
         fputs("    return (", stream) < 0 ||
         !emit_quantity_bool(stream, f, condition) || fputs(" ? ", stream) < 0)
         return false;
@@ -4060,7 +4072,7 @@ static bool predicate_emit_binding(FILE *stream, const NLCheckedFragment *f,
     const NLCheckedNodeView *condition =
         choice ? nl_checked_node_view(f, choice->initializer) : NULL;
     if (plan->normal_arm > 1 || binding->initializer != plan->selection ||
-        !condition || !emit_less_operands(stream, f, condition, 1) ||
+        !condition || !emit_quantity_operands(stream, f, condition, 1) ||
         fprintf(stream, "    uint8_t nl_local_%zu;\n    if (",
                 binding->symbol) < 0 ||
         !emit_quantity_bool(stream, f, condition) || fputs(") {\n", stream) < 0)
@@ -4140,7 +4152,7 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
             }
             if (fn->quantity_parameter && v->kind == NL_CHECKED_BINDING &&
                 init && init->kind == NL_CHECKED_IF &&
-                !emit_less_operands(
+                !emit_quantity_operands(
                     stream, f, nl_checked_node_view(f, init->initializer), 1))
                 return false;
             if (!v0_emit_node(stream, f, i, 1) ||
@@ -4417,7 +4429,6 @@ static size_t v0_export_function(const NLSemanticContext *c, const char *name)
 }
 
 #include "c17_guarded_usize_internal.h"
-#include "division_usize_internal.h"
 
 static int compile_v0_to(const char *path, bool check_only,
                          const char *export_name, FILE *output)

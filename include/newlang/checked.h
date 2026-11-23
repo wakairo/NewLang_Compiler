@@ -64,7 +64,8 @@ typedef enum {
     NL_CHECKED_USIZE_SUBTRACTION,  /* guarded lhs >= rhs, fresh result */
     NL_CHECKED_USIZE_LESS_THAN,    /* ordinary Copy bool; no privileged proof */
     NL_CHECKED_USIZE_DIVISION,     /* C1249: name / typed nonzero literal */
-    NL_CHECKED_USIZE_REMAINDER     /* C1274: name % typed nonzero literal */
+    NL_CHECKED_USIZE_REMAINDER,    /* C1274: name % typed nonzero literal */
+    NL_CHECKED_USIZE_MULTIPLICATION /* known operands, representable product */
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,

@@ -18,6 +18,9 @@ typedef struct {
         call; /* division identifies the specialized single operation */
     size_t divisor;
 } NLDivisionUsizePlan;
+/* Known multiplication shares the existing usize arithmetic receipt. */
+bool nl_usize_product_fits(size_t lhs, size_t rhs);
+bool nl_usize_multiplication_valid(const NLCheckedFragment *, NLCheckedNodeId);
 bool nl_usize_division_operands(const NLCheckedFragment *,
                                 const NLSemanticContext *, const NLSyntaxNode *,
                                 NLCheckedNodeId, NLCheckedNodeId);

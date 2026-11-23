@@ -52,11 +52,12 @@ typedef enum {
     NL_SYNTAX_OPTION_U8,        /* SPECULATIVE PR533 builtin only */
     NL_SYNTAX_ARRAY4_TYPE,
     NL_SYNTAX_ARRAY4_CONSTRUCTOR,
-    NL_SYNTAX_USIZE_ADDITION,    /* C587: one flat + */
-    NL_SYNTAX_USIZE_SUBTRACTION, /* C593: one flat -, data.equality atoms */
-    NL_SYNTAX_USIZE_LESS_THAN,   /* C603: one flat <, same ordered atoms */
-    NL_SYNTAX_USIZE_DIVISION,    /* C1247: one flat name / usize literal */
-    NL_SYNTAX_USIZE_REMAINDER    /* C1274: one flat name % usize literal */
+    NL_SYNTAX_USIZE_ADDITION,      /* C587: one flat + */
+    NL_SYNTAX_USIZE_SUBTRACTION,   /* C593: one flat -, data.equality atoms */
+    NL_SYNTAX_USIZE_LESS_THAN,     /* C603: one flat <, same ordered atoms */
+    NL_SYNTAX_USIZE_DIVISION,      /* C1247: one flat name / usize literal */
+    NL_SYNTAX_USIZE_REMAINDER,     /* C1274: one flat name % usize literal */
+    NL_SYNTAX_USIZE_MULTIPLICATION /* one flat * of quantity atoms */
 } NLSyntaxKind;
 
 /* Requested source spelling only: not checked access permission/authority. */
