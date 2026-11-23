@@ -17,12 +17,11 @@ products = {
     "boundary": (b"18446744073709551615\n", (b"let",)),
     "zero": (b"0\n", (b"let",)),
 }
-controls = ("entry-control", "old-helper-control")
+controls = ("entry-control", "old-helper-control", "continued-tail")
 refused = {
     "overflow": (3, b"USIZE-MULTIPLICATION-OVERFLOW"),
     "wrong-type": (3, b"USIZE-MULTIPLICATION-TYPE"),
     "unknown": (3, b"USIZE-MULTIPLICATION-PRECISION"),
-    "continued-tail": (4, b"V1-BACKEND-UNSUPPORTED"),
     "formal": (4, b"V1-BACKEND-UNSUPPORTED"),
     "relay": (4, b"V1-BACKEND-UNSUPPORTED"),
     "nested-actual": (4, b"V1-BACKEND-UNSUPPORTED"),

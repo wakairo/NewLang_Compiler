@@ -71,6 +71,8 @@ static bool division_emit_expression(DivisionText *t,
     }
     case NL_CHECKED_IF:
         return division_text_append(t, "nl_if_%zu", id);
+    case NL_CHECKED_USIZE_MULTIPLICATION:
+        return division_text_append(t, "nl_product_left * nl_product_right");
     case NL_CHECKED_USIZE_LESS_THAN:
         operator_text = " < ";
         break;
@@ -156,6 +158,25 @@ static bool division_emit_if(DivisionText *t, const NLCheckedFragment *f,
     return true;
 }
 
+/* Each validated zero-formal helper has a single product. Stage its
+ * already validated atoms in source order before evaluating the product. */
+static bool division_emit_product_operands(DivisionText *t,
+                                           const NLCheckedFragment *f,
+                                           const NLCheckedNodeView *product,
+                                           int indent)
+{
+    const NLCheckedNodeView *left =
+        nl_checked_node_view(f, product->first_argument);
+    return left &&
+           division_text_append(t, "%*sconst size_t nl_product_left = ", indent,
+                                "") &&
+           division_emit_atom(t, f, product->first_argument) &&
+           division_text_append(
+               t, ";\n%*sconst size_t nl_product_right = ", indent, "") &&
+           division_emit_atom(t, f, left->next_argument) &&
+           division_text_append(t, ";\n");
+}
+
 /* C17 does not order call arguments. Materialize the checked expressions
  * once, left to right, in the lexical block that evaluates the call. */
 static bool division_emit_evaluation(DivisionText *t,
@@ -165,6 +186,8 @@ static bool division_emit_evaluation(DivisionText *t,
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
     if (!n)
         return false;
+    if (n->kind == NL_CHECKED_USIZE_MULTIPLICATION)
+        return division_emit_product_operands(t, f, n, indent);
     if (n->kind == NL_CHECKED_IF)
         return division_emit_if(t, f, id, indent);
     if (n->kind != NL_CHECKED_REGISTERED_CALL)
@@ -223,27 +246,6 @@ static bool division_emit_items(DivisionText *t, const NLCheckedFragment *f,
     return true;
 }
 
-/* Only the zero-formal helper planner supplies a product tail here. Stage
- * the already validated atom values in source order before multiplying. */
-static bool division_emit_product_tail(DivisionText *text,
-                                       const NLDivisionUsizePlan *helper)
-{
-    const NLCheckedFragment *f = helper->body;
-    const NLCheckedNodeView *product = nl_checked_node_view(f, helper->result);
-    if (!product || product->kind != NL_CHECKED_USIZE_MULTIPLICATION)
-        return false;
-    const NLCheckedNodeView *left =
-        nl_checked_node_view(f, product->first_argument);
-    return left &&
-           division_text_append(text, "    const size_t nl_product_left = ") &&
-           division_emit_atom(text, f, product->first_argument) &&
-           division_text_append(text,
-                                ";\n    const size_t nl_product_right = ") &&
-           division_emit_atom(text, f, left->next_argument) &&
-           division_text_append(
-               text, ";\n    return nl_product_left * nl_product_right;\n");
-}
-
 static bool division_emit_helper(DivisionText *text,
                                  const NLDivisionUsizePlan *helper)
 {
@@ -260,8 +262,11 @@ static bool division_emit_helper(DivisionText *text,
                                     "static size_t nl_qty_fn_%zu(void)\n{\n",
                                     helper->function) &&
                division_emit_items(text, helper->body, helper->body->root, 4) &&
-               division_emit_product_tail(text, helper) &&
-               division_text_append(text, "}\n\n");
+               division_emit_evaluation(text, helper->body, helper->result,
+                                        4) &&
+               division_text_append(text, "    return ") &&
+               division_emit_expression(text, helper->body, helper->result) &&
+               division_text_append(text, ";\n}\n\n");
     const char *first = division_scalar_type(c, fn->parameters[0]);
     const char *second =
         count == 2 ? division_scalar_type(c, fn->parameters[1]) : NULL;
