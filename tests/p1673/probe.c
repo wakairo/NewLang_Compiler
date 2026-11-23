@@ -10,6 +10,8 @@
 
 static bool injecting;
 static size_t calls, fail_at, hits;
+static bool sealing_entry_world;
+static size_t entry_world_failures;
 
 void *__real_malloc(size_t);
 void *__real_calloc(size_t, size_t);
@@ -23,6 +25,7 @@ static bool fail_here(void)
     if (!injecting || calls++ != fail_at)
         return false;
     ++hits;
+    entry_world_failures += sealing_entry_world;
     errno = ENOMEM;
     return true;
 }
@@ -49,6 +52,23 @@ char *__wrap_realpath(const char *path, char *resolved)
 FILE *__wrap_fdopen(int fd, const char *mode)
 {
     return fail_here() ? NULL : __real_fdopen(fd, mode);
+}
+
+NLCheckStatus __real_nl_h_custody_seal_result(NLCheckedFragment *,
+                                              NLCheckedFragment *,
+                                              NLCheckedNodeId,
+                                              const NLSemanticContext *);
+NLCheckStatus __wrap_nl_h_custody_seal_result(NLCheckedFragment *parent,
+                                              NLCheckedFragment *body,
+                                              NLCheckedNodeId id,
+                                              const NLSemanticContext *world)
+{
+    const bool saved = sealing_entry_world;
+    sealing_entry_world = world && !parent->body_owner;
+    const NLCheckStatus status =
+        __real_nl_h_custody_seal_result(parent, body, id, world);
+    sealing_entry_world = saved;
+    return status;
 }
 
 static void select_failure(size_t index)
@@ -211,7 +231,8 @@ typedef enum {
     COMPOSED_PRODUCT,
     GUARDED_PRODUCT,
     GUARDED_ADDITION_DECISION,
-    GUARDED_SELECTOR
+    GUARDED_SELECTOR,
+    GUARDED_BYTE_MODE
 } ProductRoute;
 
 static bool composed_product_result(const NLDivisionUsizePlan *helper)
@@ -380,10 +401,35 @@ static bool retry_product(const NLCheckedFragment *body, ProductRoute route)
     return false;
 }
 
+static bool guarded_byte_mode_result(const NLCheckedFragment *entry)
+{
+    const NLCheckedNodeId site = nl_checked_root(entry);
+    NLDivisionUsizePlan main, product;
+    if (!nl_h_custody_result_world_present(entry, site) ||
+        !nl_quantity_usize_call_valid(entry, site, &main) ||
+        main.body->body_count != 2 ||
+        main.byte_selector != main.body->body_calls[1] ||
+        !nl_quantity_usize_call_valid(main.body, main.body->body_calls[0],
+                                      &product) ||
+        !guarded_product_result(main.body, main.body->body_calls[0], &product))
+        return false;
+    NLPureU8Call selector;
+    const NLCheckedNodeView *call =
+        nl_checked_node_view(main.body, main.byte_selector);
+    NLSemanticValueView mode;
+    return call && nl_pure_u8_call(main.body, main.byte_selector, &selector) &&
+           nl_semantic_value_view(main.body->context, call->results[0].value,
+                                  &mode) &&
+           mode.type == nl_semantic_core_type(main.body->context, NL_TYPE_U8) &&
+           !mode.scalar_known && mode.dependencies == NL_DEPENDENCY_FREE;
+}
+
 static bool check_oom(const char *path, ProductRoute route)
 {
     TestNode original = {0};
     CHECK(node_checked_load(path, &original));
+    if (route == GUARDED_BYTE_MODE)
+        CHECK(guarded_byte_mode_result(original.entry));
     /* Use the registered declarations from the input. Each allocation trial
      * gets its own context; a failed check is retried on that same context. */
     NLParser *parser = NULL;
@@ -417,7 +463,9 @@ static bool check_oom(const char *path, ProductRoute route)
         const NLCheckedFragment *body =
             nl_checked_call_body(out, nl_checked_root(out));
         CHECK(body);
-        if (route != ENTRY_PRODUCT) {
+        if (route == GUARDED_BYTE_MODE) {
+            CHECK(guarded_byte_mode_result(out));
+        } else if (route != ENTRY_PRODUCT) {
             CHECK(retry_product(body, route));
         } else {
             CHECK(body->usize_additions);
@@ -433,6 +481,12 @@ static bool check_oom(const char *path, ProductRoute route)
     printf("CHECK allocation failures=%zu exact state, no artifact, "
            "same-context retry\n",
            count);
+    if (route == GUARDED_BYTE_MODE) {
+        CHECK(entry_world_failures);
+        printf("Whole-entry world seal allocation failures=%zu, "
+               "revalidated whole world and both real child results on retry\n",
+               entry_world_failures);
+    }
     return true;
 }
 
@@ -549,6 +603,8 @@ int main(int argc, char **argv)
         route = GUARDED_ADDITION_DECISION;
     else if (!strcmp(argv[1], "guarded-selector-oom"))
         route = GUARDED_SELECTOR;
+    else if (!strcmp(argv[1], "guarded-byte-mode-oom"))
+        route = GUARDED_BYTE_MODE;
     else
         return 2;
     return check_oom(argv[2], route) && named_oom(argv[2]) ? 0 : 1;
