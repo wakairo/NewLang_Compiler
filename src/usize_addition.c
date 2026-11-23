@@ -2356,20 +2356,29 @@ static bool quantity_bool_choice(const NLCheckedFragment *f,
                                   : QUANTITY_BOOL_MATCHING_ARITHMETIC);
 }
 
-/* A zero-formal helper has one product, either at the tail or in a let
- * reached by the normal tail. All other initializers are ordinary atoms. */
+static bool quantity_fixed_divisor_syntax(NLSyntaxKind kind)
+{
+    return kind == NL_SYNTAX_USIZE_DIVISION ||
+           kind == NL_SYNTAX_USIZE_REMAINDER;
+}
+
+/* A zero-formal helper has one product and optionally one fixed-divisor
+ * operation. Other initializers are ordinary atoms. */
 static bool quantity_product_shape(const NLCheckedFragment *f,
                                    const NLCheckedNodeView *root,
-                                   const NLSyntaxView *source)
+                                   const NLSyntaxView *source,
+                                   bool *with_fixed_divisor)
 {
     if (f->body_count || f->arm_count || !root || root->terminates || !source ||
         source->kind != NL_SYNTAX_BLOCK)
         return false;
     const NLSyntaxView *tail = nl_syntax_node_view(source->data.block.tail);
-    if (!tail || (tail->kind != NL_SYNTAX_USIZE_MULTIPLICATION &&
-                  tail->kind != NL_SYNTAX_EXPR_NAME))
+    if (!tail)
         return false;
     bool product = tail->kind == NL_SYNTAX_USIZE_MULTIPLICATION;
+    bool divisor = quantity_fixed_divisor_syntax(tail->kind);
+    if (!product && !divisor && tail->kind != NL_SYNTAX_EXPR_NAME)
+        return false;
     size_t count = 0;
     for (const NLSyntaxNode *item = source->data.block.items; item;
          item = nl_syntax_next_argument(item)) {
@@ -2383,41 +2392,54 @@ static bool quantity_product_shape(const NLCheckedFragment *f,
             return false;
         if (init->kind == NL_SYNTAX_USIZE_MULTIPLICATION && !product)
             product = true;
+        else if (quantity_fixed_divisor_syntax(init->kind) && !divisor)
+            divisor = true;
         else if (init->kind != NL_SYNTAX_USIZE_LITERAL &&
                  init->kind != NL_SYNTAX_EXPR_NAME)
             return false;
     }
+    *with_fixed_divisor = divisor;
     return product;
 }
 
-static bool quantity_product_tail(QuantityBody *b, const QuantityResult *result)
+/* The item walker has matched each initializer to its actual binding and
+ * validated its Copy or arithmetic receipt in this invocation. Follow those
+ * bindings by identity, with checked node IDs decreasing at every step. */
+static const NLCheckedNodeView *
+quantity_local_origin(const NLCheckedFragment *f, NLCheckedNodeId id)
 {
-    NLValueId value;
-    if (!quantity_tail_at(b, b->body->root, result->id, &value))
-        return false;
-    const NLSyntaxView *tail = nl_syntax_node_view(result->syntax);
-    if (tail->kind == NL_SYNTAX_USIZE_MULTIPLICATION)
-        return quantity_arithmetic_at(b, result->id, result->syntax) ==
-               QUANTITY_INDEPENDENT;
-    if (quantity_atom_at(b, result->id, result->syntax) != QUANTITY_INDEPENDENT)
-        return false;
-
-    /* The item walker has matched each initializer to its actual binding
-     * and validated its Copy or arithmetic receipt in this invocation.
-     * Follow the selected tail back through those bindings by identity. */
-    const NLCheckedFragment *f = b->body;
-    NLCheckedNodeId id = result->id;
     const NLCheckedNodeView *node = nl_checked_node_view(f, id);
     while (node && node->kind == NL_CHECKED_IDENTIFIER) {
         const NLCheckedNodeId binding =
             division_local_before(f, id, node->symbol);
         const NLCheckedNodeView *item = nl_checked_node_view(f, binding);
         if (!item || item->initializer >= binding)
-            return false;
+            return NULL;
         id = item->initializer;
         node = nl_checked_node_view(f, id);
     }
-    return node && node->kind == NL_CHECKED_USIZE_MULTIPLICATION;
+    return node;
+}
+
+static bool quantity_product_tail(QuantityBody *b, const QuantityResult *result,
+                                  bool with_fixed_divisor)
+{
+    const NLCheckedFragment *f = b->body;
+    const QuantityOrigin expected =
+        with_fixed_divisor ? QUANTITY_FROM_RESULT : QUANTITY_INDEPENDENT;
+    NLValueId value;
+    if (!quantity_tail_at(b, f->root, result->id, &value) ||
+        quantity_expression_at(b, result->id, result->syntax) != expected)
+        return false;
+
+    const NLCheckedNodeView *origin = quantity_local_origin(f, result->id);
+    if (with_fixed_divisor) {
+        if (!origin || (origin->kind != NL_CHECKED_USIZE_DIVISION &&
+                        origin->kind != NL_CHECKED_USIZE_REMAINDER))
+            return false;
+        origin = quantity_local_origin(f, origin->first_argument);
+    }
+    return origin && origin->kind == NL_CHECKED_USIZE_MULTIPLICATION;
 }
 
 static bool composed_quantity_body(const NLCheckedFragment *f,
@@ -2451,12 +2473,14 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
     }
     const bool product =
         !fn->count && fn->result == nl_semantic_core_type(c, NL_TYPE_USIZE);
+    bool with_fixed_divisor = false;
     QuantityResult result;
-    if ((product && !quantity_product_shape(f, root, source)) ||
+    if ((product &&
+         !quantity_product_shape(f, root, source, &with_fixed_divisor)) ||
         !quantity_items_at(&b, root, source, &result))
         return false;
     if (product) {
-        if (!quantity_product_tail(&b, &result))
+        if (!quantity_product_tail(&b, &result, with_fixed_divisor))
             return false;
     } else if (fn->count) {
         NLValueId value;

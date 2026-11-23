@@ -1,0 +1,12 @@
+fn slots() -> usize {
+    let columns = usize(37);
+    let payload = columns * usize(29);
+    payload % usize(0)
+}
+
+fn main() -> unit {
+    let count = slots();
+    let copy = count;
+    copy;
+    unit
+}
