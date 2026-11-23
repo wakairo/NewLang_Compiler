@@ -59,22 +59,31 @@ def observe(c, discard):
     return prefix + observed
 
 
-def native(cli, source, raw, *, discard=False, local_numerator=False):
+def native(cli, source, raw, *, discard=False, fixed=None, values=None):
     c = run(raw, "stdout-c17", [cli, source], 0)
     assert c.stdout and not c.stderr
     pristine = raw / "pristine.c"
     named = run(raw, "named-c17", [cli, "--emit-c17-to", pristine, source], 0)
     assert not named.stdout and not named.stderr and pristine.read_bytes() == c.stdout
-    if local_numerator:
-        numerator = re.search(rb"size_t (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(95\)\);", c.stdout)
+    if fixed:
+        number, operator, divisors = fixed
+        numerator = re.search(
+            rb"size_t (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(" + number + rb"\)\);",
+            c.stdout,
+        )
         assert numerator
-        divisors = re.findall(numerator[1] + rb" / \(\(size_t\)UINTMAX_C\((\d+)\)\);", c.stdout)
-        assert divisors == [b"6", b"8"]
+        actual = re.findall(
+            numerator[1] + b" " + re.escape(operator)
+            + rb" \(\(size_t\)UINTMAX_C\((\d+)\)\);",
+            c.stdout,
+        )
+        assert actual == divisors
     observed = raw / "observed.c"
     observed.write_bytes(observe(c.stdout, discard))
     compilers = (shutil.which("gcc"), shutil.which("clang-23") or shutil.which("clang"))
     assert all(compilers), compilers
-    values = b"15\n11\n" if local_numerator else b"23\n41\n" if discard else b"11\n19\n"
+    if values is None:
+        values = b"23\n41\n" if discard else b"11\n19\n"
     for compiler in compilers:
         for opt in ("O0", "O2"):
             for unit, stdout in ((pristine, b""), (observed, values)):
@@ -115,7 +124,7 @@ def scope(cli, source, raw):
     print(f"{raw.name} CHECK=0 C17=4, named output preserved")
 
 
-def fixtures(selection, discard, local):
+def fixtures(selection, discard, local, remainder):
     before, original = selection.split("\n\n", 1)
     body = before.replace("let amount = if", "if").replace("};\n    amount", "}")
     yield "let-copy", selection, native
@@ -142,11 +151,26 @@ def fixtures(selection, discard, local):
     yield "called-from-helper", selection.replace(
         "fn main()", "fn relay(flag: bool) -> usize { choose(flag) }\n\nfn main()"
     ).replace("choose(select_first)", "relay(select_first)"), scope
-    yield "local-numerator-let", local, partial(native, local_numerator=True)
+    local_division = partial(native, fixed=(b"95", b"/", [b"6", b"8"]), values=b"15\n11\n")
+    yield "local-numerator-let", local, local_division
     yield "local-numerator-discard", local.replace("let first = ", "").replace(
         "let second = ", ""
-    ), partial(native, discard=True, local_numerator=True)
-    yield "local-remainder", local.replace(" / ", " % "), scope
+    ), partial(local_division, discard=True)
+    yield "local-remainder", local.replace(" / ", " % "), partial(
+        native, fixed=(b"95", b"%", [b"6", b"8"]), values=b"5\n7\n"
+    )
+    local_remainder = partial(native, fixed=(b"83", b"%", [b"7", b"5"]), values=b"6\n3\n")
+    yield "local-remainder-let", remainder, local_remainder
+    yield "local-remainder-discard", remainder.replace("let first = ", "").replace(
+        "let second = ", ""
+    ), partial(local_remainder, discard=True)
+    yield "mixed-arm-operators", remainder.replace("stock % usize(5)", "stock / usize(5)"), scope
+    yield "aliased-remainder", remainder.replace(
+        "    if (flag)", "    let alias = stock;\n    if (flag)"
+    ).replace("stock %", "alias %"), scope
+    yield "arm-local-remainder", remainder.replace(
+        "    let stock = usize(83);\n", ""
+    ).replace("        stock %", "        let stock = usize(83);\n        stock %"), scope
     yield "aliased-numerator", local.replace(
         "    if (flag)", "    let alias = stock;\n    if (flag)"
     ).replace("stock /", "alias /"), scope
@@ -156,13 +180,13 @@ def fixtures(selection, discard, local):
 
 
 def main():
-    cli, root, selection, discard, local = map(Path, sys.argv[1:])
+    cli, root, selection, discard, local, remainder = map(Path, sys.argv[1:])
     root.mkdir(parents=True, exist_ok=True)
     raw = Path(tempfile.mkdtemp(dir=root))
     print(f"raw={raw}", flush=True)
     cases = []
     for name, text, verify in fixtures(
-        *(path.read_text(encoding="utf-8") for path in (selection, discard, local))
+        *(path.read_text(encoding="utf-8") for path in (selection, discard, local, remainder))
     ):
         work = raw / name
         work.mkdir()
