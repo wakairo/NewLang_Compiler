@@ -1,7 +1,8 @@
 add_executable(p1673_probe tests/p1673/probe.c tests/p1673/receipt_mutation.c)
 target_link_libraries(p1673_probe PRIVATE newlang_checked_c_node newlang_semantic)
 target_link_options(p1673_probe PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc
-    -Wl,--wrap=realloc -Wl,--wrap=strdup -Wl,--wrap=realpath -Wl,--wrap=fdopen)
+    -Wl,--wrap=realloc -Wl,--wrap=strdup -Wl,--wrap=realpath -Wl,--wrap=fdopen
+    -Wl,--wrap=nl_h_custody_seal_result)
 set(p1673_source "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1673/source")
 foreach(case receipt oom)
     add_test(NAME p1673_${case}.unit COMMAND p1673_probe "${case}"

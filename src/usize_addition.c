@@ -7,6 +7,7 @@
 #include "newlang/usize_division.h"
 #include "newlang/usize_remainder.h"
 #include "newlang/usize_subtraction.h"
+#include "pure_u8_internal.h"
 #include "semantic_internal.h"
 #include "syntax_internal.h"
 
@@ -2870,6 +2871,193 @@ static bool has_composed_actual(const NLCheckedFragment *f,
     return false;
 }
 
+static bool guarded_byte_count(QuantityBody *b, NLCheckedNodeId id,
+                               const NLSyntaxNode *syntax, NLSymbolId key)
+{
+    const NLSyntaxView *choice = nl_syntax_node_view(syntax);
+    if (!choice || choice->kind != NL_SYNTAX_IF ||
+        !literal_usize_arm(choice->data.conditional.then_block) ||
+        !literal_usize_arm(choice->data.conditional.else_block))
+        return false;
+    const NLSyntaxView *test =
+        nl_syntax_node_view(choice->data.conditional.condition);
+    const NLSyntaxView *bound =
+        test && test->kind == NL_SYNTAX_USIZE_LESS_THAN
+            ? nl_syntax_node_view(test->data.equality.right)
+            : NULL;
+    const NLCheckedNodeView *n = nl_checked_node_view(b->body, id);
+    const NLCheckedNodeView *condition =
+        n ? nl_checked_node_view(b->body, n->initializer) : NULL;
+    return bound && bound->kind == NL_SYNTAX_USIZE_LITERAL && condition &&
+           n->normal_arms == 2 &&
+           name_copy(b->body, b->context, condition->first_argument,
+                     test->data.equality.left, key) &&
+           quantity_expression_at(b, id, syntax) == QUANTITY_INDEPENDENT;
+}
+
+static bool guarded_byte_actual(const NLCheckedFragment *f,
+                                const NLSemanticContext *c, NLCheckedNodeId id,
+                                const NLSyntaxNode *syntax, NLSymbolId binding)
+{
+    const NLSyntaxView *src = nl_syntax_node_view(syntax);
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    return call && src && src->kind == NL_SYNTAX_EXPR_CALL &&
+           span_equal(src->span, call->span) &&
+           span_equal(src->data.call.callee, call->name) &&
+           !nl_syntax_next_argument(src->data.call.arguments) &&
+           guarded_named_actual(f, c, id) &&
+           name_copy(f, c, call->first_argument, src->data.call.arguments,
+                     binding);
+}
+
+static bool guarded_byte_product(QuantityBody *b, NLCheckedNodeId id,
+                                 const NLSyntaxNode *syntax)
+{
+    /* This is the same child invocation walk used during whole-quantity
+     * CHECK. The public consumer will later require the entry's world seal. */
+    if (!quantity_invocation_at(b->body, b->context, id, syntax,
+                                NL_USIZE_ANY_FIXED_DIVISOR, 1, b->remaining))
+        return false;
+    const NLCheckedFragment *product = nl_checked_call_body(b->body, id);
+    const NLCheckedNodeView *root =
+        product ? nl_checked_node_view(product, product->root) : NULL;
+    if (!root)
+        return false;
+    const NLCheckedNodeView *yes =
+        predicate_arm_value(nl_checked_if_arm(product, root->tail, 0));
+    const NLCheckedNodeView *no =
+        predicate_arm_value(nl_checked_if_arm(product, root->tail, 1));
+    return yes && yes->kind == NL_CHECKED_USIZE_MULTIPLICATION && no &&
+           no->kind == NL_CHECKED_USIZE_LITERAL && no->scalar_result.known &&
+           no->scalar_result.value == 0;
+}
+
+static bool guarded_byte_selector(const NLCheckedFragment *f,
+                                  const NLSemanticContext *c,
+                                  NLCheckedNodeId id)
+{
+    NLPureU8Call pure;
+    /* CHECK uses its real working world here. The completed child seal is
+     * required in either phase, as are the pure selector's two normal arms. */
+    if (!nl_h_custody_result_valid(f, id) ||
+        !nl_pure_u8_contents_at(f, id, c, &pure))
+        return false;
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(pure.body, pure.body->root);
+    const NLCheckedNodeView *choice =
+        nl_checked_node_view(pure.body, pure.selection);
+    if (!root || !choice || choice->normal_arms != 2 || root->item_count ||
+        root->tail != pure.selection || pure.body->body_count ||
+        pure.body->arm_count != 2)
+        return false;
+    const NLCheckedNodeView *test =
+        nl_checked_node_view(pure.body, choice->initializer);
+    const NLCheckedNodeView *left =
+        test ? nl_checked_node_view(pure.body, test->first_argument) : NULL;
+    const NLCheckedNodeView *right =
+        left ? nl_checked_node_view(pure.body, left->next_argument) : NULL;
+    return test && test->kind == NL_CHECKED_USIZE_LESS_THAN && right &&
+           left->kind == NL_CHECKED_IDENTIFIER && left->symbol == pure.formal &&
+           right->kind == NL_CHECKED_USIZE_LITERAL;
+}
+
+/* This whole entry is also walked before CHECK seals its result. The normal
+ * published call validator still requires the original complete entry world. */
+static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
+                                    const NLSemanticContext *c,
+                                    const NLFunctionEntry *fn, size_t function,
+                                    NLDivisionUsizePlan *out)
+{
+    if (f->body_count != 2 || f->arm_count != 2)
+        return false;
+    const NLSyntaxView *source =
+        nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
+    const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
+    if (!source || source->kind != NL_SYNTAX_BLOCK || !root ||
+        root->kind != NL_CHECKED_BLOCK ||
+        !span_equal(root->span, source->span) || root->item_count < 4 ||
+        root->item_count > 6)
+        return false;
+
+    const NLCheckedKind kinds[] = {NL_CHECKED_USIZE_LITERAL, NL_CHECKED_IF,
+                                   NL_CHECKED_REGISTERED_CALL,
+                                   NL_CHECKED_REGISTERED_CALL};
+    const NLCheckedNodeView *bindings[4];
+    const NLSyntaxNode *initializers[4];
+    const NLSyntaxNode *item = source->data.block.items;
+    NLCheckedNodeId id = root->first_item;
+    for (size_t i = 0; i < 4; ++i) {
+        const NLSyntaxView *src = nl_syntax_node_view(item);
+        const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        if (!binding_source(f, c, n, src) ||
+            (n->next_item && n->next_item <= id) ||
+            n->symbol > NL_SEMANTIC_MAX_ENTRIES ||
+            (i && bindings[i - 1]->symbol >= n->symbol) ||
+            nl_checked_node_view(f, n->initializer)->kind != kinds[i])
+            return false;
+        bindings[i] = n;
+        initializers[i] = src->data.binding.initializer;
+        id = n->next_item;
+        item = nl_syntax_next_argument(item);
+    }
+    const NLCheckedNodeId product = bindings[2]->initializer;
+    const NLCheckedNodeId selector = bindings[3]->initializer;
+    size_t remaining = NL_SEMANTIC_MAX_ENTRIES;
+    QuantityBody b = {
+        .body = f, .context = c, .function = fn, .remaining = &remaining};
+    const NLSymbolId key = bindings[0]->symbol;
+    if (quantity_expression_at(&b, bindings[0]->initializer, initializers[0]) !=
+        QUANTITY_INDEPENDENT)
+        return false;
+    b.origins[key - 1] = QUANTITY_INDEPENDENT;
+    if (!guarded_byte_count(&b, bindings[1]->initializer, initializers[1],
+                            key) ||
+        b.arms != f->arm_count || b.calls || f->body_calls[0] != product ||
+        f->body_calls[1] != selector ||
+        !guarded_byte_actual(f, c, product, initializers[2],
+                             bindings[1]->symbol) ||
+        !guarded_byte_product(&b, product, initializers[2]) ||
+        !guarded_byte_actual(f, c, selector, initializers[3],
+                             bindings[2]->symbol) ||
+        !guarded_byte_selector(f, c, selector))
+        return false;
+
+    size_t count = 4;
+    const NLTypeId unit = nl_semantic_unit_type(c);
+    const NLSyntaxView *end = nl_syntax_node_view(item);
+    if (end && end->kind == NL_SYNTAX_BINDING) {
+        const NLCheckedNodeView *copy = nl_checked_node_view(f, id);
+        if (!binding_source(f, c, copy, end) ||
+            (copy->next_item && copy->next_item <= id) ||
+            !scalar_name_copy(
+                f, c, copy->initializer, end->data.binding.initializer,
+                bindings[3]->symbol, nl_semantic_core_type(c, NL_TYPE_U8)))
+            return false;
+        ++count;
+        id = copy->next_item;
+        item = nl_syntax_next_argument(item);
+        end = nl_syntax_node_view(item);
+    }
+    if (item) {
+        const NLCheckedNodeView *ret = nl_checked_node_view(f, id);
+        if (!end || end->kind != NL_SYNTAX_RETURN || !ret ||
+            nl_syntax_next_argument(item) || source->data.block.tail ||
+            !division_unit_return(f, root, ret, end, unit))
+            return false;
+        ++count;
+    } else if (id || root->terminates || root->type != unit ||
+               root->result_count || root->results[0].value ||
+               nl_control_exits_count(f->exits) ||
+               !division_unit_completion(f, root->tail, source->data.block.tail,
+                                         unit))
+        return false;
+    if (count != root->item_count)
+        return false;
+    *out = (NLDivisionUsizePlan){
+        .body = f, .function = function, .byte_selector = selector};
+    return true;
+}
+
 static bool literal_divisor_body_at(const NLCheckedFragment *f,
                                     const NLSemanticContext *c, size_t function,
                                     NLUsizeOperation operation,
@@ -2895,7 +3083,9 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
     if (f->arm_count || has_composed_actual(f, c))
         return operation == NL_USIZE_ANY_FIXED_DIVISOR &&
                !strcmp(fn->name, "main") &&
-               composed_quantity_body(f, c, fn, function, 0, &remaining, out);
+               (composed_quantity_body(f, c, fn, function, 0, &remaining,
+                                       out) ||
+                guarded_byte_mode_entry(f, c, fn, function, out));
     const NLSyntaxView *s =
         nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
     const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);

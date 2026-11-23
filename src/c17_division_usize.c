@@ -1,4 +1,5 @@
 #include "division_usize_internal.h"
+#include "pure_u8_internal.h"
 
 #include <stdarg.h>
 #include <stdint.h>
@@ -26,6 +27,8 @@ static const char *division_scalar_type(const NLSemanticContext *c,
 {
     if (type == nl_semantic_core_type(c, NL_TYPE_USIZE))
         return "size_t";
+    if (type == nl_semantic_core_type(c, NL_TYPE_U8))
+        return "uint8_t";
     return type == nl_semantic_core_type(c, NL_TYPE_BOOL) ? "_Bool" : NULL;
 }
 
@@ -296,6 +299,32 @@ static bool division_emit_helper(DivisionText *text,
            division_text_append(text, ";\n}\n\n");
 }
 
+static bool division_emit_byte_selector(DivisionText *t,
+                                        const NLCheckedFragment *caller,
+                                        NLCheckedNodeId id)
+{
+    NLPureU8Call pure;
+    if (!nl_pure_u8_call(caller, id, &pure))
+        return false;
+    const NLCheckedNodeView *choice =
+        nl_checked_node_view(pure.body, pure.selection);
+    const NLCheckedNodeView *yes =
+        predicate_arm_value(nl_checked_if_arm(pure.body, pure.selection, 0));
+    const NLCheckedNodeView *no =
+        predicate_arm_value(nl_checked_if_arm(pure.body, pure.selection, 1));
+    return choice && yes && no &&
+           division_text_append(t,
+                                "static uint8_t nl_qty_fn_%zu(size_t "
+                                "nl_local_%zu)\n{\n    return ",
+                                pure.function, pure.formal) &&
+           division_emit_expression(t, pure.body, choice->initializer) &&
+           division_text_append(t,
+                                " ? ((uint8_t)UINT8_C(%zu)) "
+                                ": ((uint8_t)UINT8_C(%zu));\n}\n\n",
+                                yes->scalar_result.value,
+                                no->scalar_result.value);
+}
+
 typedef bool (*QuantityCallValidator)(const NLCheckedFragment *,
                                       NLCheckedNodeId, NLDivisionUsizePlan *);
 
@@ -308,6 +337,7 @@ typedef struct {
 static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
                                               QuantityCallValidator valid,
                                               size_t depth, bool count_nodes,
+                                              NLCheckedNodeId byte_selector,
                                               DivisionProgram *program)
 {
     if (depth >= NL_SEMANTIC_MAX_DEPTH ||
@@ -323,8 +353,19 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
         if (!program->remaining)
             return NL_CHECK_RESOURCE_LIMIT;
         --program->remaining;
+        const NLCheckedNodeId id = body->body_calls[i];
+        if (byte_selector && id == byte_selector) {
+            const NLCheckedFragment *selector = nl_checked_call_body(body, id);
+            if (!selector)
+                return NL_CHECK_SEMANTIC_UNSUPPORTED;
+            const NLCheckStatus status = division_collect_helpers(
+                selector, valid, depth + 1, true, 0, program);
+            if (status != NL_CHECK_OK)
+                return status;
+            continue; /* The whole-entry plan selected its typed definition. */
+        }
         NLDivisionUsizePlan helper;
-        if (!valid(body, body->body_calls[i], &helper) || !helper.function ||
+        if (!valid(body, id, &helper) || !helper.function ||
             helper.function > NL_SEMANTIC_MAX_ENTRIES ||
             (!helper.formal && !nl_quantity_usize_function(helper.body->context,
                                                            helper.function, 0)))
@@ -333,7 +374,7 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
          * definition, after visiting its callees in source order. */
         const bool new_definition = !program->seen[helper.function - 1];
         const NLCheckStatus status = division_collect_helpers(
-            helper.body, valid, depth + 1, new_definition, program);
+            helper.body, valid, depth + 1, new_definition, 0, program);
         if (status != NL_CHECK_OK)
             return status;
         if (new_definition) {
@@ -346,7 +387,7 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
             return NL_CHECK_RESOURCE_LIMIT;
         --program->remaining;
         const NLCheckStatus status = division_collect_helpers(
-            body->arms[i].artifact, valid, depth + 1, count_nodes, program);
+            body->arms[i].artifact, valid, depth + 1, count_nodes, 0, program);
         if (status != NL_CHECK_OK)
             return status;
     }
@@ -363,8 +404,8 @@ static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
         main.formal || main.body->body_count > NL_CHECKED_MAX_BODY_CALLS)
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     DivisionProgram program = {.remaining = NL_SEMANTIC_MAX_ENTRIES};
-    const NLCheckStatus status =
-        division_collect_helpers(main.body, call_valid, 0, true, &program);
+    const NLCheckStatus status = division_collect_helpers(
+        main.body, call_valid, 0, true, main.byte_selector, &program);
     if (status != NL_CHECK_OK)
         return status;
     DivisionText text = {.capacity = program.nodes * 512 + 2048};
@@ -380,6 +421,9 @@ static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
                              profile, SIZE_MAX);
     for (size_t i = 0; emitted && i < program.count; ++i)
         emitted = division_emit_helper(&text, &program.definitions[i]);
+    if (emitted && main.byte_selector)
+        emitted =
+            division_emit_byte_selector(&text, main.body, main.byte_selector);
     if (!emitted ||
         !division_text_append(&text, "static void nl_qty_fn_%zu(void)\n{\n",
                               main.function) ||
