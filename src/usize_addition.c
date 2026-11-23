@@ -1168,16 +1168,14 @@ static bool helper_body(const NLCheckedFragment *f, const NLSemanticContext *c,
             !block_source || block_source->kind != NL_SYNTAX_BLOCK ||
             !span_equal(block->span, block_source->span))
             return false;
-        NLValueId block_value, arm_value;
+        NLValueId block_value, arm_value, tail_value;
         if (!node_value(arm, arm->context, ar->initializer, &block_value) ||
             !node_value(arm, arm->context, arm->root, &arm_value) ||
-            block_value != arm_value)
+            !node_value(arm, arm->context, block->tail, &tail_value) ||
+            block_value != arm_value || block_value != tail_value)
             return false;
         if (operation == NL_USIZE_MULTIPLY) {
-            NLValueId tail_value;
-            if (block->first_item || block_source->data.block.items ||
-                !node_value(arm, arm->context, block->tail, &tail_value) ||
-                tail_value != block_value)
+            if (block->first_item || block_source->data.block.items)
                 return false;
             if (a == 0) {
                 if (!guarded_event(arm, block->tail, p->function, p->formal,
@@ -1713,12 +1711,57 @@ static bool division_call_values(const NLCheckedFragment *f,
            result == body_result;
 }
 
+/* Select a direct continuation of the call's actual result. The ordinary
+ * caller walker still authenticates the item source, Copy and both arms. */
+static bool guarded_addition_decision(const NLCheckedFragment *caller,
+                                      const NLSemanticContext *c,
+                                      NLCheckedNodeId call)
+{
+    NLValueId result;
+    const NLCheckedNodeView *root = nl_checked_node_view(caller, caller->root);
+    if (!root || root->kind != NL_CHECKED_BLOCK ||
+        !node_value(caller, c, call, &result))
+        return false;
+    for (NLCheckedNodeId id = root->first_item; id;) {
+        const NLCheckedNodeView *item = nl_checked_node_view(caller, id);
+        if (!item || (item->next_item && item->next_item <= id))
+            return false;
+        if (item->kind == NL_CHECKED_BINDING && item->initializer == call) {
+            const NLCheckedNodeView *next =
+                nl_checked_node_view(caller, item->next_item);
+            const NLCheckedNodeView *choice =
+                next && next->kind == NL_CHECKED_BINDING
+                    ? nl_checked_node_view(caller, next->initializer)
+                    : NULL;
+            const NLCheckedNodeView *test =
+                choice && choice->kind == NL_CHECKED_IF &&
+                        choice->normal_arms == 2
+                    ? nl_checked_node_view(caller, choice->initializer)
+                    : NULL;
+            const NLCheckedNodeView *left =
+                test && test->kind == NL_CHECKED_USIZE_LESS_THAN
+                    ? nl_checked_node_view(caller, test->first_argument)
+                    : NULL;
+            const NLCheckedNodeView *right =
+                left ? nl_checked_node_view(caller, left->next_argument) : NULL;
+            return right && right->kind == NL_CHECKED_USIZE_LITERAL &&
+                   left->kind == NL_CHECKED_IDENTIFIER &&
+                   left->value_use == NL_VALUE_COPIED && item->symbol &&
+                   left->symbol == item->symbol &&
+                   item->symbol <= c->binding_count &&
+                   c->bindings[item->symbol - 1].view.value == result;
+        }
+        id = item->next_item;
+    }
+    return false;
+}
+
 /* The unit composition planner borrows the authenticated guarded result.
  * The legacy scalar guarded-addition caller keeps its own admission path. */
-static bool guarded_product_plan(const NLCheckedFragment *f,
-                                 const NLSemanticContext *c,
-                                 const NLFunctionEntry *fn, size_t function,
-                                 NLDivisionUsizePlan *out)
+static bool guarded_unit_plan(const NLCheckedFragment *f,
+                              const NLSemanticContext *c,
+                              const NLFunctionEntry *fn, size_t function,
+                              NLDivisionUsizePlan *out)
 {
     if (fn != nl_quantity_usize_function(c, function, 1) || f->body_count ||
         f->arm_count != 2)
@@ -1738,7 +1781,9 @@ static bool guarded_product_plan(const NLCheckedFragment *f,
         return false;
 
     NLGuardedUsizePlan guard = {.body = f, .function = function};
-    if (!helper_body(f, c, fn, NL_USIZE_MULTIPLY, &guard))
+    if (!helper_body(f, c, fn, NL_USIZE_MULTIPLY, &guard) &&
+        (!guarded_addition_decision(caller, c, id) ||
+         !helper_body(f, c, fn, NL_USIZE_ADD, &guard)))
         return false;
     const NLDivisionUsizePlan plan = {.body = f,
                                       .function = function,
@@ -2559,7 +2604,7 @@ static bool composed_quantity_body(const NLCheckedFragment *f,
         f->source != fn->body->source ||
         f->body_count > NL_CHECKED_MAX_BODY_CALLS)
         return false;
-    if (guarded_product_plan(f, c, fn, function, out))
+    if (guarded_unit_plan(f, c, fn, function, out))
         return true;
     const NLSyntaxView *source =
         nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
