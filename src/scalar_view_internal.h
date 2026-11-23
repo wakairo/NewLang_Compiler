@@ -36,16 +36,16 @@ static bool copy_if_gap(const NLSource *source, size_t start, size_t end,
     }
     return *expected == 0;
 }
-static bool copy_if_literal(const NLCheckedFragment *f,
-                            const NLCheckedNodeView *v)
+static bool copy_if_literal_at(const NLCheckedFragment *f,
+                               const NLSemanticContext *context,
+                               const NLCheckedNodeView *v)
 {
     NLSemanticValueView value;
     NLSourceView text;
     if (v == NULL || v->kind != NL_CHECKED_U8_LITERAL || v->result_count != 1 ||
         !v->has_scalar_result || !v->scalar_result.known ||
         v->scalar_result.type != v->type || v->scalar_result.value > 255 ||
-        !nl_semantic_value_view(nl_checked_context(f), v->results[0].value,
-                                &value) ||
+        !nl_semantic_value_view(context, v->results[0].value, &value) ||
         !copy_if_plain(value, v->type) || !value.scalar_known ||
         value.scalar_value != v->scalar_result.value ||
         !nl_source_view(nl_checked_source(f), v->span, &text) ||
@@ -78,6 +78,11 @@ static bool copy_if_literal(const NLCheckedFragment *f,
     return digits != 0 && number == value.scalar_value &&
            copy_if_gap(nl_checked_source(f), v->span.start_byte + i,
                        v->span.end_byte, ")");
+}
+static bool copy_if_literal(const NLCheckedFragment *f,
+                            const NLCheckedNodeView *v)
+{
+    return copy_if_literal_at(f, nl_checked_context(f), v);
 }
 static bool copy_if_arm_origin(const NLCheckedFragment *parent,
                                NLCheckedNodeId id, size_t index,
