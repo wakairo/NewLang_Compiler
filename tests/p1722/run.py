@@ -34,13 +34,14 @@ def one(code, pattern):
     return matches[0]
 
 
-def observe(code, field):
+def observe(code, field,
+            selection=rb"^    const uint8_t (nl_local_\d+) = \(nl_local_\d+ \? \d+ : \d+\);\n"):
     ctor = one(code, rb"^    nl_type_\d+ (nl_local_\d+) = \{[^\n]*\};\n")
     root = ctor[1]
     target = root + rb"\.f" + field
     sibling = root + rb"\.f" + (b"1" if field == b"0" else b"0")
     size = one(code, rb"^    const size_t (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(\d+\)\);\n")
-    select = one(code, rb"^    const uint8_t (nl_local_\d+) = \(nl_local_\d+ \? \d+ : \d+\);\n")
+    select = one(code, selection)
     loan = one(code, rb"^        uint8_t \*const (nl_local_\d+) = &" + target + rb";\n")
     writer = loan[1]
     old_load = one(code, rb"^        const uint8_t (nl_replace_old_\d+) = \*" + writer + rb";\n")
@@ -72,14 +73,15 @@ def observe(code, field):
             after + code[copied.end():])
 
 
-def verify(cli, fixtures, raw):
+def verify(cli, fixtures, raw, positives=admitted, negatives=refused,
+           observe_case=observe):
     hosts = (shutil.which("gcc"), shutil.which("clang-23") or shutil.which("clang"))
     assert all(hosts)
-    for name in (*admitted, *refused):
+    for name in (*positives, *negatives):
         work = raw / name
         work.mkdir()
         src = fixtures / (name + ".nl")
-        check_status, emit_status, diagnostic = refused.get(name, (0, 0, b""))
+        check_status, emit_status, diagnostic = negatives.get(name, (0, 0, b""))
         check = run(work, "check", [cli, "--check", src], check_status)
         assert not check.stdout
         if check_status:
@@ -104,9 +106,9 @@ def verify(cli, fixtures, raw):
             continue
         assert not any(x.stderr for x in (emit, existing, created))
         assert emit.stdout == target.read_bytes() == absent.read_bytes()
-        field, expected = admitted[name]
+        field, expected = positives[name]
         observed = work / "observed.c"
-        observed.write_bytes(observe(emit.stdout, field))
+        observed.write_bytes(observe_case(emit.stdout, field))
         for label, host in zip(("gcc", "clang"), hosts):
             native(work, host, [(label + "-original", target, b""),
                                 (label + "-observed", observed, expected)])
