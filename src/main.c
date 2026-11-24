@@ -1383,6 +1383,20 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
         e->parent_post_fact <= e->parent_fact ||
         e->child_post_fact <= e->child_fact)
         return false;
+    if (target != 0 || root->terminates) {
+        /* The second field and explicit return extend the named usize
+         * threshold profile. The write must consume that same IF result. */
+        const NLCheckedNodeView *predicate =
+            nl_checked_node_view(f, bool_source_origin(f, choice->initializer));
+        if (predicate == NULL ||
+            predicate->kind != NL_CHECKED_USIZE_LESS_THAN || call_bindings != 0)
+            return false;
+        NLCheckedNodeId source = ref->next_argument;
+        while (source != 0 && source != id)
+            source = bool_source_origin(f, source);
+        if (source != id)
+            return false;
+    }
     NLSemanticValueView reference;
     if (!nl_semantic_value_view(c, ref->results[0].value, &reference) ||
         reference.dependencies != NL_DEPENDENCY_FREE ||

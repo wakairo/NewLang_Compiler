@@ -21,7 +21,9 @@ admitted = {
 }
 refused = {
     "duplicate-target-read": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "literal-replacement": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
     "second-change": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "unrelated-copy-replacement": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
     "wrong-unit-result": (3, 3, b"P9-RETURN-TYPE"),
 }
 
