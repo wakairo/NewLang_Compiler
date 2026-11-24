@@ -2943,30 +2943,30 @@ static bool guarded_byte_product(QuantityBody *b, NLCheckedNodeId id,
 
 static bool guarded_byte_selector(const NLCheckedFragment *f,
                                   const NLSemanticContext *c,
-                                  NLCheckedNodeId id)
+                                  NLCheckedNodeId id, NLPureU8Call *pure)
 {
-    NLPureU8Call pure;
     /* CHECK uses its real working world here. The completed child seal is
      * required in either phase, as are the pure selector's two normal arms. */
     if (!nl_h_custody_result_valid(f, id) ||
-        !nl_pure_u8_contents_at(f, id, c, &pure))
+        !nl_pure_u8_contents_at(f, id, c, pure))
         return false;
     const NLCheckedNodeView *root =
-        nl_checked_node_view(pure.body, pure.body->root);
+        nl_checked_node_view(pure->body, pure->body->root);
     const NLCheckedNodeView *choice =
-        nl_checked_node_view(pure.body, pure.selection);
+        nl_checked_node_view(pure->body, pure->selection);
     if (!root || !choice || choice->normal_arms != 2 || root->item_count ||
-        root->tail != pure.selection || pure.body->body_count ||
-        pure.body->arm_count != 2)
+        root->tail != pure->selection || pure->body->body_count ||
+        pure->body->arm_count != 2)
         return false;
     const NLCheckedNodeView *test =
-        nl_checked_node_view(pure.body, choice->initializer);
+        nl_checked_node_view(pure->body, choice->initializer);
     const NLCheckedNodeView *left =
-        test ? nl_checked_node_view(pure.body, test->first_argument) : NULL;
+        test ? nl_checked_node_view(pure->body, test->first_argument) : NULL;
     const NLCheckedNodeView *right =
-        left ? nl_checked_node_view(pure.body, left->next_argument) : NULL;
+        left ? nl_checked_node_view(pure->body, left->next_argument) : NULL;
     return test && test->kind == NL_CHECKED_USIZE_LESS_THAN && right &&
-           left->kind == NL_CHECKED_IDENTIFIER && left->symbol == pure.formal &&
+           left->kind == NL_CHECKED_IDENTIFIER &&
+           left->symbol == pure->formal &&
            right->kind == NL_CHECKED_USIZE_LITERAL;
 }
 
@@ -3151,24 +3151,30 @@ static bool descriptor_read(const NLCheckedFragment *f,
                c->values[read->field.old_value - 1].scalar_value;
 }
 
+typedef struct {
+    NLValueId constructor;
+    const NLCheckedField *change, *sibling;
+} GuardedByteDescriptor;
+
 /* This exact continuation has no later calls, alternate owners, or second
  * store. The ended root's recorded packages and projection facts match the
  * constructor and full Change in this actual CHECK transaction. */
-static bool
-guarded_byte_descriptor(const NLCheckedFragment *f, const NLSemanticContext *c,
-                        const NLCheckedNodeView *root,
-                        const NLSyntaxView *source, NLCheckedNodeId id,
-                        const NLSyntaxNode *item, NLSymbolId selected)
+static bool guarded_byte_descriptor(
+    const NLCheckedFragment *f, const NLSemanticContext *c,
+    const NLCheckedNodeView *root, const NLSyntaxView *source,
+    NLCheckedNodeId id, const NLSyntaxNode *item, NLSymbolId selected,
+    const NLCheckedNodeView *original, const NLSyntaxView *original_source,
+    GuardedByteDescriptor *out)
 {
-    const NLCheckedNodeView *bindings[5];
-    const NLSyntaxNode *initializer_sources[5];
-    NLSymbolId previous = selected;
-    for (size_t i = 0; i < 5; ++i) {
+    const NLCheckedNodeView *bindings[4];
+    const NLSyntaxNode *initializer_sources[4];
+    NLSymbolId previous =
+        selected > original->symbol ? selected : original->symbol;
+    for (size_t i = 0; i < 4; ++i) {
         const NLSyntaxView *s = nl_syntax_node_view(item);
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-        if (!(i ? binding_source(f, c, n, s)
-                : binding_source_shape(f, c, n, s)) ||
-            n->next_item <= id || n->symbol <= previous)
+        if (!binding_source(f, c, n, s) || n->next_item <= id ||
+            n->symbol <= previous)
             return false;
         bindings[i] = n;
         initializer_sources[i] = s->data.binding.initializer;
@@ -3185,22 +3191,22 @@ guarded_byte_descriptor(const NLCheckedFragment *f, const NLSemanticContext *c,
         !division_unit_return(f, root, end, ret, unit))
         return false;
 
-    const NLCheckedNodeView *original = bindings[0];
     const NLCheckedNodeView *ctor =
         nl_checked_node_view(f, original->initializer);
     const NLCheckedNodeView *loan =
-        nl_checked_node_view(f, bindings[1]->initializer);
+        nl_checked_node_view(f, bindings[0]->initializer);
     const NLCheckedNodeView *updated =
-        nl_checked_node_view(f, bindings[2]->initializer);
+        nl_checked_node_view(f, bindings[1]->initializer);
     const NLCheckedNodeView *sibling =
-        nl_checked_node_view(f, bindings[3]->initializer);
+        nl_checked_node_view(f, bindings[2]->initializer);
     NLSemanticValueView initial, final;
-    if (!descriptor_constructor(f, c, ctor,
-                                nl_syntax_node_view(initializer_sources[0]), u8,
-                                &initial))
+    if (!descriptor_constructor(
+            f, c, ctor,
+            nl_syntax_node_view(original_source->data.binding.initializer), u8,
+            &initial))
         return false;
     const NLCheckedNodeView *store = descriptor_replace(
-        f, c, loan, nl_syntax_node_view(initializer_sources[1]), original,
+        f, c, loan, nl_syntax_node_view(initializer_sources[0]), original,
         selected, ctor->type, u8);
     if (!store)
         return false;
@@ -3214,27 +3220,60 @@ guarded_byte_descriptor(const NLCheckedFragment *f, const NLSemanticContext *c,
         place.type != ctor->type ||
         !nl_semantic_value_view(c, local.value, &final) ||
         final.type != ctor->type || final.field_count != 2 ||
+        !descriptor_read(f, c, bindings[1]->initializer,
+                         nl_syntax_node_view(initializer_sources[1]), original,
+                         change, u8) ||
         !descriptor_read(f, c, bindings[2]->initializer,
                          nl_syntax_node_view(initializer_sources[2]), original,
-                         change, u8) ||
-        !descriptor_read(f, c, bindings[3]->initializer,
-                         nl_syntax_node_view(initializer_sources[3]), original,
                          change, u8))
         return false;
 
-    return updated->field.index == change->index &&
-           updated->field.child == change->child &&
-           updated->field.child_incarnation == change->child_incarnation &&
-           updated->field.child_fact == change->child_post_fact &&
-           updated->field.old_value == change->new_value &&
-           sibling_field->index != change->index &&
-           sibling_field->child != change->child &&
-           initial.fields[change->index] == change->old_value &&
-           final.fields[change->index] == change->new_value &&
-           initial.fields[sibling_field->index] == sibling_field->old_value &&
-           final.fields[sibling_field->index] == sibling_field->old_value &&
-           scalar_name_copy(f, c, bindings[4]->initializer,
-                            initializer_sources[4], bindings[1]->symbol, u8);
+    if (updated->field.index != change->index ||
+        updated->field.child != change->child ||
+        updated->field.child_incarnation != change->child_incarnation ||
+        updated->field.child_fact != change->child_post_fact ||
+        updated->field.old_value != change->new_value ||
+        sibling_field->index == change->index ||
+        sibling_field->child == change->child ||
+        initial.fields[change->index] != change->old_value ||
+        final.fields[change->index] != change->new_value ||
+        initial.fields[sibling_field->index] != sibling_field->old_value ||
+        final.fields[sibling_field->index] != sibling_field->old_value ||
+        !scalar_name_copy(f, c, bindings[3]->initializer,
+                          initializer_sources[3], bindings[0]->symbol, u8))
+        return false;
+    *out =
+        (GuardedByteDescriptor){ctor->results[0].value, change, sibling_field};
+    return true;
+}
+
+/* The unchanged scalar validators identify these three choices. Read the
+ * original and its unchanged pre-Change fields in both arms of each. */
+static bool guarded_byte_live_original(const NLCheckedFragment *f,
+                                       NLCheckedNodeId count,
+                                       NLCheckedNodeId product,
+                                       const NLPureU8Call *selector,
+                                       const GuardedByteDescriptor *original)
+{
+    const NLCheckedFragment *product_body = nl_checked_call_body(f, product);
+    const NLCheckedNodeView *product_root =
+        product_body ? nl_checked_node_view(product_body, product_body->root)
+                     : NULL;
+    if (!product_root)
+        return false;
+    const NLCheckedFragment *owners[] = {f, product_body, selector->body};
+    const NLCheckedNodeId choices[] = {count, product_root->tail,
+                                       selector->selection};
+    for (size_t choice = 0; choice < 3; ++choice)
+        for (size_t arm = 0; arm < 2; ++arm) {
+            const NLCheckedFragment *branch =
+                nl_checked_if_arm(owners[choice], choices[choice], arm);
+            if (!nl_c17_descriptor_frame(
+                    nl_checked_context(branch), original->change->base,
+                    original->constructor, original->change, original->sibling))
+                return false;
+        }
+    return true;
 }
 
 /* This whole entry is also walked before CHECK seals its result. The normal
@@ -3262,6 +3301,21 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
     const NLSyntaxNode *initializers[4];
     const NLSyntaxNode *item = source->data.block.items;
     NLCheckedNodeId id = root->first_item;
+    NLCheckedNodeId descriptor = 0;
+    const NLSyntaxNode *descriptor_item = NULL;
+    const NLCheckedNodeView *first = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *first_value =
+        first ? nl_checked_node_view(f, first->initializer) : NULL;
+    const bool early = root->item_count == 10 && first_value &&
+                       first_value->kind == NL_CHECKED_AGGREGATE;
+    if (early) {
+        if (first->next_item <= id)
+            return false;
+        descriptor = id;
+        descriptor_item = item;
+        id = first->next_item;
+        item = nl_syntax_next_argument(item);
+    }
     for (size_t i = 0; i < 4; ++i) {
         const NLSyntaxView *src = nl_syntax_node_view(item);
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
@@ -3281,6 +3335,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
     size_t remaining = NL_SEMANTIC_MAX_ENTRIES;
     QuantityBody b = {
         .body = f, .context = c, .function = fn, .remaining = &remaining};
+    NLPureU8Call pure;
     const NLSymbolId key = bindings[0]->symbol;
     if (quantity_expression_at(&b, bindings[0]->initializer, initializers[0]) !=
         QUANTITY_INDEPENDENT)
@@ -3295,17 +3350,39 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         !guarded_byte_product(&b, product, initializers[2]) ||
         !guarded_byte_actual(f, c, selector, initializers[3],
                              bindings[2]->symbol) ||
-        !guarded_byte_selector(f, c, selector))
+        !guarded_byte_selector(f, c, selector, &pure))
         return false;
 
     if (root->item_count == 10) {
+        if (!early) {
+            descriptor = id;
+            descriptor_item = item;
+        }
+        const NLCheckedNodeView *original = nl_checked_node_view(f, descriptor);
+        const NLSyntaxView *original_source =
+            nl_syntax_node_view(descriptor_item);
+        if (!binding_source_shape(f, c, original, original_source) ||
+            (early ? original->symbol >= key
+                   : original->symbol <= bindings[3]->symbol))
+            return false;
+        if (!early) {
+            if (original->next_item <= id)
+                return false;
+            id = original->next_item;
+            item = nl_syntax_next_argument(item);
+        }
+        GuardedByteDescriptor fields;
         if (!guarded_byte_descriptor(f, c, root, source, id, item,
-                                     bindings[3]->symbol))
+                                     bindings[3]->symbol, original,
+                                     original_source, &fields) ||
+            (early && !guarded_byte_live_original(f, bindings[1]->initializer,
+                                                  product, &pure, &fields)))
             return false;
         *out = (NLDivisionUsizePlan){.body = f,
                                      .function = function,
                                      .byte_selector = selector,
-                                     .byte_descriptor = id};
+                                     .byte_descriptor = descriptor,
+                                     .byte_update = id};
         return true;
     }
 

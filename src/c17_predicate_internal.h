@@ -45,40 +45,6 @@ static bool predicate_original_frame(const NLCheckedFragment *f,
     return false;
 }
 
-static bool predicate_descriptor_arm(const NLCheckedFragment *arm,
-                                     NLSymbolId original, NLValueId ctor,
-                                     const NLCheckedField *change,
-                                     const NLCheckedField *sibling)
-{
-    if (!arm)
-        return false;
-    const NLSemanticContext *c = nl_checked_context(arm);
-    NLSemanticBindingView binding;
-    NLSemanticPlaceView root;
-    if (!nl_semantic_binding_view(c, original, &binding) ||
-        binding.availability != NL_AVAILABLE ||
-        binding.place != change->parent || binding.value != ctor ||
-        binding.type != change->nominal ||
-        !nl_semantic_place_view(c, binding.place, &root) || !root.live ||
-        !root.independent_root || root.fixed_field_count != 2 ||
-        root.incarnation != change->parent_incarnation ||
-        root.current_fact != change->parent_fact || root.current_value != ctor)
-        return false;
-    const NLCheckedField *fields[] = {change, sibling};
-    for (size_t i = 0; i < 2; ++i) {
-        const NLCheckedField *field = fields[i];
-        NLSemanticPlaceView place;
-        if (field->index >= 2 ||
-            root.fixed_fields[field->index] != field->child ||
-            !nl_semantic_place_view(c, field->child, &place) || !place.live ||
-            place.incarnation != field->child_incarnation ||
-            place.current_fact != field->child_fact ||
-            place.current_value != field->old_value)
-            return false;
-    }
-    return true;
-}
-
 /* Borrow the actual pure call's canonical arm snapshots. The closed caller
  * walk connects their current descriptor to the single later Change. */
 static bool predicate_live_descriptor(const NLCheckedFragment *f,
@@ -196,9 +162,10 @@ static bool predicate_live_descriptor(const NLCheckedFragment *f,
         value.fields[sibling->index] != sibling->old_value)
         return false;
     for (size_t i = 0; i < 2; ++i)
-        if (!predicate_descriptor_arm(
-                nl_checked_if_arm(pure->body, pure->selection, i), change->base,
-                ctor->results[0].value, change, sibling))
+        if (!nl_c17_descriptor_frame(nl_checked_context(nl_checked_if_arm(
+                                         pure->body, pure->selection, i)),
+                                     change->base, ctor->results[0].value,
+                                     change, sibling))
             return false;
     return true;
 }
