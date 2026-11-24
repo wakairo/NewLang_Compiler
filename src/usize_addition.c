@@ -3038,12 +3038,63 @@ static bool descriptor_constructor(const NLCheckedFragment *f,
     return !id && !item;
 }
 
-static const NLCheckedNodeView *
+/* Classify the actual checked writer before the entry world is sealed. The
+ * published entry validator also replays the completed caller/Change proof. */
+static bool descriptor_writer(const NLCheckedFragment *f, NLCheckedNodeId id,
+                              const NLCheckedNodeView *loan, NLTypeId u8,
+                              NLCheckedField *change)
+{
+    NLCopyBodyParameters formals;
+    NLCopyBodyView copy;
+    NLCopyBodyEventView event;
+    if (!nl_checked_copy_body_parameters(f, id, &formals) ||
+        nl_checked_node_view(f, formals.loan) != loan ||
+        !nl_checked_copy_body_view(f, id, &copy) || copy.event_count != 1 ||
+        !nl_checked_copy_body_event(f, id, 0, &event) ||
+        event.kind != NL_COPY_BODY_CHANGE)
+        return false;
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *root = nl_checked_node_view(copy.body, copy.root);
+    const NLCheckedNodeView *local =
+        root ? nl_checked_node_view(copy.body, root->first_item) : NULL;
+    const NLCheckedNodeView *old =
+        root ? nl_checked_node_view(copy.body, root->tail) : NULL;
+    const NLCheckedNodeView *store =
+        nl_checked_node_view(copy.body, event.node);
+    const NLCheckedNodeView *ref =
+        store ? nl_checked_node_view(copy.body, store->first_argument) : NULL;
+    const NLCheckedNodeView *incoming =
+        ref ? nl_checked_node_view(copy.body, ref->next_argument) : NULL;
+    if (!call || call->first_argument != formals.arguments[0] || !root ||
+        root->kind != NL_CHECKED_BLOCK || root->terminates ||
+        root->item_count != 1 || copy.body->arm_count ||
+        copy.body->body_count || !local || local->kind != NL_CHECKED_BINDING ||
+        local->next_item || local->initializer != event.node || !old ||
+        old->kind != NL_CHECKED_IDENTIFIER ||
+        old->value_use != NL_VALUE_COPIED || old->symbol != local->symbol ||
+        old->result_count != 1 || old->type != u8 ||
+        old->results[0].value != copy.result.value || !store ||
+        store->kind != NL_CHECKED_REPLACE || !ref ||
+        ref->kind != NL_CHECKED_IDENTIFIER ||
+        ref->value_use != NL_VALUE_COPIED ||
+        ref->symbol != formals.parameters[0] || !incoming ||
+        incoming->kind != NL_CHECKED_IDENTIFIER ||
+        incoming->value_use != NL_VALUE_COPIED ||
+        incoming->symbol != formals.parameters[1] || incoming->next_argument)
+        return false;
+    *change = event.field;
+    return true;
+}
+
+static bool
 descriptor_replace(const NLCheckedFragment *f, const NLSemanticContext *c,
                    const NLCheckedNodeView *loan, const NLSyntaxView *source,
                    const NLCheckedNodeView *original, NLSymbolId selected,
-                   NLTypeId nominal, NLTypeId u8)
+                   NLTypeId nominal, NLTypeId u8, NLCheckedField *field,
+                   NLCheckedNodeId *writer)
 {
+    if (!loan)
+        return false;
     const NLCheckedNodeView *body = nl_checked_node_view(f, loan->initializer);
     if (loan->kind != NL_CHECKED_LOAN_HEADER || loan->type != u8 ||
         loan->result_count != 1 || loan->results[0].type != u8 ||
@@ -3057,7 +3108,7 @@ descriptor_replace(const NLCheckedFragment *f, const NLSemanticContext *c,
         !descriptor_field_source(f, c,
                                  nl_syntax_node_view(source->data.loan.source),
                                  &loan->field, original, nominal, u8))
-        return NULL;
+        return false;
 
     const NLSyntaxView *src_body = nl_syntax_node_view(source->data.loan.body);
     const NLSyntaxView *src =
@@ -3069,19 +3120,37 @@ descriptor_replace(const NLCheckedFragment *f, const NLSemanticContext *c,
     NLValueId old_value;
     if (!src || src->kind != NL_SYNTAX_EXPR_CALL ||
         src->data.call.argument_count != 2 ||
-        !token(f->source, src->data.call.callee, "replace") ||
         !span_equal(body->span, src_body->span) || !store ||
-        store->kind != NL_CHECKED_REPLACE || store->argument_count != 2 ||
-        !span_equal(store->span, src->span) ||
+        store->argument_count != 2 || !span_equal(store->span, src->span) ||
         !scalar_node_value(f, c, body->tail, u8, &old_value) ||
-        !nl_c17_field_change(f, c, store, nominal, u8) ||
         old_value != body->results[0].value ||
         old_value != loan->results[0].value)
-        return NULL;
+        return false;
+
+    const bool delegated = store->kind == NL_CHECKED_REGISTERED_CALL;
+    if (delegated) {
+        if (!store->function || store->function > c->function_count ||
+            !token(f->source, src->data.call.callee,
+                   c->functions[store->function - 1].name) ||
+            !descriptor_writer(f, body->tail, loan, u8, field))
+            return false;
+    } else {
+        if (store->kind != NL_CHECKED_REPLACE ||
+            !token(f->source, src->data.call.callee, "replace") ||
+            !nl_c17_field_change(f, c, store, nominal, u8))
+            return false;
+        *field = store->field;
+    }
 
     const NLCheckedField *before = &loan->field;
-    const NLCheckedField *change = &store->field;
-    if (before->access != NL_ACCESS_WRITE ||
+    const NLCheckedField *change = field;
+    if (!change->present || !change->dependency_compatible ||
+        change->access != NL_ACCESS_WRITE || change->nominal != nominal ||
+        change->type != u8 || !change->parent_post_fact ||
+        !change->child_post_fact ||
+        change->parent_post_fact == change->parent_fact ||
+        change->child_post_fact == change->child_fact ||
+        before->access != NL_ACCESS_WRITE ||
         loan->loan.source != before->base || before->base != change->base ||
         before->index != change->index || before->parent != change->parent ||
         before->child != change->child ||
@@ -3092,7 +3161,7 @@ descriptor_replace(const NLCheckedFragment *f, const NLSemanticContext *c,
         before->old_value != change->old_value || change->payload_occurrence ||
         change->post_payload_occurrence || loan->loan.place != change->child ||
         loan->loan.incarnation != change->child_incarnation)
-        return NULL;
+        return false;
 
     const NLCheckedNodeView *ref =
         nl_checked_node_view(f, store->first_argument);
@@ -3122,9 +3191,10 @@ descriptor_replace(const NLCheckedFragment *f, const NLSemanticContext *c,
         arg->next_argument ||
         !scalar_name_copy(f, c, ref->next_argument,
                           nl_syntax_next_argument(first), selected, u8) ||
-        change->new_value != arg->results[0].value)
-        return NULL;
-    return store;
+        (!delegated && change->new_value != arg->results[0].value))
+        return false;
+    *writer = delegated ? body->tail : 0;
+    return true;
 }
 
 static bool descriptor_read(const NLCheckedFragment *f,
@@ -3153,7 +3223,9 @@ static bool descriptor_read(const NLCheckedFragment *f,
 
 typedef struct {
     NLValueId constructor;
-    const NLCheckedField *change, *sibling;
+    NLCheckedField change;
+    const NLCheckedField *sibling;
+    NLCheckedNodeId writer;
 } GuardedByteDescriptor;
 
 /* This exact continuation has no later calls, alternate owners, or second
@@ -3205,12 +3277,13 @@ static bool guarded_byte_descriptor(
             nl_syntax_node_view(original_source->data.binding.initializer), u8,
             &initial))
         return false;
-    const NLCheckedNodeView *store = descriptor_replace(
-        f, c, loan, nl_syntax_node_view(initializer_sources[0]), original,
-        selected, ctor->type, u8);
-    if (!store)
+    NLCheckedField field;
+    NLCheckedNodeId writer;
+    if (!descriptor_replace(
+            f, c, loan, nl_syntax_node_view(initializer_sources[0]), original,
+            selected, ctor->type, u8, &field, &writer))
         return false;
-    const NLCheckedField *change = &store->field;
+    const NLCheckedField *change = &field;
     const NLCheckedField *sibling_field = &sibling->field;
     const NLSemanticBindingView local = c->bindings[original->symbol - 1].view;
     NLSemanticPlaceView place;
@@ -3242,8 +3315,8 @@ static bool guarded_byte_descriptor(
         !scalar_name_copy(f, c, bindings[3]->initializer,
                           initializer_sources[3], bindings[0]->symbol, u8))
         return false;
-    *out =
-        (GuardedByteDescriptor){ctor->results[0].value, change, sibling_field};
+    *out = (GuardedByteDescriptor){ctor->results[0].value, field, sibling_field,
+                                   writer};
     return true;
 }
 
@@ -3268,9 +3341,10 @@ static bool guarded_byte_live_original(const NLCheckedFragment *f,
         for (size_t arm = 0; arm < 2; ++arm) {
             const NLCheckedFragment *branch =
                 nl_checked_if_arm(owners[choice], choices[choice], arm);
-            if (!nl_c17_descriptor_frame(
-                    nl_checked_context(branch), original->change->base,
-                    original->constructor, original->change, original->sibling))
+            if (!nl_c17_descriptor_frame(nl_checked_context(branch),
+                                         original->change.base,
+                                         original->constructor,
+                                         &original->change, original->sibling))
                 return false;
         }
     return true;
@@ -3283,7 +3357,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                                     const NLFunctionEntry *fn, size_t function,
                                     bool entry, NLDivisionUsizePlan *out)
 {
-    if (f->body_count != 2 || f->arm_count != 2)
+    if ((f->body_count != 2 && f->body_count != 3) || f->arm_count != 2)
         return false;
     const NLSyntaxView *source =
         nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
@@ -3375,6 +3449,9 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         if (!guarded_byte_descriptor(f, c, root, source, id, item,
                                      bindings[3]->symbol, original,
                                      original_source, &fields) ||
+            (fields.writer ? (!early || f->body_count != 3 ||
+                              f->body_calls[2] != fields.writer)
+                           : f->body_count != 2) ||
             (early && !guarded_byte_live_original(f, bindings[1]->initializer,
                                                   product, &pure, &fields)))
             return false;
@@ -3382,10 +3459,13 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                                      .function = function,
                                      .byte_selector = selector,
                                      .byte_descriptor = descriptor,
-                                     .byte_update = id};
+                                     .byte_update = id,
+                                     .byte_update_call = fields.writer};
         return true;
     }
 
+    if (f->body_count != 2)
+        return false;
     size_t count = 4;
     const NLTypeId unit = nl_semantic_unit_type(c);
     const NLSyntaxView *end = nl_syntax_node_view(item);
@@ -3540,14 +3620,14 @@ static bool literal_divisor_body_at(const NLCheckedFragment *f,
     return true;
 }
 
-static bool literal_divisor_call_valid(const NLCheckedFragment *f,
-                                       NLCheckedNodeId call,
-                                       NLUsizeOperation operation,
-                                       NLDivisionUsizePlan *out)
+static NLCheckStatus literal_divisor_call_plan(const NLCheckedFragment *f,
+                                               NLCheckedNodeId call,
+                                               NLUsizeOperation operation,
+                                               NLDivisionUsizePlan *out)
 {
     if (!f || !out || nl_checked_proof_class(f) != NL_CHECKED_MACHINE_PROVED ||
         !nl_h_custody_result_valid(f, call))
-        return false;
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
     const NLCheckedNodeView *n = nl_checked_node_view(f, call);
     const NLCheckedFragment *body = nl_checked_call_body(f, call);
     NLDivisionUsizePlan plan;
@@ -3556,11 +3636,11 @@ static bool literal_divisor_call_valid(const NLCheckedFragment *f,
         !literal_divisor_body_at(body, f->context, n->function, operation,
                                  !f->body_owner && call == nl_checked_root(f),
                                  &plan))
-        return false;
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
     if (plan.formal ||
         n->type == nl_semantic_core_type(f->context, NL_TYPE_USIZE)) {
         if (!division_call_values(f, f->context, call, &plan))
-            return false;
+            return NL_CHECK_SEMANTIC_UNSUPPORTED;
         if (plan.division) {
             const NLCheckedNodeView *event =
                 nl_checked_node_view(body, plan.division);
@@ -3570,35 +3650,49 @@ static bool literal_divisor_call_valid(const NLCheckedFragment *f,
                             (event->kind == NL_CHECKED_USIZE_REMAINDER &&
                              nl_checked_usize_remainder_valid(
                                  body, plan.division, NULL))))
-                return false;
+                return NL_CHECK_SEMANTIC_UNSUPPORTED;
         }
     } else {
         if (n->argument_count || n->first_argument ||
             n->type != nl_semantic_unit_type(f->context) || n->result_count ||
             n->results[0].value || !nl_h_custody_result_world_present(f, call))
-            return false;
+            return NL_CHECK_SEMANTIC_UNSUPPORTED;
         /* Each actual invocation owns its result even when the emitter uses
          * one shared C definition for the same source declaration. */
-        for (size_t i = 0; i < body->body_count; ++i)
-            if (!nl_h_custody_result_valid(body, body->body_calls[i]))
-                return false;
+        for (size_t i = 0; i < body->body_count; ++i) {
+            const NLCheckedNodeId child = body->body_calls[i];
+            if (plan.byte_update_call && child == plan.byte_update_call) {
+                /* The scoped writer has its own existing replay proof. The
+                 * complete entry seal above already covers its owned graph. */
+                const NLCheckStatus status =
+                    nl_checked_copy_body_parameters_validate(body, child, NULL);
+                if (status == NL_CHECK_OUT_OF_MEMORY ||
+                    status == NL_CHECK_RESOURCE_LIMIT)
+                    return status;
+                if (status != NL_CHECK_OK)
+                    return NL_CHECK_SEMANTIC_UNSUPPORTED;
+            } else if (!nl_h_custody_result_valid(body, child))
+                return NL_CHECK_SEMANTIC_UNSUPPORTED;
+        }
     }
     *out = plan;
-    return true;
+    return NL_CHECK_OK;
 }
 
 bool nl_division_usize_call_valid(const NLCheckedFragment *f,
                                   NLCheckedNodeId call,
                                   NLDivisionUsizePlan *out)
 {
-    return literal_divisor_call_valid(f, call, NL_USIZE_DIVIDE, out);
+    return literal_divisor_call_plan(f, call, NL_USIZE_DIVIDE, out) ==
+           NL_CHECK_OK;
 }
 
 bool nl_remainder_usize_call_valid(const NLCheckedFragment *f,
                                    NLCheckedNodeId call,
                                    NLDivisionUsizePlan *out)
 {
-    return literal_divisor_call_valid(f, call, NL_USIZE_REMAINDER, out);
+    return literal_divisor_call_plan(f, call, NL_USIZE_REMAINDER, out) ==
+           NL_CHECK_OK;
 }
 
 bool nl_quantity_usize_body_at(const NLCheckedFragment *f,
@@ -3621,5 +3715,12 @@ bool nl_quantity_usize_call_valid(const NLCheckedFragment *f,
                                   NLCheckedNodeId call,
                                   NLDivisionUsizePlan *out)
 {
-    return literal_divisor_call_valid(f, call, NL_USIZE_ANY_FIXED_DIVISOR, out);
+    return nl_quantity_usize_call_plan(f, call, out) == NL_CHECK_OK;
+}
+
+NLCheckStatus nl_quantity_usize_call_plan(const NLCheckedFragment *f,
+                                          NLCheckedNodeId call,
+                                          NLDivisionUsizePlan *out)
+{
+    return literal_divisor_call_plan(f, call, NL_USIZE_ANY_FIXED_DIVISOR, out);
 }

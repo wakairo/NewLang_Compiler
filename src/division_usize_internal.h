@@ -18,7 +18,8 @@ typedef struct {
         call; /* division identifies the specialized single operation */
     NLCheckedNodeId byte_selector; /* guarded product to pure u8, entry only */
     NLCheckedNodeId byte_descriptor,
-        byte_update; /* original and continuation */
+        byte_update;                  /* original and continuation */
+    NLCheckedNodeId byte_update_call; /* optional scoped writer */
     size_t divisor;
 } NLDivisionUsizePlan;
 /* Known multiplication shares the existing usize arithmetic receipt. */
@@ -46,6 +47,9 @@ bool nl_quantity_usize_body_at(const NLCheckedFragment *,
                                NLDivisionUsizePlan *);
 bool nl_quantity_usize_call_valid(const NLCheckedFragment *, NLCheckedNodeId,
                                   NLDivisionUsizePlan *);
+NLCheckStatus nl_quantity_usize_call_plan(const NLCheckedFragment *,
+                                          NLCheckedNodeId,
+                                          NLDivisionUsizePlan *);
 /* Staged text: every failure leaves both caller outputs untouched. */
 NLCheckStatus nl_division_usize_c17(const NLCheckedFragment *, char **,
                                     size_t *);
