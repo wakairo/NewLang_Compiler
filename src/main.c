@@ -1329,13 +1329,31 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
                 return false;
             reads[n->field.index] = n;
             break;
+        case NL_CHECKED_RETURN: {
+            const NLCheckedNodeView *unit =
+                nl_checked_node_view(f, n->initializer);
+            const NLControlExitView *exit = nl_control_exit_view(f->exits, 0);
+            if (!reads[0] || !reads[1] || !root->terminates || root->tail ||
+                root->result_count || root->returned.type != p->unit ||
+                root->returned.value || n->next_item || !n->terminates ||
+                n->result_count || n->returned.type != p->unit ||
+                n->returned.value || !unit || unit->kind != NL_CHECKED_UNIT ||
+                unit->type != p->unit || unit->result_count ||
+                nl_control_exits_count(f->exits) != 1 || !exit ||
+                !exit->state ||
+                !nl_control_exits_only_return(f->exits, f->function_target) ||
+                exit->count != 1 || exit->values[0].type != p->unit ||
+                exit->values[0].value)
+                return false;
+            break;
+        }
         default:
             return false;
         }
     }
     if (aggregate == NULL || loan == NULL || write == NULL ||
         reads[0] == NULL || reads[1] == NULL || !write->field.present ||
-        loan->field.index != 0 || write->field.index != 0)
+        write->field.index >= 2 || loan->field.index != write->field.index)
         return false;
     for (size_t i = 0; i < f->count; ++i)
         if (f->nodes[i].kind == NL_CHECKED_BINDING &&
@@ -1349,6 +1367,8 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
         !bool_root_value(f, declaration->initializer))
         return false;
     const NLCheckedField *e = &write->field;
+    const size_t target = e->index;
+    const size_t sibling = 1 - target;
     const NLCheckedNodeView *body = nl_checked_node_view(f, loan->initializer);
     const NLCheckedNodeView *ref =
         nl_checked_node_view(f, write->first_argument);
@@ -1363,6 +1383,20 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
         e->parent_post_fact <= e->parent_fact ||
         e->child_post_fact <= e->child_fact)
         return false;
+    if (target != 0 || root->terminates) {
+        /* The second field and explicit return extend the named usize
+         * threshold profile. The write must consume that same IF result. */
+        const NLCheckedNodeView *predicate =
+            nl_checked_node_view(f, bool_source_origin(f, choice->initializer));
+        if (predicate == NULL ||
+            predicate->kind != NL_CHECKED_USIZE_LESS_THAN || call_bindings != 0)
+            return false;
+        NLCheckedNodeId source = ref->next_argument;
+        while (source != 0 && source != id)
+            source = bool_source_origin(f, source);
+        if (source != id)
+            return false;
+    }
     NLSemanticValueView reference;
     if (!nl_semantic_value_view(c, ref->results[0].value, &reference) ||
         reference.dependencies != NL_DEPENDENCY_FREE ||
@@ -1425,7 +1459,7 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
             field.parent_field_index != i)
             return false;
     }
-    if (e->child != original.fixed_fields[0])
+    if (e->child != original.fixed_fields[target])
         return false;
     for (size_t a = 0; a < 2; ++a) {
         const NLSemanticContext *w = nl_checked_context(arms[a]);
@@ -1473,11 +1507,11 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
             e->parent_incarnation != original.incarnation ||
             e->parent_fact != original.current_fact ||
             e->child_incarnation !=
-                w->places[original.fixed_fields[0] - 1].incarnation ||
+                w->places[original.fixed_fields[target] - 1].incarnation ||
             e->child_fact !=
-                w->places[original.fixed_fields[0] - 1].current_fact ||
+                w->places[original.fixed_fields[target] - 1].current_fact ||
             e->old_value !=
-                w->places[original.fixed_fields[0] - 1].current_value)
+                w->places[original.fixed_fields[target] - 1].current_value)
             return false;
         for (size_t j = 0; j < arms[a]->branch_value_prefix; ++j) {
             NLSemanticValueView value = w->values[j];
@@ -1554,11 +1588,11 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
                 return false;
         }
     }
-    const NLCheckedField *fields[3] = {&loan->field, &reads[0]->field,
-                                       &reads[1]->field};
+    const NLCheckedField *fields[3] = {&loan->field, &reads[target]->field,
+                                       &reads[sibling]->field};
     for (size_t i = 0; i < 3; ++i) {
         const NLCheckedField *r = fields[i];
-        const size_t index = i == 2 ? 1 : 0;
+        const size_t index = i == 2 ? sibling : target;
         const NLPlaceId child = original.fixed_fields[index];
         const NLSemanticPlaceView before = entry->places[child - 1];
         if (r->base != e->base || r->nominal != e->nominal ||
@@ -1591,9 +1625,10 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
            !scope.active &&
            nl_semantic_value_view(c, retained.value, &recomposed) &&
            recomposed.type == p->aggregate && recomposed.field_count == 2 &&
-           recomposed.fields[0] == e->new_value &&
-           recomposed.fields[1] ==
-               entry->places[original.fixed_fields[1] - 1].current_value &&
+           recomposed.fields[target] == e->new_value &&
+           recomposed.fields[sibling] ==
+               entry->places[original.fixed_fields[sibling] - 1]
+                   .current_value &&
            recomposed.carrier == NL_CARRIER_ENDED;
 }
 
