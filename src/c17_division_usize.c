@@ -1,4 +1,5 @@
 #include "division_usize_internal.h"
+#include "newlang/copy_body.h"
 #include "pure_u8_internal.h"
 
 #include <stdarg.h>
@@ -310,12 +311,23 @@ static bool division_emit_byte_update(DivisionText *text,
             text,
             "    uint8_t nl_local_%zu;\n"
             "    {\n"
-            "        uint8_t *const nl_local_%zu = &nl_local_%zu.f%zu;\n"
-            "        nl_local_%zu = *nl_local_%zu;\n"
-            "        *nl_local_%zu = nl_local_%zu;\n"
-            "    }\n",
-            old->symbol, writer, object, change->field.index, old->symbol,
-            writer, writer, selected->symbol))
+            "        uint8_t *const nl_local_%zu = &nl_local_%zu.f%zu;\n",
+            old->symbol, writer, object, loan->field.index))
+        return false;
+    if (plan->byte_update_call) {
+        if (!division_text_append(
+                text,
+                "        nl_local_%zu = nl_qty_fn_%zu(nl_local_%zu, "
+                "nl_local_%zu);\n",
+                old->symbol, change->function, writer, selected->symbol))
+            return false;
+    } else if (!division_text_append(text,
+                                     "        nl_local_%zu = *nl_local_%zu;\n"
+                                     "        *nl_local_%zu = nl_local_%zu;\n",
+                                     old->symbol, writer, writer,
+                                     selected->symbol))
+        return false;
+    if (!division_text_append(text, "    }\n"))
         return false;
     NLCheckedNodeId id = old->next_item;
     for (size_t i = 0; i < 2; ++i) {
@@ -414,6 +426,26 @@ static bool division_emit_byte_selector(DivisionText *t,
                                 no->scalar_result.value);
 }
 
+/* The entry plan validated one replace and its forwarded old Copy. */
+static bool division_emit_byte_writer(DivisionText *t,
+                                      const NLCheckedFragment *caller,
+                                      NLCheckedNodeId id)
+{
+    NLCopyBodyParameters formals;
+    const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
+    return call && nl_checked_copy_body_parameters(caller, id, &formals) &&
+           division_text_append(
+               t,
+               "static uint8_t nl_qty_fn_%zu(uint8_t *nl_local_%zu, "
+               "uint8_t nl_local_%zu)\n{\n"
+               "    const uint8_t nl_previous = *nl_local_%zu;\n"
+               "    *nl_local_%zu = nl_local_%zu;\n"
+               "    return nl_previous;\n}\n\n",
+               call->function, formals.parameters[0], formals.parameters[1],
+               formals.parameters[0], formals.parameters[0],
+               formals.parameters[1]);
+}
+
 typedef bool (*QuantityCallValidator)(const NLCheckedFragment *,
                                       NLCheckedNodeId, NLDivisionUsizePlan *);
 
@@ -427,6 +459,7 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
                                               QuantityCallValidator valid,
                                               size_t depth, bool count_nodes,
                                               NLCheckedNodeId byte_selector,
+                                              NLCheckedNodeId byte_writer,
                                               DivisionProgram *program)
 {
     if (depth >= NL_SEMANTIC_MAX_DEPTH ||
@@ -443,12 +476,13 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
             return NL_CHECK_RESOURCE_LIMIT;
         --program->remaining;
         const NLCheckedNodeId id = body->body_calls[i];
-        if (byte_selector && id == byte_selector) {
-            const NLCheckedFragment *selector = nl_checked_call_body(body, id);
-            if (!selector)
+        if ((byte_selector && id == byte_selector) ||
+            (byte_writer && id == byte_writer)) {
+            const NLCheckedFragment *typed = nl_checked_call_body(body, id);
+            if (!typed)
                 return NL_CHECK_SEMANTIC_UNSUPPORTED;
             const NLCheckStatus status = division_collect_helpers(
-                selector, valid, depth + 1, true, 0, program);
+                typed, valid, depth + 1, true, 0, 0, program);
             if (status != NL_CHECK_OK)
                 return status;
             continue; /* The whole-entry plan selected its typed definition. */
@@ -463,7 +497,7 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
          * definition, after visiting its callees in source order. */
         const bool new_definition = !program->seen[helper.function - 1];
         const NLCheckStatus status = division_collect_helpers(
-            helper.body, valid, depth + 1, new_definition, 0, program);
+            helper.body, valid, depth + 1, new_definition, 0, 0, program);
         if (status != NL_CHECK_OK)
             return status;
         if (new_definition) {
@@ -475,26 +509,26 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
         if (!program->remaining)
             return NL_CHECK_RESOURCE_LIMIT;
         --program->remaining;
-        const NLCheckStatus status = division_collect_helpers(
-            body->arms[i].artifact, valid, depth + 1, count_nodes, 0, program);
+        const NLCheckStatus status =
+            division_collect_helpers(body->arms[i].artifact, valid, depth + 1,
+                                     count_nodes, 0, 0, program);
         if (status != NL_CHECK_OK)
             return status;
     }
     return NL_CHECK_OK;
 }
 
-static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
+static NLCheckStatus literal_divisor_c17(const NLDivisionUsizePlan *main,
                                          const char *profile,
                                          QuantityCallValidator call_valid,
                                          char **out, size_t *length)
 {
-    NLDivisionUsizePlan main;
-    if (!out || !length || !call_valid(entry, nl_checked_root(entry), &main) ||
-        main.formal || main.body->body_count > NL_CHECKED_MAX_BODY_CALLS)
+    if (main->formal || main->body->body_count > NL_CHECKED_MAX_BODY_CALLS)
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     DivisionProgram program = {.remaining = NL_SEMANTIC_MAX_ENTRIES};
     const NLCheckStatus status = division_collect_helpers(
-        main.body, call_valid, 0, true, main.byte_selector, &program);
+        main->body, call_valid, 0, true, main->byte_selector,
+        main->byte_update_call, &program);
     if (status != NL_CHECK_OK)
         return status;
     DivisionText text = {.capacity = program.nodes * 512 + 2048};
@@ -510,23 +544,26 @@ static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
                              profile, SIZE_MAX);
     for (size_t i = 0; emitted && i < program.count; ++i)
         emitted = division_emit_helper(&text, &program.definitions[i]);
-    if (emitted && main.byte_selector)
+    if (emitted && main->byte_selector)
         emitted =
-            division_emit_byte_selector(&text, main.body, main.byte_selector);
-    if (emitted && main.byte_descriptor)
+            division_emit_byte_selector(&text, main->body, main->byte_selector);
+    if (emitted && main->byte_update_call)
+        emitted = division_emit_byte_writer(&text, main->body,
+                                            main->byte_update_call);
+    if (emitted && main->byte_descriptor)
         emitted = division_text_append(
             &text, "_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1, "
                    "\"NewLang C17 requires exact 8-bit uint8_t\");\n\n");
     if (!emitted ||
         !division_text_append(&text, "static void nl_qty_fn_%zu(void)\n{\n",
-                              main.function) ||
-        !division_emit_items_before(&text, main.body, main.body->root, 4,
-                                    main.byte_descriptor, main.byte_update) ||
-        (main.byte_update && !division_emit_byte_update(&text, &main)) ||
+                              main->function) ||
+        !division_emit_items_before(&text, main->body, main->body->root, 4,
+                                    main->byte_descriptor, main->byte_update) ||
+        (main->byte_update && !division_emit_byte_update(&text, main)) ||
         !division_text_append(&text,
                               "    return;\n}\n\nint main(void)\n{\n"
                               "    nl_qty_fn_%zu();\n    return 0;\n}\n",
-                              main.function)) {
+                              main->function)) {
         free(text.bytes);
         return NL_CHECK_RESOURCE_LIMIT;
     }
@@ -538,20 +575,35 @@ static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
 NLCheckStatus nl_division_usize_c17(const NLCheckedFragment *entry, char **out,
                                     size_t *length)
 {
-    return literal_divisor_c17(entry, "division", nl_division_usize_call_valid,
+    NLDivisionUsizePlan plan;
+    if (!out || !length ||
+        !nl_division_usize_call_valid(entry, nl_checked_root(entry), &plan))
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
+    return literal_divisor_c17(&plan, "division", nl_division_usize_call_valid,
                                out, length);
 }
 
 NLCheckStatus nl_remainder_usize_c17(const NLCheckedFragment *entry, char **out,
                                      size_t *length)
 {
-    return literal_divisor_c17(entry, "remainder",
+    NLDivisionUsizePlan plan;
+    if (!out || !length ||
+        !nl_remainder_usize_call_valid(entry, nl_checked_root(entry), &plan))
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
+    return literal_divisor_c17(&plan, "remainder",
                                nl_remainder_usize_call_valid, out, length);
 }
 
 NLCheckStatus nl_quantity_usize_c17(const NLCheckedFragment *entry, char **out,
                                     size_t *length)
 {
-    return literal_divisor_c17(entry, "composition",
+    if (!out || !length)
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
+    NLDivisionUsizePlan plan;
+    const NLCheckStatus status =
+        nl_quantity_usize_call_plan(entry, nl_checked_root(entry), &plan);
+    if (status != NL_CHECK_OK)
+        return status;
+    return literal_divisor_c17(&plan, "composition",
                                nl_quantity_usize_call_valid, out, length);
 }
