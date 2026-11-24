@@ -45,12 +45,74 @@ static bool predicate_original_frame(const NLCheckedFragment *f,
     return false;
 }
 
+static bool predicate_descriptor_change(const NLCheckedFragment *f,
+                                        const NLCheckedNodeView *loan,
+                                        NLCheckedNodeId selector, V0Program *p,
+                                        NLCheckedField *change)
+{
+    const NLCheckedNodeView *block = nl_checked_node_view(f, loan->initializer);
+    const NLCheckedNodeView *tail =
+        block ? nl_checked_node_view(f, block->tail) : NULL;
+    if (!block || block->item_count || block->first_item || !tail)
+        return false;
+    if (tail->kind == NL_CHECKED_REPLACE) {
+        const NLCheckedNodeView *ref =
+            nl_checked_node_view(f, tail->first_argument);
+        const NLCheckedNodeView *input =
+            ref ? nl_checked_node_view(f, ref->next_argument) : NULL;
+        V0Program local = *p;
+        if (f->body_count != 1 || !tail->field.present || !input ||
+            bool_source_origin(f, ref->next_argument) != selector ||
+            tail->field.new_value != input->results[0].value ||
+            !gate_loan(f, loan, &local))
+            return false;
+        *change = tail->field;
+        return true;
+    }
+
+    /* The scoped call already owns its actual-to-formal and Change replay.
+     * Borrow that single event and check that the helper returns its old Copy.
+     */
+    NLCopyBodyParameters parameters;
+    if (f->body_count != 2 || tail->kind != NL_CHECKED_REGISTERED_CALL ||
+        !nl_checked_copy_body_parameters(f, block->tail, &parameters) ||
+        nl_checked_node_view(f, parameters.loan) != loan ||
+        bool_source_origin(f, parameters.arguments[1]) != selector)
+        return false;
+    const NLCheckStatus status =
+        nl_checked_copy_body_parameters_validate(f, block->tail, &parameters);
+    if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
+        p->copy_body_status = status;
+    NLCopyBodyView copy;
+    NLCopyBodyEventView event;
+    if (status != NL_CHECK_OK ||
+        !nl_checked_copy_body_view(f, block->tail, &copy) ||
+        copy.event_count != 1 ||
+        !nl_checked_copy_body_event(f, block->tail, 0, &event) ||
+        event.kind != NL_COPY_BODY_CHANGE)
+        return false;
+    const NLCheckedNodeView *root = nl_checked_node_view(copy.body, copy.root);
+    const NLCheckedNodeView *store =
+        nl_checked_node_view(copy.body, event.node);
+    const NLCheckedNodeView *dest =
+        store ? nl_checked_node_view(copy.body, store->first_argument) : NULL;
+    const NLCheckedNodeView *incoming =
+        dest ? nl_checked_node_view(copy.body, dest->next_argument) : NULL;
+    if (!root || root->terminates ||
+        copy_origin(copy.body, root->tail) != event.node || !incoming ||
+        incoming->kind != NL_CHECKED_IDENTIFIER ||
+        incoming->value_use != NL_VALUE_COPIED ||
+        incoming->symbol != parameters.parameters[1])
+        return false;
+    *change = event.field;
+    return true;
+}
+
 /* Borrow the actual pure call's canonical arm snapshots. The closed caller
  * walk connects their current descriptor to the single later Change. */
 static bool predicate_live_descriptor(const NLCheckedFragment *f,
                                       NLCheckedNodeId call_id,
-                                      const NLPureU8Call *pure,
-                                      const V0Program *p)
+                                      const NLPureU8Call *pure, V0Program *p)
 {
     enum {
         ORIGINAL,
@@ -69,7 +131,7 @@ static bool predicate_live_descriptor(const NLCheckedFragment *f,
         NL_CHECKED_IDENTIFIER};
     const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
     if (!root || root->kind != NL_CHECKED_BLOCK || !root->terminates ||
-        root->tail || root->item_count != COUNT + 1 || f->body_count != 1)
+        root->tail || root->item_count != COUNT + 1)
         return false;
     const NLCheckedNodeView *bindings[COUNT], *initializers[COUNT];
     NLCheckedNodeId item = root->first_item;
@@ -102,25 +164,14 @@ static bool predicate_live_descriptor(const NLCheckedFragment *f,
         return false;
 
     const NLCheckedNodeView *loan = initializers[OLD];
-    const NLCheckedNodeView *body = nl_checked_node_view(f, loan->initializer);
-    const NLCheckedNodeView *store =
-        body ? nl_checked_node_view(f, body->tail) : NULL;
-    V0Program local = *p;
-    if (!body || body->item_count || body->first_item || !store ||
-        store->kind != NL_CHECKED_REPLACE || !store->field.present ||
-        !gate_loan(f, loan, &local))
+    NLCheckedField update;
+    if (!predicate_descriptor_change(f, loan, call_id, p, &update))
         return false;
-    const NLCheckedNodeView *ref =
-        nl_checked_node_view(f, store->first_argument);
-    const NLCheckedNodeView *input =
-        ref ? nl_checked_node_view(f, ref->next_argument) : NULL;
-    const NLCheckedField *change = &store->field;
+    const NLCheckedField *change = &update;
     const NLCheckedField *projection = &loan->field;
     const NLCheckedField *target = &initializers[UPDATED]->field;
     const NLCheckedField *sibling = &initializers[SIBLING]->field;
-    if (!input || bool_source_origin(f, ref->next_argument) != call_id ||
-        change->new_value != input->results[0].value ||
-        change->base != bindings[ORIGINAL]->symbol ||
+    if (change->base != bindings[ORIGINAL]->symbol ||
         projection->base != change->base ||
         projection->index != change->index ||
         projection->parent != change->parent ||
