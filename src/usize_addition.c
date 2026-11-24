@@ -3430,7 +3430,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
     size_t remaining = NL_SEMANTIC_MAX_ENTRIES;
     QuantityBody b = {
         .body = f, .context = c, .function = fn, .remaining = &remaining};
-    NLPureU8Call pure;
+    NLPureU8Call pure = {0};
     const NLSymbolId key = bindings[0]->symbol;
     if (quantity_expression_at(&b, bindings[0]->initializer, initializers[0]) !=
         QUANTITY_INDEPENDENT)
