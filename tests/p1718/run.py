@@ -24,7 +24,7 @@ def one(pattern, code):
     return matches[0]
 
 
-def observe(code, field):
+def observe(code, field, early=False):
     other = b"1" if field == b"0" else b"0"
     scalar = one(
         rb"^    size_t (nl_local_\d+) = nl_qty_fn_\d+\((nl_local_\d+)\);\n"
@@ -47,7 +47,12 @@ def observe(code, field):
     updated = one(rb"^    const uint8_t (nl_local_\d+) = " + target + rb";\n", code)
     untouched = one(rb"^    const uint8_t (nl_local_\d+) = " + sibling + rb";\n", code)
     old = one(rb"^    const uint8_t (nl_local_\d+) = " + store[1] + rb";\n", code)
-    assert scalar.end() < ctor.start() < loan.start() < store.start()
+    if early:
+        count_binding = one(rb"^    size_t " + count + rb" = [^;]+;\n", code)
+        assert ctor.end() < count_binding.start() < scalar.start()
+    else:
+        assert scalar.end() < ctor.start()
+    assert max(scalar.end(), ctor.end()) < loan.start() < store.start()
     assert store.end() < updated.start() < untouched.start() < old.start()
     declare = (b"    const uint8_t *observed_target = &" + root + b".f" + field + b";\n"
                b"    const uint8_t *observed_sibling = &" + root + b".f" + other + b";\n"
@@ -67,14 +72,14 @@ def observe(code, field):
             code[loan.end():old.end()] + after + code[old.end():])
 
 
-def verify(cli, sources, raw):
+def verify(cli, sources, raw, positives=admitted, negatives=refused, early=False):
     hosts = (shutil.which("gcc"), shutil.which("clang-23") or shutil.which("clang"))
     assert all(hosts)
-    for name in (*admitted, *refused):
+    for name in (*positives, *negatives):
         work = raw / name
         work.mkdir()
         source = sources / (name + ".nl")
-        status = 0 if name in admitted else 4
+        status = 0 if name in positives else 4
         check = run(work, "check", [cli, "--check", source], 0)
         assert not check.stdout and not check.stderr
         emit = run(work, "emit", [cli, source], status)
@@ -95,9 +100,9 @@ def verify(cli, sources, raw):
             continue
         assert not any(result.stderr for result in (emit, existing, created))
         assert emit.stdout == target.read_bytes() == absent.read_bytes()
-        wanted, field = admitted[name]
+        wanted, field = positives[name]
         observed = work / "observed.c"
-        observed.write_bytes(observe(emit.stdout, field))
+        observed.write_bytes(observe(emit.stdout, field, early))
         for label, host in zip(("gcc", "clang"), hosts):
             native(work, host, [(label + "-original", target, b""),
                                 (label + "-observed", observed, wanted)])

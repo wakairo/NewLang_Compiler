@@ -80,4 +80,37 @@ static inline bool nl_c17_field_change(const NLCheckedFragment *f,
            v->field.parent_post_fact != v->field.parent_fact &&
            v->field.child_post_fact != v->field.child_fact;
 }
+
+/* Match the original's two current fields in an already identified arm
+ * context to the pre-Change target and unmodified sibling. */
+static inline bool nl_c17_descriptor_frame(const NLSemanticContext *c,
+                                           NLSymbolId original, NLValueId ctor,
+                                           const NLCheckedField *change,
+                                           const NLCheckedField *sibling)
+{
+    NLSemanticBindingView binding;
+    NLSemanticPlaceView root;
+    if (!c || !nl_semantic_binding_view(c, original, &binding) ||
+        binding.availability != NL_AVAILABLE ||
+        binding.place != change->parent || binding.value != ctor ||
+        binding.type != change->nominal ||
+        !nl_semantic_place_view(c, binding.place, &root) || !root.live ||
+        !root.independent_root || root.fixed_field_count != 2 ||
+        root.incarnation != change->parent_incarnation ||
+        root.current_fact != change->parent_fact || root.current_value != ctor)
+        return false;
+    const NLCheckedField *fields[] = {change, sibling};
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedField *field = fields[i];
+        NLSemanticPlaceView place;
+        if (field->index >= 2 ||
+            root.fixed_fields[field->index] != field->child ||
+            !nl_semantic_place_view(c, field->child, &place) || !place.live ||
+            place.incarnation != field->child_incarnation ||
+            place.current_fact != field->child_fact ||
+            place.current_value != field->old_value)
+            return false;
+    }
+    return true;
+}
 #endif

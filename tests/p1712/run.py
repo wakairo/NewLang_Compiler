@@ -17,9 +17,8 @@ admitted = {
     "scalar-bind-only": b"1023,65472,97\n",
     "selector-known-only": None,
 }
+# p1730 runs the original descriptor sources as native positives.
 refused = {
-    "descriptor-1023": 4,
-    "descriptor-1024": 4,
     "wrong-actual": 4,
     "copy-alias": 4,
     "extra-call": 4,

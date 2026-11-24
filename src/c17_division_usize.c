@@ -217,14 +217,45 @@ static bool division_emit_evaluation(DivisionText *t,
     return !arg;
 }
 
+static bool division_emit_byte_constructor(DivisionText *text,
+                                           const NLCheckedFragment *f,
+                                           const NLCheckedNodeView *original)
+{
+    const NLCheckedNodeView *ctor =
+        nl_checked_node_view(f, original->initializer);
+    if (!division_text_append(text,
+                              "    struct { uint8_t f0; uint8_t f1; } "
+                              "nl_local_%zu = {",
+                              original->symbol))
+        return false;
+    for (NLCheckedNodeId id = ctor->first_argument; id;) {
+        const NLCheckedNodeView *field = nl_checked_node_view(f, id);
+        const NLCheckedNodeView *literal =
+            nl_checked_node_view(f, field->initializer);
+        if (!division_text_append(text, " .f%zu = ((uint8_t)UINT8_C(%zu)),",
+                                  field->field_index,
+                                  literal->scalar_result.value))
+            return false;
+        id = field->next_argument;
+    }
+    return division_text_append(text, " };\n");
+}
+
 static bool division_emit_items_before(DivisionText *t,
                                        const NLCheckedFragment *f,
                                        NLCheckedNodeId block, int indent,
+                                       NLCheckedNodeId descriptor,
                                        NLCheckedNodeId stop)
 {
     const NLCheckedNodeView *root = nl_checked_node_view(f, block);
     for (NLCheckedNodeId id = root->first_item; id && id != stop;) {
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
+        if (id == descriptor) {
+            if (!division_emit_byte_constructor(t, f, n))
+                return false;
+            id = n->next_item;
+            continue;
+        }
         if (n->kind == NL_CHECKED_RETURN)
             break; /* The validated plan supplies the separate exit result. */
         if (n->kind == NL_CHECKED_STATEMENT) {
@@ -254,21 +285,19 @@ static bool division_emit_items_before(DivisionText *t,
 static bool division_emit_items(DivisionText *t, const NLCheckedFragment *f,
                                 NLCheckedNodeId block, int indent)
 {
-    return division_emit_items_before(t, f, block, indent, 0);
+    return division_emit_items_before(t, f, block, indent, 0, 0);
 }
 
 /* The entry validator matches every binding in this exact continuation.
  * Names come from the original checked carriers, and indices are the
  * resolved semantic fields of the one constructed local. */
-static bool division_emit_byte_descriptor(DivisionText *text,
-                                          const NLDivisionUsizePlan *plan)
+static bool division_emit_byte_update(DivisionText *text,
+                                      const NLDivisionUsizePlan *plan)
 {
     const NLCheckedFragment *f = plan->body;
     const NLCheckedNodeView *original =
         nl_checked_node_view(f, plan->byte_descriptor);
-    const NLCheckedNodeView *ctor =
-        nl_checked_node_view(f, original->initializer);
-    const NLCheckedNodeView *old = nl_checked_node_view(f, original->next_item);
+    const NLCheckedNodeView *old = nl_checked_node_view(f, plan->byte_update);
     const NLCheckedNodeView *loan = nl_checked_node_view(f, old->initializer);
     const NLCheckedNodeView *body = nl_checked_node_view(f, loan->initializer);
     const NLCheckedNodeView *change = nl_checked_node_view(f, body->tail);
@@ -277,24 +306,8 @@ static bool division_emit_byte_descriptor(DivisionText *text,
     const NLCheckedNodeView *selected =
         nl_checked_node_view(f, ref->next_argument);
     const size_t object = original->symbol, writer = ref->symbol;
-    if (!division_text_append(text,
-                              "    struct { uint8_t f0; uint8_t f1; } "
-                              "nl_local_%zu = {",
-                              object))
-        return false;
-    for (NLCheckedNodeId id = ctor->first_argument; id;) {
-        const NLCheckedNodeView *field = nl_checked_node_view(f, id);
-        const NLCheckedNodeView *literal =
-            nl_checked_node_view(f, field->initializer);
-        if (!division_text_append(text, " .f%zu = ((uint8_t)UINT8_C(%zu)),",
-                                  field->field_index,
-                                  literal->scalar_result.value))
-            return false;
-        id = field->next_argument;
-    }
     if (!division_text_append(
             text,
-            " };\n"
             "    uint8_t nl_local_%zu;\n"
             "    {\n"
             "        uint8_t *const nl_local_%zu = &nl_local_%zu.f%zu;\n"
@@ -508,9 +521,8 @@ static NLCheckStatus literal_divisor_c17(const NLCheckedFragment *entry,
         !division_text_append(&text, "static void nl_qty_fn_%zu(void)\n{\n",
                               main.function) ||
         !division_emit_items_before(&text, main.body, main.body->root, 4,
-                                    main.byte_descriptor) ||
-        (main.byte_descriptor &&
-         !division_emit_byte_descriptor(&text, &main)) ||
+                                    main.byte_descriptor, main.byte_update) ||
+        (main.byte_update && !division_emit_byte_update(&text, &main)) ||
         !division_text_append(&text,
                               "    return;\n}\n\nint main(void)\n{\n"
                               "    nl_qty_fn_%zu();\n    return 0;\n}\n",
