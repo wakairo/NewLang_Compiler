@@ -2941,35 +2941,6 @@ static bool guarded_byte_product(QuantityBody *b, NLCheckedNodeId id,
            no->scalar_result.value == 0;
 }
 
-static bool guarded_byte_selector(const NLCheckedFragment *f,
-                                  const NLSemanticContext *c,
-                                  NLCheckedNodeId id, NLPureU8Call *pure)
-{
-    /* CHECK uses its real working world here. The completed child seal is
-     * required in either phase, as are the pure selector's two normal arms. */
-    if (!nl_h_custody_result_valid(f, id) ||
-        !nl_pure_u8_contents_at(f, id, c, pure))
-        return false;
-    const NLCheckedNodeView *root =
-        nl_checked_node_view(pure->body, pure->body->root);
-    const NLCheckedNodeView *choice =
-        nl_checked_node_view(pure->body, pure->selection);
-    if (!root || !choice || choice->normal_arms != 2 || root->item_count ||
-        root->tail != pure->selection || pure->body->body_count ||
-        pure->body->arm_count != 2)
-        return false;
-    const NLCheckedNodeView *test =
-        nl_checked_node_view(pure->body, choice->initializer);
-    const NLCheckedNodeView *left =
-        test ? nl_checked_node_view(pure->body, test->first_argument) : NULL;
-    const NLCheckedNodeView *right =
-        left ? nl_checked_node_view(pure->body, left->next_argument) : NULL;
-    return test && test->kind == NL_CHECKED_USIZE_LESS_THAN && right &&
-           left->kind == NL_CHECKED_IDENTIFIER &&
-           left->symbol == pure->formal &&
-           right->kind == NL_CHECKED_USIZE_LITERAL;
-}
-
 static bool descriptor_field_source(const NLCheckedFragment *f,
                                     const NLSemanticContext *c,
                                     const NLSyntaxView *source,
@@ -3446,7 +3417,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
     if (!local_policy && (f->body_calls[1] != selector ||
                           !guarded_byte_actual(f, c, selector, initializers[3],
                                                bindings[2]->symbol) ||
-                          !guarded_byte_selector(f, c, selector, &pure)))
+                          !nl_pure_u8_threshold_at(f, c, selector, &pure)))
         return false;
 
     if (root->item_count >= 9) {
@@ -3483,7 +3454,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         if (early &&
             !guarded_byte_live_original(
                 f, bindings[1]->initializer, product,
-                local_policy ? fields.policy.body : pure.body,
+                local_policy ? fields.policy.selection_body : pure.body,
                 local_policy ? fields.policy.selection : pure.selection,
                 &fields))
             return false;
