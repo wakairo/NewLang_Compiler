@@ -1,5 +1,5 @@
+#include "copy_body_internal.h"
 #include "division_usize_internal.h"
-#include "newlang/copy_body.h"
 #include "pure_u8_internal.h"
 
 #include <stdarg.h>
@@ -400,50 +400,78 @@ static bool division_emit_helper(DivisionText *text,
            division_text_append(text, ";\n}\n\n");
 }
 
+static bool division_emit_byte_choice(DivisionText *t,
+                                      const NLCheckedFragment *body,
+                                      NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *choice = nl_checked_node_view(body, id);
+    const NLCheckedNodeView *yes =
+        predicate_arm_value(nl_checked_if_arm(body, id, 0));
+    const NLCheckedNodeView *no =
+        predicate_arm_value(nl_checked_if_arm(body, id, 1));
+    return choice && yes && no &&
+           division_emit_expression(t, body, choice->initializer) &&
+           division_text_append(t,
+                                " ? ((uint8_t)UINT8_C(%zu)) "
+                                ": ((uint8_t)UINT8_C(%zu))",
+                                yes->scalar_result.value,
+                                no->scalar_result.value);
+}
+
 static bool division_emit_byte_selector(DivisionText *t,
                                         const NLCheckedFragment *caller,
                                         NLCheckedNodeId id)
 {
     NLPureU8Call pure;
-    if (!nl_pure_u8_call(caller, id, &pure))
-        return false;
-    const NLCheckedNodeView *choice =
-        nl_checked_node_view(pure.body, pure.selection);
-    const NLCheckedNodeView *yes =
-        predicate_arm_value(nl_checked_if_arm(pure.body, pure.selection, 0));
-    const NLCheckedNodeView *no =
-        predicate_arm_value(nl_checked_if_arm(pure.body, pure.selection, 1));
-    return choice && yes && no &&
+    return nl_pure_u8_call(caller, id, &pure) &&
            division_text_append(t,
                                 "static uint8_t nl_qty_fn_%zu(size_t "
                                 "nl_local_%zu)\n{\n    return ",
                                 pure.function, pure.formal) &&
-           division_emit_expression(t, pure.body, choice->initializer) &&
-           division_text_append(t,
-                                " ? ((uint8_t)UINT8_C(%zu)) "
-                                ": ((uint8_t)UINT8_C(%zu));\n}\n\n",
-                                yes->scalar_result.value,
-                                no->scalar_result.value);
+           division_emit_byte_choice(t, pure.body, pure.selection) &&
+           division_text_append(t, ";\n}\n\n");
+}
+
+static bool division_emit_byte_exchange(DivisionText *t, NLSymbolId writer,
+                                        NLSymbolId mode)
+{
+    return division_text_append(
+        t,
+        "    const uint8_t nl_previous = *nl_local_%zu;\n"
+        "    *nl_local_%zu = nl_local_%zu;\n"
+        "    return nl_previous;\n}\n\n",
+        writer, writer, mode);
 }
 
 /* The entry plan validated one replace and its forwarded old Copy. */
 static bool division_emit_byte_writer(DivisionText *t,
                                       const NLCheckedFragment *caller,
-                                      NLCheckedNodeId id)
+                                      NLCheckedNodeId id, bool local_policy)
 {
-    NLCopyBodyParameters formals;
     const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
+    if (local_policy) {
+        NLCopyPolicyWriter policy;
+        return call && nl_copy_policy_writer(caller, id, &policy) &&
+               division_text_append(
+                   t,
+                   "static uint8_t nl_qty_fn_%zu(uint8_t *nl_local_%zu, "
+                   "size_t nl_local_%zu)\n{\n"
+                   "    const uint8_t nl_local_%zu = ",
+                   call->function, policy.writer, policy.budget,
+                   policy.selected) &&
+               division_emit_byte_choice(t, policy.body, policy.selection) &&
+               division_text_append(t, ";\n") &&
+               division_emit_byte_exchange(t, policy.writer, policy.selected);
+    }
+    NLCopyBodyParameters formals;
     return call && nl_checked_copy_body_parameters(caller, id, &formals) &&
            division_text_append(
                t,
                "static uint8_t nl_qty_fn_%zu(uint8_t *nl_local_%zu, "
-               "uint8_t nl_local_%zu)\n{\n"
-               "    const uint8_t nl_previous = *nl_local_%zu;\n"
-               "    *nl_local_%zu = nl_local_%zu;\n"
-               "    return nl_previous;\n}\n\n",
-               call->function, formals.parameters[0], formals.parameters[1],
-               formals.parameters[0], formals.parameters[0],
-               formals.parameters[1]);
+               "uint8_t nl_local_%zu)\n{\n",
+               call->function, formals.parameters[0], formals.parameters[1]) &&
+           division_emit_byte_exchange(t, formals.parameters[0],
+                                       formals.parameters[1]);
 }
 
 typedef bool (*QuantityCallValidator)(const NLCheckedFragment *,
@@ -548,8 +576,8 @@ static NLCheckStatus literal_divisor_c17(const NLDivisionUsizePlan *main,
         emitted =
             division_emit_byte_selector(&text, main->body, main->byte_selector);
     if (emitted && main->byte_update_call)
-        emitted = division_emit_byte_writer(&text, main->body,
-                                            main->byte_update_call);
+        emitted = division_emit_byte_writer(
+            &text, main->body, main->byte_update_call, !main->byte_selector);
     if (emitted && main->byte_descriptor)
         emitted = division_text_append(
             &text, "_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1, "
