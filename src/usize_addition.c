@@ -3261,6 +3261,50 @@ static bool descriptor_reloan(const NLCheckedFragment *f,
            second->old_value == first->new_value;
 }
 
+/* Verify the two post-loan field reads against this original's packages.
+ * Registered writer routes may observe either field first. */
+static bool
+descriptor_observations(const NLCheckedFragment *f, const NLSemanticContext *c,
+                        const NLCheckedNodeView *original,
+                        const NLSemanticValueView *initial,
+                        NLValueId initial_target, const NLCheckedField *change,
+                        const NLCheckedNodeView *const bindings[2],
+                        const NLSyntaxNode *const sources[2], bool registered,
+                        const NLCheckedField **sibling_out)
+{
+    const NLSemanticBindingView local = c->bindings[original->symbol - 1].view;
+    NLSemanticPlaceView place;
+    NLSemanticValueView final;
+    if (local.place != change->parent ||
+        !nl_semantic_place_view(c, local.place, &place) ||
+        place.incarnation != change->parent_incarnation ||
+        place.type != change->nominal ||
+        !nl_semantic_value_view(c, local.value, &final) ||
+        final.type != change->nominal || final.field_count != 2)
+        return false;
+    const NLCheckedNodeView *reads[2];
+    for (size_t i = 0; i < 2; ++i) {
+        if (!descriptor_read(f, c, bindings[i]->initializer,
+                             nl_syntax_node_view(sources[i]), original, change,
+                             change->type))
+            return false;
+        reads[i] = nl_checked_node_view(f, bindings[i]->initializer);
+    }
+    const size_t target =
+        registered && reads[0]->field.index != change->index ? 1 : 0;
+    const NLCheckedField *updated = &reads[target]->field;
+    const NLCheckedField *sibling = &reads[1 - target]->field;
+    if (!descriptor_target_read(updated, change) ||
+        sibling->index == change->index || sibling->child == change->child ||
+        initial->fields[change->index] != initial_target ||
+        final.fields[change->index] != change->new_value ||
+        initial->fields[sibling->index] != sibling->old_value ||
+        final.fields[sibling->index] != sibling->old_value)
+        return false;
+    *sibling_out = sibling;
+    return true;
+}
+
 /* Match the fixed continuation, ending with the original field observations
  * and exact displaced Copies. The two-call form reuses the same writer. */
 static bool guarded_byte_descriptor(
@@ -3312,7 +3356,7 @@ static bool guarded_byte_descriptor(
         nl_checked_node_view(f, original->initializer);
     const NLCheckedNodeView *loan =
         nl_checked_node_view(f, bindings[0]->initializer);
-    NLSemanticValueView initial, final;
+    NLSemanticValueView initial;
     if (!descriptor_constructor(
             f, c, ctor,
             nl_syntax_node_view(original_source->data.binding.initializer), u8,
@@ -3356,39 +3400,11 @@ static bool guarded_byte_descriptor(
         }
         change = &second_field;
     }
-    const NLSemanticBindingView local = c->bindings[original->symbol - 1].view;
-    NLSemanticPlaceView place;
-    if (local.place != change->parent ||
-        !nl_semantic_place_view(c, local.place, &place) ||
-        place.incarnation != change->parent_incarnation ||
-        place.type != ctor->type ||
-        !nl_semantic_value_view(c, local.value, &final) ||
-        final.type != ctor->type || final.field_count != 2 ||
-        !descriptor_read(f, c, bindings[observation]->initializer,
-                         nl_syntax_node_view(initializer_sources[observation]),
-                         original, change, u8) ||
-        !descriptor_read(
-            f, c, bindings[observation + 1]->initializer,
-            nl_syntax_node_view(initializer_sources[observation + 1]), original,
-            change, u8))
-        return false;
-
-    /* Both registered writer routes use the checked Change to identify the
-     * two post-loan reads. Lowering keeps their source order. */
-    const NLCheckedNodeView *reads[] = {
-        nl_checked_node_view(f, bindings[observation]->initializer),
-        nl_checked_node_view(f, bindings[observation + 1]->initializer)};
-    const size_t target =
-        writer && reads[0]->field.index != change->index ? 1 : 0;
-    const NLCheckedField *updated = &reads[target]->field;
-    const NLCheckedField *sibling_field = &reads[1 - target]->field;
-    if (!descriptor_target_read(updated, change) ||
-        sibling_field->index == change->index ||
-        sibling_field->child == change->child ||
-        initial.fields[field.index] != field.old_value ||
-        final.fields[change->index] != change->new_value ||
-        initial.fields[sibling_field->index] != sibling_field->old_value ||
-        final.fields[sibling_field->index] != sibling_field->old_value ||
+    const NLCheckedField *sibling_field;
+    if (!descriptor_observations(f, c, original, &initial, field.old_value,
+                                 change, bindings + observation,
+                                 initializer_sources + observation, writer != 0,
+                                 &sibling_field) ||
         !scalar_name_copy(f, c, bindings[observation + 2]->initializer,
                           initializer_sources[observation + 2],
                           bindings[0]->symbol, u8))
@@ -3406,6 +3422,167 @@ static bool guarded_byte_descriptor(
                                    .second_writer = second_writer,
                                    .policy = policy};
     return true;
+}
+
+/* The first original must still be present at its exact post-Change state
+ * when the second original is handed to the writer. */
+static bool descriptor_after_change(const NLSemanticContext *context,
+                                    const GuardedByteDescriptor *original,
+                                    NLValueId value)
+{
+    const NLCheckedField *change = &original->change;
+    const NLCheckedField *peer = original->sibling;
+    NLSemanticBindingView binding;
+    NLSemanticPlaceView root, field, sibling;
+    return nl_semantic_binding_view(context, change->base, &binding) &&
+           binding.availability == NL_AVAILABLE && binding.value == value &&
+           binding.place == change->parent && binding.type == change->nominal &&
+           nl_semantic_place_view(context, binding.place, &root) && root.live &&
+           root.independent_root && root.implicit_local &&
+           root.incarnation == change->parent_incarnation &&
+           root.current_fact == change->parent_post_fact &&
+           root.current_value == value && root.fixed_field_count == 2 &&
+           root.fixed_fields[change->index] == change->child &&
+           root.fixed_fields[peer->index] == peer->child &&
+           nl_semantic_place_view(context, change->child, &field) &&
+           field.live && field.incarnation == change->child_incarnation &&
+           field.current_fact == change->child_post_fact &&
+           field.current_value == change->new_value &&
+           nl_semantic_place_view(context, peer->child, &sibling) &&
+           sibling.live && sibling.incarnation == peer->child_incarnation &&
+           sibling.current_fact == peer->child_fact &&
+           sibling.current_value == peer->old_value;
+}
+
+static bool
+descriptor_ordered_originals(const NLCheckedFragment *f,
+                             const NLSemanticContext *c,
+                             const NLCheckedNodeView *const loans[2],
+                             const GuardedByteDescriptor fields[2])
+{
+    const NLCheckedField *left = &fields[0].change, *right = &fields[1].change;
+    if (left->nominal != right->nominal || left->index != right->index)
+        return false;
+    const NLPlaceId first_places[] = {left->parent, left->child,
+                                      fields[0].sibling->child};
+    const NLPlaceId second_places[] = {right->parent, right->child,
+                                       fields[1].sibling->child};
+    for (size_t i = 0; i < 3; ++i)
+        for (size_t j = 0; j < 3; ++j)
+            if (first_places[i] == second_places[j])
+                return false;
+    const NLCheckedNodeView *first = nl_checked_node_view(f, fields[0].writer);
+    const NLCheckedNodeView *second = nl_checked_node_view(f, fields[1].writer);
+    NLSemanticScopeView closed;
+    NLSemanticBindingView final;
+    NLCopyBodyParameters first_call, second_call;
+    if (!first || !second || first->function != second->function ||
+        loans[0]->loan.scope == loans[1]->loan.scope ||
+        loans[0]->span.end_byte >= loans[1]->span.start_byte ||
+        !nl_checked_copy_body_parameters(f, fields[0].writer, &first_call) ||
+        !nl_checked_copy_body_parameters(f, fields[1].writer, &second_call) ||
+        !nl_semantic_scope_view(second_call.entry, loans[0]->loan.scope,
+                                &closed) ||
+        closed.active || !nl_semantic_binding_view(c, left->base, &final) ||
+        !descriptor_after_change(second_call.entry, &fields[0], final.value) ||
+        !nl_c17_descriptor_frame(first_call.entry, right->base,
+                                 fields[1].constructor, right,
+                                 fields[1].sibling))
+        return false;
+    const NLCopyBodyParameters calls[] = {first_call, second_call};
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedField *change = &fields[i].change;
+        if (!nl_c17_descriptor_frame(calls[i].entry, change->base,
+                                     fields[i].constructor, change,
+                                     fields[i].sibling) ||
+            !nl_semantic_scope_view(c, loans[i]->loan.scope, &closed) ||
+            closed.active)
+            return false;
+        const NLPlaceId places[] = {change->parent, change->child,
+                                    fields[i].sibling->child};
+        const NLIncarnationId incarnations[] = {
+            change->parent_incarnation, change->child_incarnation,
+            fields[i].sibling->child_incarnation};
+        for (size_t j = 0; j < 3; ++j) {
+            NLSemanticPlaceView ended;
+            if (!nl_semantic_place_view(c, places[j], &ended) || ended.live ||
+                ended.incarnation != incarnations[j])
+                return false;
+        }
+    }
+    return true;
+}
+
+/* Two early originals, two one-Change writer calls and four post-loan reads.
+ * The matcher reads the existing per-call frames and never joins their worlds.
+ */
+static bool guarded_byte_distinct_descriptors(
+    const NLCheckedFragment *f, const NLSemanticContext *c,
+    const NLCheckedNodeView *root, const NLSyntaxView *source,
+    NLCheckedNodeId id, const NLSyntaxNode *item, NLSymbolId selected,
+    const NLCheckedNodeView *const originals[2],
+    const NLSyntaxView *const original_sources[2],
+    GuardedByteDescriptor fields[2], NLCheckedNodeId *second_update)
+{
+    const NLCheckedNodeView *bindings[9];
+    const NLSyntaxNode *initializers[9];
+    NLSymbolId previous = selected;
+    for (size_t i = 0; i < 9; ++i) {
+        const NLSyntaxView *syntax = nl_syntax_node_view(item);
+        const NLCheckedNodeView *binding = nl_checked_node_view(f, id);
+        if (!binding_source(f, c, binding, syntax) ||
+            binding->next_item <= id || binding->symbol <= previous)
+            return false;
+        if (i == 2)
+            *second_update = id;
+        bindings[i] = binding;
+        initializers[i] = syntax->data.binding.initializer;
+        previous = binding->symbol;
+        id = binding->next_item;
+        item = nl_syntax_next_argument(item);
+    }
+    const NLSyntaxView *ret = nl_syntax_node_view(item);
+    const NLCheckedNodeView *end = nl_checked_node_view(f, id);
+    if (!ret || ret->kind != NL_SYNTAX_RETURN || !end ||
+        nl_syntax_next_argument(item) || source->data.block.tail ||
+        !division_unit_return(f, root, end, ret, nl_semantic_unit_type(c)))
+        return false;
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    const NLCheckedNodeView *mode =
+        nl_checked_node_view(f, bindings[1]->initializer);
+    if (!mode || mode->type != u8 || !copy_if_literal_at(f, c, mode))
+        return false;
+    const NLSymbolId actuals[] = {selected, bindings[1]->symbol};
+    const NLCheckedNodeView *loans[2];
+    for (size_t i = 0; i < 2; ++i) {
+        const size_t update = 2 * i, read = 3 + 2 * i, copy = 7 + i;
+        const NLCheckedNodeView *original = originals[i];
+        const NLCheckedNodeView *ctor =
+            nl_checked_node_view(f, original->initializer);
+        NLSemanticValueView initial;
+        loans[i] = nl_checked_node_view(f, bindings[update]->initializer);
+        GuardedByteDescriptor *field = &fields[i];
+        if (!ctor ||
+            !descriptor_constructor(
+                f, c, ctor,
+                nl_syntax_node_view(
+                    original_sources[i]->data.binding.initializer),
+                u8, &initial) ||
+            !descriptor_replace(f, c, loans[i],
+                                nl_syntax_node_view(initializers[update]),
+                                original, actuals[i], ctor->type, u8,
+                                &field->change, &field->writer, NULL) ||
+            field->writer != f->body_calls[2 + i] ||
+            !descriptor_observations(f, c, original, &initial,
+                                     field->change.old_value, &field->change,
+                                     bindings + read, initializers + read, true,
+                                     &field->sibling) ||
+            !scalar_name_copy(f, c, bindings[copy]->initializer,
+                              initializers[copy], bindings[update]->symbol, u8))
+            return false;
+        field->constructor = ctor->results[0].value;
+    }
+    return descriptor_ordered_originals(f, c, loans, fields);
 }
 
 /* The unchanged scalar validators identify these three choices. Read the
@@ -3457,11 +3634,12 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
 
     /* The in-writer route has eight bindings and an optional Return item. */
     const bool local_policy = root->item_count == (root->terminates ? 9u : 8u);
-    const bool sequential = f->body_count == 4;
-    if (sequential && (!root->terminates ||
-                       (root->item_count != 13 && root->item_count != 14)))
+    const bool distinct = f->body_count == 4 && root->item_count == 16;
+    const bool sequential = f->body_count == 4 && !distinct;
+    if (((sequential || distinct) && !root->terminates) ||
+        (sequential && root->item_count != 13 && root->item_count != 14))
         return false;
-    const bool descriptor_entry = local_policy || sequential ||
+    const bool descriptor_entry = local_policy || sequential || distinct ||
                                   (root->terminates && root->item_count == 10);
     if (root->item_count > 6 && (!entry || !descriptor_entry))
         return false;
@@ -3475,13 +3653,16 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
     NLCheckedNodeId id = root->first_item;
     NLCheckedNodeId descriptor = 0;
     const NLSyntaxNode *descriptor_item = NULL;
+    NLCheckedNodeId second_descriptor = 0;
+    const NLCheckedNodeView *standby = NULL;
+    const NLSyntaxView *standby_source = NULL;
     const NLCheckedNodeView *first = nl_checked_node_view(f, id);
     const NLCheckedNodeView *first_value =
         first ? nl_checked_node_view(f, first->initializer) : NULL;
     const bool early = descriptor_entry && first_value &&
                        first_value->kind == NL_CHECKED_AGGREGATE;
     if ((local_policy && (!early || f->body_count != 2)) ||
-        (sequential && !early))
+        ((sequential || distinct) && !early))
         return false;
     if (early) {
         if (first->next_item <= id)
@@ -3489,6 +3670,16 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         descriptor = id;
         descriptor_item = item;
         id = first->next_item;
+        item = nl_syntax_next_argument(item);
+    }
+    if (distinct) {
+        second_descriptor = id;
+        standby = nl_checked_node_view(f, id);
+        standby_source = nl_syntax_node_view(item);
+        if (!binding_source_shape(f, c, standby, standby_source) ||
+            standby->symbol <= first->symbol || standby->next_item <= id)
+            return false;
+        id = standby->next_item;
         item = nl_syntax_next_argument(item);
     }
     for (size_t i = 0; i < prefix; ++i) {
@@ -3547,6 +3738,34 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                 return false;
             id = original->next_item;
             item = nl_syntax_next_argument(item);
+        }
+        if (distinct) {
+            if (standby->symbol >= key)
+                return false;
+            const NLCheckedNodeView *originals[] = {original, standby};
+            const NLSyntaxView *sources[] = {original_source, standby_source};
+            GuardedByteDescriptor originals_fields[2] = {0};
+            NLCheckedNodeId second_update = 0;
+            if (!guarded_byte_distinct_descriptors(
+                    f, c, root, source, id, item, bindings[3]->symbol,
+                    originals, sources, originals_fields, &second_update))
+                return false;
+            for (size_t i = 0; i < 2; ++i)
+                if (!guarded_byte_live_original(
+                        f, bindings[1]->initializer, product, pure.body,
+                        pure.selection, &originals_fields[i]))
+                    return false;
+            *out = (NLDivisionUsizePlan){
+                .body = f,
+                .function = function,
+                .byte_selector = selector,
+                .byte_descriptor = descriptor,
+                .byte_update = id,
+                .byte_update_call = originals_fields[0].writer,
+                .byte_second_descriptor = second_descriptor,
+                .byte_second_update = second_update,
+                .byte_second_update_call = originals_fields[1].writer};
+            return true;
         }
         GuardedByteDescriptor fields;
         if (!guarded_byte_descriptor(

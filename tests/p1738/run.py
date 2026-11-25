@@ -188,6 +188,92 @@ def observe_sequence(code, field):
     return b"".join(pieces)
 
 
+# Bytes, selected, old/final/tag for the active queue, old/final/tag for standby.
+independent = {
+    "dual-named": (b"1", b"4032,31,19,31,83,43,7,127\n"),
+    "dual-direct-tail": (b"1", b"4032,31,19,31,83,43,7,127\n"),
+    "dual-high": (b"1", b"4096,73,19,73,83,43,7,127\n"),
+}
+independent_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("dual-inline", "dual-crossed-read", "dual-wrong-old", "dual-same-root")
+}
+
+
+def observe_independent(code, field):
+    constructors = list(re.finditer(
+        rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n", code, re.M
+    ))
+    assert len(constructors) == 2 and constructors[0][1] != constructors[1][1]
+    targets = [ctor[1] + rb"\.f" + field for ctor in constructors]
+    sibling_index = b"0" if field == b"1" else b"1"
+    siblings = [ctor[1] + rb"\.f" + sibling_index for ctor in constructors]
+    planned = one(code, rb"^    size_t (nl_local_\d+) = nl_qty_fn_\d+\(nl_local_\d+\);\n")
+    trial = one(code, rb"^    uint8_t (nl_local_\d+) = nl_qty_fn_\d+\(" + planned[1] + rb"\);\n")
+    calls = [
+        one(code, rb"^    uint8_t (nl_local_\d+);\n"
+                  rb"    \{\n"
+                  rb"        uint8_t \*const (nl_local_\d+) = &" + target + rb";\n"
+                  rb"        \1 = (nl_qty_fn_\d+)\(\2, (nl_local_\d+)\);\n"
+                  rb"    \}\n")
+        for target in targets
+    ]
+    first, second = calls
+    assert first[3] == second[3] and first[4] == trial[1]
+    helper = one(code, rb"^static uint8_t " + first[3] +
+                 rb"\(uint8_t \*(nl_local_\d+), uint8_t (nl_local_\d+)\)\n"
+                 rb"\{\n    const uint8_t nl_previous = \*\1;\n"
+                 rb"    \*\1 = \2;\n    return nl_previous;\n\}\n")
+    recovery = one(code, rb"^    const uint8_t " + second[4] +
+                   rb" = \(\(uint8_t\)UINT8_C\(\d+\)\);\n")
+    reads = [
+        one(code, rb"^    const uint8_t (nl_local_\d+) = " + field_path + rb";\n")
+        for field_path in (targets[0], siblings[0], targets[1], siblings[1])
+    ]
+    copied = [
+        one(code, rb"^    const uint8_t (nl_local_\d+) = " + call[1] + rb";\n")
+        for call in calls
+    ]
+    order = [helper, *constructors, planned, trial, first, recovery, second, *reads, *copied]
+    assert all(left.end() <= right.start() for left, right in zip(order, order[1:]))
+
+    first_target, second_target = (p.replace(rb"\.", b".") for p in targets)
+    first_tag, second_tag = (p.replace(rb"\.", b".") for p in siblings)
+    setup = (b"    const uint8_t *const first_original = &" + first_target + b";\n"
+             b"    const uint8_t *const second_original = &" + second_target + b";\n"
+             b"    const uint8_t initial_first = *first_original, initial_second = *second_original;\n"
+             b"    const uint8_t saved_first_tag = " + first_tag + b", saved_second_tag = " + second_tag + b";\n"
+             b"    assert(first_original != second_original);\n")
+    before_first = (b"        assert(" + first[2] + b" == first_original && " + first[2] +
+                    b" != &" + first_tag + b");\n")
+    before_second = (b"        assert(" + second[2] + b" == second_original && " + second[2] +
+                     b" != &" + second_tag + b");\n"
+                     b"        assert(*first_original == " + trial[1] +
+                     b" && *second_original == initial_second && " + second_tag + b" == saved_second_tag);\n")
+    final = (b"    assert(" + copied[0][1] + b" == initial_first && " + copied[1][1] +
+             b" == initial_second);\n"
+             b"    assert(" + reads[0][1] + b" == " + trial[1] + b" && *first_original == " + reads[0][1] +
+             b" && " + reads[2][1] + b" == " + second[4] + b" && *second_original == " + reads[2][1] + b");\n"
+             b"    assert(" + reads[1][1] + b" == saved_first_tag && " + reads[3][1] +
+             b" == saved_second_tag);\n")
+    values = [trial[1], copied[0][1], reads[0][1], reads[1][1], copied[1][1], reads[2][1], reads[3][1]]
+    final += (b'    printf("%zu,%u,%u,%u,%u,%u,%u,%u\\n", ' + planned[1] + b", " +
+              b", ".join(b"(unsigned)" + item for item in values) + b");\n")
+    edits = [
+        (constructors[1].end(), setup),
+        (code.index(b"\n", first.start(2)) + 1, before_first),
+        (code.index(b"\n", second.start(2)) + 1, before_second),
+        (copied[1].end(), final),
+    ]
+    parts = [b"#include <assert.h>\n#include <stdio.h>\n"]
+    previous = 0
+    for position, content in edits:
+        parts.extend((code[previous:position], content))
+        previous = position
+    parts.append(code[previous:])
+    return b"".join(parts)
+
+
 if __name__ == "__main__":
     cli, sources = (Path(arg).resolve() for arg in sys.argv[1:3])
     if len(sys.argv) == 4:
@@ -201,3 +287,4 @@ if __name__ == "__main__":
         verify(cli, sources, raw, admitted, refused, observe)
         verify(cli, sources, raw, reordered, {}, partial(observe, sibling_first=True))
         verify(cli, sources, raw, sequential, {}, observe_sequence)
+        verify(cli, sources, raw, independent, independent_refusals, observe_independent)

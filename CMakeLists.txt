@@ -2331,6 +2331,10 @@ include(tests/p1455/CMakeLists.txt)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    # Give the exhaustive rollback sweeps room for ASan shard scheduling.
+    set_tests_properties(p1773_sequential_writer_rollback.unit PROPERTIES TIMEOUT 180)
+    set_tests_properties(p1778_independent_writer_rollback.unit PROPERTIES TIMEOUT 180)
+    set_tests_properties(p1756_delegated_policy_rollback.unit PROPERTIES TIMEOUT 180)
     # Full registration/invocation/named-output fault enumeration with host
     # ASan checks thousands of independent retries. Keep every location and
     # assertion; give only this finite cohort its measured sanitizer budget.
