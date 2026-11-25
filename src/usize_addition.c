@@ -3458,7 +3458,8 @@ static bool
 descriptor_ordered_originals(const NLCheckedFragment *f,
                              const NLSemanticContext *c,
                              const NLCheckedNodeView *const loans[2],
-                             const GuardedByteDescriptor fields[2])
+                             const GuardedByteDescriptor fields[2],
+                             const NLCheckedNodeView *read_binding)
 {
     const NLCheckedField *left = &fields[0].change, *right = &fields[1].change;
     if (left->nominal != right->nominal || left->index != right->index)
@@ -3489,6 +3490,18 @@ descriptor_ordered_originals(const NLCheckedFragment *f,
                                  fields[1].constructor, right,
                                  fields[1].sibling))
         return false;
+    if (read_binding) {
+        NLSemanticBindingView input;
+        const NLCheckedNodeView *read =
+            nl_checked_node_view(f, read_binding->initializer);
+        /* The second call must still hold the exact checked field Copy. */
+        if (!read ||
+            !nl_semantic_binding_view(second_call.entry, read_binding->symbol,
+                                      &input) ||
+            input.availability != NL_AVAILABLE || input.type != left->type ||
+            input.value != read->results[0].value)
+            return false;
+    }
     const NLCopyBodyParameters calls[] = {first_call, second_call};
     for (size_t i = 0; i < 2; ++i) {
         const NLCheckedField *change = &fields[i].change;
@@ -3513,9 +3526,9 @@ descriptor_ordered_originals(const NLCheckedFragment *f,
     return true;
 }
 
-/* Two early originals, two one-Change writer calls and four post-loan reads.
- * The matcher reads the existing per-call frames and never joins their worlds.
- */
+/* Two early originals, two one-Change writer calls and four final reads.
+ * The second mode is a literal or a Copy of the first original's updated
+ * field between the loans. Both calls retain their own replay frames. */
 static bool guarded_byte_distinct_descriptors(
     const NLCheckedFragment *f, const NLSemanticContext *c,
     const NLCheckedNodeView *root, const NLSyntaxView *source,
@@ -3550,7 +3563,9 @@ static bool guarded_byte_distinct_descriptors(
     const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
     const NLCheckedNodeView *mode =
         nl_checked_node_view(f, bindings[1]->initializer);
-    if (!mode || mode->type != u8 || !copy_if_literal_at(f, c, mode))
+    const bool observed = mode && mode->kind == NL_CHECKED_FIELD_READ;
+    if (!mode || mode->type != u8 ||
+        (!observed && !copy_if_literal_at(f, c, mode)))
         return false;
     const NLSymbolId actuals[] = {selected, bindings[1]->symbol};
     const NLCheckedNodeView *loans[2];
@@ -3582,7 +3597,17 @@ static bool guarded_byte_distinct_descriptors(
             return false;
         field->constructor = ctor->results[0].value;
     }
-    return descriptor_ordered_originals(f, c, loans, fields);
+    /* A read feeding the second writer must observe the first Change. */
+    const NLCheckedField *active = &fields[0].change;
+    if (observed && (loans[0]->span.end_byte >= mode->span.start_byte ||
+                     mode->span.end_byte >= loans[1]->span.start_byte ||
+                     !descriptor_read(f, c, bindings[1]->initializer,
+                                      nl_syntax_node_view(initializers[1]),
+                                      originals[0], active, u8) ||
+                     !descriptor_target_read(&mode->field, active)))
+        return false;
+    return descriptor_ordered_originals(f, c, loans, fields,
+                                        observed ? bindings[1] : NULL);
 }
 
 /* The unchanged scalar validators identify these three choices. Read the
