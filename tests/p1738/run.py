@@ -213,7 +213,20 @@ mirror_refusals = {
 }
 
 
-def observe_independent(code, field, observed_mode=False):
+# Bytes, selected, second actual, and old/final/tag for each original.
+displaced_modes = {
+    "fallback-low": (b"1", b"4032,35,41,41,35,117,101,41,149\n"),
+    "fallback-high": (b"1", b"4096,93,57,57,93,117,102,57,149\n"),
+    "fallback-tail": (b"1", b"4032,35,41,41,35,117,101,41,149\n"),
+}
+displaced_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("other-copy", "equal-byte-other-copy", "fallback-wrong-actual",
+                 "pre-change-read")
+}
+
+
+def observe_independent(code, field, mode_source="literal"):
     constructors = list(re.finditer(
         rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n", code, re.M
     ))
@@ -237,17 +250,22 @@ def observe_independent(code, field, observed_mode=False):
                  rb"\(uint8_t \*(nl_local_\d+), uint8_t (nl_local_\d+)\)\n"
                  rb"\{\n    const uint8_t nl_previous = \*\1;\n"
                  rb"    \*\1 = \2;\n    return nl_previous;\n\}\n")
-    source = targets[0] if observed_mode else rb"\(\(uint8_t\)UINT8_C\(\d+\)\)"
+    source = {
+        "literal": rb"\(\(uint8_t\)UINT8_C\(\d+\)\)",
+        "current": targets[0],
+        "displaced": first[1],
+    }[mode_source]
     incoming = one(code, rb"^    const uint8_t " + second[4] + rb" = " + source + rb";\n")
     reads = []
     for field_path in (targets[0], siblings[0], targets[1], siblings[1]):
         pattern = re.compile(rb"^    const uint8_t (nl_local_\d+) = " + field_path + rb";\n", re.M)
         read, = pattern.finditer(code, second.end())
         reads.append(read)
-    copied = [
-        one(code, rb"^    const uint8_t (nl_local_\d+) = " + call[1] + rb";\n")
-        for call in calls
-    ]
+    copied = []
+    for call in calls:
+        pattern = re.compile(rb"^    const uint8_t (nl_local_\d+) = " + call[1] + rb";\n", re.M)
+        result, = pattern.finditer(code, second.end())
+        copied.append(result)
     order = [helper, *constructors, planned, trial, first, incoming, second, *reads, *copied]
     assert all(left.end() <= right.start() for left, right in zip(order, order[1:]))
 
@@ -264,8 +282,9 @@ def observe_independent(code, field, observed_mode=False):
                      b" != &" + second_tag + b");\n"
                      b"        assert(*first_original == " + trial[1] +
                      b" && *second_original == initial_second && " + second_tag + b" == saved_second_tag);\n")
-    if observed_mode:
-        before_second += b"        assert(" + second[4] + b" == *first_original);\n"
+    if mode_source != "literal":
+        expected_mode = b"*first_original" if mode_source == "current" else b"initial_first"
+        before_second += b"        assert(" + second[4] + b" == " + expected_mode + b");\n"
     final = (b"    assert(" + copied[0][1] + b" == initial_first && " + copied[1][1] +
              b" == initial_second);\n"
              b"    assert(" + reads[0][1] + b" == " + trial[1] + b" && *first_original == " + reads[0][1] +
@@ -273,7 +292,7 @@ def observe_independent(code, field, observed_mode=False):
              b"    assert(" + reads[1][1] + b" == saved_first_tag && " + reads[3][1] +
              b" == saved_second_tag);\n")
     values = [trial[1]]
-    if observed_mode:
+    if mode_source != "literal":
         values.append(second[4])
     values.extend((copied[0][1], reads[0][1], reads[1][1],
                    copied[1][1], reads[2][1], reads[3][1]))
@@ -309,4 +328,6 @@ if __name__ == "__main__":
         verify(cli, sources, raw, sequential, {}, observe_sequence)
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
-               partial(observe_independent, observed_mode=True))
+               partial(observe_independent, mode_source="current"))
+        verify(cli, sources, raw, displaced_modes, displaced_refusals,
+               partial(observe_independent, mode_source="displaced"))
