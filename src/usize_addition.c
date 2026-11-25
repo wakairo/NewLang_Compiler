@@ -3026,9 +3026,7 @@ static bool descriptor_writer(const NLCheckedFragment *f, NLCheckedNodeId id,
         return false;
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLCheckedNodeView *root = nl_checked_node_view(copy.body, copy.root);
-    const NLCheckedNodeView *local =
-        root ? nl_checked_node_view(copy.body, root->first_item) : NULL;
-    const NLCheckedNodeView *old =
+    const NLCheckedNodeView *tail =
         root ? nl_checked_node_view(copy.body, root->tail) : NULL;
     const NLCheckedNodeView *store =
         nl_checked_node_view(copy.body, event.node);
@@ -3038,13 +3036,9 @@ static bool descriptor_writer(const NLCheckedFragment *f, NLCheckedNodeId id,
         ref ? nl_checked_node_view(copy.body, ref->next_argument) : NULL;
     if (!call || call->first_argument != formals.arguments[0] || !root ||
         root->kind != NL_CHECKED_BLOCK || root->terminates ||
-        root->item_count != 1 || copy.body->arm_count ||
-        copy.body->body_count || !local || local->kind != NL_CHECKED_BINDING ||
-        local->next_item || local->initializer != event.node || !old ||
-        old->kind != NL_CHECKED_IDENTIFIER ||
-        old->value_use != NL_VALUE_COPIED || old->symbol != local->symbol ||
-        old->result_count != 1 || old->type != u8 ||
-        old->results[0].value != copy.result.value || !store ||
+        copy.body->arm_count || copy.body->body_count || !tail ||
+        tail->result_count != 1 || tail->type != u8 ||
+        tail->results[0].value != copy.result.value || !store ||
         store->kind != NL_CHECKED_REPLACE || !ref ||
         ref->kind != NL_CHECKED_IDENTIFIER ||
         ref->value_use != NL_VALUE_COPIED ||
@@ -3053,6 +3047,23 @@ static bool descriptor_writer(const NLCheckedFragment *f, NLCheckedNodeId id,
         incoming->value_use != NL_VALUE_COPIED ||
         incoming->symbol != formals.parameters[1] || incoming->next_argument)
         return false;
+    if (root->tail == event.node) {
+        /* The body directly forwards the recorded result of its one Change. */
+        if (root->item_count || root->first_item || root->result_count != 1 ||
+            root->results[0].type != u8 || copy.result.type != u8 ||
+            root->results[0].value != event.result ||
+            copy.result.value != event.result)
+            return false;
+    } else {
+        const NLCheckedNodeView *local =
+            nl_checked_node_view(copy.body, root->first_item);
+        if (root->item_count != 1 || !local ||
+            local->kind != NL_CHECKED_BINDING || local->next_item ||
+            local->initializer != event.node ||
+            tail->kind != NL_CHECKED_IDENTIFIER ||
+            tail->value_use != NL_VALUE_COPIED || tail->symbol != local->symbol)
+            return false;
+    }
     *change = event.field;
     return true;
 }
