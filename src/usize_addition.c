@@ -3635,9 +3635,9 @@ static bool guarded_byte_distinct_descriptors(
                                       originals[0], active, u8) ||
                      !descriptor_target_read(&mode->field, active)))
         return false;
-    /* Displaced handoffs and snapshots use matching declared positions. */
-    if ((displaced || snapshot_first) &&
-        active->index != fields[1].change.index)
+    /* Current-field reads already match their source Change. Displaced
+     * handoffs keep the matching-position restriction. */
+    if (displaced && active->index != fields[1].change.index)
         return false;
     return descriptor_ordered_originals(f, c, loans, fields,
                                         copied ? bindings : NULL);

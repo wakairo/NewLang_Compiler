@@ -2339,6 +2339,7 @@ include(tests/p1455/CMakeLists.txt)
     set_tests_properties(p1790_mixed_field_rollback.unit PROPERTIES TIMEOUT 180)
     set_tests_properties(p1794_snapshot_writer_rollback.unit PROPERTIES TIMEOUT 180)
     set_tests_properties(p1798_normal_writer_completion_rollback.unit PROPERTIES TIMEOUT 180)
+    set_tests_properties(p1802_mixed_snapshot_rollback.unit PROPERTIES TIMEOUT 180)
     set_tests_properties(p1756_delegated_policy_rollback.unit PROPERTIES TIMEOUT 180)
     # Full registration/invocation/named-output fault enumeration with host
     # ASan checks thousands of independent retries. Keep every location and
