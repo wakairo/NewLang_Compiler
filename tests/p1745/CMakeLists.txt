@@ -6,5 +6,10 @@ add_test(NAME p1745_direct_policy_writer_native.integration
 add_test(NAME p1745_direct_policy_writer_rollback.unit COMMAND p1673_probe
     guarded-byte-policy-writer-oom "${p1745_sources}/variant-overflow-fallback.nl"
     unused)
+add_test(NAME p1748_named_policy_writer_rollback.unit COMMAND p1673_probe
+    guarded-byte-named-policy-writer-oom
+    "${p1745_sources}/named-variant-overflow-fallback.nl"
+    unused)
 set_tests_properties(p1745_direct_policy_writer_native.integration
-    p1745_direct_policy_writer_rollback.unit PROPERTIES TIMEOUT 90)
+    p1745_direct_policy_writer_rollback.unit
+    p1748_named_policy_writer_rollback.unit PROPERTIES TIMEOUT 90)

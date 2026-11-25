@@ -298,10 +298,26 @@ static bool policy_source(const NLCheckedFragment *f)
         nl_syntax_node_view(selected->data.binding.initializer);
     const NLSyntaxView *change =
         nl_syntax_node_view(old->data.binding.initializer);
-    if (!choice || choice->kind != NL_SYNTAX_IF || !change ||
-        change->kind != NL_SYNTAX_EXPR_CALL ||
+    if (!choice || !change || change->kind != NL_SYNTAX_EXPR_CALL ||
         change->data.call.argument_count != 2 ||
         !predicate_name(f, change->data.call.callee, "replace"))
+        return false;
+    const NLSyntaxView *writer =
+        nl_syntax_node_view(change->data.call.arguments);
+    const NLSyntaxView *mode = nl_syntax_node_view(
+        nl_syntax_next_argument(change->data.call.arguments));
+    if (!writer || writer->kind != NL_SYNTAX_EXPR_NAME ||
+        !predicate_name(f, writer->data.name, fn->parameter_names[0]) ||
+        !mode || mode->kind != NL_SYNTAX_EXPR_NAME)
+        return false;
+    if (choice->kind == NL_SYNTAX_EXPR_CALL) {
+        const NLSyntaxView *arg =
+            nl_syntax_node_view(choice->data.call.arguments);
+        return choice->data.call.argument_count == 1 && arg &&
+               arg->kind == NL_SYNTAX_EXPR_NAME &&
+               predicate_name(f, arg->data.name, fn->parameter_names[1]);
+    }
+    if (choice->kind != NL_SYNTAX_IF)
         return false;
     const NLSyntaxView *test =
         nl_syntax_node_view(choice->data.conditional.condition);
@@ -317,18 +333,11 @@ static bool policy_source(const NLCheckedFragment *f)
     const NLSyntaxView *right = nl_syntax_node_view(test->data.equality.right);
     const NLSyntaxView *yes = nl_syntax_node_view(a->data.block.tail);
     const NLSyntaxView *no = nl_syntax_node_view(b->data.block.tail);
-    const NLSyntaxView *writer =
-        nl_syntax_node_view(change->data.call.arguments);
-    const NLSyntaxView *mode = nl_syntax_node_view(
-        nl_syntax_next_argument(change->data.call.arguments));
     return left && left->kind == NL_SYNTAX_EXPR_NAME &&
            predicate_name(f, left->data.name, fn->parameter_names[1]) &&
            right && right->kind == NL_SYNTAX_USIZE_LITERAL && yes &&
            yes->kind == NL_SYNTAX_U8_LITERAL && no &&
-           no->kind == NL_SYNTAX_U8_LITERAL && writer &&
-           writer->kind == NL_SYNTAX_EXPR_NAME &&
-           predicate_name(f, writer->data.name, fn->parameter_names[0]) &&
-           mode && mode->kind == NL_SYNTAX_EXPR_NAME;
+           no->kind == NL_SYNTAX_U8_LITERAL;
 }
 
 static bool policy_writer(const NLCopyBodyProof *p)
@@ -885,7 +894,7 @@ static bool policy_contents(const NLCopyBodyProof *p, NLCopyPolicyWriter *out)
     const NLCheckedFragment *f = p->owner;
     const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
     if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
-        root->item_count != 2 || f->arm_count != 2 || f->body_count)
+        root->item_count != 2)
         return false;
     const NLCheckedNodeView *selected =
         nl_checked_node_view(f, root->first_item);
@@ -912,18 +921,9 @@ static bool policy_contents(const NLCopyBodyProof *p, NLCopyPolicyWriter *out)
         return false;
     const NLCheckedNodeView *choice =
         nl_checked_node_view(f, selected->initializer);
-    const NLCheckedNodeView *test =
-        choice ? nl_checked_node_view(f, choice->initializer) : NULL;
-    const NLCheckedNodeView *left =
-        test ? nl_checked_node_view(f, test->first_argument) : NULL;
-    const NLCheckedNodeView *right =
-        left ? nl_checked_node_view(f, left->next_argument) : NULL;
     const NLSymbolId budget = p->parameters.parameters[1];
-    if (!choice || choice->kind != NL_CHECKED_IF || choice->normal_arms != 2 ||
-        !test || test->kind != NL_CHECKED_USIZE_LESS_THAN || !left ||
-        left->kind != NL_CHECKED_IDENTIFIER || left->symbol != budget ||
-        !right || right->kind != NL_CHECKED_USIZE_LITERAL || !budget ||
-        budget > p->exit->binding_count || budget > p->entry->binding_count)
+    if (!choice || !budget || budget > p->exit->binding_count ||
+        budget > p->entry->binding_count)
         return false;
 
     const NLTypeId usize = p->parameter_types[1];
@@ -941,14 +941,44 @@ static bool policy_contents(const NLCopyBodyProof *p, NLCopyPolicyWriter *out)
                               nl_semantic_core_type(p->exit, NL_TYPE_BOOL),
                           .u8 = nl_semantic_core_type(p->exit, NL_TYPE_U8),
                           .parameter = usize};
-    if (!predicate_scalar(&walk, selected->initializer))
-        return false;
+    const NLCheckedFragment *selection_body = f;
+    NLCheckedNodeId selection = selected->initializer, selector_call = 0;
+    if (choice->kind == NL_CHECKED_REGISTERED_CALL) {
+        const NLCheckedNodeView *arg =
+            nl_checked_node_view(f, choice->first_argument);
+        NLPureU8Call pure = {0};
+        if (f->arm_count || f->body_count != 1 || !f->body_calls ||
+            f->body_calls[0] != selection || !arg ||
+            arg->kind != NL_CHECKED_IDENTIFIER || arg->symbol != budget ||
+            !predicate_scalar(&walk, choice->first_argument) ||
+            !nl_pure_u8_threshold_at(f, p->exit, selection, &pure))
+            return false;
+        selector_call = selection;
+        selection = pure.selection;
+        selection_body = pure.body;
+    } else {
+        const NLCheckedNodeView *test =
+            nl_checked_node_view(f, choice->initializer);
+        const NLCheckedNodeView *left =
+            test ? nl_checked_node_view(f, test->first_argument) : NULL;
+        const NLCheckedNodeView *right =
+            left ? nl_checked_node_view(f, left->next_argument) : NULL;
+        if (f->arm_count != 2 || f->body_count ||
+            choice->kind != NL_CHECKED_IF || choice->normal_arms != 2 ||
+            !test || test->kind != NL_CHECKED_USIZE_LESS_THAN || !left ||
+            left->kind != NL_CHECKED_IDENTIFIER || left->symbol != budget ||
+            !right || right->kind != NL_CHECKED_USIZE_LITERAL ||
+            !predicate_scalar(&walk, selection))
+            return false;
+    }
     *out = (NLCopyPolicyWriter){.body = f,
+                                .selection_body = selection_body,
                                 .writer = ref->symbol,
                                 .budget = budget,
                                 .selected = selected->symbol,
                                 .loan = p->parameters.loan,
-                                .selection = selected->initializer,
+                                .selection = selection,
+                                .selector_call = selector_call,
                                 .change = p->first->view.field};
     return true;
 }
@@ -967,7 +997,7 @@ typedef struct {
     NLSemanticPlaceView *model;
     NLSymbolId *bound;
     size_t events, depth;
-    NLCheckedNodeId policy_selection;
+    NLCheckedNodeId policy_selection, policy_call;
     NLTypeId u8;
     NLCheckStatus status;
     bool current_seen;
@@ -1217,6 +1247,12 @@ static bool expression(Replay *r, NLCheckedNodeId id,
         break;
     }
     case NL_CHECKED_REGISTERED_CALL: {
+        if (id == r->policy_call) {
+            /* The read-only child and exact formal Copy were authenticated
+             * by policy_contents. Replay consumes only its caller operand. */
+            ok = take(r, n->first_argument) && scalar(r, id);
+            break;
+        }
         if (id != r->proof->current_call || loan || r->current_seen ||
             !nl_copy_body_forward_origin(r->f) || !scalar(r, id) ||
             n->argument_count != 1 || !n->first_argument ||
@@ -1920,10 +1956,8 @@ static NLCheckStatus copy_body_validate(const NLCheckedFragment *caller,
         f->nodes != p->nodes_origin || !p->nodes ||
         p->count > NL_SEMANTIC_MAX_ENTRIES ||
         memcmp(f->nodes, p->nodes, p->count * sizeof(*p->nodes)) ||
-        f->arm_count != (policy            ? 2u
-                         : p->current_loop ? 1u
-                                           : 0u) ||
-        f->body_count != (p->current_call ? 1u : 0u) ||
+        (!policy && (f->arm_count != (p->current_loop ? 1u : 0u) ||
+                     f->body_count != (p->current_call ? 1u : 0u))) ||
         (p->current_call && !nl_copy_body_forward_origin(f)) || p->pending ||
         p->exit != p->view.live_exit || !p->exit ||
         p->exit->place_count > NL_SEMANTIC_MAX_ENTRIES ||
@@ -1950,7 +1984,9 @@ static NLCheckStatus copy_body_validate(const NLCheckedFragment *caller,
     Replay r = {.proof = p,
                 .f = f,
                 .next = p->first,
-                .policy_selection = scalar_policy.selection,
+                .policy_selection =
+                    scalar_policy.selector_call ? 0 : scalar_policy.selection,
+                .policy_call = scalar_policy.selector_call,
                 .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
     r.seen = calloc(f->count + 1, sizeof(*r.seen));
     r.model = calloc(p->exit->place_count + 1, sizeof(*r.model));

@@ -15,9 +15,16 @@ admitted = {
     "variant-boundary": (b"0", b"2048,7,17,7,51\n"),
     "variant-overflow-fallback": (b"0", b"0,2,17,2,51\n"),
 }
+named = {
+    "named-policy-bulk": (b"1", b"4096,4,9,4,37\n"),
+    "named-variant-boundary": (b"0", b"2048,7,17,7,51\n"),
+    "named-variant-overflow-fallback": (b"0", b"0,2,17,2,51\n"),
+    "named-policy-edit": (b"0", b"2032,7,17,7,51\n"),
+}
 refused = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
-    for name in ("named-policy-bulk", "forwarded-writer-bulk",
+    for name in ("named-independent-input", "named-nested-policy",
+                 "forwarded-writer-bulk",
                  "constant-writer-bulk", "returns-new-mode",
                  "second-policy-change", "unrelated-budget")
 }
@@ -35,3 +42,5 @@ if __name__ == "__main__":
     with scope as directory:
         verify(cli, sources, Path(directory), admitted, refused,
                partial(observe, local_policy=True))
+        verify(cli, sources, Path(directory), named, {},
+               partial(observe, local_policy=True, named_policy=True))

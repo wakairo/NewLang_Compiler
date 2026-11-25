@@ -451,15 +451,22 @@ static bool division_emit_byte_writer(DivisionText *t,
     const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
     if (local_policy) {
         NLCopyPolicyWriter policy;
-        return call && nl_copy_policy_writer(caller, id, &policy) &&
-               division_text_append(
+        if (!call || !nl_copy_policy_writer(caller, id, &policy) ||
+            (policy.selector_call && !division_emit_byte_selector(
+                                         t, policy.body, policy.selector_call)))
+            return false;
+        return division_text_append(
                    t,
                    "static uint8_t nl_qty_fn_%zu(uint8_t *nl_local_%zu, "
                    "size_t nl_local_%zu)\n{\n"
                    "    const uint8_t nl_local_%zu = ",
                    call->function, policy.writer, policy.budget,
                    policy.selected) &&
-               division_emit_byte_choice(t, policy.body, policy.selection) &&
+               (policy.selector_call
+                    ? division_emit_expression(t, policy.body,
+                                               policy.selector_call)
+                    : division_emit_byte_choice(t, policy.selection_body,
+                                                policy.selection)) &&
                division_text_append(t, ";\n") &&
                division_emit_byte_exchange(t, policy.writer, policy.selected);
     }
@@ -509,8 +516,16 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
             const NLCheckedFragment *typed = nl_checked_call_body(body, id);
             if (!typed)
                 return NL_CHECK_SEMANTIC_UNSUPPORTED;
+            NLCheckedNodeId nested_selector = 0;
+            if (id == byte_writer && !byte_selector) {
+                NLCopyPolicyWriter policy;
+                if (!nl_copy_policy_writer(body, id, &policy) ||
+                    policy.body != typed)
+                    return NL_CHECK_SEMANTIC_UNSUPPORTED;
+                nested_selector = policy.selector_call;
+            }
             const NLCheckStatus status = division_collect_helpers(
-                typed, valid, depth + 1, true, 0, 0, program);
+                typed, valid, depth + 1, true, nested_selector, 0, program);
             if (status != NL_CHECK_OK)
                 return status;
             continue; /* The whole-entry plan selected its typed definition. */

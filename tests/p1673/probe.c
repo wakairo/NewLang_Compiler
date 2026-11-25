@@ -235,7 +235,8 @@ typedef enum {
     GUARDED_SELECTOR,
     GUARDED_BYTE_MODE,
     GUARDED_BYTE_MODE_HELPER,
-    GUARDED_BYTE_POLICY_WRITER
+    GUARDED_BYTE_POLICY_WRITER,
+    GUARDED_BYTE_NAMED_POLICY_WRITER
 } ProductRoute;
 
 static bool composed_product_result(const NLDivisionUsizePlan *helper)
@@ -404,12 +405,13 @@ static bool retry_product(const NLCheckedFragment *body, ProductRoute route)
     return false;
 }
 
-static bool policy_writer_result(const NLDivisionUsizePlan *plan)
+static bool policy_writer_result(const NLDivisionUsizePlan *plan, bool named)
 {
     const NLCheckedFragment *main = plan->body;
     const NLCheckedNodeId call = plan->byte_update_call;
     NLCopyPolicyWriter writer;
-    CHECK(nl_copy_policy_writer(main, call, &writer));
+    CHECK(nl_copy_policy_writer(main, call, &writer) &&
+          (writer.selector_call != 0) == named);
     NLCopyBodyParameters public_parameters;
     NLCopyBodyView public_body;
     CHECK(!nl_checked_copy_body_parameters(main, call, &public_parameters) &&
@@ -428,6 +430,25 @@ static bool policy_writer_result(const NLDivisionUsizePlan *plan)
           nl_semantic_value_view(main->context, formal.value, &budget) &&
           budget.type == nl_semantic_core_type(main->context, NL_TYPE_USIZE) &&
           !budget.scalar_known && budget.dependencies == NL_DEPENDENCY_FREE);
+    if (named) {
+        NLPureU8Call selector;
+        CHECK(nl_pure_u8_call(writer.body, writer.selector_call, &selector) &&
+              selector.body == writer.selection_body &&
+              selector.selection == writer.selection);
+        const NLCheckedNodeView *choice =
+            nl_checked_node_view(writer.body, writer.selector_call);
+        const NLCheckedNodeView *arg =
+            nl_checked_node_view(writer.body, choice->first_argument);
+        NLSemanticBindingView selector_formal, selected;
+        CHECK(arg && arg->symbol == writer.budget &&
+              arg->value_use == NL_VALUE_COPIED &&
+              nl_semantic_binding_view(writer.body->context, selector.formal,
+                                       &selector_formal) &&
+              selector_formal.value == arg->results[0].value &&
+              nl_semantic_binding_view(proof->first->before, writer.selected,
+                                       &selected) &&
+              selected.value == choice->results[0].value);
+    }
     CHECK(proof->view.event_count == 1 &&
           proof->first->view.kind == NL_COPY_BODY_CHANGE &&
           writer.change.child == loan->field.child &&
@@ -451,10 +472,12 @@ static bool guarded_byte_mode_result(const NLCheckedFragment *entry,
                                       &product) ||
         !guarded_product_result(main.body, main.body->body_calls[0], &product))
         return false;
-    if (route == GUARDED_BYTE_POLICY_WRITER)
+    if (route == GUARDED_BYTE_POLICY_WRITER ||
+        route == GUARDED_BYTE_NAMED_POLICY_WRITER)
         return !main.byte_selector &&
                main.byte_update_call == main.body->body_calls[1] &&
-               policy_writer_result(&main);
+               policy_writer_result(&main,
+                                    route == GUARDED_BYTE_NAMED_POLICY_WRITER);
     if (main.byte_selector != main.body->body_calls[1] ||
         (delegated ? main.byte_update_call != main.body->body_calls[2]
                    : main.byte_update_call != 0))
@@ -474,7 +497,8 @@ static bool check_oom(const char *path, ProductRoute route)
 {
     const bool byte_mode = route == GUARDED_BYTE_MODE ||
                            route == GUARDED_BYTE_MODE_HELPER ||
-                           route == GUARDED_BYTE_POLICY_WRITER;
+                           route == GUARDED_BYTE_POLICY_WRITER ||
+                           route == GUARDED_BYTE_NAMED_POLICY_WRITER;
     TestNode original = {0};
     CHECK(node_checked_load(path, &original));
     if (byte_mode)
@@ -564,7 +588,8 @@ static bool no_staging_file(const char *path)
     return closedir(d) == 0 && clean;
 }
 
-static bool check_named_failures(const char *input, const char *dir)
+static bool check_named_failures(const char *input, const char *dir,
+                                 size_t limit)
 {
     char target[128], absent[128], expected[8192];
     CHECK(snprintf(target, sizeof(target), "%s/output.c", dir) > 0 &&
@@ -577,7 +602,7 @@ static bool check_named_failures(const char *input, const char *dir)
           expected_length < sizeof(expected));
 
     size_t count = 0;
-    for (; count < 2000; ++count) {
+    for (; count < limit; ++count) {
         struct stat before, after;
         CHECK(stat(target, &before) == 0);
         select_failure(count);
@@ -601,21 +626,22 @@ static bool check_named_failures(const char *input, const char *dir)
         CHECK(emit_c17_to(target, input) == 0 &&
               file_has(target, expected, expected_length));
     }
-    CHECK(unlink(target) == 0 && no_staging_file(dir) && count && count < 2000);
+    CHECK(unlink(target) == 0 && no_staging_file(dir) && count &&
+          count < limit);
     printf("named C17 allocation failures=%zu each for existing/absent; "
            "no-clobber and same-process retry\n",
            count);
     return true;
 }
 
-static bool named_oom(const char *input)
+static bool named_oom(const char *input, size_t limit)
 {
     char dir[] = "p1673-stage.XXXXXX";
     FILE *diagnostics = tmpfile();
     const int saved = dup(STDERR_FILENO);
     CHECK(diagnostics && saved >= 0 && mkdtemp(dir));
     CHECK(fflush(stderr) == 0 && dup2(fileno(diagnostics), STDERR_FILENO) >= 0);
-    const bool ok = check_named_failures(input, dir);
+    const bool ok = check_named_failures(input, dir, limit);
     CHECK(fflush(stderr) == 0 && dup2(saved, STDERR_FILENO) >= 0 &&
           close(saved) == 0);
     if (!ok) {
@@ -658,7 +684,13 @@ int main(int argc, char **argv)
         route = GUARDED_BYTE_MODE_HELPER;
     else if (!strcmp(argv[1], "guarded-byte-policy-writer-oom"))
         route = GUARDED_BYTE_POLICY_WRITER;
+    else if (!strcmp(argv[1], "guarded-byte-named-policy-writer-oom"))
+        route = GUARDED_BYTE_NAMED_POLICY_WRITER;
     else
         return 2;
-    return check_oom(argv[2], route) && named_oom(argv[2]) ? 0 : 1;
+    /* The additional sealed selector can exhaust the legacy 2000-trial
+     * bound. Keep that bound on the existing routes. */
+    const size_t named_limit =
+        route == GUARDED_BYTE_NAMED_POLICY_WRITER ? 3000 : 2000;
+    return check_oom(argv[2], route) && named_oom(argv[2], named_limit) ? 0 : 1;
 }
