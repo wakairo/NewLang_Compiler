@@ -1,6 +1,7 @@
 from contextlib import nullcontext
 from functools import partial
 from pathlib import Path
+import re
 import runpy
 import sys
 from tempfile import TemporaryDirectory
@@ -21,12 +22,21 @@ reordered = {
     "split-port-sibling-first": (b"0", b"0,2,63,2,207\n"),
     "writer-tail-queue-sibling-first": (b"1", b"32640,31,11,31,91\n"),
 }
+# Bytes, trial mode, first old, optional intermediate read, second old,
+# final mode, unchanged sibling.
+sequential = {
+    "sequential-named": (b"1", b"4096,31,9,31,31,5,97\n"),
+    "adjacent-named": (b"1", b"4096,31,9,31,5,97\n"),
+    "sequential-tail": (b"1", b"4096,31,9,31,31,5,97\n"),
+}
 refused = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("independent-actual", "independent-input", "independent-old",
                  "second-change", "late-descriptor",
                  "split-direct-sibling-first", "split-duplicate-target",
-                 "writer-explicit-return", "writer-tail-wrong-actual")
+                 "writer-explicit-return", "writer-tail-wrong-actual",
+                 "sequential-different-field", "sequential-wrong-old",
+                 "sequential-wrong-actual")
 }
 refused["scope-exit"] = (3, 3, b"P8-EXIT-DEPENDENCY")
 
@@ -108,6 +118,76 @@ def observe(code, field, local_policy=False, named_policy=False,
             code[loan.end():copied.end()] + after + code[copied.end():])
 
 
+def observe_sequence(code, field):
+    constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
+    root = constructor[1]
+    target = root + rb"\.f" + field
+    sibling = root + rb"\.f" + (b"1" if field == b"0" else b"0")
+    budget = one(code, rb"^    size_t (nl_local_\d+) = nl_qty_fn_\d+\(nl_local_\d+\);\n")
+    selected = one(code, rb"^    uint8_t (nl_local_\d+) = nl_qty_fn_\d+\(" + budget[1] + rb"\);\n")
+    first, second = re.finditer(
+        rb"^    uint8_t (nl_local_\d+);\n"
+        rb"    \{\n"
+        rb"        uint8_t \*const (nl_local_\d+) = &" + target + rb";\n"
+        rb"        \1 = (nl_qty_fn_\d+)\(\2, (nl_local_\d+)\);\n"
+        rb"    \}\n",
+        code, re.M,
+    )
+    assert first[3] == second[3] and first[4] == selected[1]
+    exchange = one(
+        code,
+        rb"^static uint8_t " + first[3] +
+        rb"\(uint8_t \*(nl_local_\d+), uint8_t (nl_local_\d+)\)\n"
+        rb"\{\n    const uint8_t nl_previous = \*\1;\n"
+        rb"    \*\1 = \2;\n    return nl_previous;\n\}\n",
+    )
+    recovery = one(code, rb"^    const uint8_t " + second[4] +
+                        rb" = \(\(uint8_t\)UINT8_C\(\d+\)\);\n")
+    reads = list(re.finditer(rb"^    const uint8_t (nl_local_\d+) = " + target + rb";\n", code, re.M))
+    assert len(reads) in (1, 2)
+    intermediate = reads[0] if len(reads) == 2 else None
+    updated = reads[-1]
+    unchanged = one(code, rb"^    const uint8_t (nl_local_\d+) = " + sibling + rb";\n")
+    copied = [
+        one(code, rb"^    const uint8_t (nl_local_\d+) = " + event[1] + rb";\n")
+        for event in (first, second)
+    ]
+    assert exchange.end() < constructor.start() < budget.start() < selected.start()
+    assert selected.end() <= first.start() < recovery.start() < second.start()
+    assert second.end() <= updated.start() < unchanged.start() < copied[0].start() < copied[1].start()
+    if intermediate:
+        assert first.end() <= intermediate.start() < recovery.start()
+
+    target = target.replace(rb"\.", b".")
+    sibling = sibling.replace(rb"\.", b".")
+    edits = [(constructor.end(),
+              b"    const uint8_t *original = &" + target + b";\n"
+              b"    const uint8_t *original_sibling = &" + sibling + b";\n"
+              b"    const uint8_t initial = *original;\n"
+              b"    const uint8_t initial_sibling = *original_sibling;\n")]
+    for call in (first, second):
+        edits.append((code.index(b"\n", call.start(2)) + 1,
+                      b"        assert(" + call[2] + b" == original && original != original_sibling);\n"))
+    final = (b"    assert(" + copied[0][1] + b" == initial && " + copied[1][1] + b" == " + selected[1] + b");\n"
+             b"    assert(" + updated[1] + b" == " + second[4] + b" && " + updated[1] + b" == *original);\n"
+             b"    assert(" + unchanged[1] + b" == initial_sibling && *original_sibling == initial_sibling);\n")
+    values = [selected[1], copied[0][1]]
+    if intermediate:
+        final += b"    assert(" + intermediate[1] + b" == " + selected[1] + b");\n"
+        values.append(intermediate[1])
+    values.extend((copied[1][1], updated[1], unchanged[1]))
+    final += (b'    printf("%zu' + b",%u" * len(values) + b'\\n", ' + budget[1] + b", " +
+              b", ".join(b"(unsigned)" + value for value in values) + b");\n")
+    edits.append((copied[1].end(), final))
+    pieces = [b"#include <assert.h>\n#include <stdio.h>\n"]
+    previous = 0
+    for point, addition in edits:
+        pieces.extend((code[previous:point], addition))
+        previous = point
+    pieces.append(code[previous:])
+    return b"".join(pieces)
+
+
 if __name__ == "__main__":
     cli, sources = (Path(arg).resolve() for arg in sys.argv[1:3])
     if len(sys.argv) == 4:
@@ -120,3 +200,4 @@ if __name__ == "__main__":
         raw = Path(directory)
         verify(cli, sources, raw, admitted, refused, observe)
         verify(cli, sources, raw, reordered, {}, partial(observe, sibling_first=True))
+        verify(cli, sources, raw, sequential, {}, observe_sequence)

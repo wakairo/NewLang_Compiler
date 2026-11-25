@@ -20,6 +20,7 @@ typedef struct {
     NLCheckedNodeId byte_descriptor,
         byte_update;                  /* original and continuation */
     NLCheckedNodeId byte_update_call; /* optional scoped writer */
+    NLCheckedNodeId byte_second_update, byte_second_update_call;
     size_t divisor;
 } NLDivisionUsizePlan;
 /* Known multiplication shares the existing usize arithmetic receipt. */
