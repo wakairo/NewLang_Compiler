@@ -3462,7 +3462,7 @@ descriptor_ordered_originals(const NLCheckedFragment *f,
                              const NLCheckedNodeView *const mode_bindings[2])
 {
     const NLCheckedField *left = &fields[0].change, *right = &fields[1].change;
-    if (left->nominal != right->nominal || left->index != right->index)
+    if (left->nominal != right->nominal)
         return false;
     const NLPlaceId first_places[] = {left->parent, left->child,
                                       fields[0].sibling->child};
@@ -3622,6 +3622,9 @@ static bool guarded_byte_distinct_descriptors(
                                       nl_syntax_node_view(initializers[1]),
                                       originals[0], active, u8) ||
                      !descriptor_target_read(&mode->field, active)))
+        return false;
+    /* Displaced-result handoffs retain the adopted equal-position rule. */
+    if (displaced && active->index != fields[1].change.index)
         return false;
     return descriptor_ordered_originals(f, c, loans, fields,
                                         copied ? bindings : NULL);

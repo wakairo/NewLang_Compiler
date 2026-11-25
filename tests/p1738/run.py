@@ -188,11 +188,13 @@ def observe_sequence(code, field):
     return b"".join(pieces)
 
 
-# Bytes, selected, old/final/tag for the active queue, old/final/tag for standby.
+# Bytes, selected, second actual, then old/final/sibling for each original.
 independent = {
-    "dual-named": (b"1", b"4032,31,19,31,83,43,7,127\n"),
-    "dual-direct-tail": (b"1", b"4032,31,19,31,83,43,7,127\n"),
-    "dual-high": (b"1", b"4096,73,19,73,83,43,7,127\n"),
+    "dual-named": (b"11", b"4032,31,7,19,31,83,43,7,127\n"),
+    "dual-direct-tail": (b"11", b"4032,31,7,19,31,83,43,7,127\n"),
+    "dual-high": (b"11", b"4096,73,7,19,73,83,43,7,127\n"),
+    "mixed-literal-low": (b"10", b"4032,35,19,41,35,117,101,19,149\n"),
+    "mixed-literal-high": (b"01", b"4096,93,19,117,93,41,149,19,101\n"),
 }
 independent_refusals = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
@@ -202,38 +204,43 @@ independent_refusals = {
 
 # Bytes, selected, observed, active old/final/tag, standby old/final/tag.
 mirrored = {
-    "mirror-low": (b"1", b"4032,35,35,22,35,119,81,35,147\n"),
-    "mirror-high": (b"1", b"4096,93,93,22,93,119,81,93,147\n"),
-    "mirror-tail": (b"1", b"4032,35,35,22,35,119,81,35,147\n"),
+    "mirror-low": (b"11", b"4032,35,35,22,35,119,81,35,147\n"),
+    "mirror-high": (b"11", b"4096,93,93,22,93,119,81,93,147\n"),
+    "mirror-tail": (b"11", b"4032,35,35,22,35,119,81,35,147\n"),
+    "mixed-current-low": (b"10", b"4032,35,35,41,35,117,101,35,149\n"),
+    "mixed-current-high": (b"01", b"4096,93,93,117,93,41,149,93,101\n"),
 }
 mirror_refusals = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("mirror-sibling", "mirror-wrong-original", "mirror-stale",
-                 "mirror-wrong-actual")
+                 "mirror-wrong-actual", "mixed-sibling", "mixed-stale",
+                 "mixed-crossed-read")
 }
 
 
 # Bytes, selected, second actual, and old/final/tag for each original.
 displaced_modes = {
-    "fallback-low": (b"1", b"4032,35,41,41,35,117,101,41,149\n"),
-    "fallback-high": (b"1", b"4096,93,57,57,93,117,102,57,149\n"),
-    "fallback-tail": (b"1", b"4032,35,41,41,35,117,101,41,149\n"),
+    "fallback-low": (b"11", b"4032,35,41,41,35,117,101,41,149\n"),
+    "fallback-high": (b"11", b"4096,93,57,57,93,117,102,57,149\n"),
+    "fallback-tail": (b"11", b"4032,35,41,41,35,117,101,41,149\n"),
 }
 displaced_refusals = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("other-copy", "equal-byte-other-copy", "fallback-wrong-actual",
-                 "pre-change-read")
+                 "pre-change-read", "mixed-old", "mixed-old-reverse")
 }
 
 
-def observe_independent(code, field, mode_source="literal"):
+def observe_independent(code, positions, mode_source="literal"):
     constructors = list(re.finditer(
         rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n", code, re.M
     ))
     assert len(constructors) == 2 and constructors[0][1] != constructors[1][1]
-    targets = [ctor[1] + rb"\.f" + field for ctor in constructors]
-    sibling_index = b"0" if field == b"1" else b"1"
-    siblings = [ctor[1] + rb"\.f" + sibling_index for ctor in constructors]
+    assert re.fullmatch(rb"[01]{2}", positions)
+    fields = positions[:1], positions[1:]
+    targets = [ctor[1] + rb"\.f" + field for ctor, field in zip(constructors, fields)]
+    siblings = [ctor[1] + rb"\.f" + (b"0" if field == b"1" else b"1")
+                for ctor, field in zip(constructors, fields)]
     planned = one(code, rb"^    size_t (nl_local_\d+) = nl_qty_fn_\d+\(nl_local_\d+\);\n")
     trial = one(code, rb"^    uint8_t (nl_local_\d+) = nl_qty_fn_\d+\(" + planned[1] + rb"\);\n")
     calls = [
@@ -291,11 +298,8 @@ def observe_independent(code, field, mode_source="literal"):
              b" && " + reads[2][1] + b" == " + second[4] + b" && *second_original == " + reads[2][1] + b");\n"
              b"    assert(" + reads[1][1] + b" == saved_first_tag && " + reads[3][1] +
              b" == saved_second_tag);\n")
-    values = [trial[1]]
-    if mode_source != "literal":
-        values.append(second[4])
-    values.extend((copied[0][1], reads[0][1], reads[1][1],
-                   copied[1][1], reads[2][1], reads[3][1]))
+    values = (trial[1], second[4], copied[0][1], reads[0][1], reads[1][1],
+              copied[1][1], reads[2][1], reads[3][1])
     final += (b'    printf("%zu' + b",%u" * len(values) + b'\\n", ' + planned[1] + b", " +
               b", ".join(b"(unsigned)" + item for item in values) + b");\n")
     edits = [
