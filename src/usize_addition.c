@@ -3285,13 +3285,13 @@ static bool guarded_byte_descriptor(
                          change, u8))
         return false;
 
-    /* The scoped writer's two post-loan reads can appear in either order.
-     * Match the roles to the checked Change. Lowering keeps source order. */
+    /* Both registered writer routes use the checked Change to identify the
+     * two post-loan reads. Lowering keeps their source order. */
     const NLCheckedNodeView *reads[] = {
         nl_checked_node_view(f, bindings[1]->initializer),
         nl_checked_node_view(f, bindings[2]->initializer)};
     const size_t target =
-        local_policy && reads[0]->field.index != change->index ? 1 : 0;
+        writer && reads[0]->field.index != change->index ? 1 : 0;
     const NLCheckedField *updated = &reads[target]->field;
     const NLCheckedField *sibling_field = &reads[1 - target]->field;
     if (updated->index != change->index || updated->child != change->child ||

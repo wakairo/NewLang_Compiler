@@ -1,3 +1,5 @@
+from contextlib import nullcontext
+from functools import partial
 from pathlib import Path
 import runpy
 import sys
@@ -12,10 +14,15 @@ admitted = {
     "guarded-delegated-1024": (b"0", b"0,53,17,53,211\n"),
     "guarded-delegated-reversed": (b"1", b"65472,109,17,109,211\n"),
 }
+reordered = {
+    "split-queue-sibling-first": (b"1", b"32768,17,23,17,191\n"),
+    "split-port-sibling-first": (b"0", b"0,2,63,2,207\n"),
+}
 refused = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("independent-actual", "independent-input", "independent-old",
-                 "second-change", "late-descriptor")
+                 "second-change", "late-descriptor",
+                 "split-direct-sibling-first", "split-duplicate-target")
 }
 refused["scope-exit"] = (3, 3, b"P8-EXIT-DEPENDENCY")
 
@@ -102,7 +109,10 @@ if __name__ == "__main__":
     if len(sys.argv) == 4:
         raw = Path(sys.argv[3]).resolve()
         raw.mkdir()
-        verify(cli, sources, raw, admitted, refused, observe)
+        scope = nullcontext(raw)
     else:
-        with TemporaryDirectory(prefix="p1738-") as directory:
-            verify(cli, sources, Path(directory), admitted, refused, observe)
+        scope = TemporaryDirectory(prefix="p1738-")
+    with scope as directory:
+        raw = Path(directory)
+        verify(cli, sources, raw, admitted, refused, observe)
+        verify(cli, sources, raw, reordered, {}, partial(observe, sibling_first=True))
