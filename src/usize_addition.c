@@ -3216,30 +3216,77 @@ typedef struct {
     NLValueId constructor;
     NLCheckedField change;
     const NLCheckedField *sibling;
-    NLCheckedNodeId writer;
+    NLCheckedNodeId writer, second_update, second_writer;
     NLCopyPolicyWriter policy;
 } GuardedByteDescriptor;
 
-/* This exact continuation has no later calls, alternate owners, or second
- * store. The ended root's recorded packages and projection facts match the
- * constructor and full Change in this actual CHECK transaction. */
+static bool descriptor_target_read(const NLCheckedField *read,
+                                   const NLCheckedField *change)
+{
+    return read->index == change->index && read->child == change->child &&
+           read->child_incarnation == change->child_incarnation &&
+           read->child_fact == change->child_post_fact &&
+           read->old_value == change->new_value;
+}
+
+/* The actual second call must begin with the first loan already closed and
+ * the same field at the first Change's post-state. No caller world is joined.
+ */
+static bool descriptor_reloan(const NLCheckedFragment *f,
+                              const NLCheckedNodeView *first_loan,
+                              const NLCheckedNodeView *second_loan,
+                              NLCheckedNodeId writer,
+                              NLCheckedNodeId second_writer,
+                              const NLCheckedField *first,
+                              const NLCheckedField *second)
+{
+    NLCopyBodyParameters parameters;
+    NLSemanticScopeView ended;
+    const NLCheckedNodeView *first_call = nl_checked_node_view(f, writer);
+    const NLCheckedNodeView *second_call =
+        nl_checked_node_view(f, second_writer);
+    return first_call && second_call &&
+           first_call->function == second_call->function &&
+           first_loan->loan.scope != second_loan->loan.scope &&
+           first_loan->span.end_byte < second_loan->span.start_byte &&
+           nl_checked_copy_body_parameters(f, second_writer, &parameters) &&
+           nl_semantic_scope_view(parameters.entry, first_loan->loan.scope,
+                                  &ended) &&
+           !ended.active && second->parent == first->parent &&
+           second->parent_incarnation == first->parent_incarnation &&
+           second->index == first->index && second->child == first->child &&
+           second->child_incarnation == first->child_incarnation &&
+           second->parent_fact == first->parent_post_fact &&
+           second->child_fact == first->child_post_fact &&
+           second->old_value == first->new_value;
+}
+
+/* Match the fixed continuation, ending with the original field observations
+ * and exact displaced Copies. The two-call form reuses the same writer. */
 static bool guarded_byte_descriptor(
     const NLCheckedFragment *f, const NLSemanticContext *c,
     const NLCheckedNodeView *root, const NLSyntaxView *source,
     NLCheckedNodeId id, const NLSyntaxNode *item, NLSymbolId selected,
     const NLCheckedNodeView *original, const NLSyntaxView *original_source,
-    bool local_policy, GuardedByteDescriptor *out)
+    bool local_policy, bool sequential, GuardedByteDescriptor *out)
 {
-    const NLCheckedNodeView *bindings[4];
-    const NLSyntaxNode *initializer_sources[4];
+    const bool intermediate = sequential && root->item_count == 14;
+    const size_t last_exchange = sequential ? 2 + (size_t)intermediate : 0;
+    const size_t observation = last_exchange + 1;
+    const size_t binding_count = last_exchange + 4 + (size_t)sequential;
+    const NLCheckedNodeView *bindings[8];
+    const NLSyntaxNode *initializer_sources[8];
+    NLCheckedNodeId second_update = 0;
     NLSymbolId previous =
         selected > original->symbol ? selected : original->symbol;
-    for (size_t i = 0; i < 4; ++i) {
+    for (size_t i = 0; i < binding_count; ++i) {
         const NLSyntaxView *s = nl_syntax_node_view(item);
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
         if (!binding_source(f, c, n, s) ||
             (n->next_item && n->next_item <= id) || n->symbol <= previous)
             return false;
+        if (sequential && i == last_exchange)
+            second_update = id;
         bindings[i] = n;
         initializer_sources[i] = s->data.binding.initializer;
         previous = n->symbol;
@@ -3280,6 +3327,35 @@ static bool guarded_byte_descriptor(
                             local_policy ? &policy : NULL))
         return false;
     const NLCheckedField *change = &field;
+    NLCheckedField second_field;
+    NLCheckedNodeId second_writer = 0;
+    if (sequential) {
+        const NLCheckedNodeView *mode = bindings[last_exchange - 1];
+        const NLCheckedNodeView *literal =
+            nl_checked_node_view(f, mode->initializer);
+        const NLCheckedNodeView *second_loan =
+            nl_checked_node_view(f, bindings[last_exchange]->initializer);
+        if (!writer || !literal || literal->type != u8 ||
+            !copy_if_literal_at(f, c, literal) ||
+            !descriptor_replace(
+                f, c, second_loan,
+                nl_syntax_node_view(initializer_sources[last_exchange]),
+                original, mode->symbol, ctor->type, u8, &second_field,
+                &second_writer, NULL) ||
+            !descriptor_reloan(f, loan, second_loan, writer, second_writer,
+                               &field, &second_field))
+            return false;
+        if (intermediate) {
+            const NLCheckedNodeId read = bindings[1]->initializer;
+            if (!descriptor_read(f, c, read,
+                                 nl_syntax_node_view(initializer_sources[1]),
+                                 original, &field, u8) ||
+                !descriptor_target_read(&nl_checked_node_view(f, read)->field,
+                                        &field))
+                return false;
+        }
+        change = &second_field;
+    }
     const NLSemanticBindingView local = c->bindings[original->symbol - 1].view;
     NLSemanticPlaceView place;
     if (local.place != change->parent ||
@@ -3288,40 +3364,46 @@ static bool guarded_byte_descriptor(
         place.type != ctor->type ||
         !nl_semantic_value_view(c, local.value, &final) ||
         final.type != ctor->type || final.field_count != 2 ||
-        !descriptor_read(f, c, bindings[1]->initializer,
-                         nl_syntax_node_view(initializer_sources[1]), original,
-                         change, u8) ||
-        !descriptor_read(f, c, bindings[2]->initializer,
-                         nl_syntax_node_view(initializer_sources[2]), original,
-                         change, u8))
+        !descriptor_read(f, c, bindings[observation]->initializer,
+                         nl_syntax_node_view(initializer_sources[observation]),
+                         original, change, u8) ||
+        !descriptor_read(
+            f, c, bindings[observation + 1]->initializer,
+            nl_syntax_node_view(initializer_sources[observation + 1]), original,
+            change, u8))
         return false;
 
     /* Both registered writer routes use the checked Change to identify the
      * two post-loan reads. Lowering keeps their source order. */
     const NLCheckedNodeView *reads[] = {
-        nl_checked_node_view(f, bindings[1]->initializer),
-        nl_checked_node_view(f, bindings[2]->initializer)};
+        nl_checked_node_view(f, bindings[observation]->initializer),
+        nl_checked_node_view(f, bindings[observation + 1]->initializer)};
     const size_t target =
         writer && reads[0]->field.index != change->index ? 1 : 0;
     const NLCheckedField *updated = &reads[target]->field;
     const NLCheckedField *sibling_field = &reads[1 - target]->field;
-    if (updated->index != change->index || updated->child != change->child ||
-        updated->child_incarnation != change->child_incarnation ||
-        updated->child_fact != change->child_post_fact ||
-        updated->old_value != change->new_value ||
+    if (!descriptor_target_read(updated, change) ||
         sibling_field->index == change->index ||
         sibling_field->child == change->child ||
-        initial.fields[change->index] != change->old_value ||
+        initial.fields[field.index] != field.old_value ||
         final.fields[change->index] != change->new_value ||
         initial.fields[sibling_field->index] != sibling_field->old_value ||
         final.fields[sibling_field->index] != sibling_field->old_value ||
-        !scalar_name_copy(f, c, bindings[3]->initializer,
-                          initializer_sources[3], bindings[0]->symbol, u8))
+        !scalar_name_copy(f, c, bindings[observation + 2]->initializer,
+                          initializer_sources[observation + 2],
+                          bindings[0]->symbol, u8))
+        return false;
+    if (sequential &&
+        !scalar_name_copy(f, c, bindings[observation + 3]->initializer,
+                          initializer_sources[observation + 3],
+                          bindings[last_exchange]->symbol, u8))
         return false;
     *out = (GuardedByteDescriptor){.constructor = ctor->results[0].value,
                                    .change = field,
                                    .sibling = sibling_field,
                                    .writer = writer,
+                                   .second_update = second_update,
+                                   .second_writer = second_writer,
                                    .policy = policy};
     return true;
 }
@@ -3363,7 +3445,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                                     const NLFunctionEntry *fn, size_t function,
                                     bool entry, NLDivisionUsizePlan *out)
 {
-    if ((f->body_count != 2 && f->body_count != 3) || f->arm_count != 2)
+    if (f->body_count < 2 || f->body_count > 4 || f->arm_count != 2)
         return false;
     const NLSyntaxView *source =
         nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
@@ -3375,8 +3457,12 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
 
     /* The in-writer route has eight bindings and an optional Return item. */
     const bool local_policy = root->item_count == (root->terminates ? 9u : 8u);
-    const bool descriptor_entry =
-        local_policy || (root->terminates && root->item_count == 10);
+    const bool sequential = f->body_count == 4;
+    if (sequential && (!root->terminates ||
+                       (root->item_count != 13 && root->item_count != 14)))
+        return false;
+    const bool descriptor_entry = local_policy || sequential ||
+                                  (root->terminates && root->item_count == 10);
     if (root->item_count > 6 && (!entry || !descriptor_entry))
         return false;
     const size_t prefix = local_policy ? 3 : 4;
@@ -3394,7 +3480,8 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         first ? nl_checked_node_view(f, first->initializer) : NULL;
     const bool early = descriptor_entry && first_value &&
                        first_value->kind == NL_CHECKED_AGGREGATE;
-    if (local_policy && (!early || f->body_count != 2))
+    if ((local_policy && (!early || f->body_count != 2)) ||
+        (sequential && !early))
         return false;
     if (early) {
         if (first->next_item <= id)
@@ -3462,11 +3549,15 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
             item = nl_syntax_next_argument(item);
         }
         GuardedByteDescriptor fields;
-        if (!guarded_byte_descriptor(f, c, root, source, id, item,
-                                     bindings[prefix - 1]->symbol, original,
-                                     original_source, local_policy, &fields))
+        if (!guarded_byte_descriptor(
+                f, c, root, source, id, item, bindings[prefix - 1]->symbol,
+                original, original_source, local_policy, sequential, &fields))
             return false;
-        if (local_policy) {
+        if (sequential) {
+            if (f->body_calls[2] != fields.writer ||
+                f->body_calls[3] != fields.second_writer)
+                return false;
+        } else if (local_policy) {
             if (f->body_calls[1] != fields.writer)
                 return false;
         } else if (fields.writer ? (!early || f->body_count != 3 ||
@@ -3486,7 +3577,10 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                                      .byte_selector = selector,
                                      .byte_descriptor = descriptor,
                                      .byte_update = id,
-                                     .byte_update_call = fields.writer};
+                                     .byte_update_call = fields.writer,
+                                     .byte_second_update = fields.second_update,
+                                     .byte_second_update_call =
+                                         fields.second_writer};
         return true;
     }
 
@@ -3687,7 +3781,9 @@ static NLCheckStatus literal_divisor_call_plan(const NLCheckedFragment *f,
          * one shared C definition for the same source declaration. */
         for (size_t i = 0; i < body->body_count; ++i) {
             const NLCheckedNodeId child = body->body_calls[i];
-            if (plan.byte_update_call && child == plan.byte_update_call) {
+            if ((plan.byte_update_call && child == plan.byte_update_call) ||
+                (plan.byte_second_update_call &&
+                 child == plan.byte_second_update_call)) {
                 /* The scoped writer has its own existing replay proof. The
                  * complete entry seal above already covers its owned graph. */
                 const NLCheckStatus status =

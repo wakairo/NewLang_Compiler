@@ -292,13 +292,14 @@ static bool division_emit_items(DivisionText *t, const NLCheckedFragment *f,
 /* The entry validator matches every binding in this exact continuation.
  * Names come from the original checked carriers, and indices are the
  * resolved semantic fields of the one constructed local. */
-static bool division_emit_byte_update(DivisionText *text,
-                                      const NLDivisionUsizePlan *plan)
+static bool division_emit_byte_loan(DivisionText *text,
+                                    const NLDivisionUsizePlan *plan,
+                                    NLCheckedNodeId binding, bool registered)
 {
     const NLCheckedFragment *f = plan->body;
     const NLCheckedNodeView *original =
         nl_checked_node_view(f, plan->byte_descriptor);
-    const NLCheckedNodeView *old = nl_checked_node_view(f, plan->byte_update);
+    const NLCheckedNodeView *old = nl_checked_node_view(f, binding);
     const NLCheckedNodeView *loan = nl_checked_node_view(f, old->initializer);
     const NLCheckedNodeView *body = nl_checked_node_view(f, loan->initializer);
     const NLCheckedNodeView *change = nl_checked_node_view(f, body->tail);
@@ -314,7 +315,7 @@ static bool division_emit_byte_update(DivisionText *text,
             "        uint8_t *const nl_local_%zu = &nl_local_%zu.f%zu;\n",
             old->symbol, writer, object, loan->field.index))
         return false;
-    if (plan->byte_update_call) {
+    if (registered) {
         if (!division_text_append(
                 text,
                 "        nl_local_%zu = nl_qty_fn_%zu(nl_local_%zu, "
@@ -327,27 +328,74 @@ static bool division_emit_byte_update(DivisionText *text,
                                      old->symbol, writer, writer,
                                      selected->symbol))
         return false;
-    if (!division_text_append(text, "    }\n"))
-        return false;
-    NLCheckedNodeId id = old->next_item;
-    for (size_t i = 0; i < 2; ++i) {
-        const NLCheckedNodeView *binding = nl_checked_node_view(f, id);
-        const NLCheckedNodeView *read =
-            nl_checked_node_view(f, binding->initializer);
-        if (!division_text_append(
-                text,
-                "    const uint8_t nl_local_%zu = nl_local_%zu.f%zu;\n"
-                "    (void)nl_local_%zu;\n",
-                binding->symbol, object, read->field.index, binding->symbol))
-            return false;
-        id = binding->next_item;
-    }
-    const NLCheckedNodeView *copy = nl_checked_node_view(f, id);
+    return division_text_append(text, "    }\n");
+}
+
+static bool division_emit_byte_read(DivisionText *text,
+                                    const NLCheckedFragment *f,
+                                    const NLCheckedNodeView *binding,
+                                    NLSymbolId object)
+{
+    const NLCheckedNodeView *read =
+        nl_checked_node_view(f, binding->initializer);
+    return division_text_append(
+        text,
+        "    const uint8_t nl_local_%zu = nl_local_%zu.f%zu;\n"
+        "    (void)nl_local_%zu;\n",
+        binding->symbol, object, read->field.index, binding->symbol);
+}
+
+static bool division_emit_displaced_copy(DivisionText *text,
+                                         const NLCheckedNodeView *copy,
+                                         const NLCheckedNodeView *old)
+{
     return division_text_append(
         text,
         "    const uint8_t nl_local_%zu = nl_local_%zu;\n"
         "    (void)nl_local_%zu;\n",
         copy->symbol, old->symbol, copy->symbol);
+}
+
+static bool division_emit_byte_update(DivisionText *text,
+                                      const NLDivisionUsizePlan *plan)
+{
+    const NLCheckedFragment *f = plan->body;
+    const NLSymbolId object =
+        nl_checked_node_view(f, plan->byte_descriptor)->symbol;
+    const NLCheckedNodeView *first = nl_checked_node_view(f, plan->byte_update);
+    if (!division_emit_byte_loan(text, plan, plan->byte_update,
+                                 plan->byte_update_call != 0))
+        return false;
+    const NLCheckedNodeView *item = nl_checked_node_view(f, first->next_item);
+    const NLCheckedNodeView *second = NULL;
+    if (plan->byte_second_update) {
+        const NLCheckedNodeView *init =
+            nl_checked_node_view(f, item->initializer);
+        if (init->kind == NL_CHECKED_FIELD_READ) {
+            if (!division_emit_byte_read(text, f, item, object))
+                return false;
+            item = nl_checked_node_view(f, item->next_item);
+            init = nl_checked_node_view(f, item->initializer);
+        }
+        if (!division_text_append(text,
+                                  "    const uint8_t nl_local_%zu = "
+                                  "((uint8_t)UINT8_C(%zu));\n",
+                                  item->symbol, init->scalar_result.value) ||
+            !division_emit_byte_loan(text, plan, plan->byte_second_update,
+                                     true))
+            return false;
+        second = nl_checked_node_view(f, plan->byte_second_update);
+        item = nl_checked_node_view(f, second->next_item);
+    }
+    for (size_t i = 0; i < 2; ++i) {
+        if (!division_emit_byte_read(text, f, item, object))
+            return false;
+        item = nl_checked_node_view(f, item->next_item);
+    }
+    return division_emit_displaced_copy(text, item, first) &&
+           (!second ||
+            division_emit_displaced_copy(
+                text, nl_checked_node_view(f, item->next_item), second));
 }
 
 static bool division_emit_helper(DivisionText *text,
@@ -517,12 +565,11 @@ typedef struct {
     size_t count, nodes, remaining;
 } DivisionProgram;
 
-static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
-                                              QuantityCallValidator valid,
-                                              size_t depth, bool count_nodes,
-                                              NLCheckedNodeId byte_selector,
-                                              NLCheckedNodeId byte_writer,
-                                              DivisionProgram *program)
+static NLCheckStatus division_collect_helpers(
+    const NLCheckedFragment *body, QuantityCallValidator valid, size_t depth,
+    bool count_nodes, NLCheckedNodeId byte_selector,
+    NLCheckedNodeId byte_writer, NLCheckedNodeId second_byte_writer,
+    DivisionProgram *program)
 {
     if (depth >= NL_SEMANTIC_MAX_DEPTH ||
         body->body_count > NL_CHECKED_MAX_BODY_CALLS)
@@ -539,7 +586,8 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
         --program->remaining;
         const NLCheckedNodeId id = body->body_calls[i];
         if ((byte_selector && id == byte_selector) ||
-            (byte_writer && id == byte_writer)) {
+            (byte_writer && id == byte_writer) ||
+            (second_byte_writer && id == second_byte_writer)) {
             const NLCheckedFragment *typed = nl_checked_call_body(body, id);
             if (!typed)
                 return NL_CHECK_SEMANTIC_UNSUPPORTED;
@@ -559,7 +607,7 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
                 nested_selector = policy.delegate;
             }
             const NLCheckStatus status = division_collect_helpers(
-                typed, valid, depth + 1, true, nested_selector, 0, program);
+                typed, valid, depth + 1, true, nested_selector, 0, 0, program);
             if (status != NL_CHECK_OK)
                 return status;
             continue; /* The whole-entry plan selected its typed definition. */
@@ -574,7 +622,7 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
          * definition, after visiting its callees in source order. */
         const bool new_definition = !program->seen[helper.function - 1];
         const NLCheckStatus status = division_collect_helpers(
-            helper.body, valid, depth + 1, new_definition, 0, 0, program);
+            helper.body, valid, depth + 1, new_definition, 0, 0, 0, program);
         if (status != NL_CHECK_OK)
             return status;
         if (new_definition) {
@@ -588,7 +636,7 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
         --program->remaining;
         const NLCheckStatus status =
             division_collect_helpers(body->arms[i].artifact, valid, depth + 1,
-                                     count_nodes, 0, 0, program);
+                                     count_nodes, 0, 0, 0, program);
         if (status != NL_CHECK_OK)
             return status;
     }
@@ -605,7 +653,7 @@ static NLCheckStatus literal_divisor_c17(const NLDivisionUsizePlan *main,
     DivisionProgram program = {.remaining = NL_SEMANTIC_MAX_ENTRIES};
     const NLCheckStatus status = division_collect_helpers(
         main->body, call_valid, 0, true, main->byte_selector,
-        main->byte_update_call, &program);
+        main->byte_update_call, main->byte_second_update_call, &program);
     if (status != NL_CHECK_OK)
         return status;
     DivisionText text = {.capacity = program.nodes * 512 + 2048};
