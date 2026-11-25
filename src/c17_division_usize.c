@@ -418,18 +418,45 @@ static bool division_emit_byte_choice(DivisionText *t,
                                 no->scalar_result.value);
 }
 
+static bool division_emit_byte_selector_header(DivisionText *t,
+                                               const NLPureU8Call *pure)
+{
+    return division_text_append(t,
+                                "static uint8_t nl_qty_fn_%zu(size_t "
+                                "nl_local_%zu)\n{\n    return ",
+                                pure->function, pure->formal);
+}
+
+static bool division_emit_byte_threshold(DivisionText *t,
+                                         const NLPureU8Call *pure)
+{
+    return division_emit_byte_selector_header(t, pure) &&
+           division_emit_byte_choice(t, pure->body, pure->selection) &&
+           division_text_append(t, ";\n}\n\n");
+}
+
 static bool division_emit_byte_selector(DivisionText *t,
                                         const NLCheckedFragment *caller,
                                         NLCheckedNodeId id)
 {
     NLPureU8Call pure;
     return nl_pure_u8_call(caller, id, &pure) &&
-           division_text_append(t,
-                                "static uint8_t nl_qty_fn_%zu(size_t "
-                                "nl_local_%zu)\n{\n    return ",
-                                pure.function, pure.formal) &&
-           division_emit_byte_choice(t, pure.body, pure.selection) &&
-           division_text_append(t, ";\n}\n\n");
+           division_emit_byte_threshold(t, &pure);
+}
+
+static bool division_emit_writer_selector(DivisionText *t,
+                                          const NLCheckedFragment *caller,
+                                          NLCheckedNodeId id)
+{
+    NLPureU8WriterPolicy policy;
+    return nl_pure_u8_writer_policy_at(caller, nl_checked_context(caller), id,
+                                       &policy) &&
+           division_emit_byte_threshold(t, &policy.threshold) &&
+           (!policy.delegate ||
+            (division_emit_byte_selector_header(t, &policy.wrapper) &&
+             division_emit_expression(t, policy.wrapper.body,
+                                      policy.delegate) &&
+             division_text_append(t, ";\n}\n\n")));
 }
 
 static bool division_emit_byte_exchange(DivisionText *t, NLSymbolId writer,
@@ -452,7 +479,7 @@ static bool division_emit_byte_writer(DivisionText *t,
     if (local_policy) {
         NLCopyPolicyWriter policy;
         if (!call || !nl_copy_policy_writer(caller, id, &policy) ||
-            (policy.selector_call && !division_emit_byte_selector(
+            (policy.selector_call && !division_emit_writer_selector(
                                          t, policy.body, policy.selector_call)))
             return false;
         return division_text_append(
@@ -523,6 +550,13 @@ static NLCheckStatus division_collect_helpers(const NLCheckedFragment *body,
                     policy.body != typed)
                     return NL_CHECK_SEMANTIC_UNSUPPORTED;
                 nested_selector = policy.selector_call;
+            } else if (id == byte_selector && typed->body_count) {
+                NLPureU8WriterPolicy policy;
+                if (!nl_pure_u8_writer_policy_at(body, nl_checked_context(body),
+                                                 id, &policy) ||
+                    policy.wrapper.body != typed || !policy.delegate)
+                    return NL_CHECK_SEMANTIC_UNSUPPORTED;
+                nested_selector = policy.delegate;
             }
             const NLCheckStatus status = division_collect_helpers(
                 typed, valid, depth + 1, true, nested_selector, 0, program);

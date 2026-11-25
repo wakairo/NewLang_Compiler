@@ -571,10 +571,10 @@ typedef struct {
 /* CHECK may read the genuine precommit transaction; published consumers use
  * the wrapper below and the current public caller. This changes no child
  * context/ownership and never turns a shallow foreign-world view into proof. */
-static bool nl_scalar_u8_contents_at(const NLCheckedFragment *f,
-                                     NLCheckedNodeId id,
-                                     const NLSemanticContext *c,
-                                     bool readonly_u8, NLPureU8Call *out)
+static bool nl_scalar_u8_invocation_at(const NLCheckedFragment *f,
+                                       NLCheckedNodeId id,
+                                       const NLSemanticContext *c,
+                                       bool readonly_u8, NLPureU8Call *out)
 {
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLCheckedFragment *body = nl_checked_call_body(f, id);
@@ -614,17 +614,32 @@ static bool nl_scalar_u8_contents_at(const NLCheckedFragment *f,
             formal = i + 1;
         }
     }
-    NLPureU8Plan plan;
-    if (!formal || !nl_scalar_u8_body_at(body, formal, nl_semantic_unit_type(c),
-                                         u8, c, readonly_u8, &plan))
-        return false;
     const NLCheckedNodeView *root = nl_checked_node_view(body, body->root);
+    if (!formal || !root)
+        return false;
     const NLCheckedResult result =
         root->terminates ? root->returned : root->results[0];
     if (result.type != call->results[0].type ||
         result.value != call->results[0].value)
         return false;
-    *out = (NLPureU8Call){body, formal, plan.selection, call->function, plan};
+    *out = (NLPureU8Call){
+        .body = body, .formal = formal, .function = call->function};
+    return true;
+}
+
+static bool nl_scalar_u8_contents_at(const NLCheckedFragment *f,
+                                     NLCheckedNodeId id,
+                                     const NLSemanticContext *c,
+                                     bool readonly_u8, NLPureU8Call *out)
+{
+    NLPureU8Call call;
+    if (!nl_scalar_u8_invocation_at(f, id, c, readonly_u8, &call) ||
+        !nl_scalar_u8_body_at(call.body, call.formal, nl_semantic_unit_type(c),
+                              nl_semantic_core_type(c, NL_TYPE_U8), c,
+                              readonly_u8, &call.plan))
+        return false;
+    call.selection = call.plan.selection;
+    *out = call;
     return true;
 }
 
@@ -664,6 +679,71 @@ static inline bool nl_pure_u8_threshold_at(const NLCheckedFragment *f,
            left->kind == NL_CHECKED_IDENTIFIER &&
            left->symbol == pure->formal &&
            right->kind == NL_CHECKED_USIZE_LITERAL;
+}
+
+typedef struct {
+    NLPureU8Call threshold, wrapper;
+    NLCheckedNodeId delegate;
+} NLPureU8WriterPolicy;
+
+/* A writer may use the direct threshold or a single pure tail delegation.
+ * Both registered calls have their existing result seals. The leaf is
+ * validated by the direct threshold predicate. */
+static inline bool nl_pure_u8_writer_policy_at(const NLCheckedFragment *f,
+                                               const NLSemanticContext *c,
+                                               NLCheckedNodeId id,
+                                               NLPureU8WriterPolicy *out)
+{
+    const NLCheckedFragment *body = nl_checked_call_body(f, id);
+    if (!body)
+        return false;
+    NLPureU8WriterPolicy policy = {0};
+    if (!body->body_count) {
+        if (!nl_pure_u8_threshold_at(f, c, id, &policy.threshold))
+            return false;
+        *out = policy;
+        return true;
+    }
+    if (body->body_count != 1 || !body->body_calls || body->arm_count ||
+        nl_control_exits_count(body->exits) ||
+        !nl_h_custody_result_valid(f, id) ||
+        !nl_scalar_u8_invocation_at(f, id, c, false, &policy.wrapper))
+        return false;
+
+    policy.delegate = body->body_calls[0];
+    const NLCheckedNodeView *root = nl_checked_node_view(body, body->root);
+    const NLCheckedNodeView *delegate =
+        nl_checked_node_view(body, policy.delegate);
+    const NLCheckedNodeView *actual =
+        delegate ? nl_checked_node_view(body, delegate->first_argument) : NULL;
+    const NLSyntaxView *block =
+        nl_syntax_node_view(nl_syntax_tree_root(body->body_owner->syntax));
+    const NLSyntaxView *tail =
+        block && block->kind == NL_SYNTAX_BLOCK && !block->data.block.items
+            ? nl_syntax_node_view(block->data.block.tail)
+            : NULL;
+    const NLTypeId usize = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    PredicateWalk walk = {.body = body,
+                          .context = c,
+                          .formal = policy.wrapper.formal,
+                          .quantity = usize,
+                          .u8 = u8,
+                          .parameter = usize};
+    if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
+        root->first_item || root->item_count || root->tail != policy.delegate ||
+        root->type != u8 || root->result_count != 1 || !delegate || !tail ||
+        tail->kind != NL_SYNTAX_EXPR_CALL ||
+        tail->span.start_byte != delegate->span.start_byte ||
+        tail->span.end_byte != delegate->span.end_byte ||
+        root->results[0].value != delegate->results[0].value || !actual ||
+        actual->kind != NL_CHECKED_IDENTIFIER ||
+        actual->symbol != policy.wrapper.formal ||
+        !predicate_scalar(&walk, delegate->first_argument) ||
+        !nl_pure_u8_threshold_at(body, c, policy.delegate, &policy.threshold))
+        return false;
+    *out = policy;
+    return true;
 }
 
 /* Same owned graph walk and finished-result seal, distinct operand contract.

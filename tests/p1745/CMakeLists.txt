@@ -15,8 +15,12 @@ add_test(NAME p1749_scoped_writer_unit_rollback.unit COMMAND p1673_probe
 add_test(NAME p1749_named_writer_unit_rollback.unit COMMAND p1673_probe
     guarded-byte-named-policy-writer-oom
     "${p1745_sources}/named-unit-tail.nl" unused)
+add_test(NAME p1756_delegated_policy_rollback.unit COMMAND p1673_probe
+    guarded-byte-delegated-policy-writer-oom
+    "${p1745_sources}/delegated-unit-tail.nl" unused)
 set_tests_properties(p1745_direct_policy_writer_native.integration
     p1745_direct_policy_writer_rollback.unit
     p1748_named_policy_writer_rollback.unit
     p1749_scoped_writer_unit_rollback.unit
-    p1749_named_writer_unit_rollback.unit PROPERTIES TIMEOUT 90)
+    p1749_named_writer_unit_rollback.unit
+    p1756_delegated_policy_rollback.unit PROPERTIES TIMEOUT 90)
