@@ -2334,6 +2334,7 @@ include(tests/p1455/CMakeLists.txt)
     # Give the exhaustive rollback sweeps room for ASan shard scheduling.
     set_tests_properties(p1773_sequential_writer_rollback.unit PROPERTIES TIMEOUT 180)
     set_tests_properties(p1778_independent_writer_rollback.unit PROPERTIES TIMEOUT 180)
+    set_tests_properties(p1782_observed_mode_rollback.unit PROPERTIES TIMEOUT 180)
     set_tests_properties(p1756_delegated_policy_rollback.unit PROPERTIES TIMEOUT 180)
     # Full registration/invocation/named-output fault enumeration with host
     # ASan checks thousands of independent retries. Keep every location and

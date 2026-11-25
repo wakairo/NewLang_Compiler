@@ -200,7 +200,20 @@ independent_refusals = {
 }
 
 
-def observe_independent(code, field):
+# Bytes, selected, observed, active old/final/tag, standby old/final/tag.
+mirrored = {
+    "mirror-low": (b"1", b"4032,35,35,22,35,119,81,35,147\n"),
+    "mirror-high": (b"1", b"4096,93,93,22,93,119,81,93,147\n"),
+    "mirror-tail": (b"1", b"4032,35,35,22,35,119,81,35,147\n"),
+}
+mirror_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("mirror-sibling", "mirror-wrong-original", "mirror-stale",
+                 "mirror-wrong-actual")
+}
+
+
+def observe_independent(code, field, observed_mode=False):
     constructors = list(re.finditer(
         rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n", code, re.M
     ))
@@ -224,17 +237,18 @@ def observe_independent(code, field):
                  rb"\(uint8_t \*(nl_local_\d+), uint8_t (nl_local_\d+)\)\n"
                  rb"\{\n    const uint8_t nl_previous = \*\1;\n"
                  rb"    \*\1 = \2;\n    return nl_previous;\n\}\n")
-    recovery = one(code, rb"^    const uint8_t " + second[4] +
-                   rb" = \(\(uint8_t\)UINT8_C\(\d+\)\);\n")
-    reads = [
-        one(code, rb"^    const uint8_t (nl_local_\d+) = " + field_path + rb";\n")
-        for field_path in (targets[0], siblings[0], targets[1], siblings[1])
-    ]
+    source = targets[0] if observed_mode else rb"\(\(uint8_t\)UINT8_C\(\d+\)\)"
+    incoming = one(code, rb"^    const uint8_t " + second[4] + rb" = " + source + rb";\n")
+    reads = []
+    for field_path in (targets[0], siblings[0], targets[1], siblings[1]):
+        pattern = re.compile(rb"^    const uint8_t (nl_local_\d+) = " + field_path + rb";\n", re.M)
+        read, = pattern.finditer(code, second.end())
+        reads.append(read)
     copied = [
         one(code, rb"^    const uint8_t (nl_local_\d+) = " + call[1] + rb";\n")
         for call in calls
     ]
-    order = [helper, *constructors, planned, trial, first, recovery, second, *reads, *copied]
+    order = [helper, *constructors, planned, trial, first, incoming, second, *reads, *copied]
     assert all(left.end() <= right.start() for left, right in zip(order, order[1:]))
 
     first_target, second_target = (p.replace(rb"\.", b".") for p in targets)
@@ -250,14 +264,20 @@ def observe_independent(code, field):
                      b" != &" + second_tag + b");\n"
                      b"        assert(*first_original == " + trial[1] +
                      b" && *second_original == initial_second && " + second_tag + b" == saved_second_tag);\n")
+    if observed_mode:
+        before_second += b"        assert(" + second[4] + b" == *first_original);\n"
     final = (b"    assert(" + copied[0][1] + b" == initial_first && " + copied[1][1] +
              b" == initial_second);\n"
              b"    assert(" + reads[0][1] + b" == " + trial[1] + b" && *first_original == " + reads[0][1] +
              b" && " + reads[2][1] + b" == " + second[4] + b" && *second_original == " + reads[2][1] + b");\n"
              b"    assert(" + reads[1][1] + b" == saved_first_tag && " + reads[3][1] +
              b" == saved_second_tag);\n")
-    values = [trial[1], copied[0][1], reads[0][1], reads[1][1], copied[1][1], reads[2][1], reads[3][1]]
-    final += (b'    printf("%zu,%u,%u,%u,%u,%u,%u,%u\\n", ' + planned[1] + b", " +
+    values = [trial[1]]
+    if observed_mode:
+        values.append(second[4])
+    values.extend((copied[0][1], reads[0][1], reads[1][1],
+                   copied[1][1], reads[2][1], reads[3][1]))
+    final += (b'    printf("%zu' + b",%u" * len(values) + b'\\n", ' + planned[1] + b", " +
               b", ".join(b"(unsigned)" + item for item in values) + b");\n")
     edits = [
         (constructors[1].end(), setup),
@@ -288,3 +308,5 @@ if __name__ == "__main__":
         verify(cli, sources, raw, reordered, {}, partial(observe, sibling_first=True))
         verify(cli, sources, raw, sequential, {}, observe_sequence)
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
+        verify(cli, sources, raw, mirrored, mirror_refusals,
+               partial(observe_independent, observed_mode=True))
