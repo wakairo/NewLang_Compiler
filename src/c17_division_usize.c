@@ -246,12 +246,13 @@ static bool division_emit_items_before(DivisionText *t,
                                        const NLCheckedFragment *f,
                                        NLCheckedNodeId block, int indent,
                                        NLCheckedNodeId descriptor,
+                                       NLCheckedNodeId second_descriptor,
                                        NLCheckedNodeId stop)
 {
     const NLCheckedNodeView *root = nl_checked_node_view(f, block);
     for (NLCheckedNodeId id = root->first_item; id && id != stop;) {
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-        if (id == descriptor) {
+        if (id == descriptor || id == second_descriptor) {
             if (!division_emit_byte_constructor(t, f, n))
                 return false;
             id = n->next_item;
@@ -286,20 +287,18 @@ static bool division_emit_items_before(DivisionText *t,
 static bool division_emit_items(DivisionText *t, const NLCheckedFragment *f,
                                 NLCheckedNodeId block, int indent)
 {
-    return division_emit_items_before(t, f, block, indent, 0, 0);
+    return division_emit_items_before(t, f, block, indent, 0, 0, 0);
 }
 
 /* The entry validator matches every binding in this exact continuation.
  * Names come from the original checked carriers, and indices are the
- * resolved semantic fields of the one constructed local. */
+ * resolved semantic fields of the selected original. */
 static bool division_emit_byte_loan(DivisionText *text,
-                                    const NLDivisionUsizePlan *plan,
-                                    NLCheckedNodeId binding, bool registered)
+                                    const NLCheckedFragment *f,
+                                    NLSymbolId object,
+                                    const NLCheckedNodeView *old,
+                                    bool registered)
 {
-    const NLCheckedFragment *f = plan->body;
-    const NLCheckedNodeView *original =
-        nl_checked_node_view(f, plan->byte_descriptor);
-    const NLCheckedNodeView *old = nl_checked_node_view(f, binding);
     const NLCheckedNodeView *loan = nl_checked_node_view(f, old->initializer);
     const NLCheckedNodeView *body = nl_checked_node_view(f, loan->initializer);
     const NLCheckedNodeView *change = nl_checked_node_view(f, body->tail);
@@ -307,7 +306,7 @@ static bool division_emit_byte_loan(DivisionText *text,
         nl_checked_node_view(f, change->first_argument);
     const NLCheckedNodeView *selected =
         nl_checked_node_view(f, ref->next_argument);
-    const size_t object = original->symbol, writer = ref->symbol;
+    const NLSymbolId writer = ref->symbol;
     if (!division_text_append(
             text,
             "    uint8_t nl_local_%zu;\n"
@@ -362,8 +361,12 @@ static bool division_emit_byte_update(DivisionText *text,
     const NLCheckedFragment *f = plan->body;
     const NLSymbolId object =
         nl_checked_node_view(f, plan->byte_descriptor)->symbol;
+    const NLSymbolId second_object =
+        plan->byte_second_descriptor
+            ? nl_checked_node_view(f, plan->byte_second_descriptor)->symbol
+            : object;
     const NLCheckedNodeView *first = nl_checked_node_view(f, plan->byte_update);
-    if (!division_emit_byte_loan(text, plan, plan->byte_update,
+    if (!division_emit_byte_loan(text, f, object, first,
                                  plan->byte_update_call != 0))
         return false;
     const NLCheckedNodeView *item = nl_checked_node_view(f, first->next_item);
@@ -377,18 +380,19 @@ static bool division_emit_byte_update(DivisionText *text,
             item = nl_checked_node_view(f, item->next_item);
             init = nl_checked_node_view(f, item->initializer);
         }
+        second = nl_checked_node_view(f, plan->byte_second_update);
         if (!division_text_append(text,
                                   "    const uint8_t nl_local_%zu = "
                                   "((uint8_t)UINT8_C(%zu));\n",
                                   item->symbol, init->scalar_result.value) ||
-            !division_emit_byte_loan(text, plan, plan->byte_second_update,
-                                     true))
+            !division_emit_byte_loan(text, f, second_object, second, true))
             return false;
-        second = nl_checked_node_view(f, plan->byte_second_update);
         item = nl_checked_node_view(f, second->next_item);
     }
-    for (size_t i = 0; i < 2; ++i) {
-        if (!division_emit_byte_read(text, f, item, object))
+    const size_t reads = plan->byte_second_descriptor ? 4 : 2;
+    for (size_t i = 0; i < reads; ++i) {
+        if (!division_emit_byte_read(text, f, item,
+                                     i < 2 ? object : second_object))
             return false;
         item = nl_checked_node_view(f, item->next_item);
     }
@@ -682,8 +686,9 @@ static NLCheckStatus literal_divisor_c17(const NLDivisionUsizePlan *main,
     if (!emitted ||
         !division_text_append(&text, "static void nl_qty_fn_%zu(void)\n{\n",
                               main->function) ||
-        !division_emit_items_before(&text, main->body, main->body->root, 4,
-                                    main->byte_descriptor, main->byte_update) ||
+        !division_emit_items_before(
+            &text, main->body, main->body->root, 4, main->byte_descriptor,
+            main->byte_second_descriptor, main->byte_update) ||
         (main->byte_update && !division_emit_byte_update(&text, main)) ||
         !division_text_append(&text,
                               "    return;\n}\n\nint main(void)\n{\n"

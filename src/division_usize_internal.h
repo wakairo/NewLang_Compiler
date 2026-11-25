@@ -18,8 +18,9 @@ typedef struct {
         call; /* division identifies the specialized single operation */
     NLCheckedNodeId byte_selector; /* guarded product to pure u8, entry only */
     NLCheckedNodeId byte_descriptor,
-        byte_update;                  /* original and continuation */
-    NLCheckedNodeId byte_update_call; /* optional scoped writer */
+        byte_update;                        /* original and continuation */
+    NLCheckedNodeId byte_update_call;       /* optional scoped writer */
+    NLCheckedNodeId byte_second_descriptor; /* optional second original */
     NLCheckedNodeId byte_second_update, byte_second_update_call;
     size_t divisor;
 } NLDivisionUsizePlan;

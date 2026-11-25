@@ -14,8 +14,11 @@ add_test(NAME p1769_direct_displaced_writer_rollback.unit COMMAND p1673_probe
 add_test(NAME p1773_sequential_writer_rollback.unit COMMAND p1673_probe
     guarded-byte-sequential-writer-oom "${p1738_sources}/sequential-named.nl"
     unused)
+add_test(NAME p1778_independent_writer_rollback.unit COMMAND p1673_probe
+    guarded-byte-distinct-writers-oom "${p1738_sources}/dual-named.nl" unused)
 set_tests_properties(p1738_guarded_scoped_helper_native.integration
     p1738_guarded_scoped_helper_rollback.unit
     p1764_caller_selected_writer_rollback.unit
     p1769_direct_displaced_writer_rollback.unit
-    p1773_sequential_writer_rollback.unit PROPERTIES TIMEOUT 90)
+    p1773_sequential_writer_rollback.unit
+    p1778_independent_writer_rollback.unit PROPERTIES TIMEOUT 90)
