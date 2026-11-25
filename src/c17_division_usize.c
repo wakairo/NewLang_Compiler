@@ -382,12 +382,19 @@ static bool division_emit_byte_update(DivisionText *text,
         }
         second = nl_checked_node_view(f, plan->byte_second_update);
         /* The field read can itself bind the second writer's actual. */
-        if (item != second &&
-            !division_text_append(text,
-                                  "    const uint8_t nl_local_%zu = "
-                                  "((uint8_t)UINT8_C(%zu));\n",
-                                  item->symbol, init->scalar_result.value))
-            return false;
+        if (item != second) {
+            if (plan->byte_second_descriptor &&
+                init->kind == NL_CHECKED_IDENTIFIER) {
+                if (!division_emit_displaced_copy(text, item, first))
+                    return false;
+            } else if (!division_text_append(text,
+                                             "    const uint8_t nl_local_%zu = "
+                                             "((uint8_t)UINT8_C(%zu));\n",
+                                             item->symbol,
+                                             init->scalar_result.value)) {
+                return false;
+            }
+        }
         if (!division_emit_byte_loan(text, f, second_object, second, true))
             return false;
         item = nl_checked_node_view(f, second->next_item);
