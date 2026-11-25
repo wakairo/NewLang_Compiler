@@ -30,6 +30,15 @@ delegated = {
     "delegated-unit-tail": (b"1", b"4096,4,9,4,37\n"),
     "delegated-unit-fallthrough": (b"0", b"0,2,17,2,51\n"),
 }
+reordered_inline = {
+    "port-sibling-first": (b"0", b"0,2,17,2,51\n"),
+}
+reordered_named = {
+    "queue-sibling-first": (b"1", b"4096,4,9,4,37\n"),
+}
+reordered_delegated = {
+    "delegated-sibling-first": (b"1", b"4096,4,9,4,37\n"),
+}
 refused = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("named-independent-input", "delegated-independent-input",
@@ -37,7 +46,7 @@ refused = {
                  "forwarded-writer-bulk",
                  "constant-writer-bulk", "returns-new-mode",
                  "second-policy-change", "unrelated-budget", "unit-statement",
-                 "unit-choice")
+                 "unit-choice", "caller-duplicate-read", "caller-wrong-old")
 }
 refused["scope-exit"] = (3, 3, b"P8-EXIT-DEPENDENCY")
 
@@ -57,3 +66,10 @@ if __name__ == "__main__":
                partial(observe, local_policy=True, named_policy=True))
         verify(cli, sources, Path(directory), delegated, {},
                partial(observe, local_policy=True, named_policy=True, delegated_policy=True))
+        verify(cli, sources, Path(directory), reordered_inline, {},
+               partial(observe, local_policy=True, sibling_first=True))
+        verify(cli, sources, Path(directory), reordered_named, {},
+               partial(observe, local_policy=True, named_policy=True, sibling_first=True))
+        verify(cli, sources, Path(directory), reordered_delegated, {},
+               partial(observe, local_policy=True, named_policy=True,
+                       delegated_policy=True, sibling_first=True))

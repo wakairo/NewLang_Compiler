@@ -3254,10 +3254,6 @@ static bool guarded_byte_descriptor(
         nl_checked_node_view(f, original->initializer);
     const NLCheckedNodeView *loan =
         nl_checked_node_view(f, bindings[0]->initializer);
-    const NLCheckedNodeView *updated =
-        nl_checked_node_view(f, bindings[1]->initializer);
-    const NLCheckedNodeView *sibling =
-        nl_checked_node_view(f, bindings[2]->initializer);
     NLSemanticValueView initial, final;
     if (!descriptor_constructor(
             f, c, ctor,
@@ -3273,7 +3269,6 @@ static bool guarded_byte_descriptor(
                             local_policy ? &policy : NULL))
         return false;
     const NLCheckedField *change = &field;
-    const NLCheckedField *sibling_field = &sibling->field;
     const NLSemanticBindingView local = c->bindings[original->symbol - 1].view;
     NLSemanticPlaceView place;
     if (local.place != change->parent ||
@@ -3290,11 +3285,19 @@ static bool guarded_byte_descriptor(
                          change, u8))
         return false;
 
-    if (updated->field.index != change->index ||
-        updated->field.child != change->child ||
-        updated->field.child_incarnation != change->child_incarnation ||
-        updated->field.child_fact != change->child_post_fact ||
-        updated->field.old_value != change->new_value ||
+    /* The scoped writer's two post-loan reads can appear in either order.
+     * Match the roles to the checked Change. Lowering keeps source order. */
+    const NLCheckedNodeView *reads[] = {
+        nl_checked_node_view(f, bindings[1]->initializer),
+        nl_checked_node_view(f, bindings[2]->initializer)};
+    const size_t target =
+        local_policy && reads[0]->field.index != change->index ? 1 : 0;
+    const NLCheckedField *updated = &reads[target]->field;
+    const NLCheckedField *sibling_field = &reads[1 - target]->field;
+    if (updated->index != change->index || updated->child != change->child ||
+        updated->child_incarnation != change->child_incarnation ||
+        updated->child_fact != change->child_post_fact ||
+        updated->old_value != change->new_value ||
         sibling_field->index == change->index ||
         sibling_field->child == change->child ||
         initial.fields[change->index] != change->old_value ||

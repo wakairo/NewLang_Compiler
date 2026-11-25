@@ -20,7 +20,8 @@ refused = {
 refused["scope-exit"] = (3, 3, b"P8-EXIT-DEPENDENCY")
 
 
-def observe(code, field, local_policy=False, named_policy=False, delegated_policy=False):
+def observe(code, field, local_policy=False, named_policy=False,
+            delegated_policy=False, sibling_first=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -74,7 +75,8 @@ def observe(code, field, local_policy=False, named_policy=False, delegated_polic
     assert constructor.end() < count.start() < product.start() < loan.start() < call.start()
     if selector is not None:
         assert product.start() < selector.start() < loan.start()
-    assert call.end() < updated.start() < unchanged.start() < copied.start()
+    first, second = (unchanged, updated) if sibling_first else (updated, unchanged)
+    assert call.end() < first.start() < second.start() < copied.start()
     target, sibling = (name.replace(rb"\.", b".") for name in (target, sibling))
     before = (b"    const uint8_t *original_target = &" + target + b";\n"
               b"    const uint8_t *original_sibling = &" + sibling + b";\n"
