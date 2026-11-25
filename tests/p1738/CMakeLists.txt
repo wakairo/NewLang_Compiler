@@ -21,5 +21,3 @@ set_tests_properties(p1738_guarded_scoped_helper_native.integration
     p1764_caller_selected_writer_rollback.unit
     p1769_direct_displaced_writer_rollback.unit
     p1778_independent_writer_rollback.unit PROPERTIES TIMEOUT 90)
-# Give the exhaustive rollback sweep room for ASan shard scheduling.
-set_tests_properties(p1773_sequential_writer_rollback.unit PROPERTIES TIMEOUT 180)
