@@ -1,6 +1,7 @@
 #define main newlang_driver_main
 #include "../../src/main.c"
 #undef main
+#include "../../src/copy_body_internal.h"
 #include "../../src/guarded_usize_internal.h"
 #include "../support/node_checked.h"
 #include "newlang/usize_division.h"
@@ -233,7 +234,8 @@ typedef enum {
     GUARDED_ADDITION_DECISION,
     GUARDED_SELECTOR,
     GUARDED_BYTE_MODE,
-    GUARDED_BYTE_MODE_HELPER
+    GUARDED_BYTE_MODE_HELPER,
+    GUARDED_BYTE_POLICY_WRITER
 } ProductRoute;
 
 static bool composed_product_result(const NLDivisionUsizePlan *helper)
@@ -402,20 +404,60 @@ static bool retry_product(const NLCheckedFragment *body, ProductRoute route)
     return false;
 }
 
-static bool guarded_byte_mode_result(const NLCheckedFragment *entry,
-                                     bool delegated)
+static bool policy_writer_result(const NLDivisionUsizePlan *plan)
 {
+    const NLCheckedFragment *main = plan->body;
+    const NLCheckedNodeId call = plan->byte_update_call;
+    NLCopyPolicyWriter writer;
+    CHECK(nl_copy_policy_writer(main, call, &writer));
+    NLCopyBodyParameters public_parameters;
+    NLCopyBodyView public_body;
+    CHECK(!nl_checked_copy_body_parameters(main, call, &public_parameters) &&
+          !nl_checked_copy_body_view(main, call, &public_body));
+    const NLCopyBodyProof *proof = writer.body->copy_body;
+    const NLCheckedNodeView *actual =
+        nl_checked_node_view(main, proof->parameters.arguments[1]);
+    const NLCheckedNodeView *loan = nl_checked_node_view(main, writer.loan);
+    NLSemanticBindingView formal;
+    NLSemanticValueView budget;
+    NLSemanticScopeView scope;
+    CHECK(actual && actual->kind == NL_CHECKED_IDENTIFIER &&
+          actual->value_use == NL_VALUE_COPIED && loan &&
+          nl_semantic_binding_view(proof->entry, writer.budget, &formal) &&
+          formal.value == actual->results[0].value &&
+          nl_semantic_value_view(main->context, formal.value, &budget) &&
+          budget.type == nl_semantic_core_type(main->context, NL_TYPE_USIZE) &&
+          !budget.scalar_known && budget.dependencies == NL_DEPENDENCY_FREE);
+    CHECK(proof->view.event_count == 1 &&
+          proof->first->view.kind == NL_COPY_BODY_CHANGE &&
+          writer.change.child == loan->field.child &&
+          writer.change.child_incarnation == loan->field.child_incarnation &&
+          loan->results[0].value == proof->view.result.value &&
+          nl_semantic_scope_view(main->context, loan->loan.scope, &scope) &&
+          !scope.active);
+    return true;
+}
+
+static bool guarded_byte_mode_result(const NLCheckedFragment *entry,
+                                     ProductRoute route)
+{
+    const bool delegated = route == GUARDED_BYTE_MODE_HELPER;
     const NLCheckedNodeId site = nl_checked_root(entry);
     NLDivisionUsizePlan main, product;
     if (!nl_h_custody_result_world_present(entry, site) ||
         !nl_quantity_usize_call_valid(entry, site, &main) ||
         main.body->body_count != (delegated ? 3u : 2u) ||
-        main.byte_selector != main.body->body_calls[1] ||
-        (delegated ? main.byte_update_call != main.body->body_calls[2]
-                   : main.byte_update_call != 0) ||
         !nl_quantity_usize_call_valid(main.body, main.body->body_calls[0],
                                       &product) ||
         !guarded_product_result(main.body, main.body->body_calls[0], &product))
+        return false;
+    if (route == GUARDED_BYTE_POLICY_WRITER)
+        return !main.byte_selector &&
+               main.byte_update_call == main.body->body_calls[1] &&
+               policy_writer_result(&main);
+    if (main.byte_selector != main.body->body_calls[1] ||
+        (delegated ? main.byte_update_call != main.body->body_calls[2]
+                   : main.byte_update_call != 0))
         return false;
     NLPureU8Call selector;
     const NLCheckedNodeView *call =
@@ -430,12 +472,13 @@ static bool guarded_byte_mode_result(const NLCheckedFragment *entry,
 
 static bool check_oom(const char *path, ProductRoute route)
 {
-    const bool delegated = route == GUARDED_BYTE_MODE_HELPER;
-    const bool byte_mode = route == GUARDED_BYTE_MODE || delegated;
+    const bool byte_mode = route == GUARDED_BYTE_MODE ||
+                           route == GUARDED_BYTE_MODE_HELPER ||
+                           route == GUARDED_BYTE_POLICY_WRITER;
     TestNode original = {0};
     CHECK(node_checked_load(path, &original));
     if (byte_mode)
-        CHECK(guarded_byte_mode_result(original.entry, delegated));
+        CHECK(guarded_byte_mode_result(original.entry, route));
     /* Use the registered declarations from the input. Each allocation trial
      * gets its own context; a failed check is retried on that same context. */
     NLParser *parser = NULL;
@@ -470,7 +513,7 @@ static bool check_oom(const char *path, ProductRoute route)
             nl_checked_call_body(out, nl_checked_root(out));
         CHECK(body);
         if (byte_mode) {
-            CHECK(guarded_byte_mode_result(out, delegated));
+            CHECK(guarded_byte_mode_result(out, route));
         } else if (route != ENTRY_PRODUCT) {
             CHECK(retry_product(body, route));
         } else {
@@ -613,6 +656,8 @@ int main(int argc, char **argv)
         route = GUARDED_BYTE_MODE;
     else if (!strcmp(argv[1], "guarded-byte-mode-helper-oom"))
         route = GUARDED_BYTE_MODE_HELPER;
+    else if (!strcmp(argv[1], "guarded-byte-policy-writer-oom"))
+        route = GUARDED_BYTE_POLICY_WRITER;
     else
         return 2;
     return check_oom(argv[2], route) && named_oom(argv[2]) ? 0 : 1;

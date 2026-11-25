@@ -132,6 +132,19 @@ NLCheckStatus nl_copy_body_local_validate(const NLCheckedFragment *,
  */
 bool nl_copy_body_readonly_valid(const NLCheckedFragment *);
 
+/* Private consumer of the same scoped writer history. Publishing the old
+ * write-u8 Copy surface does not publish this selector or its replay. */
+typedef struct {
+    const NLCheckedFragment *body;
+    NLSymbolId writer, budget, selected;
+    NLCheckedNodeId loan, selection;
+    NLCheckedField change;
+} NLCopyPolicyWriter;
+bool nl_copy_policy_writer(const NLCheckedFragment *, NLCheckedNodeId,
+                           NLCopyPolicyWriter *);
+NLCheckStatus nl_copy_policy_writer_validate(const NLCheckedFragment *,
+                                             NLCheckedNodeId);
+
 NLCheckStatus nl_copy_body_parameters(NLCheckedFragment *,
                                       const NLCheckedFragment *,
                                       NLCheckedNodeId, const NLSymbolId[2],

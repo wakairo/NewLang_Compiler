@@ -13,6 +13,7 @@
 #include "copy_body_internal.h"
 #include "if_field_internal.h"
 #include "linear_break_internal.h"
+#include "pure_u8_internal.h"
 static void destroy(NLCheckedFragment *);
 
 /* A retained world address does not freeze its present function table. Check
@@ -277,6 +278,66 @@ bool nl_copy_trio(const NLSemanticContext *c, NLPlaceId root,
     }
     return true;
 }
+static bool policy_source(const NLCheckedFragment *f)
+{
+    const NLFunctionBody *fn = f->body_owner;
+    const NLSyntaxView *root =
+        nl_syntax_node_view(nl_syntax_tree_root(fn->syntax));
+    if (!root || root->kind != NL_SYNTAX_BLOCK)
+        return false;
+    const NLSyntaxNode *first = root->data.block.items;
+    const NLSyntaxNode *second = nl_syntax_next_argument(first);
+    const NLSyntaxView *selected = nl_syntax_node_view(first);
+    const NLSyntaxView *old = nl_syntax_node_view(second);
+    const NLSyntaxView *tail = nl_syntax_node_view(root->data.block.tail);
+    if (!selected || selected->kind != NL_SYNTAX_BINDING || !old ||
+        old->kind != NL_SYNTAX_BINDING || nl_syntax_next_argument(second) ||
+        !tail || tail->kind != NL_SYNTAX_EXPR_NAME)
+        return false;
+    const NLSyntaxView *choice =
+        nl_syntax_node_view(selected->data.binding.initializer);
+    const NLSyntaxView *change =
+        nl_syntax_node_view(old->data.binding.initializer);
+    if (!choice || choice->kind != NL_SYNTAX_IF || !change ||
+        change->kind != NL_SYNTAX_EXPR_CALL ||
+        change->data.call.argument_count != 2 ||
+        !predicate_name(f, change->data.call.callee, "replace"))
+        return false;
+    const NLSyntaxView *test =
+        nl_syntax_node_view(choice->data.conditional.condition);
+    const NLSyntaxView *a =
+        nl_syntax_node_view(choice->data.conditional.then_block);
+    const NLSyntaxView *b =
+        nl_syntax_node_view(choice->data.conditional.else_block);
+    if (!test || test->kind != NL_SYNTAX_USIZE_LESS_THAN || !a || !b ||
+        a->kind != NL_SYNTAX_BLOCK || b->kind != NL_SYNTAX_BLOCK ||
+        a->data.block.items || b->data.block.items)
+        return false;
+    const NLSyntaxView *left = nl_syntax_node_view(test->data.equality.left);
+    const NLSyntaxView *right = nl_syntax_node_view(test->data.equality.right);
+    const NLSyntaxView *yes = nl_syntax_node_view(a->data.block.tail);
+    const NLSyntaxView *no = nl_syntax_node_view(b->data.block.tail);
+    const NLSyntaxView *writer =
+        nl_syntax_node_view(change->data.call.arguments);
+    const NLSyntaxView *mode = nl_syntax_node_view(
+        nl_syntax_next_argument(change->data.call.arguments));
+    return left && left->kind == NL_SYNTAX_EXPR_NAME &&
+           predicate_name(f, left->data.name, fn->parameter_names[1]) &&
+           right && right->kind == NL_SYNTAX_USIZE_LITERAL && yes &&
+           yes->kind == NL_SYNTAX_U8_LITERAL && no &&
+           no->kind == NL_SYNTAX_U8_LITERAL && writer &&
+           writer->kind == NL_SYNTAX_EXPR_NAME &&
+           predicate_name(f, writer->data.name, fn->parameter_names[0]) &&
+           mode && mode->kind == NL_SYNTAX_EXPR_NAME;
+}
+
+static bool policy_writer(const NLCopyBodyProof *p)
+{
+    return p->formal_write &&
+           p->parameter_types[1] ==
+               nl_semantic_core_type(p->entry, NL_TYPE_USIZE);
+}
+
 NLCheckStatus nl_copy_body_parameters(NLCheckedFragment *f,
                                       const NLCheckedFragment *caller,
                                       NLCheckedNodeId call,
@@ -287,11 +348,14 @@ NLCheckStatus nl_copy_body_parameters(NLCheckedFragment *f,
     const NLFunctionEntry *fn = n ? function_entry(c, n->function) : NULL;
     if (!fn)
         return NL_CHECK_OK;
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
     if (fn->count != 2 ||
-        fn->parameters[1] != nl_semantic_core_type(c, NL_TYPE_U8))
+        (fn->parameters[1] != u8 &&
+         (fn->parameters[1] != nl_semantic_core_type(c, NL_TYPE_USIZE) ||
+          fn->result != u8 || !policy_source(f))))
         return NL_CHECK_OK;
     const NLSemanticTypeView t = c->types[fn->parameters[0] - 1].view;
-    if (t.kind != NL_TYPE_REF || t.target != fn->parameters[1] ||
+    if (t.kind != NL_TYPE_REF || t.target != u8 ||
         t.access != NL_ACCESS_WRITE || t.is_exclusive)
         return NL_CHECK_OK;
     const NLCheckedNodeView *a =
@@ -715,7 +779,7 @@ bool nl_checked_copy_body_view(const NLCheckedFragment *c, NLCheckedNodeId id,
                                NLCopyBodyView *out)
 {
     const NLCopyBodyProof *p = proof_for_observation(c, id);
-    if (!p || !out)
+    if (!p || policy_writer(p) || !out)
         return false;
     *out = p->view;
     return true;
@@ -725,7 +789,7 @@ bool nl_checked_copy_body_parameters(const NLCheckedFragment *c,
                                      NLCopyBodyParameters *out)
 {
     const NLCopyBodyProof *p = proof_for_observation(c, id);
-    if (!p || !p->formal_write || !out)
+    if (!p || !p->formal_write || policy_writer(p) || !out)
         return false;
     *out = p->parameters;
     return true;
@@ -745,7 +809,7 @@ nl_checked_copy_body_parameters_validate(const NLCheckedFragment *c,
                                          const NLCopyBodyParameters *v)
 {
     const NLCopyBodyProof *p = proof_for_validation(c, id);
-    if (!p || !p->formal_write ||
+    if (!p || !p->formal_write || policy_writer(p) ||
         (v && !same_parameters(v, &p->issued_parameters)))
         return INVALID;
     return p->unit_call ? nl_checked_copy_unit_validate(c, id, NULL)
@@ -763,7 +827,8 @@ static const CopyEvent *event_at(const NLCopyBodyProof *p, size_t index)
 bool nl_checked_copy_body_event(const NLCheckedFragment *c, NLCheckedNodeId id,
                                 size_t index, NLCopyBodyEventView *out)
 {
-    const CopyEvent *e = event_at(proof_for_observation(c, id), index);
+    const NLCopyBodyProof *p = proof_for_observation(c, id);
+    const CopyEvent *e = p && !policy_writer(p) ? event_at(p, index) : NULL;
     if (!e || !out)
         return false;
     *out = e->view;
@@ -809,6 +874,91 @@ static bool intrinsic(const NLSemanticValueView *a,
     return a->type == b->type && a->scalar_known == b->scalar_known &&
            a->scalar_value == b->scalar_value;
 }
+
+/* This reads the actual callee graph and the original Copy receipt. The
+ * scalar walk validates both owned IF arms without merging their worlds. */
+static bool policy_contents(const NLCopyBodyProof *p, NLCopyPolicyWriter *out)
+{
+    if (!p || !policy_writer(p) || p->view.event_count != 1 || !p->first ||
+        p->first->view.kind != NL_COPY_BODY_CHANGE || !p->exit)
+        return false;
+    const NLCheckedFragment *f = p->owner;
+    const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
+    if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
+        root->item_count != 2 || f->arm_count != 2 || f->body_count)
+        return false;
+    const NLCheckedNodeView *selected =
+        nl_checked_node_view(f, root->first_item);
+    const NLCheckedNodeView *old =
+        selected ? nl_checked_node_view(f, selected->next_item) : NULL;
+    const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
+    if (!selected || selected->kind != NL_CHECKED_BINDING || !old ||
+        old->kind != NL_CHECKED_BINDING || old->next_item || !tail ||
+        tail->kind != NL_CHECKED_IDENTIFIER ||
+        tail->value_use != NL_VALUE_COPIED || tail->symbol != old->symbol ||
+        old->initializer != p->first->view.node)
+        return false;
+    const NLCheckedNodeView *change = nl_checked_node_view(f, old->initializer);
+    const NLCheckedNodeView *ref =
+        change ? nl_checked_node_view(f, change->first_argument) : NULL;
+    const NLCheckedNodeView *mode =
+        ref ? nl_checked_node_view(f, ref->next_argument) : NULL;
+    if (!change || change->kind != NL_CHECKED_REPLACE || !ref ||
+        ref->kind != NL_CHECKED_IDENTIFIER ||
+        ref->symbol != p->parameters.parameters[0] || !mode ||
+        mode->kind != NL_CHECKED_IDENTIFIER ||
+        mode->symbol != selected->symbol ||
+        mode->value_use != NL_VALUE_COPIED || mode->next_argument)
+        return false;
+    const NLCheckedNodeView *choice =
+        nl_checked_node_view(f, selected->initializer);
+    const NLCheckedNodeView *test =
+        choice ? nl_checked_node_view(f, choice->initializer) : NULL;
+    const NLCheckedNodeView *left =
+        test ? nl_checked_node_view(f, test->first_argument) : NULL;
+    const NLCheckedNodeView *right =
+        left ? nl_checked_node_view(f, left->next_argument) : NULL;
+    const NLSymbolId budget = p->parameters.parameters[1];
+    if (!choice || choice->kind != NL_CHECKED_IF || choice->normal_arms != 2 ||
+        !test || test->kind != NL_CHECKED_USIZE_LESS_THAN || !left ||
+        left->kind != NL_CHECKED_IDENTIFIER || left->symbol != budget ||
+        !right || right->kind != NL_CHECKED_USIZE_LITERAL || !budget ||
+        budget > p->exit->binding_count || budget > p->entry->binding_count)
+        return false;
+
+    const NLTypeId usize = p->parameter_types[1];
+    const NLValueId input = p->entry->bindings[budget - 1].view.value;
+    const NLValueId formal = p->exit->bindings[budget - 1].view.value;
+    if (input != formal || !nl_copy_plain(p->entry, input, usize) ||
+        !nl_copy_plain(p->exit, formal, usize) ||
+        !intrinsic(&p->entry->values[input - 1], &p->exit->values[formal - 1]))
+        return false;
+    PredicateWalk walk = {.body = f,
+                          .context = p->exit,
+                          .formal = budget,
+                          .quantity = usize,
+                          .boolean =
+                              nl_semantic_core_type(p->exit, NL_TYPE_BOOL),
+                          .u8 = nl_semantic_core_type(p->exit, NL_TYPE_U8),
+                          .parameter = usize};
+    if (!predicate_scalar(&walk, selected->initializer))
+        return false;
+    *out = (NLCopyPolicyWriter){.body = f,
+                                .writer = ref->symbol,
+                                .budget = budget,
+                                .selected = selected->symbol,
+                                .loan = p->parameters.loan,
+                                .selection = selected->initializer,
+                                .change = p->first->view.field};
+    return true;
+}
+
+bool nl_copy_policy_writer(const NLCheckedFragment *f, NLCheckedNodeId id,
+                           NLCopyPolicyWriter *out)
+{
+    return out && policy_contents(proof_for_observation(f, id), out);
+}
+
 typedef struct {
     const NLCopyBodyProof *proof;
     const NLCheckedFragment *f;
@@ -817,6 +967,7 @@ typedef struct {
     NLSemanticPlaceView *model;
     NLSymbolId *bound;
     size_t events, depth;
+    NLCheckedNodeId policy_selection;
     NLTypeId u8;
     NLCheckStatus status;
     bool current_seen;
@@ -1054,6 +1205,17 @@ static bool expression(Replay *r, NLCheckedNodeId id,
     if (!n)
         goto done;
     switch (n->kind) {
+    case NL_CHECKED_IF: {
+        if (id != r->policy_selection)
+            break;
+        /* policy_contents checked exactly this condition and its two pure
+         * arms. Count each parent operand in the ordered Copy replay. */
+        const NLCheckedNodeView *test = take(r, n->initializer);
+        const NLCheckedNodeView *left =
+            test ? take(r, test->first_argument) : NULL;
+        ok = left && take(r, left->next_argument) && scalar(r, id);
+        break;
+    }
     case NL_CHECKED_REGISTERED_CALL: {
         if (id != r->proof->current_call || loan || r->current_seen ||
             !nl_copy_body_forward_origin(r->f) || !scalar(r, id) ||
@@ -1502,7 +1664,8 @@ static bool parameter_entry(const NLCopyBodyProof *p,
         fn->parameters[0] == 0 || fn->parameters[0] > entry->type_count ||
         call->argument_count != 2 ||
         call->first_argument != p->parameters.arguments[0] ||
-        fn->parameters[1] != nl_semantic_core_type(entry, NL_TYPE_U8))
+        (fn->parameters[1] != nl_semantic_core_type(entry, NL_TYPE_U8) &&
+         !policy_writer(p)))
         return false;
     /* The current registry entry, not only its address/signature, must still
      * select the original CHECK-issued callable. History supplies no right to
@@ -1521,7 +1684,8 @@ static bool parameter_entry(const NLCopyBodyProof *p,
         memcmp(now->parameters, p->parameter_types, sizeof(p->parameter_types)))
         return false;
     const NLSemanticTypeView t = entry->types[fn->parameters[0] - 1].view;
-    if (t.kind != NL_TYPE_REF || t.target != fn->parameters[1] ||
+    if (t.kind != NL_TYPE_REF ||
+        t.target != nl_semantic_core_type(entry, NL_TYPE_U8) ||
         t.access != NL_ACCESS_WRITE || t.is_exclusive)
         return false;
     const NLCheckedNodeView *loan =
@@ -1707,14 +1871,15 @@ bool nl_copy_body_readonly_valid(const NLCheckedFragment *f)
            call && readonly_entry(p, p->caller, call);
 }
 
-NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
-                                            NLCheckedNodeId id,
-                                            const NLCopyBodyView *candidate)
+static NLCheckStatus copy_body_validate(const NLCheckedFragment *caller,
+                                        NLCheckedNodeId id,
+                                        const NLCopyBodyView *candidate,
+                                        bool policy)
 {
     if (!nl_h_unchecked_machine_only(caller))
         return INVALID;
     const NLCopyBodyProof *p = proof_for_validation(caller, id);
-    if (!p || !caller->nodes ||
+    if (!p || !caller->nodes || policy_writer(p) != policy ||
         (candidate && !same_body_view(candidate, &p->view)))
         return INVALID;
     const NLCheckedFragment *f = p->owner;
@@ -1755,7 +1920,9 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
         f->nodes != p->nodes_origin || !p->nodes ||
         p->count > NL_SEMANTIC_MAX_ENTRIES ||
         memcmp(f->nodes, p->nodes, p->count * sizeof(*p->nodes)) ||
-        f->arm_count != (p->current_loop ? 1u : 0u) ||
+        f->arm_count != (policy            ? 2u
+                         : p->current_loop ? 1u
+                                           : 0u) ||
         f->body_count != (p->current_call ? 1u : 0u) ||
         (p->current_call && !nl_copy_body_forward_origin(f)) || p->pending ||
         p->exit != p->view.live_exit || !p->exit ||
@@ -1777,9 +1944,13 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
          (!p->current_loop && !p->current_call && !p->readonly_local) ||
          !readonly_entry(p, caller, call)))
         return INVALID;
+    NLCopyPolicyWriter scalar_policy = {0};
+    if (policy && !policy_contents(p, &scalar_policy))
+        return INVALID;
     Replay r = {.proof = p,
                 .f = f,
                 .next = p->first,
+                .policy_selection = scalar_policy.selection,
                 .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
     r.seen = calloc(f->count + 1, sizeof(*r.seen));
     r.model = calloc(p->exit->place_count + 1, sizeof(*r.model));
@@ -1810,7 +1981,7 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
             root->result_count != 1 ||
             root->results[0].value != p->view.result.value)
             goto done;
-        if (p->readonly_local && !local_old_tail(&r, root->tail))
+        if ((p->readonly_local || policy) && !local_old_tail(&r, root->tail))
             goto done;
     }
     if ((p->current_loop || p->current_call) && !r.current_seen)
@@ -1890,6 +2061,17 @@ done:
     free(r.model);
     free(r.bound);
     return status;
+}
+NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
+                                            NLCheckedNodeId id,
+                                            const NLCopyBodyView *candidate)
+{
+    return copy_body_validate(caller, id, candidate, false);
+}
+NLCheckStatus nl_copy_policy_writer_validate(const NLCheckedFragment *caller,
+                                             NLCheckedNodeId id)
+{
+    return copy_body_validate(caller, id, NULL, true);
 }
 NLCheckStatus
 nl_checked_copy_body_event_validate(const NLCheckedFragment *caller,
