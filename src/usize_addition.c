@@ -3226,8 +3226,8 @@ static bool guarded_byte_descriptor(
     for (size_t i = 0; i < 4; ++i) {
         const NLSyntaxView *s = nl_syntax_node_view(item);
         const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-        if (!binding_source(f, c, n, s) || n->next_item <= id ||
-            n->symbol <= previous)
+        if (!binding_source(f, c, n, s) ||
+            (n->next_item && n->next_item <= id) || n->symbol <= previous)
             return false;
         bindings[i] = n;
         initializer_sources[i] = s->data.binding.initializer;
@@ -3235,13 +3235,19 @@ static bool guarded_byte_descriptor(
         id = n->next_item;
         item = nl_syntax_next_argument(item);
     }
-    const NLSyntaxView *ret = nl_syntax_node_view(item);
-    const NLCheckedNodeView *end = nl_checked_node_view(f, id);
     const NLTypeId unit = nl_semantic_unit_type(c);
     const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
-    if (!ret || ret->kind != NL_SYNTAX_RETURN || !end ||
-        nl_syntax_next_argument(item) || source->data.block.tail ||
-        !division_unit_return(f, root, end, ret, unit))
+    if (root->terminates) {
+        const NLSyntaxView *ret = nl_syntax_node_view(item);
+        const NLCheckedNodeView *end = nl_checked_node_view(f, id);
+        if (!ret || ret->kind != NL_SYNTAX_RETURN || !end ||
+            nl_syntax_next_argument(item) || source->data.block.tail ||
+            !division_unit_return(f, root, end, ret, unit))
+            return false;
+    } else if (id || item || root->type != unit || root->result_count ||
+               root->results[0].value || nl_control_exits_count(f->exits) ||
+               !division_unit_completion(f, root->tail, source->data.block.tail,
+                                         unit))
         return false;
 
     const NLCheckedNodeView *ctor =
@@ -3350,12 +3356,15 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
     const NLCheckedNodeView *root = nl_checked_node_view(f, f->root);
     if (!source || source->kind != NL_SYNTAX_BLOCK || !root ||
         root->kind != NL_CHECKED_BLOCK ||
-        !span_equal(root->span, source->span) || root->item_count < 4 ||
-        (root->item_count > 6 &&
-         (!entry || (root->item_count != 9 && root->item_count != 10))))
+        !span_equal(root->span, source->span) || root->item_count < 4)
         return false;
 
-    const bool local_policy = root->item_count == 9;
+    /* The in-writer route has eight bindings and an optional Return item. */
+    const bool local_policy = root->item_count == (root->terminates ? 9u : 8u);
+    const bool descriptor_entry =
+        local_policy || (root->terminates && root->item_count == 10);
+    if (root->item_count > 6 && (!entry || !descriptor_entry))
+        return false;
     const size_t prefix = local_policy ? 3 : 4;
     const NLCheckedKind kinds[] = {NL_CHECKED_USIZE_LITERAL, NL_CHECKED_IF,
                                    NL_CHECKED_REGISTERED_CALL,
@@ -3369,7 +3378,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
     const NLCheckedNodeView *first = nl_checked_node_view(f, id);
     const NLCheckedNodeView *first_value =
         first ? nl_checked_node_view(f, first->initializer) : NULL;
-    const bool early = root->item_count >= 9 && first_value &&
+    const bool early = descriptor_entry && first_value &&
                        first_value->kind == NL_CHECKED_AGGREGATE;
     if (local_policy && (!early || f->body_count != 2))
         return false;
@@ -3420,7 +3429,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                           !nl_pure_u8_threshold_at(f, c, selector, &pure)))
         return false;
 
-    if (root->item_count >= 9) {
+    if (descriptor_entry) {
         if (!early) {
             descriptor = id;
             descriptor_item = item;

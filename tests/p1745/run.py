@@ -14,19 +14,24 @@ admitted = {
     "inline-policy-oversize": (b"1", b"0,1,9,1,37\n"),
     "variant-boundary": (b"0", b"2048,7,17,7,51\n"),
     "variant-overflow-fallback": (b"0", b"0,2,17,2,51\n"),
+    "unit-tail": (b"1", b"4096,6,11,6,45\n"),
+    "unit-fallthrough": (b"0", b"0,12,31,12,71\n"),
 }
 named = {
     "named-policy-bulk": (b"1", b"4096,4,9,4,37\n"),
     "named-variant-boundary": (b"0", b"2048,7,17,7,51\n"),
     "named-variant-overflow-fallback": (b"0", b"0,2,17,2,51\n"),
     "named-policy-edit": (b"0", b"2032,7,17,7,51\n"),
+    "named-unit-tail": (b"1", b"4096,4,9,4,37\n"),
+    "named-unit-fallthrough": (b"0", b"0,2,17,2,51\n"),
 }
 refused = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("named-independent-input", "named-nested-policy",
                  "forwarded-writer-bulk",
                  "constant-writer-bulk", "returns-new-mode",
-                 "second-policy-change", "unrelated-budget")
+                 "second-policy-change", "unrelated-budget", "unit-statement",
+                 "unit-choice")
 }
 refused["scope-exit"] = (3, 3, b"P8-EXIT-DEPENDENCY")
 
