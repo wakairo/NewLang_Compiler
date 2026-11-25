@@ -216,8 +216,7 @@ mirror_refusals = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("mirror-sibling", "mirror-wrong-original", "mirror-stale",
                  "mirror-wrong-actual", "mixed-sibling", "mixed-stale",
-                 "mixed-crossed-read", "complete-stale-current",
-                 "complete-snapshot")
+                 "mixed-crossed-read", "complete-stale-current")
 }
 
 
@@ -241,11 +240,14 @@ snapshots = {
     "snapshot-high": (b"00", b"4096,93,93,117,93,41,101,93,149\n"),
     "snapshot-mixed": (b"10", b"4032,35,35,41,35,117,101,35,149\n"),
     "snapshot-mixed-reverse": (b"01", b"4096,93,93,117,93,41,149,93,101\n"),
+    "complete-snapshot": (b"11", b"4032,35,35,41,35,117,149,35,101\n"),
+    "complete-snapshot-high-unit": (b"00", b"4096,93,93,117,93,41,101,93,149\n"),
 }
 snapshot_refusals = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("snapshot-stale", "snapshot-sibling-actual",
-                 "snapshot-wrong-original", "snapshot-mixed-sibling")
+                 "snapshot-wrong-original", "snapshot-mixed-sibling",
+                 "complete-snapshot-mixed")
 }
 
 
