@@ -236,7 +236,8 @@ typedef enum {
     GUARDED_BYTE_MODE,
     GUARDED_BYTE_MODE_HELPER,
     GUARDED_BYTE_POLICY_WRITER,
-    GUARDED_BYTE_NAMED_POLICY_WRITER
+    GUARDED_BYTE_NAMED_POLICY_WRITER,
+    GUARDED_BYTE_DELEGATED_POLICY_WRITER
 } ProductRoute;
 
 static bool composed_product_result(const NLDivisionUsizePlan *helper)
@@ -405,8 +406,11 @@ static bool retry_product(const NLCheckedFragment *body, ProductRoute route)
     return false;
 }
 
-static bool policy_writer_result(const NLDivisionUsizePlan *plan, bool named)
+static bool policy_writer_result(const NLDivisionUsizePlan *plan,
+                                 ProductRoute route)
 {
+    const bool named = route != GUARDED_BYTE_POLICY_WRITER;
+    const bool delegated = route == GUARDED_BYTE_DELEGATED_POLICY_WRITER;
     const NLCheckedFragment *main = plan->body;
     const NLCheckedNodeId call = plan->byte_update_call;
     NLCopyPolicyWriter writer;
@@ -433,10 +437,14 @@ static bool policy_writer_result(const NLDivisionUsizePlan *plan, bool named)
           budget.type == nl_semantic_core_type(main->context, NL_TYPE_USIZE) &&
           !budget.scalar_known && budget.dependencies == NL_DEPENDENCY_FREE);
     if (named) {
-        NLPureU8Call selector;
-        CHECK(nl_pure_u8_call(writer.body, writer.selector_call, &selector) &&
-              selector.body == writer.selection_body &&
-              selector.selection == writer.selection);
+        NLPureU8WriterPolicy policy;
+        CHECK(nl_pure_u8_writer_policy_at(writer.body, writer.body->context,
+                                          writer.selector_call, &policy) &&
+              (policy.delegate != 0) == delegated &&
+              policy.threshold.body == writer.selection_body &&
+              policy.threshold.selection == writer.selection);
+        const NLPureU8Call *selector =
+            delegated ? &policy.wrapper : &policy.threshold;
         const NLCheckedNodeView *choice =
             nl_checked_node_view(writer.body, writer.selector_call);
         const NLCheckedNodeView *arg =
@@ -444,12 +452,26 @@ static bool policy_writer_result(const NLDivisionUsizePlan *plan, bool named)
         NLSemanticBindingView selector_formal, selected;
         CHECK(arg && arg->symbol == writer.budget &&
               arg->value_use == NL_VALUE_COPIED &&
-              nl_semantic_binding_view(writer.body->context, selector.formal,
+              nl_semantic_binding_view(writer.body->context, selector->formal,
                                        &selector_formal) &&
               selector_formal.value == arg->results[0].value &&
               nl_semantic_binding_view(proof->first->before, writer.selected,
                                        &selected) &&
               selected.value == choice->results[0].value);
+        if (delegated) {
+            const NLCheckedNodeView *leaf =
+                nl_checked_node_view(selector->body, policy.delegate);
+            const NLCheckedNodeView *forwarded =
+                nl_checked_node_view(selector->body, leaf->first_argument);
+            NLSemanticBindingView leaf_formal;
+            CHECK(forwarded && forwarded->symbol == selector->formal &&
+                  forwarded->value_use == NL_VALUE_COPIED &&
+                  nl_semantic_binding_view(selector->body->context,
+                                           policy.threshold.formal,
+                                           &leaf_formal) &&
+                  leaf_formal.value == forwarded->results[0].value &&
+                  leaf->results[0].value == selected.value);
+        }
     }
     CHECK(proof->view.event_count == 1 &&
           proof->first->view.kind == NL_COPY_BODY_CHANGE &&
@@ -491,11 +513,11 @@ static bool guarded_byte_mode_result(const NLCheckedFragment *entry,
         !guarded_product_result(main.body, main.body->body_calls[0], &product))
         return false;
     if (route == GUARDED_BYTE_POLICY_WRITER ||
-        route == GUARDED_BYTE_NAMED_POLICY_WRITER)
+        route == GUARDED_BYTE_NAMED_POLICY_WRITER ||
+        route == GUARDED_BYTE_DELEGATED_POLICY_WRITER)
         return !main.byte_selector &&
                main.byte_update_call == main.body->body_calls[1] &&
-               policy_writer_result(&main,
-                                    route == GUARDED_BYTE_NAMED_POLICY_WRITER);
+               policy_writer_result(&main, route);
     if (main.byte_selector != main.body->body_calls[1] ||
         (delegated ? main.byte_update_call != main.body->body_calls[2]
                    : main.byte_update_call != 0))
@@ -516,7 +538,8 @@ static bool check_oom(const char *path, ProductRoute route)
     const bool byte_mode = route == GUARDED_BYTE_MODE ||
                            route == GUARDED_BYTE_MODE_HELPER ||
                            route == GUARDED_BYTE_POLICY_WRITER ||
-                           route == GUARDED_BYTE_NAMED_POLICY_WRITER;
+                           route == GUARDED_BYTE_NAMED_POLICY_WRITER ||
+                           route == GUARDED_BYTE_DELEGATED_POLICY_WRITER;
     TestNode original = {0};
     CHECK(node_checked_load(path, &original));
     if (byte_mode)
@@ -704,11 +727,15 @@ int main(int argc, char **argv)
         route = GUARDED_BYTE_POLICY_WRITER;
     else if (!strcmp(argv[1], "guarded-byte-named-policy-writer-oom"))
         route = GUARDED_BYTE_NAMED_POLICY_WRITER;
+    else if (!strcmp(argv[1], "guarded-byte-delegated-policy-writer-oom"))
+        route = GUARDED_BYTE_DELEGATED_POLICY_WRITER;
     else
         return 2;
-    /* The additional sealed selector can exhaust the legacy 2000-trial
-     * bound. Keep that bound on the existing routes. */
+    /* A named selector and its optional sealed leaf need a larger sweep. */
     const size_t named_limit =
-        route == GUARDED_BYTE_NAMED_POLICY_WRITER ? 3000 : 2000;
+        route == GUARDED_BYTE_NAMED_POLICY_WRITER ||
+                route == GUARDED_BYTE_DELEGATED_POLICY_WRITER
+            ? 3000
+            : 2000;
     return check_oom(argv[2], route) && named_oom(argv[2], named_limit) ? 0 : 1;
 }

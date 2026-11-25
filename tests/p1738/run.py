@@ -20,7 +20,7 @@ refused = {
 refused["scope-exit"] = (3, 3, b"P8-EXIT-DEPENDENCY")
 
 
-def observe(code, field, local_policy=False, named_policy=False):
+def observe(code, field, local_policy=False, named_policy=False, delegated_policy=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -40,12 +40,19 @@ def observe(code, field, local_policy=False, named_policy=False):
         assert local_policy
         choice = one(code, rb"^    const uint8_t (nl_local_\d+) = (nl_qty_fn_\d+)\(" +
                      helper[2] + rb"\);\n")
-        definition = one(code, rb"^static uint8_t " + choice[2] +
+        threshold = choice[2]
+        if delegated_policy:
+            wrapper = one(code, rb"^static uint8_t " + threshold +
+                          rb"\(size_t (nl_local_\d+)\)\n\{\n"
+                          rb"    return (nl_qty_fn_\d+)\(\1\);\n\}\n")
+            assert wrapper.end() < helper.start()
+            threshold = wrapper[2]
+        definition = one(code, rb"^static uint8_t " + threshold +
                          rb"\(size_t (nl_local_\d+)\)\n\{\n"
                          rb"    return \1 < \(\(size_t\)UINTMAX_C\(\d+\)\) \? "
                          rb"\(\(uint8_t\)UINT8_C\(\d+\)\) : "
                          rb"\(\(uint8_t\)UINT8_C\(\d+\)\);\n\}\n")
-        assert definition.end() < helper.start()
+        assert definition.end() < (wrapper.start() if delegated_policy else helper.start())
         assert choice.start() == helper.end() and choice.end() == load.start()
         mode = choice[1]
     elif local_policy:

@@ -946,16 +946,16 @@ static bool policy_contents(const NLCopyBodyProof *p, NLCopyPolicyWriter *out)
     if (choice->kind == NL_CHECKED_REGISTERED_CALL) {
         const NLCheckedNodeView *arg =
             nl_checked_node_view(f, choice->first_argument);
-        NLPureU8Call pure = {0};
+        NLPureU8WriterPolicy policy;
         if (f->arm_count || f->body_count != 1 || !f->body_calls ||
             f->body_calls[0] != selection || !arg ||
             arg->kind != NL_CHECKED_IDENTIFIER || arg->symbol != budget ||
             !predicate_scalar(&walk, choice->first_argument) ||
-            !nl_pure_u8_threshold_at(f, p->exit, selection, &pure))
+            !nl_pure_u8_writer_policy_at(f, p->exit, selection, &policy))
             return false;
         selector_call = selection;
-        selection = pure.selection;
-        selection_body = pure.body;
+        selection = policy.threshold.selection;
+        selection_body = policy.threshold.body;
     } else {
         const NLCheckedNodeView *test =
             nl_checked_node_view(f, choice->initializer);
