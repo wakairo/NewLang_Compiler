@@ -3535,27 +3535,29 @@ descriptor_ordered_originals(const NLCheckedFragment *f,
     return true;
 }
 
-/* Two early originals, two one-Change writer calls and four final reads.
- * Between the loans the second mode comes from a literal, the updated field
- * of the first original, or the first call's displaced result. */
+/* Two early originals and two one-Change calls. The first original's reads
+ * can precede the second loan when its target Copy also supplies the mode. */
 static bool guarded_byte_distinct_descriptors(
     const NLCheckedFragment *f, const NLSemanticContext *c,
     const NLCheckedNodeView *root, const NLSyntaxView *source,
     NLCheckedNodeId id, const NLSyntaxNode *item, NLSymbolId selected,
     const NLCheckedNodeView *const originals[2],
-    const NLSyntaxView *const original_sources[2],
+    const NLSyntaxView *const original_sources[2], bool snapshot_first,
     GuardedByteDescriptor fields[2], NLCheckedNodeId *second_update)
 {
     const NLCheckedNodeView *bindings[9];
     const NLSyntaxNode *initializers[9];
+    const size_t count = snapshot_first ? 8 : 9;
+    const size_t updates[] = {0, snapshot_first ? 3u : 2u};
+    const size_t reads[] = {snapshot_first ? 1u : 3u, count - 4};
     NLSymbolId previous = selected;
-    for (size_t i = 0; i < 9; ++i) {
+    for (size_t i = 0; i < count; ++i) {
         const NLSyntaxView *syntax = nl_syntax_node_view(item);
         const NLCheckedNodeView *binding = nl_checked_node_view(f, id);
         if (!binding_source(f, c, binding, syntax) ||
             binding->next_item <= id || binding->symbol <= previous)
             return false;
-        if (i == 2)
+        if (i == updates[1])
             *second_update = id;
         bindings[i] = binding;
         initializers[i] = syntax->data.binding.initializer;
@@ -3575,6 +3577,8 @@ static bool guarded_byte_distinct_descriptors(
     if (!mode || mode->type != u8)
         return false;
     const bool observed = mode->kind == NL_CHECKED_FIELD_READ;
+    if (snapshot_first && !observed)
+        return false;
     const bool displaced = mode->kind == NL_CHECKED_IDENTIFIER;
     const bool copied = observed || displaced;
     if (!copied && !copy_if_literal_at(f, c, mode))
@@ -3586,7 +3590,8 @@ static bool guarded_byte_distinct_descriptors(
     const NLSymbolId actuals[] = {selected, bindings[1]->symbol};
     const NLCheckedNodeView *loans[2];
     for (size_t i = 0; i < 2; ++i) {
-        const size_t update = 2 * i, read = 3 + 2 * i, copy = 7 + i;
+        const size_t update = updates[i], read = reads[i];
+        const size_t copy = count - 2 + i;
         const NLCheckedNodeView *original = originals[i];
         const NLCheckedNodeView *ctor =
             nl_checked_node_view(f, original->initializer);
@@ -3623,8 +3628,9 @@ static bool guarded_byte_distinct_descriptors(
                                       originals[0], active, u8) ||
                      !descriptor_target_read(&mode->field, active)))
         return false;
-    /* Displaced-result handoffs retain the adopted equal-position rule. */
-    if (displaced && active->index != fields[1].change.index)
+    /* Displaced handoffs and snapshots use matching declared positions. */
+    if ((displaced || snapshot_first) &&
+        active->index != fields[1].change.index)
         return false;
     return descriptor_ordered_originals(f, c, loans, fields,
                                         copied ? bindings : NULL);
@@ -3679,7 +3685,9 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
 
     /* The in-writer route has eight bindings and an optional Return item. */
     const bool local_policy = root->item_count == (root->terminates ? 9u : 8u);
-    const bool distinct = f->body_count == 4 && root->item_count == 16;
+    const bool distinct = f->body_count == 4 &&
+                          (root->item_count == 15 || root->item_count == 16);
+    const bool snapshot_first = distinct && root->item_count == 15;
     const bool sequential = f->body_count == 4 && !distinct;
     if (((sequential || distinct) && !root->terminates) ||
         (sequential && root->item_count != 13 && root->item_count != 14))
@@ -3793,7 +3801,8 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
             NLCheckedNodeId second_update = 0;
             if (!guarded_byte_distinct_descriptors(
                     f, c, root, source, id, item, bindings[3]->symbol,
-                    originals, sources, originals_fields, &second_update))
+                    originals, sources, snapshot_first, originals_fields,
+                    &second_update))
                 return false;
             for (size_t i = 0; i < 2; ++i)
                 if (!guarded_byte_live_original(
@@ -3809,7 +3818,8 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                 .byte_update_call = originals_fields[0].writer,
                 .byte_second_descriptor = second_descriptor,
                 .byte_second_update = second_update,
-                .byte_second_update_call = originals_fields[1].writer};
+                .byte_second_update_call = originals_fields[1].writer,
+                .byte_snapshot_first = snapshot_first};
             return true;
         }
         GuardedByteDescriptor fields;
