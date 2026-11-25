@@ -231,7 +231,19 @@ displaced_refusals = {
 }
 
 
-def observe_independent(code, positions, mode_source="literal"):
+snapshots = {
+    "snapshot-low": (b"11", b"4032,35,35,41,35,117,149,35,101\n"),
+    "snapshot-high": (b"00", b"4096,93,93,117,93,41,101,93,149\n"),
+}
+snapshot_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("snapshot-stale", "snapshot-sibling-actual",
+                 "snapshot-wrong-original", "snapshot-mixed")
+}
+
+
+def observe_independent(code, positions, mode_source="literal",
+                        snapshot_first=False):
     constructors = list(re.finditer(
         rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n", code, re.M
     ))
@@ -264,16 +276,23 @@ def observe_independent(code, positions, mode_source="literal"):
     }[mode_source]
     incoming = one(code, rb"^    const uint8_t " + second[4] + rb" = " + source + rb";\n")
     reads = []
-    for field_path in (targets[0], siblings[0], targets[1], siblings[1]):
+    paths = (targets[0], siblings[0], targets[1], siblings[1])
+    for i, field_path in enumerate(paths):
         pattern = re.compile(rb"^    const uint8_t (nl_local_\d+) = " + field_path + rb";\n", re.M)
-        read, = pattern.finditer(code, second.end())
+        start = first.end() if snapshot_first and i < 2 else second.end()
+        read, = pattern.finditer(code, start)
         reads.append(read)
     copied = []
     for call in calls:
         pattern = re.compile(rb"^    const uint8_t (nl_local_\d+) = " + call[1] + rb";\n", re.M)
         result, = pattern.finditer(code, second.end())
         copied.append(result)
-    order = [helper, *constructors, planned, trial, first, incoming, second, *reads, *copied]
+    prefix = [helper, *constructors, planned, trial, first]
+    if snapshot_first:
+        assert mode_source == "current" and reads[0].span() == incoming.span()
+        order = [*prefix, *reads[:2], second, *reads[2:], *copied]
+    else:
+        order = [*prefix, incoming, second, *reads, *copied]
     assert all(left.end() <= right.start() for left, right in zip(order, order[1:]))
 
     first_target, second_target = (p.replace(rb"\.", b".") for p in targets)
@@ -335,3 +354,5 @@ if __name__ == "__main__":
                partial(observe_independent, mode_source="current"))
         verify(cli, sources, raw, displaced_modes, displaced_refusals,
                partial(observe_independent, mode_source="displaced"))
+        verify(cli, sources, raw, snapshots, snapshot_refusals,
+               partial(observe_independent, mode_source="current", snapshot_first=True))
