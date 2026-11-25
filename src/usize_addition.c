@@ -3305,6 +3305,25 @@ descriptor_observations(const NLCheckedFragment *f, const NLSemanticContext *c,
     return true;
 }
 
+static bool guarded_byte_completion(const NLCheckedFragment *f,
+                                    const NLCheckedNodeView *root,
+                                    const NLSyntaxView *source,
+                                    NLCheckedNodeId id,
+                                    const NLSyntaxNode *item, NLTypeId unit)
+{
+    if (root->terminates) {
+        const NLSyntaxView *ret = nl_syntax_node_view(item);
+        const NLCheckedNodeView *end = nl_checked_node_view(f, id);
+        return ret && ret->kind == NL_SYNTAX_RETURN && end &&
+               !nl_syntax_next_argument(item) && !source->data.block.tail &&
+               division_unit_return(f, root, end, ret, unit);
+    }
+    return !id && !item && root->type == unit && !root->result_count &&
+           !root->results[0].value && !nl_control_exits_count(f->exits) &&
+           division_unit_completion(f, root->tail, source->data.block.tail,
+                                    unit);
+}
+
 /* Match the fixed continuation, ending with the original field observations
  * and exact displaced Copies. The two-call form reuses the same writer. */
 static bool guarded_byte_descriptor(
@@ -3339,17 +3358,7 @@ static bool guarded_byte_descriptor(
     }
     const NLTypeId unit = nl_semantic_unit_type(c);
     const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
-    if (root->terminates) {
-        const NLSyntaxView *ret = nl_syntax_node_view(item);
-        const NLCheckedNodeView *end = nl_checked_node_view(f, id);
-        if (!ret || ret->kind != NL_SYNTAX_RETURN || !end ||
-            nl_syntax_next_argument(item) || source->data.block.tail ||
-            !division_unit_return(f, root, end, ret, unit))
-            return false;
-    } else if (id || item || root->type != unit || root->result_count ||
-               root->results[0].value || nl_control_exits_count(f->exits) ||
-               !division_unit_completion(f, root->tail, source->data.block.tail,
-                                         unit))
+    if (!guarded_byte_completion(f, root, source, id, item, unit))
         return false;
 
     const NLCheckedNodeView *ctor =
@@ -3555,7 +3564,8 @@ static bool guarded_byte_distinct_descriptors(
         const NLSyntaxView *syntax = nl_syntax_node_view(item);
         const NLCheckedNodeView *binding = nl_checked_node_view(f, id);
         if (!binding_source(f, c, binding, syntax) ||
-            binding->next_item <= id || binding->symbol <= previous)
+            (binding->next_item && binding->next_item <= id) ||
+            binding->symbol <= previous)
             return false;
         if (i == updates[1])
             *second_update = id;
@@ -3565,11 +3575,8 @@ static bool guarded_byte_distinct_descriptors(
         id = binding->next_item;
         item = nl_syntax_next_argument(item);
     }
-    const NLSyntaxView *ret = nl_syntax_node_view(item);
-    const NLCheckedNodeView *end = nl_checked_node_view(f, id);
-    if (!ret || ret->kind != NL_SYNTAX_RETURN || !end ||
-        nl_syntax_next_argument(item) || source->data.block.tail ||
-        !division_unit_return(f, root, end, ret, nl_semantic_unit_type(c)))
+    if (!guarded_byte_completion(f, root, source, id, item,
+                                 nl_semantic_unit_type(c)))
         return false;
     const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
     const NLCheckedNodeView *mode =
@@ -3685,12 +3692,14 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
 
     /* The in-writer route has eight bindings and an optional Return item. */
     const bool local_policy = root->item_count == (root->terminates ? 9u : 8u);
-    const bool distinct = f->body_count == 4 &&
-                          (root->item_count == 15 || root->item_count == 16);
-    const bool snapshot_first = distinct && root->item_count == 15;
+    const size_t binding_count = root->item_count - (size_t)root->terminates;
+    const bool snapshot_first =
+        f->body_count == 4 && root->terminates && binding_count == 14;
+    const bool distinct =
+        f->body_count == 4 && (binding_count == 15 || snapshot_first);
     const bool sequential = f->body_count == 4 && !distinct;
-    if (((sequential || distinct) && !root->terminates) ||
-        (sequential && root->item_count != 13 && root->item_count != 14))
+    if (sequential && (!root->terminates ||
+                       (root->item_count != 13 && root->item_count != 14)))
         return false;
     const bool descriptor_entry = local_policy || sequential || distinct ||
                                   (root->terminates && root->item_count == 10);

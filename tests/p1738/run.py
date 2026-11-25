@@ -195,6 +195,7 @@ independent = {
     "dual-high": (b"11", b"4096,73,7,19,73,83,43,7,127\n"),
     "mixed-literal-low": (b"10", b"4032,35,19,41,35,117,101,19,149\n"),
     "mixed-literal-high": (b"01", b"4096,93,19,117,93,41,149,19,101\n"),
+    "complete-literal-mixed": (b"01", b"4096,93,19,117,93,41,149,19,101\n"),
 }
 independent_refusals = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
@@ -209,12 +210,14 @@ mirrored = {
     "mirror-tail": (b"11", b"4032,35,35,22,35,119,81,35,147\n"),
     "mixed-current-low": (b"10", b"4032,35,35,41,35,117,101,35,149\n"),
     "mixed-current-high": (b"01", b"4096,93,93,117,93,41,149,93,101\n"),
+    "complete-current": (b"11", b"4032,35,35,41,35,117,149,35,101\n"),
 }
 mirror_refusals = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("mirror-sibling", "mirror-wrong-original", "mirror-stale",
                  "mirror-wrong-actual", "mixed-sibling", "mixed-stale",
-                 "mixed-crossed-read")
+                 "mixed-crossed-read", "complete-stale-current",
+                 "complete-snapshot")
 }
 
 
@@ -223,11 +226,13 @@ displaced_modes = {
     "fallback-low": (b"11", b"4032,35,41,41,35,117,101,41,149\n"),
     "fallback-high": (b"11", b"4096,93,57,57,93,117,102,57,149\n"),
     "fallback-tail": (b"11", b"4032,35,41,41,35,117,101,41,149\n"),
+    "complete-displaced-unit": (b"00", b"4096,93,117,117,93,41,101,117,149\n"),
 }
 displaced_refusals = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("other-copy", "equal-byte-other-copy", "fallback-wrong-actual",
-                 "pre-change-read", "mixed-old", "mixed-old-reverse")
+                 "pre-change-read", "mixed-old", "mixed-old-reverse",
+                 "complete-mixed-displaced")
 }
 
 
