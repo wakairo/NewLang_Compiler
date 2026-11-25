@@ -420,9 +420,11 @@ static bool policy_writer_result(const NLDivisionUsizePlan *plan, bool named)
     const NLCheckedNodeView *actual =
         nl_checked_node_view(main, proof->parameters.arguments[1]);
     const NLCheckedNodeView *loan = nl_checked_node_view(main, writer.loan);
+    const NLCheckedNodeView *block = nl_checked_node_view(main, main->root);
     NLSemanticBindingView formal;
     NLSemanticValueView budget;
     NLSemanticScopeView scope;
+    NLSemanticPlaceView descriptor, field;
     CHECK(actual && actual->kind == NL_CHECKED_IDENTIFIER &&
           actual->value_use == NL_VALUE_COPIED && loan &&
           nl_semantic_binding_view(proof->entry, writer.budget, &formal) &&
@@ -455,7 +457,23 @@ static bool policy_writer_result(const NLDivisionUsizePlan *plan, bool named)
           writer.change.child_incarnation == loan->field.child_incarnation &&
           loan->results[0].value == proof->view.result.value &&
           nl_semantic_scope_view(main->context, loan->loan.scope, &scope) &&
-          !scope.active);
+          !scope.active &&
+          nl_semantic_place_view(main->context, writer.change.parent,
+                                 &descriptor) &&
+          !descriptor.live &&
+          descriptor.incarnation == writer.change.parent_incarnation &&
+          nl_semantic_place_view(main->context, writer.change.child, &field) &&
+          !field.live && field.incarnation == writer.change.child_incarnation);
+    CHECK(block);
+    if (!block->terminates) {
+        const NLTypeId unit = nl_semantic_unit_type(main->context);
+        const NLCheckedNodeView *tail = nl_checked_node_view(main, block->tail);
+        CHECK(block->type == unit && !block->result_count &&
+              !block->results[0].value && !nl_control_exits_count(main->exits));
+        CHECK(!block->tail ||
+              (tail && tail->kind == NL_CHECKED_UNIT && tail->type == unit &&
+               !tail->result_count && !tail->results[0].value));
+    }
     return true;
 }
 
