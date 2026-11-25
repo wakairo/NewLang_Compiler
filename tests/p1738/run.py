@@ -13,16 +13,20 @@ admitted = {
     "guarded-delegated-1023": (b"0", b"65472,109,17,109,211\n"),
     "guarded-delegated-1024": (b"0", b"0,53,17,53,211\n"),
     "guarded-delegated-reversed": (b"1", b"65472,109,17,109,211\n"),
+    "writer-tail-queue": (b"1", b"32640,31,11,31,91\n"),
+    "writer-tail-timer": (b"0", b"0,7,73,7,229\n"),
 }
 reordered = {
     "split-queue-sibling-first": (b"1", b"32768,17,23,17,191\n"),
     "split-port-sibling-first": (b"0", b"0,2,63,2,207\n"),
+    "writer-tail-queue-sibling-first": (b"1", b"32640,31,11,31,91\n"),
 }
 refused = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("independent-actual", "independent-input", "independent-old",
                  "second-change", "late-descriptor",
-                 "split-direct-sibling-first", "split-duplicate-target")
+                 "split-direct-sibling-first", "split-duplicate-target",
+                 "writer-explicit-return", "writer-tail-wrong-actual")
 }
 refused["scope-exit"] = (3, 3, b"P8-EXIT-DEPENDENCY")
 
