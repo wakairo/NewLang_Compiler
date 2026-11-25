@@ -20,6 +20,8 @@ add_test(NAME p1782_observed_mode_rollback.unit COMMAND p1673_probe
     guarded-byte-distinct-writers-oom "${p1738_sources}/mirror-low.nl" unused)
 add_test(NAME p1786_displaced_mode_rollback.unit COMMAND p1673_probe
     guarded-byte-distinct-writers-oom "${p1738_sources}/fallback-low.nl" unused)
+add_test(NAME p1790_mixed_field_rollback.unit COMMAND p1673_probe
+    guarded-byte-distinct-writers-oom "${p1738_sources}/mixed-current-low.nl" unused)
 set_tests_properties(p1738_guarded_scoped_helper_native.integration
     p1738_guarded_scoped_helper_rollback.unit
     p1764_caller_selected_writer_rollback.unit
