@@ -26,6 +26,8 @@ add_test(NAME p1794_snapshot_writer_rollback.unit COMMAND p1673_probe
     guarded-byte-distinct-writers-oom "${p1738_sources}/snapshot-low.nl" unused)
 add_test(NAME p1798_normal_writer_completion_rollback.unit COMMAND p1673_probe
     guarded-byte-distinct-writers-oom "${p1738_sources}/complete-displaced-unit.nl" unused)
+add_test(NAME p1802_mixed_snapshot_rollback.unit COMMAND p1673_probe
+    guarded-byte-distinct-writers-oom "${p1738_sources}/snapshot-mixed.nl" unused)
 set_tests_properties(p1738_guarded_scoped_helper_native.integration
     p1738_guarded_scoped_helper_rollback.unit
     p1764_caller_selected_writer_rollback.unit
