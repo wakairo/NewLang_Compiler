@@ -3480,7 +3480,7 @@ static bool guarded_byte_descriptor(
         const NLCheckedNodeView *value =
             nl_checked_node_view(f, mode->initializer);
         const bool saved_copy =
-            intermediate && !handoff &&
+            intermediate && !delivery &&
             scalar_name_copy(f, c, mode->initializer,
                              initializer_sources[mode_index],
                              bindings[0]->symbol, u8);
