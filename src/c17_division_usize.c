@@ -405,7 +405,8 @@ static bool division_emit_byte_update(DivisionText *text,
             return false;
         item = nl_checked_node_view(f, second->next_item);
     }
-    const size_t first_reads = 2 - early_reads;
+    const size_t first_reads =
+        plan->byte_second_descriptor ? 2 - early_reads : 2;
     const size_t reads = first_reads + (plan->byte_second_descriptor ? 2 : 0);
     for (size_t i = 0; i < reads; ++i) {
         if (!division_emit_byte_read(text, f, item,

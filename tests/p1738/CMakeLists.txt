@@ -34,6 +34,8 @@ add_test(NAME p1810_distinct_registered_writers_rollback.unit COMMAND p1673_prob
     guarded-byte-distinct-writers-oom "${p1738_sources}/split-literal-unit.nl" unused)
 add_test(NAME p1814_saved_recovery_rollback.unit COMMAND p1673_probe
     guarded-byte-sequential-writer-oom "${p1738_sources}/restore-low.nl" unused)
+add_test(NAME p1817_midpoint_rollback.unit COMMAND p1673_probe
+    guarded-byte-sequential-writer-oom "${p1738_sources}/midpoint-low.nl" unused)
 set_tests_properties(p1738_guarded_scoped_helper_native.integration
     p1738_guarded_scoped_helper_rollback.unit
     p1764_caller_selected_writer_rollback.unit
