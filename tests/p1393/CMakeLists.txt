@@ -12,3 +12,13 @@ add_test(NAME p1393_native.integration COMMAND "${Python3_EXECUTABLE}"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1393/native.py" "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1393_probe>"
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1393" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
 add_test(NAME p1393_current_read_auth.unit COMMAND p1393_owned auth "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1393/sources/P1-C-free-current-tail-read-v2.nl")
+
+set(p1393_dir "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1393")
+set(p1393_retained_live "${p1393_dir}/sources/P2-C-live-current-tail-read.nl")
+add_test(NAME p1393_retained_live_source.integration COMMAND "${Python3_EXECUTABLE}"
+    "${p1393_dir}/retained_live.py" "$<TARGET_FILE:newlangc>"
+    "$<TARGET_FILE:p1393_owned>" "${p1393_retained_live}")
+add_test(NAME p1393_retained_live_oom.unit COMMAND p1393_owned oom "${p1393_retained_live}")
+add_test(NAME p1393_retained_live_native.integration COMMAND "${Python3_EXECUTABLE}"
+    "${p1393_dir}/native.py" "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1393_probe>"
+    "${p1393_dir}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" --retained-live)
