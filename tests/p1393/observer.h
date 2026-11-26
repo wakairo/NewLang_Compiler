@@ -25,6 +25,34 @@ static const nl_node *actual_tail;
 void p1393_observe_live_copy(const nl_option *, const nl_option *);
 static unsigned exclusive;
 static uintptr_t free_order[5];
+#ifdef P1393_RETAINED_LIVE
+static const size_t success_order[5] = {4, 3, 2, 1, 0};
+enum {
+    releases_before_read = 0
+};
+#else
+static const size_t success_order[5] = {3, 4, 2, 1, 0};
+enum {
+    releases_before_read = 1
+};
+#endif
+
+static void require_read_phase(void)
+{
+    REQUIRE(freed == releases_before_read &&
+            five_releases() == releases_before_read);
+#ifdef P1393_RETAINED_LIVE
+    for (size_t i = 0; i < 5; ++i)
+        REQUIRE(phases[i] == 4 && nodes[i] != NULL);
+    const nl_node *detached = nodes[3];
+    REQUIRE(detached->f0.tag == 0 && detached->f0.ptr == NULL &&
+            detached->f1.tag == 0 && detached->f1.ptr == NULL &&
+            detached->f2.tag == 0 && detached->f2.ptr == NULL);
+#else
+    REQUIRE(phases[3] == 9 && nodes[3] == NULL);
+#endif
+}
+
 static size_t index_of(uintptr_t p)
 {
     REQUIRE(p != 0);
@@ -100,9 +128,10 @@ static void root_ref(const nl_node *p, size_t d, unsigned write, size_t r,
     size_t i = index_of((uintptr_t)p);
     if (roots < 9)
         REQUIRE(freed == 0 && write == 1);
-    else
-        REQUIRE(freed == 1 && phases[3] == 9 && nodes[3] == NULL &&
-                i == (roots == 9 ? 1u : 2u) && write == 0);
+    else {
+        require_read_phase();
+        REQUIRE(i == (roots == 9 ? 1u : 2u) && write == 0);
+    }
     REQUIRE(phases[i] == 4 && d == expected_init[i][3] &&
             r == expected_init[i][1] && inc == expected_init[i][2]);
     REQUIRE(active_domain == d && active_scope == scope && !exclusive);
@@ -184,14 +213,15 @@ static void change(const nl_option *f, const nl_option *old, size_t occurrence,
 static void end(const nl_node *p, size_t d, size_t r, size_t inc)
 {
     size_t i = index_of((uintptr_t)p);
-    static const size_t order[5] = {3, 4, 2, 1, 0};
     REQUIRE(phases[i] == 4 &&
-            i == (live == 5 ? order[freed] : live - freed - 1) && exclusive &&
-            active_domain == d && active_scope != 0);
+            i == (live == 5 ? success_order[freed] : live - freed - 1) &&
+            exclusive && active_domain == d && active_scope != 0);
     REQUIRE(d == expected_init[i][3] && r == expected_init[i][1] &&
             inc == expected_init[i][2]);
     REQUIRE(changes == (live == 5 ? 9u : 0u));
-    REQUIRE(reads == (live == 5 && freed > 0 ? 2u : 0u));
+    const bool after_read =
+        live == 5 && (releases_before_read == 0 || freed != 0);
+    REQUIRE(reads == (after_read ? 2u : 0u));
     if (i == 2)
         actual_tail = NULL;
     /* Retire every typed alias before EndRoot; no C pointer evaluation later.
@@ -222,17 +252,16 @@ static void release(const void *p, const void *raw_p, size_t n)
 void five_observe_free(uintptr_t p)
 {
     size_t i = index_of(p);
-    static const size_t order[5] = {3, 4, 2, 1, 0};
     REQUIRE(phases[i] == 8 && freed < live &&
-            i == (live == 5 ? order[freed] : live - freed - 1));
+            i == (live == 5 ? success_order[freed] : live - freed - 1));
     phases[i] = 9;
     free_order[freed++] = p;
 }
 static void copy_read(const nl_option *f, const nl_option *value, size_t root,
                       size_t index, size_t fact, size_t occurrence)
 {
-    REQUIRE(reads < 2 && changes == 9 && freed == 1 && five_releases() == 1 &&
-            phases[3] == 9 && nodes[3] == NULL && active_scope && !exclusive);
+    require_read_phase();
+    REQUIRE(reads < 2 && changes == 9 && active_scope && !exclusive);
     REQUIRE(root == expected_read[reads][0] &&
             index == expected_read[reads][1] &&
             fact == expected_read[reads][3] &&
@@ -255,8 +284,8 @@ static void copy_read(const nl_option *f, const nl_option *value, size_t root,
 }
 static void some_pointer(const nl_node *p)
 {
-    REQUIRE(reads == 1 && matched == 0 && freed == 1 && active_scope == 0 &&
-            phases[3] == 9 && nodes[3] == NULL && p == nodes[2]);
+    require_read_phase();
+    REQUIRE(reads == 1 && matched == 0 && active_scope == 0 && p == nodes[2]);
     actual_tail = p;
     ++matched;
     printf("SOME actual-live-B=%zx\n", (size_t)(uintptr_t)p);
