@@ -146,6 +146,13 @@ report_statuses = {
 report_status_refusals = {
     "report-status-earlier-decision": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
 }
+named_route_limits = {
+    "p1857-route-before": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,1,17,1\n"),
+    "p1857-route-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,1,101,101,1,101,1\n"),
+}
+named_route_refusals = {
+    "p1857-wrong-byte-source": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
 payloads = {
     "payload-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0,13\n"),
     "payload-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
@@ -245,7 +252,8 @@ def observe(code, field, local_policy=False, named_policy=False,
 
 def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False,
                      route=False, payload=False, handoff=False, delivery=False,
-                     named_default=False, report_status=False):
+                     named_default=False, report_status=False,
+                     named_route_limit=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -331,9 +339,14 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
         last = reported_tag
     if route:
         assert report
+        route_limit = rb"\(\(size_t\)UINTMAX_C\(4064\)\)"
+        if named_route_limit:
+            setting = one(code[:constructor.start()],
+                          rb"^    size_t (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(\d+\)\);\n")
+            route_limit = setting[1]
         route_pattern = re.compile(
             rb"    \(void\)" + last[1] + rb";\n"
-            rb"    _Bool (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(4064\)\) < "
+            rb"    _Bool (nl_local_\d+) = " + route_limit + rb" < "
             + budget[1] + rb";\n")
         flag = route_pattern.match(code, last.end())
         assert flag
@@ -618,6 +631,11 @@ if __name__ == "__main__":
                partial(observe_sequence, saved_copy=True, midpoint=True,
                        report=True, route=True, payload=True, handoff=True,
                        delivery=True, named_default=True, report_status=True))
+        verify(cli, sources, raw, named_route_limits, named_route_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True, handoff=True,
+                       delivery=True, named_default=True, report_status=True,
+                       named_route_limit=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))

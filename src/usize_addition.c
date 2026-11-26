@@ -3323,7 +3323,7 @@ static bool guarded_byte_completion(const NLCheckedFragment *f,
 
 static bool guarded_byte_report_route(QuantityBody *body, NLCheckedNodeId id,
                                       const NLSyntaxNode *syntax,
-                                      NLSymbolId bytes)
+                                      NLSymbolId bytes, NLSymbolId named_limit)
 {
     const NLCheckedFragment *f = body->body;
     const NLCheckedNodeView *test = nl_checked_node_view(f, id);
@@ -3332,8 +3332,11 @@ static bool guarded_byte_report_route(QuantityBody *body, NLCheckedNodeId id,
     const NLCheckedNodeView *actual =
         limit ? nl_checked_node_view(f, limit->next_argument) : NULL;
     if (!test || test->kind != NL_CHECKED_USIZE_LESS_THAN || !limit ||
-        limit->kind != NL_CHECKED_USIZE_LITERAL || !actual ||
-        actual->kind != NL_CHECKED_IDENTIFIER || actual->symbol != bytes)
+        (named_limit ? limit->kind != NL_CHECKED_IDENTIFIER ||
+                           limit->symbol != named_limit
+                     : limit->kind != NL_CHECKED_USIZE_LITERAL) ||
+        !actual || actual->kind != NL_CHECKED_IDENTIFIER ||
+        actual->symbol != bytes)
         return false;
     /* The prefix has already validated the producer of this exact binding. */
     body->origins[bytes - 1] = QUANTITY_FROM_RESULT;
@@ -3417,6 +3420,7 @@ static bool guarded_byte_descriptor(
     const NLSyntaxView *original_source, bool local_policy, bool sequential,
     bool midpoint, bool report, bool route, bool payload, bool handoff,
     bool delivery, bool named_default, bool report_status,
+    NLSymbolId report_limit,
     GuardedByteDescriptor *out)
 {
     const NLCheckedFragment *f = body->body;
@@ -3572,7 +3576,8 @@ static bool guarded_byte_descriptor(
     }
     if (route &&
         !guarded_byte_report_route(body, bindings[observation + 6]->initializer,
-                                   initializer_sources[observation + 6], bytes))
+                                   initializer_sources[observation + 6], bytes,
+                                   report_limit))
         return false;
     if (payload) {
         const NLSymbolId samples[] = {bindings[observation + 5]->symbol,
@@ -3608,7 +3613,7 @@ static bool guarded_byte_descriptor(
         const NLSymbolId forwarded[] = {bindings[observation + 8]->symbol,
                                         fallback};
         if (!guarded_byte_report_route(body, bindings[ready]->initializer,
-                                       initializer_sources[ready], bytes) ||
+                                       initializer_sources[ready], bytes, 0) ||
             !guarded_byte_report_choice(
                 f, c, bindings[ready + 1]->initializer,
                 nl_syntax_node_view(initializer_sources[ready + 1]),
@@ -3888,8 +3893,28 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
 
     /* The in-writer route has eight bindings and an optional Return item. */
     const bool local_policy = root->item_count == (root->terminates ? 9u : 8u);
-    const size_t binding_count = root->item_count - (size_t)root->terminates;
-    const NLCheckedNodeView *first = nl_checked_node_view(f, root->first_item);
+    size_t binding_count = root->item_count - (size_t)root->terminates;
+    const NLSyntaxNode *item = source->data.block.items;
+    NLCheckedNodeId id = root->first_item;
+    const NLCheckedNodeView *first = nl_checked_node_view(f, id);
+    NLSymbolId report_limit = 0;
+    /* Permit a single literal setting ahead of the saved report-status form. */
+    if (entry && f->body_count == 4 && root->terminates &&
+        binding_count == 24 && first) {
+        const NLSyntaxView *setting = nl_syntax_node_view(item);
+        size_t number;
+        if (!binding_source(f, c, first, setting) ||
+            first->symbol > NL_SEMANTIC_MAX_ENTRIES ||
+            first->next_item <= id ||
+            !literal(f, c, nl_checked_node_view(f, first->initializer),
+                     setting->data.binding.initializer, &number))
+            return false;
+        report_limit = first->symbol;
+        id = first->next_item;
+        item = nl_syntax_next_argument(item);
+        first = nl_checked_node_view(f, id);
+        --binding_count;
+    }
     const NLCheckedNodeView *first_value =
         first ? nl_checked_node_view(f, first->initializer) : NULL;
     const NLCheckedNodeView *next =
@@ -3902,6 +3927,8 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         first_value->kind == NL_CHECKED_AGGREGATE && next_value &&
         next_value->kind == NL_CHECKED_USIZE_LITERAL;
     const bool report_status = one_original && binding_count == 23;
+    if (report_limit && (!report_status || report_limit >= first->symbol))
+        return false;
     const bool named_default =
         one_original && (binding_count == 22 || report_status);
     const bool delivery =
@@ -3933,8 +3960,6 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                                    NL_CHECKED_REGISTERED_CALL};
     const NLCheckedNodeView *bindings[4];
     const NLSyntaxNode *initializers[4];
-    const NLSyntaxNode *item = source->data.block.items;
-    NLCheckedNodeId id = root->first_item;
     NLCheckedNodeId descriptor = 0;
     const NLSyntaxNode *descriptor_item = NULL;
     NLCheckedNodeId second_descriptor = 0;
@@ -3989,6 +4014,8 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         QUANTITY_INDEPENDENT)
         return false;
     b.origins[key - 1] = QUANTITY_INDEPENDENT;
+    if (report_limit)
+        b.origins[report_limit - 1] = QUANTITY_INDEPENDENT;
     if (!guarded_byte_count(&b, bindings[1]->initializer, initializers[1],
                             key) ||
         b.arms != 2 || b.calls || f->body_calls[0] != product ||
@@ -4055,7 +4082,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                 &b, root, source, id, item, bindings[prefix - 1]->symbol,
                 bindings[2]->symbol, original, original_source, local_policy,
                 sequential, midpoint, report, route, payload, handoff, delivery,
-                named_default, report_status, &fields))
+                named_default, report_status, report_limit, &fields))
             return false;
         if (sequential) {
             if (f->body_calls[2] != fields.writer ||
