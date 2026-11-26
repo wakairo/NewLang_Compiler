@@ -242,6 +242,22 @@ static bool division_emit_byte_constructor(DivisionText *text,
     return division_text_append(text, " };\n");
 }
 
+static bool division_emit_binding(DivisionText *t, const NLCheckedFragment *f,
+                                  const NLCheckedNodeView *binding, int indent)
+{
+    const NLCheckedNodeView *init =
+        nl_checked_node_view(f, binding->initializer);
+    const char *type =
+        init ? division_scalar_type(f->context, init->type) : NULL;
+    return type &&
+           division_emit_evaluation(t, f, binding->initializer, indent) &&
+           division_text_append(t, "%*s%s nl_local_%zu = ", indent, "", type,
+                                binding->symbol) &&
+           division_emit_expression(t, f, binding->initializer) &&
+           division_text_append(t, ";\n%*s(void)nl_local_%zu;\n", indent, "",
+                                binding->symbol);
+}
+
 static bool division_emit_items_before(DivisionText *t,
                                        const NLCheckedFragment *f,
                                        NLCheckedNodeId block, int indent,
@@ -268,16 +284,8 @@ static bool division_emit_items_before(DivisionText *t,
             id = n->next_item;
             continue;
         }
-        if (n->kind != NL_CHECKED_BINDING)
-            return false;
-        const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
-        const char *type = division_scalar_type(f->context, init->type);
-        if (!type || !division_emit_evaluation(t, f, n->initializer, indent) ||
-            !division_text_append(t, "%*s%s nl_local_%zu = ", indent, "", type,
-                                  n->symbol) ||
-            !division_emit_expression(t, f, n->initializer) ||
-            !division_text_append(t, ";\n%*s(void)nl_local_%zu;\n", indent, "",
-                                  n->symbol))
+        if (n->kind != NL_CHECKED_BINDING ||
+            !division_emit_binding(t, f, n, indent))
             return false;
         id = n->next_item;
     }
@@ -431,9 +439,13 @@ static bool division_emit_byte_update(DivisionText *text,
     /* The entry plan matched the two report Copies to these earlier reads. */
     const NLCheckedNodeView *mode = nl_checked_node_view(f, first->next_item);
     const NLCheckedNodeView *peer = nl_checked_node_view(f, mode->next_item);
-    return division_emit_byte_copy(text, report, mode) &&
-           division_emit_byte_copy(
-               text, nl_checked_node_view(f, report->next_item), peer);
+    const NLCheckedNodeView *tag = nl_checked_node_view(f, report->next_item);
+    if (!division_emit_byte_copy(text, report, mode) ||
+        !division_emit_byte_copy(text, tag, peer))
+        return false;
+    const NLCheckedNodeView *route = nl_checked_node_view(f, tag->next_item);
+    return !route || route->kind != NL_CHECKED_BINDING ||
+           division_emit_binding(text, f, route, 4);
 }
 
 static bool division_emit_helper(DivisionText *text,

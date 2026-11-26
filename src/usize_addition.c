@@ -3321,25 +3321,45 @@ static bool guarded_byte_completion(const NLCheckedFragment *f,
                                     unit);
 }
 
+static bool guarded_byte_report_route(QuantityBody *body, NLCheckedNodeId id,
+                                      const NLSyntaxNode *syntax,
+                                      NLSymbolId bytes)
+{
+    const NLCheckedFragment *f = body->body;
+    const NLCheckedNodeView *test = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *limit =
+        test ? nl_checked_node_view(f, test->first_argument) : NULL;
+    const NLCheckedNodeView *actual =
+        limit ? nl_checked_node_view(f, limit->next_argument) : NULL;
+    if (!test || test->kind != NL_CHECKED_USIZE_LESS_THAN || !limit ||
+        limit->kind != NL_CHECKED_USIZE_LITERAL || !actual ||
+        actual->kind != NL_CHECKED_IDENTIFIER || actual->symbol != bytes)
+        return false;
+    /* The prefix has already validated the producer of this exact binding. */
+    body->origins[bytes - 1] = QUANTITY_FROM_RESULT;
+    return quantity_condition_at(body, id, syntax) == QUANTITY_FROM_RESULT;
+}
+
 /* Match the fixed continuation, ending with the original field observations
  * and exact displaced Copies. The two-call form reuses the same writer. */
 static bool guarded_byte_descriptor(
-    const NLCheckedFragment *f, const NLSemanticContext *c,
-    const NLCheckedNodeView *root, const NLSyntaxView *source,
-    NLCheckedNodeId id, const NLSyntaxNode *item, NLSymbolId selected,
-    const NLCheckedNodeView *original, const NLSyntaxView *original_source,
-    bool local_policy, bool sequential, bool midpoint, bool report,
-    GuardedByteDescriptor *out)
+    QuantityBody *body, const NLCheckedNodeView *root,
+    const NLSyntaxView *source, NLCheckedNodeId id, const NLSyntaxNode *item,
+    NLSymbolId selected, NLSymbolId bytes, const NLCheckedNodeView *original,
+    const NLSyntaxView *original_source, bool local_policy, bool sequential,
+    bool midpoint, bool report, bool route, GuardedByteDescriptor *out)
 {
+    const NLCheckedFragment *f = body->body;
+    const NLSemanticContext *c = body->context;
     const bool intermediate =
         sequential && (root->item_count == 14 || midpoint);
     const size_t last_exchange =
         sequential ? 2 + (size_t)intermediate + (size_t)midpoint : 0;
     const size_t observation = last_exchange + 1;
-    const size_t binding_count =
-        last_exchange + 4 + (size_t)sequential + (report ? 2u : 0u);
-    const NLCheckedNodeView *bindings[11];
-    const NLSyntaxNode *initializer_sources[11];
+    const size_t binding_count = last_exchange + 4 + (size_t)sequential +
+                                 (report ? 2u : 0u) + (size_t)route;
+    const NLCheckedNodeView *bindings[12];
+    const NLSyntaxNode *initializer_sources[12];
     NLCheckedNodeId second_update = 0;
     NLSymbolId previous =
         selected > original->symbol ? selected : original->symbol;
@@ -3388,10 +3408,12 @@ static bool guarded_byte_descriptor(
         const NLCheckedNodeView *mode = bindings[mode_index];
         const NLCheckedNodeView *value =
             nl_checked_node_view(f, mode->initializer);
+        /* Routed reports use the configured recovery literal. */
         const bool saved_copy =
-            intermediate && scalar_name_copy(f, c, mode->initializer,
-                                             initializer_sources[mode_index],
-                                             bindings[0]->symbol, u8);
+            intermediate && !route &&
+            scalar_name_copy(f, c, mode->initializer,
+                             initializer_sources[mode_index],
+                             bindings[0]->symbol, u8);
         const NLCheckedNodeView *second_loan =
             nl_checked_node_view(f, bindings[last_exchange]->initializer);
         NLCopyBodyParameters second_call;
@@ -3477,6 +3499,10 @@ static bool guarded_byte_descriptor(
                 return false;
         }
     }
+    if (route &&
+        !guarded_byte_report_route(body, bindings[observation + 6]->initializer,
+                                   initializer_sources[observation + 6], bytes))
+        return false;
     *out = (GuardedByteDescriptor){.constructor = ctor->results[0].value,
                                    .change = field,
                                    .sibling = sibling_field,
@@ -3757,7 +3783,8 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         f->body_count == 4 && root->terminates && first_value &&
         first_value->kind == NL_CHECKED_AGGREGATE && next_value &&
         next_value->kind == NL_CHECKED_USIZE_LITERAL;
-    const bool report = one_original && binding_count == 16;
+    const bool route = one_original && binding_count == 17;
+    const bool report = one_original && (binding_count == 16 || route);
     const bool midpoint = one_original && (binding_count == 14 || report);
     const bool snapshot_first =
         f->body_count == 4 && binding_count == 14 && !midpoint;
@@ -3896,10 +3923,10 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
             return true;
         }
         GuardedByteDescriptor fields;
-        if (!guarded_byte_descriptor(f, c, root, source, id, item,
-                                     bindings[prefix - 1]->symbol, original,
-                                     original_source, local_policy, sequential,
-                                     midpoint, report, &fields))
+        if (!guarded_byte_descriptor(
+                &b, root, source, id, item, bindings[prefix - 1]->symbol,
+                bindings[2]->symbol, original, original_source, local_policy,
+                sequential, midpoint, report, route, &fields))
             return false;
         if (sequential) {
             if (f->body_calls[2] != fields.writer ||
