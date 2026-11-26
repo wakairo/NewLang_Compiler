@@ -466,6 +466,8 @@ static bool division_emit_helper(DivisionText *text,
         nl_quantity_usize_function(c, helper->function, count);
     if (!fn && count == 1)
         fn = nl_quantity_bool_function(c, helper->function);
+    if (!fn && count == 2)
+        fn = nl_quantity_report_predicate_function(c, helper->function);
     if (!fn)
         return false;
     if (!count)
@@ -481,11 +483,12 @@ static bool division_emit_helper(DivisionText *text,
     const char *first = division_scalar_type(c, fn->parameters[0]);
     const char *second =
         count == 2 ? division_scalar_type(c, fn->parameters[1]) : NULL;
-    if (!first || (count == 2 && !second))
+    const char *result = division_scalar_type(c, fn->result);
+    if (!result || !first || (count == 2 && !second))
         return false;
-    return division_text_append(text,
-                                "static size_t nl_qty_fn_%zu(%s nl_local_%zu",
-                                helper->function, first, helper->formal) &&
+    return division_text_append(text, "static %s nl_qty_fn_%zu(%s nl_local_%zu",
+                                result, helper->function, first,
+                                helper->formal) &&
            (!helper->second_formal ||
             division_text_append(text, ", %s nl_local_%zu", second,
                                  helper->second_formal)) &&
