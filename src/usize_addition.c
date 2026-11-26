@@ -3416,7 +3416,8 @@ static bool guarded_byte_descriptor(
     NLSymbolId selected, NLSymbolId bytes, const NLCheckedNodeView *original,
     const NLSyntaxView *original_source, bool local_policy, bool sequential,
     bool midpoint, bool report, bool route, bool payload, bool handoff,
-    bool delivery, bool named_default, GuardedByteDescriptor *out)
+    bool delivery, bool named_default, bool report_status,
+    GuardedByteDescriptor *out)
 {
     const NLCheckedFragment *f = body->body;
     const NLSemanticContext *c = body->context;
@@ -3425,12 +3426,12 @@ static bool guarded_byte_descriptor(
     const size_t last_exchange =
         sequential ? 2 + (size_t)intermediate + (size_t)midpoint : 0;
     const size_t observation = last_exchange + 1;
-    const size_t binding_count = last_exchange + 4 + (size_t)sequential +
-                                 (report ? 2u : 0u) + (size_t)route +
-                                 (size_t)payload + (size_t)handoff +
-                                 (delivery ? 2u : 0u) + (size_t)named_default;
-    const NLCheckedNodeView *bindings[17];
-    const NLSyntaxNode *initializer_sources[17];
+    const size_t binding_count =
+        last_exchange + 4 + (size_t)sequential + (report ? 2u : 0u) +
+        (size_t)route + (size_t)payload + (size_t)handoff +
+        (delivery ? 2u : 0u) + (size_t)named_default + (size_t)report_status;
+    const NLCheckedNodeView *bindings[18];
+    const NLSyntaxNode *initializer_sources[18];
     NLCheckedNodeId second_update = 0;
     NLSymbolId previous =
         selected > original->symbol ? selected : original->symbol;
@@ -3612,6 +3613,12 @@ static bool guarded_byte_descriptor(
                 f, c, bindings[ready + 1]->initializer,
                 nl_syntax_node_view(initializer_sources[ready + 1]),
                 bindings[ready]->symbol, forwarded, u8))
+            return false;
+        if (report_status &&
+            !scalar_name_copy(f, c, bindings[ready + 2]->initializer,
+                              initializer_sources[ready + 2],
+                              bindings[ready]->symbol,
+                              nl_semantic_core_type(c, NL_TYPE_BOOL)))
             return false;
     }
     *out = (GuardedByteDescriptor){.constructor = ctor->results[0].value,
@@ -3894,7 +3901,9 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         f->body_count == 4 && root->terminates && first_value &&
         first_value->kind == NL_CHECKED_AGGREGATE && next_value &&
         next_value->kind == NL_CHECKED_USIZE_LITERAL;
-    const bool named_default = one_original && binding_count == 22;
+    const bool report_status = one_original && binding_count == 23;
+    const bool named_default =
+        one_original && (binding_count == 22 || report_status);
     const bool delivery =
         one_original && (binding_count == 21 || named_default);
     const bool handoff = one_original && (binding_count == 19 || delivery);
@@ -4046,7 +4055,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                 &b, root, source, id, item, bindings[prefix - 1]->symbol,
                 bindings[2]->symbol, original, original_source, local_policy,
                 sequential, midpoint, report, route, payload, handoff, delivery,
-                named_default, &fields))
+                named_default, report_status, &fields))
             return false;
         if (sequential) {
             if (f->body_calls[2] != fields.writer ||

@@ -139,6 +139,13 @@ named_default_refusals = {
     "named-default-sample": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
     "named-default-equal-other": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
 }
+report_statuses = {
+    "report-status-sample-zero": (b"0", b"4096,39,93,39,0,39,93,0,39,0,1,0,0,1,0,1\n"),
+    "report-status-default-zero": (b"0", b"4096,39,93,39,0,39,93,0,39,0,1,0,0,0,0,0\n"),
+}
+report_status_refusals = {
+    "report-status-earlier-decision": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
 payloads = {
     "payload-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0,13\n"),
     "payload-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
@@ -238,7 +245,7 @@ def observe(code, field, local_policy=False, named_policy=False,
 
 def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False,
                      route=False, payload=False, handoff=False, delivery=False,
-                     named_default=False):
+                     named_default=False, report_status=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -375,6 +382,12 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
         assert ready.end() <= choice.start() < sent.start()
         values.extend((ready[1], sent[1]))
         last = sent
+    if report_status:
+        assert named_default and delivery
+        status = one(code, rb"^    _Bool (nl_local_\d+) = " + ready[1] + rb";\n")
+        assert last.end() <= status.start()
+        values.append(status[1])
+        last = status
     final += (b'    printf("%zu' + b",%u" * len(values) + b'\\n", ' + budget[1] + b", " +
               b", ".join(b"(unsigned)" + value for value in values) + b");\n")
     edits.append((last.end(), final))
@@ -601,6 +614,10 @@ if __name__ == "__main__":
                partial(observe_sequence, saved_copy=True, midpoint=True,
                        report=True, route=True, payload=True, handoff=True, delivery=True,
                        named_default=True))
+        verify(cli, sources, raw, report_statuses, report_status_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True, handoff=True,
+                       delivery=True, named_default=True, report_status=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))
