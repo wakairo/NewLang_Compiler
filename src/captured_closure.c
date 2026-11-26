@@ -433,7 +433,8 @@ static bool same_ref(NLReferenceFacts a, NLReferenceFacts b)
  * The saved world is prior to Change, while its D loan and both refs are live.
  * No C offsets or source spelling take part in this proof. */
 static NLCheckStatus access_validate(const NLCheckedFragment *f,
-                                     const NLCapturedChange *c, bool read)
+                                     const NLCapturedChange *c, bool read,
+                                     NLCheckedNodeId opening_loan)
 {
     if (c == NULL || c->world != f->context || c->before == NULL ||
         c->after == NULL || c->before == c->after ||
@@ -623,6 +624,29 @@ static NLCheckStatus access_validate(const NLCheckedFragment *f,
         domain_binding.value != b->domains[root.governing_domain - 1].value ||
         domain_binding.place != loan->loan.place)
         return INVALID;
+    if (opening_loan != 0) {
+        /* The loan that forwards this read also provides the stability for
+         * the acquisition in its single binding, before its tail read. */
+        const NLCheckedNodeView *body =
+            nl_checked_node_view(f, loan->initializer);
+        const NLCheckedNodeView *binding =
+            body == NULL ? NULL : nl_checked_node_view(f, body->first_item);
+        const NLCheckedNodeView *receiver =
+            binding == NULL ? NULL : argument_node(f, binding, 0);
+        if (loan != nl_checked_node_view(f, opening_loan) || body == NULL ||
+            body->kind != NL_CHECKED_BLOCK || body->item_count != 1 ||
+            body->tail != c->node || binding == NULL ||
+            binding->kind != NL_CHECKED_BINDING || binding->next_item != 0 ||
+            nl_checked_node_view(f, binding->initializer) != acquired ||
+            binding->initializer <= opening_loan ||
+            binding->initializer >= v->first_argument ||
+            v->first_argument >= c->node || receiver == NULL ||
+            receiver->kind != NL_CHECKED_RECEIVER || receiver->symbol != e.base)
+            return INVALID;
+        for (size_t i = 0; i < b->scope_count; ++i)
+            if (b->scopes[i].active != (i + 1 == loan->loan.scope))
+                return INVALID;
+    }
     NLSemanticContext *expected = NULL;
     status = nl_sem_clone(b, &expected);
     if (status == NL_CHECK_OK && read) {
@@ -784,11 +808,12 @@ static bool read_ref(const NLCheckedFragment *f, NLCheckedNodeId id)
 }
 static NLCheckStatus read_access(const NLCheckedFragment *f, const ReadEvent *r,
                                  const Release *roots, size_t owner,
-                                 size_t field, bool c_ended_before_read)
+                                 size_t field, bool c_ended_before_read,
+                                 NLCheckedNodeId opening_loan)
 {
     if (r == NULL || r->kind != NL_CHECKED_LINK_READ)
         return INVALID;
-    NLCheckStatus s = access_validate(f, &r->event, true);
+    NLCheckStatus s = access_validate(f, &r->event, true, opening_loan);
     if (s != NL_CHECK_OK)
         return s;
     const NLCheckedNodeView *n = nl_checked_node_view(f, r->event.node);
@@ -803,9 +828,13 @@ static NLCheckStatus read_access(const NLCheckedFragment *f, const ReadEvent *r,
 /* The actual read must be the lexical loan's normal result and then the
  * binding subsequently copied by match. An unrelated equal-valued local is
  * not a source def-use edge. */
-static NLSymbolId read_binding(const NLCheckedFragment *f, NLCheckedNodeId id)
+static NLSymbolId read_binding(const NLCheckedFragment *f, NLCheckedNodeId id,
+                               NLCheckedNodeId *opening_loan)
 {
     const NLCheckedNodeView *read = nl_checked_node_view(f, id);
+    if (read == NULL || read->kind != NL_CHECKED_LINK_READ ||
+        read->result_count != 1)
+        return 0;
     for (size_t i = 1; i <= f->count; ++i) {
         const NLCheckedNodeView *b = nl_checked_node_view(f, i);
         if (b->kind != NL_CHECKED_BINDING)
@@ -815,11 +844,15 @@ static NLSymbolId read_binding(const NLCheckedFragment *f, NLCheckedNodeId id)
         const NLCheckedNodeView *body =
             loan == NULL ? NULL : nl_checked_node_view(f, loan->initializer);
         if (loan != NULL && loan->kind == NL_CHECKED_LOAN_HEADER &&
-            loan->loan.normal_result_forwarded && loan->result_count == 1 &&
+            b->initializer < id && loan->loan.normal_result_forwarded &&
+            loan->result_count == 1 &&
             loan->results[0].value == read->results[0].value && body != NULL &&
             body->kind == NL_CHECKED_BLOCK && body->tail == id &&
-            receiver != NULL && receiver->kind == NL_CHECKED_RECEIVER)
+            receiver != NULL && receiver->kind == NL_CHECKED_RECEIVER) {
+            if (opening_loan != NULL)
+                *opening_loan = b->initializer;
             return receiver->symbol;
+        }
     }
     return 0;
 }
@@ -843,7 +876,7 @@ static NLCheckStatus read_match(const NLCheckedFragment *f, const ReadEvent *r,
         m->match_binding_prefix != c->before->binding_count)
         return INVALID;
     const NLCheckedNodeView *init = nl_checked_node_view(f, m->initializer);
-    const NLSymbolId binding = read_binding(f, first_read);
+    const NLSymbolId binding = read_binding(f, first_read, NULL);
     if (init == NULL || init->kind != NL_CHECKED_IDENTIFIER ||
         init->result_count != 1 || init->value_use != NL_VALUE_COPIED ||
         binding == 0 || init->symbol != binding ||
@@ -919,14 +952,15 @@ static NLCheckStatus read_match(const NLCheckedFragment *f, const ReadEvent *r,
             case NL_CHECKED_LINK_READ: {
                 ++read_count;
                 const ReadEvent *event = read_event(arm, i);
-                s = read_access(arm, event, roots, 2, 0, c_ended_before_read);
+                s = read_access(arm, event, roots, 2, 0, c_ended_before_read,
+                                0);
                 if (s != NL_CHECK_OK)
                     break;
                 const NLSemanticContext *b = event->event.before;
                 if (root->symbol > b->binding_count ||
                     b->bindings[root->symbol - 1].view.value !=
                         entry->values[input - 1].sum_payload ||
-                    read_binding(arm, i) == 0)
+                    read_binding(arm, i, NULL) == 0)
                     s = INVALID;
                 const NLValueId base =
                     b->bindings[v->field.base - 1].view.value;
@@ -989,6 +1023,13 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
         (f->field_change_count > NL_CAPTURED_SETUP_CHANGES &&
          f->field_change_count != NL_CAPTURED_UNLINK_CHANGES))
         return INVALID;
+    NLCheckedNodeId opening_loan = 0;
+    if (f->captured_reads != NULL &&
+        (f->captured_reads->count != 2 ||
+         f->captured_reads->events[0].kind != NL_CHECKED_LINK_READ ||
+         read_binding(f, f->captured_reads->events[0].event.node,
+                      &opening_loan) == 0))
+        return INVALID;
     Release releases[NL_CAPTURED_MAX_RELEASES] = {0};
     size_t count = certificate->view.count, grants = 0;
     for (size_t r = 0; r < count; ++r) {
@@ -1003,7 +1044,7 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                 sizeof(releases[r].fields));
     }
     bool nested = false;
-    bool c_ended_before_read = false;
+    bool c_ended_at_loan = false;
     size_t retained_cleanup_step = 0;
     size_t changes = 0, reads = 0;
     NLCheckedNodeId first_read = 0;
@@ -1013,6 +1054,13 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             v->kind == NL_CHECKED_IF || v->kind == NL_CHECKED_LOOP ||
             v->kind == NL_CHECKED_REGISTERED_CALL)
             return INVALID; /* finite lifecycle/field certificate profile */
+        if (i == opening_loan) {
+            if (nested || count != 5 || changes != NL_CAPTURED_UNLINK_CHANGES)
+                return INVALID;
+            /* No release may change this ledger from loan entry to join.
+             * The saved read worlds recheck the whole selected phase. */
+            c_ended_at_loan = releases[3].freed;
+        }
         if (v->kind == NL_CHECKED_REPLACE) {
             if (nested || count != 5 || changes >= f->field_change_count ||
                 changes >= NL_CAPTURED_CHANGE_CAPACITY ||
@@ -1020,7 +1068,7 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                 f->field_changes[changes]->node != i)
                 return INVALID;
             const NLCapturedChange *change = f->field_changes[changes++];
-            NLCheckStatus s = access_validate(f, change, false);
+            NLCheckStatus s = access_validate(f, change, false, 0);
             if (s != NL_CHECK_OK)
                 return s;
             const NLSemanticContext *b = change->before;
@@ -1124,14 +1172,11 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             const ReadEvent *event = &f->captured_reads->events[reads];
             NLCheckStatus s;
             if (reads++ == 0) {
-                /* Keep the first read's lifecycle phase through both arms
-                 * and the join. A partial release fails read_phase. */
-                c_ended_before_read = releases[3].freed;
-                s = read_access(f, event, releases, 1, 1, c_ended_before_read);
+                s = read_access(f, event, releases, 1, 1, c_ended_at_loan,
+                                opening_loan);
                 first_read = i;
             } else {
-                s = read_match(f, event, releases, first_read,
-                               c_ended_before_read);
+                s = read_match(f, event, releases, first_read, c_ended_at_loan);
             }
             if (s != NL_CHECK_OK)
                 return s;
@@ -1273,7 +1318,7 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             v->kind != NL_CHECKED_DOMAIN_FINALIZE &&
             v->kind != NL_CHECKED_DEALLOCATE)
             continue;
-        if (nested)
+        if (nested || (opening_loan != 0 && i > opening_loan && reads != 2))
             return INVALID;
         const NLSemanticValueView *a = input(f, v, 0), *b = input(f, v, 1);
         if (a == NULL)
@@ -1296,7 +1341,7 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                 index = r;
         if (index == count)
             return INVALID;
-        if (reads != 0 && !c_ended_before_read) {
+        if (reads != 0 && !c_ended_at_loan) {
             /* The retained-live continuation completes the match before
              * fully releasing each original, in reverse allocation order. */
             static const NLCheckedKind cleanup[] = {
