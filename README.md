@@ -454,6 +454,8 @@ the current North Star contract in
 and long-horizon C-replacement coverage in
 [`docs/NewLang_C_Replacement_Coverage_Map.md`](docs/NewLang_C_Replacement_Coverage_Map.md).
 
+See the [Pank Value Ledger (Japanese)](docs/Pank_Value_Ledger.md) for measured examples, evidence, and coverage limits.
+
 The adopted, non-normative [evidence inventory and development roadmap](docs/NewLang_Development_Roadmap.md)
 separates current source/checker/native capabilities from product and research investment gates.
 
