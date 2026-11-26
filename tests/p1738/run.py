@@ -164,6 +164,12 @@ shared_report_limits = {
     "p1857-shared-low": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,255,0\n"),
     "p1857-shared-high": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151,1\n"),
 }
+report_route_predicate = {
+    "p1857-predicate-route": (b"1", b"4032,17,67,17,101,17,67,101,17,101,1,101,101,0,255,0\n"),
+}
+report_predicate_refusals = {
+    "p1857-reversed-predicate": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
 payloads = {
     "payload-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0,13\n"),
     "payload-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
@@ -261,10 +267,20 @@ def observe(code, field, local_policy=False, named_policy=False,
             code[loan.end():copied.end()] + after + code[copied.end():])
 
 
+def report_test_pattern(limit, budget, helper):
+    result = rb"    _Bool (?P<result>nl_local_\d+) = "
+    if not helper:
+        return result + limit + rb" < " + budget + rb";\n"
+    return (rb"    size_t (?P<actual>nl_actual_\d+)_0 = " + limit + rb";\n"
+            rb"    size_t (?P=actual)_1 = " + budget + rb";\n" + result +
+            rb"(?P<function>nl_qty_fn_\d+)\((?P=actual)_0, (?P=actual)_1\);\n")
+
+
 def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False,
                      route=False, payload=False, handoff=False, delivery=False,
                      named_default=False, report_status=False,
-                     named_route_limit=False, named_delivery_limit=None):
+                     named_route_limit=False, named_delivery_limit=None,
+                     route_helper=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -358,18 +374,22 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
             assert len(settings) == (2 if named_delivery_limit == "separate" else 1)
             route_limit = settings[0][1]
         route_pattern = re.compile(
-            rb"    \(void\)" + last[1] + rb";\n"
-            rb"    _Bool (nl_local_\d+) = " + route_limit + rb" < "
-            + budget[1] + rb";\n")
+            rb"    \(void\)" + last[1] + rb";\n" +
+            report_test_pattern(route_limit, budget[1], route_helper))
         flag = route_pattern.match(code, last.end())
         assert flag
-        values.append(flag[1])
+        if route_helper:
+            one(code, rb"^static _Bool " + flag["function"] +
+                rb"\(size_t (nl_local_\d+), size_t (nl_local_\d+)\)\n"
+                rb"\{\n    \(void\)\1;\n    \(void\)\2;\n"
+                rb"    return \1 < \2;\n\}\n")
+        values.append(flag["result"])
         last = flag
     if payload:
         assert route
         selected_sample = one(
             code, rb"^    uint8_t (nl_if_(\d+));\n"
-            rb"    _Bool nl_condition_\2 = " + flag[1] + rb";\n"
+            rb"    _Bool nl_condition_\2 = " + flag["result"] + rb";\n"
             rb"    if \(nl_condition_\2\) \{\n"
             rb"        \1 = " + reported_tag[1] + rb";\n"
             rb"    \} else \{\n"
@@ -392,8 +412,8 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
             assert named_route_limit
             delivery_limit = settings[-1][1]
         ready, = (match for match in re.finditer(
-            rb"^    _Bool (nl_local_\d+) = " + delivery_limit + rb" < " +
-            budget[1] + rb";\n", code, re.M) if match.start() >= last.end())
+            rb"^" + report_test_pattern(delivery_limit, budget[1], False),
+            code, re.M) if match.start() >= last.end())
         fallback = rb"\(\(uint8_t\)UINT8_C\(\d+\)\)"
         if named_default:
             default, = (match for match in re.finditer(
@@ -402,7 +422,7 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
             fallback = default[1]
         choice = one(
             code, rb"^    uint8_t (nl_if_(\d+));\n"
-            rb"    _Bool nl_condition_\2 = " + ready[1] + rb";\n"
+            rb"    _Bool nl_condition_\2 = " + ready["result"] + rb";\n"
             rb"    if \(nl_condition_\2\) \{\n"
             rb"        \1 = " + report_input[1] + rb";\n"
             rb"    \} else \{\n"
@@ -410,11 +430,11 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
             rb"    \}\n")
         sent = one(code, rb"^    uint8_t (nl_local_\d+) = " + choice[1] + rb";\n")
         assert ready.end() <= choice.start() < sent.start()
-        values.extend((ready[1], sent[1]))
+        values.extend((ready["result"], sent[1]))
         last = sent
     if report_status:
         assert named_default and delivery
-        status = one(code, rb"^    _Bool (nl_local_\d+) = " + ready[1] + rb";\n")
+        status = one(code, rb"^    _Bool (nl_local_\d+) = " + ready["result"] + rb";\n")
         assert last.end() <= status.start()
         values.append(status[1])
         last = status
@@ -656,6 +676,9 @@ if __name__ == "__main__":
         verify(cli, sources, raw, shared_report_limits, {},
                partial(observe_status, named_route_limit=True,
                        named_delivery_limit="shared"))
+        verify(cli, sources, raw, report_route_predicate, report_predicate_refusals,
+               partial(observe_status, named_route_limit=True,
+                       named_delivery_limit="separate", route_helper=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))

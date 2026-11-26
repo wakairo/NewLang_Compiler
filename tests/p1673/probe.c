@@ -236,6 +236,7 @@ typedef enum {
     GUARDED_BYTE_MODE,
     GUARDED_BYTE_MODE_HELPER,
     GUARDED_BYTE_SEQUENTIAL_WRITER,
+    GUARDED_BYTE_REPORT_PREDICATE,
     GUARDED_BYTE_DISTINCT_WRITERS,
     GUARDED_BYTE_POLICY_WRITER,
     GUARDED_BYTE_NAMED_POLICY_WRITER,
@@ -506,8 +507,10 @@ static bool guarded_byte_mode_result(const NLCheckedFragment *entry,
 {
     const bool delegated = route == GUARDED_BYTE_MODE_HELPER;
     const bool distinct = route == GUARDED_BYTE_DISTINCT_WRITERS;
-    const bool twice = distinct || route == GUARDED_BYTE_SEQUENTIAL_WRITER;
-    const size_t body_count = twice ? 4u : delegated ? 3u : 2u;
+    const bool predicate = route == GUARDED_BYTE_REPORT_PREDICATE;
+    const bool twice =
+        distinct || predicate || route == GUARDED_BYTE_SEQUENTIAL_WRITER;
+    const size_t body_count = twice ? 4u + predicate : delegated ? 3u : 2u;
     const NLCheckedNodeId site = nl_checked_root(entry);
     NLDivisionUsizePlan main, product;
     if (!nl_h_custody_result_world_present(entry, site) ||
@@ -535,6 +538,20 @@ static bool guarded_byte_mode_result(const NLCheckedFragment *entry,
     } else if (delegated ? main.byte_update_call != main.body->body_calls[2]
                          : main.byte_update_call != 0)
         return false;
+    if (predicate) {
+        const NLCheckedNodeId test = main.body->body_calls[4];
+        NLDivisionUsizePlan report;
+        NLSemanticValueView result;
+        const NLCheckedNodeView *node = nl_checked_node_view(main.body, test);
+        if (!node || !nl_quantity_usize_call_valid(main.body, test, &report) ||
+            !report.formal || !report.second_formal ||
+            !nl_semantic_value_view(main.body->context, node->results[0].value,
+                                    &result) ||
+            result.type !=
+                nl_semantic_core_type(main.body->context, NL_TYPE_BOOL) ||
+            result.scalar_known || result.dependencies != NL_DEPENDENCY_FREE)
+            return false;
+    }
     NLPureU8Call selector;
     const NLCheckedNodeView *call =
         nl_checked_node_view(main.body, main.byte_selector);
@@ -548,17 +565,19 @@ static bool guarded_byte_mode_result(const NLCheckedFragment *entry,
 
 static bool check_oom(const char *path, ProductRoute route)
 {
-    const size_t limit = route == GUARDED_BYTE_SEQUENTIAL_WRITER ||
+    const bool predicate = route == GUARDED_BYTE_REPORT_PREDICATE;
+    const size_t limit = predicate ? 4500
+                         : route == GUARDED_BYTE_SEQUENTIAL_WRITER ||
                                  route == GUARDED_BYTE_DISTINCT_WRITERS
                              ? 3000
                              : 2000;
-    const bool byte_mode = route == GUARDED_BYTE_MODE ||
-                           route == GUARDED_BYTE_MODE_HELPER ||
-                           route == GUARDED_BYTE_SEQUENTIAL_WRITER ||
-                           route == GUARDED_BYTE_DISTINCT_WRITERS ||
-                           route == GUARDED_BYTE_POLICY_WRITER ||
-                           route == GUARDED_BYTE_NAMED_POLICY_WRITER ||
-                           route == GUARDED_BYTE_DELEGATED_POLICY_WRITER;
+    const bool byte_mode =
+        route == GUARDED_BYTE_MODE || route == GUARDED_BYTE_MODE_HELPER ||
+        route == GUARDED_BYTE_SEQUENTIAL_WRITER || predicate ||
+        route == GUARDED_BYTE_DISTINCT_WRITERS ||
+        route == GUARDED_BYTE_POLICY_WRITER ||
+        route == GUARDED_BYTE_NAMED_POLICY_WRITER ||
+        route == GUARDED_BYTE_DELEGATED_POLICY_WRITER;
     TestNode original = {0};
     CHECK(node_checked_load(path, &original));
     if (byte_mode)
@@ -744,6 +763,8 @@ int main(int argc, char **argv)
         route = GUARDED_BYTE_MODE_HELPER;
     else if (!strcmp(argv[1], "guarded-byte-sequential-writer-oom"))
         route = GUARDED_BYTE_SEQUENTIAL_WRITER;
+    else if (!strcmp(argv[1], "guarded-byte-report-predicate-oom"))
+        route = GUARDED_BYTE_REPORT_PREDICATE;
     else if (!strcmp(argv[1], "guarded-byte-distinct-writers-oom"))
         route = GUARDED_BYTE_DISTINCT_WRITERS;
     else if (!strcmp(argv[1], "guarded-byte-policy-writer-oom"))
@@ -756,8 +777,10 @@ int main(int argc, char **argv)
         return 2;
     size_t named_limit = 2000;
     /* Extra registered invocations need a larger sweep. */
-    if (route == GUARDED_BYTE_SEQUENTIAL_WRITER ||
-        route == GUARDED_BYTE_DISTINCT_WRITERS)
+    if (route == GUARDED_BYTE_REPORT_PREDICATE)
+        named_limit = 6000;
+    else if (route == GUARDED_BYTE_SEQUENTIAL_WRITER ||
+             route == GUARDED_BYTE_DISTINCT_WRITERS)
         named_limit = 4000;
     else if (route == GUARDED_BYTE_NAMED_POLICY_WRITER ||
              route == GUARDED_BYTE_DELEGATED_POLICY_WRITER)
