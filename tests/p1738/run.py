@@ -48,6 +48,19 @@ reports = {
     "report-high": (b"0", b"4096,31,37,31,127,31,37,127,31,127\n"),
 }
 report_refusals = {"report-wrong-time": (0, 4, b"V1-BACKEND-UNSUPPORTED")}
+saved_midpoints = {
+    "saved-midpoint-low": (b"1", b"4032,13,27,13,27,13,27,27\n"),
+    "saved-midpoint-high": (b"0", b"4096,31,43,31,127,31,43,127\n"),
+}
+saved_reports = {
+    "saved-report-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27\n"),
+    "saved-report-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127\n"),
+}
+saved_midpoint_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("equal-peer-restore", "wrong-midpoint-field", "late-report",
+                 "second-field", "second-writer")
+}
 refused = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("independent-actual", "independent-input", "independent-old",
@@ -416,6 +429,10 @@ if __name__ == "__main__":
                partial(observe_sequence, midpoint=True))
         verify(cli, sources, raw, reports, report_refusals,
                partial(observe_sequence, midpoint=True, report=True))
+        verify(cli, sources, raw, saved_midpoints, saved_midpoint_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True))
+        verify(cli, sources, raw, saved_reports, {},
+               partial(observe_sequence, saved_copy=True, midpoint=True, report=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))
