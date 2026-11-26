@@ -344,15 +344,15 @@ static bool division_emit_byte_read(DivisionText *text,
         binding->symbol, object, read->field.index, binding->symbol);
 }
 
-static bool division_emit_displaced_copy(DivisionText *text,
-                                         const NLCheckedNodeView *copy,
-                                         const NLCheckedNodeView *old)
+static bool division_emit_byte_copy(DivisionText *text,
+                                    const NLCheckedNodeView *copy,
+                                    const NLCheckedNodeView *source)
 {
     return division_text_append(
         text,
         "    const uint8_t nl_local_%zu = nl_local_%zu;\n"
         "    (void)nl_local_%zu;\n",
-        copy->symbol, old->symbol, copy->symbol);
+        copy->symbol, source->symbol, copy->symbol);
 }
 
 static bool division_emit_byte_update(DivisionText *text,
@@ -391,7 +391,7 @@ static bool division_emit_byte_update(DivisionText *text,
         if (item != second) {
             /* The entry plan ties this Copy to the first exchange's result. */
             if (init->kind == NL_CHECKED_IDENTIFIER) {
-                if (!division_emit_displaced_copy(text, item, first))
+                if (!division_emit_byte_copy(text, item, first))
                     return false;
             } else if (!division_text_append(text,
                                              "    const uint8_t nl_local_%zu = "
@@ -405,7 +405,8 @@ static bool division_emit_byte_update(DivisionText *text,
             return false;
         item = nl_checked_node_view(f, second->next_item);
     }
-    const size_t first_reads = 2 - early_reads;
+    const size_t first_reads =
+        plan->byte_second_descriptor ? 2 - early_reads : 2;
     const size_t reads = first_reads + (plan->byte_second_descriptor ? 2 : 0);
     for (size_t i = 0; i < reads; ++i) {
         if (!division_emit_byte_read(text, f, item,
@@ -413,10 +414,26 @@ static bool division_emit_byte_update(DivisionText *text,
             return false;
         item = nl_checked_node_view(f, item->next_item);
     }
-    return division_emit_displaced_copy(text, item, first) &&
-           (!second ||
-            division_emit_displaced_copy(
-                text, nl_checked_node_view(f, item->next_item), second));
+    if (!division_emit_byte_copy(text, item, first))
+        return false;
+    if (!second)
+        return true;
+    const NLCheckedNodeView *second_old =
+        nl_checked_node_view(f, item->next_item);
+    if (!division_emit_byte_copy(text, second_old, second))
+        return false;
+    if (!plan->byte_snapshot_first || plan->byte_second_descriptor)
+        return true;
+    const NLCheckedNodeView *report =
+        nl_checked_node_view(f, second_old->next_item);
+    if (!report || report->kind != NL_CHECKED_BINDING)
+        return true;
+    /* The entry plan matched the two report Copies to these earlier reads. */
+    const NLCheckedNodeView *mode = nl_checked_node_view(f, first->next_item);
+    const NLCheckedNodeView *peer = nl_checked_node_view(f, mode->next_item);
+    return division_emit_byte_copy(text, report, mode) &&
+           division_emit_byte_copy(
+               text, nl_checked_node_view(f, report->next_item), peer);
 }
 
 static bool division_emit_helper(DivisionText *text,
