@@ -690,14 +690,15 @@ static bool unlink_step(const NLSemanticContext *world, const Release *roots,
 
 /* Temporal read worlds are checked against the SAME lifecycle ledger as the
  * nine Changes. Pointer bits do not create an original or a Domain owner. */
-static bool read_phase(const NLSemanticContext *b, const Release *roots)
+static bool read_phase(const NLSemanticContext *b, const Release *roots,
+                       bool c_ended_before_read)
 {
     if (b->region_count != 5 || b->domain_count != 5)
         return false;
     for (size_t r = 0; r < 5; ++r) {
         const Release own = roots[r];
         const NLCapturedOriginal o = own.original;
-        const bool ended = r == 3;
+        const bool ended = c_ended_before_read && r == 3;
         if (!own.initialized || own.ended != ended || own.erased != ended ||
             own.finalized != ended || own.freed != ended || o.root == 0 ||
             o.root > b->place_count || o.domain == 0 ||
@@ -783,7 +784,7 @@ static bool read_ref(const NLCheckedFragment *f, NLCheckedNodeId id)
 }
 static NLCheckStatus read_access(const NLCheckedFragment *f, const ReadEvent *r,
                                  const Release *roots, size_t owner,
-                                 size_t field)
+                                 size_t field, bool c_ended_before_read)
 {
     if (r == NULL || r->kind != NL_CHECKED_LINK_READ)
         return INVALID;
@@ -791,8 +792,8 @@ static NLCheckStatus read_access(const NLCheckedFragment *f, const ReadEvent *r,
     if (s != NL_CHECK_OK)
         return s;
     const NLCheckedNodeView *n = nl_checked_node_view(f, r->event.node);
-    if (!read_phase(r->event.before, roots) ||
-        !read_phase(r->event.after, roots) ||
+    if (!read_phase(r->event.before, roots, c_ended_before_read) ||
+        !read_phase(r->event.after, roots, c_ended_before_read) ||
         n->field.parent != roots[owner].original.root ||
         n->field.index != field ||
         n->field.old_value != roots[owner].fields[field])
@@ -824,7 +825,8 @@ static NLSymbolId read_binding(const NLCheckedFragment *f, NLCheckedNodeId id)
 }
 static NLCheckStatus read_match(const NLCheckedFragment *f, const ReadEvent *r,
                                 const Release *roots,
-                                NLCheckedNodeId first_read)
+                                NLCheckedNodeId first_read,
+                                bool c_ended_before_read)
 {
     const NLCapturedChange *c = &r->event;
     const NLCheckedNodeView *m = nl_checked_node_view(f, c->node);
@@ -833,8 +835,9 @@ static NLCheckStatus read_match(const NLCheckedFragment *f, const ReadEvent *r,
         c->before != c->before_origin || c->after != c->after_origin ||
         nl_sem_validate(c->before) != NL_CHECK_OK ||
         nl_sem_validate(c->after) != NL_CHECK_OK ||
-        !read_phase(c->before, roots) || !read_phase(c->after, roots) ||
-        m == NULL || m->kind != NL_CHECKED_MATCH || m->normal_arms != 2 ||
+        !read_phase(c->before, roots, c_ended_before_read) ||
+        !read_phase(c->after, roots, c_ended_before_read) || m == NULL ||
+        m->kind != NL_CHECKED_MATCH || m->normal_arms != 2 ||
         m->item_count != 2 || !m->normal_frame_unchanged || m->terminates ||
         m->type != 1 || m->result_count != 0 ||
         m->match_binding_prefix != c->before->binding_count)
@@ -916,7 +919,7 @@ static NLCheckStatus read_match(const NLCheckedFragment *f, const ReadEvent *r,
             case NL_CHECKED_LINK_READ: {
                 ++read_count;
                 const ReadEvent *event = read_event(arm, i);
-                s = read_access(arm, event, roots, 2, 0);
+                s = read_access(arm, event, roots, 2, 0, c_ended_before_read);
                 if (s != NL_CHECK_OK)
                     break;
                 const NLSemanticContext *b = event->event.before;
@@ -1000,6 +1003,8 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                 sizeof(releases[r].fields));
     }
     bool nested = false;
+    bool c_ended_before_read = false;
+    size_t retained_cleanup_step = 0;
     size_t changes = 0, reads = 0;
     NLCheckedNodeId first_read = 0;
     for (size_t i = 1; i <= f->count; ++i) {
@@ -1119,10 +1124,14 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             const ReadEvent *event = &f->captured_reads->events[reads];
             NLCheckStatus s;
             if (reads++ == 0) {
-                s = read_access(f, event, releases, 1, 1);
+                /* Keep the first read's lifecycle phase through both arms
+                 * and the join. A partial release fails read_phase. */
+                c_ended_before_read = releases[3].freed;
+                s = read_access(f, event, releases, 1, 1, c_ended_before_read);
                 first_read = i;
             } else {
-                s = read_match(f, event, releases, first_read);
+                s = read_match(f, event, releases, first_read,
+                               c_ended_before_read);
             }
             if (s != NL_CHECK_OK)
                 return s;
@@ -1287,6 +1296,20 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                 index = r;
         if (index == count)
             return INVALID;
+        if (reads != 0 && !c_ended_before_read) {
+            /* The retained-live continuation completes the match before
+             * fully releasing each original, in reverse allocation order. */
+            static const NLCheckedKind cleanup[] = {
+                NL_CHECKED_DESTROY, NL_CHECKED_ERASE_SLOT,
+                NL_CHECKED_DOMAIN_FINALIZE, NL_CHECKED_DEALLOCATE};
+            const size_t stride = sizeof(cleanup) / sizeof(cleanup[0]);
+            const size_t released = retained_cleanup_step / stride;
+            if (reads != 2 || released >= count ||
+                index != count - 1 - released ||
+                v->kind != cleanup[retained_cleanup_step % stride])
+                return INVALID;
+            ++retained_cleanup_step;
+        }
         Release *r = &releases[index];
         if (!r->initialized || r->freed)
             return INVALID;
