@@ -73,6 +73,9 @@ static bool division_emit_expression(DivisionText *t,
                division_emit_expression(t, f, n->first_argument) &&
                division_text_append(t, ")");
     }
+    case NL_CHECKED_U8_LITERAL:
+        return division_text_append(t, "((uint8_t)UINT8_C(%zu))",
+                                    n->scalar_result.value);
     case NL_CHECKED_IF:
         return division_text_append(t, "nl_if_%zu", id);
     case NL_CHECKED_USIZE_MULTIPLICATION:
