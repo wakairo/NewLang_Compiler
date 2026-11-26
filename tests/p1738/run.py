@@ -153,6 +153,17 @@ named_route_limits = {
 named_route_refusals = {
     "p1857-wrong-byte-source": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
 }
+named_delivery_limits = {
+    "p1857-delivery-before": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,1,17,1\n"),
+    "p1857-delivery-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,255,0\n"),
+}
+named_delivery_refusals = {
+    "p1857-wrong-ready-source": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
+shared_report_limits = {
+    "p1857-shared-low": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,255,0\n"),
+    "p1857-shared-high": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151,1\n"),
+}
 payloads = {
     "payload-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0,13\n"),
     "payload-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
@@ -253,7 +264,7 @@ def observe(code, field, local_policy=False, named_policy=False,
 def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False,
                      route=False, payload=False, handoff=False, delivery=False,
                      named_default=False, report_status=False,
-                     named_route_limit=False):
+                     named_route_limit=False, named_delivery_limit=None):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -341,9 +352,11 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
         assert report
         route_limit = rb"\(\(size_t\)UINTMAX_C\(4064\)\)"
         if named_route_limit:
-            setting = one(code[:constructor.start()],
-                          rb"^    size_t (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(\d+\)\);\n")
-            route_limit = setting[1]
+            settings = list(re.finditer(
+                rb"^    size_t (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(\d+\)\);\n",
+                code[:constructor.start()], re.M))
+            assert len(settings) == (2 if named_delivery_limit == "separate" else 1)
+            route_limit = settings[0][1]
         route_pattern = re.compile(
             rb"    \(void\)" + last[1] + rb";\n"
             rb"    _Bool (nl_local_\d+) = " + route_limit + rb" < "
@@ -374,8 +387,12 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
         last = report_input
     if delivery:
         assert handoff
+        delivery_limit = rb"\(\(size_t\)UINTMAX_C\(\d+\)\)"
+        if named_delivery_limit:
+            assert named_route_limit
+            delivery_limit = settings[-1][1]
         ready, = (match for match in re.finditer(
-            rb"^    _Bool (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(\d+\)\) < " +
+            rb"^    _Bool (nl_local_\d+) = " + delivery_limit + rb" < " +
             budget[1] + rb";\n", code, re.M) if match.start() >= last.end())
         fallback = rb"\(\(uint8_t\)UINT8_C\(\d+\)\)"
         if named_default:
@@ -627,15 +644,18 @@ if __name__ == "__main__":
                partial(observe_sequence, saved_copy=True, midpoint=True,
                        report=True, route=True, payload=True, handoff=True, delivery=True,
                        named_default=True))
-        verify(cli, sources, raw, report_statuses, report_status_refusals,
-               partial(observe_sequence, saved_copy=True, midpoint=True,
-                       report=True, route=True, payload=True, handoff=True,
-                       delivery=True, named_default=True, report_status=True))
+        observe_status = partial(observe_sequence, saved_copy=True, midpoint=True,
+                                 report=True, route=True, payload=True, handoff=True,
+                                 delivery=True, named_default=True, report_status=True)
+        verify(cli, sources, raw, report_statuses, report_status_refusals, observe_status)
         verify(cli, sources, raw, named_route_limits, named_route_refusals,
-               partial(observe_sequence, saved_copy=True, midpoint=True,
-                       report=True, route=True, payload=True, handoff=True,
-                       delivery=True, named_default=True, report_status=True,
-                       named_route_limit=True))
+               partial(observe_status, named_route_limit=True))
+        verify(cli, sources, raw, named_delivery_limits, named_delivery_refusals,
+               partial(observe_status, named_route_limit=True,
+                       named_delivery_limit="separate"))
+        verify(cli, sources, raw, shared_report_limits, {},
+               partial(observe_status, named_route_limit=True,
+                       named_delivery_limit="shared"))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))
