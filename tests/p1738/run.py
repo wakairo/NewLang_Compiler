@@ -170,6 +170,17 @@ report_route_predicate = {
 report_predicate_refusals = {
     "p1857-reversed-predicate": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
 }
+report_delivery_predicates = {
+    "p1857-predicate-both": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,1,17,1\n"),
+    "p1857-predicate-default-zero": (b"0", b"4096,39,93,39,0,39,93,0,39,0,1,0,0,0,0,0\n"),
+}
+shared_report_predicates = {
+    "p1857-predicate-historical-zero": (b"0", b"4096,39,93,39,0,39,93,0,39,0,1,0,0,1,0,1\n"),
+}
+report_delivery_predicate_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("p1857-wrong-call-position", "p1857-distinct-predicates")
+}
 payloads = {
     "payload-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0,13\n"),
     "payload-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
@@ -280,7 +291,7 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
                      route=False, payload=False, handoff=False, delivery=False,
                      named_default=False, report_status=False,
                      named_route_limit=False, named_delivery_limit=None,
-                     route_helper=False):
+                     route_helper=False, delivery_helper=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -412,8 +423,11 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
             assert named_route_limit
             delivery_limit = settings[-1][1]
         ready, = (match for match in re.finditer(
-            rb"^" + report_test_pattern(delivery_limit, budget[1], False),
+            rb"^" + report_test_pattern(delivery_limit, budget[1], delivery_helper),
             code, re.M) if match.start() >= last.end())
+        if delivery_helper:
+            assert route_helper and ready["function"] == flag["function"]
+            assert ready["actual"] != flag["actual"]
         fallback = rb"\(\(uint8_t\)UINT8_C\(\d+\)\)"
         if named_default:
             default, = (match for match in re.finditer(
@@ -679,6 +693,12 @@ if __name__ == "__main__":
         verify(cli, sources, raw, report_route_predicate, report_predicate_refusals,
                partial(observe_status, named_route_limit=True,
                        named_delivery_limit="separate", route_helper=True))
+        observe_predicates = partial(observe_status, named_route_limit=True,
+                                     route_helper=True, delivery_helper=True)
+        verify(cli, sources, raw, report_delivery_predicates, report_delivery_predicate_refusals,
+               partial(observe_predicates, named_delivery_limit="separate"))
+        verify(cli, sources, raw, shared_report_predicates, {},
+               partial(observe_predicates, named_delivery_limit="shared"))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))

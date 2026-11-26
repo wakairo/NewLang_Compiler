@@ -3687,7 +3687,7 @@ static bool guarded_byte_descriptor(
         !guarded_byte_report_route(body, bindings[observation + 6]->initializer,
                                    initializer_sources[observation + 6], bytes,
                                    report_limits[0], !report_limits[0],
-                                   f->body_count == 5 ? f->body_calls[4] : 0))
+                                   f->body_count >= 5 ? f->body_calls[4] : 0))
         return false;
     if (payload) {
         const NLSymbolId samples[] = {bindings[observation + 5]->symbol,
@@ -3724,9 +3724,10 @@ static bool guarded_byte_descriptor(
                                         fallback};
         const NLSymbolId delivery_limit =
             report_limits[1] ? report_limits[1] : report_limits[0];
-        if (!guarded_byte_report_route(body, bindings[ready]->initializer,
-                                       initializer_sources[ready], bytes,
-                                       delivery_limit, !report_limits[1], 0) ||
+        if (!guarded_byte_report_route(
+                body, bindings[ready]->initializer, initializer_sources[ready],
+                bytes, delivery_limit, !report_limits[1],
+                f->body_count == 6 ? f->body_calls[5] : 0) ||
             !guarded_byte_report_choice(
                 f, c, bindings[ready + 1]->initializer,
                 nl_syntax_node_view(initializer_sources[ready + 1]),
@@ -3994,7 +3995,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                                     const NLFunctionEntry *fn, size_t function,
                                     bool entry, NLDivisionUsizePlan *out)
 {
-    if (f->body_count < 2 || f->body_count > 5)
+    if (f->body_count < 2 || f->body_count > 6)
         return false;
     const NLSyntaxView *source =
         nl_syntax_node_view(nl_syntax_tree_root(fn->body->syntax));
@@ -4011,11 +4012,13 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
     NLCheckedNodeId id = root->first_item;
     const NLCheckedNodeView *first = nl_checked_node_view(f, id);
     NLSymbolId report_limits[2] = {0};
+    const size_t report_status_bindings = 23;
     /* The saved report-status form can name the cutoffs in order, or
      * reuse the historical cutoff for the delivery decision. */
     const size_t settings = entry && f->body_count >= 4 && root->terminates &&
-                                    binding_count >= 24 && binding_count <= 25
-                                ? binding_count - 23
+                                    binding_count > report_status_bindings &&
+                                    binding_count <= report_status_bindings + 2
+                                ? binding_count - report_status_bindings
                                 : 0;
     for (size_t i = 0; i < settings; ++i) {
         const NLSyntaxView *setting = nl_syntax_node_view(item);
@@ -4044,13 +4047,26 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         f->body_count >= 4 && root->terminates && first_value &&
         first_value->kind == NL_CHECKED_AGGREGATE && next_value &&
         next_value->kind == NL_CHECKED_USIZE_LITERAL;
-    const bool report_status = one_original && binding_count == 23;
+    const bool report_status =
+        one_original && binding_count == report_status_bindings;
     if (settings &&
         (!report_status || report_limits[settings - 1] >= first->symbol))
         return false;
-    if (f->body_count == 5 &&
+    if (f->body_count >= 5 &&
         (!report_status || !settings || !f->body_calls[4]))
         return false;
+    if (f->body_count == 6) {
+        const NLCheckedNodeId route = f->body_calls[4];
+        const NLCheckedNodeId delivery = f->body_calls[5];
+        const NLCheckedNodeView *first_test = nl_checked_node_view(f, route);
+        const NLCheckedNodeView *second_test =
+            nl_checked_node_view(f, delivery);
+        /* Share the declaration, but each decision is matched to its own
+         * later source call, Copies and sealed result. */
+        if (delivery <= route || !first_test || !second_test ||
+            first_test->function != second_test->function)
+            return false;
+    }
     const bool named_default =
         one_original && (binding_count == 22 || report_status);
     const bool delivery =
