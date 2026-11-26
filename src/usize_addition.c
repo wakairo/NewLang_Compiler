@@ -3466,9 +3466,9 @@ guarded_byte_descriptor(QuantityBody *body, const NLCheckedNodeView *root,
         const NLCheckedNodeView *mode = bindings[mode_index];
         const NLCheckedNodeView *value =
             nl_checked_node_view(f, mode->initializer);
-        /* Routed reports use the configured recovery literal. */
+        /* Selecting a payload still requires literal recovery. */
         const bool saved_copy =
-            intermediate && !route &&
+            intermediate && !payload &&
             scalar_name_copy(f, c, mode->initializer,
                              initializer_sources[mode_index],
                              bindings[0]->symbol, u8);
