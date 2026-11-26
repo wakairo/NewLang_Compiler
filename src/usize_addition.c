@@ -3635,9 +3635,10 @@ static bool guarded_byte_distinct_descriptors(
                                       originals[0], active, u8) ||
                      !descriptor_target_read(&mode->field, active)))
         return false;
-    /* Current-field reads already match their source Change. Displaced
-     * handoffs keep the matching-position restriction. */
-    if (displaced && active->index != fields[1].change.index)
+    /* Displaced handoffs and normally completing snapshots require
+     * matching declared positions. */
+    if ((displaced || (snapshot_first && !root->terminates)) &&
+        active->index != fields[1].change.index)
         return false;
     return descriptor_ordered_originals(f, c, loans, fields,
                                         copied ? bindings : NULL);
@@ -3693,8 +3694,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
     /* The in-writer route has eight bindings and an optional Return item. */
     const bool local_policy = root->item_count == (root->terminates ? 9u : 8u);
     const size_t binding_count = root->item_count - (size_t)root->terminates;
-    const bool snapshot_first =
-        f->body_count == 4 && root->terminates && binding_count == 14;
+    const bool snapshot_first = f->body_count == 4 && binding_count == 14;
     const bool distinct =
         f->body_count == 4 && (binding_count == 15 || snapshot_first);
     const bool sequential = f->body_count == 4 && !distinct;
