@@ -2346,6 +2346,8 @@ include(tests/p1455/CMakeLists.txt)
     set_tests_properties(p1817_midpoint_rollback.unit PROPERTIES TIMEOUT 180)
     set_tests_properties(p1822_saved_midpoint_rollback.unit PROPERTIES TIMEOUT 180)
     set_tests_properties(p1825_routed_report_rollback.unit PROPERTIES TIMEOUT 180)
+    set_tests_properties(p1829_saved_route_rollback.unit PROPERTIES TIMEOUT 180)
+    set_tests_properties(p1829_saved_payload_rollback.unit PROPERTIES TIMEOUT 180)
     set_tests_properties(p1756_delegated_policy_rollback.unit PROPERTIES TIMEOUT 180)
     # Full registration/invocation/named-output fault enumeration with host
     # ASan checks thousands of independent retries. Keep every location and

@@ -61,11 +61,32 @@ saved_midpoint_refusals = {
     for name in ("equal-peer-restore", "wrong-midpoint-field", "late-report",
                  "second-field", "second-writer")
 }
+saved_routes = {
+    "saved-route-low-before": (b"1", b"4032,13,27,13,73,13,27,73,13,73,0\n"),
+    "saved-route-low-edited": (b"1", b"4032,13,61,13,73,13,61,73,13,73,0\n"),
+    "saved-route-high-before": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1\n"),
+    "saved-route-high-edited": (b"0", b"4096,31,91,31,127,31,91,127,31,127,1\n"),
+}
+saved_route_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("saved-route-equal-sibling", "saved-route-blocks")
+}
 routes = {
     "route-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0\n"),
     "route-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1\n"),
 }
 route_refusals = {"route-blocks": (0, 4, b"V1-BACKEND-UNSUPPORTED")}
+saved_payloads = {
+    "saved-payload-low-before": (b"1", b"4032,13,27,13,73,13,27,73,13,73,0,13\n"),
+    "saved-payload-low-edited": (b"1", b"4032,13,61,13,73,13,61,73,13,73,0,13\n"),
+    "saved-payload-high-before": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
+    "saved-payload-high-edited": (b"0", b"4096,31,91,31,127,31,91,127,31,127,1,127\n"),
+}
+saved_payload_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("saved-payload-live-mode", "saved-payload-equal-sibling",
+                 "saved-payload-different-condition")
+}
 payloads = {
     "payload-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0,13\n"),
     "payload-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
@@ -473,6 +494,12 @@ if __name__ == "__main__":
         verify(cli, sources, raw, payloads, payload_refusals,
                partial(observe_sequence, midpoint=True, report=True,
                        route=True, payload=True))
+        verify(cli, sources, raw, saved_routes, saved_route_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True))
+        verify(cli, sources, raw, saved_payloads, saved_payload_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))
