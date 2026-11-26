@@ -115,10 +115,12 @@ static bool division_emit_if(DivisionText *t, const NLCheckedFragment *f,
                              NLCheckedNodeId id, int indent)
 {
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-    if (!division_text_append(t,
-                              "%*ssize_t nl_if_%zu;\n"
+    const char *type = n ? division_scalar_type(f->context, n->type) : NULL;
+    if (!type ||
+        !division_text_append(t,
+                              "%*s%s nl_if_%zu;\n"
                               "%*s_Bool nl_condition_%zu = ",
-                              indent, "", id, indent, "", id) ||
+                              indent, "", type, id, indent, "", id) ||
         !division_emit_expression(t, f, n->initializer) ||
         !division_text_append(t, ";\n%*sif (nl_condition_%zu) {\n", indent, "",
                               id))
@@ -444,8 +446,14 @@ static bool division_emit_byte_update(DivisionText *text,
         !division_emit_byte_copy(text, tag, peer))
         return false;
     const NLCheckedNodeView *route = nl_checked_node_view(f, tag->next_item);
-    return !route || route->kind != NL_CHECKED_BINDING ||
-           division_emit_binding(text, f, route, 4);
+    if (!route || route->kind != NL_CHECKED_BINDING)
+        return true;
+    if (!division_emit_binding(text, f, route, 4))
+        return false;
+    const NLCheckedNodeView *payload =
+        nl_checked_node_view(f, route->next_item);
+    return !payload || payload->kind != NL_CHECKED_BINDING ||
+           division_emit_binding(text, f, payload, 4);
 }
 
 static bool division_emit_helper(DivisionText *text,
