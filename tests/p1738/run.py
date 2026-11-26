@@ -106,6 +106,46 @@ saved_payload_refusals = {
     for name in ("saved-payload-live-mode", "saved-payload-equal-sibling",
                  "saved-payload-different-condition")
 }
+saved_handoffs = {
+    "saved-handoff-low-before": (b"1", b"4032,17,23,17,101,17,23,101,17,101,0,17,17\n"),
+    "saved-handoff-low-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17\n"),
+    "saved-handoff-high-before": (b"0", b"4096,39,41,39,151,39,41,151,39,151,1,151,151\n"),
+    "saved-handoff-high-edited": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151\n"),
+}
+saved_handoff_refusals = {
+    "saved-handoff-live": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "saved-handoff-equal": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "saved-handoff-wrong-restore": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
+saved_deliveries = {
+    "saved-delivery-low-before": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,1,17\n"),
+    "saved-delivery-low-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,0\n"),
+    "saved-delivery-high-before": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151\n"),
+    "saved-delivery-high-edited": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,0,0\n"),
+}
+saved_delivery_refusals = {
+    "saved-delivery-old-decision": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "saved-delivery-raw-blocks": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "saved-delivery-wrong-fallback": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
+named_defaults = {
+    "named-default-low-before": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,0\n"),
+    "named-default-low-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,255\n"),
+    "named-default-high-before": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151\n"),
+    "named-default-high-edited": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151\n"),
+}
+named_default_refusals = {
+    "named-default-literal-recovery": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "named-default-sample": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "named-default-equal-other": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
+report_statuses = {
+    "report-status-sample-zero": (b"0", b"4096,39,93,39,0,39,93,0,39,0,1,0,0,1,0,1\n"),
+    "report-status-default-zero": (b"0", b"4096,39,93,39,0,39,93,0,39,0,1,0,0,0,0,0\n"),
+}
+report_status_refusals = {
+    "report-status-earlier-decision": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
 payloads = {
     "payload-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0,13\n"),
     "payload-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
@@ -204,7 +244,8 @@ def observe(code, field, local_policy=False, named_policy=False,
 
 
 def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False,
-                     route=False, payload=False, handoff=False, delivery=False):
+                     route=False, payload=False, handoff=False, delivery=False,
+                     named_default=False, report_status=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -323,18 +364,30 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
         ready, = (match for match in re.finditer(
             rb"^    _Bool (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(\d+\)\) < " +
             budget[1] + rb";\n", code, re.M) if match.start() >= last.end())
+        fallback = rb"\(\(uint8_t\)UINT8_C\(\d+\)\)"
+        if named_default:
+            default, = (match for match in re.finditer(
+                rb"^    uint8_t (nl_local_\d+) = " + fallback + rb";\n",
+                code, re.M) if last.end() <= match.start() < ready.start())
+            fallback = default[1]
         choice = one(
             code, rb"^    uint8_t (nl_if_(\d+));\n"
             rb"    _Bool nl_condition_\2 = " + ready[1] + rb";\n"
             rb"    if \(nl_condition_\2\) \{\n"
             rb"        \1 = " + report_input[1] + rb";\n"
             rb"    \} else \{\n"
-            rb"        \1 = \(\(uint8_t\)UINT8_C\(\d+\)\);\n"
+            rb"        \1 = " + fallback + rb";\n"
             rb"    \}\n")
         sent = one(code, rb"^    uint8_t (nl_local_\d+) = " + choice[1] + rb";\n")
         assert ready.end() <= choice.start() < sent.start()
         values.extend((ready[1], sent[1]))
         last = sent
+    if report_status:
+        assert named_default and delivery
+        status = one(code, rb"^    _Bool (nl_local_\d+) = " + ready[1] + rb";\n")
+        assert last.end() <= status.start()
+        values.append(status[1])
+        last = status
     final += (b'    printf("%zu' + b",%u" * len(values) + b'\\n", ' + budget[1] + b", " +
               b", ".join(b"(unsigned)" + value for value in values) + b");\n")
     edits.append((last.end(), final))
@@ -551,6 +604,20 @@ if __name__ == "__main__":
         verify(cli, sources, raw, report_deliveries, report_delivery_refusals,
                partial(observe_sequence, midpoint=True, report=True,
                        route=True, payload=True, handoff=True, delivery=True))
+        verify(cli, sources, raw, saved_handoffs, saved_handoff_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True, handoff=True))
+        verify(cli, sources, raw, saved_deliveries, saved_delivery_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True, handoff=True, delivery=True))
+        verify(cli, sources, raw, named_defaults, named_default_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True, handoff=True, delivery=True,
+                       named_default=True))
+        verify(cli, sources, raw, report_statuses, report_status_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True, handoff=True,
+                       delivery=True, named_default=True, report_status=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))
