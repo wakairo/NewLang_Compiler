@@ -56,6 +56,14 @@ saved_reports = {
     "saved-report-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27\n"),
     "saved-report-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127\n"),
 }
+report_handoffs = {
+    "report-handoff-low": (b"1", b"4032,13,27,13,73,13,27,73,13,73,0,13,13\n"),
+    "report-handoff-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127,127\n"),
+}
+report_handoff_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("report-handoff-live", "report-handoff-same-byte")
+}
 saved_midpoint_refusals = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("equal-peer-restore", "wrong-midpoint-field", "late-report",
@@ -185,7 +193,7 @@ def observe(code, field, local_policy=False, named_policy=False,
 
 
 def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False,
-                     route=False, payload=False):
+                     route=False, payload=False, handoff=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -290,6 +298,12 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
         assert flag.end() <= selected_sample.start() < routed.start()
         values.append(routed[1])
         last = routed
+    if handoff:
+        assert payload
+        report_input = one(code, rb"^    uint8_t (nl_local_\d+) = " + routed[1] + rb";\n")
+        assert last.end() <= report_input.start()
+        values.append(report_input[1])
+        last = report_input
     final += (b'    printf("%zu' + b",%u" * len(values) + b'\\n", ' + budget[1] + b", " +
               b", ".join(b"(unsigned)" + value for value in values) + b");\n")
     edits.append((last.end(), final))
@@ -500,6 +514,9 @@ if __name__ == "__main__":
         verify(cli, sources, raw, saved_payloads, saved_payload_refusals,
                partial(observe_sequence, saved_copy=True, midpoint=True,
                        report=True, route=True, payload=True))
+        verify(cli, sources, raw, report_handoffs, report_handoff_refusals,
+               partial(observe_sequence, midpoint=True, report=True,
+                       route=True, payload=True, handoff=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))

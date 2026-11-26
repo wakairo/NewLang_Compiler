@@ -445,15 +445,13 @@ static bool division_emit_byte_update(DivisionText *text,
     if (!division_emit_byte_copy(text, report, mode) ||
         !division_emit_byte_copy(text, tag, peer))
         return false;
-    const NLCheckedNodeView *route = nl_checked_node_view(f, tag->next_item);
-    if (!route || route->kind != NL_CHECKED_BINDING)
-        return true;
-    if (!division_emit_binding(text, f, route, 4))
-        return false;
-    const NLCheckedNodeView *payload =
-        nl_checked_node_view(f, route->next_item);
-    return !payload || payload->kind != NL_CHECKED_BINDING ||
-           division_emit_binding(text, f, payload, 4);
+    for (const NLCheckedNodeView *binding =
+             nl_checked_node_view(f, tag->next_item);
+         binding && binding->kind == NL_CHECKED_BINDING;
+         binding = nl_checked_node_view(f, binding->next_item))
+        if (!division_emit_binding(text, f, binding, 4))
+            return false;
+    return true;
 }
 
 static bool division_emit_helper(DivisionText *text,
