@@ -22,3 +22,7 @@ add_test(NAME p1393_retained_live_oom.unit COMMAND p1393_owned oom "${p1393_reta
 add_test(NAME p1393_retained_live_native.integration COMMAND "${Python3_EXECUTABLE}"
     "${p1393_dir}/native.py" "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1393_probe>"
     "${p1393_dir}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" --retained-live)
+
+set(p1863_shared_writer "${p1393_dir}/sources/P3-C-live-shared-tail-writer.nl")
+add_test(NAME p1863_shared_writer_owned.unit
+    COMMAND p1393_probe "${p1863_shared_writer}" --shared-writer)
