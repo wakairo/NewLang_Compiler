@@ -43,6 +43,11 @@ midpoints = {
     "midpoint-high": (b"0", b"4096,31,37,31,127,31,37,127\n"),
 }
 midpoint_refusals = {"midpoint-wrong-peer": (0, 4, b"V1-BACKEND-UNSUPPORTED")}
+reports = {
+    "report-low": (b"1", b"4032,13,19,13,19,13,19,19,13,19\n"),
+    "report-high": (b"0", b"4096,31,37,31,127,31,37,127,31,127\n"),
+}
+report_refusals = {"report-wrong-time": (0, 4, b"V1-BACKEND-UNSUPPORTED")}
 refused = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("independent-actual", "independent-input", "independent-old",
@@ -132,7 +137,7 @@ def observe(code, field, local_policy=False, named_policy=False,
             code[loan.end():copied.end()] + after + code[copied.end():])
 
 
-def observe_sequence(code, field, saved_copy=False, midpoint=False):
+def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -203,9 +208,22 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False):
         final += b"    assert(" + peers[0][1] + b" == initial_sibling);\n"
         values.append(peers[0][1])
     values.extend((copied[1][1], updated[1], unchanged[1]))
+    last = copied[1]
+    if report:
+        assert midpoint
+        reported_mode, reported_tag = (
+            one(code, rb"^    const uint8_t (nl_local_\d+) = " + sample[1] + rb";\n")
+            for sample in (intermediate, peers[0])
+        )
+        assert last.end() <= reported_mode.start() < reported_tag.start()
+        final += (b"    assert(" + reported_mode[1] + b" == " + intermediate[1] +
+                  b" && " + reported_mode[1] + b" != " + updated[1] + b");\n"
+                  b"    assert(" + reported_tag[1] + b" == " + peers[0][1] + b");\n")
+        values.extend((reported_mode[1], reported_tag[1]))
+        last = reported_tag
     final += (b'    printf("%zu' + b",%u" * len(values) + b'\\n", ' + budget[1] + b", " +
               b", ".join(b"(unsigned)" + value for value in values) + b");\n")
-    edits.append((copied[1].end(), final))
+    edits.append((last.end(), final))
     pieces = [b"#include <assert.h>\n#include <stdio.h>\n"]
     previous = 0
     for point, addition in edits:
@@ -396,6 +414,8 @@ if __name__ == "__main__":
                partial(observe_sequence, saved_copy=True))
         verify(cli, sources, raw, midpoints, midpoint_refusals,
                partial(observe_sequence, midpoint=True))
+        verify(cli, sources, raw, reports, report_refusals,
+               partial(observe_sequence, midpoint=True, report=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))
