@@ -389,8 +389,8 @@ static bool division_emit_byte_update(DivisionText *text,
         second = nl_checked_node_view(f, plan->byte_second_update);
         /* The field read can itself bind the second writer's actual. */
         if (item != second) {
-            if (plan->byte_second_descriptor &&
-                init->kind == NL_CHECKED_IDENTIFIER) {
+            /* The entry plan ties this Copy to the first exchange's result. */
+            if (init->kind == NL_CHECKED_IDENTIFIER) {
                 if (!division_emit_displaced_copy(text, item, first))
                     return false;
             } else if (!division_text_append(text,
