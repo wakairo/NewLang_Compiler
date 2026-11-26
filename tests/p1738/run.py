@@ -128,6 +128,17 @@ saved_delivery_refusals = {
     "saved-delivery-raw-blocks": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
     "saved-delivery-wrong-fallback": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
 }
+named_defaults = {
+    "named-default-low-before": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,0\n"),
+    "named-default-low-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,255\n"),
+    "named-default-high-before": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151\n"),
+    "named-default-high-edited": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151\n"),
+}
+named_default_refusals = {
+    "named-default-literal-recovery": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "named-default-sample": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "named-default-equal-other": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
 payloads = {
     "payload-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0,13\n"),
     "payload-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
@@ -226,7 +237,8 @@ def observe(code, field, local_policy=False, named_policy=False,
 
 
 def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False,
-                     route=False, payload=False, handoff=False, delivery=False):
+                     route=False, payload=False, handoff=False, delivery=False,
+                     named_default=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -345,13 +357,19 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
         ready, = (match for match in re.finditer(
             rb"^    _Bool (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(\d+\)\) < " +
             budget[1] + rb";\n", code, re.M) if match.start() >= last.end())
+        fallback = rb"\(\(uint8_t\)UINT8_C\(\d+\)\)"
+        if named_default:
+            default, = (match for match in re.finditer(
+                rb"^    uint8_t (nl_local_\d+) = " + fallback + rb";\n",
+                code, re.M) if last.end() <= match.start() < ready.start())
+            fallback = default[1]
         choice = one(
             code, rb"^    uint8_t (nl_if_(\d+));\n"
             rb"    _Bool nl_condition_\2 = " + ready[1] + rb";\n"
             rb"    if \(nl_condition_\2\) \{\n"
             rb"        \1 = " + report_input[1] + rb";\n"
             rb"    \} else \{\n"
-            rb"        \1 = \(\(uint8_t\)UINT8_C\(\d+\)\);\n"
+            rb"        \1 = " + fallback + rb";\n"
             rb"    \}\n")
         sent = one(code, rb"^    uint8_t (nl_local_\d+) = " + choice[1] + rb";\n")
         assert ready.end() <= choice.start() < sent.start()
@@ -579,6 +597,10 @@ if __name__ == "__main__":
         verify(cli, sources, raw, saved_deliveries, saved_delivery_refusals,
                partial(observe_sequence, saved_copy=True, midpoint=True,
                        report=True, route=True, payload=True, handoff=True, delivery=True))
+        verify(cli, sources, raw, named_defaults, named_default_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True, handoff=True, delivery=True,
+                       named_default=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))

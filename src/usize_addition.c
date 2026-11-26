@@ -3416,7 +3416,7 @@ static bool guarded_byte_descriptor(
     NLSymbolId selected, NLSymbolId bytes, const NLCheckedNodeView *original,
     const NLSyntaxView *original_source, bool local_policy, bool sequential,
     bool midpoint, bool report, bool route, bool payload, bool handoff,
-    bool delivery, GuardedByteDescriptor *out)
+    bool delivery, bool named_default, GuardedByteDescriptor *out)
 {
     const NLCheckedFragment *f = body->body;
     const NLSemanticContext *c = body->context;
@@ -3428,9 +3428,9 @@ static bool guarded_byte_descriptor(
     const size_t binding_count = last_exchange + 4 + (size_t)sequential +
                                  (report ? 2u : 0u) + (size_t)route +
                                  (size_t)payload + (size_t)handoff +
-                                 (delivery ? 2u : 0u);
-    const NLCheckedNodeView *bindings[16];
-    const NLSyntaxNode *initializer_sources[16];
+                                 (delivery ? 2u : 0u) + (size_t)named_default;
+    const NLCheckedNodeView *bindings[17];
+    const NLSyntaxNode *initializer_sources[17];
     NLCheckedNodeId second_update = 0;
     NLSymbolId previous =
         selected > original->symbol ? selected : original->symbol;
@@ -3487,6 +3487,7 @@ static bool guarded_byte_descriptor(
             nl_checked_node_view(f, bindings[last_exchange]->initializer);
         NLCopyBodyParameters second_call;
         if (!writer || !value || value->type != u8 ||
+            (named_default && !saved_copy) ||
             (!saved_copy && !copy_if_literal_at(f, c, value)) ||
             !descriptor_replace(
                 f, c, second_loan,
@@ -3587,9 +3588,24 @@ static bool guarded_byte_descriptor(
                           bindings[observation + 7]->symbol, u8))
         return false;
     if (delivery) {
-        const size_t ready = observation + 9;
-        /* The false arm has an exact u8 literal instead of a named binding. */
-        const NLSymbolId forwarded[] = {bindings[observation + 8]->symbol, 0};
+        const size_t policy = observation + 9;
+        NLSymbolId fallback = 0;
+        if (named_default) {
+            const NLCheckedNodeView *literal =
+                nl_checked_node_view(f, bindings[policy]->initializer);
+            const NLSyntaxView *literal_source =
+                nl_syntax_node_view(initializer_sources[policy]);
+            if (!literal_source ||
+                literal_source->kind != NL_SYNTAX_U8_LITERAL || !literal ||
+                literal->kind != NL_CHECKED_U8_LITERAL || literal->type != u8 ||
+                !span_equal(literal->span, literal_source->span) ||
+                !copy_if_literal_at(f, c, literal))
+                return false;
+            fallback = bindings[policy]->symbol;
+        }
+        const size_t ready = policy + (size_t)named_default;
+        const NLSymbolId forwarded[] = {bindings[observation + 8]->symbol,
+                                        fallback};
         if (!guarded_byte_report_route(body, bindings[ready]->initializer,
                                        initializer_sources[ready], bytes) ||
             !guarded_byte_report_choice(
@@ -3878,7 +3894,9 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
         f->body_count == 4 && root->terminates && first_value &&
         first_value->kind == NL_CHECKED_AGGREGATE && next_value &&
         next_value->kind == NL_CHECKED_USIZE_LITERAL;
-    const bool delivery = one_original && binding_count == 21;
+    const bool named_default = one_original && binding_count == 22;
+    const bool delivery =
+        one_original && (binding_count == 21 || named_default);
     const bool handoff = one_original && (binding_count == 19 || delivery);
     const bool payload = one_original && (binding_count == 18 || handoff);
     const bool route = one_original && (binding_count == 17 || payload);
@@ -4028,7 +4046,7 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                 &b, root, source, id, item, bindings[prefix - 1]->symbol,
                 bindings[2]->symbol, original, original_source, local_policy,
                 sequential, midpoint, report, route, payload, handoff, delivery,
-                &fields))
+                named_default, &fields))
             return false;
         if (sequential) {
             if (f->body_calls[2] != fields.writer ||

@@ -52,6 +52,8 @@ add_test(NAME p1841_saved_handoff_rollback.unit COMMAND p1673_probe
     guarded-byte-sequential-writer-oom "${p1738_sources}/saved-handoff-low-edited.nl" unused)
 add_test(NAME p1841_saved_delivery_rollback.unit COMMAND p1673_probe
     guarded-byte-sequential-writer-oom "${p1738_sources}/saved-delivery-low-before.nl" unused)
+add_test(NAME p1841_named_default_rollback.unit COMMAND p1673_probe
+    guarded-byte-sequential-writer-oom "${p1738_sources}/named-default-low-edited.nl" unused)
 set_tests_properties(p1738_guarded_scoped_helper_native.integration
     p1738_guarded_scoped_helper_rollback.unit
     p1764_caller_selected_writer_rollback.unit

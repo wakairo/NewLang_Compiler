@@ -2352,6 +2352,7 @@ include(tests/p1455/CMakeLists.txt)
     set_tests_properties(p1833_report_delivery_rollback.unit PROPERTIES TIMEOUT 240)
     set_tests_properties(p1841_saved_handoff_rollback.unit PROPERTIES TIMEOUT 180)
     set_tests_properties(p1841_saved_delivery_rollback.unit PROPERTIES TIMEOUT 240)
+    set_tests_properties(p1841_named_default_rollback.unit PROPERTIES TIMEOUT 240)
     set_tests_properties(p1756_delegated_policy_rollback.unit PROPERTIES TIMEOUT 180)
     # Full registration/invocation/named-output fault enumeration with host
     # ASan checks thousands of independent retries. Keep every location and
