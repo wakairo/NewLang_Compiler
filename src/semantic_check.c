@@ -4006,12 +4006,15 @@ static bool body_result(Check *check, NLTypeId declared, NLCheckedNodeId body,
                         NLSourceSpan span)
 {
     const NLCheckedNodeView result = *view(check, body);
-    const NLFunctionEntry *function =
-        &check->context->functions[check->body_function - 1];
-    const bool five_tail_writer =
-        check->caller != NULL && check->allocated_slice &&
-        nl_five_tail_writer_signature(check->context, function->parameters,
-                                      function->count, declared);
+    bool five_tail_writer = false;
+    if (check->caller != NULL && check->allocated_slice &&
+        check->context->functions != NULL && check->body_function != 0 &&
+        check->body_function <= check->context->function_count) {
+        const NLFunctionEntry *function =
+            &check->context->functions[check->body_function - 1];
+        five_tail_writer = nl_five_tail_writer_signature(
+            check->context, function->parameters, function->count, declared);
+    }
     for (size_t i = 0; !five_tail_writer && i < check->context->type_count; ++i)
         if (check->context->types[i].recursive_header &&
             check->context->types[i].view.field_count == 4 &&

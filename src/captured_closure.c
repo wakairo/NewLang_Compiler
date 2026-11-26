@@ -1215,6 +1215,14 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
          read_binding(f, f->captured_reads->events[0].event.node,
                       &opening_loan) == 0))
         return INVALID;
+    bool shared_writer_profile = false;
+    for (size_t j = 0; j < world->function_count; ++j) {
+        const NLFunctionEntry *fn = &world->functions[j];
+        shared_writer_profile |=
+            fn->body != NULL &&
+            nl_five_tail_writer_signature(world, fn->parameters, fn->count,
+                                          fn->result);
+    }
     Release releases[NL_CAPTURED_MAX_RELEASES] = {0};
     size_t count = certificate->view.count, grants = 0;
     for (size_t r = 0; r < count; ++r) {
@@ -1244,6 +1252,11 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             /* No release may change this ledger from loan entry to join.
              * The saved read worlds recheck the whole selected phase. */
             c_ended_at_loan = releases[3].freed;
+            /* The shared writer keeps C live and dst.child empty. */
+            if (calls != 0 &&
+                (c_ended_at_loan || !unlink_option(world, releases[4].fields[2],
+                                                   releases, SIZE_MAX)))
+                return INVALID;
         }
         if (v->kind == NL_CHECKED_REPLACE ||
             v->kind == NL_CHECKED_REGISTERED_CALL) {
@@ -1544,16 +1557,17 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                 index = r;
         if (index == count)
             return INVALID;
-        if (reads != 0 && !c_ended_at_loan) {
-            /* The retained-live continuation completes the match before
-             * fully releasing each original, in reverse allocation order. */
+        const bool ordered_failure = shared_writer_profile && variant == 1;
+        if ((reads != 0 && !c_ended_at_loan) || ordered_failure) {
+            /* The selected shared profile releases failure originals and
+             * retained-live success originals in reverse allocation order. */
             static const NLCheckedKind cleanup[] = {
                 NL_CHECKED_DESTROY, NL_CHECKED_ERASE_SLOT,
                 NL_CHECKED_DOMAIN_FINALIZE, NL_CHECKED_DEALLOCATE};
             const size_t stride = sizeof(cleanup) / sizeof(cleanup[0]);
             const size_t released = retained_cleanup_step / stride;
-            if (reads != 2 || released >= count ||
-                index != count - 1 - released ||
+            if ((ordered_failure ? reads != 0 : reads != 2) ||
+                released >= count || index != count - 1 - released ||
                 v->kind != cleanup[retained_cleanup_step % stride])
                 return INVALID;
             ++retained_cleanup_step;

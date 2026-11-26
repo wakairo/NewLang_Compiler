@@ -52,6 +52,56 @@ def negative_sources(source):
 
 
 def shared_writer_negatives(source):
+    dst_cleanup = "let empty_dst = loan_exclusive_read(life_dst)"
+    start = source.index(dst_cleanup)
+    c_cleanup = re.search(
+        r"^ +let empty_C = loan_exclusive_read\(life_C\).*?"
+        r"^ +deallocate\(allocation_C, full_C\);\n",
+        source[start:], re.M | re.S,
+    )[0]
+    without_c = source[:start] + replace_one(source[start:], c_cleanup, "")
+    yield (
+        "shared-C-ended-before-read", "CAPTURED-CLOSURE-PRECISION",
+        insert_before(without_c, "let cached_tail_while_C_live =",
+                      dedent(c_cleanup)),
+    )
+    start = source.index("let ptr_dst =")
+    end = source.index("// Pre-detach checkpoint", start)
+    initial = source[start:end]
+    yield (
+        "dst-child-nonempty", "CAPTURED-CLOSURE-PRECISION",
+        source[:start] + replace_one(
+            initial, "child: Option<ptr<Node>>::None",
+            "child: Option<ptr<Node>>::Some(ptr_C)") + source[end:],
+    )
+    for site, original, first, second, name in (
+        (3, "B", "A", "src", "failure-3-order-swapped"),
+        (4, "C", "B", "A", "failure-4-order-swapped"),
+        (5, "dst", "C", "B", "failure-order-swapped"),
+    ):
+        start = source.index(
+            "None => {",
+            source.index(f"independent allocation site {site}: {original}"))
+        end = source.index(f"Some(bundle_{original}) => {{", start)
+        failure = source[start:end]
+
+        def cleanup_range(binding):
+            begin = failure.rfind(
+                "\n", 0, failure.index(f"let empty_{binding} =")) + 1
+            last = failure.index(
+                f"deallocate(allocation_{binding}, full_{binding});")
+            return begin, failure.index("\n", last) + 1
+
+        first_start, first_end = cleanup_range(first)
+        second_start, second_end = cleanup_range(second)
+        assert first_end == second_start
+        yield (
+            name, "CAPTURED-CLOSURE-PRECISION",
+            source[:start] + failure[:first_start] +
+            failure[second_start:second_end] +
+            failure[first_start:first_end] + failure[second_end:] +
+            source[end:],
+        )
     yield (
         "different-field", "FIVE-ROOT-WRITER-DEFINITION",
         replace_one(source, "replace(head@prev,", "replace(head@next,"),
