@@ -3481,13 +3481,10 @@ descriptor_ordered_originals(const NLCheckedFragment *f,
         for (size_t j = 0; j < 3; ++j)
             if (first_places[i] == second_places[j])
                 return false;
-    const NLCheckedNodeView *first = nl_checked_node_view(f, fields[0].writer);
-    const NLCheckedNodeView *second = nl_checked_node_view(f, fields[1].writer);
     NLSemanticScopeView closed;
     NLSemanticBindingView final;
     NLCopyBodyParameters first_call, second_call;
-    if (!first || !second || first->function != second->function ||
-        loans[0]->loan.scope == loans[1]->loan.scope ||
+    if (loans[0]->loan.scope == loans[1]->loan.scope ||
         loans[0]->span.end_byte >= loans[1]->span.start_byte ||
         !nl_checked_copy_body_parameters(f, fields[0].writer, &first_call) ||
         !nl_checked_copy_body_parameters(f, fields[1].writer, &second_call) ||

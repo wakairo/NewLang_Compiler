@@ -249,10 +249,14 @@ snapshot_refusals = {
                  "snapshot-wrong-original", "snapshot-mixed-sibling",
                  "complete-snapshot-mixed")
 }
+split_writer_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("split-wrong-return", "split-wrong-actual", "split-reloan")
+}
 
 
 def observe_independent(code, positions, mode_source="literal",
-                        snapshot_first=False):
+                        snapshot_first=False, distinct_writers=False):
     constructors = list(re.finditer(
         rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n", code, re.M
     ))
@@ -273,11 +277,14 @@ def observe_independent(code, positions, mode_source="literal",
         for target in targets
     ]
     first, second = calls
-    assert first[3] == second[3] and first[4] == trial[1]
-    helper = one(code, rb"^static uint8_t " + first[3] +
-                 rb"\(uint8_t \*(nl_local_\d+), uint8_t (nl_local_\d+)\)\n"
-                 rb"\{\n    const uint8_t nl_previous = \*\1;\n"
-                 rb"    \*\1 = \2;\n    return nl_previous;\n\}\n")
+    assert (first[3] != second[3]) == distinct_writers and first[4] == trial[1]
+    helpers = [
+        one(code, rb"^static uint8_t " + function +
+            rb"\(uint8_t \*(nl_local_\d+), uint8_t (nl_local_\d+)\)\n"
+            rb"\{\n    const uint8_t nl_previous = \*\1;\n"
+            rb"    \*\1 = \2;\n    return nl_previous;\n\}\n")
+        for function in dict.fromkeys(call[3] for call in calls)
+    ]
     source = {
         "literal": rb"\(\(uint8_t\)UINT8_C\(\d+\)\)",
         "current": targets[0],
@@ -296,7 +303,7 @@ def observe_independent(code, positions, mode_source="literal",
         pattern = re.compile(rb"^    const uint8_t (nl_local_\d+) = " + call[1] + rb";\n", re.M)
         result, = pattern.finditer(code, second.end())
         copied.append(result)
-    prefix = [helper, *constructors, planned, trial, first]
+    prefix = [*helpers, *constructors, planned, trial, first]
     if snapshot_first:
         assert mode_source == "current" and reads[0].span() == incoming.span()
         order = [*prefix, *reads[:2], second, *reads[2:], *copied]
@@ -365,3 +372,14 @@ if __name__ == "__main__":
                partial(observe_independent, mode_source="displaced"))
         verify(cli, sources, raw, snapshots, snapshot_refusals,
                partial(observe_independent, mode_source="current", snapshot_first=True))
+        verify(cli, sources, raw,
+               {"split-current": (b"11", b"4032,35,35,41,35,117,149,35,101\n")},
+               split_writer_refusals,
+               partial(observe_independent, mode_source="current", distinct_writers=True))
+        verify(cli, sources, raw,
+               {"split-literal-unit": (b"01", b"4096,93,19,117,93,41,149,19,101\n")}, {},
+               partial(observe_independent, distinct_writers=True))
+        verify(cli, sources, raw,
+               {"split-snapshot": (b"10", b"4032,35,35,41,35,117,101,35,149\n")}, {},
+               partial(observe_independent, mode_source="current", snapshot_first=True,
+                       distinct_writers=True))

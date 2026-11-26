@@ -696,6 +696,17 @@ static NLCheckStatus literal_divisor_c17(const NLDivisionUsizePlan *main,
     if (emitted && main->byte_update_call)
         emitted = division_emit_byte_writer(
             &text, main->body, main->byte_update_call, !main->byte_selector);
+    if (emitted && main->byte_second_update_call) {
+        const NLCheckedNodeView *first =
+            nl_checked_node_view(main->body, main->byte_update_call);
+        const NLCheckedNodeView *second =
+            nl_checked_node_view(main->body, main->byte_second_update_call);
+        emitted =
+            first && second &&
+            (first->function == second->function ||
+             division_emit_byte_writer(&text, main->body,
+                                       main->byte_second_update_call, false));
+    }
     if (emitted && main->byte_descriptor)
         emitted = division_text_append(
             &text, "_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1, "
