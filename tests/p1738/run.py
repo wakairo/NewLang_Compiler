@@ -56,6 +56,25 @@ saved_reports = {
     "saved-report-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27\n"),
     "saved-report-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127\n"),
 }
+report_handoffs = {
+    "report-handoff-low": (b"1", b"4032,13,27,13,73,13,27,73,13,73,0,13,13\n"),
+    "report-handoff-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127,127\n"),
+}
+report_handoff_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("report-handoff-live", "report-handoff-same-byte")
+}
+report_deliveries = {
+    "report-publish-low-before": (b"1", b"4032,13,27,13,73,13,27,73,13,73,0,13,13,1,13\n"),
+    "report-publish-low-edited": (b"1", b"4032,13,27,13,73,13,27,73,13,73,0,13,13,0,0\n"),
+    "report-publish-high-before": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127,127,1,127\n"),
+    "report-publish-high-edited": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127,127,0,0\n"),
+}
+report_delivery_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("report-publish-live", "report-publish-original-decision",
+                 "report-publish-blocks", "report-publish-nonliteral-fallback")
+}
 saved_midpoint_refusals = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("equal-peer-restore", "wrong-midpoint-field", "late-report",
@@ -185,7 +204,7 @@ def observe(code, field, local_policy=False, named_policy=False,
 
 
 def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False,
-                     route=False, payload=False):
+                     route=False, payload=False, handoff=False, delivery=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -271,9 +290,12 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
         last = reported_tag
     if route:
         assert report
-        flag = one(code, rb"^    _Bool (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(4064\)\) < "
-                   + budget[1] + rb";\n")
-        assert last.end() <= flag.start()
+        route_pattern = re.compile(
+            rb"    \(void\)" + last[1] + rb";\n"
+            rb"    _Bool (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(4064\)\) < "
+            + budget[1] + rb";\n")
+        flag = route_pattern.match(code, last.end())
+        assert flag
         values.append(flag[1])
         last = flag
     if payload:
@@ -290,6 +312,29 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
         assert flag.end() <= selected_sample.start() < routed.start()
         values.append(routed[1])
         last = routed
+    if handoff:
+        assert payload
+        report_input = one(code, rb"^    uint8_t (nl_local_\d+) = " + routed[1] + rb";\n")
+        assert last.end() <= report_input.start()
+        values.append(report_input[1])
+        last = report_input
+    if delivery:
+        assert handoff
+        ready, = (match for match in re.finditer(
+            rb"^    _Bool (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(\d+\)\) < " +
+            budget[1] + rb";\n", code, re.M) if match.start() >= last.end())
+        choice = one(
+            code, rb"^    uint8_t (nl_if_(\d+));\n"
+            rb"    _Bool nl_condition_\2 = " + ready[1] + rb";\n"
+            rb"    if \(nl_condition_\2\) \{\n"
+            rb"        \1 = " + report_input[1] + rb";\n"
+            rb"    \} else \{\n"
+            rb"        \1 = \(\(uint8_t\)UINT8_C\(\d+\)\);\n"
+            rb"    \}\n")
+        sent = one(code, rb"^    uint8_t (nl_local_\d+) = " + choice[1] + rb";\n")
+        assert ready.end() <= choice.start() < sent.start()
+        values.extend((ready[1], sent[1]))
+        last = sent
     final += (b'    printf("%zu' + b",%u" * len(values) + b'\\n", ' + budget[1] + b", " +
               b", ".join(b"(unsigned)" + value for value in values) + b");\n")
     edits.append((last.end(), final))
@@ -500,6 +545,12 @@ if __name__ == "__main__":
         verify(cli, sources, raw, saved_payloads, saved_payload_refusals,
                partial(observe_sequence, saved_copy=True, midpoint=True,
                        report=True, route=True, payload=True))
+        verify(cli, sources, raw, report_handoffs, report_handoff_refusals,
+               partial(observe_sequence, midpoint=True, report=True,
+                       route=True, payload=True, handoff=True))
+        verify(cli, sources, raw, report_deliveries, report_delivery_refusals,
+               partial(observe_sequence, midpoint=True, report=True,
+                       route=True, payload=True, handoff=True, delivery=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))
