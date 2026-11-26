@@ -117,6 +117,17 @@ saved_handoff_refusals = {
     "saved-handoff-equal": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
     "saved-handoff-wrong-restore": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
 }
+saved_deliveries = {
+    "saved-delivery-low-before": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,1,17\n"),
+    "saved-delivery-low-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,0\n"),
+    "saved-delivery-high-before": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151\n"),
+    "saved-delivery-high-edited": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,0,0\n"),
+}
+saved_delivery_refusals = {
+    "saved-delivery-old-decision": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "saved-delivery-raw-blocks": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "saved-delivery-wrong-fallback": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
 payloads = {
     "payload-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0,13\n"),
     "payload-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
@@ -565,6 +576,9 @@ if __name__ == "__main__":
         verify(cli, sources, raw, saved_handoffs, saved_handoff_refusals,
                partial(observe_sequence, saved_copy=True, midpoint=True,
                        report=True, route=True, payload=True, handoff=True))
+        verify(cli, sources, raw, saved_deliveries, saved_delivery_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True, handoff=True, delivery=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))
