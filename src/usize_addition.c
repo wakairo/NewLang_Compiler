@@ -3466,12 +3466,10 @@ guarded_byte_descriptor(QuantityBody *body, const NLCheckedNodeView *root,
         const NLCheckedNodeView *mode = bindings[mode_index];
         const NLCheckedNodeView *value =
             nl_checked_node_view(f, mode->initializer);
-        /* Selecting a payload still requires literal recovery. */
         const bool saved_copy =
-            intermediate && !payload &&
-            scalar_name_copy(f, c, mode->initializer,
-                             initializer_sources[mode_index],
-                             bindings[0]->symbol, u8);
+            intermediate && scalar_name_copy(f, c, mode->initializer,
+                                             initializer_sources[mode_index],
+                                             bindings[0]->symbol, u8);
         const NLCheckedNodeView *second_loan =
             nl_checked_node_view(f, bindings[last_exchange]->initializer);
         NLCopyBodyParameters second_call;
