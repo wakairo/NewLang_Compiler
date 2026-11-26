@@ -29,6 +29,15 @@ sequential = {
     "adjacent-named": (b"1", b"4096,31,9,31,5,97\n"),
     "sequential-tail": (b"1", b"4096,31,9,31,31,5,97\n"),
 }
+saved_recovery = {
+    "restore-low": (b"1", b"4032,13,19,13,13,19,19\n"),
+    "restore-high": (b"0", b"4096,31,37,31,31,37,127\n"),
+}
+saved_recovery_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("restore-sibling-equal-value", "restore-no-intermediate",
+                 "restore-different-writer")
+}
 refused = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("independent-actual", "independent-input", "independent-old",
@@ -118,7 +127,7 @@ def observe(code, field, local_policy=False, named_policy=False,
             code[loan.end():copied.end()] + after + code[copied.end():])
 
 
-def observe_sequence(code, field):
+def observe_sequence(code, field, saved_copy=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -141,17 +150,22 @@ def observe_sequence(code, field):
         rb"\{\n    const uint8_t nl_previous = \*\1;\n"
         rb"    \*\1 = \2;\n    return nl_previous;\n\}\n",
     )
+    recovery_value = first[1] if saved_copy else rb"\(\(uint8_t\)UINT8_C\(\d+\)\)"
     recovery = one(code, rb"^    const uint8_t " + second[4] +
-                        rb" = \(\(uint8_t\)UINT8_C\(\d+\)\);\n")
+                   rb" = " + recovery_value + rb";\n")
     reads = list(re.finditer(rb"^    const uint8_t (nl_local_\d+) = " + target + rb";\n", code, re.M))
     assert len(reads) in (1, 2)
+    if saved_copy:
+        assert len(reads) == 2
     intermediate = reads[0] if len(reads) == 2 else None
     updated = reads[-1]
     unchanged = one(code, rb"^    const uint8_t (nl_local_\d+) = " + sibling + rb";\n")
-    copied = [
-        one(code, rb"^    const uint8_t (nl_local_\d+) = " + event[1] + rb";\n")
-        for event in (first, second)
-    ]
+    copied = []
+    for event in (first, second):
+        pattern = rb"^    const uint8_t (nl_local_\d+) = " + event[1] + rb";\n"
+        result, = (match for match in re.finditer(pattern, code, re.M)
+                   if match.span() != recovery.span())
+        copied.append(result)
     assert exchange.end() < constructor.start() < budget.start() < selected.start()
     assert selected.end() <= first.start() < recovery.start() < second.start()
     assert second.end() <= updated.start() < unchanged.start() < copied[0].start() < copied[1].start()
@@ -365,6 +379,8 @@ if __name__ == "__main__":
         verify(cli, sources, raw, admitted, refused, observe)
         verify(cli, sources, raw, reordered, {}, partial(observe, sibling_first=True))
         verify(cli, sources, raw, sequential, {}, observe_sequence)
+        verify(cli, sources, raw, saved_recovery, saved_recovery_refusals,
+               partial(observe_sequence, saved_copy=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))

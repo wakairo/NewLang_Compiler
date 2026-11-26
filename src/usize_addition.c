@@ -3232,15 +3232,12 @@ static bool descriptor_target_read(const NLCheckedField *read,
 /* The actual second call must begin with the first loan already closed and
  * the same field at the first Change's post-state. No caller world is joined.
  */
-static bool descriptor_reloan(const NLCheckedFragment *f,
-                              const NLCheckedNodeView *first_loan,
-                              const NLCheckedNodeView *second_loan,
-                              NLCheckedNodeId writer,
-                              NLCheckedNodeId second_writer,
-                              const NLCheckedField *first,
-                              const NLCheckedField *second)
+static bool descriptor_reloan(
+    const NLCheckedFragment *f, const NLCheckedNodeView *first_loan,
+    const NLCheckedNodeView *second_loan, NLCheckedNodeId writer,
+    NLCheckedNodeId second_writer, const NLCheckedField *first,
+    const NLCheckedField *second, NLCopyBodyParameters *parameters)
 {
-    NLCopyBodyParameters parameters;
     NLSemanticScopeView ended;
     const NLCheckedNodeView *first_call = nl_checked_node_view(f, writer);
     const NLCheckedNodeView *second_call =
@@ -3249,8 +3246,8 @@ static bool descriptor_reloan(const NLCheckedFragment *f,
            first_call->function == second_call->function &&
            first_loan->loan.scope != second_loan->loan.scope &&
            first_loan->span.end_byte < second_loan->span.start_byte &&
-           nl_checked_copy_body_parameters(f, second_writer, &parameters) &&
-           nl_semantic_scope_view(parameters.entry, first_loan->loan.scope,
+           nl_checked_copy_body_parameters(f, second_writer, parameters) &&
+           nl_semantic_scope_view(parameters->entry, first_loan->loan.scope,
                                   &ended) &&
            !ended.active && second->parent == first->parent &&
            second->parent_incarnation == first->parent_incarnation &&
@@ -3383,20 +3380,26 @@ static bool guarded_byte_descriptor(
     NLCheckedField second_field;
     NLCheckedNodeId second_writer = 0;
     if (sequential) {
-        const NLCheckedNodeView *mode = bindings[last_exchange - 1];
-        const NLCheckedNodeView *literal =
+        const size_t mode_index = last_exchange - 1;
+        const NLCheckedNodeView *mode = bindings[mode_index];
+        const NLCheckedNodeView *value =
             nl_checked_node_view(f, mode->initializer);
+        const bool saved_copy =
+            intermediate && scalar_name_copy(f, c, mode->initializer,
+                                             initializer_sources[mode_index],
+                                             bindings[0]->symbol, u8);
         const NLCheckedNodeView *second_loan =
             nl_checked_node_view(f, bindings[last_exchange]->initializer);
-        if (!writer || !literal || literal->type != u8 ||
-            !copy_if_literal_at(f, c, literal) ||
+        NLCopyBodyParameters second_call;
+        if (!writer || !value || value->type != u8 ||
+            (!saved_copy && !copy_if_literal_at(f, c, value)) ||
             !descriptor_replace(
                 f, c, second_loan,
                 nl_syntax_node_view(initializer_sources[last_exchange]),
                 original, mode->symbol, ctor->type, u8, &second_field,
                 &second_writer, NULL) ||
             !descriptor_reloan(f, loan, second_loan, writer, second_writer,
-                               &field, &second_field))
+                               &field, &second_field, &second_call))
             return false;
         if (intermediate) {
             const NLCheckedNodeId read = bindings[1]->initializer;
@@ -3405,6 +3408,19 @@ static bool guarded_byte_descriptor(
                                  original, &field, u8) ||
                 !descriptor_target_read(&nl_checked_node_view(f, read)->field,
                                         &field))
+                return false;
+        }
+        if (saved_copy) {
+            NLSemanticBindingView first_old, recovery;
+            if (!nl_semantic_binding_view(second_call.entry,
+                                          bindings[0]->symbol, &first_old) ||
+                first_old.availability != NL_AVAILABLE ||
+                first_old.type != u8 ||
+                first_old.value != loan->results[0].value ||
+                !nl_semantic_binding_view(second_call.entry, mode->symbol,
+                                          &recovery) ||
+                recovery.availability != NL_AVAILABLE || recovery.type != u8 ||
+                recovery.value != value->results[0].value)
                 return false;
         }
         change = &second_field;
