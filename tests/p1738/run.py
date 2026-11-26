@@ -61,6 +61,19 @@ saved_midpoint_refusals = {
     for name in ("equal-peer-restore", "wrong-midpoint-field", "late-report",
                  "second-field", "second-writer")
 }
+routes = {
+    "route-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0\n"),
+    "route-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1\n"),
+}
+route_refusals = {"route-blocks": (0, 4, b"V1-BACKEND-UNSUPPORTED")}
+payloads = {
+    "payload-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0,13\n"),
+    "payload-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
+}
+payload_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("payload-live-mode", "payload-independent-condition")
+}
 refused = {
     name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
     for name in ("independent-actual", "independent-input", "independent-old",
@@ -150,7 +163,8 @@ def observe(code, field, local_policy=False, named_policy=False,
             code[loan.end():copied.end()] + after + code[copied.end():])
 
 
-def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False):
+def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False,
+                     route=False, payload=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -234,6 +248,27 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
                   b"    assert(" + reported_tag[1] + b" == " + peers[0][1] + b");\n")
         values.extend((reported_mode[1], reported_tag[1]))
         last = reported_tag
+    if route:
+        assert report
+        flag = one(code, rb"^    _Bool (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(4064\)\) < "
+                   + budget[1] + rb";\n")
+        assert last.end() <= flag.start()
+        values.append(flag[1])
+        last = flag
+    if payload:
+        assert route
+        selected_sample = one(
+            code, rb"^    uint8_t (nl_if_(\d+));\n"
+            rb"    _Bool nl_condition_\2 = " + flag[1] + rb";\n"
+            rb"    if \(nl_condition_\2\) \{\n"
+            rb"        \1 = " + reported_tag[1] + rb";\n"
+            rb"    \} else \{\n"
+            rb"        \1 = " + reported_mode[1] + rb";\n"
+            rb"    \}\n")
+        routed = one(code, rb"^    uint8_t (nl_local_\d+) = " + selected_sample[1] + rb";\n")
+        assert flag.end() <= selected_sample.start() < routed.start()
+        values.append(routed[1])
+        last = routed
     final += (b'    printf("%zu' + b",%u" * len(values) + b'\\n", ' + budget[1] + b", " +
               b", ".join(b"(unsigned)" + value for value in values) + b");\n")
     edits.append((last.end(), final))
@@ -433,6 +468,11 @@ if __name__ == "__main__":
                partial(observe_sequence, saved_copy=True, midpoint=True))
         verify(cli, sources, raw, saved_reports, {},
                partial(observe_sequence, saved_copy=True, midpoint=True, report=True))
+        verify(cli, sources, raw, routes, route_refusals,
+               partial(observe_sequence, midpoint=True, report=True, route=True))
+        verify(cli, sources, raw, payloads, payload_refusals,
+               partial(observe_sequence, midpoint=True, report=True,
+                       route=True, payload=True))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))

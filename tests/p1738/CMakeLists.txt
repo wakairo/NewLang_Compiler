@@ -38,6 +38,8 @@ add_test(NAME p1817_midpoint_rollback.unit COMMAND p1673_probe
     guarded-byte-sequential-writer-oom "${p1738_sources}/report-low.nl" unused)
 add_test(NAME p1822_saved_midpoint_rollback.unit COMMAND p1673_probe
     guarded-byte-sequential-writer-oom "${p1738_sources}/saved-report-low.nl" unused)
+add_test(NAME p1825_routed_report_rollback.unit COMMAND p1673_probe
+    guarded-byte-sequential-writer-oom "${p1738_sources}/payload-low.nl" unused)
 set_tests_properties(p1738_guarded_scoped_helper_native.integration
     p1738_guarded_scoped_helper_rollback.unit
     p1764_caller_selected_writer_rollback.unit
