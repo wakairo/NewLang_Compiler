@@ -83,6 +83,114 @@
         1,
         0
       ]
+    },
+    "other-origin": {
+      "names": "octet available exact",
+      "low": [
+        127,
+        127,
+        0
+      ],
+      "high": [
+        128,
+        128,
+        1
+      ]
+    },
+    "local-quota": {
+      "names": "octet slots exact below above remembered",
+      "threshold": 73,
+      "runtime_inputs": [
+        "0",
+        "72",
+        "73",
+        "74",
+        "SIZE_MAX"
+      ],
+      "low": [
+        37,
+        37,
+        0,
+        1,
+        0,
+        0
+      ],
+      "high": [
+        219,
+        219,
+        1,
+        0,
+        1,
+        1
+      ]
+    },
+    "helper-quota": {
+      "names": "octet slots exact below above remembered",
+      "threshold": 73,
+      "runtime_inputs": [
+        "0",
+        "72",
+        "73",
+        "74",
+        "SIZE_MAX"
+      ],
+      "low": [
+        37,
+        37,
+        0,
+        1,
+        0,
+        0
+      ],
+      "high": [
+        219,
+        219,
+        1,
+        0,
+        1,
+        1
+      ]
+    },
+    "mixed-copies": {
+      "names": "octet reading snapshot current cap cap_copy mid mid_copy exact exact_reverse below above remembered",
+      "threshold": 73,
+      "runtime_inputs": [
+        "0",
+        "72",
+        "73",
+        "74",
+        "SIZE_MAX"
+      ],
+      "low": [
+        37,
+        37,
+        37,
+        37,
+        219,
+        219,
+        150,
+        150,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "high": [
+        219,
+        219,
+        219,
+        219,
+        219,
+        219,
+        150,
+        150,
+        1,
+        1,
+        0,
+        1,
+        1
+      ]
     }
   }
 }

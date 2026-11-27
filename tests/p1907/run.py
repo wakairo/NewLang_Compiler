@@ -40,7 +40,11 @@ def caller_locals(data, source):
     for (name, initializer), local in zip(lets, locals_in_order):
         emitted = declarations[local]
         comparison = re.fullmatch(rb"(.+) (==|<) (.+)", initializer)
-        call = re.fullmatch(rb"(read_window|window_count|queue_mark)\((\w+)\)", initializer)
+        call = re.fullmatch(
+            rb"(read_window|window_count|queue_mark|read_slots|widen_slots)\((\w+)\)",
+            initializer,
+        )
+        widening = re.fullmatch(rb"usize\((\w+)\)", initializer)
         if comparison:
             left, op, right = comparison.groups()
             if op == b"==":
@@ -55,10 +59,12 @@ def caller_locals(data, source):
             invoked = re.fullmatch(rb"(nl_fn_\d+)\(" + names[call[2]] + rb"\)",
                                    declarations[emitted])
             assert invoked
-            if call[1] == b"window_count":
+            if call[1] in (b"window_count", b"widen_slots"):
                 assert re.search(rb"^static size_t " + invoked[1] +
                                  rb"\(uint8_t nl_local_\d+\)$", data, re.M)
             calls.append(emitted)
+        elif widening and widening[1] in names:
+            assert emitted == b"(size_t)" + names[widening[1]]
         elif initializer in names:
             assert emitted == names[initializer]
         names[name] = local
@@ -79,8 +85,9 @@ def observation(data, source, case):
     tail = data[body.end(1):]
     if "constant" in case:
         return headers + data[:body.start(1)] + caller + tail
+    threshold = str(case.get("threshold", 64)).encode()
     seed = re.compile(rb"^    const size_t " + names[b"load"] +
-                      rb" = \(\(size_t\)UINTMAX_C\(64\)\);$", re.M)
+                      rb" = \(\(size_t\)UINTMAX_C\(" + threshold + rb"\)\);$", re.M)
     caller, count = seed.subn(b"    const size_t " + names[b"load"] + b" = test_load;", caller)
     assert count == 1
     assert tail.count(b"int main(void)") == 1
@@ -116,7 +123,8 @@ def exercise(root, compiler, cc, name, source=None):
     watched.write_bytes(observation(raw, source, case))
     width = re.search(rb"_Static_assert\(SIZE_MAX == UINTMAX_C\((\d+)\)", raw)
     assert width
-    inputs = [int(width[1]) if v == "SIZE_MAX" else int(v) for v in OBSERVATIONS["runtime_inputs"]]
+    inputs = [int(width[1]) if v == "SIZE_MAX" else int(v)
+              for v in case.get("runtime_inputs", OBSERVATIONS["runtime_inputs"])]
     for opt in ("-O0", "-O2"):
         flags = [cc, "-std=c17", "-pedantic-errors", "-Wall", "-Wextra", "-Werror", opt]
         plain, trace = root / ("raw" + opt), root / ("observed" + opt)
@@ -124,8 +132,9 @@ def exercise(root, compiler, cc, name, source=None):
         result = run(root, plain.name + ".run", [plain], 0)
         assert not result.stdout and not result.stderr
         run(root, trace.name + ".build", [*flags, watched, "-o", trace], 0)
+        threshold = case.get("threshold", 64)
         expected = ([(None, case["constant"])] if "constant" in case else
-                    [(v, case["low"] if v < 64 else case["high"]) for v in inputs])
+                    [(v, case["low"] if v < threshold else case["high"]) for v in inputs])
         for value, row in expected:
             args = [trace] if value is None else [trace, value]
             result = run(root, f"{trace.name}.{value}.run", args, 0)
@@ -155,8 +164,11 @@ def refusal(root, compiler, name, check_status, emit_status, diagnostic):
 def suite(root, compiler, cc):
     for name in OBSERVATIONS["cases"]:
         exercise(root / name, compiler, cc, name)
-    refusal(root / "wrong-nominal", compiler, "wrong-nominal", 3, 3, b"[USIZE-EQUALITY-TYPE]")
-    for name in ("other-origin", "inline-actual"):
+    for name in ("wrong-nominal", "local-wrong-nominal"):
+        refusal(root / name, compiler, name, 3, 3, b"[USIZE-EQUALITY-TYPE]")
+    refusal(root / "inline-operand", compiler, "inline-operand", 3, 3,
+            b"[USIZE-EQUALITY-SOURCE-PRECISION]")
+    for name in ("inline-actual", "caller-if"):
         refusal(root / name, compiler, name, 0, 4, b"[V1-BACKEND-UNSUPPORTED]")
 
 
