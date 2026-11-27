@@ -2048,9 +2048,16 @@ static NLCheckedNodeId local_conversion_result(Check *check, NLSourceSpan span,
                                                      input.scalar_value});
 }
 
+typedef enum {
+    LOCAL_CONVERSION_NAMED,
+    LOCAL_CONVERSION_GUARDED_U8,
+    LOCAL_CONVERSION_WIDEN_FORMAL
+} LocalConversionMode;
+
 static NLCheckedNodeId local_conversion(Check *check,
                                         const NLSyntaxView *syntax,
-                                        NLSemanticTypeKind target, bool guarded)
+                                        NLSemanticTypeKind target,
+                                        LocalConversionMode mode)
 {
     const NLSyntaxView *operand =
         nl_syntax_node_view(syntax->data.call.arguments);
@@ -2062,9 +2069,19 @@ static NLCheckedNodeId local_conversion(Check *check,
         return 0;
     }
     const NLCheckedNodeId arg = identifier(check, operand);
-    if (!guarded || !arg)
-        return local_conversion_result(check, syntax->span, arg, target);
+    if (!arg)
+        return 0;
     const NLSymbolId formal = check->function_binding_floor + 1;
+    if (mode == LOCAL_CONVERSION_WIDEN_FORMAL &&
+        (view(check, arg)->symbol != formal ||
+         view(check, arg)->value_use != NL_VALUE_COPIED)) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "NUMERIC-CONVERSION-PRECISION",
+             "helper widening requires a Copy of its own u8 formal");
+        return 0;
+    }
+    if (mode != LOCAL_CONVERSION_GUARDED_U8)
+        return local_conversion_result(check, syntax->span, arg, target);
     if (!nl_guarded_u8_operand(check->artifact, check->context, formal, arg) ||
         !nl_guarded_usize_same_current(check->guard_entry, check->context,
                                        formal) ||
@@ -2204,16 +2221,21 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax,
         const bool to_u8 = equal_name(check, syntax->data.call.callee, "u8");
         const bool to_byte =
             equal_name(check, syntax->data.call.callee, "byte");
-        if ((to_u8 || to_byte ||
-             equal_name(check, syntax->data.call.callee, "usize")) &&
-            local_address_context(check))
+        const bool to_usize =
+            equal_name(check, syntax->data.call.callee, "usize");
+        if ((to_u8 || to_byte || to_usize) && local_address_context(check))
             return local_conversion(check, syntax,
                                     to_byte ? NL_TYPE_BYTE
                                     : to_u8 ? NL_TYPE_U8
                                             : NL_TYPE_USIZE,
-                                    false);
+                                    LOCAL_CONVERSION_NAMED);
         if (to_u8 && guarded_u8_context(check))
-            return local_conversion(check, syntax, NL_TYPE_U8, true);
+            return local_conversion(check, syntax, NL_TYPE_U8,
+                                    LOCAL_CONVERSION_GUARDED_U8);
+        if (to_usize && !check->loop &&
+            nl_pure_widening_function(c, local_scalar_function(check)))
+            return local_conversion(check, syntax, NL_TYPE_USIZE,
+                                    LOCAL_CONVERSION_WIDEN_FORMAL);
         const bool to_address =
             equal_name(check, syntax->data.call.callee, "addr");
         if ((to_address ||
@@ -4796,6 +4818,8 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         !function->caller_effects && !function->hidden_dependencies &&
         !function->owner_receiver && !function->owner_producer &&
         !function->custody_recipient;
+    const bool widening_candidate =
+        !body.definition && nl_pure_widening_function(c, function);
     NLSymbolId copy_parameters[2] = {0};
     for (size_t i = 0; i < function->count; ++i) {
         const NLCheckedNodeView argument = *view(caller, arguments[i]);
@@ -5086,8 +5110,12 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         expected_parameter == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
         call_view->type == expected_parameter && call_view->result_count == 1)
         call_view->parameter_type = expected_parameter;
-    if ((predicate_result || scalar_h_read || current_result || result_world ||
-         quantity_result || five_tail_writer) &&
+    const bool widening_result =
+        widening_candidate &&
+        nl_pure_widening_body_at(body.artifact, copy_parameters[0], c);
+    if ((predicate_result || widening_result || scalar_h_read ||
+         current_result || result_world || quantity_result ||
+         five_tail_writer) &&
         !host(&body,
               nl_h_custody_seal_result(
                   caller->artifact, body.artifact, call_id,
