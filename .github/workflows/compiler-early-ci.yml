@@ -43,7 +43,7 @@ jobs:
         run: |
           . .deps/activate.sh
           cmake --build build --parallel "$(nproc)"
-      - name: Existing 84 CTests (success permits next work, not merge)
+      - name: Existing 85 CTests (success permits next work, not merge)
         shell: bash
         run: |
           set -euo pipefail
@@ -77,6 +77,7 @@ jobs:
             p1123_11-prefix-current_oom.unit p1193_signature_return_auth.unit p1193_signature_oom.unit
             p1260_oom.unit p1227_oom.unit p1227_c283_alias_oom.unit
             p1272_source_native.integration p1272_oom.unit p1272_named_oom.integration
+            p9_exit.unit
           )
           regex="^($(IFS='|'; echo "${names[*]}"))$"
           regex=${regex//./\\.}
