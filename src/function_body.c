@@ -1,3 +1,4 @@
+#include "address_body_internal.h"
 #include "newlang/parser.h"
 #include "semantic_internal.h"
 #include "syntax_internal.h"

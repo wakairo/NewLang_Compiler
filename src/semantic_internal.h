@@ -263,8 +263,6 @@ NLCheckStatus nl_body_create(const NLSyntaxTree *, const NLFunctionParameter *,
 NLCheckStatus nl_body_create_span(const NLSource *, NLSourceSpan,
                                   const NLFunctionParameter *, size_t,
                                   NLFunctionBody **);
-NLCheckStatus nl_body_create_address_main_span(const NLSource *, NLSourceSpan,
-                                               NLFunctionBody **);
 NLCheckStatus nl_body_retain(NLFunctionBody *);
 void nl_body_release(NLFunctionBody *);
 NLCheckStatus nl_live_tail_registry(NLSemanticContext *, NLTypeId, NLTypeId *);
