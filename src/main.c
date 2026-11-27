@@ -1214,15 +1214,20 @@ static bool gate_numeric_conversion(const NLCheckedFragment *f,
     if (!operand || !address_name(operand, operand->type) ||
         operand->next_argument || !bool_source_origin(f, v->first_argument) ||
         !address_scalar_view(c, operand, &input) ||
-        !address_scalar_view(c, v, &result) || !input.scalar_known ||
-        !result.scalar_known || input.scalar_value != result.scalar_value ||
-        !v->has_scalar_result || !v->scalar_result.known ||
+        !address_scalar_view(c, v, &result) ||
+        input.scalar_known != result.scalar_known ||
+        input.scalar_value != result.scalar_value || !v->has_scalar_result ||
+        v->scalar_result.known != result.scalar_known ||
         v->scalar_result.type != v->type ||
         v->scalar_result.value != result.scalar_value ||
         !nl_semantic_type_view(c, operand->type, &source) ||
-        !nl_semantic_type_view(c, v->type, &target) ||
-        !nl_scalar_conversion_fits(source.kind, target.kind,
-                                   input.scalar_value))
+        !nl_semantic_type_view(c, v->type, &target))
+        return false;
+    if (input.scalar_known
+            ? !nl_scalar_conversion_fits(source.kind, target.kind,
+                                         input.scalar_value)
+            : (input.scalar_value ||
+               !nl_numeric_runtime_widening(source.kind, target.kind)))
         return false;
     p->uses_usize |=
         source.kind == NL_TYPE_USIZE || target.kind == NL_TYPE_USIZE;
@@ -4263,7 +4268,7 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     }
 }
 
-/* The pure predicate consumer validated both literal arms and the real Bool
+/* The pure predicate consumer validated both arms and the real Bool
  * producer. Emit that guest condition exactly once, including direct IF
  * RETURN/tail forms; never emit the checker's cached truth. */
 static bool predicate_emit_return(FILE *stream, const NLCheckedFragment *f,
@@ -4278,7 +4283,13 @@ static bool predicate_emit_return(FILE *stream, const NLCheckedFragment *f,
     for (size_t a = 0; a < 2; ++a) {
         const NLCheckedNodeId id = (NLCheckedNodeId)(value - f->nodes) + 1;
         const NLCheckedFragment *arm = nl_checked_if_arm(f, id, a);
-        if (!v1_emit_scalar(stream, predicate_arm_value(arm)) ||
+        const NLCheckedNodeView *tail = predicate_arm_value(arm);
+        if (tail->kind == NL_CHECKED_NUMERIC_CONVERSION) {
+            if (fputs("(uint8_t)", stream) < 0)
+                return false;
+            tail = nl_checked_node_view(arm, tail->first_argument);
+        }
+        if (!v1_emit_scalar(stream, tail) ||
             (a == 0 && fputs(" : ", stream) < 0))
             return false;
     }

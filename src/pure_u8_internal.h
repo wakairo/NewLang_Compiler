@@ -1,6 +1,7 @@
 #ifndef NEWLANG_PURE_U8_INTERNAL_H
 #define NEWLANG_PURE_U8_INTERNAL_H
 
+#include "guarded_usize_internal.h"
 #include "h_origin_internal.h"
 #include "newlang/parser.h"
 #include "scalar_view_internal.h"
@@ -21,6 +22,7 @@ typedef struct {
     NLTypeId quantity, boolean, u8, parameter;
     NLCheckedNodeId bindings[NL_SEMANTIC_MAX_ENTRIES];
     bool seen[NL_PARSER_MAX_NODES];
+    bool guarded_narrowing;
     size_t depth, selections;
     NLCheckedNodeId selection;
 } PredicateWalk;
@@ -125,6 +127,32 @@ static bool predicate_selection_arm(PredicateWalk *w,
     return predicate_scalar(&branch, block->tail);
 }
 
+static bool predicate_narrow_tail(const PredicateWalk *w, NLCheckedNodeId id,
+                                  const NLCheckedFragment *arm,
+                                  const NLCheckedNodeView *block,
+                                  const NLCheckedNodeView *tail)
+{
+    if (!w->guarded_narrowing || w->incoming || w->parameter != w->quantity ||
+        tail->kind != NL_CHECKED_NUMERIC_CONVERSION)
+        return false;
+    const NLCheckedNodeView *body =
+        nl_checked_node_view(w->body, nl_checked_root(w->body));
+    const NLCheckedNodeView *operand =
+        nl_checked_node_view(arm, tail->first_argument);
+    const NLSemanticContext *c = nl_checked_context(arm);
+    NLSemanticValueView result;
+    return body && !body->item_count && !body->first_item && body->tail == id &&
+           !block->terminates && tail->argument_count == 1 &&
+           tail->first_argument < block->tail && tail->has_scalar_result &&
+           predicate_value_at(c, tail, &result) && !result.scalar_known &&
+           !result.scalar_value && operand &&
+           nl_guarded_u8_operand(arm, c, w->formal, tail->first_argument) &&
+           copy_if_gap(arm->source, tail->span.start_byte,
+                       operand->span.start_byte, "u8(") &&
+           copy_if_gap(arm->source, operand->span.end_byte, tail->span.end_byte,
+                       ")");
+}
+
 static bool predicate_arm(PredicateWalk *w, NLCheckedNodeId id, size_t index)
 {
     const NLCheckedFragment *arm = nl_checked_if_arm(w->body, id, index);
@@ -138,10 +166,13 @@ static bool predicate_arm(PredicateWalk *w, NLCheckedNodeId id, size_t index)
     const NLCheckedNodeView *tail = predicate_arm_value(arm);
     if (!root || !block || !tail || root == block || root == tail ||
         block == tail || root->kind != NL_CHECKED_IF_ARM ||
-        block->kind != NL_CHECKED_BLOCK || tail->type != w->u8 ||
-        (w->incoming
-             ? (root->terminates || !predicate_selection_arm(w, arm, tail))
-             : !copy_if_literal(arm, tail)))
+        block->kind != NL_CHECKED_BLOCK || tail->type != w->u8)
+        return false;
+    const bool narrow =
+        !root->terminates && predicate_narrow_tail(w, id, arm, block, tail);
+    if (w->incoming
+            ? (root->terminates || !predicate_selection_arm(w, arm, tail))
+            : (!narrow && !copy_if_literal(arm, tail)))
         return false;
     if (root->terminates) {
         const NLCheckedNodeView *ret =
@@ -162,11 +193,11 @@ static bool predicate_arm(PredicateWalk *w, NLCheckedNodeId id, size_t index)
                copy_if_gap(arm->source, ret->span.end_byte,
                            block->span.end_byte, "}");
     }
-    return nl_checked_node_count(arm) == 3 && !block->terminates &&
-           !block->first_item && !block->item_count && root->type == w->u8 &&
-           block->type == w->u8 && root->result_count == 1 &&
-           block->result_count == 1 && root->results[0].type == w->u8 &&
-           block->results[0].type == w->u8 &&
+    return nl_checked_node_count(arm) == (narrow ? 4u : 3u) &&
+           !block->terminates && !block->first_item && !block->item_count &&
+           root->type == w->u8 && block->type == w->u8 &&
+           root->result_count == 1 && block->result_count == 1 &&
+           root->results[0].type == w->u8 && block->results[0].type == w->u8 &&
            root->results[0].value == tail->results[0].value &&
            block->results[0].value == tail->results[0].value &&
            !nl_control_exits_count(arm->exits) &&
@@ -377,7 +408,8 @@ static bool nl_scalar_u8_formals_at(const NLCheckedFragment *f,
                                     NLSymbolId formal, NLTypeId unit,
                                     NLTypeId u8, const NLSemanticContext *c,
                                     bool readonly_u8, NLTypeId parameter,
-                                    NLSymbolId incoming, NLPureU8Plan *plan)
+                                    NLSymbolId incoming, bool guarded_narrowing,
+                                    NLPureU8Plan *plan)
 {
     PredicateWalk w = {.body = f,
                        .context = c,
@@ -386,7 +418,8 @@ static bool nl_scalar_u8_formals_at(const NLCheckedFragment *f,
                        .quantity = nl_semantic_core_type(c, NL_TYPE_USIZE),
                        .boolean = nl_semantic_core_type(c, NL_TYPE_BOOL),
                        .u8 = u8,
-                       .parameter = parameter};
+                       .parameter = parameter,
+                       .guarded_narrowing = guarded_narrowing};
     const NLCheckedNodeView *root = predicate_take(&w, nl_checked_root(f));
     if (!root || root->kind != NL_CHECKED_BLOCK ||
         nl_checked_node_count(f) > NL_PARSER_MAX_NODES)
@@ -536,26 +569,21 @@ static bool nl_scalar_u8_formals_at(const NLCheckedFragment *f,
 static bool nl_scalar_u8_body_at(const NLCheckedFragment *f, NLSymbolId formal,
                                  NLTypeId unit, NLTypeId u8,
                                  const NLSemanticContext *c, bool readonly_u8,
-                                 NLPureU8Plan *plan)
+                                 bool guarded_narrowing, NLPureU8Plan *plan)
 {
     return nl_scalar_u8_formals_at(
         f, formal, unit, u8, c, readonly_u8,
-        readonly_u8 ? u8 : nl_semantic_core_type(c, NL_TYPE_USIZE), 0, plan);
+        readonly_u8 ? u8 : nl_semantic_core_type(c, NL_TYPE_USIZE), 0,
+        guarded_narrowing, plan);
 }
 
-static inline bool nl_pure_u8_body_at(const NLCheckedFragment *f,
-                                      NLSymbolId formal, NLTypeId unit,
-                                      NLTypeId u8, const NLSemanticContext *c,
-                                      NLPureU8Plan *plan)
-{
-    return nl_scalar_u8_body_at(f, formal, unit, u8, c, false, plan);
-}
-
+/* The ordinary scalar emitter handles the guarded conversion tail. */
 static inline bool nl_pure_u8_body(const NLCheckedFragment *f,
                                    NLSymbolId formal, NLTypeId unit,
                                    NLTypeId u8, NLPureU8Plan *plan)
 {
-    return nl_pure_u8_body_at(f, formal, unit, u8, nl_checked_context(f), plan);
+    return nl_scalar_u8_body_at(f, formal, unit, u8, nl_checked_context(f),
+                                false, true, plan);
 }
 
 typedef struct {
@@ -630,13 +658,14 @@ static bool nl_scalar_u8_invocation_at(const NLCheckedFragment *f,
 static bool nl_scalar_u8_contents_at(const NLCheckedFragment *f,
                                      NLCheckedNodeId id,
                                      const NLSemanticContext *c,
-                                     bool readonly_u8, NLPureU8Call *out)
+                                     bool readonly_u8, bool guarded_narrowing,
+                                     NLPureU8Call *out)
 {
     NLPureU8Call call;
     if (!nl_scalar_u8_invocation_at(f, id, c, readonly_u8, &call) ||
         !nl_scalar_u8_body_at(call.body, call.formal, nl_semantic_unit_type(c),
                               nl_semantic_core_type(c, NL_TYPE_U8), c,
-                              readonly_u8, &call.plan))
+                              readonly_u8, guarded_narrowing, &call.plan))
         return false;
     call.selection = call.plan.selection;
     *out = call;
@@ -648,7 +677,7 @@ static inline bool nl_pure_u8_contents_at(const NLCheckedFragment *f,
                                           const NLSemanticContext *c,
                                           NLPureU8Call *out)
 {
-    return nl_scalar_u8_contents_at(f, id, c, false, out);
+    return nl_scalar_u8_contents_at(f, id, c, false, false, out);
 }
 
 /* Both byte writers use this exact finite threshold policy. The real child
@@ -753,11 +782,12 @@ static inline bool nl_readonly_u8_contents(const NLCheckedFragment *f,
                                            NLCheckedNodeId id,
                                            NLPureU8Call *out)
 {
-    return nl_scalar_u8_contents_at(f, id, nl_checked_context(f), true, out);
+    return nl_scalar_u8_contents_at(f, id, nl_checked_context(f), true, false,
+                                    out);
 }
 
-static bool nl_pure_u8_contents(const NLCheckedFragment *f, NLCheckedNodeId id,
-                                NLPureU8Call *out)
+static inline bool nl_pure_u8_contents(const NLCheckedFragment *f,
+                                       NLCheckedNodeId id, NLPureU8Call *out)
 {
     return nl_pure_u8_contents_at(f, id, nl_checked_context(f), out);
 }
@@ -832,7 +862,7 @@ nl_readonly_selection_contents(const NLCheckedFragment *origin,
         root->results[0].value != call->results[0].value ||
         !nl_scalar_u8_formals_at(body, formals[0], nl_semantic_unit_type(c),
                                  types[1], c, false, types[0], formals[1],
-                                 &plan))
+                                 false, &plan))
         return false;
     *body_out = body;
     return true;
@@ -841,14 +871,24 @@ nl_readonly_selection_contents(const NLCheckedFragment *origin,
 /* Published consumers require the original finished-result receipt. The
  * contents walk is also used by CHECK on its own unpublished definition
  * prefix, where source_call deliberately has not issued that receipt. */
-static inline bool nl_pure_u8_call(const NLCheckedFragment *f,
-                                   NLCheckedNodeId id, NLPureU8Call *out)
+static inline bool nl_pure_u8_call_mode(const NLCheckedFragment *f,
+                                        NLCheckedNodeId id,
+                                        bool guarded_narrowing,
+                                        NLPureU8Call *out)
 {
-    if (!nl_h_custody_result_valid(f, id) || !nl_pure_u8_contents(f, id, out))
+    if (!nl_h_custody_result_valid(f, id) ||
+        !nl_scalar_u8_contents_at(f, id, nl_checked_context(f), false,
+                                  guarded_narrowing, out))
         return false;
     const NLCheckedNodeView *choice =
         nl_checked_node_view(out->body, out->selection);
     return choice && choice->normal_arms == 2;
+}
+
+static inline bool nl_pure_u8_call(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id, NLPureU8Call *out)
+{
+    return nl_pure_u8_call_mode(f, id, false, out);
 }
 
 #endif

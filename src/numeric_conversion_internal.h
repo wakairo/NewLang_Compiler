@@ -30,6 +30,13 @@ static inline bool nl_scalar_conversion_pair(NLSemanticTypeKind source,
            nl_conversion_limit(target) != 0;
 }
 
+static inline bool nl_numeric_runtime_widening(NLSemanticTypeKind source,
+                                               NLSemanticTypeKind target)
+{
+    return source == NL_TYPE_U8 && target == NL_TYPE_USIZE &&
+           nl_conversion_limit(source) <= nl_conversion_limit(target);
+}
+
 /* A shared precondition for the selected explicit conversions. The checked
  * scalar carrier is size_t; callers require an established known value. */
 static inline bool nl_scalar_conversion_fits(NLSemanticTypeKind source,
