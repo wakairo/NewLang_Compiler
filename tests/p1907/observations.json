@@ -1,0 +1,88 @@
+{
+  "runtime_inputs": [
+    "0",
+    "63",
+    "64",
+    "65",
+    "SIZE_MAX"
+  ],
+  "cases": {
+    "comparisons-and-selector": {
+      "names": "available exact below queue observed",
+      "low": [
+        127,
+        0,
+        1,
+        13,
+        13
+      ],
+      "high": [
+        128,
+        1,
+        0,
+        29,
+        29
+      ]
+    },
+    "known-equality": {
+      "names": "available exact different again",
+      "constant": [
+        128,
+        1,
+        0,
+        1
+      ]
+    },
+    "runtime-comparisons": {
+      "names": "available current limit exact below above remembered current_again",
+      "low": [
+        127,
+        127,
+        128,
+        0,
+        1,
+        0,
+        0,
+        127
+      ],
+      "high": [
+        128,
+        128,
+        128,
+        1,
+        0,
+        1,
+        1,
+        128
+      ]
+    },
+    "selector-control": {
+      "names": "available queue observed",
+      "low": [
+        127,
+        13,
+        13
+      ],
+      "high": [
+        128,
+        29,
+        29
+      ]
+    },
+    "two-results": {
+      "names": "available limit equal below",
+      "low": [
+        127,
+        128,
+        0,
+        1
+      ],
+      "high": [
+        128,
+        128,
+        1,
+        0
+      ]
+    }
+  }
+}
