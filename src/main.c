@@ -2244,8 +2244,9 @@ static bool v1_call_parameter_kind(const NLCheckedFragment *f,
     const NLTypeId type = fn->parameters[0];
     const bool quantity =
         allow_quantity && type == nl_semantic_core_type(c, NL_TYPE_USIZE);
-    if ((!quantity && type != p->u8) || call->type != p->u8 || arg == NULL ||
-        arg->next_argument != 0 || arg->parameter_type != type ||
+    const bool scalar_unit = call->type == p->unit && type == p->u8;
+    if ((!quantity && type != p->u8) || (call->type != p->u8 && !scalar_unit) ||
+        arg == NULL || arg->next_argument != 0 || arg->parameter_type != type ||
         fn->body->parameter_names[0] == NULL)
         return false;
     if (quantity) {
@@ -2321,6 +2322,52 @@ static bool widening_call(const NLCheckedFragment *f, NLCheckedNodeId id,
                                             .parameter = formal};
     p->uses_usize = true;
     return true;
+}
+
+/* Unit statements borrow the same finished BODY receipt as scalar result
+ * calls. Admit a real preceding Copy binding in the actual unit entry. */
+static bool v1_scalar_unit_statement(const NLCheckedFragment *f,
+                                     NLCheckedNodeId id,
+                                     const NLCheckedFragment *body,
+                                     NLSymbolId formal, const V0Program *p)
+{
+    const NLSemanticContext *c = nl_checked_context(f);
+    if (p->u8_export || p->aggregate || !c || !c->functions ||
+        !p->entry_function || p->entry_function > c->function_count ||
+        f->body_owner != c->functions[p->entry_function - 1].body ||
+        !nl_h_custody_result_valid(f, id))
+        return false;
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    if (!root || root->kind != NL_CHECKED_BLOCK)
+        return false;
+    bool statement = false;
+    for (NLCheckedNodeId i = root->first_item; i;) {
+        const NLCheckedNodeView *item = nl_checked_node_view(f, i);
+        if (!item || (item->next_item && item->next_item <= i))
+            return false;
+        if (item->kind == NL_CHECKED_STATEMENT && item->initializer == id &&
+            !item->terminates && item->type == p->unit && !item->result_count) {
+            statement = true;
+            break;
+        }
+        i = item->next_item;
+    }
+    if (!statement)
+        return false;
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *arg =
+        nl_checked_node_view(f, call->first_argument);
+    const NLCheckedNodeView *source =
+        nl_checked_node_view(f, bool_source_origin(f, call->first_argument));
+    NLSemanticBindingView bound;
+    NLSemanticValueView actual, original;
+    return address_name(arg, p->u8) && predicate_value(f, arg, &actual) &&
+           predicate_value(f, source, &original) && original.type == p->u8 &&
+           nl_semantic_binding_view(c, arg->symbol, &bound) &&
+           bound.type == p->u8 && bound.value == source->results[0].value &&
+           actual.scalar_known == original.scalar_known &&
+           actual.scalar_value == original.scalar_value &&
+           nl_pure_u8_unit_body_at(body, formal, c);
 }
 
 /* Finite scalar callee: Copy locals and a scalar tail/return. Only the tail
@@ -2497,7 +2544,11 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
     NLCopyUnitView unit_proof;
     const bool unit_formals =
         !scalar && nl_checked_copy_unit_view(fragment, id, &unit_proof);
-    if (!scalar && call->argument_count && !unit_formals)
+    const bool scalar_unit =
+        call->type == program->unit && call->argument_count == 1;
+    if ((scalar_unit &&
+         !v1_scalar_unit_statement(fragment, id, body, parameter, program)) ||
+        (!scalar && call->argument_count && !unit_formals && !scalar_unit))
         return false;
     if (unit_formals) {
         NLCheckStatus status =
@@ -2604,7 +2655,7 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
                      .ref_parameter = ref_parameter,
                      .quantity_parameter = false,
                      .current_local_copy = false};
-    return scalar || unit_formals ||
+    return scalar || unit_formals || scalar_unit ||
            v0_validate_node(body, nl_checked_root(body), program);
 }
 
@@ -4532,11 +4583,17 @@ static bool v0_emit_signature(FILE *stream, const V0Function *fn, NLTypeId u8)
                        "uint8_t nl_local_%zu)",
                        fn->result == u8 ? "uint8_t" : "void", fn->function,
                        fn->ref_parameter, fn->parameter) >= 0;
-    if (fn->parameter != 0)
-        return fprintf(stream, "static %s nl_fn_%zu(%s nl_local_%zu)",
-                       fn->result == u8 ? "uint8_t" : "size_t", fn->function,
+    if (fn->parameter != 0) {
+        const NLSemanticContext *c = nl_checked_context(fn->body);
+        const char *result =
+            fn->result == u8                                        ? "uint8_t"
+            : fn->result == nl_semantic_core_type(c, NL_TYPE_USIZE) ? "size_t"
+                                                                    : "void";
+        return fprintf(stream, "static %s nl_fn_%zu(%s nl_local_%zu)", result,
+                       fn->function,
                        fn->quantity_parameter ? "size_t" : "uint8_t",
                        fn->parameter) >= 0;
+    }
     return fprintf(stream,
                    fn->result == u8 ? "static uint8_t nl_fn_%zu(void)"
                                     : "static void nl_fn_%zu(void)",

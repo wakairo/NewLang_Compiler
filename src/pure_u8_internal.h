@@ -452,6 +452,123 @@ done:
     return valid;
 }
 
+static bool predicate_binding(PredicateWalk *w, NLCheckedNodeId id,
+                              const NLCheckedNodeView *n, NLTypeId unit)
+{
+    const NLCheckedFragment *f = w->body;
+    const NLSemanticContext *c = w->context;
+    const NLCheckedNodeView *receiver = predicate_take(w, n->first_argument);
+    const NLCheckedNodeView *init = nl_checked_node_view(f, n->initializer);
+    if (!receiver || !init || init->result_count != 1 ||
+        receiver->kind != NL_CHECKED_RECEIVER || receiver->next_argument ||
+        n->argument_count != 1 || !n->symbol || n->symbol > c->binding_count ||
+        n->symbol > NL_SEMANTIC_MAX_ENTRIES || n->symbol == w->formal ||
+        receiver->symbol != n->symbol || n->result_count || n->type != unit ||
+        n->terminates || receiver->type != init->type ||
+        w->bindings[n->symbol - 1] ||
+        !predicate_name(f, receiver->name, c->bindings[n->symbol - 1].name) ||
+        c->bindings[n->symbol - 1].view.value != init->results[0].value ||
+        !copy_if_gap(nl_checked_source(f), n->span.start_byte,
+                     receiver->name.start_byte, "let") ||
+        !copy_if_gap(nl_checked_source(f), receiver->name.end_byte,
+                     init->span.start_byte, "=") ||
+        n->span.end_byte != init->span.end_byte ||
+        !predicate_scalar(w, n->initializer))
+        return false;
+    w->bindings[n->symbol - 1] = id;
+    return true;
+}
+
+static bool predicate_discard(PredicateWalk *w, const NLCheckedNodeView *n,
+                              NLTypeId unit)
+{
+    const NLCheckedNodeView *value =
+        nl_checked_node_view(w->body, n->initializer);
+    /* Generic statement lowering has unit RETURNs. Discarding a typed IF
+     * with an exit needs its separate binding/tail consumer. */
+    return value && (value->kind != NL_CHECKED_IF || value->normal_arms == 2) &&
+           value->type == w->u8 && n->type == unit && !n->result_count &&
+           !n->terminates && n->span.start_byte == value->span.start_byte &&
+           copy_if_gap(w->body->source, value->span.end_byte, n->span.end_byte,
+                       ";") &&
+           predicate_scalar(w, n->initializer);
+}
+
+static bool predicate_unit_value(PredicateWalk *w, NLCheckedNodeId id,
+                                 NLTypeId unit)
+{
+    const NLCheckedNodeView *value = predicate_take(w, id);
+    return value && value->kind == NL_CHECKED_UNIT && value->type == unit &&
+           !value->terminates && !value->result_count &&
+           copy_if_gap(w->body->source, value->span.start_byte,
+                       value->span.end_byte, "unit");
+}
+
+static inline bool nl_pure_u8_unit_function(const NLSemanticContext *c,
+                                            const NLFunctionEntry *fn)
+{
+    return fn && fn->kind == NL_CHECKED_REGISTERED_CALL && fn->count == 1 &&
+           fn->parameters &&
+           fn->parameters[0] == nl_semantic_core_type(c, NL_TYPE_U8) &&
+           fn->result == nl_semantic_unit_type(c) && fn->body &&
+           fn->body->syntax && !fn->caller_effects &&
+           !fn->hidden_dependencies && !fn->owner_receiver &&
+           !fn->owner_producer && !fn->custody_recipient;
+}
+
+/* Use the ordinary scalar Copy walk on an exact non-owning body. A unit
+ * return has the canonical exit slot but carries no caller result value. */
+static inline bool nl_pure_u8_unit_body_at(const NLCheckedFragment *f,
+                                           NLSymbolId formal,
+                                           const NLSemanticContext *c)
+{
+    const NLTypeId unit = nl_semantic_unit_type(c);
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    if (!f || !formal || !u8 || f->body_count || f->arm_count ||
+        nl_checked_node_count(f) > NL_PARSER_MAX_NODES)
+        return false;
+    PredicateWalk w = {
+        .body = f, .context = c, .formal = formal, .u8 = u8, .parameter = u8};
+    const NLCheckedNodeView *root = predicate_take(&w, nl_checked_root(f));
+    if (!root || root->kind != NL_CHECKED_BLOCK || root->result_count)
+        return false;
+    size_t items = 0;
+    const NLCheckedNodeView *ret = NULL;
+    for (NLCheckedNodeId id = root->first_item; id;) {
+        const NLCheckedNodeView *n = predicate_take(&w, id);
+        if (!n || ++items > root->item_count)
+            return false;
+        if (n->kind == NL_CHECKED_BINDING) {
+            if (!predicate_binding(&w, id, n, unit))
+                return false;
+        } else if (n->kind == NL_CHECKED_STATEMENT) {
+            if (!predicate_discard(&w, n, unit))
+                return false;
+        } else if (n->kind == NL_CHECKED_RETURN) {
+            if (n->next_item || !predicate_unit_value(&w, n->initializer, unit))
+                return false;
+            ret = n;
+        } else
+            return false;
+        id = n->next_item;
+    }
+    if (items != root->item_count)
+        return false;
+    const size_t exits = nl_control_exits_count(nl_checked_control_exits(f));
+    if (ret) {
+        if (!root->terminates || root->tail || root->returned.type != unit ||
+            root->returned.value || exits != 1 ||
+            !predicate_return(f, ret, 0, f->function_target))
+            return false;
+    } else if (root->terminates || root->type != unit || exits ||
+               (root->tail && !predicate_unit_value(&w, root->tail, unit)))
+        return false;
+    for (size_t i = 0; i < nl_checked_node_count(f); ++i)
+        if (!w.seen[i])
+            return false;
+    return true;
+}
+
 static bool nl_scalar_formals_at(const NLCheckedFragment *f, NLSymbolId formal,
                                  NLTypeId unit, NLTypeId u8, NLTypeId result,
                                  const NLSemanticContext *c, bool readonly_u8,
@@ -479,43 +596,11 @@ static bool nl_scalar_formals_at(const NLCheckedFragment *f, NLSymbolId formal,
         if (!n || ++items > nl_checked_node_count(f))
             return false;
         if (n->kind == NL_CHECKED_BINDING) {
-            const NLCheckedNodeView *receiver =
-                predicate_take(&w, n->first_argument);
-            const NLCheckedNodeView *init =
-                nl_checked_node_view(f, n->initializer);
-            if (!receiver || !init || init->result_count != 1 ||
-                receiver->kind != NL_CHECKED_RECEIVER ||
-                receiver->next_argument || n->argument_count != 1 ||
-                !n->symbol || n->symbol > c->binding_count ||
-                n->symbol > NL_SEMANTIC_MAX_ENTRIES || n->symbol == formal ||
-                receiver->symbol != n->symbol || n->result_count ||
-                n->type != unit || n->terminates ||
-                receiver->type != init->type || w.bindings[n->symbol - 1] ||
-                !predicate_name(f, receiver->name,
-                                c->bindings[n->symbol - 1].name) ||
-                c->bindings[n->symbol - 1].view.value !=
-                    init->results[0].value ||
-                !copy_if_gap(nl_checked_source(f), n->span.start_byte,
-                             receiver->name.start_byte, "let") ||
-                !copy_if_gap(nl_checked_source(f), receiver->name.end_byte,
-                             init->span.start_byte, "=") ||
-                n->span.end_byte != init->span.end_byte ||
-                !predicate_scalar(&w, n->initializer))
+            if (!predicate_binding(&w, id, n, unit))
                 return false;
-            w.bindings[n->symbol - 1] = id;
         } else if (n->kind == NL_CHECKED_STATEMENT && !readonly_u8 &&
                    !incoming) {
-            const NLCheckedNodeView *value =
-                nl_checked_node_view(f, n->initializer);
-            /* Generic statement lowering has unit RETURNs. A discarded IF
-             * with typed exits needs binding/tail lowering, not that path. */
-            if (!value ||
-                (value->kind == NL_CHECKED_IF && value->normal_arms != 2) ||
-                value->type != u8 || n->type != unit || n->result_count ||
-                n->terminates || n->span.start_byte != value->span.start_byte ||
-                !copy_if_gap(f->source, value->span.end_byte, n->span.end_byte,
-                             ";") ||
-                !predicate_scalar(&w, n->initializer))
+            if (!predicate_discard(&w, n, unit))
                 return false;
         } else if (n->kind == NL_CHECKED_RETURN && !readonly_u8 && !incoming) {
             const NLCheckedNodeView *value =
