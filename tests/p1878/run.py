@@ -21,12 +21,17 @@ def positive(root, compiler, cc, name, values):
     assert not any((checked.stdout, checked.stderr, emitted.stdout, emitted.stderr))
     data = output.read_bytes()
     assert b"_Static_assert(UINTPTR_MAX ==" in data
-    bools = list(re.finditer(rb"^    const _Bool (nl_local_\d+) = .*;$", data, re.M))
-    assert len(bools) == len(values)
-    at = bools[-1].end()
+    scalars = re.finditer(
+        rb"^    const (_Bool|uintptr_t|size_t) (nl_local_\d+) = (.*);$",
+        data, re.M,
+    )
+    observations = [match for match in scalars if match[1] == b"_Bool" or
+                    any(op in match[3] for op in (b" % ", b" + ", b" - "))]
+    assert len(observations) == len(values)
+    at = observations[-1].end()
     observed = root / "observed.c"
-    arguments = b", ".join(match[1] for match in bools)
-    specifiers = b",".join([b"%d"] * len(bools))
+    arguments = b", ".join(b"(uintmax_t)" + match[2] for match in observations)
+    specifiers = b",".join([b"%ju"] * len(observations))
     observed.write_bytes(b"#include <stdio.h>\n" + data[:at] +
                          b'\n    printf("' + specifiers + b'\\n", ' +
                          arguments + b");" + data[at:])
@@ -65,14 +70,24 @@ def main():
         work = TemporaryDirectory(prefix="p1878-address-data-")
     with work as directory:
         root = Path(directory)
-        for name, values in (("coordinate-roundtrip", (1,)),
-                             ("coordinate-comparison", (1, 0, 0, 1))):
+        for name, values in (
+            ("coordinate-roundtrip", (1,)),
+            ("coordinate-comparison", (1, 0, 0, 1)),
+            ("coordinate-residue-literal", (0, 1)),
+            ("coordinate-residue-known-literal", (5,)),
+            ("coordinate-offset-known", (17, 13, 1)),
+        ):
             case = root / name
             case.mkdir()
             positive(case, compiler, cc, name, values)
         for name, diagnostic in (
             ("coordinate-mixed-equality", "UINTPTR-COMPARISON-TYPE"),
             ("coordinate-as-pointer", "P3-PTR-REQUIRED"),
+            ("coordinate-mixed-plus", "UINTPTR-ARITHMETIC-TYPE"),
+            ("coordinate-residue", "USIZE-REMAINDER-SOURCE-PRECISION"),
+            ("coordinate-residue-zero-literal", "UINTPTR-REMAINDER-ZERO"),
+            ("coordinate-offset-unknown", "UINTPTR-ARITHMETIC-PRECISION"),
+            ("coordinate-offset-underflow", "UINTPTR-OFFSET-RANGE"),
         ):
             case = root / name
             case.mkdir()

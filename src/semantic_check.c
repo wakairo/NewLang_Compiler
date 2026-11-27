@@ -1,4 +1,5 @@
 #include "address_body_internal.h"
+#include "address_data_internal.h"
 #include "captured_read_internal.h"
 #include "copy_body_internal.h"
 #include "copy_old_result_internal.h"
@@ -1927,11 +1928,12 @@ static NLTypeId local_coordinate_type(Check *check, NLSourceSpan span)
 }
 
 static NLCheckedNodeId local_address_result(Check *check, NLSourceSpan span,
-                                            NLCheckedNodeId arg,
+                                            NLCheckedNodeId first,
+                                            NLCheckedNodeId second,
                                             NLCheckedKind kind,
                                             NLScalarValue scalar)
 {
-    const NLValueId input = one_result(check, arg);
+    const NLValueId input = one_result(check, first);
     if (input == 0)
         return 0;
     const NLValueId value =
@@ -1943,11 +1945,15 @@ static NLCheckedNodeId local_address_result(Check *check, NLSourceSpan span,
     if (value == 0)
         return 0;
     end_temporary(check, input);
+    if (second != 0) {
+        end_temporary(check, one_result(check, second));
+        view(check, first)->next_argument = second;
+    }
     return add(check, (NLCheckedNodeView){.kind = kind,
                                           .span = span,
                                           .type = scalar.type,
-                                          .first_argument = arg,
-                                          .argument_count = 1,
+                                          .first_argument = first,
+                                          .argument_count = second == 0 ? 1 : 2,
                                           .result_count = 1,
                                           .results = {{scalar.type, value}},
                                           .has_scalar_result = true,
@@ -1996,7 +2002,7 @@ static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
             to_address ? address : local_coordinate_type(check, syntax->span);
         return result == 0 ? 0
                            : local_address_result(
-                                 check, syntax->span, arg,
+                                 check, syntax->span, arg, 0,
                                  NL_CHECKED_ADDRESS_DATA_CONVERSION,
                                  (NLScalarValue){result, ptr.scalar_known,
                                                  ptr.scalar_value});
@@ -2027,7 +2033,7 @@ static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
     }
     /* The runtime coordinate is unknown. Do not carry the pointer's
      * provenance, authority or relationships into the scalar package. */
-    return local_address_result(check, syntax->span, arg,
+    return local_address_result(check, syntax->span, arg, 0,
                                 NL_CHECKED_ADDR_FROM_PTR,
                                 (NLScalarValue){address, false, 0});
 }
@@ -2973,6 +2979,54 @@ static bool finite_add_bound(size_t limit, size_t step)
     return limit && step <= SIZE_MAX - (limit - 1);
 }
 
+static NLCheckedNodeId local_coordinate_arithmetic(Check *check,
+                                                   const NLSyntaxView *syntax,
+                                                   NLCheckedNodeId left,
+                                                   NLCheckedNodeId right,
+                                                   NLCheckedKind kind)
+{
+    const NLSemanticContext *c = check->context;
+    const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLCheckedNodeView lhs = *view(check, left);
+    const NLCheckedNodeView rhs = *view(check, right);
+    const bool remainder = kind == NL_CHECKED_UINTPTR_REMAINDER;
+    if (check->terminated || lhs.kind != NL_CHECKED_IDENTIFIER ||
+        lhs.value_use != NL_VALUE_COPIED || lhs.result_count != 1 ||
+        rhs.type != quantity || rhs.result_count != 1 ||
+        (remainder && rhs.kind != NL_CHECKED_USIZE_LITERAL)) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+             "UINTPTR-ARITHMETIC-TYPE",
+             "coordinate arithmetic requires a named point and a usize");
+        return 0;
+    }
+    const NLSemanticValueView a = c->values[lhs.results[0].value - 1];
+    const NLSemanticValueView b = c->values[rhs.results[0].value - 1];
+    if (a.dependencies != NL_DEPENDENCY_FREE || a.value_dependency_count ||
+        b.dependencies != NL_DEPENDENCY_FREE || b.value_dependency_count) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "UINTPTR-ARITHMETIC-PRECISION",
+             "coordinate arithmetic requires independent scalar data");
+        return 0;
+    }
+    NLScalarValue result = {.type = remainder ? quantity : lhs.type};
+    const NLCheckStatus status = nl_coordinate_arithmetic(
+        kind, (NLScalarValue){lhs.type, a.scalar_known, a.scalar_value},
+        (NLScalarValue){rhs.type, b.scalar_known, b.scalar_value}, &result);
+    if (status != NL_CHECK_OK) {
+        fail(check, status, syntax->data.equality.operator_span,
+             status == NL_CHECK_ANALYSIS_PRECISION_LIMIT
+                 ? "UINTPTR-ARITHMETIC-PRECISION"
+             : remainder ? "UINTPTR-REMAINDER-ZERO"
+                         : "UINTPTR-OFFSET-RANGE",
+             status == NL_CHECK_ANALYSIS_PRECISION_LIMIT
+                 ? "coordinate operation lacks an established scalar bound"
+             : remainder ? "coordinate period must be nonzero"
+                         : "coordinate offset is outside target range");
+        return 0;
+    }
+    return local_address_result(check, syntax->span, left, right, kind, result);
+}
+
 /* Division and remainder by a nonzero literal work for Unknown numerators.
  * The Known-only +/- rules are separate. */
 static NLCheckedNodeId usize_literal_divisor(Check *check,
@@ -2989,6 +3043,11 @@ static NLCheckedNodeId usize_literal_divisor(Check *check,
     const NLCheckedNodeView a = *view(check, left), b = *view(check, right);
     NLSemanticContext *c = check->context;
     const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLTypeId coordinate = nl_semantic_core_type(c, NL_TYPE_UINTPTR);
+    if (remainder && coordinate != 0 && a.type == coordinate &&
+        local_address_context(check))
+        return local_coordinate_arithmetic(check, s, left, right,
+                                           NL_CHECKED_UINTPTR_REMAINDER);
     if (check->terminated || a.type != type || b.type != type ||
         a.result_count != 1 || b.result_count != 1 ||
         a.results[0].type != type || b.results[0].type != type) {
@@ -3077,6 +3136,13 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
     const NLCheckedNodeView lhs = *view(check, left), rhs = *view(check, right);
     NLSemanticContext *const c = check->context;
     const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLTypeId coordinate = nl_semantic_core_type(c, NL_TYPE_UINTPTR);
+    if (!multiplication && coordinate != 0 && lhs.type == coordinate &&
+        local_address_context(check))
+        return local_coordinate_arithmetic(check, syntax, left, right,
+                                           subtraction
+                                               ? NL_CHECKED_UINTPTR_SUBTRACTION
+                                               : NL_CHECKED_UINTPTR_ADDITION);
     if (check->terminated || lhs.result_count != 1 || rhs.result_count != 1 ||
         lhs.type != quantity || rhs.type != quantity ||
         lhs.results[0].type != quantity || rhs.results[0].type != quantity) {
