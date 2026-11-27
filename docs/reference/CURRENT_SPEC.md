@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_40.md
+NewLang_v0_spec_Draft17_41.md
 ```
 
 Repository policy:
@@ -13,6 +13,8 @@ Repository policy:
 - Design-thread reports, FormalProof results, compiler findings, and review-resolution documents are inputs to specification work; they do not override the canonical Draft by themselves.
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
+
+Draft17.41 (**PROPOSED / UNMERGED candidate branch selector**) adds the exact stock ordinary-client comparison and the separately enrolled genuine wrong-Domain static control in §3.2b.10, with the guarded application clause in §18.1d. Its protected-main base `023b9372cc6d1b86d50be873d1c1073e2492d9ac` selects Draft17.40. This candidate requires independent review, Coordination Gate E, protected-main adoption and explicit selection before it becomes canonical. The [F paper result](https://github.com/wakairo/NewLang_Compiler/issues/1889#issuecomment-7213166757) covers the exact revised packet. Compiler and native evidence and the isolated Unknown remain unmeasured. Option A and H1 HOLD. Product GO #624 PAUSED.
 
 Draft17.37 (**CANONICAL ONLY WHEN CURRENT_SPEC SELECTS THIS DRAFT; [Coordination C785 independent §4.2 Gate E ACCEPT](https://github.com/wakairo/NewLang_Compiler/pull/1394#pullrequestreview-5887475888)**) — SOURCE-ONLY optional third exact H5 success-arm alternative on top of adopted old6/exact9: retain all five authentic original allocations and the nine true scoped link Changes; after all loans close, completely end/deallocate only isolated original C once with its original R/O/D/Allocation/full Storage, then freshly read actual current A.prev from live A under D_A, exhaustively Copy-match its genuine Some(ptr_B), independently certify matched B as a currently live original under its own D_B, and read B.next before the four remaining original dst/B/A/src releases. All five failure worlds, current/Option occurrence and Change+Reset/loan rules, provenance, original owner conservation and nonescaping references remain unchanged. A copied Option retains value/pointer provenance but not old field conditional-occurrence borrowing identity; a ptr/Some tag plus D_B does not issue B ownership or liveness. No append, graph membership, new issuer/owner/ABI, general traversal, safe facade or H5 payload expansion is selected. At source adoption this new source's compiler SOURCE/CHECK/owned/C17/native is **NOT_RUN / NOT_IMPLEMENTED** and requires separate bounded P evidence and risk-proportional independent review. Product GO #624 PAUSED, H1 #268 HOLD; author+ordinary-safe caller audit-locality improvement vs well-factored C remains UNMEASURED.
 
