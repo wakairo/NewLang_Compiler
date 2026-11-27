@@ -1,4 +1,5 @@
 #include "captured_read_internal.h"
+#include "h_origin_internal.h"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -429,12 +430,166 @@ static bool same_ref(NLReferenceFacts a, NLReferenceFacts b)
            a.occurrence_dependency == b.occurrence_dependency;
 }
 
+/* Draft17.40 §3.2b.9 uses H's already registered fixed prev type. This
+ * signature classifies the selected body; it gives no access to a root. */
+bool nl_five_tail_writer_signature(const NLSemanticContext *c,
+                                   const NLTypeId *parameters, size_t count,
+                                   NLTypeId result)
+{
+    if (count != 2 || parameters == NULL || parameters[0] == 0 ||
+        parameters[0] > c->type_count || parameters[1] == 0 ||
+        parameters[1] > c->type_count || result == 0 || result > c->type_count)
+        return false;
+    const NLSemanticTypeView ref = c->types[parameters[0] - 1].view;
+    const NLSemanticTypeView ptr = c->types[parameters[1] - 1].view;
+    if (ref.kind != NL_TYPE_REF || ref.is_exclusive ||
+        ref.access != NL_ACCESS_WRITE || ptr.kind != NL_TYPE_PTR ||
+        ptr.target != ref.target || !nl_recursive_local_type(c, ref.target))
+        return false;
+    const NLTypeEntry *h = &c->types[ref.target - 1];
+    const NLTypeEntry *option = &c->types[result - 1];
+    return h->view.field_count == 4 && h->field_types[1] == result &&
+           option->option_target == parameters[1] && option->view.is_copy;
+}
+
+typedef struct {
+    const NLCheckedFragment *body;
+    const NLCapturedChange *change;
+    NLCheckedNodeId call, acquisition;
+    NLSymbolId actual;
+    NLScopeId scope;
+} WriterCall;
+
+static bool writer_copy(const NLSemanticContext *before,
+                        const NLCheckedNodeView *arg, NLSymbolId formal,
+                        NLTypeId type)
+{
+    if (arg == NULL || arg->kind != NL_CHECKED_IDENTIFIER ||
+        arg->value_use != NL_VALUE_COPIED || arg->reborrow_scope != 0 ||
+        arg->contextually_weakened || arg->parameter_type != type ||
+        arg->result_count != 1 || arg->results[0].type != type ||
+        arg->symbol == 0 || formal <= arg->symbol ||
+        formal > before->binding_count)
+        return false;
+    const NLSemanticBindingView actual = before->bindings[arg->symbol - 1].view;
+    const NLSemanticBindingView parameter = before->bindings[formal - 1].view;
+    if (actual.availability != NL_AVAILABLE ||
+        parameter.availability != NL_AVAILABLE || actual.type != type ||
+        parameter.type != type || actual.value == 0 ||
+        actual.value > before->value_count || parameter.value == 0 ||
+        parameter.value > before->value_count ||
+        parameter.value == actual.value ||
+        parameter.value != arg->results[0].value ||
+        actual.place == parameter.place)
+        return false;
+    const NLSemanticValueView v = before->values[actual.value - 1],
+                              p = before->values[parameter.value - 1];
+    return v.type == type && p.type == type &&
+           v.dependencies == NL_DEPENDENCY_FREE &&
+           p.dependencies == NL_DEPENDENCY_FREE && !v.value_dependency_count &&
+           !p.value_dependency_count && !v.reference_count &&
+           !p.reference_count && same_ref(v.reference, p.reference);
+}
+
+/* Borrow an actual call's one Change from its existing BODY result seal.
+ * Bind both actual Copies to their positional formals in the event's world.
+ * The caller's loan must be the exact block that acquires and uses the ref. */
+static bool writer_call(const NLCheckedFragment *f, NLCheckedNodeId id,
+                        WriterCall *out)
+{
+    const NLSemanticContext *w = f->context;
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    if (call == NULL || call->kind != NL_CHECKED_REGISTERED_CALL ||
+        !call->body_backed || call->terminates || call->argument_count != 2 ||
+        call->result_count != 1 || call->function == 0 ||
+        call->function > w->function_count || !nl_h_custody_result_valid(f, id))
+        return false;
+    const NLFunctionEntry *fn = &w->functions[call->function - 1];
+    const NLCheckedFragment *body = nl_checked_call_body(f, id);
+    if (!fn->body ||
+        !nl_five_tail_writer_signature(w, fn->parameters, fn->count,
+                                       fn->result) ||
+        body == NULL || body->context != w || body->body_owner != fn->body ||
+        body->field_change_count != 1 || body->body_count || body->arm_count)
+        return false;
+    const NLCapturedChange *change = body->field_changes[0];
+    const NLCheckedNodeView *root = nl_checked_node_view(body, body->root);
+    const NLCheckedNodeView *replace =
+        change == NULL ? NULL : nl_checked_node_view(body, change->node);
+    if (replace == NULL || replace->kind != NL_CHECKED_REPLACE ||
+        change->world != w || change->before == NULL ||
+        change->before != change->before_origin || root == NULL ||
+        root->kind != NL_CHECKED_BLOCK || root->item_count ||
+        root->tail != change->node || root->result_count != 1 ||
+        replace->field.index != 1 || call->type != fn->result ||
+        call->results[0].type != fn->result ||
+        root->results[0].type != fn->result ||
+        call->results[0].value != replace->field.old_value ||
+        root->results[0].value != replace->field.old_value)
+        return false;
+    const NLCheckedNodeView *head = argument_node(f, call, 0);
+    const NLCheckedNodeView *tail = argument_node(f, call, 1);
+    const NLCheckedNodeView *some = argument_node(body, replace, 1);
+    const NLCheckedNodeView *payload =
+        some == NULL ? NULL : nl_checked_node_view(body, some->initializer);
+    const NLSemanticContext *b = change->before;
+    NLValueId ptr = 0;
+    if (some == NULL || some->kind != NL_CHECKED_SUM_CONSTRUCTOR ||
+        some->variant != 2 || some->argument_count != 0 || payload == NULL ||
+        payload->kind != NL_CHECKED_IDENTIFIER ||
+        payload->value_use != NL_VALUE_COPIED ||
+        !result_id(body, payload, &ptr) || ptr > b->value_count ||
+        !writer_copy(b, head, replace->field.base, fn->parameters[0]) ||
+        !writer_copy(b, tail, payload->symbol, fn->parameters[1]) ||
+        b->values[ptr - 1].type != fn->parameters[1] ||
+        !same_ref(b->values[ptr - 1].reference,
+                  b->values[tail->results[0].value - 1].reference))
+        return false;
+    const NLValueId incoming = replace->field.new_value;
+    if (incoming == 0 || incoming > b->value_count ||
+        b->values[incoming - 1].sum_payload != ptr)
+        return false;
+    const NLReferenceFacts ref =
+        b->values[head->results[0].value - 1].reference;
+    if (ref.scope == 0 || ref.scope > w->scope_count ||
+        w->scopes[ref.scope - 1].active)
+        return false;
+    for (size_t i = 1; i < id; ++i) {
+        const NLCheckedNodeView *loan = nl_checked_node_view(f, i);
+        if (loan->kind != NL_CHECKED_LOAN_HEADER ||
+            loan->loan.scope != ref.scope)
+            continue;
+        const NLCheckedNodeView *block =
+            nl_checked_node_view(f, loan->initializer);
+        const NLCheckedNodeView *bind =
+            block == NULL ? NULL : nl_checked_node_view(f, block->first_item);
+        const NLCheckedNodeView *receiver =
+            bind == NULL ? NULL : argument_node(f, bind, 0);
+        if (!loan->loan.normal_result_forwarded || loan->result_count != 1 ||
+            loan->results[0].value != call->results[0].value ||
+            loan->results[0].type != call->type || block == NULL ||
+            block->kind != NL_CHECKED_BLOCK || block->item_count != 1 ||
+            block->tail != id || bind == NULL ||
+            bind->kind != NL_CHECKED_BINDING || bind->next_item != 0 ||
+            bind->initializer <= i || bind->initializer >= id ||
+            receiver == NULL || receiver->kind != NL_CHECKED_RECEIVER ||
+            receiver->symbol != head->symbol)
+            return false;
+        *out = (WriterCall){body,         change,   id, bind->initializer,
+                            head->symbol, ref.scope};
+        return true;
+    }
+    return false;
+}
+
 /* Recheck the actual root acquisition separately from field projection.
  * The saved world is prior to Change, while its D loan and both refs are live.
  * No C offsets or source spelling take part in this proof. */
 static NLCheckStatus access_validate(const NLCheckedFragment *f,
                                      const NLCapturedChange *c, bool read,
-                                     NLCheckedNodeId opening_loan)
+                                     NLCheckedNodeId opening_loan,
+                                     const NLCheckedFragment *caller,
+                                     const WriterCall *writer)
 {
     if (c == NULL || c->world != f->context || c->before == NULL ||
         c->after == NULL || c->before == c->after ||
@@ -550,15 +705,29 @@ static NLCheckStatus access_validate(const NLCheckedFragment *f,
         projected->reference_count != 0 ||
         projected->dependencies != NL_DEPENDENCY_FREE)
         return INVALID;
-    const NLCheckedNodeView *acquired = NULL;
-    for (size_t i = 1; i < c->node; ++i) {
-        const NLCheckedNodeView *n = nl_checked_node_view(f, i);
-        if (n->kind == NL_CHECKED_REF_FROM_PTR && n->result_count == 1 &&
-            n->results[0].value == root_value)
-            acquired = n;
+    const NLCheckedFragment *owner = writer ? caller : f;
+    const NLCheckedNodeId action = writer ? writer->call : c->node;
+    const NLValueId acquired_value =
+        writer ? b->bindings[writer->actual - 1].view.value : root_value;
+    const NLCheckedNodeView *acquired =
+        writer ? nl_checked_node_view(owner, writer->acquisition) : NULL;
+    if (!writer)
+        for (size_t i = 1; i < action; ++i) {
+            const NLCheckedNodeView *n = nl_checked_node_view(owner, i);
+            if (n->kind == NL_CHECKED_REF_FROM_PTR && n->result_count == 1 &&
+                n->results[0].value == acquired_value)
+                acquired = n;
+        }
+    if (acquired == NULL || acquired->kind != NL_CHECKED_REF_FROM_PTR ||
+        acquired->result_count != 1 ||
+        acquired->results[0].value != acquired_value)
+        return INVALID;
+    if (writer) {
+        for (size_t i = 0; i < b->scope_count; ++i)
+            if (b->scopes[i].active != (i + 1 == writer->scope))
+                return INVALID;
     }
-    if (acquired == NULL || acquired->argument_count != 2 ||
-        acquired->type != root_ref.type ||
+    if (acquired->argument_count != 2 || acquired->type != root_ref.type ||
         acquired->results[0].type != root_ref.type ||
         !acquired->has_reference_result ||
         !same_ref(acquired->reference_result, root_ref.reference) ||
@@ -567,15 +736,16 @@ static NLCheckStatus access_validate(const NLCheckedFragment *f,
         acquired->lifetime_domain != root.governing_domain ||
         !extent_same(acquired->lifetime_range, root.placement))
         return INVALID;
-    const NLSemanticValueView *pointer = input(f, acquired, 0);
-    const NLSemanticValueView *stable = input(f, acquired, 1);
-    const NLCheckedNodeView *pointer_operand = argument_node(f, acquired, 0);
-    const NLCheckedNodeView *stable_operand = argument_node(f, acquired, 1);
+    const NLSemanticValueView *pointer = input(owner, acquired, 0);
+    const NLSemanticValueView *stable = input(owner, acquired, 1);
+    const NLCheckedNodeView *pointer_operand =
+        argument_node(owner, acquired, 0);
+    const NLCheckedNodeView *stable_operand = argument_node(owner, acquired, 1);
     if (pointer == NULL || stable == NULL ||
         pointer_operand->value_use != NL_VALUE_COPIED ||
         stable_operand->value_use != NL_VALUE_COPIED ||
         !pointer_to(b, *pointer, e.parent, e.parent_incarnation) ||
-        (!read && nl_allocated_write_access(b, input_id(f, acquired, 0)) !=
+        (!read && nl_allocated_write_access(b, input_id(owner, acquired, 0)) !=
                       NL_CHECK_OK) ||
         !domain_ref(b, *stable, root.governing_domain, false) ||
         stable->reference.scope != root_ref.reference.scope ||
@@ -602,8 +772,8 @@ static NLCheckStatus access_validate(const NLCheckedFragment *f,
             return INVALID;
     }
     const NLCheckedNodeView *loan = NULL;
-    for (size_t i = 1; i < c->node; ++i) {
-        const NLCheckedNodeView *n = nl_checked_node_view(f, i);
+    for (size_t i = 1; i < action; ++i) {
+        const NLCheckedNodeView *n = nl_checked_node_view(owner, i);
         if (n->kind == NL_CHECKED_LOAN_HEADER &&
             n->loan.ref_symbol == stable_operand->symbol &&
             n->loan.scope == stable->reference.scope)
@@ -695,6 +865,25 @@ static bool unlink_option(const NLSemanticContext *world, NLValueId id,
     const NLCapturedOriginal original = originals[target].original;
     return pointer_to(world, world->values[option.sum_payload - 1],
                       original.root, original.incarnation);
+}
+
+/* The selected shared-writer continuation promises the whole five-root
+ * graph, including fields untouched by its nine Changes. Check actual
+ * source-issued Option packages against the same original root ledger. */
+static bool shared_unlink_state(const NLSemanticContext *world,
+                                const Release *originals)
+{
+    static const size_t after[5][3] = {{SIZE_MAX, SIZE_MAX, 1},
+                                       {2, 2, SIZE_MAX},
+                                       {SIZE_MAX, 1, SIZE_MAX},
+                                       {SIZE_MAX, SIZE_MAX, SIZE_MAX},
+                                       {SIZE_MAX, SIZE_MAX, SIZE_MAX}};
+    for (size_t root = 0; root < 5; ++root)
+        for (size_t field = 0; field < 3; ++field)
+            if (!unlink_option(world, originals[root].fields[field], originals,
+                               after[root][field]))
+                return false;
+    return true;
 }
 
 static bool unlink_step(const NLSemanticContext *world, const Release *roots,
@@ -813,7 +1002,8 @@ static NLCheckStatus read_access(const NLCheckedFragment *f, const ReadEvent *r,
 {
     if (r == NULL || r->kind != NL_CHECKED_LINK_READ)
         return INVALID;
-    NLCheckStatus s = access_validate(f, &r->event, true, opening_loan);
+    NLCheckStatus s =
+        access_validate(f, &r->event, true, opening_loan, NULL, NULL);
     if (s != NL_CHECK_OK)
         return s;
     const NLCheckedNodeView *n = nl_checked_node_view(f, r->event.node);
@@ -1019,9 +1209,23 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                            size_t *histogram, size_t depth)
 {
     const NLSemanticContext *world = f->context;
+    const size_t calls = f->body_count;
     if (f->field_change_count > NL_CAPTURED_CHANGE_CAPACITY ||
-        (f->field_change_count > NL_CAPTURED_SETUP_CHANGES &&
-         f->field_change_count != NL_CAPTURED_UNLINK_CHANGES))
+        (calls != 0 && calls != 2))
+        return INVALID;
+    const size_t total_changes = f->field_change_count + calls;
+    if (total_changes > NL_CAPTURED_SETUP_CHANGES &&
+        total_changes != NL_CAPTURED_UNLINK_CHANGES)
+        return INVALID;
+    WriterCall writers[2] = {0};
+    if (calls != 0 &&
+        (total_changes != NL_CAPTURED_UNLINK_CHANGES ||
+         f->captured_reads == NULL ||
+         !writer_call(f, f->body_calls[0], &writers[0]) ||
+         !writer_call(f, f->body_calls[1], &writers[1]) ||
+         writers[0].body == writers[1].body ||
+         writers[0].body->body_owner != writers[1].body->body_owner ||
+         writers[0].scope == writers[1].scope))
         return INVALID;
     NLCheckedNodeId opening_loan = 0;
     if (f->captured_reads != NULL &&
@@ -1030,6 +1234,14 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
          read_binding(f, f->captured_reads->events[0].event.node,
                       &opening_loan) == 0))
         return INVALID;
+    bool shared_writer_profile = false;
+    for (size_t j = 0; j < world->function_count; ++j) {
+        const NLFunctionEntry *fn = &world->functions[j];
+        shared_writer_profile |=
+            fn->body != NULL &&
+            nl_five_tail_writer_signature(world, fn->parameters, fn->count,
+                                          fn->result);
+    }
     Release releases[NL_CAPTURED_MAX_RELEASES] = {0};
     size_t count = certificate->view.count, grants = 0;
     for (size_t r = 0; r < count; ++r) {
@@ -1046,13 +1258,12 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
     bool nested = false;
     bool c_ended_at_loan = false;
     size_t retained_cleanup_step = 0;
-    size_t changes = 0, reads = 0;
+    size_t changes = 0, direct = 0, shared = 0, reads = 0;
     NLCheckedNodeId first_read = 0;
     for (size_t i = 1; i <= f->count; ++i) {
         const NLCheckedNodeView *v = nl_checked_node_view(f, i);
         if (v->terminates || v->kind == NL_CHECKED_TAKE ||
-            v->kind == NL_CHECKED_IF || v->kind == NL_CHECKED_LOOP ||
-            v->kind == NL_CHECKED_REGISTERED_CALL)
+            v->kind == NL_CHECKED_IF || v->kind == NL_CHECKED_LOOP)
             return INVALID; /* finite lifecycle/field certificate profile */
         if (i == opening_loan) {
             if (nested || count != 5 || changes != NL_CAPTURED_UNLINK_CHANGES)
@@ -1060,17 +1271,38 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             /* No release may change this ledger from loan entry to join.
              * The saved read worlds recheck the whole selected phase. */
             c_ended_at_loan = releases[3].freed;
-        }
-        if (v->kind == NL_CHECKED_REPLACE) {
-            if (nested || count != 5 || changes >= f->field_change_count ||
-                changes >= NL_CAPTURED_CHANGE_CAPACITY ||
-                f->field_changes[changes] == NULL ||
-                f->field_changes[changes]->node != i)
+            /* The shared writer keeps C live and the fixed link state. */
+            if (calls != 0 &&
+                (c_ended_at_loan || !shared_unlink_state(world, releases)))
                 return INVALID;
-            const NLCapturedChange *change = f->field_changes[changes++];
-            NLCheckStatus s = access_validate(f, change, false, 0);
+        }
+        if (v->kind == NL_CHECKED_REPLACE ||
+            v->kind == NL_CHECKED_REGISTERED_CALL) {
+            if (nested || count != 5 || changes >= total_changes)
+                return INVALID;
+            const WriterCall *writer = NULL;
+            const NLCapturedChange *change;
+            const NLCheckedFragment *event_owner = f;
+            if (v->kind == NL_CHECKED_REGISTERED_CALL) {
+                if (shared >= calls || writers[shared].call != i ||
+                    changes != (shared == 0 ? 1u : 7u))
+                    return INVALID;
+                writer = &writers[shared++];
+                event_owner = writer->body;
+                change = writer->change;
+            } else {
+                if (direct >= f->field_change_count ||
+                    f->field_changes[direct] == NULL ||
+                    f->field_changes[direct]->node != i)
+                    return INVALID;
+                change = f->field_changes[direct++];
+            }
+            NLCheckStatus s =
+                access_validate(event_owner, change, false, 0, f, writer);
             if (s != NL_CHECK_OK)
                 return s;
+            const NLCheckedField field =
+                nl_checked_node_view(event_owner, change->node)->field;
             const NLSemanticContext *b = change->before;
             size_t owner = count;
             for (size_t r = 0; r < count; ++r) {
@@ -1110,20 +1342,20 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                         b->places[p.fixed_fields[j] - 1].current_value !=
                             releases[r].fields[j])
                         return INVALID;
-                if (o.root == v->field.parent)
+                if (o.root == field.parent)
                     owner = r;
             }
-            if (owner == count || v->field.index >= 3 ||
-                releases[owner].fields[v->field.index] != v->field.old_value)
+            if (owner == count || field.index >= 3 ||
+                releases[owner].fields[field.index] != field.old_value)
                 return INVALID;
-            if (f->field_change_count == NL_CAPTURED_UNLINK_CHANGES &&
-                !unlink_step(b, releases, changes - 1, owner, v->field))
+            if (total_changes == NL_CAPTURED_UNLINK_CHANGES &&
+                !unlink_step(b, releases, changes, owner, field))
                 return INVALID;
-            releases[owner].fields[v->field.index] = v->field.new_value;
+            ++changes;
+            releases[owner].fields[field.index] = field.new_value;
             /* A copied Some pointer must retain one current original target;
              * it contributes no Allocation/Domain/Storage responsibility. */
-            const NLSemanticValueView incoming =
-                b->values[v->field.new_value - 1];
+            const NLSemanticValueView incoming = b->values[field.new_value - 1];
             if (incoming.variant == 2) {
                 bool original = false;
                 if (incoming.sum_payload == 0 ||
@@ -1142,6 +1374,8 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
         if (v->kind == NL_CHECKED_REF_FROM_PTR ||
             v->kind == NL_CHECKED_FIELD_REF) {
             bool proved = false;
+            for (size_t j = 0; j < calls; ++j)
+                proved |= writers[j].acquisition == i;
             for (size_t j = 0;
                  j < f->field_change_count && j < NL_CAPTURED_CHANGE_CAPACITY;
                  ++j) {
@@ -1165,7 +1399,7 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
         if (v->kind == NL_CHECKED_LINK_READ ||
             (v->kind == NL_CHECKED_MATCH && read_event(f, i) != NULL)) {
             if (nested || count != 5 || changes != NL_CAPTURED_UNLINK_CHANGES ||
-                f->field_change_count != NL_CAPTURED_UNLINK_CHANGES ||
+                total_changes != NL_CAPTURED_UNLINK_CHANGES ||
                 f->captured_reads == NULL || f->captured_reads->count != 2 ||
                 reads >= 2 || f->captured_reads->events[reads].event.node != i)
                 return INVALID;
@@ -1341,16 +1575,17 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                 index = r;
         if (index == count)
             return INVALID;
-        if (reads != 0 && !c_ended_at_loan) {
-            /* The retained-live continuation completes the match before
-             * fully releasing each original, in reverse allocation order. */
+        const bool ordered_failure = shared_writer_profile && variant == 1;
+        if ((reads != 0 && !c_ended_at_loan) || ordered_failure) {
+            /* The selected shared profile releases failure originals and
+             * retained-live success originals in reverse allocation order. */
             static const NLCheckedKind cleanup[] = {
                 NL_CHECKED_DESTROY, NL_CHECKED_ERASE_SLOT,
                 NL_CHECKED_DOMAIN_FINALIZE, NL_CHECKED_DEALLOCATE};
             const size_t stride = sizeof(cleanup) / sizeof(cleanup[0]);
             const size_t released = retained_cleanup_step / stride;
-            if (reads != 2 || released >= count ||
-                index != count - 1 - released ||
+            if ((ordered_failure ? reads != 0 : reads != 2) ||
+                released >= count || index != count - 1 - released ||
                 v->kind != cleanup[retained_cleanup_step % stride])
                 return INVALID;
             ++retained_cleanup_step;
@@ -1407,8 +1642,18 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             r->freed = true;
         }
     }
+    if (count == 5)
+        for (size_t i = 0; i < world->function_count; ++i) {
+            const NLFunctionEntry *fn = &world->functions[i];
+            if (fn->body != NULL &&
+                nl_five_tail_writer_signature(world, fn->parameters, fn->count,
+                                              fn->result) &&
+                (calls != 2 || writers[0].body->body_owner != fn->body))
+                return INVALID;
+        }
     if (grants != 1 || count != certificate->view.count + (variant == 2) ||
-        changes != f->field_change_count ||
+        changes != total_changes || direct != f->field_change_count ||
+        shared != calls ||
         reads != (f->captured_reads == NULL ? 0 : f->captured_reads->count))
         return INVALID;
     if (nested)

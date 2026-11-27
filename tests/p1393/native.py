@@ -21,6 +21,7 @@ parser.add_argument("cc")
 parser.add_argument("sanitizer")
 parser.add_argument("--matrix", action="store_true")
 parser.add_argument("--retained-live", action="store_true")
+parser.add_argument("--shared-writer", action="store_true")
 parser.add_argument("--clang")
 parser.add_argument("--output", type=Path)
 args = parser.parse_args()
@@ -48,18 +49,27 @@ def run(label, command, env=None):
     return p
 
 
-if args.retained_live:
+retained_live = args.retained_live or args.shared_writer
+if args.shared_writer:
+    source = args.directory / "sources/P3-C-live-shared-tail-writer.nl"
+    source_hash = "1eab0d6c41d9066e907538ad6d42884eddd52360d130c5237dfb36b01016b255"
+elif retained_live:
     source = args.directory / "sources/P2-C-live-current-tail-read.nl"
     source_hash = "294bcf1bbb75e76c46768484826d2873480d478e139a12df73f28b4cdc4da879"
 else:
     source = args.directory / "sources/P1-C-free-current-tail-read-v2.nl"
     source_hash = "105fc934021586050ad875d05f251c65a30de70c34f330913bb1738022be11b4"
 assert sha(source) == source_hash
-checked = run("checked", [str(args.probe), str(source)])
+probe = [str(args.probe), str(source)]
+if args.shared_writer:
+    probe.append("--shared-writer")
+checked = run("checked", probe)
 rows = {}
 for line in checked.stdout.decode().splitlines():
     kind, *values = line.split()
     rows.setdefault(kind, []).append(list(map(int, values)))
+checked_calls = rows.pop("CALL", [])
+assert len(checked_calls) == (2 if args.shared_writer else 0)
 assert {k: len(v) for k, v in rows.items()} == {
     "INIT": 5, "ROOT": 11, "FIELD": 11, "CHANGE": 9, "READ": 2}
 assert all(len({v[i] for v in rows["INIT"]}) == 5 for i in range(4))
@@ -73,7 +83,15 @@ emitted = run("emit", [str(args.compiler), str(source)])
 assert not emitted.stderr
 code = emitted.stdout.decode()
 assert code.count("=malloc(56);") == 5
-assert len(re.findall(r"^\*nl_v_\d+=nl_v_\d+;", code, re.M)) == 9
+assert len(re.findall(r"^\*nl_v_\d+=nl_v_\d+;", code, re.M)) == (
+    7 if args.shared_writer else 9)
+if args.shared_writer:
+    assert code.count("static nl_option nl_five_replace_prev(") == 1
+    assert code.count("nl_five_replace_prev(") == 3
+    assert len(re.findall(r"^head->f1=\(nl_option\)\{1,tail\};$", code, re.M)) == 1
+    assert len(re.findall(
+        r"^nl_option nl_v_\d+=nl_five_replace_prev\(nl_v_\d+,nl_v_\d+\);$",
+        code, re.M)) == 2
 calls = re.findall(r"NL_FIVE_ROOT\(nl_v_(\d+),nl_v_(\d+)->token,(\d+),(\d+),(\d+),(\d+)\)", code)
 assert len(calls) == 11
 for expected, call in zip(rows["ROOT"], calls):
@@ -108,16 +126,18 @@ assert origin(some[2],some.start())=="nl_v_"+read_calls[0][1]
 b_pointer="nl_v_"+calls[10][0]
 b_root_hook=code.index("NL_FIVE_ROOT("+b_pointer+",")
 assert origin(b_pointer,b_root_hook)==("payload","nl_v_"+read_calls[0][1])
-if not args.retained_live:
+if not retained_live:
     assert code.rfind("free(",0,code.index("NL_FIVE_READ("))>=0
 (root/"static-def-use.json").write_text(json.dumps({"read_hooks":read_calls,"Some_binder":some[1],"B_source_pointer":b_pointer,"authentic_chain":True})+"\n")
-raw = root / ("P2-raw.c" if args.retained_live else "P1-raw.c")
+raw = root / ("P3-raw.c" if args.shared_writer else
+              "P2-raw.c" if retained_live else "P1-raw.c")
 raw.write_bytes(emitted.stdout)
 original_C_hash = sha(raw)
 records = []
 (root / "native-input-freeze.json").write_text(json.dumps({
     "source_SHA256": sha(source), "raw_C_SHA256": original_C_hash,
-    "checked_rows": rows, "checked_header_SHA256": sha(root / "five_expect.h"),
+    "checked_rows": rows, "writer_calls": checked_calls,
+    "checked_header_SHA256": sha(root / "five_expect.h"),
     "observer_SHA256": sha(args.directory / "observer.h"),
     "observer_memory_SHA256": sha(args.directory / "observer_memory.c"),
     "platform_SHA256": sha(repo / "tests/integration/five_platform.c"),
@@ -136,7 +156,7 @@ def native(label, cc, opt, observed, worlds, sanitizer="none", path=raw):
     if observed:
         command += ['-DNEWLANG_FIVE_OBSERVER="' +
                     str(args.directory.resolve() / "observer.h") + '"', "-I" + str(root)]
-        if args.retained_live:
+        if retained_live:
             command += ["-DP1393_RETAINED_LIVE"]
     else:
         command += ["-DNEWLANG_UNOBSERVED"]
@@ -206,7 +226,8 @@ else:
     assert len(records) == 7
 assert sha(raw) == original_C_hash
 print(json.dumps({"source_SHA256": sha(source), "raw_C_SHA256": original_C_hash,
-                  "genuine_checked_rows": rows, "guests": records,
+                  "genuine_checked_rows": rows, "writer_calls": checked_calls,
+                  "guests": records,
                   "raw_unmodified": True, "no_program_value_injection": True,
                   "raw_dynamic_reads": "NOT_OBSERVED: legal optimization may eliminate unused reads",
                   "passive_memory": "instrumented operands/results plus separate-TU live A/B reads; not raw-machine timing"}, indent=2))

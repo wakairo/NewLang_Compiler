@@ -1,4 +1,5 @@
 #include "checked_c_five.h"
+#include "captured_read_internal.h"
 #include "captured_trace_internal.h"
 #include "checked_c_target.h"
 #include "newlang/captured_closure.h"
@@ -32,6 +33,7 @@ typedef struct {
 typedef struct {
     char *text;
     size_t used, temp, frame, steps, sites, changes;
+    size_t writer_function, writer_calls;
     NLTypeId node, option, ptr, unit, u8;
     NLNodeCStatus status;
 } Five;
@@ -157,7 +159,7 @@ static bool covered(Five *e, const World *w)
              k == NL_CHECKED_DEALLOCATE || k == NL_CHECKED_DOMAIN_CREATE ||
              k == NL_CHECKED_DOMAIN_FINALIZE || k == NL_CHECKED_REPLACE ||
              k == NL_CHECKED_FIELD_REF || k == NL_CHECKED_REF_FROM_PTR ||
-             k == NL_CHECKED_LINK_READ) &&
+             k == NL_CHECKED_LINK_READ || k == NL_CHECKED_REGISTERED_CALL) &&
             w->visited[i] != 1)
             return no(e);
     }
@@ -635,6 +637,35 @@ static bool expr(Five *e, World *w, NLCheckedNodeId id, Result *out)
                    out->temp, args[0].temp, args[0].temp, out->temp,
                    v->field.parent, v->field.index, v->field.child_fact,
                    v->field.payload_occurrence);
+    if (v->kind == NL_CHECKED_REGISTERED_CALL) {
+        /* The enclosing captured-closure validation covered this exact
+         * BODY and its only Change. Emit the two evaluated actuals once and
+         * forward the helper's actual return, with the usual observer hooks. */
+        const NLCheckedFragment *body = nl_checked_call_body(w->fragment, id);
+        NLCapturedChangeView change;
+        if (v->function != e->writer_function || v->argument_count != 2 ||
+            v->type != e->option || args[1].type != e->ptr ||
+            !nl_checked_captured_change_view(body, 0, &change))
+            return no(e);
+        const NLCheckedNodeView *replace =
+            nl_checked_node_view(body, change.operation);
+        const NLCheckedNodeView *projection =
+            nl_checked_node_view(body, replace->first_argument);
+        const NLCheckedField field = replace->field;
+        const size_t head = args[0].temp;
+        return ++e->writer_calls <= 2 &&
+               ++e->changes <= NL_CAPTURED_CHANGE_CAPACITY &&
+               put(e,
+                   "NL_FIVE_FIELD(nl_v_%zu,&nl_v_%zu->f1,1,1,%zu,%zu,%zu,%zu);"
+                   "\n"
+                   "nl_option "
+                   "nl_v_%zu=nl_five_replace_prev(nl_v_%zu,nl_v_%zu);\n"
+                   "NL_FIVE_CHANGE(&nl_v_%zu->f1,&nl_v_%zu,%zu,%zu);\n",
+                   head, head, field.nominal, field.child,
+                   field.child_incarnation, projection->reference_result.scope,
+                   out->temp, head, args[1].temp, head, out->temp,
+                   field.payload_occurrence, field.post_payload_occurrence);
+    }
     if (v->kind == NL_CHECKED_REPLACE) {
         bool certified = false;
         for (size_t i = 0; i < nl_checked_captured_change_count(w->fragment);
@@ -699,6 +730,12 @@ NLNodeCStatus nl_checked_c_five(const NLCheckedFragment *body, char **out,
     Five e = {.node = trial->allocation_target,
               .unit = nl_semantic_unit_type(c),
               .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
+    for (size_t i = 0; i < c->function_count; ++i) {
+        const NLFunctionEntry *fn = &c->functions[i];
+        if (fn->body && nl_five_tail_writer_signature(c, fn->parameters,
+                                                      fn->count, fn->result))
+            e.writer_function = i + 1;
+    }
     NLSemanticTypeView h;
     NLAggregateField f;
     if (!nl_semantic_type_view(c, e.node, &h) || h.field_count != 4 ||
@@ -744,12 +781,19 @@ NLNodeCStatus nl_checked_c_five(const NLCheckedFragment *body, char **out,
         "((void)0)\n"
         "#define NL_FIVE_FINALIZE(...) ((void)0)\n#define NL_FIVE_RELEASE(...) "
         "((void)0)\n"
-        "#define NL_FIVE_FINISH() ((void)0)\n#endif\nint main(void){\n");
+        "#define NL_FIVE_FINISH() ((void)0)\n#endif\n");
+    if (e.writer_function)
+        (void)put(&e, "static nl_option nl_five_replace_prev(nl_node *head,"
+                      "const nl_node *tail){\n"
+                      "nl_option old=head->f1;\nhead->f1=(nl_option){1,tail};\n"
+                      "return old;\n}\n");
+    (void)put(&e, "int main(void){\n");
     unsigned char visited[FIVE_NODES] = {0};
     World w = {.fragment = body, .visited = visited};
     Result result;
     if (!expr(&e, &w, nl_checked_root(body), &result) ||
         result.type != e.unit || e.sites != 5 ||
+        e.writer_calls != (e.writer_function ? 2u : 0u) ||
         (e.changes != NL_CAPTURED_SETUP_CHANGES &&
          e.changes != NL_CAPTURED_UNLINK_CHANGES) ||
         !covered(&e, &w) || !put(&e, "NL_FIVE_FINISH();\nreturn 0;\n}\n")) {

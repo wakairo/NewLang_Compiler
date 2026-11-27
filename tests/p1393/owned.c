@@ -304,6 +304,7 @@ static bool foreign_destroy(const char *path, bool retained_live)
     return true;
 }
 static size_t capture_calls, wanted_call, wanted_offset, allocation_index;
+static size_t writer_seals, wanted_writer_seal;
 static bool armed, injection_window, injected, fail_buffer;
 static const NLSemanticContext *selected_world;
 void *__real_malloc(size_t);
@@ -375,6 +376,53 @@ NLCheckStatus __wrap_nl_captured_read_end(NLCheckedFragment *f,
     injection_window = false;
     return s;
 }
+NLCheckStatus __real_nl_h_custody_seal_result(NLCheckedFragment *,
+                                              NLCheckedFragment *,
+                                              NLCheckedNodeId,
+                                              const NLSemanticContext *);
+NLCheckStatus __wrap_nl_h_custody_seal_result(NLCheckedFragment *parent,
+                                              NLCheckedFragment *body,
+                                              NLCheckedNodeId call,
+                                              const NLSemanticContext *world)
+{
+    const NLCheckedNodeView *v = nl_checked_node_view(parent, call);
+    if (body->field_change_count != 1 || !v ||
+        v->kind != NL_CHECKED_REGISTERED_CALL || v->argument_count != 2)
+        return __real_nl_h_custody_seal_result(parent, body, call, world);
+    injection_window = ++writer_seals == wanted_writer_seal;
+    allocation_index = 0;
+    NLCheckStatus s =
+        __real_nl_h_custody_seal_result(parent, body, call, world);
+    injection_window = false;
+    return s;
+}
+
+static bool writer_seal_oom(const char *path)
+{
+    Program p = {0};
+    writer_seals = 0;
+    CHECK(prepare(path, &p) == NL_CHECK_OK && writer_seals == 4);
+    destroy(&p);
+    /* Two calls in the declaration CHECK and two in the actual entry CHECK. */
+    for (size_t site = 1; site <= 4; ++site) {
+        wanted_writer_seal = site;
+        wanted_offset = writer_seals = 0;
+        injected = false;
+        armed = true;
+        NLCheckStatus s = prepare(path, &p);
+        armed = false;
+        wanted_writer_seal = 0;
+        CHECK(injected && s == NL_CHECK_OUT_OF_MEMORY && p.entry == NULL);
+        destroy(&p);
+        CHECK(prepare(path, &p) == NL_CHECK_OK);
+        destroy(&p);
+        printf("OOM shared writer BODY seal %zu: OUT_OF_MEMORY and unchanged "
+               "snapshot; healthy retry PASS\n",
+               site);
+    }
+    return true;
+}
+
 static bool oom(const char *path)
 {
     Program good = {0};
@@ -644,9 +692,10 @@ int main(int argc, char **argv)
 {
     if (argc != 3)
         return 1;
-    const bool ok = strcmp(argv[1], "auth") == 0 ? current_auth(argv[2])
-                    : strcmp(argv[1], "oom") == 0
-                        ? oom(argv[2])
+    const bool ok = strcmp(argv[1], "auth") == 0  ? current_auth(argv[2])
+                    : strcmp(argv[1], "oom") == 0 ? oom(argv[2])
+                    : strcmp(argv[1], "writer-oom") == 0
+                        ? oom(argv[2]) && writer_seal_oom(argv[2])
                         : verify(argv[2], strcmp(argv[1], "owned-live") == 0);
     return ok ? 0 : 1;
 }
