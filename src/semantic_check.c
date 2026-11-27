@@ -9,6 +9,7 @@
 #include "if_field_internal.h"
 #include "linear_break_internal.h"
 #include "newlang/parser.h"
+#include "numeric_conversion_internal.h"
 #include "producer_local_internal.h"
 #include "pure_u8_internal.h"
 #include "semantic_internal.h"
@@ -1927,11 +1928,11 @@ static NLTypeId local_coordinate_type(Check *check, NLSourceSpan span)
     return type;
 }
 
-static NLCheckedNodeId local_address_result(Check *check, NLSourceSpan span,
-                                            NLCheckedNodeId first,
-                                            NLCheckedNodeId second,
-                                            NLCheckedKind kind,
-                                            NLScalarValue scalar)
+static NLCheckedNodeId local_scalar_result(Check *check, NLSourceSpan span,
+                                           NLCheckedNodeId first,
+                                           NLCheckedNodeId second,
+                                           NLCheckedKind kind,
+                                           NLScalarValue scalar)
 {
     const NLValueId input = one_result(check, first);
     if (input == 0)
@@ -1960,6 +1961,59 @@ static NLCheckedNodeId local_address_result(Check *check, NLSourceSpan span,
                                           .scalar_result = scalar});
 }
 
+static NLCheckedNodeId local_numeric_result(Check *check, NLSourceSpan span,
+                                            NLCheckedNodeId arg,
+                                            NLSemanticTypeKind target)
+{
+    const NLValueId operand = arg ? one_result(check, arg) : 0;
+    if (operand == 0)
+        return 0;
+    NLSemanticContext *c = check->context;
+    const NLSemanticValueView input = c->values[operand - 1];
+    const NLSemanticTypeKind source = c->types[input.type - 1].view.kind;
+    if (source == target || nl_numeric_limit(source) == 0) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, span, "NUMERIC-CONVERSION-TYPE",
+             "expected a different nominal u8, usize or uintptr operand");
+        return 0;
+    }
+    if (!input.scalar_known || input.dependencies != NL_DEPENDENCY_FREE ||
+        input.value_dependency_count || input.reference.place ||
+        input.reference_count) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+             "NUMERIC-CONVERSION-PRECISION",
+             "expected an independent known numeric value");
+        return 0;
+    }
+    if (!nl_numeric_conversion_fits(source, target, input.scalar_value)) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, span, "NUMERIC-CONVERSION-RANGE",
+             "numeric operand is outside the destination range");
+        return 0;
+    }
+    const NLTypeId result = target == NL_TYPE_UINTPTR
+                                ? local_coordinate_type(check, span)
+                                : nl_semantic_core_type(c, target);
+    return result == 0 ? 0
+                       : local_scalar_result(
+                             check, span, arg, 0, NL_CHECKED_NUMERIC_CONVERSION,
+                             (NLScalarValue){result, true, input.scalar_value});
+}
+
+static NLCheckedNodeId local_numeric(Check *check, const NLSyntaxView *syntax,
+                                     NLSemanticTypeKind target)
+{
+    const NLSyntaxView *operand =
+        nl_syntax_node_view(syntax->data.call.arguments);
+    if (syntax->data.call.argument_count != 1 || operand == NULL ||
+        operand->kind != NL_SYNTAX_EXPR_NAME) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+             "NUMERIC-CONVERSION-PROFILE",
+             "explicit numeric conversion requires one named operand");
+        return 0;
+    }
+    return local_numeric_result(check, syntax->span, identifier(check, operand),
+                                target);
+}
+
 static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
                                      bool to_address)
 {
@@ -1979,6 +2033,8 @@ static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
     NLSemanticContext *c = check->context;
     const NLSemanticValueView ptr = c->values[input - 1];
     const NLSemanticTypeView type = c->types[ptr.type - 1].view;
+    if (!to_address && type.kind == NL_TYPE_U8)
+        return local_numeric_result(check, syntax->span, arg, NL_TYPE_UINTPTR);
     const NLTypeId address = nl_semantic_core_type(c, NL_TYPE_ADDR);
     if ((!to_address &&
          (type.kind == NL_TYPE_ADDR || type.kind == NL_TYPE_USIZE)) ||
@@ -1992,7 +2048,9 @@ static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
             return 0;
         }
         if (type.kind == NL_TYPE_USIZE &&
-            (!ptr.scalar_known || ptr.scalar_value > UINTPTR_MAX)) {
+            (!ptr.scalar_known ||
+             !nl_numeric_conversion_fits(NL_TYPE_USIZE, NL_TYPE_UINTPTR,
+                                         ptr.scalar_value))) {
             fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, operand->span,
                  "UINTPTR-CONVERSION-RANGE",
                  "conversion requires a known representable quantity");
@@ -2001,7 +2059,7 @@ static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
         const NLTypeId result =
             to_address ? address : local_coordinate_type(check, syntax->span);
         return result == 0 ? 0
-                           : local_address_result(
+                           : local_scalar_result(
                                  check, syntax->span, arg, 0,
                                  NL_CHECKED_ADDRESS_DATA_CONVERSION,
                                  (NLScalarValue){result, ptr.scalar_known,
@@ -2033,9 +2091,9 @@ static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
     }
     /* The runtime coordinate is unknown. Do not carry the pointer's
      * provenance, authority or relationships into the scalar package. */
-    return local_address_result(check, syntax->span, arg, 0,
-                                NL_CHECKED_ADDR_FROM_PTR,
-                                (NLScalarValue){address, false, 0});
+    return local_scalar_result(check, syntax->span, arg, 0,
+                               NL_CHECKED_ADDR_FROM_PTR,
+                               (NLScalarValue){address, false, 0});
 }
 
 static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax,
@@ -2074,6 +2132,11 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax,
         }
     }
     if (function_id == 0) {
+        const bool to_u8 = equal_name(check, syntax->data.call.callee, "u8");
+        if ((to_u8 || equal_name(check, syntax->data.call.callee, "usize")) &&
+            local_address_context(check))
+            return local_numeric(check, syntax,
+                                 to_u8 ? NL_TYPE_U8 : NL_TYPE_USIZE);
         const bool to_address =
             equal_name(check, syntax->data.call.callee, "addr");
         if ((to_address ||
@@ -3024,7 +3087,7 @@ static NLCheckedNodeId local_coordinate_arithmetic(Check *check,
                          : "coordinate offset is outside target range");
         return 0;
     }
-    return local_address_result(check, syntax->span, left, right, kind, result);
+    return local_scalar_result(check, syntax->span, left, right, kind, result);
 }
 
 /* Division and remainder by a nonzero literal work for Unknown numerators.
