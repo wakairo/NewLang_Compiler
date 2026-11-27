@@ -18,6 +18,7 @@ struct NLParser {
     size_t depth;
     bool match_scrutinee;
     bool array4_initializer; /* Ordinary direct-constructor context only. */
+    bool local_address_body; /* Ordinary parameterless unit main only. */
     NLSyntaxTree *tree;      /* Owned only while a fragment call is active. */
     NLParseStatus status;
     NLParseDiagnostic failure;
@@ -97,6 +98,11 @@ static bool punct(NLParser *parser, unsigned char spelling)
         return false;
     }
     return view.bytes[0] == spelling;
+}
+
+static bool address_inequality(NLParser *parser)
+{
+    return parser->local_address_body && punct(parser, '!');
 }
 
 static void consume(NLParser *parser)
@@ -1479,8 +1485,9 @@ ordinary_name:
     if (peek(parser) && expression_extension(parser) && !punct(parser, ';') &&
         !punct(parser, '=') &&
         !(flat_atom &&
-          (punct(parser, '+') || punct(parser, '-') || punct(parser, '*') ||
-           punct(parser, '<') || punct(parser, '/') || punct(parser, '%')) &&
+          (address_inequality(parser) || punct(parser, '+') ||
+           punct(parser, '-') || punct(parser, '*') || punct(parser, '<') ||
+           punct(parser, '/') || punct(parser, '%')) &&
           result->view.kind == NL_SYNTAX_EXPR_NAME) &&
         !(parser->match_scrutinee && punct(parser, '{'))) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
@@ -1505,10 +1512,11 @@ static NLSyntaxNode *source_expression(NLParser *parser)
 {
     NLSyntaxNode *left = source_primary(parser, true);
     if (left == NULL ||
-        (!punct(parser, '=') && !punct(parser, '+') && !punct(parser, '-') &&
-         !punct(parser, '*') && !punct(parser, '<') && !punct(parser, '/') &&
-         !punct(parser, '%')))
+        (!punct(parser, '=') && !address_inequality(parser) &&
+         !punct(parser, '+') && !punct(parser, '-') && !punct(parser, '*') &&
+         !punct(parser, '<') && !punct(parser, '/') && !punct(parser, '%')))
         return left;
+    const bool inequality = address_inequality(parser);
     const bool addition = punct(parser, '+');
     const bool subtraction = punct(parser, '-');
     const bool multiplication = punct(parser, '*');
@@ -1523,7 +1531,8 @@ static NLSyntaxNode *source_expression(NLParser *parser)
                     parser->token.span.start_byte != first.end_byte)) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, first,
              "P5-EXPRESSION-UNSUPPORTED",
-             "expected one contiguous == operator");
+             inequality ? "expected one contiguous != operator"
+                        : "expected one contiguous == operator");
         return NULL;
     }
     const NLSourceSpan operator_span = {first.start_byte,
@@ -1538,9 +1547,9 @@ static NLSyntaxNode *source_expression(NLParser *parser)
         ((division || remainder) &&
          (left->view.kind != NL_SYNTAX_EXPR_NAME ||
           right->view.kind != NL_SYNTAX_USIZE_LITERAL)) ||
-        (punct(parser, '=') || punct(parser, '+') || punct(parser, '-') ||
-         punct(parser, '*') || punct(parser, '<') || punct(parser, '/') ||
-         punct(parser, '%'))) {
+        (punct(parser, '=') || address_inequality(parser) ||
+         punct(parser, '+') || punct(parser, '-') || punct(parser, '*') ||
+         punct(parser, '<') || punct(parser, '/') || punct(parser, '%'))) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, operator_span,
              remainder        ? "USIZE-REMAINDER-SOURCE-PRECISION"
              : division       ? "USIZE-DIVISION-SOURCE-PRECISION"
@@ -1548,6 +1557,7 @@ static NLSyntaxNode *source_expression(NLParser *parser)
              : multiplication ? "USIZE-MULTIPLICATION-SOURCE-PRECISION"
              : addition       ? "USIZE-ADDITION-SOURCE-PRECISION"
              : less           ? "USIZE-LESS-THAN-SOURCE-PRECISION"
+             : inequality     ? "ADDR-INEQUALITY-SOURCE-PRECISION"
                               : "USIZE-EQUALITY-SOURCE-PRECISION",
              "only one flat binary operation of names or typed literals is "
              "supported");
@@ -1561,6 +1571,7 @@ static NLSyntaxNode *source_expression(NLParser *parser)
         : multiplication ? NL_SYNTAX_USIZE_MULTIPLICATION
         : addition       ? NL_SYNTAX_USIZE_ADDITION
         : less           ? NL_SYNTAX_USIZE_LESS_THAN
+        : inequality     ? NL_SYNTAX_ADDR_INEQUALITY
                          : NL_SYNTAX_USIZE_EQUALITY,
         (NLSourceSpan){left->view.span.start_byte, right->view.span.end_byte});
     if (result != NULL) {
@@ -1717,6 +1728,7 @@ static NLSyntaxNode *function_declaration(NLParser *parser)
     const NLSourceSpan start = parser->token.span;
     if (!expect_word(parser, "fn", "P11-DECLARATION", "expected top-level fn"))
         return NULL;
+    const bool entry_name = word(parser, "main");
     NLSyntaxNode *name = source_name(parser, NL_SYNTAX_FUNCTION, false);
     if (name == NULL || !structural_name(parser, name->view.data.name))
         return NULL;
@@ -1779,6 +1791,7 @@ static NLSyntaxNode *function_declaration(NLParser *parser)
         return NULL;
     }
     consume(parser);
+    const bool unit_result = word(parser, "unit");
     name->view.data.function.result = type(parser);
     if (name->view.data.function.result == NULL)
         return NULL;
@@ -1788,7 +1801,10 @@ static NLSyntaxNode *function_declaration(NLParser *parser)
                  "fn requires lexical block body");
         return NULL;
     }
+    parser->local_address_body =
+        entry_name && unit_result && name->view.data.function.count == 0;
     name->view.data.function.body = source_expression(parser);
+    parser->local_address_body = false;
     if (name->view.data.function.body == NULL)
         return NULL;
     name->view.span = (NLSourceSpan){
@@ -2000,19 +2016,29 @@ unsupported:
 
 typedef NLSyntaxNode *(*Fragment)(NLParser *parser);
 
+static NLSyntaxNode *address_main_body(NLParser *parser)
+{
+    parser->local_address_body = true;
+    NLSyntaxNode *body = source_fragment(parser);
+    parser->local_address_body = false;
+    return body;
+}
+
 static NLParseStatus fragment(NLParser *parser, NLSyntaxTree **out_tree,
                               NLParseDiagnostic *out_diagnostic, Fragment parse)
 {
     if (parser == NULL || out_tree == NULL || *out_tree != NULL) {
         return NL_PARSE_INTERNAL_ERROR;
     }
-    if (parse == function_unit || parse == source_fragment)
+    if (parse == function_unit || parse == source_fragment ||
+        parse == address_main_body)
         (void)nl_lexer_init_source(&parser->lexer, parser->source);
     else
         (void)nl_lexer_init(&parser->lexer, parser->source);
     parser->have_token = false;
     parser->depth = 0;
     parser->array4_initializer = false;
+    parser->local_address_body = false;
     parser->status = NL_PARSE_OK;
     parser->tree = nl_syntax_tree_create(parser->source);
     if (parser->tree == NULL) {
@@ -2098,6 +2124,12 @@ NLParseStatus nl_parser_parse_source_fragment(NLParser *parser,
                                               NLParseDiagnostic *diagnostic)
 {
     return fragment(parser, out, diagnostic, source_fragment);
+}
+
+NLParseStatus nl_parser_parse_address_main_body(NLParser *parser,
+                                                NLSyntaxTree **out)
+{
+    return fragment(parser, out, NULL, address_main_body);
 }
 
 bool nl_parse_diagnostic_render(FILE *stream, const NLSource *source,

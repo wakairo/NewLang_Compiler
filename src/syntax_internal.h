@@ -1,7 +1,7 @@
 #ifndef NEWLANG_SYNTAX_INTERNAL_H
 #define NEWLANG_SYNTAX_INTERNAL_H
 
-#include "newlang/syntax.h"
+#include "newlang/parser.h"
 
 /* Private construction state shared only by parser/syntax implementations. */
 struct NLSyntaxNode {
@@ -23,5 +23,8 @@ struct NLSyntaxTree {
 NLSyntaxTree *nl_syntax_tree_create(const NLSource *source);
 NLSyntaxNode *nl_syntax_node_create(NLSyntaxTree *tree, NLSyntaxKind kind,
                                     NLSourceSpan span);
+
+/* Preserves the selected spelling when a unit main's body is retained. */
+NLParseStatus nl_parser_parse_address_main_body(NLParser *, NLSyntaxTree **);
 
 #endif
