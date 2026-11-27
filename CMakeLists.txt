@@ -817,6 +817,35 @@ include(tests/p1455/CMakeLists.txt)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_test(NAME p1875_local_addr.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1875/run.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1875/addr.nl")
+    add_test(NAME p1878_address_data.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1878/run.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_test(NAME p1882_explicit_numeric.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1882/run.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_test(NAME p1885_byte_codec.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1885/run.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_test(NAME p1890_runtime_conversion.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1890/run.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_test(NAME p1897_direct_widening.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1897/run.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_test(NAME p1900_direct_unit_copy.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1900/run.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
     add_executable(p866_public tests/p866/public.c)
     add_executable(p866_integrity tests/p866/integrity.c)
     add_executable(p866_oom tests/p866/oom.c)

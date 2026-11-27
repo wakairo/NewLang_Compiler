@@ -1,5 +1,7 @@
+#include "address_body_internal.h"
 #include "newlang/parser.h"
 #include "semantic_internal.h"
+#include "syntax_internal.h"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -22,9 +24,10 @@ void nl_body_release(NLFunctionBody *body)
     nl_source_destroy(body->source);
     free(body);
 }
-NLCheckStatus nl_body_create_span(const NLSource *source, NLSourceSpan span,
-                                  const NLFunctionParameter *parameters,
-                                  size_t count, NLFunctionBody **out)
+static NLCheckStatus create_body_span(const NLSource *source, NLSourceSpan span,
+                                      const NLFunctionParameter *parameters,
+                                      size_t count, bool address_main,
+                                      NLFunctionBody **out)
 {
     NLFunctionBody *body = malloc(sizeof(*body));
     if (body == NULL)
@@ -57,7 +60,9 @@ NLCheckStatus nl_body_create_span(const NLSource *source, NLSourceSpan span,
     NLParseStatus parse_status = nl_parser_create(body->source, &parser);
     if (parse_status == NL_PARSE_OK)
         parse_status =
-            nl_parser_parse_source_fragment(parser, &body->syntax, NULL);
+            address_main
+                ? nl_parser_parse_address_main_body(parser, &body->syntax)
+                : nl_parser_parse_source_fragment(parser, &body->syntax, NULL);
     nl_parser_destroy(parser);
     if (parse_status != NL_PARSE_OK) {
         status = parse_status == NL_PARSE_OUT_OF_MEMORY ? NL_CHECK_OUT_OF_MEMORY
@@ -76,6 +81,20 @@ NLCheckStatus nl_body_create_span(const NLSource *source, NLSourceSpan span,
 failure:
     nl_body_release(body);
     return status;
+}
+
+NLCheckStatus nl_body_create_span(const NLSource *source, NLSourceSpan span,
+                                  const NLFunctionParameter *parameters,
+                                  size_t count, NLFunctionBody **out)
+{
+    return create_body_span(source, span, parameters, count, false, out);
+}
+
+NLCheckStatus nl_body_create_address_main_span(const NLSource *source,
+                                               NLSourceSpan span,
+                                               NLFunctionBody **out)
+{
+    return create_body_span(source, span, NULL, 0, true, out);
 }
 
 NLCheckStatus nl_body_create(const NLSyntaxTree *syntax,

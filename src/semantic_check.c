@@ -1,3 +1,5 @@
+#include "address_body_internal.h"
+#include "address_data_internal.h"
 #include "captured_read_internal.h"
 #include "copy_body_internal.h"
 #include "copy_old_result_internal.h"
@@ -7,6 +9,7 @@
 #include "if_field_internal.h"
 #include "linear_break_internal.h"
 #include "newlang/parser.h"
+#include "numeric_conversion_internal.h"
 #include "producer_local_internal.h"
 #include "pure_u8_internal.h"
 #include "semantic_internal.h"
@@ -1892,6 +1895,293 @@ static bool custody_preflight(Check *check, const NLSyntaxView *syntax,
     return true;
 }
 
+/* Recursive and aggregate units retain their current source rules. */
+static const NLFunctionEntry *local_scalar_function(const Check *check)
+{
+    const NLSemanticContext *c = check->context;
+    if (!check->in_function_body || check->in_source_loan ||
+        check->allocated_slice || check->body_function == 0 ||
+        check->body_function > c->function_count)
+        return NULL;
+    for (size_t i = 0; i < c->type_count; ++i)
+        if (c->types[i].recursive_header || c->types[i].view.field_count != 0)
+            return NULL;
+    return &c->functions[check->body_function - 1];
+}
+
+static bool local_address_context(const Check *check)
+{
+    const NLFunctionEntry *f = local_scalar_function(check);
+    return f && f->count == 0 &&
+           f->result == nl_semantic_unit_type(check->context) &&
+           strcmp(f->name, "main") == 0;
+}
+
+static bool guarded_u8_context(const Check *check)
+{
+    const NLFunctionEntry *f = local_scalar_function(check);
+    const NLSemanticContext *c = check->context;
+    return f && f->body && f->body->syntax && !check->loop &&
+           f->kind == NL_CHECKED_REGISTERED_CALL && !f->caller_effects &&
+           !f->hidden_dependencies && f->count == 1 && f->parameters &&
+           f->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
+           f->result == nl_semantic_core_type(c, NL_TYPE_U8);
+}
+
+static bool guarded_u8_tail(const Check *check, const NLSyntaxView *conversion)
+{
+    const NLFunctionEntry *f =
+        &check->context->functions[check->body_function - 1];
+    const NLSyntaxView *body =
+        nl_syntax_node_view(nl_syntax_tree_root(f->body->syntax));
+    const NLSyntaxView *choice =
+        body && body->kind == NL_SYNTAX_BLOCK && !body->data.block.items
+            ? nl_syntax_node_view(body->data.block.tail)
+            : NULL;
+    if (!choice || choice->kind != NL_SYNTAX_IF)
+        return false;
+    const NLSyntaxView *yes =
+        nl_syntax_node_view(choice->data.conditional.then_block);
+    const NLSyntaxView *no =
+        nl_syntax_node_view(choice->data.conditional.else_block);
+    const NLSyntaxView *fallback =
+        no && no->kind == NL_SYNTAX_BLOCK && !no->data.block.items
+            ? nl_syntax_node_view(no->data.block.tail)
+            : NULL;
+    return yes && yes->kind == NL_SYNTAX_BLOCK && !yes->data.block.items &&
+           nl_syntax_node_view(yes->data.block.tail) == conversion &&
+           fallback && fallback->kind == NL_SYNTAX_U8_LITERAL;
+}
+
+static NLTypeId local_coordinate_type(Check *check, NLSourceSpan span)
+{
+    NLSemanticContext *c = check->context;
+    NLTypeId type = nl_semantic_core_type(c, NL_TYPE_UINTPTR);
+    if (type == 0) {
+        /* Reserve the core coordinate only in a CHECK world using it. Other
+         * profiles keep their original type table and allocation sequence. */
+        if (!host(check, nl_sem_nominal(c, "uintptr", true, true, &type), span))
+            return 0;
+        c->types[type - 1].view.kind = NL_TYPE_UINTPTR;
+    }
+    return type;
+}
+
+static NLCheckedNodeId local_scalar_result(Check *check, NLSourceSpan span,
+                                           NLCheckedNodeId first,
+                                           NLCheckedNodeId second,
+                                           NLCheckedKind kind,
+                                           NLScalarValue scalar)
+{
+    const NLValueId input = one_result(check, first);
+    if (input == 0)
+        return 0;
+    const NLValueId value =
+        new_value(check,
+                  (NLSemanticValueView){.type = scalar.type,
+                                        .scalar_known = scalar.known,
+                                        .scalar_value = scalar.value},
+                  span);
+    if (value == 0)
+        return 0;
+    end_temporary(check, input);
+    if (second != 0) {
+        end_temporary(check, one_result(check, second));
+        view(check, first)->next_argument = second;
+    }
+    return add(check, (NLCheckedNodeView){.kind = kind,
+                                          .span = span,
+                                          .type = scalar.type,
+                                          .first_argument = first,
+                                          .argument_count = second == 0 ? 1 : 2,
+                                          .result_count = 1,
+                                          .results = {{scalar.type, value}},
+                                          .has_scalar_result = true,
+                                          .scalar_result = scalar});
+}
+
+static NLCheckedNodeId local_conversion_result(Check *check, NLSourceSpan span,
+                                               NLCheckedNodeId arg,
+                                               NLSemanticTypeKind target)
+{
+    const NLValueId operand = arg ? one_result(check, arg) : 0;
+    if (operand == 0)
+        return 0;
+    NLSemanticContext *c = check->context;
+    const NLSemanticValueView input = c->values[operand - 1];
+    const NLSemanticTypeKind source = c->types[input.type - 1].view.kind;
+    if (!nl_scalar_conversion_pair(source, target)) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, span, "NUMERIC-CONVERSION-TYPE",
+             target == NL_TYPE_BYTE
+                 ? "byte conversion requires a nominal u8 operand"
+             : target == NL_TYPE_U8
+                 ? "u8 conversion requires a nominal byte, usize or uintptr "
+                   "operand"
+                 : "expected a different nominal u8, usize or uintptr operand");
+        return 0;
+    }
+    if ((!input.scalar_known &&
+         (input.scalar_value ||
+          !nl_numeric_runtime_widening(source, target))) ||
+        input.dependencies != NL_DEPENDENCY_FREE ||
+        input.value_dependency_count || input.reference.place ||
+        input.reference_count) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+             "NUMERIC-CONVERSION-PRECISION",
+             "expected an independent known scalar value");
+        return 0;
+    }
+    if (input.scalar_known &&
+        !nl_scalar_conversion_fits(source, target, input.scalar_value)) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, span, "NUMERIC-CONVERSION-RANGE",
+             "numeric operand is outside the destination range");
+        return 0;
+    }
+    const NLTypeId result = target == NL_TYPE_UINTPTR
+                                ? local_coordinate_type(check, span)
+                                : nl_semantic_core_type(c, target);
+    return result == 0
+               ? 0
+               : local_scalar_result(check, span, arg, 0,
+                                     NL_CHECKED_NUMERIC_CONVERSION,
+                                     (NLScalarValue){result, input.scalar_known,
+                                                     input.scalar_value});
+}
+
+typedef enum {
+    LOCAL_CONVERSION_NAMED,
+    LOCAL_CONVERSION_GUARDED_U8,
+    LOCAL_CONVERSION_WIDEN_FORMAL
+} LocalConversionMode;
+
+static NLCheckedNodeId local_conversion(Check *check,
+                                        const NLSyntaxView *syntax,
+                                        NLSemanticTypeKind target,
+                                        LocalConversionMode mode)
+{
+    const NLSyntaxView *operand =
+        nl_syntax_node_view(syntax->data.call.arguments);
+    if (syntax->data.call.argument_count != 1 || operand == NULL ||
+        operand->kind != NL_SYNTAX_EXPR_NAME) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+             "NUMERIC-CONVERSION-PROFILE",
+             "explicit numeric conversion requires one named operand");
+        return 0;
+    }
+    const NLCheckedNodeId arg = identifier(check, operand);
+    if (!arg)
+        return 0;
+    const NLSymbolId formal = check->function_binding_floor + 1;
+    if (mode == LOCAL_CONVERSION_WIDEN_FORMAL &&
+        (view(check, arg)->symbol != formal ||
+         view(check, arg)->value_use != NL_VALUE_COPIED)) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "NUMERIC-CONVERSION-PRECISION",
+             "helper widening requires a Copy of its own u8 formal");
+        return 0;
+    }
+    if (mode != LOCAL_CONVERSION_GUARDED_U8)
+        return local_conversion_result(check, syntax->span, arg, target);
+    if (!nl_guarded_u8_operand(check->artifact, check->context, formal, arg) ||
+        !nl_guarded_usize_same_current(check->guard_entry, check->context,
+                                       formal) ||
+        !guarded_u8_tail(check, syntax)) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "NUMERIC-CONVERSION-PRECISION",
+             "narrowing needs the same current formal on its proven true edge");
+        return 0;
+    }
+    /* Both arms are checked even for a concrete replay of a call. The guard
+     * proves representability on execution, without producing a Known value. */
+    return local_scalar_result(
+        check, syntax->span, arg, 0, NL_CHECKED_NUMERIC_CONVERSION,
+        (NLScalarValue){nl_semantic_core_type(check->context, NL_TYPE_U8),
+                        false, 0});
+}
+
+static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
+                                     bool to_address)
+{
+    const NLSyntaxView *operand =
+        nl_syntax_node_view(syntax->data.call.arguments);
+    if (syntax->data.call.argument_count != 1 || operand == NULL ||
+        operand->kind != NL_SYNTAX_EXPR_NAME) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+             "ADDR-OPERAND-PROFILE",
+             "address data conversion requires one named operand");
+        return 0;
+    }
+    const NLCheckedNodeId arg = identifier(check, operand);
+    const NLValueId input = arg ? one_result(check, arg) : 0;
+    if (input == 0)
+        return 0;
+    NLSemanticContext *c = check->context;
+    const NLSemanticValueView ptr = c->values[input - 1];
+    const NLSemanticTypeView type = c->types[ptr.type - 1].view;
+    if (!to_address && type.kind == NL_TYPE_U8)
+        return local_conversion_result(check, syntax->span, arg,
+                                       NL_TYPE_UINTPTR);
+    const NLTypeId address = nl_semantic_core_type(c, NL_TYPE_ADDR);
+    if ((!to_address &&
+         (type.kind == NL_TYPE_ADDR || type.kind == NL_TYPE_USIZE)) ||
+        (to_address && type.kind == NL_TYPE_UINTPTR)) {
+        if (ptr.dependencies != NL_DEPENDENCY_FREE ||
+            ptr.value_dependency_count != 0 || ptr.reference.place != 0 ||
+            ptr.reference_count != 0) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, operand->span,
+                 "ADDRESS-CONVERSION-PRECISION",
+                 "conversion requires independent scalar address data");
+            return 0;
+        }
+        if (type.kind == NL_TYPE_USIZE &&
+            (!ptr.scalar_known ||
+             !nl_scalar_conversion_fits(NL_TYPE_USIZE, NL_TYPE_UINTPTR,
+                                        ptr.scalar_value))) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, operand->span,
+                 "UINTPTR-CONVERSION-RANGE",
+                 "conversion requires a known representable quantity");
+            return 0;
+        }
+        const NLTypeId result =
+            to_address ? address : local_coordinate_type(check, syntax->span);
+        return result == 0 ? 0
+                           : local_scalar_result(
+                                 check, syntax->span, arg, 0,
+                                 NL_CHECKED_ADDRESS_DATA_CONVERSION,
+                                 (NLScalarValue){result, ptr.scalar_known,
+                                                 ptr.scalar_value});
+    }
+    if (!to_address) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, operand->span,
+             "UINTPTR-CONVERSION-TYPE",
+             "uintptr requires nominal addr or a representable usize");
+        return 0;
+    }
+    if (type.kind != NL_TYPE_PTR) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, operand->span, "ADDR-PTR-TYPE",
+             "addr requires a pointer operand");
+        return 0;
+    }
+    if (!concrete_ref(check, input, operand->span) ||
+        !reference_live(check, input, operand->span))
+        return 0;
+    const NLSemanticPlaceView root = c->places[ptr.reference.place - 1];
+    if (type.target != nl_semantic_core_type(c, NL_TYPE_U8) ||
+        !root.implicit_local || !root.independent_root ||
+        root.placement.region != 0 || root.governing_domain != 0 ||
+        ptr.reference.scope != 0 || ptr.dependencies != NL_DEPENDENCY_FREE ||
+        ptr.value_dependency_count != 0) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, operand->span,
+             "ADDR-LOCAL-PROFILE", "addr requires a live lexical u8 root");
+        return 0;
+    }
+    /* The runtime coordinate is unknown. Do not carry the pointer's
+     * provenance, authority or relationships into the scalar package. */
+    return local_scalar_result(check, syntax->span, arg, 0,
+                               NL_CHECKED_ADDR_FROM_PTR,
+                               (NLScalarValue){address, false, 0});
+}
+
 static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax,
                             NLTypeId expected_parameter)
 {
@@ -1928,6 +2218,30 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax,
         }
     }
     if (function_id == 0) {
+        const bool to_u8 = equal_name(check, syntax->data.call.callee, "u8");
+        const bool to_byte =
+            equal_name(check, syntax->data.call.callee, "byte");
+        const bool to_usize =
+            equal_name(check, syntax->data.call.callee, "usize");
+        if ((to_u8 || to_byte || to_usize) && local_address_context(check))
+            return local_conversion(check, syntax,
+                                    to_byte ? NL_TYPE_BYTE
+                                    : to_u8 ? NL_TYPE_U8
+                                            : NL_TYPE_USIZE,
+                                    LOCAL_CONVERSION_NAMED);
+        if (to_u8 && guarded_u8_context(check))
+            return local_conversion(check, syntax, NL_TYPE_U8,
+                                    LOCAL_CONVERSION_GUARDED_U8);
+        if (to_usize && !check->loop &&
+            nl_pure_widening_function(c, local_scalar_function(check)))
+            return local_conversion(check, syntax, NL_TYPE_USIZE,
+                                    LOCAL_CONVERSION_WIDEN_FORMAL);
+        const bool to_address =
+            equal_name(check, syntax->data.call.callee, "addr");
+        if ((to_address ||
+             equal_name(check, syntax->data.call.callee, "uintptr")) &&
+            local_address_context(check))
+            return local_address(check, syntax, to_address);
         fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->data.call.callee,
              "P3-UNKNOWN-CALLEE", "unknown semantic callee");
         return 0;
@@ -2715,10 +3029,11 @@ static NLCheckedNodeId typed_literal(Check *check, const NLSyntaxView *syntax)
 /* Numeric comparison never proves root identity or memory access. Unknown
  * dependency-free operands produce an ordinary unknown Bool; dependent
  * operands still require a richer dependency representation. */
-static NLCheckedNodeId usize_comparison(Check *check,
-                                        const NLSyntaxView *syntax)
+static NLCheckedNodeId scalar_comparison(Check *check,
+                                         const NLSyntaxView *syntax)
 {
     const bool less = syntax->kind == NL_SYNTAX_USIZE_LESS_THAN;
+    const bool unequal = syntax->kind == NL_SYNTAX_ADDR_INEQUALITY;
     const NLCheckedNodeId left = expression(check, syntax->data.equality.left);
     if (left == 0)
         return 0;
@@ -2729,14 +3044,36 @@ static NLCheckedNodeId usize_comparison(Check *check,
     const NLCheckedNodeView lhs = *view(check, left), rhs = *view(check, right);
     NLSemanticContext *const c = check->context;
     const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLTypeId addr = nl_semantic_core_type(c, NL_TYPE_ADDR);
+    const NLTypeId coordinate = nl_semantic_core_type(c, NL_TYPE_UINTPTR);
+    const bool point = coordinate != 0 && !less &&
+                       (lhs.type == coordinate || rhs.type == coordinate);
+    const bool address =
+        !point &&
+        (unequal || (!less && (lhs.type == addr || rhs.type == addr)));
+    const NLTypeId operand_type = point     ? coordinate
+                                  : address ? addr
+                                            : quantity;
     if (check->terminated || lhs.result_count != 1 || rhs.result_count != 1 ||
-        lhs.type != quantity || rhs.type != quantity ||
-        lhs.results[0].type != quantity || rhs.results[0].type != quantity) {
+        lhs.type != operand_type || rhs.type != operand_type ||
+        lhs.results[0].type != operand_type ||
+        rhs.results[0].type != operand_type) {
         fail(check, NL_CHECK_SEMANTIC_ERROR,
              syntax->data.equality.operator_span,
-             less ? "USIZE-LESS-THAN-TYPE" : "USIZE-EQUALITY-TYPE",
-             less ? "< requires two exact core usize operands"
-                  : "== requires two exact core usize operands");
+             point     ? "UINTPTR-COMPARISON-TYPE"
+             : address ? "ADDR-COMPARISON-TYPE"
+             : less    ? "USIZE-LESS-THAN-TYPE"
+                       : "USIZE-EQUALITY-TYPE",
+             point ? "coordinate comparison requires two exact uintptr operands"
+             : address
+                 ? "address comparison requires two exact core addr operands"
+             : less ? "< requires two exact core usize operands"
+                    : "== requires two exact core usize operands");
+        return 0;
+    }
+    if ((address || point) && !local_address_context(check)) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+             "ADDR-LOCAL-PROFILE", "address comparison requires lexical main");
         return 0;
     }
     const NLSemanticValueView a = c->values[lhs.results[0].value - 1];
@@ -2746,17 +3083,23 @@ static NLCheckedNodeId usize_comparison(Check *check,
         b.value_dependency_count != 0) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
              syntax->data.equality.operator_span,
-             less ? "USIZE-LESS-THAN-PRECISION" : "USIZE-EQUALITY-PRECISION",
-             less ? "less-than needs dependency-free quantity operands in "
-                    "this profile"
-                  : "equality needs dependency-free quantity operands in "
-                    "this profile");
+             point     ? "UINTPTR-COMPARISON-PRECISION"
+             : address ? "ADDR-COMPARISON-PRECISION"
+             : less    ? "USIZE-LESS-THAN-PRECISION"
+                       : "USIZE-EQUALITY-PRECISION",
+             (address || point)
+                 ? "address comparison requires dependency-free operands"
+             : less ? "less-than needs dependency-free quantity operands in "
+                      "this profile"
+                    : "equality needs dependency-free quantity operands in "
+                      "this profile");
         return 0;
     }
     const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_BOOL);
     const bool known = a.scalar_known && b.scalar_known;
-    const size_t truth = known ? (less ? a.scalar_value < b.scalar_value
-                                       : a.scalar_value == b.scalar_value)
+    const size_t truth = known ? (less      ? a.scalar_value < b.scalar_value
+                                  : unequal ? a.scalar_value != b.scalar_value
+                                            : a.scalar_value == b.scalar_value)
                                : 0;
     const NLValueId value = new_value(
         check,
@@ -2768,9 +3111,14 @@ static NLCheckedNodeId usize_comparison(Check *check,
     end_temporary(check, lhs.results[0].value);
     end_temporary(check, rhs.results[0].value);
     view(check, left)->next_argument = right;
+    const NLCheckedKind kind = point ? (unequal ? NL_CHECKED_UINTPTR_INEQUALITY
+                                                : NL_CHECKED_UINTPTR_EQUALITY)
+                               : unequal ? NL_CHECKED_ADDR_INEQUALITY
+                               : address ? NL_CHECKED_ADDR_EQUALITY
+                               : less    ? NL_CHECKED_USIZE_LESS_THAN
+                                         : NL_CHECKED_USIZE_EQUALITY;
     return add(check,
-               (NLCheckedNodeView){.kind = less ? NL_CHECKED_USIZE_LESS_THAN
-                                                : NL_CHECKED_USIZE_EQUALITY,
+               (NLCheckedNodeView){.kind = kind,
                                    .span = syntax->span,
                                    .name = syntax->data.equality.operator_span,
                                    .type = type,
@@ -2793,6 +3141,54 @@ static bool finite_add_bound(size_t limit, size_t step)
     return limit && step <= SIZE_MAX - (limit - 1);
 }
 
+static NLCheckedNodeId local_coordinate_arithmetic(Check *check,
+                                                   const NLSyntaxView *syntax,
+                                                   NLCheckedNodeId left,
+                                                   NLCheckedNodeId right,
+                                                   NLCheckedKind kind)
+{
+    const NLSemanticContext *c = check->context;
+    const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLCheckedNodeView lhs = *view(check, left);
+    const NLCheckedNodeView rhs = *view(check, right);
+    const bool remainder = kind == NL_CHECKED_UINTPTR_REMAINDER;
+    if (check->terminated || lhs.kind != NL_CHECKED_IDENTIFIER ||
+        lhs.value_use != NL_VALUE_COPIED || lhs.result_count != 1 ||
+        rhs.type != quantity || rhs.result_count != 1 ||
+        (remainder && rhs.kind != NL_CHECKED_USIZE_LITERAL)) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+             "UINTPTR-ARITHMETIC-TYPE",
+             "coordinate arithmetic requires a named point and a usize");
+        return 0;
+    }
+    const NLSemanticValueView a = c->values[lhs.results[0].value - 1];
+    const NLSemanticValueView b = c->values[rhs.results[0].value - 1];
+    if (a.dependencies != NL_DEPENDENCY_FREE || a.value_dependency_count ||
+        b.dependencies != NL_DEPENDENCY_FREE || b.value_dependency_count) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "UINTPTR-ARITHMETIC-PRECISION",
+             "coordinate arithmetic requires independent scalar data");
+        return 0;
+    }
+    NLScalarValue result = {.type = remainder ? quantity : lhs.type};
+    const NLCheckStatus status = nl_coordinate_arithmetic(
+        kind, (NLScalarValue){lhs.type, a.scalar_known, a.scalar_value},
+        (NLScalarValue){rhs.type, b.scalar_known, b.scalar_value}, &result);
+    if (status != NL_CHECK_OK) {
+        fail(check, status, syntax->data.equality.operator_span,
+             status == NL_CHECK_ANALYSIS_PRECISION_LIMIT
+                 ? "UINTPTR-ARITHMETIC-PRECISION"
+             : remainder ? "UINTPTR-REMAINDER-ZERO"
+                         : "UINTPTR-OFFSET-RANGE",
+             status == NL_CHECK_ANALYSIS_PRECISION_LIMIT
+                 ? "coordinate operation lacks an established scalar bound"
+             : remainder ? "coordinate period must be nonzero"
+                         : "coordinate offset is outside target range");
+        return 0;
+    }
+    return local_scalar_result(check, syntax->span, left, right, kind, result);
+}
+
 /* Division and remainder by a nonzero literal work for Unknown numerators.
  * The Known-only +/- rules are separate. */
 static NLCheckedNodeId usize_literal_divisor(Check *check,
@@ -2809,6 +3205,11 @@ static NLCheckedNodeId usize_literal_divisor(Check *check,
     const NLCheckedNodeView a = *view(check, left), b = *view(check, right);
     NLSemanticContext *c = check->context;
     const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLTypeId coordinate = nl_semantic_core_type(c, NL_TYPE_UINTPTR);
+    if (remainder && coordinate != 0 && a.type == coordinate &&
+        local_address_context(check))
+        return local_coordinate_arithmetic(check, s, left, right,
+                                           NL_CHECKED_UINTPTR_REMAINDER);
     if (check->terminated || a.type != type || b.type != type ||
         a.result_count != 1 || b.result_count != 1 ||
         a.results[0].type != type || b.results[0].type != type) {
@@ -2897,6 +3298,13 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
     const NLCheckedNodeView lhs = *view(check, left), rhs = *view(check, right);
     NLSemanticContext *const c = check->context;
     const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLTypeId coordinate = nl_semantic_core_type(c, NL_TYPE_UINTPTR);
+    if (!multiplication && coordinate != 0 && lhs.type == coordinate &&
+        local_address_context(check))
+        return local_coordinate_arithmetic(check, syntax, left, right,
+                                           subtraction
+                                               ? NL_CHECKED_UINTPTR_SUBTRACTION
+                                               : NL_CHECKED_UINTPTR_ADDITION);
     if (check->terminated || lhs.result_count != 1 || rhs.result_count != 1 ||
         lhs.type != quantity || rhs.type != quantity ||
         lhs.results[0].type != quantity || rhs.results[0].type != quantity) {
@@ -3037,6 +3445,7 @@ static NLCheckedNodeId expression_for_parameter(Check *check,
         node->kind != NL_SYNTAX_LOOP && node->kind != NL_SYNTAX_U8_LITERAL &&
         node->kind != NL_SYNTAX_USIZE_LITERAL &&
         node->kind != NL_SYNTAX_USIZE_EQUALITY &&
+        node->kind != NL_SYNTAX_ADDR_INEQUALITY &&
         node->kind != NL_SYNTAX_USIZE_LESS_THAN &&
         node->kind != NL_SYNTAX_USIZE_ADDITION &&
         node->kind != NL_SYNTAX_USIZE_SUBTRACTION &&
@@ -3078,8 +3487,9 @@ static NLCheckedNodeId expression_for_parameter(Check *check,
                                                       .type = 1})
                      : identifier(check, node);
     } else if (node->kind == NL_SYNTAX_USIZE_EQUALITY ||
+               node->kind == NL_SYNTAX_ADDR_INEQUALITY ||
                node->kind == NL_SYNTAX_USIZE_LESS_THAN) {
-        result = usize_comparison(check, node);
+        result = scalar_comparison(check, node);
     } else if (node->kind == NL_SYNTAX_USIZE_DIVISION) {
         result = usize_division(check, syntax);
     } else if (node->kind == NL_SYNTAX_USIZE_REMAINDER) {
@@ -4408,6 +4818,16 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         !function->caller_effects && !function->hidden_dependencies &&
         !function->owner_receiver && !function->owner_producer &&
         !function->custody_recipient;
+    const bool widening_candidate =
+        !body.definition && nl_pure_widening_function(c, function);
+    const NLCheckedNodeView *unit_actual = nl_pure_u8_unit_function(c, function)
+                                               ? view(caller, arguments[0])
+                                               : NULL;
+    const bool scalar_unit_candidate =
+        !body.definition && caller->artifact == caller->origin_invocation &&
+        !caller->allocated_slice && !caller->in_source_loan && !caller->loop &&
+        unit_actual && unit_actual->kind == NL_CHECKED_IDENTIFIER &&
+        unit_actual->value_use == NL_VALUE_COPIED;
     NLSymbolId copy_parameters[2] = {0};
     for (size_t i = 0; i < function->count; ++i) {
         const NLCheckedNodeView argument = *view(caller, arguments[i]);
@@ -4698,8 +5118,15 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         expected_parameter == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
         call_view->type == expected_parameter && call_view->result_count == 1)
         call_view->parameter_type = expected_parameter;
-    if ((predicate_result || scalar_h_read || current_result || result_world ||
-         quantity_result || five_tail_writer) &&
+    const bool widening_result =
+        widening_candidate &&
+        nl_pure_widening_body_at(body.artifact, copy_parameters[0], c);
+    const bool scalar_unit_result =
+        scalar_unit_candidate &&
+        nl_pure_u8_unit_body_at(body.artifact, copy_parameters[0], c);
+    if ((predicate_result || widening_result || scalar_unit_result ||
+         scalar_h_read || current_result || result_world || quantity_result ||
+         five_tail_writer) &&
         !host(&body,
               nl_h_custody_seal_result(
                   caller->artifact, body.artifact, call_id,
@@ -12282,6 +12709,17 @@ cleanup:
     return ok;
 }
 
+static bool contains_address_inequality(const NLSyntaxTree *tree,
+                                        NLSourceSpan span)
+{
+    for (const NLSyntaxNode *n = tree->nodes; n != NULL; n = n->owned_next)
+        if (n->view.kind == NL_SYNTAX_ADDR_INEQUALITY &&
+            n->view.span.start_byte >= span.start_byte &&
+            n->view.span.end_byte <= span.end_byte)
+            return true;
+    return false;
+}
+
 static NLCheckStatus
 register_function_unit(NLSemanticContext *context,
                        const NLSyntaxTree *const *inputs, size_t count,
@@ -12572,12 +13010,18 @@ register_function_unit(NLSemanticContext *context,
         check.source = nl_syntax_tree_source(d->tree);
         const NLSourceSpan span =
             nl_syntax_node_view(d->syntax->data.function.body)->span;
-        if (!host(&check,
-                  nl_body_create_span(
-                      check.source, span, d->parameters,
-                      d->syntax->data.function.count,
-                      &check.context->functions[d->function - 1].body),
-                  span))
+        NLFunctionEntry *f = &check.context->functions[d->function - 1];
+        const bool address_main =
+            f->count == 0 &&
+            f->result == nl_semantic_unit_type(check.context) &&
+            strcmp(d->name, "main") == 0 &&
+            contains_address_inequality(d->tree, span);
+        const NLCheckStatus created =
+            address_main
+                ? nl_body_create_address_main_span(check.source, span, &f->body)
+                : nl_body_create_span(check.source, span, d->parameters,
+                                      f->count, &f->body);
+        if (!host(&check, created, span))
             goto failure;
     }
     /* Symbolic obligations are checked before any ordinary definition walks a

@@ -65,7 +65,17 @@ typedef enum {
     NL_CHECKED_USIZE_LESS_THAN,    /* ordinary Copy bool; no privileged proof */
     NL_CHECKED_USIZE_DIVISION,     /* C1249: name / typed nonzero literal */
     NL_CHECKED_USIZE_REMAINDER,    /* C1274: name % typed nonzero literal */
-    NL_CHECKED_USIZE_MULTIPLICATION /* known operands, representable product */
+    NL_CHECKED_USIZE_MULTIPLICATION, /* known operands, representable product */
+    NL_CHECKED_ADDR_FROM_PTR,        /* nominal coordinate without provenance */
+    NL_CHECKED_ADDR_EQUALITY,
+    NL_CHECKED_ADDR_INEQUALITY,
+    NL_CHECKED_ADDRESS_DATA_CONVERSION,
+    NL_CHECKED_UINTPTR_EQUALITY,
+    NL_CHECKED_UINTPTR_INEQUALITY,
+    NL_CHECKED_UINTPTR_REMAINDER,
+    NL_CHECKED_UINTPTR_ADDITION,
+    NL_CHECKED_UINTPTR_SUBTRACTION,
+    NL_CHECKED_NUMERIC_CONVERSION
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,

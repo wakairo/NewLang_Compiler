@@ -11,6 +11,11 @@ typedef struct {
     NLCheckedNodeId conditional, addition, call;
     size_t limit, step;
 } NLGuardedUsizePlan;
+bool nl_guarded_usize_same_current(const NLSemanticContext *,
+                                   const NLSemanticContext *, NLSymbolId);
+/* The u8 consumer separately requires the actual empty true-tail arm. */
+bool nl_guarded_u8_operand(const NLCheckedFragment *, const NLSemanticContext *,
+                           NLSymbolId, NLCheckedNodeId);
 bool nl_guarded_usize_permitted(const NLCheckedFragment *,
                                 const NLSemanticContext *,
                                 const NLSemanticContext *, size_t, NLSymbolId,
