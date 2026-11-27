@@ -4436,12 +4436,37 @@ static bool predicate_emit_return(FILE *stream, const NLCheckedFragment *f,
 {
     const NLCheckedNodeView *condition =
         nl_checked_node_view(f, value->initializer);
-    if (!emit_quantity_operands(stream, f, condition, 1) ||
-        fputs("    return (", stream) < 0 ||
+    const NLCheckedNodeId id = (NLCheckedNodeId)(value - f->nodes) + 1;
+    const NLCheckedFragment *yes = nl_checked_if_arm(f, id, 0);
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(yes, nl_checked_root(yes));
+    const NLCheckedNodeView *block =
+        nl_checked_node_view(yes, root->initializer);
+    if (!emit_quantity_operands(stream, f, condition, 1))
+        return false;
+    if (!block->terminates && block->first_item) {
+        /* The checked narrowing and its Copy locals execute only in the
+         * selected true arm. Use the ordinary typed binding emitter. */
+        if (fputs("    if (", stream) < 0 ||
+            !emit_quantity_bool(stream, f, condition) ||
+            fputs(") {\n", stream) < 0)
+            return false;
+        for (NLCheckedNodeId item = block->first_item; item;) {
+            if (!v0_emit_node(stream, yes, item, 2))
+                return false;
+            item = nl_checked_node_view(yes, item)->next_item;
+        }
+        return fputs("        return ", stream) >= 0 &&
+               v1_emit_scalar(stream, predicate_arm_value(yes)) &&
+               fputs(";\n    }\n    return ", stream) >= 0 &&
+               v1_emit_scalar(
+                   stream, predicate_arm_value(nl_checked_if_arm(f, id, 1))) &&
+               fputs(";\n", stream) >= 0;
+    }
+    if (fputs("    return (", stream) < 0 ||
         !emit_quantity_bool(stream, f, condition) || fputs(" ? ", stream) < 0)
         return false;
     for (size_t a = 0; a < 2; ++a) {
-        const NLCheckedNodeId id = (NLCheckedNodeId)(value - f->nodes) + 1;
         const NLCheckedFragment *arm = nl_checked_if_arm(f, id, a);
         const NLCheckedNodeView *tail = predicate_arm_value(arm);
         if (tail->kind == NL_CHECKED_NUMERIC_CONVERSION) {

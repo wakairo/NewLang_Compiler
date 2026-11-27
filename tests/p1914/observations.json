@@ -1,0 +1,58 @@
+{
+  "positive": {
+    "bound-result": {
+      "bound": 256,
+      "fallback": 217,
+      "seed": 255,
+      "copies": 0
+    },
+    "copied-result": {
+      "bound": 256,
+      "fallback": 217,
+      "seed": 255,
+      "copies": 1
+    },
+    "narrower-copy-chain": {
+      "bound": 32,
+      "fallback": 201,
+      "seed": 31,
+      "copies": 2
+    },
+    "mixed": {
+      "bound": 256,
+      "fallback": 217,
+      "seed": 255,
+      "copies": 1,
+      "codec": 61
+    },
+    "direct-tail": {
+      "bound": 256,
+      "fallback": 217,
+      "seed": 255,
+      "direct": true
+    },
+    "codec": {
+      "codec": 61
+    }
+  },
+  "negative": {
+    "insufficient-bound": "NUMERIC-CONVERSION-PRECISION",
+    "missing-guard": "NUMERIC-CONVERSION-PRECISION",
+    "wrong-edge": "NUMERIC-CONVERSION-PRECISION",
+    "different-current": "NUMERIC-CONVERSION-PRECISION",
+    "shadowed-current": "NUMERIC-CONVERSION-PRECISION",
+    "wrong-nominal": "P3-TYPE-MISMATCH",
+    "unrelated-tail": "NUMERIC-CONVERSION-PRECISION"
+  },
+  "inputs": [
+    "0",
+    "1",
+    "31",
+    "32",
+    "254",
+    "255",
+    "256",
+    "257",
+    "SIZE_MAX"
+  ]
+}

@@ -140,30 +140,109 @@ static bool predicate_selection_arm(PredicateWalk *w,
     return predicate_scalar(&branch, block->tail);
 }
 
-static bool predicate_narrow_tail(const PredicateWalk *w, NLCheckedNodeId id,
-                                  const NLCheckedFragment *arm,
-                                  const NLCheckedNodeView *block,
-                                  const NLCheckedNodeView *tail)
+static bool predicate_narrow_value(const PredicateWalk *w, NLCheckedNodeId id,
+                                   const NLCheckedFragment *arm,
+                                   NLCheckedNodeId value)
 {
+    const NLCheckedNodeView *cast = nl_checked_node_view(arm, value);
     if (!w->guarded_narrowing || w->incoming || w->parameter != w->quantity ||
-        tail->kind != NL_CHECKED_NUMERIC_CONVERSION)
+        !cast || cast->kind != NL_CHECKED_NUMERIC_CONVERSION ||
+        cast->type != w->u8)
         return false;
     const NLCheckedNodeView *body =
         nl_checked_node_view(w->body, nl_checked_root(w->body));
     const NLCheckedNodeView *operand =
-        nl_checked_node_view(arm, tail->first_argument);
+        nl_checked_node_view(arm, cast->first_argument);
     const NLSemanticContext *c = nl_checked_context(arm);
     NLSemanticValueView result;
     return body && !body->item_count && !body->first_item && body->tail == id &&
-           !block->terminates && tail->argument_count == 1 &&
-           tail->first_argument < block->tail && tail->has_scalar_result &&
-           predicate_value_at(c, tail, &result) && !result.scalar_known &&
-           !result.scalar_value && operand &&
-           nl_guarded_u8_operand(arm, c, w->formal, tail->first_argument) &&
-           copy_if_gap(arm->source, tail->span.start_byte,
+           cast->argument_count == 1 && cast->first_argument < value &&
+           cast->has_scalar_result && predicate_value_at(c, cast, &result) &&
+           !result.scalar_known && !result.scalar_value && operand &&
+           nl_guarded_u8_operand(arm, c, w->formal, cast->first_argument) &&
+           copy_if_gap(arm->source, cast->span.start_byte,
                        operand->span.start_byte, "u8(") &&
-           copy_if_gap(arm->source, operand->span.end_byte, tail->span.end_byte,
+           copy_if_gap(arm->source, operand->span.end_byte, cast->span.end_byte,
                        ")");
+}
+
+static bool predicate_binding_shape(PredicateWalk *, const NLCheckedNodeView *,
+                                    NLTypeId);
+
+static bool predicate_narrow_copy(PredicateWalk *w, NLCheckedNodeId id,
+                                  NLSymbolId from)
+{
+    const NLCheckedNodeView *copy = predicate_take(w, id);
+    NLSemanticValueView result;
+    return copy && copy->kind == NL_CHECKED_IDENTIFIER && from &&
+           copy->symbol == from && copy->type == w->u8 &&
+           copy->value_use == NL_VALUE_COPIED && !copy->argument_count &&
+           !copy->first_argument && !copy->next_argument &&
+           copy->span.start_byte == copy->name.start_byte &&
+           copy->span.end_byte == copy->name.end_byte &&
+           predicate_name(w->body, copy->name,
+                          w->context->bindings[from - 1].name) &&
+           predicate_value_at(w->context, copy, &result) &&
+           !result.scalar_known && !result.scalar_value;
+}
+
+/* The already authenticated arm owns these values and bindings. Account for
+ * every node here and follow declaration symbols through the Copy tail. */
+static bool predicate_narrow_copy_arm(const PredicateWalk *w,
+                                      NLCheckedNodeId id,
+                                      const NLCheckedFragment *arm,
+                                      const NLCheckedNodeView *root,
+                                      const NLCheckedNodeView *block)
+{
+    if (!w->guarded_narrowing || w->incoming || arm->if_arm_index != 0 ||
+        block->terminates || nl_checked_node_count(arm) > NL_PARSER_MAX_NODES)
+        return false;
+    PredicateWalk local = {.body = arm,
+                           .context = nl_checked_context(arm),
+                           .formal = w->formal,
+                           .u8 = w->u8};
+    if (!predicate_take(&local, nl_checked_root(arm)) ||
+        !predicate_take(&local, root->initializer))
+        return false;
+    const NLTypeId unit = nl_semantic_unit_type(local.context);
+    NLSymbolId previous = 0;
+    size_t count = 0, end = block->span.start_byte;
+    for (NLCheckedNodeId item = block->first_item; item;) {
+        const NLCheckedNodeView *binding = predicate_take(&local, item);
+        if (!binding || binding->kind != NL_CHECKED_BINDING ||
+            binding->initializer >= item ||
+            !copy_if_gap(arm->source, end, binding->span.start_byte,
+                         previous ? ";" : "{") ||
+            !predicate_binding_shape(&local, binding, unit))
+            return false;
+        if (previous) {
+            if (!predicate_narrow_copy(&local, binding->initializer, previous))
+                return false;
+        } else {
+            const NLCheckedNodeView *cast =
+                predicate_take(&local, binding->initializer);
+            if (!cast ||
+                !predicate_narrow_value(w, id, arm, binding->initializer) ||
+                !predicate_take(&local, cast->first_argument))
+                return false;
+        }
+        previous = binding->symbol;
+        local.bindings[previous - 1] = item;
+        end = binding->span.end_byte;
+        item = binding->next_item;
+        ++count;
+    }
+    const NLCheckedNodeView *tail = nl_checked_node_view(arm, block->tail);
+    if (count != block->item_count ||
+        !predicate_narrow_copy(&local, block->tail, previous) ||
+        !copy_if_gap(arm->source, end, tail->span.start_byte, ";") ||
+        !copy_if_gap(arm->source, tail->span.end_byte, block->span.end_byte,
+                     "}"))
+        return false;
+    for (size_t i = 0; i < nl_checked_node_count(arm); ++i)
+        if (!local.seen[i])
+            return false;
+    return true;
 }
 
 static bool predicate_arm(PredicateWalk *w, NLCheckedNodeId id, size_t index)
@@ -181,8 +260,12 @@ static bool predicate_arm(PredicateWalk *w, NLCheckedNodeId id, size_t index)
         block == tail || root->kind != NL_CHECKED_IF_ARM ||
         block->kind != NL_CHECKED_BLOCK || tail->type != w->u8)
         return false;
+    const bool local = !root->terminates && block->first_item &&
+                       predicate_narrow_copy_arm(w, id, arm, root, block);
     const bool narrow =
-        !root->terminates && predicate_narrow_tail(w, id, arm, block, tail);
+        !root->terminates && !block->terminates &&
+        (local || (!block->first_item &&
+                   predicate_narrow_value(w, id, arm, block->tail)));
     if (w->incoming
             ? (root->terminates || !predicate_selection_arm(w, arm, tail))
             : (!narrow && !copy_if_literal(arm, tail)))
@@ -206,18 +289,18 @@ static bool predicate_arm(PredicateWalk *w, NLCheckedNodeId id, size_t index)
                copy_if_gap(arm->source, ret->span.end_byte,
                            block->span.end_byte, "}");
     }
-    return nl_checked_node_count(arm) == (narrow ? 4u : 3u) &&
-           !block->terminates && !block->first_item && !block->item_count &&
-           root->type == w->u8 && block->type == w->u8 &&
+    return !block->terminates && root->type == w->u8 && block->type == w->u8 &&
            root->result_count == 1 && block->result_count == 1 &&
            root->results[0].type == w->u8 && block->results[0].type == w->u8 &&
            root->results[0].value == tail->results[0].value &&
            block->results[0].value == tail->results[0].value &&
            !nl_control_exits_count(arm->exits) &&
-           copy_if_gap(arm->source, block->span.start_byte,
-                       tail->span.start_byte, "{") &&
-           copy_if_gap(arm->source, tail->span.end_byte, block->span.end_byte,
-                       "}");
+           (local || (nl_checked_node_count(arm) == (narrow ? 4u : 3u) &&
+                      !block->first_item && !block->item_count &&
+                      copy_if_gap(arm->source, block->span.start_byte,
+                                  tail->span.start_byte, "{") &&
+                      copy_if_gap(arm->source, tail->span.end_byte,
+                                  block->span.end_byte, "}")));
 }
 
 static bool predicate_selection(PredicateWalk *w, NLCheckedNodeId id,
@@ -452,8 +535,8 @@ done:
     return valid;
 }
 
-static bool predicate_binding(PredicateWalk *w, NLCheckedNodeId id,
-                              const NLCheckedNodeView *n, NLTypeId unit)
+static bool predicate_binding_shape(PredicateWalk *w,
+                                    const NLCheckedNodeView *n, NLTypeId unit)
 {
     const NLCheckedFragment *f = w->body;
     const NLSemanticContext *c = w->context;
@@ -472,7 +555,15 @@ static bool predicate_binding(PredicateWalk *w, NLCheckedNodeId id,
                      receiver->name.start_byte, "let") ||
         !copy_if_gap(nl_checked_source(f), receiver->name.end_byte,
                      init->span.start_byte, "=") ||
-        n->span.end_byte != init->span.end_byte ||
+        n->span.end_byte != init->span.end_byte)
+        return false;
+    return true;
+}
+
+static bool predicate_binding(PredicateWalk *w, NLCheckedNodeId id,
+                              const NLCheckedNodeView *n, NLTypeId unit)
+{
+    if (!predicate_binding_shape(w, n, unit) ||
         !predicate_scalar(w, n->initializer))
         return false;
     w->bindings[n->symbol - 1] = id;

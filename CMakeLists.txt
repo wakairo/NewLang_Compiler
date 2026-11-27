@@ -850,6 +850,10 @@ include(tests/p1455/CMakeLists.txt)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1907/run.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_test(NAME p1914_guarded_narrow_copy.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1914/run.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
     add_executable(p866_public tests/p866/public.c)
     add_executable(p866_integrity tests/p866/integrity.c)
     add_executable(p866_oom tests/p866/oom.c)
