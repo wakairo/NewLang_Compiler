@@ -4820,6 +4820,14 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         !function->custody_recipient;
     const bool widening_candidate =
         !body.definition && nl_pure_widening_function(c, function);
+    const NLCheckedNodeView *unit_actual = nl_pure_u8_unit_function(c, function)
+                                               ? view(caller, arguments[0])
+                                               : NULL;
+    const bool scalar_unit_candidate =
+        !body.definition && caller->artifact == caller->origin_invocation &&
+        !caller->allocated_slice && !caller->in_source_loan && !caller->loop &&
+        unit_actual && unit_actual->kind == NL_CHECKED_IDENTIFIER &&
+        unit_actual->value_use == NL_VALUE_COPIED;
     NLSymbolId copy_parameters[2] = {0};
     for (size_t i = 0; i < function->count; ++i) {
         const NLCheckedNodeView argument = *view(caller, arguments[i]);
@@ -5113,8 +5121,11 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     const bool widening_result =
         widening_candidate &&
         nl_pure_widening_body_at(body.artifact, copy_parameters[0], c);
-    if ((predicate_result || widening_result || scalar_h_read ||
-         current_result || result_world || quantity_result ||
+    const bool scalar_unit_result =
+        scalar_unit_candidate &&
+        nl_pure_u8_unit_body_at(body.artifact, copy_parameters[0], c);
+    if ((predicate_result || widening_result || scalar_unit_result ||
+         scalar_h_read || current_result || result_world || quantity_result ||
          five_tail_writer) &&
         !host(&body,
               nl_h_custody_seal_result(
