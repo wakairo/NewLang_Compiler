@@ -206,6 +206,8 @@ static bool gate_address_data(const NLCheckedFragment *,
                               const NLCheckedNodeView *, V0Program *);
 static bool gate_numeric_conversion(const NLCheckedFragment *, NLCheckedNodeId,
                                     V0Program *);
+static bool widening_call(const NLCheckedFragment *, NLCheckedNodeId,
+                          V0Program *);
 
 static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
                                  V0Program *p, bool allow_loop,
@@ -276,6 +278,8 @@ static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
             return gate_address_data(f, v, p);
         if (v->kind == NL_CHECKED_NUMERIC_CONVERSION)
             return gate_numeric_conversion(f, id, p);
+        if (v->kind == NL_CHECKED_REGISTERED_CALL)
+            return allow_loop && widening_call(f, id, p);
         if (v->kind != NL_CHECKED_IDENTIFIER || v->symbol == 0 ||
             v->value_use != NL_VALUE_COPIED)
             return false;
@@ -2271,6 +2275,54 @@ static bool v1_call_parameter(const NLCheckedFragment *f, NLCheckedNodeId id,
 
 #include "c17_predicate_internal.h"
 
+/* The only new quantity-result call in this dispatcher is an ordinary
+ * widening in the actual unit entry. Borrow its existing BODY/result seal
+ * and revalidate the Copy actual and typed body before allocating a C name. */
+static bool widening_call(const NLCheckedFragment *f, NLCheckedNodeId id,
+                          V0Program *p)
+{
+    if (p->u8_export || p->aggregate || !nl_h_custody_result_valid(f, id) ||
+        !bool_root_value(f, id))
+        return false;
+    const NLSemanticContext *c = nl_checked_context(f);
+    if (!c || !c->functions || !p->entry_function ||
+        p->entry_function > c->function_count ||
+        f->body_owner != c->functions[p->entry_function - 1].body)
+        return false;
+    const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLSymbolId formal =
+        nl_scalar_invocation_formal_at(f, id, c, p->u8, quantity);
+    if (!formal)
+        return false;
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *arg =
+        nl_checked_node_view(f, call->first_argument);
+    const NLCheckedNodeView *source =
+        nl_checked_node_view(f, bool_source_origin(f, call->first_argument));
+    const NLCheckedFragment *body = nl_checked_call_body(f, id);
+    NLSemanticBindingView binding;
+    NLSemanticValueView actual, original;
+    if (!address_name(arg, p->u8) || !predicate_value(f, arg, &actual) ||
+        !predicate_value(f, source, &original) || original.type != p->u8 ||
+        !nl_semantic_binding_view(c, arg->symbol, &binding) ||
+        binding.type != p->u8 || binding.value != source->results[0].value ||
+        actual.scalar_known != original.scalar_known ||
+        actual.scalar_value != original.scalar_value ||
+        !nl_pure_widening_body_at(body, formal, c))
+        return false;
+    V0Function *prior = v0_find_function(p, call->function);
+    if (prior)
+        return prior->result == quantity && !prior->quantity_parameter;
+    if (p->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
+        return false;
+    p->functions[p->count++] = (V0Function){.function = call->function,
+                                            .body = body,
+                                            .result = quantity,
+                                            .parameter = formal};
+    p->uses_usize = true;
+    return true;
+}
+
 /* Finite scalar callee: Copy locals and a scalar tail/return. Only the tail
  * may additionally be one authenticated u8 call, within two scalar frames.
  * No call arguments containing calls, refs, writes, branches or general ABI. */
@@ -3379,8 +3431,12 @@ static bool v1_emit_call(FILE *stream, const NLCheckedFragment *f,
 {
     const NLCheckedNodeView *v = nl_checked_node_view(f, id);
     const bool scalar = v->result_count == 1;
+    const char *type =
+        v->type == nl_semantic_core_type(nl_checked_context(f), NL_TYPE_USIZE)
+            ? "size_t"
+            : "uint8_t";
     if (!v0_indent(stream, depth) ||
-        (scalar ? fprintf(stream, "const uint8_t nl_call_%zu = nl_fn_%zu(", id,
+        (scalar ? fprintf(stream, "const %s nl_call_%zu = nl_fn_%zu(", type, id,
                           v->function)
                 : fprintf(stream, "nl_fn_%zu(", v->function)) < 0)
         return false;
@@ -3402,6 +3458,15 @@ static bool v1_emit_call(FILE *stream, const NLCheckedFragment *f,
         return false;
     return !scalar || (v0_indent(stream, depth) &&
                        fprintf(stream, "(void)nl_call_%zu;\n", id) >= 0);
+}
+
+static bool emit_numeric_conversion(FILE *stream, const NLCheckedFragment *f,
+                                    const NLCheckedNodeView *value,
+                                    const char *type)
+{
+    return fprintf(stream, "(%s)", type) >= 0 &&
+           v1_emit_scalar(stream,
+                          nl_checked_node_view(f, value->first_argument));
 }
 
 /* Stage the actual left and right operands in source order. Less-than also
@@ -4161,12 +4226,10 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                 : initializer->type == nl_semantic_core_type(c, NL_TYPE_USIZE)
                     ? "size_t"
                     : "uintptr_t";
-            const NLCheckedNodeView *operand =
-                nl_checked_node_view(fragment, initializer->first_argument);
-            if (fprintf(stream, "%s%s nl_local_%zu = (%s)",
-                        octet ? scalar_qualifier : "const ", type, view->symbol,
-                        type) < 0 ||
-                !v1_emit_scalar(stream, operand))
+            if (fprintf(stream, "%s%s nl_local_%zu = ",
+                        octet ? scalar_qualifier : "const ", type,
+                        view->symbol) < 0 ||
+                !emit_numeric_conversion(stream, fragment, initializer, type))
                 return false;
         } else if (initializer->type ==
                        nl_semantic_core_type(nl_checked_context(fragment),
@@ -4196,7 +4259,9 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                                          NL_TYPE_USIZE)) {
             if (fprintf(stream, "const size_t nl_local_%zu = ", view->symbol) <
                     0 ||
-                !emit_quantity_bool(stream, fragment, initializer))
+                (initializer->kind == NL_CHECKED_REGISTERED_CALL
+                     ? fprintf(stream, "nl_call_%zu", view->initializer) < 0
+                     : !emit_quantity_bool(stream, fragment, initializer)))
                 return false;
         } else if (initializer->type ==
                    nl_semantic_core_type(nl_checked_context(fragment),
@@ -4446,6 +4511,11 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
             if (!v1_emit_call(stream, f, root->tail, 1) ||
                 fprintf(stream, "    return nl_call_%zu;\n", root->tail) < 0)
                 return false;
+        } else if (tail->kind == NL_CHECKED_NUMERIC_CONVERSION) {
+            if (fputs("    return ", stream) < 0 ||
+                !emit_numeric_conversion(stream, f, tail, "size_t") ||
+                fputs(";\n", stream) < 0)
+                return false;
         } else if (fputs("    return ", stream) < 0 ||
                    !v1_emit_scalar(stream, tail) || fputs(";\n", stream) < 0) {
             return false;
@@ -4463,8 +4533,8 @@ static bool v0_emit_signature(FILE *stream, const V0Function *fn, NLTypeId u8)
                        fn->result == u8 ? "uint8_t" : "void", fn->function,
                        fn->ref_parameter, fn->parameter) >= 0;
     if (fn->parameter != 0)
-        return fprintf(stream, "static uint8_t nl_fn_%zu(%s nl_local_%zu)",
-                       fn->function,
+        return fprintf(stream, "static %s nl_fn_%zu(%s nl_local_%zu)",
+                       fn->result == u8 ? "uint8_t" : "size_t", fn->function,
                        fn->quantity_parameter ? "size_t" : "uint8_t",
                        fn->parameter) >= 0;
     return fprintf(stream,
@@ -4607,7 +4677,7 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         if (root == NULL ||
             !v0_emit_signature(stream, &function, program->u8) ||
             fputc('\n', stream) == EOF ||
-            !(function.result == program->u8
+            !(function.result != program->unit
                   ? v1_emit_body(stream, &function)
                   : v0_emit_unit_body(stream, &function, root,
                                       program->two_normal_unit &&
@@ -4880,6 +4950,7 @@ static int compile_v0_to(const char *path, bool check_only,
     }
     V0Program program = {.unit = nl_semantic_unit_type(context),
                          .u8 = nl_semantic_core_type(context, NL_TYPE_U8),
+                         .entry_function = root_view ? root_view->function : 0,
                          .u8_export = export_name != NULL};
     if (program.u8_export) {
         if (root_view == NULL || root_view->function != selected ||
@@ -4951,8 +5022,6 @@ static int compile_v0_to(const char *path, bool check_only,
         goto cleanup;
     }
 emit:
-    program.entry_function = root_view->function;
-
     if (!v0_emit_c(output, &program) || fflush(output) != 0) {
         result =
             report_error("V0-C-OUTPUT", "failed to emit Checked-C", path, 1);
