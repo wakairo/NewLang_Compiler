@@ -20,6 +20,7 @@
 #include "newlang/source.h"
 #include "newlang/usize_addition.h"
 #include "newlang/usize_subtraction.h"
+#include "numeric_conversion_internal.h"
 #include "semantic_internal.h"
 
 #include <errno.h>
@@ -203,6 +204,8 @@ static bool v1_scalar(const NLCheckedFragment *fragment, NLCheckedNodeId id,
  * required; no usize call ABI, ref, arithmetic or inferred owner authority. */
 static bool gate_address_data(const NLCheckedFragment *,
                               const NLCheckedNodeView *, V0Program *);
+static bool gate_numeric_conversion(const NLCheckedFragment *, NLCheckedNodeId,
+                                    V0Program *);
 
 static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
                                  V0Program *p, bool allow_loop,
@@ -271,6 +274,8 @@ static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
         }
         if (v->kind == NL_CHECKED_UINTPTR_REMAINDER)
             return gate_address_data(f, v, p);
+        if (v->kind == NL_CHECKED_NUMERIC_CONVERSION)
+            return gate_numeric_conversion(f, id, p);
         if (v->kind != NL_CHECKED_IDENTIFIER || v->symbol == 0 ||
             v->value_use != NL_VALUE_COPIED)
             return false;
@@ -377,7 +382,8 @@ static bool bool_quantity_origin(const NLCheckedFragment *f, NLCheckedNodeId id,
             v->kind == NL_CHECKED_USIZE_SUBTRACTION ||
             v->kind == NL_CHECKED_USIZE_MULTIPLICATION)
             return true;
-        if (v->kind == NL_CHECKED_UINTPTR_REMAINDER)
+        if (v->kind == NL_CHECKED_UINTPTR_REMAINDER ||
+            v->kind == NL_CHECKED_NUMERIC_CONVERSION)
             return bool_root_value(f, id);
         id = bool_source_origin(f, id);
     }
@@ -1192,6 +1198,39 @@ static bool address_scalar_view(const NLSemanticContext *c,
            !value->reference_count;
 }
 
+static bool gate_numeric_conversion(const NLCheckedFragment *f,
+                                    NLCheckedNodeId id, V0Program *p)
+{
+    const NLCheckedNodeView *v = nl_checked_node_view(f, id);
+    if (!v || v->kind != NL_CHECKED_NUMERIC_CONVERSION ||
+        v->argument_count != 1 || v->first_argument >= id ||
+        !bool_root_value(f, id))
+        return false;
+    const NLCheckedNodeView *operand =
+        nl_checked_node_view(f, v->first_argument);
+    const NLSemanticContext *c = nl_checked_context(f);
+    NLSemanticValueView input, result;
+    NLSemanticTypeView source, target;
+    if (!operand || !address_name(operand, operand->type) ||
+        operand->next_argument || !bool_source_origin(f, v->first_argument) ||
+        !address_scalar_view(c, operand, &input) ||
+        !address_scalar_view(c, v, &result) || !input.scalar_known ||
+        !result.scalar_known || input.scalar_value != result.scalar_value ||
+        !v->has_scalar_result || !v->scalar_result.known ||
+        v->scalar_result.type != v->type ||
+        v->scalar_result.value != result.scalar_value ||
+        !nl_semantic_type_view(c, operand->type, &source) ||
+        !nl_semantic_type_view(c, v->type, &target) ||
+        !nl_numeric_conversion_fits(source.kind, target.kind,
+                                    input.scalar_value))
+        return false;
+    p->uses_usize |=
+        source.kind == NL_TYPE_USIZE || target.kind == NL_TYPE_USIZE;
+    p->uses_uintptr |=
+        source.kind == NL_TYPE_UINTPTR || target.kind == NL_TYPE_UINTPTR;
+    return true;
+}
+
 static bool gate_address_data(const NLCheckedFragment *f,
                               const NLCheckedNodeView *v, V0Program *p)
 {
@@ -1226,7 +1265,8 @@ static bool gate_address_data(const NLCheckedFragment *f,
         if (!((v->type == addr && first->type == point) ||
               (v->type == point && first->type == addr) ||
               (v->type == point && first->type == usize && input.scalar_known &&
-               input.scalar_value <= UINTPTR_MAX &&
+               nl_numeric_conversion_fits(NL_TYPE_USIZE, NL_TYPE_UINTPTR,
+                                          input.scalar_value) &&
                quantity_scalar_impl(f, v->first_argument, p, false, NULL))))
             return false;
         p->uses_uintptr = true;
@@ -2940,6 +2980,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                ((v0_unit_loan_binding(fragment, view) &&
                  v0_validate_node(fragment, view->initializer, program)) ||
                 loop_quantity_scalar(fragment, view->initializer, program) ||
+                gate_numeric_conversion(fragment, view->initializer, program) ||
                 gate_address_data(fragment, initializer, program) ||
                 runtime_boolean_scalar_at(fragment, view->initializer, program,
                                           0) ||
@@ -4104,6 +4145,22 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                     return false;
             }
             if (fputc(')', stream) == EOF)
+                return false;
+        } else if (initializer->kind == NL_CHECKED_NUMERIC_CONVERSION) {
+            const NLSemanticContext *c = nl_checked_context(fragment);
+            const bool octet =
+                initializer->type == nl_semantic_core_type(c, NL_TYPE_U8);
+            const char *type =
+                octet ? "uint8_t"
+                : initializer->type == nl_semantic_core_type(c, NL_TYPE_USIZE)
+                    ? "size_t"
+                    : "uintptr_t";
+            const NLCheckedNodeView *operand =
+                nl_checked_node_view(fragment, initializer->first_argument);
+            if (fprintf(stream, "%s%s nl_local_%zu = (%s)",
+                        octet ? scalar_qualifier : "const ", type, view->symbol,
+                        type) < 0 ||
+                !v1_emit_scalar(stream, operand))
                 return false;
         } else if (initializer->type ==
                        nl_semantic_core_type(nl_checked_context(fragment),
