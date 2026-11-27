@@ -410,9 +410,12 @@ static bool bool_loop_quantity_origin(const NLCheckedFragment *f,
     return id == loop && bool_root_value(f, loop);
 }
 
+static bool bool_widening_quantity_origin(const NLCheckedFragment *,
+                                          NLCheckedNodeId, V0Program *);
+
 static bool boolean_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
                                 V0Program *p, NLCheckedNodeId condition_of,
-                                bool allow_loop)
+                                bool allow_runtime)
 {
     const NLSemanticContext *c = nl_checked_context(f);
     const NLTypeId boolean = nl_semantic_core_type(c, NL_TYPE_BOOL);
@@ -435,7 +438,7 @@ static bool boolean_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
             v->type != boolean || v->terminates || v->result_count != 1 ||
             v->results[0].type != boolean ||
             !nl_semantic_value_view(c, v->results[0].value, &value) ||
-            value.type != boolean || (!value.scalar_known && !allow_loop) ||
+            value.type != boolean || (!value.scalar_known && !allow_runtime) ||
             (value.scalar_known && value.scalar_value > 1) ||
             value.dependencies != NL_DEPENDENCY_FREE ||
             value.value_dependency_count != 0 || value.domain != 0 ||
@@ -478,19 +481,29 @@ static bool boolean_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
                 v->scalar_result.type != boolean ||
                 (known && v->scalar_result.value != expected))
                 return false;
-            if (!known) {
-                /* A real same-caller loop result against a source literal;
-                 * cached Unknown bits never choose an arm or grant rights. */
-                return (left->kind == NL_CHECKED_USIZE_LITERAL &&
-                        bool_quantity_origin(f, v->first_argument, p) &&
-                        bool_loop_quantity_origin(f, left->next_argument, p)) ||
-                       (right->kind == NL_CHECKED_USIZE_LITERAL &&
-                        bool_quantity_origin(f, left->next_argument, p) &&
-                        bool_loop_quantity_origin(f, v->first_argument, p));
-            }
-            if (!bool_quantity_origin(f, v->first_argument, p) ||
-                !bool_quantity_origin(f, left->next_argument, p))
+            if (!known &&
+                ((left->kind == NL_CHECKED_USIZE_LITERAL &&
+                  bool_quantity_origin(f, v->first_argument, p) &&
+                  bool_loop_quantity_origin(f, left->next_argument, p)) ||
+                 (right->kind == NL_CHECKED_USIZE_LITERAL &&
+                  bool_quantity_origin(f, left->next_argument, p) &&
+                  bool_loop_quantity_origin(f, v->first_argument, p))))
+                return true;
+            const bool left_widened =
+                allow_runtime &&
+                bool_widening_quantity_origin(f, v->first_argument, p);
+            const bool right_widened =
+                allow_runtime &&
+                bool_widening_quantity_origin(f, left->next_argument, p);
+            if ((!known && !left_widened && !right_widened) ||
+                (!left_widened &&
+                 !bool_quantity_origin(f, v->first_argument, p)) ||
+                (!right_widened &&
+                 !bool_quantity_origin(f, left->next_argument, p)) ||
+                known != (a.scalar_known && b.scalar_known))
                 return false;
+            if (!known)
+                return true;
             /* Consistency only; emit the original guest operands below. */
             const bool truth = less ? a.scalar_value < b.scalar_value
                                     : a.scalar_value == b.scalar_value;
@@ -2368,6 +2381,37 @@ static bool v1_scalar_unit_statement(const NLCheckedFragment *f,
            actual.scalar_known == original.scalar_known &&
            actual.scalar_value == original.scalar_value &&
            nl_pure_u8_unit_body_at(body, formal, c);
+}
+
+/* A comparison reads the exact root-local Copy chain of an earlier call.
+ * Reuse the checked widening invocation before consuming its emitted local. */
+static bool bool_widening_quantity_origin(const NLCheckedFragment *f,
+                                          NLCheckedNodeId id, V0Program *p)
+{
+    const NLSemanticContext *c = nl_checked_context(f);
+    const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLCheckedNodeView *use = nl_checked_node_view(f, id);
+    while (address_name(use, quantity)) {
+        const NLCheckedNodeId origin = bool_source_origin(f, id);
+        const NLCheckedNodeView *source = nl_checked_node_view(f, origin);
+        NLSemanticBindingView binding;
+        NLSemanticValueView copied, original;
+        if (!predicate_value(f, use, &copied) ||
+            !predicate_value(f, source, &original) ||
+            source->type != quantity ||
+            !nl_semantic_binding_view(c, use->symbol, &binding) ||
+            binding.type != quantity ||
+            binding.value != source->results[0].value ||
+            copied.scalar_known != original.scalar_known ||
+            copied.scalar_value != original.scalar_value)
+            return false;
+        if (source->kind == NL_CHECKED_REGISTERED_CALL)
+            return v0_find_function(p, source->function) &&
+                   widening_call(f, origin, p);
+        id = origin;
+        use = source;
+    }
+    return false;
 }
 
 /* Finite scalar callee: Copy locals and a scalar tail/return. Only the tail
