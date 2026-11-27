@@ -237,7 +237,7 @@ static bool predicate_call(const NLCheckedFragment *f, NLCheckedNodeId id,
         return false;
     NLPureU8Call pure;
     NLSymbolId formal;
-    if (!nl_pure_u8_call(f, id, &pure) ||
+    if (!nl_pure_u8_call_mode(f, id, !p->aggregate, &pure) ||
         (p->aggregate && !predicate_original_frame(f, id, p) &&
          !predicate_live_descriptor(f, id, &pure, p)) ||
         !v1_call_parameter_kind(f, id, p, &formal, true) ||

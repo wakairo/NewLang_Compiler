@@ -4268,7 +4268,7 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     }
 }
 
-/* The pure predicate consumer validated both literal arms and the real Bool
+/* The pure predicate consumer validated both arms and the real Bool
  * producer. Emit that guest condition exactly once, including direct IF
  * RETURN/tail forms; never emit the checker's cached truth. */
 static bool predicate_emit_return(FILE *stream, const NLCheckedFragment *f,
@@ -4283,7 +4283,13 @@ static bool predicate_emit_return(FILE *stream, const NLCheckedFragment *f,
     for (size_t a = 0; a < 2; ++a) {
         const NLCheckedNodeId id = (NLCheckedNodeId)(value - f->nodes) + 1;
         const NLCheckedFragment *arm = nl_checked_if_arm(f, id, a);
-        if (!v1_emit_scalar(stream, predicate_arm_value(arm)) ||
+        const NLCheckedNodeView *tail = predicate_arm_value(arm);
+        if (tail->kind == NL_CHECKED_NUMERIC_CONVERSION) {
+            if (fputs("(uint8_t)", stream) < 0)
+                return false;
+            tail = nl_checked_node_view(arm, tail->first_argument);
+        }
+        if (!v1_emit_scalar(stream, tail) ||
             (a == 0 && fputs(" : ", stream) < 0))
             return false;
     }

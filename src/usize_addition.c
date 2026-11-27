@@ -846,6 +846,91 @@ static bool same_operand_place(NLSemanticPlaceView a, NLSemanticPlaceView b)
            !b.governing_domain && !a.parent_aggregate && !b.parent_aggregate &&
            !a.parent_sum && !b.parent_sum;
 }
+
+bool nl_guarded_usize_same_current(const NLSemanticContext *entry,
+                                   const NLSemanticContext *c,
+                                   NLSymbolId formal)
+{
+    NLSemanticBindingView before, now;
+    NLSemanticPlaceView a, b;
+    return entry && entry != c &&
+           nl_semantic_binding_view(entry, formal, &before) &&
+           nl_semantic_binding_view(c, formal, &now) &&
+           same_binding(before, now) &&
+           nl_semantic_place_view(entry, before.place, &a) &&
+           nl_semantic_place_view(c, now.place, &b) && same_operand_place(a, b);
+}
+
+static bool guard_current_copies(const NLSemanticContext *c, NLSymbolId formal,
+                                 const NLCheckedNodeView *compared,
+                                 const NLCheckedNodeView *used)
+{
+    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    NLSemanticBindingView binding;
+    NLSemanticPlaceView place;
+    if (!nl_semantic_binding_view(c, formal, &binding) ||
+        binding.type != type || binding.availability != NL_AVAILABLE ||
+        !nl_semantic_place_view(c, binding.place, &place) || !place.live ||
+        !place.current_fact || place.current_value != binding.value ||
+        !quantity(c, binding.value, type) ||
+        !quantity(c, compared->results[0].value, type) ||
+        !quantity(c, used->results[0].value, type))
+        return false;
+    const NLSemanticValueView original = c->values[binding.value - 1];
+    const NLSemanticValueView copies[] = {
+        c->values[compared->results[0].value - 1],
+        c->values[used->results[0].value - 1]};
+    for (size_t i = 0; i < 2; ++i)
+        if (copies[i].scalar_known != original.scalar_known ||
+            copies[i].scalar_value != original.scalar_value)
+            return false;
+    return true;
+}
+
+bool nl_guarded_u8_operand(const NLCheckedFragment *f,
+                           const NLSemanticContext *c, NLSymbolId formal,
+                           NLCheckedNodeId operand)
+{
+    if (!f || !c || !formal || !f->if_parent || f->if_arm_index != 0 ||
+        f->source != f->if_parent->source)
+        return false;
+    const NLCheckedFragment *parent = f->if_parent;
+    const NLCheckedNodeView *choice =
+        nl_checked_node_view(parent, f->if_parent_node);
+    const NLCheckedNodeView *test =
+        choice ? nl_checked_node_view(parent, choice->initializer) : NULL;
+    const NLCheckedNodeView *left =
+        test ? nl_checked_node_view(parent, test->first_argument) : NULL;
+    const NLCheckedNodeView *bound =
+        left ? nl_checked_node_view(parent, left->next_argument) : NULL;
+    const NLCheckedNodeView *used = nl_checked_node_view(f, operand);
+    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    return choice && choice->kind == NL_CHECKED_IF &&
+           choice->initializer < f->if_parent_node && test &&
+           test->kind == NL_CHECKED_USIZE_LESS_THAN &&
+           test->argument_count == 2 &&
+           token(parent->source, test->name, "<") && left &&
+           left->kind == NL_CHECKED_IDENTIFIER && left->symbol == formal &&
+           left->value_use == NL_VALUE_COPIED && left->type == type &&
+           left->result_count == 1 && left->results[0].type == type &&
+           left->results[0].value <= f->branch_value_prefix && bound &&
+           bound->kind == NL_CHECKED_USIZE_LITERAL && bound->type == type &&
+           bound->result_count == 1 && bound->results[0].type == type &&
+           !bound->next_argument &&
+           bound->results[0].value <= f->branch_value_prefix &&
+           bound->has_scalar_result && bound->scalar_result.known &&
+           bound->scalar_result.type == type &&
+           bound->scalar_result.value > 0 &&
+           bound->scalar_result.value - 1 <= UINT8_MAX &&
+           plain(c, bound->results[0].value, type,
+                 bound->scalar_result.value) &&
+           used && used->kind == NL_CHECKED_IDENTIFIER &&
+           used->symbol == formal && used->value_use == NL_VALUE_COPIED &&
+           used->type == type && used->result_count == 1 &&
+           used->results[0].type == type && !used->next_argument &&
+           guard_current_copies(c, formal, left, used);
+}
+
 static NLUsizeOperation guarded_operation(const NLSyntaxNode *syntax)
 {
     const NLSyntaxView *source = nl_syntax_node_view(syntax);
@@ -923,9 +1008,6 @@ static bool guard_shape(const NLCheckedFragment *f, const NLSemanticContext *c,
     const NLSyntaxView *branch = nl_syntax_node_view(if_source);
     const NLSyntaxView *guard =
         branch ? nl_syntax_node_view(branch->data.conditional.condition) : NULL;
-    const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_USIZE);
-    NLSemanticBindingView binding;
-    NLSemanticPlaceView place;
     if (!guard || guard->kind != NL_SYNTAX_USIZE_LESS_THAN ||
         !span_equal(guard->span, test->span) ||
         !span_equal(test->name, guard->data.equality.operator_span) ||
@@ -937,23 +1019,9 @@ static bool guard_shape(const NLCheckedFragment *f, const NLSemanticContext *c,
         (operation == NL_USIZE_MULTIPLY
              ? !guarded_product_source(fn, if_source, branch, syntax) ||
                    !nl_usize_product_fits(*limit - 1, *step)
-             : *step > SIZE_MAX - (*limit - 1)) ||
-        !nl_semantic_binding_view(c, formal, &binding) ||
-        binding.type != type || binding.availability != NL_AVAILABLE ||
-        !nl_semantic_place_view(c, binding.place, &place) || !place.live ||
-        !place.current_fact || place.current_value != binding.value ||
-        !quantity(c, binding.value, type) ||
-        !quantity(c, a->results[0].value, type) ||
-        !quantity(c, x->results[0].value, type))
+             : *step > SIZE_MAX - (*limit - 1)))
         return false;
-    const NLSemanticValueView original = c->values[binding.value - 1];
-    const NLSemanticValueView copied[] = {c->values[a->results[0].value - 1],
-                                          c->values[x->results[0].value - 1]};
-    for (size_t i = 0; i < 2; ++i)
-        if (copied[i].scalar_known != original.scalar_known ||
-            copied[i].scalar_value != original.scalar_value)
-            return false;
-    return true;
+    return guard_current_copies(c, formal, a, x);
 }
 bool nl_guarded_usize_permitted(const NLCheckedFragment *f,
                                 const NLSemanticContext *c,
@@ -962,16 +1030,10 @@ bool nl_guarded_usize_permitted(const NLCheckedFragment *f,
                                 NLCheckedNodeId left, NLCheckedNodeId right)
 {
     size_t limit, step;
-    NLSemanticBindingView before, now;
-    NLSemanticPlaceView a, b;
     return entry && entry != c &&
            guard_shape(f, c, function, formal, guarded_operation(syntax),
                        syntax, left, right, &limit, &step) &&
-           nl_semantic_binding_view(entry, formal, &before) &&
-           nl_semantic_binding_view(c, formal, &now) &&
-           same_binding(before, now) &&
-           nl_semantic_place_view(entry, before.place, &a) &&
-           nl_semantic_place_view(c, now.place, &b) && same_operand_place(a, b);
+           nl_guarded_usize_same_current(entry, c, formal);
 }
 NLCheckStatus nl_guarded_usize_capture(NLCheckedFragment *f, NLCheckedNodeId id,
                                        const NLSyntaxNode *syntax,
