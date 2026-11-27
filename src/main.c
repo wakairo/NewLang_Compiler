@@ -1161,6 +1161,39 @@ static bool gate_ptr(const NLCheckedFragment *f, NLCheckedNodeId id,
            gate_identifier(f, arg, p) &&
            gate_ref_type(f, arg->type, NL_ACCESS_READ, p);
 }
+
+static bool address_name(const NLCheckedNodeView *v, NLTypeId addr)
+{
+    return v != NULL && v->kind == NL_CHECKED_IDENTIFIER && v->symbol != 0 &&
+           v->type == addr && v->result_count == 1 &&
+           v->results[0].type == addr && v->value_use == NL_VALUE_COPIED &&
+           !v->has_reference_result;
+}
+
+static bool gate_address_data(const NLCheckedFragment *f,
+                              const NLCheckedNodeView *v, const V0Program *p)
+{
+    const NLSemanticContext *c = nl_checked_context(f);
+    const NLTypeId addr = nl_semantic_core_type(c, NL_TYPE_ADDR);
+    if (v->result_count != 1 || v->results[0].type != v->type ||
+        v->has_reference_result)
+        return false;
+    if (address_name(v, addr))
+        return true;
+    const NLCheckedNodeView *first = nl_checked_node_view(f, v->first_argument);
+    if (v->kind == NL_CHECKED_ADDR_FROM_PTR)
+        return v->type == addr && v->argument_count == 1 && first != NULL &&
+               first->kind == NL_CHECKED_IDENTIFIER && !first->next_argument &&
+               gate_ptr(f, v->first_argument, p);
+    if (v->kind != NL_CHECKED_ADDR_EQUALITY &&
+        v->kind != NL_CHECKED_ADDR_INEQUALITY)
+        return false;
+    const NLCheckedNodeView *second =
+        first == NULL ? NULL : nl_checked_node_view(f, first->next_argument);
+    return v->type == nl_semantic_core_type(c, NL_TYPE_BOOL) &&
+           v->argument_count == 2 && address_name(first, addr) &&
+           address_name(second, addr) && !second->next_argument;
+}
 static bool gate_replace(const NLCheckedFragment *f, NLCheckedNodeId id,
                          const V0Program *p, NLSymbolId required_ref)
 {
@@ -2830,6 +2863,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                ((v0_unit_loan_binding(fragment, view) &&
                  v0_validate_node(fragment, view->initializer, program)) ||
                 loop_quantity_scalar(fragment, view->initializer, program) ||
+                gate_address_data(fragment, initializer, program) ||
                 runtime_boolean_scalar_at(fragment, view->initializer, program,
                                           0) ||
                 (receiver->type == program->u8 &&
@@ -3039,6 +3073,25 @@ static bool gate_emit_ptr(FILE *stream, const NLCheckedFragment *f,
         v = nl_checked_node_view(f, v->first_argument);
     return v != NULL && v->kind == NL_CHECKED_IDENTIFIER &&
            fprintf(stream, "nl_local_%zu", v->symbol) >= 0;
+}
+
+static bool emit_address_data(FILE *stream, const NLCheckedFragment *f,
+                              const NLCheckedNodeView *v)
+{
+    if (v->kind == NL_CHECKED_IDENTIFIER)
+        return fprintf(stream, "nl_local_%zu", v->symbol) >= 0;
+    const NLCheckedNodeView *left = nl_checked_node_view(f, v->first_argument);
+    if (left == NULL)
+        return false;
+    if (v->kind == NL_CHECKED_ADDR_FROM_PTR)
+        return fputs("(uintptr_t)(const void *)", stream) >= 0 &&
+               gate_emit_ptr(stream, f, left);
+    const NLCheckedNodeView *right =
+        nl_checked_node_view(f, left->next_argument);
+    return right != NULL &&
+           fprintf(stream, "(nl_local_%zu %s nl_local_%zu)", left->symbol,
+                   v->kind == NL_CHECKED_ADDR_EQUALITY ? "==" : "!=",
+                   right->symbol) >= 0;
 }
 static bool gate_emit_replace(FILE *stream, const NLCheckedFragment *f,
                               NLCheckedNodeId id, size_t depth, bool discard)
@@ -3956,6 +4009,20 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                     return false;
             }
             if (fputc(')', stream) == EOF)
+                return false;
+        } else if (initializer->type ==
+                       nl_semantic_core_type(nl_checked_context(fragment),
+                                             NL_TYPE_ADDR) ||
+                   initializer->kind == NL_CHECKED_ADDR_EQUALITY ||
+                   initializer->kind == NL_CHECKED_ADDR_INEQUALITY) {
+            const char *type =
+                initializer->kind == NL_CHECKED_ADDR_EQUALITY ||
+                        initializer->kind == NL_CHECKED_ADDR_INEQUALITY
+                    ? "_Bool"
+                    : "uintptr_t";
+            if (fprintf(stream, "const %s nl_local_%zu = ", type,
+                        view->symbol) < 0 ||
+                !emit_address_data(stream, fragment, initializer))
                 return false;
         } else if (initializer->type ==
                    nl_semantic_core_type(nl_checked_context(fragment),
