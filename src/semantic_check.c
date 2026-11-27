@@ -1912,14 +1912,58 @@ static bool local_address_context(const Check *check)
     return true;
 }
 
-static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax)
+static NLTypeId local_coordinate_type(Check *check, NLSourceSpan span)
+{
+    NLSemanticContext *c = check->context;
+    NLTypeId type = nl_semantic_core_type(c, NL_TYPE_UINTPTR);
+    if (type == 0) {
+        /* Reserve the core coordinate only in a CHECK world using it. Other
+         * profiles keep their original type table and allocation sequence. */
+        if (!host(check, nl_sem_nominal(c, "uintptr", true, true, &type), span))
+            return 0;
+        c->types[type - 1].view.kind = NL_TYPE_UINTPTR;
+    }
+    return type;
+}
+
+static NLCheckedNodeId local_address_result(Check *check, NLSourceSpan span,
+                                            NLCheckedNodeId arg,
+                                            NLCheckedKind kind,
+                                            NLScalarValue scalar)
+{
+    const NLValueId input = one_result(check, arg);
+    if (input == 0)
+        return 0;
+    const NLValueId value =
+        new_value(check,
+                  (NLSemanticValueView){.type = scalar.type,
+                                        .scalar_known = scalar.known,
+                                        .scalar_value = scalar.value},
+                  span);
+    if (value == 0)
+        return 0;
+    end_temporary(check, input);
+    return add(check, (NLCheckedNodeView){.kind = kind,
+                                          .span = span,
+                                          .type = scalar.type,
+                                          .first_argument = arg,
+                                          .argument_count = 1,
+                                          .result_count = 1,
+                                          .results = {{scalar.type, value}},
+                                          .has_scalar_result = true,
+                                          .scalar_result = scalar});
+}
+
+static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
+                                     bool to_address)
 {
     const NLSyntaxView *operand =
         nl_syntax_node_view(syntax->data.call.arguments);
     if (syntax->data.call.argument_count != 1 || operand == NULL ||
         operand->kind != NL_SYNTAX_EXPR_NAME) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
-             "ADDR-OPERAND-PROFILE", "addr requires one named pointer local");
+             "ADDR-OPERAND-PROFILE",
+             "address data conversion requires one named operand");
         return 0;
     }
     const NLCheckedNodeId arg = identifier(check, operand);
@@ -1929,6 +1973,40 @@ static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax)
     NLSemanticContext *c = check->context;
     const NLSemanticValueView ptr = c->values[input - 1];
     const NLSemanticTypeView type = c->types[ptr.type - 1].view;
+    const NLTypeId address = nl_semantic_core_type(c, NL_TYPE_ADDR);
+    if ((!to_address &&
+         (type.kind == NL_TYPE_ADDR || type.kind == NL_TYPE_USIZE)) ||
+        (to_address && type.kind == NL_TYPE_UINTPTR)) {
+        if (ptr.dependencies != NL_DEPENDENCY_FREE ||
+            ptr.value_dependency_count != 0 || ptr.reference.place != 0 ||
+            ptr.reference_count != 0) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, operand->span,
+                 "ADDRESS-CONVERSION-PRECISION",
+                 "conversion requires independent scalar address data");
+            return 0;
+        }
+        if (type.kind == NL_TYPE_USIZE &&
+            (!ptr.scalar_known || ptr.scalar_value > UINTPTR_MAX)) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, operand->span,
+                 "UINTPTR-CONVERSION-RANGE",
+                 "conversion requires a known representable quantity");
+            return 0;
+        }
+        const NLTypeId result =
+            to_address ? address : local_coordinate_type(check, syntax->span);
+        return result == 0 ? 0
+                           : local_address_result(
+                                 check, syntax->span, arg,
+                                 NL_CHECKED_ADDRESS_DATA_CONVERSION,
+                                 (NLScalarValue){result, ptr.scalar_known,
+                                                 ptr.scalar_value});
+    }
+    if (!to_address) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, operand->span,
+             "UINTPTR-CONVERSION-TYPE",
+             "uintptr requires nominal addr or a representable usize");
+        return 0;
+    }
     if (type.kind != NL_TYPE_PTR) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, operand->span, "ADDR-PTR-TYPE",
              "addr requires a pointer operand");
@@ -1949,22 +2027,9 @@ static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax)
     }
     /* The runtime coordinate is unknown. Do not carry the pointer's
      * provenance, authority or relationships into the scalar package. */
-    const NLTypeId address = nl_semantic_core_type(c, NL_TYPE_ADDR);
-    const NLValueId value =
-        new_value(check, (NLSemanticValueView){.type = address}, syntax->span);
-    if (value == 0)
-        return 0;
-    end_temporary(check, input);
-    return add(check,
-               (NLCheckedNodeView){.kind = NL_CHECKED_ADDR_FROM_PTR,
-                                   .span = syntax->span,
-                                   .type = address,
-                                   .first_argument = arg,
-                                   .argument_count = 1,
-                                   .result_count = 1,
-                                   .results = {{address, value}},
-                                   .has_scalar_result = true,
-                                   .scalar_result = {address, false, 0}});
+    return local_address_result(check, syntax->span, arg,
+                                NL_CHECKED_ADDR_FROM_PTR,
+                                (NLScalarValue){address, false, 0});
 }
 
 static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax,
@@ -2003,9 +2068,12 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax,
         }
     }
     if (function_id == 0) {
-        if (equal_name(check, syntax->data.call.callee, "addr") &&
+        const bool to_address =
+            equal_name(check, syntax->data.call.callee, "addr");
+        if ((to_address ||
+             equal_name(check, syntax->data.call.callee, "uintptr")) &&
             local_address_context(check))
-            return local_address(check, syntax);
+            return local_address(check, syntax, to_address);
         fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->data.call.callee,
              "P3-UNKNOWN-CALLEE", "unknown semantic callee");
         return 0;
@@ -2809,24 +2877,33 @@ static NLCheckedNodeId scalar_comparison(Check *check,
     NLSemanticContext *const c = check->context;
     const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
     const NLTypeId addr = nl_semantic_core_type(c, NL_TYPE_ADDR);
+    const NLTypeId coordinate = nl_semantic_core_type(c, NL_TYPE_UINTPTR);
+    const bool point = coordinate != 0 && !less &&
+                       (lhs.type == coordinate || rhs.type == coordinate);
     const bool address =
-        unequal || (!less && (lhs.type == addr || rhs.type == addr));
-    const NLTypeId operand_type = address ? addr : quantity;
+        !point &&
+        (unequal || (!less && (lhs.type == addr || rhs.type == addr)));
+    const NLTypeId operand_type = point     ? coordinate
+                                  : address ? addr
+                                            : quantity;
     if (check->terminated || lhs.result_count != 1 || rhs.result_count != 1 ||
         lhs.type != operand_type || rhs.type != operand_type ||
         lhs.results[0].type != operand_type ||
         rhs.results[0].type != operand_type) {
-        fail(
-            check, NL_CHECK_SEMANTIC_ERROR, syntax->data.equality.operator_span,
-            address ? "ADDR-COMPARISON-TYPE"
-            : less  ? "USIZE-LESS-THAN-TYPE"
-                    : "USIZE-EQUALITY-TYPE",
-            address ? "address comparison requires two exact core addr operands"
-            : less  ? "< requires two exact core usize operands"
+        fail(check, NL_CHECK_SEMANTIC_ERROR,
+             syntax->data.equality.operator_span,
+             point     ? "UINTPTR-COMPARISON-TYPE"
+             : address ? "ADDR-COMPARISON-TYPE"
+             : less    ? "USIZE-LESS-THAN-TYPE"
+                       : "USIZE-EQUALITY-TYPE",
+             point ? "coordinate comparison requires two exact uintptr operands"
+             : address
+                 ? "address comparison requires two exact core addr operands"
+             : less ? "< requires two exact core usize operands"
                     : "== requires two exact core usize operands");
         return 0;
     }
-    if (address && !local_address_context(check)) {
+    if ((address || point) && !local_address_context(check)) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
              "ADDR-LOCAL-PROFILE", "address comparison requires lexical main");
         return 0;
@@ -2838,14 +2915,16 @@ static NLCheckedNodeId scalar_comparison(Check *check,
         b.value_dependency_count != 0) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
              syntax->data.equality.operator_span,
-             address ? "ADDR-COMPARISON-PRECISION"
-             : less  ? "USIZE-LESS-THAN-PRECISION"
-                     : "USIZE-EQUALITY-PRECISION",
-             address ? "address comparison requires dependency-free operands"
-             : less  ? "less-than needs dependency-free quantity operands in "
-                       "this profile"
-                     : "equality needs dependency-free quantity operands in "
-                       "this profile");
+             point     ? "UINTPTR-COMPARISON-PRECISION"
+             : address ? "ADDR-COMPARISON-PRECISION"
+             : less    ? "USIZE-LESS-THAN-PRECISION"
+                       : "USIZE-EQUALITY-PRECISION",
+             (address || point)
+                 ? "address comparison requires dependency-free operands"
+             : less ? "less-than needs dependency-free quantity operands in "
+                      "this profile"
+                    : "equality needs dependency-free quantity operands in "
+                      "this profile");
         return 0;
     }
     const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_BOOL);
@@ -2864,7 +2943,9 @@ static NLCheckedNodeId scalar_comparison(Check *check,
     end_temporary(check, lhs.results[0].value);
     end_temporary(check, rhs.results[0].value);
     view(check, left)->next_argument = right;
-    const NLCheckedKind kind = unequal   ? NL_CHECKED_ADDR_INEQUALITY
+    const NLCheckedKind kind = point ? (unequal ? NL_CHECKED_UINTPTR_INEQUALITY
+                                                : NL_CHECKED_UINTPTR_EQUALITY)
+                               : unequal ? NL_CHECKED_ADDR_INEQUALITY
                                : address ? NL_CHECKED_ADDR_EQUALITY
                                : less    ? NL_CHECKED_USIZE_LESS_THAN
                                          : NL_CHECKED_USIZE_EQUALITY;

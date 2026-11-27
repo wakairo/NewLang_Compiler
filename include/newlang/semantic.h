@@ -54,7 +54,8 @@ typedef enum {
     NL_TYPE_ADDR,
     NL_TYPE_SUM,
     NL_TYPE_BOOL,
-    NL_TYPE_ARRAY /* structural builtin, never a user nominal */
+    NL_TYPE_ARRAY, /* structural builtin, never a user nominal */
+    NL_TYPE_UINTPTR
 } NLSemanticTypeKind;
 typedef struct {
     NLSemanticTypeKind kind;
