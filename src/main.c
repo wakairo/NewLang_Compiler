@@ -1214,15 +1214,20 @@ static bool gate_numeric_conversion(const NLCheckedFragment *f,
     if (!operand || !address_name(operand, operand->type) ||
         operand->next_argument || !bool_source_origin(f, v->first_argument) ||
         !address_scalar_view(c, operand, &input) ||
-        !address_scalar_view(c, v, &result) || !input.scalar_known ||
-        !result.scalar_known || input.scalar_value != result.scalar_value ||
-        !v->has_scalar_result || !v->scalar_result.known ||
+        !address_scalar_view(c, v, &result) ||
+        input.scalar_known != result.scalar_known ||
+        input.scalar_value != result.scalar_value || !v->has_scalar_result ||
+        v->scalar_result.known != result.scalar_known ||
         v->scalar_result.type != v->type ||
         v->scalar_result.value != result.scalar_value ||
         !nl_semantic_type_view(c, operand->type, &source) ||
-        !nl_semantic_type_view(c, v->type, &target) ||
-        !nl_scalar_conversion_fits(source.kind, target.kind,
-                                   input.scalar_value))
+        !nl_semantic_type_view(c, v->type, &target))
+        return false;
+    if (input.scalar_known
+            ? !nl_scalar_conversion_fits(source.kind, target.kind,
+                                         input.scalar_value)
+            : (input.scalar_value ||
+               !nl_numeric_runtime_widening(source.kind, target.kind)))
         return false;
     p->uses_usize |=
         source.kind == NL_TYPE_USIZE || target.kind == NL_TYPE_USIZE;

@@ -1981,7 +1981,10 @@ static NLCheckedNodeId local_conversion_result(Check *check, NLSourceSpan span,
                  : "expected a different nominal u8, usize or uintptr operand");
         return 0;
     }
-    if (!input.scalar_known || input.dependencies != NL_DEPENDENCY_FREE ||
+    if ((!input.scalar_known &&
+         (input.scalar_value ||
+          !nl_numeric_runtime_widening(source, target))) ||
+        input.dependencies != NL_DEPENDENCY_FREE ||
         input.value_dependency_count || input.reference.place ||
         input.reference_count) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
@@ -1989,7 +1992,8 @@ static NLCheckedNodeId local_conversion_result(Check *check, NLSourceSpan span,
              "expected an independent known scalar value");
         return 0;
     }
-    if (!nl_scalar_conversion_fits(source, target, input.scalar_value)) {
+    if (input.scalar_known &&
+        !nl_scalar_conversion_fits(source, target, input.scalar_value)) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, span, "NUMERIC-CONVERSION-RANGE",
              "numeric operand is outside the destination range");
         return 0;
@@ -1997,10 +2001,12 @@ static NLCheckedNodeId local_conversion_result(Check *check, NLSourceSpan span,
     const NLTypeId result = target == NL_TYPE_UINTPTR
                                 ? local_coordinate_type(check, span)
                                 : nl_semantic_core_type(c, target);
-    return result == 0 ? 0
-                       : local_scalar_result(
-                             check, span, arg, 0, NL_CHECKED_NUMERIC_CONVERSION,
-                             (NLScalarValue){result, true, input.scalar_value});
+    return result == 0
+               ? 0
+               : local_scalar_result(check, span, arg, 0,
+                                     NL_CHECKED_NUMERIC_CONVERSION,
+                                     (NLScalarValue){result, input.scalar_known,
+                                                     input.scalar_value});
 }
 
 static NLCheckedNodeId local_conversion(Check *check,
