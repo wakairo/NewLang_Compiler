@@ -873,16 +873,15 @@ static bool unlink_option(const NLSemanticContext *world, NLValueId id,
 static bool shared_unlink_state(const NLSemanticContext *world,
                                 const Release *originals)
 {
-    static const size_t after[5][3] = {
-        {SIZE_MAX, SIZE_MAX, 1},
-        {2, 2, SIZE_MAX},
-        {SIZE_MAX, 1, SIZE_MAX},
-        {SIZE_MAX, SIZE_MAX, SIZE_MAX},
-        {SIZE_MAX, SIZE_MAX, SIZE_MAX}};
+    static const size_t after[5][3] = {{SIZE_MAX, SIZE_MAX, 1},
+                                       {2, 2, SIZE_MAX},
+                                       {SIZE_MAX, 1, SIZE_MAX},
+                                       {SIZE_MAX, SIZE_MAX, SIZE_MAX},
+                                       {SIZE_MAX, SIZE_MAX, SIZE_MAX}};
     for (size_t root = 0; root < 5; ++root)
         for (size_t field = 0; field < 3; ++field)
-            if (!unlink_option(world, originals[root].fields[field],
-                               originals, after[root][field]))
+            if (!unlink_option(world, originals[root].fields[field], originals,
+                               after[root][field]))
                 return false;
     return true;
 }
