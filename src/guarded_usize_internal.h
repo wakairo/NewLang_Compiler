@@ -13,7 +13,7 @@ typedef struct {
 } NLGuardedUsizePlan;
 bool nl_guarded_usize_same_current(const NLSemanticContext *,
                                    const NLSemanticContext *, NLSymbolId);
-/* The u8 consumer separately requires the actual empty true-tail arm. */
+/* The u8 consumers separately validate the exact normal true-arm use. */
 bool nl_guarded_u8_operand(const NLCheckedFragment *, const NLSemanticContext *,
                            NLSymbolId, NLCheckedNodeId);
 bool nl_guarded_usize_permitted(const NLCheckedFragment *,
