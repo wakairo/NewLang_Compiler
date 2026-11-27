@@ -867,6 +867,26 @@ static bool unlink_option(const NLSemanticContext *world, NLValueId id,
                       original.root, original.incarnation);
 }
 
+/* The selected shared-writer continuation promises the whole five-root
+ * graph, including fields untouched by its nine Changes. Check actual
+ * source-issued Option packages against the same original root ledger. */
+static bool shared_unlink_state(const NLSemanticContext *world,
+                                const Release *originals)
+{
+    static const size_t after[5][3] = {
+        {SIZE_MAX, SIZE_MAX, 1},
+        {2, 2, SIZE_MAX},
+        {SIZE_MAX, 1, SIZE_MAX},
+        {SIZE_MAX, SIZE_MAX, SIZE_MAX},
+        {SIZE_MAX, SIZE_MAX, SIZE_MAX}};
+    for (size_t root = 0; root < 5; ++root)
+        for (size_t field = 0; field < 3; ++field)
+            if (!unlink_option(world, originals[root].fields[field],
+                               originals, after[root][field]))
+                return false;
+    return true;
+}
+
 static bool unlink_step(const NLSemanticContext *world, const Release *roots,
                         size_t step, size_t owner, NLCheckedField field)
 {
@@ -1252,10 +1272,9 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             /* No release may change this ledger from loan entry to join.
              * The saved read worlds recheck the whole selected phase. */
             c_ended_at_loan = releases[3].freed;
-            /* The shared writer keeps C live and dst.child empty. */
+            /* The shared writer keeps C live and the fixed link state. */
             if (calls != 0 &&
-                (c_ended_at_loan || !unlink_option(world, releases[4].fields[2],
-                                                   releases, SIZE_MAX)))
+                (c_ended_at_loan || !shared_unlink_state(world, releases)))
                 return INVALID;
         }
         if (v->kind == NL_CHECKED_REPLACE ||

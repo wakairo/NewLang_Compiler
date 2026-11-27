@@ -53,6 +53,26 @@ def negative_sources(source):
 
 def shared_writer_negatives(source):
     dst_cleanup = "let empty_dst = loan_exclusive_read(life_dst)"
+    # These source-valid initial links are not among the nine recorded
+    # Changes, but the selected five-root continuation requires them empty.
+    for root, field, target in (
+        ("A", "child", "ptr_src"),
+        ("B", "child", "ptr_A"),
+        ("C", "next", "ptr_B"),
+        ("C", "child", "ptr_B"),
+        ("dst", "next", "ptr_C"),
+        ("dst", "prev", "ptr_C"),
+    ):
+        start = source.index(f"initialize(vacant_{root}, Node {{")
+        end = source.index(f"}}, stable_{root})", start)
+        initial = source[start:end]
+        changed = replace_one(
+            initial, f"{field}: Option<ptr<Node>>::None",
+            f"{field}: Option<ptr<Node>>::Some({target})")
+        yield (
+            f"{root}-{field}-nonempty", "CAPTURED-CLOSURE-PRECISION",
+            source[:start] + changed + source[end:],
+        )
     start = source.index(dst_cleanup)
     c_cleanup = re.search(
         r"^ +let empty_C = loan_exclusive_read\(life_C\).*?"
