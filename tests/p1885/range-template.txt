@@ -1,0 +1,4 @@
+    let input_{index:03d} = u8({value});
+    let encoded_{index:03d} = byte(input_{index:03d});
+    let decoded_{index:03d} = u8(encoded_{index:03d});
+    let restored_{index:03d} = byte(decoded_{index:03d});

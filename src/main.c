@@ -1221,8 +1221,8 @@ static bool gate_numeric_conversion(const NLCheckedFragment *f,
         v->scalar_result.value != result.scalar_value ||
         !nl_semantic_type_view(c, operand->type, &source) ||
         !nl_semantic_type_view(c, v->type, &target) ||
-        !nl_numeric_conversion_fits(source.kind, target.kind,
-                                    input.scalar_value))
+        !nl_scalar_conversion_fits(source.kind, target.kind,
+                                   input.scalar_value))
         return false;
     p->uses_usize |=
         source.kind == NL_TYPE_USIZE || target.kind == NL_TYPE_USIZE;
@@ -1265,8 +1265,8 @@ static bool gate_address_data(const NLCheckedFragment *f,
         if (!((v->type == addr && first->type == point) ||
               (v->type == point && first->type == addr) ||
               (v->type == point && first->type == usize && input.scalar_known &&
-               nl_numeric_conversion_fits(NL_TYPE_USIZE, NL_TYPE_UINTPTR,
-                                          input.scalar_value) &&
+               nl_scalar_conversion_fits(NL_TYPE_USIZE, NL_TYPE_UINTPTR,
+                                         input.scalar_value) &&
                quantity_scalar_impl(f, v->first_argument, p, false, NULL))))
             return false;
         p->uses_uintptr = true;
@@ -4149,7 +4149,8 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
         } else if (initializer->kind == NL_CHECKED_NUMERIC_CONVERSION) {
             const NLSemanticContext *c = nl_checked_context(fragment);
             const bool octet =
-                initializer->type == nl_semantic_core_type(c, NL_TYPE_U8);
+                initializer->type == nl_semantic_core_type(c, NL_TYPE_U8) ||
+                initializer->type == nl_semantic_core_type(c, NL_TYPE_BYTE);
             const char *type =
                 octet ? "uint8_t"
                 : initializer->type == nl_semantic_core_type(c, NL_TYPE_USIZE)

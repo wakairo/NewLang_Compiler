@@ -1961,9 +1961,9 @@ static NLCheckedNodeId local_scalar_result(Check *check, NLSourceSpan span,
                                           .scalar_result = scalar});
 }
 
-static NLCheckedNodeId local_numeric_result(Check *check, NLSourceSpan span,
-                                            NLCheckedNodeId arg,
-                                            NLSemanticTypeKind target)
+static NLCheckedNodeId local_conversion_result(Check *check, NLSourceSpan span,
+                                               NLCheckedNodeId arg,
+                                               NLSemanticTypeKind target)
 {
     const NLValueId operand = arg ? one_result(check, arg) : 0;
     if (operand == 0)
@@ -1971,9 +1971,14 @@ static NLCheckedNodeId local_numeric_result(Check *check, NLSourceSpan span,
     NLSemanticContext *c = check->context;
     const NLSemanticValueView input = c->values[operand - 1];
     const NLSemanticTypeKind source = c->types[input.type - 1].view.kind;
-    if (source == target || nl_numeric_limit(source) == 0) {
+    if (!nl_scalar_conversion_pair(source, target)) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, span, "NUMERIC-CONVERSION-TYPE",
-             "expected a different nominal u8, usize or uintptr operand");
+             target == NL_TYPE_BYTE
+                 ? "byte conversion requires a nominal u8 operand"
+             : target == NL_TYPE_U8
+                 ? "u8 conversion requires a nominal byte, usize or uintptr "
+                   "operand"
+                 : "expected a different nominal u8, usize or uintptr operand");
         return 0;
     }
     if (!input.scalar_known || input.dependencies != NL_DEPENDENCY_FREE ||
@@ -1981,10 +1986,10 @@ static NLCheckedNodeId local_numeric_result(Check *check, NLSourceSpan span,
         input.reference_count) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
              "NUMERIC-CONVERSION-PRECISION",
-             "expected an independent known numeric value");
+             "expected an independent known scalar value");
         return 0;
     }
-    if (!nl_numeric_conversion_fits(source, target, input.scalar_value)) {
+    if (!nl_scalar_conversion_fits(source, target, input.scalar_value)) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, span, "NUMERIC-CONVERSION-RANGE",
              "numeric operand is outside the destination range");
         return 0;
@@ -1998,8 +2003,9 @@ static NLCheckedNodeId local_numeric_result(Check *check, NLSourceSpan span,
                              (NLScalarValue){result, true, input.scalar_value});
 }
 
-static NLCheckedNodeId local_numeric(Check *check, const NLSyntaxView *syntax,
-                                     NLSemanticTypeKind target)
+static NLCheckedNodeId local_conversion(Check *check,
+                                        const NLSyntaxView *syntax,
+                                        NLSemanticTypeKind target)
 {
     const NLSyntaxView *operand =
         nl_syntax_node_view(syntax->data.call.arguments);
@@ -2010,8 +2016,8 @@ static NLCheckedNodeId local_numeric(Check *check, const NLSyntaxView *syntax,
              "explicit numeric conversion requires one named operand");
         return 0;
     }
-    return local_numeric_result(check, syntax->span, identifier(check, operand),
-                                target);
+    return local_conversion_result(check, syntax->span,
+                                   identifier(check, operand), target);
 }
 
 static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
@@ -2034,7 +2040,8 @@ static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
     const NLSemanticValueView ptr = c->values[input - 1];
     const NLSemanticTypeView type = c->types[ptr.type - 1].view;
     if (!to_address && type.kind == NL_TYPE_U8)
-        return local_numeric_result(check, syntax->span, arg, NL_TYPE_UINTPTR);
+        return local_conversion_result(check, syntax->span, arg,
+                                       NL_TYPE_UINTPTR);
     const NLTypeId address = nl_semantic_core_type(c, NL_TYPE_ADDR);
     if ((!to_address &&
          (type.kind == NL_TYPE_ADDR || type.kind == NL_TYPE_USIZE)) ||
@@ -2049,8 +2056,8 @@ static NLCheckedNodeId local_address(Check *check, const NLSyntaxView *syntax,
         }
         if (type.kind == NL_TYPE_USIZE &&
             (!ptr.scalar_known ||
-             !nl_numeric_conversion_fits(NL_TYPE_USIZE, NL_TYPE_UINTPTR,
-                                         ptr.scalar_value))) {
+             !nl_scalar_conversion_fits(NL_TYPE_USIZE, NL_TYPE_UINTPTR,
+                                        ptr.scalar_value))) {
             fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, operand->span,
                  "UINTPTR-CONVERSION-RANGE",
                  "conversion requires a known representable quantity");
@@ -2133,10 +2140,15 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax,
     }
     if (function_id == 0) {
         const bool to_u8 = equal_name(check, syntax->data.call.callee, "u8");
-        if ((to_u8 || equal_name(check, syntax->data.call.callee, "usize")) &&
+        const bool to_byte =
+            equal_name(check, syntax->data.call.callee, "byte");
+        if ((to_u8 || to_byte ||
+             equal_name(check, syntax->data.call.callee, "usize")) &&
             local_address_context(check))
-            return local_numeric(check, syntax,
-                                 to_u8 ? NL_TYPE_U8 : NL_TYPE_USIZE);
+            return local_conversion(check, syntax,
+                                    to_byte ? NL_TYPE_BYTE
+                                    : to_u8 ? NL_TYPE_U8
+                                            : NL_TYPE_USIZE);
         const bool to_address =
             equal_name(check, syntax->data.call.callee, "addr");
         if ((to_address ||
