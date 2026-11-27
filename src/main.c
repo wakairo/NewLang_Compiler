@@ -1,6 +1,7 @@
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 700
 #endif
+#include "address_data_internal.h"
 #include "c17_local_field_internal.h"
 #include "checked_c_target.h"
 #include "copy_body_internal.h"
@@ -77,6 +78,7 @@ typedef struct {
     size_t entry_function;
     NLTypeId unit, u8, aggregate;
     bool uses_usize;
+    bool uses_uintptr;
     bool u8_export;    /* opt-in target wrapper, never source authority */
     bool linear_break; /* independently validated private CHECK consumer */
     bool stuttering_loop;
@@ -199,6 +201,9 @@ static bool v1_scalar(const NLCheckedFragment *fragment, NLCheckedNodeId id,
 
 /* Native target §6 quantity staging only. A source-connected Copy binding is
  * required; no usize call ABI, ref, arithmetic or inferred owner authority. */
+static bool gate_address_data(const NLCheckedFragment *,
+                              const NLCheckedNodeView *, V0Program *);
+
 static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
                                  V0Program *p, bool allow_loop,
                                  NLCheckedNodeId *loop_origin)
@@ -264,6 +269,8 @@ static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
                    v->scalar_result.type == type &&
                    v->scalar_result.value == expected;
         }
+        if (v->kind == NL_CHECKED_UINTPTR_REMAINDER)
+            return gate_address_data(f, v, p);
         if (v->kind != NL_CHECKED_IDENTIFIER || v->symbol == 0 ||
             v->value_use != NL_VALUE_COPIED)
             return false;
@@ -370,6 +377,8 @@ static bool bool_quantity_origin(const NLCheckedFragment *f, NLCheckedNodeId id,
             v->kind == NL_CHECKED_USIZE_SUBTRACTION ||
             v->kind == NL_CHECKED_USIZE_MULTIPLICATION)
             return true;
+        if (v->kind == NL_CHECKED_UINTPTR_REMAINDER)
+            return bool_root_value(f, id);
         id = bool_source_origin(f, id);
     }
     return false;
@@ -1170,29 +1179,97 @@ static bool address_name(const NLCheckedNodeView *v, NLTypeId addr)
            !v->has_reference_result;
 }
 
+static bool address_scalar_view(const NLSemanticContext *c,
+                                const NLCheckedNodeView *node,
+                                NLSemanticValueView *value)
+{
+    return node != NULL && node->result_count == 1 &&
+           node->results[0].type == node->type && !node->has_reference_result &&
+           nl_semantic_value_view(c, node->results[0].value, value) &&
+           value->type == node->type &&
+           value->dependencies == NL_DEPENDENCY_FREE &&
+           !value->value_dependency_count && !value->reference.place &&
+           !value->reference_count;
+}
+
 static bool gate_address_data(const NLCheckedFragment *f,
-                              const NLCheckedNodeView *v, const V0Program *p)
+                              const NLCheckedNodeView *v, V0Program *p)
 {
     const NLSemanticContext *c = nl_checked_context(f);
     const NLTypeId addr = nl_semantic_core_type(c, NL_TYPE_ADDR);
+    const NLTypeId point = nl_semantic_core_type(c, NL_TYPE_UINTPTR);
     if (v->result_count != 1 || v->results[0].type != v->type ||
         v->has_reference_result)
         return false;
     if (address_name(v, addr))
         return true;
+    if (point != 0 && address_name(v, point)) {
+        p->uses_uintptr = true;
+        return true;
+    }
     const NLCheckedNodeView *first = nl_checked_node_view(f, v->first_argument);
     if (v->kind == NL_CHECKED_ADDR_FROM_PTR)
         return v->type == addr && v->argument_count == 1 && first != NULL &&
                first->kind == NL_CHECKED_IDENTIFIER && !first->next_argument &&
                gate_ptr(f, v->first_argument, p);
-    if (v->kind != NL_CHECKED_ADDR_EQUALITY &&
-        v->kind != NL_CHECKED_ADDR_INEQUALITY)
-        return false;
+    if (point != 0 && v->kind == NL_CHECKED_ADDRESS_DATA_CONVERSION) {
+        if (v->argument_count != 1 || first == NULL || first->next_argument)
+            return false;
+        const NLTypeId usize = nl_semantic_core_type(c, NL_TYPE_USIZE);
+        NLSemanticValueView input, result;
+        if (!address_name(first, first->type) ||
+            !address_scalar_view(c, first, &input) ||
+            !address_scalar_view(c, v, &result) ||
+            input.scalar_known != result.scalar_known ||
+            input.scalar_value != result.scalar_value)
+            return false;
+        if (!((v->type == addr && first->type == point) ||
+              (v->type == point && first->type == addr) ||
+              (v->type == point && first->type == usize && input.scalar_known &&
+               input.scalar_value <= UINTPTR_MAX &&
+               quantity_scalar_impl(f, v->first_argument, p, false, NULL))))
+            return false;
+        p->uses_uintptr = true;
+        return true;
+    }
     const NLCheckedNodeView *second =
         first == NULL ? NULL : nl_checked_node_view(f, first->next_argument);
-    return v->type == nl_semantic_core_type(c, NL_TYPE_BOOL) &&
-           v->argument_count == 2 && address_name(first, addr) &&
-           address_name(second, addr) && !second->next_argument;
+    if (point != 0 && nl_coordinate_operation(v->kind)) {
+        const bool remainder = v->kind == NL_CHECKED_UINTPTR_REMAINDER;
+        const NLTypeId usize = nl_semantic_core_type(c, NL_TYPE_USIZE);
+        NLSemanticValueView a, b, output;
+        if (v->type != (remainder ? usize : point) || v->argument_count != 2 ||
+            !address_name(first, point) || !address_scalar_view(c, first, &a) ||
+            !address_scalar_view(c, second, &b) || second->next_argument ||
+            second->type != usize ||
+            (remainder && second->kind != NL_CHECKED_USIZE_LITERAL) ||
+            !quantity_scalar_impl(f, first->next_argument, p, false, NULL) ||
+            !address_scalar_view(c, v, &output))
+            return false;
+        NLScalarValue expected = {.type = v->type};
+        if (nl_coordinate_arithmetic(
+                v->kind, (NLScalarValue){point, a.scalar_known, a.scalar_value},
+                (NLScalarValue){usize, b.scalar_known, b.scalar_value},
+                &expected) != NL_CHECK_OK ||
+            output.scalar_known != expected.known ||
+            output.scalar_value != expected.value)
+            return false;
+        p->uses_uintptr = true;
+        return true;
+    }
+    const bool coordinate = v->kind == NL_CHECKED_UINTPTR_EQUALITY ||
+                            v->kind == NL_CHECKED_UINTPTR_INEQUALITY;
+    if ((!coordinate && v->kind != NL_CHECKED_ADDR_EQUALITY &&
+         v->kind != NL_CHECKED_ADDR_INEQUALITY) ||
+        (coordinate && point == 0))
+        return false;
+    const NLTypeId operand = coordinate ? point : addr;
+    if (v->type != nl_semantic_core_type(c, NL_TYPE_BOOL) ||
+        v->argument_count != 2 || !address_name(first, operand) ||
+        !address_name(second, operand) || second->next_argument)
+        return false;
+    p->uses_uintptr |= coordinate;
+    return true;
 }
 static bool gate_replace(const NLCheckedFragment *f, NLCheckedNodeId id,
                          const V0Program *p, NLSymbolId required_ref)
@@ -3086,12 +3163,30 @@ static bool emit_address_data(FILE *stream, const NLCheckedFragment *f,
     if (v->kind == NL_CHECKED_ADDR_FROM_PTR)
         return fputs("(uintptr_t)(const void *)", stream) >= 0 &&
                gate_emit_ptr(stream, f, left);
+    if (v->kind == NL_CHECKED_ADDRESS_DATA_CONVERSION)
+        return fprintf(stream, "(uintptr_t)nl_local_%zu", left->symbol) >= 0;
     const NLCheckedNodeView *right =
         nl_checked_node_view(f, left->next_argument);
-    return right != NULL &&
-           fprintf(stream, "(nl_local_%zu %s nl_local_%zu)", left->symbol,
-                   v->kind == NL_CHECKED_ADDR_EQUALITY ? "==" : "!=",
-                   right->symbol) >= 0;
+    if (right == NULL)
+        return false;
+    if (nl_coordinate_operation(v->kind)) {
+        const bool remainder = v->kind == NL_CHECKED_UINTPTR_REMAINDER;
+        const char op = remainder                                ? '%'
+                        : v->kind == NL_CHECKED_UINTPTR_ADDITION ? '+'
+                                                                 : '-';
+        return fprintf(stream, "(%s)((uintmax_t)nl_local_%zu %c (uintmax_t)",
+                       remainder ? "size_t" : "uintptr_t", left->symbol,
+                       op) >= 0 &&
+               (right->kind == NL_CHECKED_USIZE_LITERAL
+                    ? fprintf(stream, "UINTMAX_C(%zu)",
+                              right->scalar_result.value)
+                    : fprintf(stream, "nl_local_%zu", right->symbol)) >= 0 &&
+               fputc(')', stream) != EOF;
+    }
+    const bool equal = v->kind == NL_CHECKED_ADDR_EQUALITY ||
+                       v->kind == NL_CHECKED_UINTPTR_EQUALITY;
+    return fprintf(stream, "(nl_local_%zu %s nl_local_%zu)", left->symbol,
+                   equal ? "==" : "!=", right->symbol) >= 0;
 }
 static bool gate_emit_replace(FILE *stream, const NLCheckedFragment *f,
                               NLCheckedNodeId id, size_t depth, bool discard)
@@ -4013,12 +4108,21 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
         } else if (initializer->type ==
                        nl_semantic_core_type(nl_checked_context(fragment),
                                              NL_TYPE_ADDR) ||
+                   initializer->type ==
+                       nl_semantic_core_type(nl_checked_context(fragment),
+                                             NL_TYPE_UINTPTR) ||
                    initializer->kind == NL_CHECKED_ADDR_EQUALITY ||
-                   initializer->kind == NL_CHECKED_ADDR_INEQUALITY) {
+                   initializer->kind == NL_CHECKED_ADDR_INEQUALITY ||
+                   initializer->kind == NL_CHECKED_UINTPTR_EQUALITY ||
+                   initializer->kind == NL_CHECKED_UINTPTR_INEQUALITY ||
+                   initializer->kind == NL_CHECKED_UINTPTR_REMAINDER) {
             const char *type =
-                initializer->kind == NL_CHECKED_ADDR_EQUALITY ||
-                        initializer->kind == NL_CHECKED_ADDR_INEQUALITY
+                initializer->type ==
+                        nl_semantic_core_type(nl_checked_context(fragment),
+                                              NL_TYPE_BOOL)
                     ? "_Bool"
+                : initializer->kind == NL_CHECKED_UINTPTR_REMAINDER
+                    ? "size_t"
                     : "uintptr_t";
             if (fprintf(stream, "const %s nl_local_%zu = ", type,
                         view->symbol) < 0 ||
@@ -4326,6 +4430,12 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
                 "_Static_assert(SIZE_MAX == UINTMAX_C(%zu), "
                 "\"NewLang usize target mismatch\");\n\n",
                 SIZE_MAX) < 0)
+        return false;
+    if (program->uses_uintptr &&
+        fprintf(stream,
+                "_Static_assert(UINTPTR_MAX == UINTMAX_C(%ju), "
+                "\"NewLang uintptr target mismatch\");\n\n",
+                (uintmax_t)UINTPTR_MAX) < 0)
         return false;
 
     if (program->aggregate != 0 &&
