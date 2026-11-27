@@ -65,11 +65,11 @@ static NLCheckedNodeId match(const NLCheckedFragment *f)
     return 0;
 }
 
-static bool temporal(Program *, bool);
-static bool foreign_destroy(const char *);
+static bool temporal(Program *, bool, bool);
+static bool foreign_destroy(const char *, bool);
 static bool oom(const char *);
 
-static bool verify(const char *path)
+static bool verify(const char *path, bool retained_live)
 {
     Program p = {0};
     CHECK(prepare(path, &p) == NL_CHECK_OK);
@@ -102,9 +102,9 @@ static bool verify(const char *path)
     printf("CHECK/owned/custody PASS; original release worlds 0..5 once; "
            "reads=%zu matches=%zu\n",
            reads, matches);
-    CHECK(temporal(&p, true));
+    CHECK(temporal(&p, true, retained_live));
     destroy(&p);
-    CHECK(foreign_destroy(path));
+    CHECK(foreign_destroy(path, retained_live));
     return true;
 }
 static const NLCheckedFragment *top_of(Program *p)
@@ -134,7 +134,7 @@ static bool denied(const NLCheckedFragment *entry,
           out == NULL && n == 98765);
     return true;
 }
-static bool temporal(Program *p, bool attack)
+static bool temporal(Program *p, bool attack, bool retained_live)
 {
     const NLCheckedFragment *top = top_of(p);
     NLCheckedFragment *leaf = leaf_of(top);
@@ -146,7 +146,8 @@ static bool temporal(Program *p, bool attack)
     for (size_t i = 0; i < 4; ++i)
         parent = nl_checked_match_arm(parent, match(parent), 1);
     CHECK(nl_checked_captured_closure_view(parent, match(parent), &ancestors));
-    const NLPlaceId c_root = ancestors.originals[3].root;
+    const NLCapturedOriginal c = ancestors.originals[3];
+    const NLPlaceId c_root = c.root;
     CHECK(last.after->places[c_root - 1].live);
     ReadEvent *first = &leaf->captured_reads->events[0];
     ReadEvent *fork = &leaf->captured_reads->events[1];
@@ -162,6 +163,21 @@ static bool temporal(Program *p, bool attack)
     }
     CHECK(some && some->captured_reads && some->captured_reads->count == 1);
     ReadEvent *second = &some->captured_reads->events[0];
+    const NLSemanticContext *phase_worlds[] = {
+        first->event.before, first->event.after,   fork->event.before,
+        fork->event.after,   second->event.before, second->event.after};
+    for (size_t i = 0; i < sizeof(phase_worlds) / sizeof(phase_worlds[0]);
+         ++i) {
+        const NLSemanticContext *phase = phase_worlds[i];
+        CHECK(phase && phase->places[c_root - 1].live == retained_live &&
+              phase->places[c_root - 1].incarnation == c.incarnation &&
+              phase->places[c_root - 1].governing_domain ==
+                  (retained_live ? c.domain : 0) &&
+              phase->domains[c.domain - 1].live == retained_live &&
+              phase->regions[c.extent.region - 1].view.live == retained_live);
+    }
+    printf("C %s at both reads and the normal match join\n",
+           retained_live ? "live" : "ended");
     ReadEvent *events[] = {first, second};
     for (size_t i = 0; i < 2; ++i) {
         const NLSemanticContext *b = events[i]->event.before;
@@ -169,11 +185,7 @@ static bool temporal(Program *p, bool attack)
         const NLCheckedFragment *f = i == 0 ? leaf : some;
         const NLCheckedNodeView *read =
             nl_checked_node_view(f, events[i]->event.node);
-        CHECK(b && a && b != a && b != last.after &&
-              !b->places[c_root - 1].live);
-        CHECK(b->places[c_root - 1].governing_domain == 0 &&
-              !b->domains[ancestors.originals[3].domain - 1].live &&
-              !b->regions[3].view.live);
+        CHECK(b && a && b != a && b != last.after);
         CHECK(read->field.parent == ancestors.originals[i == 0 ? 1 : 2].root &&
               read->field.index == (i == 0 ? 1u : 0u));
         CHECK(b->places[read->field.parent - 1].live &&
@@ -257,7 +269,7 @@ static bool temporal(Program *p, bool attack)
            "poison rejection PASS\n");
     return true;
 }
-static bool foreign_destroy(const char *path)
+static bool foreign_destroy(const char *path, bool retained_live)
 {
     Program a = {0}, b = {0};
     CHECK(prepare(path, &a) == NL_CHECK_OK && prepare(path, &b) == NL_CHECK_OK);
@@ -285,13 +297,14 @@ static bool foreign_destroy(const char *path)
     destroy(&a); /* deliberately unrestored foreign display view */
     CHECK(nl_h_custody_validate(b.entry) &&
           nl_checked_captured_closure_validate(bt, match(bt)) == NL_CHECK_OK);
-    CHECK(temporal(&b, false));
+    CHECK(temporal(&b, false, retained_live));
     destroy(&b);
     printf("A unrestored foreign Some view destroy; genuine B "
            "survives/destroys PASS\n");
     return true;
 }
 static size_t capture_calls, wanted_call, wanted_offset, allocation_index;
+static size_t writer_seals, wanted_writer_seal;
 static bool armed, injection_window, injected, fail_buffer;
 static const NLSemanticContext *selected_world;
 void *__real_malloc(size_t);
@@ -363,6 +376,53 @@ NLCheckStatus __wrap_nl_captured_read_end(NLCheckedFragment *f,
     injection_window = false;
     return s;
 }
+NLCheckStatus __real_nl_h_custody_seal_result(NLCheckedFragment *,
+                                              NLCheckedFragment *,
+                                              NLCheckedNodeId,
+                                              const NLSemanticContext *);
+NLCheckStatus __wrap_nl_h_custody_seal_result(NLCheckedFragment *parent,
+                                              NLCheckedFragment *body,
+                                              NLCheckedNodeId call,
+                                              const NLSemanticContext *world)
+{
+    const NLCheckedNodeView *v = nl_checked_node_view(parent, call);
+    if (body->field_change_count != 1 || !v ||
+        v->kind != NL_CHECKED_REGISTERED_CALL || v->argument_count != 2)
+        return __real_nl_h_custody_seal_result(parent, body, call, world);
+    injection_window = ++writer_seals == wanted_writer_seal;
+    allocation_index = 0;
+    NLCheckStatus s =
+        __real_nl_h_custody_seal_result(parent, body, call, world);
+    injection_window = false;
+    return s;
+}
+
+static bool writer_seal_oom(const char *path)
+{
+    Program p = {0};
+    writer_seals = 0;
+    CHECK(prepare(path, &p) == NL_CHECK_OK && writer_seals == 4);
+    destroy(&p);
+    /* Two calls in the declaration CHECK and two in the actual entry CHECK. */
+    for (size_t site = 1; site <= 4; ++site) {
+        wanted_writer_seal = site;
+        wanted_offset = writer_seals = 0;
+        injected = false;
+        armed = true;
+        NLCheckStatus s = prepare(path, &p);
+        armed = false;
+        wanted_writer_seal = 0;
+        CHECK(injected && s == NL_CHECK_OUT_OF_MEMORY && p.entry == NULL);
+        destroy(&p);
+        CHECK(prepare(path, &p) == NL_CHECK_OK);
+        destroy(&p);
+        printf("OOM shared writer BODY seal %zu: OUT_OF_MEMORY and unchanged "
+               "snapshot; healthy retry PASS\n",
+               site);
+    }
+    return true;
+}
+
 static bool oom(const char *path)
 {
     Program good = {0};
@@ -634,6 +694,8 @@ int main(int argc, char **argv)
         return 1;
     const bool ok = strcmp(argv[1], "auth") == 0  ? current_auth(argv[2])
                     : strcmp(argv[1], "oom") == 0 ? oom(argv[2])
-                                                  : verify(argv[2]);
+                    : strcmp(argv[1], "writer-oom") == 0
+                        ? oom(argv[2]) && writer_seal_oom(argv[2])
+                        : verify(argv[2], strcmp(argv[1], "owned-live") == 0);
     return ok ? 0 : 1;
 }

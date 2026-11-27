@@ -1,3 +1,4 @@
+#include "captured_read_internal.h"
 #include "copy_body_internal.h"
 #include "copy_old_result_internal.h"
 #include "division_usize_internal.h"
@@ -4005,7 +4006,16 @@ static bool body_result(Check *check, NLTypeId declared, NLCheckedNodeId body,
                         NLSourceSpan span)
 {
     const NLCheckedNodeView result = *view(check, body);
-    for (size_t i = 0; i < check->context->type_count; ++i)
+    bool five_tail_writer = false;
+    if (check->caller != NULL && check->allocated_slice &&
+        check->context->functions != NULL && check->body_function != 0 &&
+        check->body_function <= check->context->function_count) {
+        const NLFunctionEntry *function =
+            &check->context->functions[check->body_function - 1];
+        five_tail_writer = nl_five_tail_writer_signature(
+            check->context, function->parameters, function->count, declared);
+    }
+    for (size_t i = 0; !five_tail_writer && i < check->context->type_count; ++i)
         if (check->context->types[i].recursive_header &&
             check->context->types[i].view.field_count == 4 &&
             (check->allocation_budget == NULL ||
@@ -4309,6 +4319,19 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     const size_t binding_floor = c->binding_count, scope_floor = c->scope_count,
                  place_floor = c->place_count;
     const NLSourceSpan call_span = view(caller, call_id)->span;
+    const bool five_tail_writer = nl_five_tail_writer_signature(
+        c, function->parameters, function->count, function->result);
+    if (five_tail_writer &&
+        (!caller->allocated_slice || caller->allocation_depth != 5 ||
+         !caller->in_source_loan || caller->body_function == 0 ||
+         strcmp(c->functions[caller->body_function - 1].name, "main") != 0 ||
+         view(caller, arguments[0])->kind != NL_CHECKED_IDENTIFIER ||
+         view(caller, arguments[1])->kind != NL_CHECKED_IDENTIFIER)) {
+        fail(caller, NL_CHECK_SEMANTIC_UNSUPPORTED, call_span,
+             "FIVE-ROOT-WRITER-CALL",
+             "shared writer requires the selected original scoped actuals");
+        return false;
+    }
     bool scalar_h_read = false, result_world = false;
     Check body = {.caller = caller,
                   .scalar_h_read = &scalar_h_read,
@@ -4339,7 +4362,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         body.custody_packet = view(caller, call_id)->custody_call.packet;
         body.custody_sink = view(caller, call_id)->custody_call.sink;
     }
-    body.allocated_slice = function->custody_recipient ||
+    body.allocated_slice = five_tail_writer || function->custody_recipient ||
                            (function->owner_receiver &&
                             view(caller, call_id)->owner_call.entry_proved) ||
                            (function->owner_producer &&
@@ -4676,7 +4699,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         call_view->type == expected_parameter && call_view->result_count == 1)
         call_view->parameter_type = expected_parameter;
     if ((predicate_result || scalar_h_read || current_result || result_world ||
-         quantity_result) &&
+         quantity_result || five_tail_writer) &&
         !host(&body,
               nl_h_custody_seal_result(
                   caller->artifact, body.artifact, call_id,
@@ -11854,9 +11877,64 @@ static void clear_definition_state(NLSemanticContext *c)
                              .function_count = function_count};
 }
 
+/* Type-check the sole formal projection and replacement without inventing a
+ * live allocation for an abstract reference. The existing actual-body walk
+ * separately checks the instantiated ref, arguments, Change and exit. */
+static bool five_tail_writer_definition(Check *check,
+                                        const NLFunctionEntry *function)
+{
+    const NLFunctionBody *plan = function->body;
+    const NLSyntaxView *block =
+        nl_syntax_node_view(nl_syntax_tree_root(plan->syntax));
+    const NLSyntaxView *tail =
+        block->kind == NL_SYNTAX_BLOCK && block->data.block.item_count == 0
+            ? nl_syntax_node_view(block->data.block.tail)
+            : NULL;
+    const NLTypeId ref = function->parameters[0];
+    const NLTypeId h = check->context->types[ref - 1].view.target;
+    const char *prev = check->context->types[h - 1].field_names[1];
+    const NLSource *source = check->source;
+    check->source = plan->source;
+    if (tail && tail->kind == NL_SYNTAX_EXPR_CALL &&
+        equal_name(check, tail->data.call.callee, "replace") &&
+        tail->data.call.argument_count == 2) {
+        const NLSyntaxNode *arg = tail->data.call.arguments;
+        const NLSyntaxView *field = nl_syntax_node_view(arg);
+        const NLSyntaxView *some =
+            nl_syntax_node_view(nl_syntax_next_argument(arg));
+        if (field->kind == NL_SYNTAX_FIELD_DESIGNATOR &&
+            equal_name(check, field->data.field_designator.base,
+                       plan->parameter_names[0]) &&
+            equal_name(check, field->data.field_designator.field, prev) &&
+            some->kind == NL_SYNTAX_SUM_CONSTRUCTOR &&
+            some->data.constructor.type &&
+            equal_name(check, some->data.constructor.variant, "Some") &&
+            some->data.constructor.argument_count == 1) {
+            const NLSyntaxView *payload =
+                nl_syntax_node_view(some->data.constructor.arguments);
+            if (payload->kind == NL_SYNTAX_EXPR_NAME &&
+                equal_name(check, payload->data.name,
+                           plan->parameter_names[1]) &&
+                check_type(check, some->data.constructor.type) ==
+                    function->result) {
+                check->source = source;
+                return true;
+            }
+        }
+    }
+    check->source = source;
+    fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, block->span,
+         "FIVE-ROOT-WRITER-DEFINITION",
+         "shared writer must replace its formal prev with Some of its pointer");
+    return false;
+}
+
 static bool check_definition(Check *registration, size_t function_id)
 {
     NLFunctionEntry *entry = &registration->context->functions[function_id - 1];
+    if (nl_five_tail_writer_signature(registration->context, entry->parameters,
+                                      entry->count, entry->result))
+        return five_tail_writer_definition(registration, entry);
     if (entry->custody_recipient) {
         registration->status = nl_custody_definition(
             registration->context, entry->body,
@@ -12220,7 +12298,7 @@ register_function_unit(NLSemanticContext *context,
     Check check = {.source = nl_syntax_tree_source(inputs[0]),
                    .closure_probe = closure_probe};
     FunctionDeclaration *declarations = NULL;
-    const NLSyntaxView *recursive = NULL, *avs = NULL;
+    const NLSyntaxView *recursive = NULL, *avs = NULL, *five_writer = NULL;
     size_t recursive_input = 0, avs_input = 0;
     bool avs_leading = false;
     size_t total = 0, input = 0;
@@ -12309,16 +12387,25 @@ register_function_unit(NLSemanticContext *context,
                   nl_allocated_prepare_layout(check.context, registered_h),
                   recursive->span))
             goto failure;
-        if (recursive->data.avs_struct.count == 4 &&
-            (count != 1 || total != 1 ||
-             strcmp(declarations[0].name, "main") != 0 ||
-             declarations[0].syntax->data.function.count != 0 ||
-             check_type(&check, declarations[0].syntax->data.function.result) !=
-                 1)) {
-            fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, recursive->span,
-                 "FIVE-ROOT-SOURCE-PROFILE",
-                 "three-link H selects one parameterless main only");
-            goto failure;
+        if (recursive->data.avs_struct.count == 4) {
+            const NLSyntaxView *unit =
+                nl_syntax_node_view(nl_syntax_tree_root(inputs[0]));
+            if (count == 1 && total == 2 && avs == NULL &&
+                nl_syntax_node_view(unit->data.function_unit.declarations) ==
+                    recursive &&
+                strcmp(declarations[0].name, "main") != 0)
+                five_writer = declarations[0].syntax;
+            if (count != 1 || (total != 1 && five_writer == NULL) ||
+                strcmp(declarations[total - 1].name, "main") != 0 ||
+                declarations[total - 1].syntax->data.function.count != 0 ||
+                check_type(&check, declarations[total - 1]
+                                       .syntax->data.function.result) != 1) {
+                fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, recursive->span,
+                     "FIVE-ROOT-SOURCE-PROFILE",
+                     "three-link H selects parameterless main and at most "
+                     "the shared tail writer");
+                goto failure;
+            }
         }
     }
     if (!host(&check, nl_recursive_validate(check.context), (NLSourceSpan){0}))
@@ -12388,7 +12475,11 @@ register_function_unit(NLSemanticContext *context,
             nl_producer_signature(check.context, types, parameter, result);
         const bool custody =
             nl_custody_signature(check.context, types, parameter, result);
-        if (custody) {
+        if (s == five_writer) {
+            if (!nl_five_tail_writer_signature(check.context, types, parameter,
+                                               result))
+                goto signature_limit;
+        } else if (custody) {
             if (recursive == NULL || count != 1 || custody_recipients != 0 ||
                 strcmp(d->name, "main") == 0) {
                 fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
@@ -12495,7 +12586,8 @@ register_function_unit(NLSemanticContext *context,
     for (size_t pass = 0; pass < 2; ++pass)
         for (size_t i = 0; i < total; ++i) {
             const FunctionDeclaration *d = &declarations[i];
-            if ((check.context->functions[d->function - 1].owner_receiver ||
+            if ((d->syntax == five_writer ||
+                 check.context->functions[d->function - 1].owner_receiver ||
                  check.context->functions[d->function - 1].owner_producer ||
                  check.context->functions[d->function - 1].custody_recipient) !=
                 (pass == 0))

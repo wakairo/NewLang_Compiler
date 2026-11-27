@@ -33,7 +33,7 @@ fn stripe_bytes(count: usize) -> usize {
 
 C を生かしたまま読む Pank の固定形は Draft 17.39 §3.2b.8 に入り、#1844 で直接版が採用されました。この例では、実際の `A.prev` から元 B を借り直して読む間も C を元の所有者の下で生かし、読取りと match を閉じてから C を含む元の allocation を解放します。 [Draft §3.2b.8](reference/NewLang_v0_spec_Draft17_39.md#32b8-one-cached-tail-read-while-detached-original-c-remains-live) · [実装 #1844](https://github.com/wakairo/NewLang_Compiler/issues/1844) · [Draft §20.4](reference/NewLang_v0_spec_Draft17_39.md#204-ordinary-safe-api-の責任) · [直接版の採用記録](https://github.com/wakairo/NewLang_Compiler/issues/1844#issuecomment-7193084945)
 
-Draft 17.40 §3.2b.9 では、構築と切断で同じ writer を呼ぶ限定ソースが選定されました。実装検証や作者・呼び出し側の比較が必要な範囲は台帳を参照してください。 [Draft 17.40 §3.2b.9](https://github.com/wakairo/NewLang_Compiler/blob/0d11fcc2f62f778faaf22622f933170163dcf1f8/docs/reference/NewLang_v0_spec_Draft17_40.md#32b9-one-shared-writer-for-the-two-retained-live-cache-changes) · [現在の比較範囲](Pank_Value_Ledger.md#元の寿命と解放責任を保つ)
+Draft 17.40 §3.2b.9 では、構築と切断で同じ writer を呼び、実旧値を返す限定ソースが選定されました。private C では、直接版と旧値を返す共通 writer 版がともに、構築時の `NULL` と切断時の生存中の元 C のアドレスを確認し、GCC の strict C17（O0/O2）で成功と割り当て失敗 1〜5 の結果を保ちました。Pank の共通 writer は #1867 で採用されました。公開 safe API を使う呼び出し側の未測定範囲は台帳を参照してください。 [Draft 17.40 §3.2b.9](https://github.com/wakairo/NewLang_Compiler/blob/0d11fcc2f62f778faaf22622f933170163dcf1f8/docs/reference/NewLang_v0_spec_Draft17_40.md#32b9-one-shared-writer-for-the-two-retained-live-cache-changes) · [C の実旧値対照](https://github.com/wakairo/NewLang_Compiler/issues/1837#issuecomment-7206856674) · [共通 writer の採用記録](https://github.com/wakairo/NewLang_Compiler/issues/1863#issuecomment-7207269087) · [現在の比較範囲](Pank_Value_Ledger.md#元の寿命と解放責任を保つ)
 
 ## 同じバイト数で由来の異なる 0 を報告する
 

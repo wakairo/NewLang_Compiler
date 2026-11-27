@@ -106,6 +106,81 @@ saved_payload_refusals = {
     for name in ("saved-payload-live-mode", "saved-payload-equal-sibling",
                  "saved-payload-different-condition")
 }
+saved_handoffs = {
+    "saved-handoff-low-before": (b"1", b"4032,17,23,17,101,17,23,101,17,101,0,17,17\n"),
+    "saved-handoff-low-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17\n"),
+    "saved-handoff-high-before": (b"0", b"4096,39,41,39,151,39,41,151,39,151,1,151,151\n"),
+    "saved-handoff-high-edited": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151\n"),
+}
+saved_handoff_refusals = {
+    "saved-handoff-live": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "saved-handoff-equal": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "saved-handoff-wrong-restore": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
+saved_deliveries = {
+    "saved-delivery-low-before": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,1,17\n"),
+    "saved-delivery-low-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,0\n"),
+    "saved-delivery-high-before": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151\n"),
+    "saved-delivery-high-edited": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,0,0\n"),
+}
+saved_delivery_refusals = {
+    "saved-delivery-old-decision": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "saved-delivery-raw-blocks": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "saved-delivery-wrong-fallback": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
+named_defaults = {
+    "named-default-low-before": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,0\n"),
+    "named-default-low-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,255\n"),
+    "named-default-high-before": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151\n"),
+    "named-default-high-edited": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151\n"),
+}
+named_default_refusals = {
+    "named-default-literal-recovery": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "named-default-sample": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+    "named-default-equal-other": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
+report_statuses = {
+    "report-status-sample-zero": (b"0", b"4096,39,93,39,0,39,93,0,39,0,1,0,0,1,0,1\n"),
+    "report-status-default-zero": (b"0", b"4096,39,93,39,0,39,93,0,39,0,1,0,0,0,0,0\n"),
+}
+report_status_refusals = {
+    "report-status-earlier-decision": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
+named_route_limits = {
+    "p1857-route-before": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,1,17,1\n"),
+    "p1857-route-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,1,101,101,1,101,1\n"),
+}
+named_route_refusals = {
+    "p1857-wrong-byte-source": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
+named_delivery_limits = {
+    "p1857-delivery-before": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,1,17,1\n"),
+    "p1857-delivery-edited": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,255,0\n"),
+}
+named_delivery_refusals = {
+    "p1857-wrong-ready-source": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
+shared_report_limits = {
+    "p1857-shared-low": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,0,255,0\n"),
+    "p1857-shared-high": (b"0", b"4096,39,93,39,151,39,93,151,39,151,1,151,151,1,151,1\n"),
+}
+report_route_predicate = {
+    "p1857-predicate-route": (b"1", b"4032,17,67,17,101,17,67,101,17,101,1,101,101,0,255,0\n"),
+}
+report_predicate_refusals = {
+    "p1857-reversed-predicate": (0, 4, b"V1-BACKEND-UNSUPPORTED"),
+}
+report_delivery_predicates = {
+    "p1857-predicate-both": (b"1", b"4032,17,67,17,101,17,67,101,17,101,0,17,17,1,17,1\n"),
+    "p1857-predicate-default-zero": (b"0", b"4096,39,93,39,0,39,93,0,39,0,1,0,0,0,0,0\n"),
+}
+shared_report_predicates = {
+    "p1857-predicate-historical-zero": (b"0", b"4096,39,93,39,0,39,93,0,39,0,1,0,0,1,0,1\n"),
+}
+report_delivery_predicate_refusals = {
+    name: (0, 4, b"V1-BACKEND-UNSUPPORTED")
+    for name in ("p1857-wrong-call-position", "p1857-distinct-predicates")
+}
 payloads = {
     "payload-low": (b"1", b"4032,13,27,13,27,13,27,27,13,27,0,13\n"),
     "payload-high": (b"0", b"4096,31,43,31,127,31,43,127,31,127,1,127\n"),
@@ -203,8 +278,20 @@ def observe(code, field, local_policy=False, named_policy=False,
             code[loan.end():copied.end()] + after + code[copied.end():])
 
 
+def report_test_pattern(limit, budget, helper):
+    result = rb"    _Bool (?P<result>nl_local_\d+) = "
+    if not helper:
+        return result + limit + rb" < " + budget + rb";\n"
+    return (rb"    size_t (?P<actual>nl_actual_\d+)_0 = " + limit + rb";\n"
+            rb"    size_t (?P=actual)_1 = " + budget + rb";\n" + result +
+            rb"(?P<function>nl_qty_fn_\d+)\((?P=actual)_0, (?P=actual)_1\);\n")
+
+
 def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False,
-                     route=False, payload=False, handoff=False, delivery=False):
+                     route=False, payload=False, handoff=False, delivery=False,
+                     named_default=False, report_status=False,
+                     named_route_limit=False, named_delivery_limit=None,
+                     route_helper=False, delivery_helper=False):
     constructor = one(code, rb"^    struct \{ uint8_t f0; uint8_t f1; \} (nl_local_\d+) = [^\n]+;\n")
     root = constructor[1]
     target = root + rb"\.f" + field
@@ -290,19 +377,30 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
         last = reported_tag
     if route:
         assert report
+        route_limit = rb"\(\(size_t\)UINTMAX_C\(4064\)\)"
+        if named_route_limit:
+            settings = list(re.finditer(
+                rb"^    size_t (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(\d+\)\);\n",
+                code[:constructor.start()], re.M))
+            assert len(settings) == (2 if named_delivery_limit == "separate" else 1)
+            route_limit = settings[0][1]
         route_pattern = re.compile(
-            rb"    \(void\)" + last[1] + rb";\n"
-            rb"    _Bool (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(4064\)\) < "
-            + budget[1] + rb";\n")
+            rb"    \(void\)" + last[1] + rb";\n" +
+            report_test_pattern(route_limit, budget[1], route_helper))
         flag = route_pattern.match(code, last.end())
         assert flag
-        values.append(flag[1])
+        if route_helper:
+            one(code, rb"^static _Bool " + flag["function"] +
+                rb"\(size_t (nl_local_\d+), size_t (nl_local_\d+)\)\n"
+                rb"\{\n    \(void\)\1;\n    \(void\)\2;\n"
+                rb"    return \1 < \2;\n\}\n")
+        values.append(flag["result"])
         last = flag
     if payload:
         assert route
         selected_sample = one(
             code, rb"^    uint8_t (nl_if_(\d+));\n"
-            rb"    _Bool nl_condition_\2 = " + flag[1] + rb";\n"
+            rb"    _Bool nl_condition_\2 = " + flag["result"] + rb";\n"
             rb"    if \(nl_condition_\2\) \{\n"
             rb"        \1 = " + reported_tag[1] + rb";\n"
             rb"    \} else \{\n"
@@ -320,21 +418,40 @@ def observe_sequence(code, field, saved_copy=False, midpoint=False, report=False
         last = report_input
     if delivery:
         assert handoff
+        delivery_limit = rb"\(\(size_t\)UINTMAX_C\(\d+\)\)"
+        if named_delivery_limit:
+            assert named_route_limit
+            delivery_limit = settings[-1][1]
         ready, = (match for match in re.finditer(
-            rb"^    _Bool (nl_local_\d+) = \(\(size_t\)UINTMAX_C\(\d+\)\) < " +
-            budget[1] + rb";\n", code, re.M) if match.start() >= last.end())
+            rb"^" + report_test_pattern(delivery_limit, budget[1], delivery_helper),
+            code, re.M) if match.start() >= last.end())
+        if delivery_helper:
+            assert route_helper and ready["function"] == flag["function"]
+            assert ready["actual"] != flag["actual"]
+        fallback = rb"\(\(uint8_t\)UINT8_C\(\d+\)\)"
+        if named_default:
+            default, = (match for match in re.finditer(
+                rb"^    uint8_t (nl_local_\d+) = " + fallback + rb";\n",
+                code, re.M) if last.end() <= match.start() < ready.start())
+            fallback = default[1]
         choice = one(
             code, rb"^    uint8_t (nl_if_(\d+));\n"
-            rb"    _Bool nl_condition_\2 = " + ready[1] + rb";\n"
+            rb"    _Bool nl_condition_\2 = " + ready["result"] + rb";\n"
             rb"    if \(nl_condition_\2\) \{\n"
             rb"        \1 = " + report_input[1] + rb";\n"
             rb"    \} else \{\n"
-            rb"        \1 = \(\(uint8_t\)UINT8_C\(\d+\)\);\n"
+            rb"        \1 = " + fallback + rb";\n"
             rb"    \}\n")
         sent = one(code, rb"^    uint8_t (nl_local_\d+) = " + choice[1] + rb";\n")
         assert ready.end() <= choice.start() < sent.start()
-        values.extend((ready[1], sent[1]))
+        values.extend((ready["result"], sent[1]))
         last = sent
+    if report_status:
+        assert named_default and delivery
+        status = one(code, rb"^    _Bool (nl_local_\d+) = " + ready["result"] + rb";\n")
+        assert last.end() <= status.start()
+        values.append(status[1])
+        last = status
     final += (b'    printf("%zu' + b",%u" * len(values) + b'\\n", ' + budget[1] + b", " +
               b", ".join(b"(unsigned)" + value for value in values) + b");\n")
     edits.append((last.end(), final))
@@ -551,6 +668,37 @@ if __name__ == "__main__":
         verify(cli, sources, raw, report_deliveries, report_delivery_refusals,
                partial(observe_sequence, midpoint=True, report=True,
                        route=True, payload=True, handoff=True, delivery=True))
+        verify(cli, sources, raw, saved_handoffs, saved_handoff_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True, handoff=True))
+        verify(cli, sources, raw, saved_deliveries, saved_delivery_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True, handoff=True, delivery=True))
+        verify(cli, sources, raw, named_defaults, named_default_refusals,
+               partial(observe_sequence, saved_copy=True, midpoint=True,
+                       report=True, route=True, payload=True, handoff=True, delivery=True,
+                       named_default=True))
+        observe_status = partial(observe_sequence, saved_copy=True, midpoint=True,
+                                 report=True, route=True, payload=True, handoff=True,
+                                 delivery=True, named_default=True, report_status=True)
+        verify(cli, sources, raw, report_statuses, report_status_refusals, observe_status)
+        verify(cli, sources, raw, named_route_limits, named_route_refusals,
+               partial(observe_status, named_route_limit=True))
+        verify(cli, sources, raw, named_delivery_limits, named_delivery_refusals,
+               partial(observe_status, named_route_limit=True,
+                       named_delivery_limit="separate"))
+        verify(cli, sources, raw, shared_report_limits, {},
+               partial(observe_status, named_route_limit=True,
+                       named_delivery_limit="shared"))
+        verify(cli, sources, raw, report_route_predicate, report_predicate_refusals,
+               partial(observe_status, named_route_limit=True,
+                       named_delivery_limit="separate", route_helper=True))
+        observe_predicates = partial(observe_status, named_route_limit=True,
+                                     route_helper=True, delivery_helper=True)
+        verify(cli, sources, raw, report_delivery_predicates, report_delivery_predicate_refusals,
+               partial(observe_predicates, named_delivery_limit="separate"))
+        verify(cli, sources, raw, shared_report_predicates, {},
+               partial(observe_predicates, named_delivery_limit="shared"))
         verify(cli, sources, raw, independent, independent_refusals, observe_independent)
         verify(cli, sources, raw, mirrored, mirror_refusals,
                partial(observe_independent, mode_source="current"))

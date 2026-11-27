@@ -15,4 +15,7 @@ struct NLCapturedReads {
     size_t count;
 };
 
+bool nl_five_tail_writer_signature(const NLSemanticContext *, const NLTypeId *,
+                                   size_t, NLTypeId);
+
 #endif

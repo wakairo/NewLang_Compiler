@@ -46,6 +46,9 @@ const NLFunctionEntry *nl_quantity_usize_function(const NLSemanticContext *,
 /* Signature only. Admission still requires the complete composed plan. */
 const NLFunctionEntry *nl_quantity_bool_function(const NLSemanticContext *,
                                                  size_t function);
+const NLFunctionEntry *
+nl_quantity_report_predicate_function(const NLSemanticContext *,
+                                      size_t function);
 bool nl_quantity_usize_body_at(const NLCheckedFragment *,
                                const NLSemanticContext *, size_t, bool entry,
                                NLDivisionUsizePlan *);
