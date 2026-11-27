@@ -31,4 +31,17 @@ fn stripe_bytes(count: usize) -> usize {
 
 作者が決めるのは、どのノードがどのリストに属し、どの経路でキャッシュを更新し、いつ元のノードを解放できるかです。まだ生きている C を古い末尾として返すことも、このリストでは誤りです。リストの所属規則は寿命検査に加えて必要です。外した C を生かす必要がある用途について、#1837 は同じアドレスを保つ private C の正例も測定しています。C の公開 API なら所属を確認するガードやハンドルで内部リンクを隠す設計があり、Rust の intrusive list でも同じノードを保持する選択肢があります。元の allocator や所有契約、追加の格納領域、失敗時の処理を揃えて比較する必要があります。 [V の比較](https://github.com/wakairo/NewLang_Compiler/issues/1836#issuecomment-7187458493)
 
-C を生かしたまま読む Pank の固定形は Draft 17.39 §3.2b.8 に入りました。#1837 の当時の通常 CHECK はこの形を `CAPTURED-CLOSURE-PRECISION` で拒否し、実装と検証は #1844 の対象です。この固定例から先の、公開 safe API による保護、作者と呼び出し側の再監査範囲や利用実績は未確認です。 [Draft §3.2b.8](reference/NewLang_v0_spec_Draft17_39.md#32b8-one-cached-tail-read-while-detached-original-c-remains-live) · [実装 #1844](https://github.com/wakairo/NewLang_Compiler/issues/1844) · [Draft §20.4](reference/NewLang_v0_spec_Draft17_39.md#204-ordinary-safe-api-の責任)
+C を生かしたまま読む Pank の固定形は Draft 17.39 §3.2b.8 に入り、#1844 で直接版が採用されました。この例では、実際の `A.prev` から元 B を借り直して読む間も C を元の所有者の下で生かし、読取りと match を閉じてから C を含む元の allocation を解放します。 [Draft §3.2b.8](reference/NewLang_v0_spec_Draft17_39.md#32b8-one-cached-tail-read-while-detached-original-c-remains-live) · [実装 #1844](https://github.com/wakairo/NewLang_Compiler/issues/1844) · [Draft §20.4](reference/NewLang_v0_spec_Draft17_39.md#204-ordinary-safe-api-の責任) · [直接版の採用記録](https://github.com/wakairo/NewLang_Compiler/issues/1844#issuecomment-7193084945)
+
+Draft 17.40 §3.2b.9 では、構築と切断で同じ writer を呼ぶ限定ソースが選定されました。実装検証や作者・呼び出し側の比較が必要な範囲は台帳を参照してください。 [Draft 17.40 §3.2b.9](https://github.com/wakairo/NewLang_Compiler/blob/0d11fcc2f62f778faaf22622f933170163dcf1f8/docs/reference/NewLang_v0_spec_Draft17_40.md#32b9-one-shared-writer-for-the-two-retained-live-cache-changes) · [現在の比較範囲](Pank_Value_Ledger.md#元の寿命と解放責任を保つ)
+
+## 同じバイト数で由来の異なる 0 を報告する
+
+4,096 バイトの固定例では、`tag` を 93 から一時値 39 に替え、最初の交換が返した 93 で復元します。隣の `batching` は両方で 0 のままです。前段の判定は両方で真で、この 0 を履歴として選びます。後段の比較のしきい値だけを変えると、報告は次のようになります。 [履歴の 0 のソース](https://github.com/wakairo/NewLang_Compiler/blob/6179fae07da27db6712a962b9974ca12a4f2dbd4/tests/p1738/source/report-status-sample-zero.nl#L19-L39) · [既定値の 0 のソース](https://github.com/wakairo/NewLang_Compiler/blob/6179fae07da27db6712a962b9974ca12a4f2dbd4/tests/p1738/source/report-status-default-zero.nl#L19-L39)
+
+| 後段の比較 | 実測した報告値と履歴採用の Bool |
+| --- | --- |
+| `4064 < bytes` | `(0, true)` |
+| `4100 < bytes` | `(0, false)` |
+
+2 つの 0 は、それぞれ履歴を採用した値と、設定した既定値です。生成 C17 と同じ契約の C 参照実装で、この差を観測しました。 [報告の観測と C 比較](https://github.com/wakairo/NewLang_Compiler/issues/1841#issuecomment-7187750635)
