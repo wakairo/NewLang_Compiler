@@ -67,9 +67,13 @@ def cases():
         yield program("local", "direct", "<", False, high, literal=True)
         yield program("local", "named", "==", True, high, literal=True)
 
+def mixed_producers():
+    _, registered, _ = program("registered", "named", "<", True, True)
+    return registered.replace("let bound = usize(112);", "let bound = usize(octet);")
+
+
 def refusals():
     _, local, _ = program("local", "direct", "==", False, False)
-    _, registered, _ = program("registered", "named", "<", True, True)
     backend = (0, 4, "V1-BACKEND-UNSUPPORTED")
     return {
         "wrong-nominal": (
@@ -85,9 +89,6 @@ def refusals():
                           "let extra = sample_octet(load);\n    let octet = sample_octet(load);"), backend),
         "second-local-widening": (
             local.replace("let reading = quantity;", "let spare = usize(octet);\n    let reading = quantity;"), backend),
-        "mixed-producers": (
-            registered.replace("let bound = usize(112);",
-                               "let bound = usize(octet);"), backend),
         "arm-call": (
             local.replace("{ u8(71) } else", "{ sample_octet(load) } else"), backend),
         "extra-arm-bindings": (

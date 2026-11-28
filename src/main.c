@@ -827,7 +827,7 @@ static bool copy_if_two_pair_frame(const NLCheckedFragment *, NLCheckedNodeId,
 
 typedef struct {
     size_t bindings;
-    NLCheckedNodeId seed, widening;
+    NLCheckedNodeId seed;
     bool ended[NL_SEMANTIC_MAX_ENTRIES];
 } WideningIfPrefix;
 
@@ -835,9 +835,9 @@ static NLCheckedNodeId widening_copy_initializer(const NLCheckedFragment *,
                                                  NLCheckedNodeId, NLTypeId);
 static NLCheckedNodeId widening_if_condition(const NLCheckedFragment *,
                                              NLCheckedNodeId, NLCheckedNodeId,
-                                             V0Program *, NLCheckedNodeId *);
+                                             V0Program *, NLCheckedNodeId[2]);
 static bool widening_if_prefix(const NLCheckedFragment *, NLCheckedNodeId,
-                               NLCheckedNodeId, const V0Program *,
+                               const NLCheckedNodeId[2], const V0Program *,
                                WideningIfPrefix *, bool *);
 static bool widening_if_unit_use(const NLCheckedFragment *, NLCheckedNodeId,
                                  NLCheckedNodeId, const V0Program *, bool *);
@@ -880,9 +880,9 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         return false;
     const bool paired = p->aggregate != 0;
     const NLCheckedNodeView *cond = nl_checked_node_view(f, v->initializer);
-    NLCheckedNodeId producer = 0;
+    NLCheckedNodeId producers[2] = {0};
     const NLCheckedNodeId widened =
-        paired ? 0 : widening_if_condition(f, v->initializer, id, p, &producer);
+        paired ? 0 : widening_if_condition(f, v->initializer, id, p, producers);
     NLSemanticValueView cv, origin_value, result;
     const bool direct = cond != NULL && cond->kind == NL_CHECKED_USIZE_EQUALITY;
     const NLCheckedNodeId origin = widened ? widened
@@ -915,7 +915,7 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
     if (c->value_count >= NL_SEMANTIC_MAX_ENTRIES)
         return false;
     if (widened) {
-        if (!widening_if_prefix(f, id, producer, p, &prefix, body_values))
+        if (!widening_if_prefix(f, id, producers, p, &prefix, body_values))
             return false;
         bindings = prefix.bindings;
     } else {
@@ -948,9 +948,10 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
             break;
         case NL_CHECKED_REGISTERED_CALL: {
             if (widened) {
-                if (i + 1 == prefix.seed || i + 1 == prefix.widening)
+                if (i + 1 == prefix.seed || i + 1 == producers[0] ||
+                    i + 1 == producers[1])
                     break;
-                if (++calls > 1)
+                if (producers[1] || ++calls > 1)
                     return false;
                 if (n->type == p->unit) {
                     if (!widening_if_unit_use(f, id, i + 1, p, body_values))
@@ -996,7 +997,8 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         case NL_CHECKED_USIZE_LESS_THAN:
         case NL_CHECKED_IDENTIFIER:
         case NL_CHECKED_NUMERIC_CONVERSION: {
-            if (n->kind == NL_CHECKED_NUMERIC_CONVERSION && i + 1 != producer)
+            if (n->kind == NL_CHECKED_NUMERIC_CONVERSION &&
+                i + 1 != producers[0] && i + 1 != producers[1])
                 return false;
             NLSemanticValueView value;
             ++scalars;
@@ -2976,7 +2978,7 @@ static NLCheckedNodeId widening_if_condition(const NLCheckedFragment *f,
                                              NLCheckedNodeId condition,
                                              NLCheckedNodeId selection,
                                              V0Program *p,
-                                             NLCheckedNodeId *producer)
+                                             NLCheckedNodeId producers[2])
 {
     const NLTypeId boolean =
         nl_semantic_core_type(nl_checked_context(f), NL_TYPE_BOOL);
@@ -3000,10 +3002,9 @@ static NLCheckedNodeId widening_if_condition(const NLCheckedFragment *f,
         widening_comparison_origin(f, test->first_argument, true, &check);
     const NLCheckedNodeId rhs =
         widening_comparison_origin(f, left->next_argument, true, &check);
-    if (lhs && rhs && lhs != rhs)
-        return 0;
-    *producer = lhs ? lhs : rhs;
-    return *producer ? id : 0;
+    producers[0] = lhs ? lhs : rhs;
+    producers[1] = lhs && rhs != lhs ? rhs : 0;
+    return producers[0] ? id : 0;
 }
 
 static bool widening_if_binding(const NLSemanticContext *c, NLSymbolId symbol,
@@ -3084,6 +3085,7 @@ static bool widening_if_call_frame(const NLCheckedFragment *f,
 }
 
 static bool widening_if_call(const NLCheckedFragment *f, NLCheckedNodeId id,
+                             bool producer, bool before_widening,
                              const V0Program *p, WideningIfPrefix *prefix,
                              bool *body_values)
 {
@@ -3092,12 +3094,10 @@ static bool widening_if_call(const NLCheckedFragment *f, NLCheckedNodeId id,
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     V0Program check = *p;
     NLTypeId parameter;
-    if (call->type == usize && !prefix->widening &&
-        widening_call(f, id, &check)) {
+    if (producer && call->type == usize && widening_call(f, id, &check)) {
         parameter = p->u8;
-        prefix->widening = id;
-    } else if (call->type == p->u8 && !prefix->seed && !prefix->widening &&
-               predicate_call(f, id, &check)) {
+    } else if (!producer && before_widening && call->type == p->u8 &&
+               !prefix->seed && predicate_call(f, id, &check)) {
         parameter = usize;
         prefix->seed = id;
     } else {
@@ -3109,13 +3109,18 @@ static bool widening_if_call(const NLCheckedFragment *f, NLCheckedNodeId id,
 }
 
 static bool widening_if_prefix(const NLCheckedFragment *f,
-                               NLCheckedNodeId choice, NLCheckedNodeId producer,
+                               NLCheckedNodeId choice,
+                               const NLCheckedNodeId producers[2],
                                const V0Program *p, WideningIfPrefix *prefix,
                                bool *body_values)
 {
     const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
     if (!root || root->kind != NL_CHECKED_BLOCK)
         return false;
+    /* Follow the binding order. The two bits identify the condition's
+     * producers even when evaluation order differs from operand order. */
+    const unsigned expected = producers[1] ? 3u : 1u;
+    unsigned seen = 0;
     for (NLCheckedNodeId id = root->first_item; id;) {
         const NLCheckedNodeView *decl = nl_checked_node_view(f, id);
         if (!decl || decl->kind != NL_CHECKED_BINDING || !decl->initializer ||
@@ -3123,21 +3128,25 @@ static bool widening_if_prefix(const NLCheckedFragment *f,
             (decl->next_item && decl->next_item <= id))
             return false;
         if (decl->initializer == choice)
-            return prefix->widening == producer;
+            return seen == expected;
         const NLCheckedNodeView *init =
             nl_checked_node_view(f, decl->initializer);
-        if (!init ||
-            (init->kind == NL_CHECKED_REGISTERED_CALL &&
-             !widening_if_call(f, decl->initializer, p, prefix, body_values)) ||
-            !widening_if_declaration(f, decl, false, prefix))
+        const unsigned bit = decl->initializer == producers[0]   ? 1u
+                             : decl->initializer == producers[1] ? 2u
+                                                                 : 0u;
+        if (!init || (seen & bit))
             return false;
-        if (init->kind == NL_CHECKED_NUMERIC_CONVERSION) {
-            /* The selected conversion is an ordinary root declaration.
-             * It adds no call formals, retained body values or closed slots. */
-            if (decl->initializer != producer || prefix->widening)
+        if (init->kind == NL_CHECKED_REGISTERED_CALL) {
+            if (!widening_if_call(f, decl->initializer, bit != 0, seen == 0, p,
+                                  prefix, body_values))
                 return false;
-            prefix->widening = producer;
+        } else if ((init->kind == NL_CHECKED_NUMERIC_CONVERSION) !=
+                   (bit != 0)) {
+            return false;
         }
+        if (!widening_if_declaration(f, decl, false, prefix))
+            return false;
+        seen |= bit;
         id = decl->next_item;
     }
     return false;
