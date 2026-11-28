@@ -529,10 +529,10 @@ static bool boolean_scalar_at(const NLCheckedFragment *f, NLCheckedNodeId id,
 /* Explicit ordinary root consumer; the known-only entry above remains used
  * by the other profiles. Both-normal field IFs additionally require their
  * existing public current/join validator before this condition is consumed. */
-static bool runtime_boolean_scalar_at(const NLCheckedFragment *f,
-                                      NLCheckedNodeId id, V0Program *p,
-                                      NLCheckedNodeId condition_of,
-                                      bool allow_local_widening)
+static bool runtime_boolean_scalar_impl(const NLCheckedFragment *f,
+                                        NLCheckedNodeId id, V0Program *p,
+                                        NLCheckedNodeId condition_of,
+                                        bool allow_local_widening)
 {
     if (boolean_scalar_at(f, id, p, condition_of))
         return true;
@@ -540,6 +540,14 @@ static bool runtime_boolean_scalar_at(const NLCheckedFragment *f,
            !p->unit_parameters &&
            boolean_scalar_impl(f, id, p, condition_of, true,
                                allow_local_widening);
+}
+
+static bool runtime_boolean_scalar_at(const NLCheckedFragment *f,
+                                      NLCheckedNodeId id, V0Program *p,
+                                      NLCheckedNodeId condition_of)
+{
+    return runtime_boolean_scalar_impl(f, id, p, condition_of,
+                                       condition_of == 0);
 }
 
 static bool boolean_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
@@ -2816,7 +2824,7 @@ static bool if_original_carrier(const NLCheckedFragment *f, NLCheckedNodeId id,
     /* The respective current validators establish the normal/RETURN worlds.
      * Both consumers then require the same owned runtime condition origin. */
     if (p->u8_export || p->scalar_depth || !avs_shape(f, view.nominal, p) ||
-        !runtime_boolean_scalar_at(f, view.condition, p, id, false))
+        !runtime_boolean_scalar_at(f, view.condition, p, id))
         return false;
     /* The formal pointer maps to the caller original only through a validated
      * actual->formal handoff. No callee constructor or copied byte is a
@@ -2893,7 +2901,7 @@ static NLCheckedNodeId widening_if_condition(const NLCheckedFragment *f,
                   test->kind != NL_CHECKED_USIZE_LESS_THAN))
         return 0;
     V0Program check = *p;
-    if (!runtime_boolean_scalar_at(f, condition, &check, selection, true))
+    if (!runtime_boolean_scalar_impl(f, condition, &check, selection, true))
         return 0;
     const NLCheckedNodeView *left =
         nl_checked_node_view(f, test->first_argument);
@@ -3387,7 +3395,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                 gate_numeric_conversion(fragment, view->initializer, program) ||
                 gate_address_data(fragment, initializer, program) ||
                 runtime_boolean_scalar_at(fragment, view->initializer, program,
-                                          0, true) ||
+                                          0) ||
                 (receiver->type == program->u8 &&
                  ((initializer->kind == NL_CHECKED_IF &&
                    copy_or_field_if(fragment, view->initializer, program)) ||
