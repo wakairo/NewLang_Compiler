@@ -874,6 +874,10 @@ include(tests/p1455/CMakeLists.txt)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1945/run.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+    add_test(NAME p1951_selected_byte_helper.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1951/run.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     add_executable(p866_public tests/p866/public.c)
     add_executable(p866_integrity tests/p866/integrity.c)
     add_executable(p866_oom tests/p866/oom.c)
@@ -2390,6 +2394,7 @@ include(tests/p1455/CMakeLists.txt)
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
     # The two-producer matrix compiles original and observed C at O0 and O2.
     set_tests_properties(p1945_two_widening_if.integration PROPERTIES TIMEOUT 180)
+    set_tests_properties(p1951_selected_byte_helper.integration PROPERTIES TIMEOUT 180)
     # Give the exhaustive rollback sweeps room for ASan shard scheduling.
     set_tests_properties(p1773_sequential_writer_rollback.unit PROPERTIES TIMEOUT 180)
     set_tests_properties(p1778_independent_writer_rollback.unit PROPERTIES TIMEOUT 180)
