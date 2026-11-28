@@ -1,0 +1,146 @@
+{
+  "runtime_inputs": [
+    "0",
+    "90",
+    "91",
+    "92",
+    "SIZE_MAX"
+  ],
+  "seed": 91,
+  "cases": {
+    "known-direct": {
+      "names": "octet count chosen saved",
+      "constant": [
+        172,
+        172,
+        31,
+        31
+      ]
+    },
+    "direct-equality": {
+      "names": "octet count chosen saved",
+      "low": [
+        53,
+        53,
+        89,
+        89
+      ],
+      "high": [
+        211,
+        211,
+        17,
+        17
+      ]
+    },
+    "named-equality": {
+      "names": "octet count exact used chosen saved",
+      "low": [
+        53,
+        53,
+        0,
+        0,
+        89,
+        89
+      ],
+      "high": [
+        211,
+        211,
+        1,
+        1,
+        17,
+        17
+      ]
+    },
+    "direct-order": {
+      "names": "octet count chosen saved",
+      "low": [
+        53,
+        53,
+        97,
+        97
+      ],
+      "high": [
+        211,
+        211,
+        29,
+        29
+      ]
+    },
+    "named-order": {
+      "names": "octet count current above decision chosen saved",
+      "low": [
+        53,
+        53,
+        53,
+        0,
+        0,
+        89,
+        89
+      ],
+      "high": [
+        211,
+        211,
+        211,
+        1,
+        1,
+        17,
+        17
+      ]
+    },
+    "selector": {
+      "names": "octet count chosen saved",
+      "low": [
+        53,
+        53,
+        89,
+        89
+      ],
+      "high": [
+        211,
+        211,
+        17,
+        17
+      ]
+    },
+    "no-call-normal": {
+      "names": "load chosen saved",
+      "constant": [
+        91,
+        17,
+        17
+      ]
+    },
+    "direct-order-normal": {
+      "names": "octet count chosen saved",
+      "low": [
+        53,
+        53,
+        97,
+        97
+      ],
+      "high": [
+        211,
+        211,
+        29,
+        29
+      ]
+    }
+  },
+  "refusals": {
+    "wrong-condition": [
+      3,
+      3,
+      "P13-IF-CONDITION"
+    ],
+    "two-arm-bindings": [
+      0,
+      4,
+      "V1-BACKEND-UNSUPPORTED"
+    ],
+    "no-call": [
+      0,
+      4,
+      "V1-BACKEND-UNSUPPORTED"
+    ]
+  }
+}

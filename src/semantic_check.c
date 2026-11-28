@@ -1928,7 +1928,18 @@ static bool guarded_u8_context(const Check *check)
            f->result == nl_semantic_core_type(c, NL_TYPE_U8);
 }
 
-static bool guarded_u8_tail(const Check *check, const NLSyntaxView *conversion)
+static bool guarded_u8_copy_name(const Check *check, const NLSyntaxView *use,
+                                 NLSourceSpan binding)
+{
+    NLSourceView name, declaration;
+    return use && use->kind == NL_SYNTAX_EXPR_NAME &&
+           nl_source_view(check->source, use->data.name, &name) &&
+           nl_source_view(check->source, binding, &declaration) &&
+           name.length == declaration.length &&
+           !memcmp(name.bytes, declaration.bytes, name.length);
+}
+
+static bool guarded_u8_site(const Check *check, const NLSyntaxView *conversion)
 {
     const NLFunctionEntry *f =
         &check->context->functions[check->body_function - 1];
@@ -1948,9 +1959,30 @@ static bool guarded_u8_tail(const Check *check, const NLSyntaxView *conversion)
         no && no->kind == NL_SYNTAX_BLOCK && !no->data.block.items
             ? nl_syntax_node_view(no->data.block.tail)
             : NULL;
-    return yes && yes->kind == NL_SYNTAX_BLOCK && !yes->data.block.items &&
-           nl_syntax_node_view(yes->data.block.tail) == conversion &&
-           fallback && fallback->kind == NL_SYNTAX_U8_LITERAL;
+    if (!yes || yes->kind != NL_SYNTAX_BLOCK || !fallback ||
+        fallback->kind != NL_SYNTAX_U8_LITERAL)
+        return false;
+    const NLSyntaxView *tail = nl_syntax_node_view(yes->data.block.tail);
+    const NLSyntaxNode *item = yes->data.block.items;
+    if (!item)
+        return tail == conversion;
+    const NLSyntaxView *binding = nl_syntax_node_view(item);
+    if (binding->kind != NL_SYNTAX_BINDING ||
+        nl_syntax_node_view(binding->data.binding.initializer) != conversion)
+        return false;
+    /* The proved conversion may initialize a local read by a straight Copy
+     * chain ending in this same arm's result. CHECK resolves each binding. */
+    for (item = nl_syntax_next_argument(item); item;
+         item = nl_syntax_next_argument(item)) {
+        const NLSyntaxView *next = nl_syntax_node_view(item);
+        if (next->kind != NL_SYNTAX_BINDING ||
+            !guarded_u8_copy_name(
+                check, nl_syntax_node_view(next->data.binding.initializer),
+                binding->data.binding.name))
+            return false;
+        binding = next;
+    }
+    return guarded_u8_copy_name(check, tail, binding->data.binding.name);
 }
 
 static NLTypeId local_coordinate_type(Check *check, NLSourceSpan span)
@@ -2085,7 +2117,7 @@ static NLCheckedNodeId local_conversion(Check *check,
     if (!nl_guarded_u8_operand(check->artifact, check->context, formal, arg) ||
         !nl_guarded_usize_same_current(check->guard_entry, check->context,
                                        formal) ||
-        !guarded_u8_tail(check, syntax)) {
+        !guarded_u8_site(check, syntax)) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
              "NUMERIC-CONVERSION-PRECISION",
              "narrowing needs the same current formal on its proven true edge");
