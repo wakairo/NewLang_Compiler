@@ -4223,10 +4223,15 @@ static bool guarded_byte_mode_entry(const NLCheckedFragment *f,
                              bindings[1]->symbol) ||
         !guarded_byte_product(&b, product, initializers[2]))
         return false;
-    if (!local_policy && (f->body_calls[1] != selector ||
-                          !guarded_byte_actual(f, c, selector, initializers[3],
-                                               bindings[2]->symbol) ||
-                          !nl_pure_u8_threshold_at(f, c, selector, &pure)))
+    /* A plain two-call entry can consume the actual product through the
+     * already checked narrowing proof. Descriptor policies stay literal. */
+    const bool guarded_narrowing =
+        entry && !descriptor_entry && f->body_count == 2;
+    if (!local_policy &&
+        (f->body_calls[1] != selector ||
+         !guarded_byte_actual(f, c, selector, initializers[3],
+                              bindings[2]->symbol) ||
+         !nl_pure_u8_threshold_at(f, c, selector, guarded_narrowing, &pure)))
         return false;
 
     if (descriptor_entry) {

@@ -76,6 +76,17 @@ static bool division_emit_expression(DivisionText *t,
     case NL_CHECKED_U8_LITERAL:
         return division_text_append(t, "((uint8_t)UINT8_C(%zu))",
                                     n->scalar_result.value);
+    case NL_CHECKED_NUMERIC_CONVERSION: {
+        const NLCheckedNodeView *arg =
+            nl_checked_node_view(f, n->first_argument);
+        return arg &&
+               n->type == nl_semantic_core_type(f->context, NL_TYPE_U8) &&
+               nl_guarded_u8_operand(f, f->context, arg->symbol,
+                                     n->first_argument) &&
+               division_text_append(t, "((uint8_t)") &&
+               division_emit_atom(t, f, n->first_argument) &&
+               division_text_append(t, ")");
+    }
     case NL_CHECKED_IF:
         return division_text_append(t, "nl_if_%zu", id);
     case NL_CHECKED_USIZE_MULTIPLICATION:
@@ -533,7 +544,7 @@ static bool division_emit_byte_selector_header(DivisionText *t,
 {
     return division_text_append(t,
                                 "static uint8_t nl_qty_fn_%zu(size_t "
-                                "nl_local_%zu)\n{\n    return ",
+                                "nl_local_%zu)\n{\n",
                                 pure->function, pure->formal);
 }
 
@@ -541,17 +552,28 @@ static bool division_emit_byte_threshold(DivisionText *t,
                                          const NLPureU8Call *pure)
 {
     return division_emit_byte_selector_header(t, pure) &&
+           division_text_append(t, "    return ") &&
            division_emit_byte_choice(t, pure->body, pure->selection) &&
            division_text_append(t, ";\n}\n\n");
 }
 
 static bool division_emit_byte_selector(DivisionText *t,
                                         const NLCheckedFragment *caller,
-                                        NLCheckedNodeId id)
+                                        NLCheckedNodeId id,
+                                        bool guarded_narrowing)
 {
     NLPureU8Call pure;
-    return nl_pure_u8_call(caller, id, &pure) &&
-           division_emit_byte_threshold(t, &pure);
+    if (nl_pure_u8_call(caller, id, &pure))
+        return division_emit_byte_threshold(t, &pure);
+    if (!guarded_narrowing ||
+        !nl_pure_u8_threshold_at(caller, nl_checked_context(caller), id, true,
+                                 &pure))
+        return false;
+    return division_emit_byte_selector_header(t, &pure) &&
+           division_emit_if(t, pure.body, pure.selection, 4) &&
+           division_text_append(t, "    return ") &&
+           division_emit_expression(t, pure.body, pure.selection) &&
+           division_text_append(t, ";\n}\n\n");
 }
 
 static bool division_emit_writer_selector(DivisionText *t,
@@ -564,6 +586,7 @@ static bool division_emit_writer_selector(DivisionText *t,
            division_emit_byte_threshold(t, &policy.threshold) &&
            (!policy.delegate ||
             (division_emit_byte_selector_header(t, &policy.wrapper) &&
+             division_text_append(t, "    return ") &&
              division_emit_expression(t, policy.wrapper.body,
                                       policy.delegate) &&
              division_text_append(t, ";\n}\n\n")));
@@ -732,8 +755,8 @@ static NLCheckStatus literal_divisor_c17(const NLDivisionUsizePlan *main,
     for (size_t i = 0; emitted && i < program.count; ++i)
         emitted = division_emit_helper(&text, &program.definitions[i]);
     if (emitted && main->byte_selector)
-        emitted =
-            division_emit_byte_selector(&text, main->body, main->byte_selector);
+        emitted = division_emit_byte_selector(
+            &text, main->body, main->byte_selector, !main->byte_descriptor);
     if (emitted && main->byte_update_call)
         emitted = division_emit_byte_writer(
             &text, main->body, main->byte_update_call, !main->byte_selector);

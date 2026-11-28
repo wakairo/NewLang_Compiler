@@ -936,10 +936,11 @@ static inline bool nl_pure_u8_contents_at(const NLCheckedFragment *f,
 static inline bool nl_pure_u8_threshold_at(const NLCheckedFragment *f,
                                            const NLSemanticContext *c,
                                            NLCheckedNodeId id,
+                                           bool guarded_narrowing,
                                            NLPureU8Call *pure)
 {
     if (!nl_h_custody_result_valid(f, id) ||
-        !nl_pure_u8_contents_at(f, id, c, pure))
+        !nl_scalar_u8_contents_at(f, id, c, false, guarded_narrowing, pure))
         return false;
     const NLCheckedNodeView *root =
         nl_checked_node_view(pure->body, pure->body->root);
@@ -979,7 +980,7 @@ static inline bool nl_pure_u8_writer_policy_at(const NLCheckedFragment *f,
         return false;
     NLPureU8WriterPolicy policy = {0};
     if (!body->body_count) {
-        if (!nl_pure_u8_threshold_at(f, c, id, &policy.threshold))
+        if (!nl_pure_u8_threshold_at(f, c, id, false, &policy.threshold))
             return false;
         *out = policy;
         return true;
@@ -1020,7 +1021,8 @@ static inline bool nl_pure_u8_writer_policy_at(const NLCheckedFragment *f,
         actual->kind != NL_CHECKED_IDENTIFIER ||
         actual->symbol != policy.wrapper.formal ||
         !predicate_scalar(&walk, delegate->first_argument) ||
-        !nl_pure_u8_threshold_at(body, c, policy.delegate, &policy.threshold))
+        !nl_pure_u8_threshold_at(body, c, policy.delegate, false,
+                                 &policy.threshold))
         return false;
     *out = policy;
     return true;
