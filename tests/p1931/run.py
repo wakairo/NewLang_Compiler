@@ -6,7 +6,7 @@ import sys
 from tempfile import TemporaryDirectory
 
 sys.dont_write_bytecode = True
-from cases import cases, refusals
+from cases import cases, mixed_producers, refusals
 
 HERE = Path(__file__).resolve().parent
 SUPPORT = runpy.run_path(str(HERE.parent / "p1875" / "run.py"))
@@ -147,6 +147,13 @@ def suite(root, compiler, cc, sanitizer):
     witness.mkdir()
     positive(witness, compiler, cc, HERE.parent / "p1907/source/caller-if.nl",
              "octet slots exact next", [219, 219, 1, 23], sanitizer)
+    migrated = root / "mixed-producers"
+    migrated.mkdir()
+    nl = migrated / "mixed-producers.nl"
+    nl.write_text(mixed_producers(), encoding="utf-8")
+    positive(migrated, compiler, cc, nl,
+             "octet quantity reading bound prior_equal compare flag chosen saved later_less summary",
+             [207, 207, 207, 207, 1, 0, 0, 163, 163, 0, 0], sanitizer)
     for name, (source, expected) in refusals().items():
         directory = root / name
         directory.mkdir()
