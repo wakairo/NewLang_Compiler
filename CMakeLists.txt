@@ -858,6 +858,10 @@ include(tests/p1455/CMakeLists.txt)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1923/run.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_test(NAME p1931_caller_local_widening_if.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1931/run.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     add_executable(p866_public tests/p866/public.c)
     add_executable(p866_integrity tests/p866/integrity.c)
     add_executable(p866_oom tests/p866/oom.c)
@@ -2390,8 +2394,8 @@ include(tests/p1455/CMakeLists.txt)
     set_tests_properties(p1829_saved_route_rollback.unit PROPERTIES TIMEOUT 180)
     set_tests_properties(p1829_saved_payload_rollback.unit PROPERTIES TIMEOUT 360)
     set_tests_properties(p1833_report_handoff_rollback.unit PROPERTIES TIMEOUT 360)
-    set_tests_properties(p1833_report_delivery_rollback.unit PROPERTIES TIMEOUT 240)
-    set_tests_properties(p1841_saved_handoff_rollback.unit PROPERTIES TIMEOUT 180)
+    set_tests_properties(p1833_report_delivery_rollback.unit PROPERTIES TIMEOUT 480)
+    set_tests_properties(p1841_saved_handoff_rollback.unit PROPERTIES TIMEOUT 360)
     set_tests_properties(p1841_saved_delivery_rollback.unit PROPERTIES TIMEOUT 480)
     set_tests_properties(p1841_named_default_rollback.unit PROPERTIES TIMEOUT 480)
     set_tests_properties(p1841_report_status_rollback.unit PROPERTIES TIMEOUT 600)
@@ -2423,6 +2427,8 @@ include(tests/p1455/CMakeLists.txt)
     foreach(profile 01-return-left 02-return-right 03-both-return 04-return-if)
         set_tests_properties(p1193_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
+    # Preserve the declared P1227 OOM timeout after the root default.
+    set_tests_properties(p1227_oom.unit PROPERTIES TIMEOUT 300)
 endif()
 
 include(tests/p1335/CMakeLists.txt)

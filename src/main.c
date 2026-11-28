@@ -410,12 +410,13 @@ static bool bool_loop_quantity_origin(const NLCheckedFragment *f,
     return id == loop && bool_root_value(f, loop);
 }
 
-static bool bool_widening_quantity_origin(const NLCheckedFragment *,
-                                          NLCheckedNodeId, bool, V0Program *);
+static NLCheckedNodeId widening_comparison_origin(const NLCheckedFragment *,
+                                                  NLCheckedNodeId, bool,
+                                                  V0Program *);
 
 static bool boolean_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
                                 V0Program *p, NLCheckedNodeId condition_of,
-                                bool allow_runtime)
+                                bool allow_runtime, bool allow_local_widening)
 {
     const NLSemanticContext *c = nl_checked_context(f);
     const NLTypeId boolean = nl_semantic_core_type(c, NL_TYPE_BOOL);
@@ -489,14 +490,14 @@ static bool boolean_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
                   bool_quantity_origin(f, left->next_argument, p) &&
                   bool_loop_quantity_origin(f, v->first_argument, p))))
                 return true;
-            const bool local_comparison = condition_of == 0;
             const bool left_widened =
-                allow_runtime && bool_widening_quantity_origin(
-                                     f, v->first_argument, local_comparison, p);
+                allow_runtime &&
+                widening_comparison_origin(f, v->first_argument,
+                                           allow_local_widening, p);
             const bool right_widened =
                 allow_runtime &&
-                bool_widening_quantity_origin(f, left->next_argument,
-                                              local_comparison, p);
+                widening_comparison_origin(f, left->next_argument,
+                                           allow_local_widening, p);
             if ((!known && !left_widened && !right_widened) ||
                 (!left_widened &&
                  !bool_quantity_origin(f, v->first_argument, p)) ||
@@ -522,21 +523,31 @@ static bool boolean_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
 static bool boolean_scalar_at(const NLCheckedFragment *f, NLCheckedNodeId id,
                               V0Program *p, NLCheckedNodeId condition_of)
 {
-    return boolean_scalar_impl(f, id, p, condition_of, false);
+    return boolean_scalar_impl(f, id, p, condition_of, false, false);
 }
 
 /* Explicit ordinary root consumer; the known-only entry above remains used
  * by the other profiles. Both-normal field IFs additionally require their
  * existing public current/join validator before this condition is consumed. */
-static bool runtime_boolean_scalar_at(const NLCheckedFragment *f,
-                                      NLCheckedNodeId id, V0Program *p,
-                                      NLCheckedNodeId condition_of)
+static bool runtime_boolean_scalar_impl(const NLCheckedFragment *f,
+                                        NLCheckedNodeId id, V0Program *p,
+                                        NLCheckedNodeId condition_of,
+                                        bool allow_local_widening)
 {
     if (boolean_scalar_at(f, id, p, condition_of))
         return true;
     return !p->u8_export && !p->scalar_depth && !p->formal_body &&
            !p->unit_parameters &&
-           boolean_scalar_impl(f, id, p, condition_of, true);
+           boolean_scalar_impl(f, id, p, condition_of, true,
+                               allow_local_widening);
+}
+
+static bool runtime_boolean_scalar_at(const NLCheckedFragment *f,
+                                      NLCheckedNodeId id, V0Program *p,
+                                      NLCheckedNodeId condition_of)
+{
+    return runtime_boolean_scalar_impl(f, id, p, condition_of,
+                                       condition_of == 0);
 }
 
 static bool boolean_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
@@ -824,9 +835,10 @@ static NLCheckedNodeId widening_copy_initializer(const NLCheckedFragment *,
                                                  NLCheckedNodeId, NLTypeId);
 static NLCheckedNodeId widening_if_condition(const NLCheckedFragment *,
                                              NLCheckedNodeId, NLCheckedNodeId,
-                                             V0Program *);
+                                             V0Program *, NLCheckedNodeId *);
 static bool widening_if_prefix(const NLCheckedFragment *, NLCheckedNodeId,
-                               const V0Program *, WideningIfPrefix *, bool *);
+                               NLCheckedNodeId, const V0Program *,
+                               WideningIfPrefix *, bool *);
 
 static bool copy_if_unit_return(const NLCheckedFragment *f,
                                 const NLCheckedNodeView *v, const V0Program *p)
@@ -861,8 +873,9 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         return false;
     const bool paired = p->aggregate != 0;
     const NLCheckedNodeView *cond = nl_checked_node_view(f, v->initializer);
+    NLCheckedNodeId producer = 0;
     const NLCheckedNodeId widened =
-        paired ? 0 : widening_if_condition(f, v->initializer, id, p);
+        paired ? 0 : widening_if_condition(f, v->initializer, id, p, &producer);
     NLSemanticValueView cv, origin_value, result;
     const bool direct = cond != NULL && cond->kind == NL_CHECKED_USIZE_EQUALITY;
     const NLCheckedNodeId origin = widened ? widened
@@ -894,7 +907,7 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
     if (c->value_count >= NL_SEMANTIC_MAX_ENTRIES)
         return false;
     if (widened) {
-        if (!widening_if_prefix(f, id, p, &prefix, body_values))
+        if (!widening_if_prefix(f, id, producer, p, &prefix, body_values))
             return false;
         bindings = prefix.bindings;
     } else {
@@ -962,7 +975,10 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         case NL_CHECKED_USIZE_EQUALITY:
         /* The existing bool-origin and operand checks also authenticate <. */
         case NL_CHECKED_USIZE_LESS_THAN:
-        case NL_CHECKED_IDENTIFIER: {
+        case NL_CHECKED_IDENTIFIER:
+        case NL_CHECKED_NUMERIC_CONVERSION: {
+            if (n->kind == NL_CHECKED_NUMERIC_CONVERSION && i + 1 != producer)
+                return false;
             NLSemanticValueView value;
             ++scalars;
             while (scalars <= c->value_count && body_values[scalars])
@@ -2468,9 +2484,10 @@ static bool v1_scalar_unit_statement(const NLCheckedFragment *f,
 
 /* Follow the same root-local Copy chain for both widening producers. The
  * producer then supplies its own call receipt or numeric conversion proof. */
-static bool bool_widening_quantity_origin(const NLCheckedFragment *f,
-                                          NLCheckedNodeId id,
-                                          bool local_comparison, V0Program *p)
+static NLCheckedNodeId widening_comparison_origin(const NLCheckedFragment *f,
+                                                  NLCheckedNodeId id,
+                                                  bool allow_local_widening,
+                                                  V0Program *p)
 {
     const NLSemanticContext *c = nl_checked_context(f);
     const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
@@ -2479,14 +2496,18 @@ static bool bool_widening_quantity_origin(const NLCheckedFragment *f,
         const NLCheckedNodeView *source = nl_checked_node_view(f, id);
         if (source->kind == NL_CHECKED_REGISTERED_CALL)
             return v0_find_function(p, source->function) &&
-                   widening_call(f, id, p);
+                           widening_call(f, id, p)
+                       ? id
+                       : 0;
         if (source->kind == NL_CHECKED_NUMERIC_CONVERSION)
-            return local_comparison && widening_unit_entry(f, p) &&
-                   widening_copy_initializer(f, source->first_argument,
-                                             p->u8) &&
-                   gate_numeric_conversion(f, id, p);
+            return allow_local_widening && widening_unit_entry(f, p) &&
+                           widening_copy_initializer(f, source->first_argument,
+                                                     p->u8) &&
+                           gate_numeric_conversion(f, id, p)
+                       ? id
+                       : 0;
     }
-    return false;
+    return 0;
 }
 
 /* Finite scalar callee: Copy locals and a scalar tail/return. Only the tail
@@ -2865,7 +2886,8 @@ static bool if_return_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
 static NLCheckedNodeId widening_if_condition(const NLCheckedFragment *f,
                                              NLCheckedNodeId condition,
                                              NLCheckedNodeId selection,
-                                             V0Program *p)
+                                             V0Program *p,
+                                             NLCheckedNodeId *producer)
 {
     const NLTypeId boolean =
         nl_semantic_core_type(nl_checked_context(f), NL_TYPE_BOOL);
@@ -2879,17 +2901,20 @@ static NLCheckedNodeId widening_if_condition(const NLCheckedFragment *f,
                   test->kind != NL_CHECKED_USIZE_LESS_THAN))
         return 0;
     V0Program check = *p;
-    if (!runtime_boolean_scalar_at(f, condition, &check, selection))
+    if (!runtime_boolean_scalar_impl(f, condition, &check, selection, true))
         return 0;
     const NLCheckedNodeView *left =
         nl_checked_node_view(f, test->first_argument);
-    /* The caller IF prefix accounts for one registered widening result. */
-    return left && (bool_widening_quantity_origin(f, test->first_argument,
-                                                  false, &check) ||
-                    bool_widening_quantity_origin(f, left->next_argument, false,
-                                                  &check))
-               ? id
-               : 0;
+    if (!left)
+        return 0;
+    const NLCheckedNodeId lhs =
+        widening_comparison_origin(f, test->first_argument, true, &check);
+    const NLCheckedNodeId rhs =
+        widening_comparison_origin(f, left->next_argument, true, &check);
+    if (lhs && rhs && lhs != rhs)
+        return 0;
+    *producer = lhs ? lhs : rhs;
+    return *producer ? id : 0;
 }
 
 static bool widening_if_binding(const NLSemanticContext *c, NLSymbolId symbol,
@@ -2987,8 +3012,9 @@ static bool widening_if_call(const NLCheckedFragment *f, NLCheckedNodeId id,
 }
 
 static bool widening_if_prefix(const NLCheckedFragment *f,
-                               NLCheckedNodeId choice, const V0Program *p,
-                               WideningIfPrefix *prefix, bool *body_values)
+                               NLCheckedNodeId choice, NLCheckedNodeId producer,
+                               const V0Program *p, WideningIfPrefix *prefix,
+                               bool *body_values)
 {
     const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
     if (!root || root->kind != NL_CHECKED_BLOCK)
@@ -3000,7 +3026,7 @@ static bool widening_if_prefix(const NLCheckedFragment *f,
             (decl->next_item && decl->next_item <= id))
             return false;
         if (decl->initializer == choice)
-            return prefix->widening != 0;
+            return prefix->widening == producer;
         const NLCheckedNodeView *init =
             nl_checked_node_view(f, decl->initializer);
         if (!init ||
@@ -3008,6 +3034,13 @@ static bool widening_if_prefix(const NLCheckedFragment *f,
              !widening_if_call(f, decl->initializer, p, prefix, body_values)) ||
             !widening_if_declaration(f, decl, false, prefix))
             return false;
+        if (init->kind == NL_CHECKED_NUMERIC_CONVERSION) {
+            /* The selected conversion is an ordinary root declaration.
+             * It adds no call formals, retained body values or closed slots. */
+            if (decl->initializer != producer || prefix->widening)
+                return false;
+            prefix->widening = producer;
+        }
         id = decl->next_item;
     }
     return false;

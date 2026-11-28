@@ -168,8 +168,15 @@ def suite(root, compiler, cc):
         refusal(root / name, compiler, name, 3, 3, b"[USIZE-EQUALITY-TYPE]")
     refusal(root / "inline-operand", compiler, "inline-operand", 3, 3,
             b"[USIZE-EQUALITY-SOURCE-PRECISION]")
-    for name in ("inline-actual", "caller-if"):
-        refusal(root / name, compiler, name, 0, 4, b"[V1-BACKEND-UNSUPPORTED]")
+    refusal(root / "inline-actual", compiler, "inline-actual", 0, 4,
+            b"[V1-BACKEND-UNSUPPORTED]")
+    # The frozen caller-if source now reaches strict native in P1931.
+    caller = root / "caller-if"
+    caller.mkdir()
+    source = HERE / "source" / "caller-if.nl"
+    checked = run(caller, "check", [compiler, "--check", source], 0)
+    emitted = run(caller, "emit", [compiler, source], 0)
+    assert not (checked.stdout or checked.stderr or emitted.stderr) and emitted.stdout
 
 
 if __name__ == "__main__":
