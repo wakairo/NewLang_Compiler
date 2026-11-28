@@ -841,6 +841,11 @@ static bool widening_if_prefix(const NLCheckedFragment *, NLCheckedNodeId,
                                WideningIfPrefix *, bool *);
 static bool widening_if_unit_use(const NLCheckedFragment *, NLCheckedNodeId,
                                  NLCheckedNodeId, const V0Program *, bool *);
+static bool widening_if_copy_of(const NLCheckedFragment *, NLCheckedNodeId,
+                                NLCheckedNodeId, NLTypeId);
+static bool widening_if_scalar_use(const NLCheckedFragment *, NLCheckedNodeId,
+                                   NLCheckedNodeId, const V0Program *,
+                                   WideningIfPrefix *, bool *);
 
 static bool copy_if_unit_return(const NLCheckedFragment *f,
                                 const NLCheckedNodeView *v, const V0Program *p)
@@ -905,6 +910,7 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
     size_t scalars = 0, bindings = 0;
     bool body_values[NL_SEMANTIC_MAX_ENTRIES] = {false};
     WideningIfPrefix prefix = {0};
+    NLCheckedNodeId scalar_call = 0;
     size_t calls = 0;
     if (c->value_count >= NL_SEMANTIC_MAX_ENTRIES)
         return false;
@@ -944,9 +950,17 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
             if (widened) {
                 if (i + 1 == prefix.seed || i + 1 == prefix.widening)
                     break;
-                if (++calls > 1 ||
-                    !widening_if_unit_use(f, id, i + 1, p, body_values))
+                if (++calls > 1)
                     return false;
+                if (n->type == p->unit) {
+                    if (!widening_if_unit_use(f, id, i + 1, p, body_values))
+                        return false;
+                } else {
+                    if (!widening_if_scalar_use(f, id, i + 1, p, &prefix,
+                                                body_values))
+                        return false;
+                    scalar_call = i + 1;
+                }
                 break;
             }
             if (++calls > 1 || !copy_if_u8(f, i + 1, id, p))
@@ -999,7 +1013,10 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
                 (widened && n->kind == NL_CHECKED_IDENTIFIER &&
                  !widening_copy_initializer(f, i + 1, n->type)))
                 return false;
-            if (n->type == p->u8 && !copy_if_u8(f, i + 1, id, p)) {
+            if (n->type == p->u8 &&
+                !(scalar_call &&
+                  widening_if_copy_of(f, i + 1, scalar_call, p->u8)) &&
+                !copy_if_u8(f, i + 1, id, p)) {
                 NLCheckedNodeId source = widened ? i + 1 : 0;
                 while (source && source != prefix.seed)
                     source = widening_copy_initializer(f, source, p->u8);
@@ -3026,31 +3043,14 @@ static bool widening_if_declaration(const NLCheckedFragment *f,
                                prefix);
 }
 
-/* The only closed slots in this prefix come from the actual sealed calls
- * that precede the selection. Each call contributes its fresh formal,
- * source-declared locals and its own contiguous scalar results. */
-static bool widening_if_call(const NLCheckedFragment *f, NLCheckedNodeId id,
-                             const V0Program *p, WideningIfPrefix *prefix,
-                             bool *body_values)
+/* A sealed call contributes its exact formal and locals. The root and its
+ * tail can describe the same result slot. Count that slot only once. */
+static bool widening_if_call_frame(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id, NLSymbolId formal,
+                                   WideningIfPrefix *prefix, bool *body_values)
 {
     const NLSemanticContext *c = nl_checked_context(f);
-    const NLTypeId usize = nl_semantic_core_type(c, NL_TYPE_USIZE);
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
-    V0Program check = *p;
-    NLTypeId parameter;
-    if (call->type == usize && !prefix->widening &&
-        widening_call(f, id, &check)) {
-        parameter = p->u8;
-        prefix->widening = id;
-    } else if (call->type == p->u8 && !prefix->seed && !prefix->widening &&
-               predicate_call(f, id, &check)) {
-        parameter = usize;
-        prefix->seed = id;
-    } else {
-        return false;
-    }
-    const NLSymbolId formal =
-        nl_scalar_invocation_formal_at(f, id, c, parameter, call->type);
     const NLCheckedNodeView *arg =
         nl_checked_node_view(f, call->first_argument);
     const NLCheckedFragment *body = nl_checked_call_body(f, id);
@@ -3081,6 +3081,31 @@ static bool widening_if_call(const NLCheckedFragment *f, NLCheckedNodeId id,
         if (!body_values[own])
             return false;
     return true;
+}
+
+static bool widening_if_call(const NLCheckedFragment *f, NLCheckedNodeId id,
+                             const V0Program *p, WideningIfPrefix *prefix,
+                             bool *body_values)
+{
+    const NLSemanticContext *c = nl_checked_context(f);
+    const NLTypeId usize = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    V0Program check = *p;
+    NLTypeId parameter;
+    if (call->type == usize && !prefix->widening &&
+        widening_call(f, id, &check)) {
+        parameter = p->u8;
+        prefix->widening = id;
+    } else if (call->type == p->u8 && !prefix->seed && !prefix->widening &&
+               predicate_call(f, id, &check)) {
+        parameter = usize;
+        prefix->seed = id;
+    } else {
+        return false;
+    }
+    const NLSymbolId formal =
+        nl_scalar_invocation_formal_at(f, id, c, parameter, call->type);
+    return widening_if_call_frame(f, id, formal, prefix, body_values);
 }
 
 static bool widening_if_prefix(const NLCheckedFragment *f,
@@ -3116,6 +3141,67 @@ static bool widening_if_prefix(const NLCheckedFragment *f,
         id = decl->next_item;
     }
     return false;
+}
+
+/* Extend the checked caller frame through one ordinary readonly call.
+ * Follow the two caller Copies to their separate checked initializers. */
+static bool widening_if_scalar_use(const NLCheckedFragment *f,
+                                   NLCheckedNodeId choice, NLCheckedNodeId id,
+                                   const V0Program *p, WideningIfPrefix *prefix,
+                                   bool *body_values)
+{
+    NLPureU8Call pure;
+    if (id <= choice || !widening_unit_entry(f, p) ||
+        !nl_h_custody_result_valid(f, id) ||
+        !nl_readonly_u8_contents(f, id, &pure))
+        return false;
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    if (!widening_if_copy_of(f, call->first_argument, choice, p->u8))
+        return false;
+
+    const NLSemanticContext *c = nl_checked_context(f);
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    const size_t first = prefix->bindings;
+    bool after_if = false, bound = false, result_copy = false, original = false;
+    for (NLCheckedNodeId i = root->first_item; i;) {
+        const NLCheckedNodeView *item = nl_checked_node_view(f, i);
+        if (!item || (item->next_item && item->next_item <= i))
+            return false;
+        const NLCheckedNodeId init = item->initializer;
+        after_if = after_if || init == choice;
+        if (after_if && item->kind != NL_CHECKED_RETURN) {
+            if (!init || init >= i)
+                return false;
+            if (init == id) {
+                if (bound || !widening_if_call_frame(f, id, pure.formal, prefix,
+                                                     body_values))
+                    return false;
+                bound = true;
+            } else if (init != choice) {
+                if (bound && widening_if_copy_of(f, init, id, p->u8))
+                    result_copy = true;
+                else {
+                    if (!widening_if_copy_of(f, init, choice, p->u8))
+                        return false;
+                    original |= bound;
+                }
+            }
+            if (!widening_if_declaration(f, item, false, prefix))
+                return false;
+        }
+        i = item->next_item;
+    }
+    if (!bound || !result_copy || !original ||
+        prefix->bindings != c->binding_count ||
+        c->place_count != c->binding_count)
+        return false;
+    for (size_t i = first; i < c->place_count; ++i) {
+        const NLSemanticPlaceView place = c->places[i];
+        if (place.live || place.current_fact || place.current_value ||
+            place.type != c->bindings[i].view.type)
+            return false;
+    }
+    return true;
 }
 
 static bool copy_or_field_if(const NLCheckedFragment *f, NLCheckedNodeId id,
