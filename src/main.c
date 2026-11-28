@@ -839,6 +839,8 @@ static NLCheckedNodeId widening_if_condition(const NLCheckedFragment *,
 static bool widening_if_prefix(const NLCheckedFragment *, NLCheckedNodeId,
                                NLCheckedNodeId, const V0Program *,
                                WideningIfPrefix *, bool *);
+static bool widening_if_unit_use(const NLCheckedFragment *, NLCheckedNodeId,
+                                 NLCheckedNodeId, const V0Program *, bool *);
 
 static bool copy_if_unit_return(const NLCheckedFragment *f,
                                 const NLCheckedNodeView *v, const V0Program *p)
@@ -940,7 +942,10 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
             break;
         case NL_CHECKED_REGISTERED_CALL: {
             if (widened) {
-                if (i + 1 != prefix.seed && i + 1 != prefix.widening)
+                if (i + 1 == prefix.seed || i + 1 == prefix.widening)
+                    break;
+                if (++calls > 1 ||
+                    !widening_if_unit_use(f, id, i + 1, p, body_values))
                     return false;
                 break;
             }
@@ -2480,6 +2485,73 @@ static bool v1_scalar_unit_statement(const NLCheckedFragment *f,
            actual.scalar_known == original.scalar_known &&
            actual.scalar_value == original.scalar_value &&
            nl_pure_u8_unit_body_at(body, formal, c);
+}
+
+static bool widening_if_copy_of(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                NLCheckedNodeId choice, NLTypeId u8)
+{
+    while ((id = widening_copy_initializer(f, id, u8)) != 0)
+        if (id == choice)
+            return true;
+    return false;
+}
+
+/* Compose the retained unit statement with this exact root IF. Its borrowed
+ * body shares the caller world, but its Copy results are fresh suffix slots. */
+static bool widening_if_unit_use(const NLCheckedFragment *f,
+                                 NLCheckedNodeId choice, NLCheckedNodeId id,
+                                 const V0Program *p, bool *body_values)
+{
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    if (!call || id <= choice || call->type != p->unit ||
+        call->argument_count != 1 || call->result_count ||
+        !widening_if_copy_of(f, call->first_argument, choice, p->u8))
+        return false;
+    const NLCheckedFragment *body = nl_checked_call_body(f, id);
+    NLSymbolId formal = 0;
+    if (!v1_call_parameter(f, id, p, &formal) ||
+        !v1_scalar_unit_statement(f, id, body, formal, p))
+        return false;
+
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    bool after_call = false, copied = false;
+    for (NLCheckedNodeId i = root->first_item; i;) {
+        const NLCheckedNodeView *item = nl_checked_node_view(f, i);
+        if (!item || (item->next_item && item->next_item <= i))
+            return false;
+        if (after_call && item->kind == NL_CHECKED_BINDING &&
+            item->initializer > id && item->initializer < i &&
+            widening_if_copy_of(f, item->initializer, choice, p->u8)) {
+            copied = true;
+            break;
+        }
+        if (item->kind == NL_CHECKED_STATEMENT && item->initializer == id)
+            after_call = true;
+        i = item->next_item;
+    }
+    if (!copied)
+        return false;
+
+    const NLCheckedNodeView *arg =
+        nl_checked_node_view(f, call->first_argument);
+    const NLSemanticContext *c = nl_checked_context(f);
+    NLValueId previous = arg->results[0].value;
+    for (NLCheckedNodeId i = 1; i <= nl_checked_node_count(body); ++i) {
+        const NLCheckedNodeView *n = nl_checked_node_view(body, i);
+        if (!n)
+            return false;
+        if (!n->result_count)
+            continue;
+        const NLValueId own = n->results[0].value;
+        NLSemanticValueView value;
+        if (own != previous + 1 || own > c->value_count || body_values[own] ||
+            n->type != p->u8 || !predicate_value(body, n, &value) ||
+            value.carrier != NL_CARRIER_ENDED || value.owner_place)
+            return false;
+        body_values[own] = true;
+        previous = own;
+    }
+    return true;
 }
 
 /* Follow the same root-local Copy chain for both widening producers. The
