@@ -22,6 +22,26 @@ fn stripe_bytes(count: usize) -> usize {
 
 0 はこの例で作者が選んだ応答で、0 件の結果とも重なります。呼び出し側が両者を区別する必要があれば、失敗を別の値で返す契約を選べます。Draft は、予想される失敗に `Result` や `Option` を用意しています。同じ契約の C も、除数を検査してから割り、範囲内でのみ積を計算し、同じ失敗値を返せます。ここで確かめた Pank の利益は、試した形の演算を許せるかコンパイラが実行前に判断することです。任意の動的な除数や外部入力を受ける公開 API、可用性や DoS への効果は、この例での測定範囲外です。 [Draft §8](reference/NewLang_v0_spec_Draft17_39.md?plain=1#L4045) · [価値と比較の位置付け](https://github.com/wakairo/NewLang_Compiler/issues/1853)
 
+### 大きすぎる整数を意図せず小さい型へ切り詰めない
+
+件数を 8 ビットの符号なし整数に収める例です。Pank の通常の値変換では、変換先で元の値を表せることが必要です。この関数は 256 未満の件数を `u8` に変換し、範囲外では作者が選んだ 173 を返します。173 を通常の結果と見分ける必要がある場合は、その区別も作者が契約で定めます。 [Draft 17.40 §5.6](https://github.com/wakairo/NewLang_Compiler/blob/98366f23586096404eb2940b075b9ee4f867df4c/docs/reference/NewLang_v0_spec_Draft17_40.md#L3960-L3976) · [独立検証の全ソース](https://github.com/wakairo/NewLang_Compiler/issues/1899)
+
+~~~text
+fn select_octet(count: usize) -> u8 {
+    if (count < usize(256)) {
+        u8(count)
+    } else {
+        u8(173)
+    }
+}
+~~~
+
+独立検証では未加工の生成 C を厳格な C17 設定でコンパイルでき、実行は正常に終了しました。返り値は観測用の派生 C で測り、255 は 255 に変換され、256 では変換を飛ばして 173 を返しました。上限を `count < usize(257)` に変えると、真側に 256 が入り得るため、通常 CHECK と通常の C 生成はいずれも `NUMERIC-CONVERSION-PRECISION` で停止し、C は出力されませんでした。 [独立実測 #1899](https://github.com/wakairo/NewLang_Compiler/issues/1899#issuecomment-7215457382)
+
+同じ契約を C で書くなら、`count <= UINT8_MAX` を確認してから `(uint8_t)count` に変換し、範囲外で 173 を返せます。C 側も上限を `count < 257` に誤変更した場合、256 の変換結果は符号なし整数変換の規則で 0 になり、173 を返す契約を破ります。C では範囲を検査する checked cast や静的解析も有効です。
+
+この実測は同じ `usize` 仮引数を比較してから狭める固定例です。任意の外部入力や動的な上限への一般化は未確認です。同じ契約での作者・公開 safe API の呼び出し側の再監査範囲と工数の差は未測定です。 [適用範囲と採用根拠](Pank_Value_Ledger.md#数値演算の事前条件をコンパイル時に確認する)
+
 ## 外した末尾を解放してから、新しい末尾を読む
 
 固定例のリストには A、B、C があり、A の `prev` が末尾キャッシュです。元の allocation はこの 3 ノードと 2 個のヘッダの計 5 個です。最後の 3 回のリンク更新は `B.next` を空にし、`A.prev` を B に更新し、`C.prev` を空にする順です。更新に使った借用を閉じ、メンバーから外した C を元のストレージ、Domain、Allocation で一度だけ解放します。その後 A 自身の Domain を使い、現在の `A.prev` を読みます。正例の全ソースと、同じ形を再確認した記録があります。 [採用例の全ソース](https://github.com/wakairo/NewLang_Compiler/blob/37e7a5f9a4970e8e353f9d4b35a741ad5be1613f/tests/p1393/sources/P1-C-free-current-tail-read-v2.nl) · [Draft §3.2b.7](reference/NewLang_v0_spec_Draft17_39.md?plain=1#L2928) · [#1837 対照実測](https://github.com/wakairo/NewLang_Compiler/issues/1837#issuecomment-7186481382)
