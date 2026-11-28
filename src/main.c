@@ -4463,6 +4463,8 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
         if (initializer->kind == NL_CHECKED_LOAN_HEADER &&
             !gate_emit_loan(stream, fragment, initializer, depth))
             return false;
+        /* The shared binding emitter stages plain IF operands for both
+         * callers and helpers. Field/return IFs stage in emit_if_field. */
         const NLCheckedNodeView *operands =
             initializer->kind == NL_CHECKED_IF
                 ? nl_checked_node_view(fragment, initializer->initializer)
@@ -4801,11 +4803,6 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
                 i = v->next_item;
                 continue;
             }
-            if (fn->quantity_parameter && v->kind == NL_CHECKED_BINDING &&
-                init && init->kind == NL_CHECKED_IF &&
-                !emit_quantity_operands(
-                    stream, f, nl_checked_node_view(f, init->initializer), 1))
-                return false;
             if (!v0_emit_node(stream, f, i, 1) ||
                 !emit_current_binding(stream, f, v, 1))
                 return false;
