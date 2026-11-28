@@ -411,7 +411,7 @@ static bool bool_loop_quantity_origin(const NLCheckedFragment *f,
 }
 
 static bool bool_widening_quantity_origin(const NLCheckedFragment *,
-                                          NLCheckedNodeId, V0Program *);
+                                          NLCheckedNodeId, bool, V0Program *);
 
 static bool boolean_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
                                 V0Program *p, NLCheckedNodeId condition_of,
@@ -489,12 +489,14 @@ static bool boolean_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
                   bool_quantity_origin(f, left->next_argument, p) &&
                   bool_loop_quantity_origin(f, v->first_argument, p))))
                 return true;
+            const bool local_comparison = condition_of == 0;
             const bool left_widened =
-                allow_runtime &&
-                bool_widening_quantity_origin(f, v->first_argument, p);
+                allow_runtime && bool_widening_quantity_origin(
+                                     f, v->first_argument, local_comparison, p);
             const bool right_widened =
                 allow_runtime &&
-                bool_widening_quantity_origin(f, left->next_argument, p);
+                bool_widening_quantity_origin(f, left->next_argument,
+                                              local_comparison, p);
             if ((!known && !left_widened && !right_widened) ||
                 (!left_widened &&
                  !bool_quantity_origin(f, v->first_argument, p)) ||
@@ -2289,39 +2291,56 @@ static bool v1_call_parameter(const NLCheckedFragment *f, NLCheckedNodeId id,
 
 #include "c17_predicate_internal.h"
 
+/* Find the initializer of the actual preceding root declaration and confirm
+ * that the Copy reads its checked binding and scalar value. */
+static NLCheckedNodeId widening_copy_initializer(const NLCheckedFragment *f,
+                                                 NLCheckedNodeId id,
+                                                 NLTypeId type)
+{
+    const NLCheckedNodeView *use = nl_checked_node_view(f, id);
+    if (!address_name(use, type))
+        return 0;
+    const NLCheckedNodeId origin = bool_source_origin(f, id);
+    const NLCheckedNodeView *source = nl_checked_node_view(f, origin);
+    NLSemanticBindingView binding;
+    NLSemanticValueView copied, original;
+    if (!predicate_value(f, use, &copied) ||
+        !predicate_value(f, source, &original) || source->type != type ||
+        !nl_semantic_binding_view(nl_checked_context(f), use->symbol,
+                                  &binding) ||
+        binding.type != type || binding.value != source->results[0].value ||
+        copied.scalar_known != original.scalar_known ||
+        copied.scalar_value != original.scalar_value)
+        return 0;
+    return origin;
+}
+
+static bool widening_unit_entry(const NLCheckedFragment *f, const V0Program *p)
+{
+    const NLSemanticContext *c = nl_checked_context(f);
+    return !p->u8_export && !p->aggregate && c && c->functions &&
+           p->entry_function && p->entry_function <= c->function_count &&
+           f->body_owner == c->functions[p->entry_function - 1].body;
+}
+
 /* The only new quantity-result call in this dispatcher is an ordinary
  * widening in the actual unit entry. Borrow its existing BODY/result seal
  * and revalidate the Copy actual and typed body before allocating a C name. */
 static bool widening_call(const NLCheckedFragment *f, NLCheckedNodeId id,
                           V0Program *p)
 {
-    if (p->u8_export || p->aggregate || !nl_h_custody_result_valid(f, id) ||
+    if (!widening_unit_entry(f, p) || !nl_h_custody_result_valid(f, id) ||
         !bool_root_value(f, id))
         return false;
     const NLSemanticContext *c = nl_checked_context(f);
-    if (!c || !c->functions || !p->entry_function ||
-        p->entry_function > c->function_count ||
-        f->body_owner != c->functions[p->entry_function - 1].body)
-        return false;
     const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
     const NLSymbolId formal =
         nl_scalar_invocation_formal_at(f, id, c, p->u8, quantity);
     if (!formal)
         return false;
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
-    const NLCheckedNodeView *arg =
-        nl_checked_node_view(f, call->first_argument);
-    const NLCheckedNodeView *source =
-        nl_checked_node_view(f, bool_source_origin(f, call->first_argument));
     const NLCheckedFragment *body = nl_checked_call_body(f, id);
-    NLSemanticBindingView binding;
-    NLSemanticValueView actual, original;
-    if (!address_name(arg, p->u8) || !predicate_value(f, arg, &actual) ||
-        !predicate_value(f, source, &original) || original.type != p->u8 ||
-        !nl_semantic_binding_view(c, arg->symbol, &binding) ||
-        binding.type != p->u8 || binding.value != source->results[0].value ||
-        actual.scalar_known != original.scalar_known ||
-        actual.scalar_value != original.scalar_value ||
+    if (!widening_copy_initializer(f, call->first_argument, p->u8) ||
         !nl_pure_widening_body_at(body, formal, c))
         return false;
     V0Function *prior = v0_find_function(p, call->function);
@@ -2383,33 +2402,25 @@ static bool v1_scalar_unit_statement(const NLCheckedFragment *f,
            nl_pure_u8_unit_body_at(body, formal, c);
 }
 
-/* A comparison reads the exact root-local Copy chain of an earlier call.
- * Reuse the checked widening invocation before consuming its emitted local. */
+/* Follow the same root-local Copy chain for both widening producers. The
+ * producer then supplies its own call receipt or numeric conversion proof. */
 static bool bool_widening_quantity_origin(const NLCheckedFragment *f,
-                                          NLCheckedNodeId id, V0Program *p)
+                                          NLCheckedNodeId id,
+                                          bool local_comparison, V0Program *p)
 {
     const NLSemanticContext *c = nl_checked_context(f);
     const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
-    const NLCheckedNodeView *use = nl_checked_node_view(f, id);
-    while (address_name(use, quantity)) {
-        const NLCheckedNodeId origin = bool_source_origin(f, id);
-        const NLCheckedNodeView *source = nl_checked_node_view(f, origin);
-        NLSemanticBindingView binding;
-        NLSemanticValueView copied, original;
-        if (!predicate_value(f, use, &copied) ||
-            !predicate_value(f, source, &original) ||
-            source->type != quantity ||
-            !nl_semantic_binding_view(c, use->symbol, &binding) ||
-            binding.type != quantity ||
-            binding.value != source->results[0].value ||
-            copied.scalar_known != original.scalar_known ||
-            copied.scalar_value != original.scalar_value)
-            return false;
+    for (id = widening_copy_initializer(f, id, quantity); id != 0;
+         id = widening_copy_initializer(f, id, quantity)) {
+        const NLCheckedNodeView *source = nl_checked_node_view(f, id);
         if (source->kind == NL_CHECKED_REGISTERED_CALL)
             return v0_find_function(p, source->function) &&
-                   widening_call(f, origin, p);
-        id = origin;
-        use = source;
+                   widening_call(f, id, p);
+        if (source->kind == NL_CHECKED_NUMERIC_CONVERSION)
+            return local_comparison && widening_unit_entry(f, p) &&
+                   widening_copy_initializer(f, source->first_argument,
+                                             p->u8) &&
+                   gate_numeric_conversion(f, id, p);
     }
     return false;
 }
