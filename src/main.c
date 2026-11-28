@@ -951,7 +951,7 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
                 if (i + 1 == prefix.seed || i + 1 == producers[0] ||
                     i + 1 == producers[1])
                     break;
-                if (producers[1] || ++calls > 1)
+                if (++calls > 1)
                     return false;
                 if (n->type == p->unit) {
                     if (!widening_if_unit_use(f, id, i + 1, p, body_values))
